@@ -22,6 +22,7 @@ group :test, :development do
   gem 'spork'
   gem 'guard-spork'
   gem 'guard-rspec'
+  gem 'guard-rails'
   gem 'growl'
 end
 
