@@ -36,8 +36,11 @@ describe SurveysController do
     end
 
     context "when save is unsuccessful" do
-      before { post :create }
-      it { should render_template(:new) }
+      it "renders the new page" do
+        post :create
+        response.should be_ok
+        response.should render_template(:new)
+      end
     end
   end
 end
