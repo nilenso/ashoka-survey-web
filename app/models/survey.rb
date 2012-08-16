@@ -1,3 +1,3 @@
 class Survey < ActiveRecord::Base
-  attr_accessible :description, :expiry_date, :name
+  validates_presence_of :name
 end

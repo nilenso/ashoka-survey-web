@@ -1,5 +1,7 @@
 require 'spec_helper'
 
 describe Survey do
-  pending "add some examples to (or delete) #{__FILE__}"
+  context "when validating" do
+    it { should validate_presence_of :name }
+  end
 end
