@@ -1,0 +1,11 @@
+<h1> All the Surveys </h1>
+
+<% @surveys.each do |survey| %>
+  <div>
+    <ul>
+      <li>Name: <%= survey.name %></li>
+      <li>Expires On: <%= survey.expiry_date %></li>
+      <li>Description: <%= survey.description %></li>
+    </ul>
+  </div>
+<% end %>
