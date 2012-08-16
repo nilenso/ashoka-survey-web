@@ -24,7 +24,6 @@ group :test, :development do
   gem 'guard-spork'
   gem 'guard-rspec'
   gem 'factory_girl_rails'
-  gem 'guard-rails'
   gem 'shoulda-matchers'
   gem 'growl'
 end
