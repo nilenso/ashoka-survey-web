@@ -1,6 +1,8 @@
 SurveyWeb::Application.routes.draw do
 
-  resources :surveys
+  resources :surveys do
+    resources :survey_questions
+  end
   root :to => 'surveys#index'
 
   # The priority is based upon order of creation:
