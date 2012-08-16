@@ -1,11 +1,13 @@
 <h1> Create a new survey </h1>
 
-<%= form_for(@survey) do |f| %>
-  <%= f.label :name %>
-  <%= f.text_field :name %>
-  <%= f.label :expiry_date %>
-  <%= f.date_select :expiry_date %>
-  <%= f.label :description %>
-  <%= f.text_area :description %>
-  <%= f.submit %>
+<%= semantic_form_for @survey do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :name %>
+    <%= f.input :expiry_date %>
+    <%= f.input :description %>
+  <% end %>
+
+  <%= f.actions do %>
+    <%= f.action :submit, :as => :button %>
+  <% end %>
 <% end %>
