@@ -8,6 +8,7 @@ class SurveysController < ApplicationController
 
     if @survey.save
       redirect_to root_path
+      flash[:notice] = "Survey successfully created"
     else
       render :new
     end

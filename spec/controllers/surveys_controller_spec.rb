@@ -28,6 +28,7 @@ describe SurveysController do
       it "redirects to the root page" do
         post :create, :survey => survey
         response.should redirect_to(:root)
+        flash[:notice].should_not be_nil
       end
 
       it "creates a survey" do
