@@ -26,6 +26,7 @@ group :test, :development do
   gem 'factory_girl_rails'
   gem 'shoulda-matchers'
   gem 'growl'
+  gem 'forgery'
 end
 
 gem 'jquery-rails'

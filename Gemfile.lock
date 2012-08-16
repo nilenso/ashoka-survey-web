@@ -47,6 +47,7 @@ GEM
       factory_girl (~> 3.5.0)
       railties (>= 3.0.0)
     ffi (1.1.4)
+    forgery (0.5.0)
     formtastic (2.2.1)
       actionpack (>= 3.0)
     growl (1.0.3)
@@ -150,6 +151,7 @@ PLATFORMS
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
   factory_girl_rails
+  forgery
   formtastic
   growl
   guard-rspec
