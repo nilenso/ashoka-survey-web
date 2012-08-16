@@ -57,4 +57,18 @@ describe SurveysController do
       response.should render_template(:index)
     end
   end
+
+  context "DELETE 'destroy'" do
+    let!(:survey) { FactoryGirl.create(:survey) }
+
+    it "deletes a survey" do
+      expect { delete :destroy, :id => survey.id }.to change { Survey.count }.by(-1)
+      flash[:notice].should_not be_nil
+    end
+
+    it "redirects to the survey index page" do
+      delete :destroy, :id => survey.id
+      response.should redirect_to surveys_path
+    end
+  end
 end

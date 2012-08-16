@@ -18,4 +18,11 @@ class SurveysController < ApplicationController
       render :new
     end
   end
+
+  def destroy
+    survey = Survey.find(params[:id])
+    survey.destroy
+    flash[:notice] = "Survey deleted"
+    redirect_to(surveys_path)
+  end
 end
