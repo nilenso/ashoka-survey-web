@@ -44,4 +44,17 @@ describe SurveysController do
       end
     end
   end
+
+  context "GET 'index'" do
+    it "assigns the surveys instance variable" do
+      get :index
+      assigns(:surveys).should_not be_nil
+    end
+
+    it "responds with the index page" do
+      get :index
+      response.should be_ok
+      response.should render_template(:index)
+    end
+  end
 end
