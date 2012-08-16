@@ -11,7 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120816054239) do
+ActiveRecord::Schema.define(:version => 20120816093525) do
+
+  create_table "survey_questions", :force => true do |t|
+    t.text     "question"
+    t.integer  "survey_id"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "survey_questions", ["survey_id"], :name => "index_survey_questions_on_survey_id"
 
   create_table "surveys", :force => true do |t|
     t.string   "name"
