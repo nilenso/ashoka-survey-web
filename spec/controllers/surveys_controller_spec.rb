@@ -17,16 +17,27 @@ describe SurveysController do
   end
 
   context "POST 'create'" do
+    let(:survey) { FactoryGirl.attributes_for(:survey) }
+
     context "when save is successful" do
       it "assigns the survey instance variable" do
-        post :create
+        post :create, :survey => survey
         assigns(:survey).should_not be_nil
       end
 
       it "redirects to the root page" do
-        post :create
+        post :create, :survey => survey
         response.should redirect_to(:root)
       end
+
+      it "creates a survey" do
+        expect { post :create, :survey => survey }.to change { Survey.count }.by(1)
+      end
+    end
+
+    context "when save is unsuccessful" do
+      before { post :create }
+      it { should render_template(:new) }
     end
   end
 end
