@@ -1,4 +1,4 @@
-# Sentence that can be answered
+# A specificaton for a piece of info that the survey designer wants to collect.
 
 class Question < ActiveRecord::Base
   belongs_to :survey
