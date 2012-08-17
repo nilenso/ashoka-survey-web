@@ -3,6 +3,6 @@
 class Question < ActiveRecord::Base
   belongs_to :survey
   attr_accessible :content
-  validates_presence_of :content
+  validates_presence_of :content, :survey_id
   has_many :answers
 end
