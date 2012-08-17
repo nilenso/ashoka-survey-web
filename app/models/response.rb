@@ -4,5 +4,6 @@ class Response < ActiveRecord::Base
   belongs_to :survey
   has_many :answers
   validates_presence_of :survey_id
-  attr_accessible :title, :body
+  accepts_nested_attributes_for :answers
+  attr_accessible :title, :body, :answers_attributes
 end
