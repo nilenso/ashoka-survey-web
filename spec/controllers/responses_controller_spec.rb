@@ -18,6 +18,11 @@ describe ResponsesController do
     it "assigns the appropriate questions" do
       get :new, :survey_id => survey.id
       assigns(:questions).should == survey.questions
-    end    
+    end
+
+    it "assigns the appropriate questions" do
+      get :new, :survey_id => survey.id
+      assigns(:survey).should == survey
+    end
   end
 end
