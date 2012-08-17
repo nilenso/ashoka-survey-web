@@ -1,7 +1,7 @@
 SurveyWeb::Application.routes.draw do
 
   resources :surveys do
-    resources :survey_questions
+    resources :responses, :only => [:new, :create, :show]
   end
   root :to => 'surveys#index'
 
