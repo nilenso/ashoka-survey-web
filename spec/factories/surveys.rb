@@ -5,6 +5,11 @@ FactoryGirl.define do
     sequence(:name) { |n| "name_#{n}" }
     expiry_date "2012-08-16"
     description "MyText"
-    questions { FactoryGirl.create(:question) }
+
+    factory :survey_with_questions do
+      after(:create) do |survey, evaluator|
+        FactoryGirl.create_list(:question_with_answers, 5, :survey => survey)
+      end
+    end
   end
 end

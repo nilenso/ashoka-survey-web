@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ResponsesController do
-  let(:survey) { FactoryGirl.create(:survey) }
+  let(:survey) { FactoryGirl.create(:survey_with_questions) }
 
   context "GET 'new'" do
     it "renders a page to create a new response" do
