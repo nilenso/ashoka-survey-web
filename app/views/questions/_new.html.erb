@@ -1,5 +1,5 @@
 <%= f.semantic_fields_for(:questions, :child_index => "{{id}}") do |f| %>
   <%= f.inputs do %>
-    <%= f.input :question, :input_html => { :rows => 2 } %>
+    <%= f.input :content, :input_html => { :rows => 2 } %>
   <% end %>
 <% end %>

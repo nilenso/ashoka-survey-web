@@ -2,6 +2,6 @@
 
 class Question < ActiveRecord::Base
   belongs_to :survey
-  attr_accessible :question
-  validates_presence_of :question
+  attr_accessible :content
+  validates_presence_of :content
 end

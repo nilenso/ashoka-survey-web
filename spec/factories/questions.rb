@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :question do
-    question "MyText"
+    content "MyText"
     survey nil
   end
 end
