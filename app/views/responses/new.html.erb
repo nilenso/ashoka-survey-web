@@ -1,0 +1,13 @@
+<h1> Give a response for <%= @survey.name %></h1>
+
+<%= semantic_form_for @response, :url => survey_responses_path(@survey) do |f| %>
+  <%= f.semantic_fields_for :answers do |f| %>
+    <%= f.inputs do %>
+      <%= f.input :content, :label => f.object.question.content, :input_html => { :rows => 2 } %>
+     <% end %>
+  <% end %>
+
+  <%= f.actions do %>
+    <%= f.action :submit, :as => :button %>
+  <% end %>
+<% end %>

@@ -19,10 +19,5 @@ describe ResponsesController do
       get :new, :survey_id => survey.id
       assigns(:survey).should == survey
     end
-
-    it "assigns answer objects for each question" do
-      get :new, :survey_id => survey.id
-      assigns(:answers).should == survey.questions.map(&:answers)
-    end
   end
 end
