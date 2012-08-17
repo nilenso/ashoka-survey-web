@@ -40,6 +40,11 @@ describe ResponsesController do
         post :create, :response => response, :survey_id => survey.id
         assigns(:response).survey.should ==  survey
       end
+
+      it "redirects to the root path" do
+        post :create, :response => response, :survey_id => survey.id          
+        response.should redirect_to root_path
+      end
     end
   end
 end

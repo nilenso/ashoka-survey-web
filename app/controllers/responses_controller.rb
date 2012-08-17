@@ -11,7 +11,9 @@ class ResponsesController < ApplicationController
     def create
       @response = Response.new(params[:response])
       @response.survey = Survey.find(params[:survey_id])
-      @response.save
+      if @response.save
+        redirect_to root_path
+      end
     end
   end
 end
