@@ -20,4 +20,26 @@ describe ResponsesController do
       assigns(:survey).should == survey
     end
   end
+
+  context "POST 'create'" do
+    let(:response) { FactoryGirl.attributes_for(:response_with_answers)}
+
+    it "sets the response instance variable" do
+      post :create, :response => response, :survey_id => survey.id
+      assigns(:response).should_not be_nil
+    end
+
+    context "when save is successful" do
+      it "saves the response" do
+        expect do
+          post :create, :response => response, :survey_id => survey.id
+        end.to change { Response.count }.by(1)
+      end
+
+      it "saves the response to the right survey" do
+        post :create, :response => response, :survey_id => survey.id
+        assigns(:response).survey.should ==  survey
+      end
+    end
+  end
 end

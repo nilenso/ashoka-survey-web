@@ -17,7 +17,7 @@ describe SurveysController do
   end
 
   context "POST 'create'" do
-    let(:survey) { FactoryGirl.attributes_for(:survey) }
+    let(:survey) { FactoryGirl.attributes_for(:survey_with_questions) }
 
     context "when save is successful" do
       it "assigns the survey instance variable" do

@@ -7,5 +7,11 @@ class ResponsesController < ApplicationController
       @response.answers << answer
       answer.question = question
     end
+
+    def create
+      @response = Response.new(params[:response])
+      @response.survey = Survey.find(params[:survey_id])
+      @response.save
+    end
   end
 end
