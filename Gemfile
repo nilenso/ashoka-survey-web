@@ -19,6 +19,8 @@ group :assets do
 end
 
 group :test, :development do
+  gem 'jasminerice'
+  gem 'guard-jasmine'
   gem 'rspec-rails'
   gem 'rspec-http'
   gem 'spork'
