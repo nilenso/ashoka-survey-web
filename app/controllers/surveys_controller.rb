@@ -6,6 +6,7 @@ class SurveysController < ApplicationController
   
   def new
     @survey = Survey.new
+    @survey.questions << Question.new
   end
 
   def create

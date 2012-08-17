@@ -1,11 +1,23 @@
 <h1> Create a new survey </h1>
 
-<%= semantic_form_for @survey do |f| %>
-  <%= f.inputs :name, :expiry_date, :description %>
+<div id="survey">
+  <%= semantic_form_for @survey do |f| %>
+    <%= f.inputs :name, :expiry_date, :description %>
 
-  <%= link_to_add_question_fields("Add a Question", f) %>
+    <script type="text/html" id="question_template">
+      <%= (render 'questions/new', :f => f) %>
+    </script>
 
-  <%= f.actions do %>
-    <%= f.action :submit, :as => :button %>
+    <div id="questions"></div>
+
+    <%= link_to "Add a Question", '#', :class => 'add_question_field' %>
+
+    <%= f.actions do %>
+      <%= f.action :submit, :as => :button %>
+    <% end %>
   <% end %>
-<% end %>
+</div>
+
+<script type="text/javascript">
+  new SurveyApp.Survey($("#survey"));
+</script>

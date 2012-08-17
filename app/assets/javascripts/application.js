@@ -12,4 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require mustache
+//= require_self
 //= require_tree .
+
+var SurveyApp = {};
