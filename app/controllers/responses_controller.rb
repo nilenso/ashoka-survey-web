@@ -7,13 +7,13 @@ class ResponsesController < ApplicationController
       @response.answers << answer
       answer.question = question
     end
+  end
 
-    def create
-      @response = Response.new(params[:response])
-      @response.survey = Survey.find(params[:survey_id])
-      if @response.save
-        redirect_to root_path
-      end
+  def create
+    @response = Response.new(params[:response])
+    @response.survey = Survey.find(params[:survey_id])
+    if @response.save
+      redirect_to root_path
     end
   end
 end
