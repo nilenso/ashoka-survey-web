@@ -19,6 +19,12 @@ describe ResponsesController do
       get :new, :survey_id => survey.id
       assigns(:survey).should == survey
     end
+
+    it "assigns new answers to the response corresponding to the survey questions" do
+      get :new, :survey_id => survey.id
+      assigns(:response).answers.size.should == survey.questions.size
+      assigns(:response).answers.each { |answer| answer.should be_an Answer }
+    end
   end
 
   context "POST 'create'" do
