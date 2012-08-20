@@ -8,6 +8,7 @@ en:
     index:
       create_survey: "Create a new survey"
       delete_survey: "Delete this survey"
+      add_response: "Add a response for this survey"
 
   responses:
     new:
