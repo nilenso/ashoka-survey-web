@@ -5,7 +5,9 @@ SurveyWeb::Application.routes.draw do
       resources :responses, :only => [:new, :create, :show]
     end
   end
+  
   root :to => 'surveys#index'
+  match '/:locale' => 'surveys#index'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
