@@ -8,4 +8,5 @@ rvm:
 before_script:
   - psql -c 'create database survey_web_test;' -U postgres
   - cp config/database.yml.sample config/database.yml
+  - bundle exec rake db:migrate
   - bundle exec rake db:test:prepare
