@@ -44,8 +44,19 @@ Spork.prefork do
 end
 
 Spork.each_run do
-  # This code will be run each time you run your specs.
-
+  # This mocks the default_url_options method in application_controller.rb
+  # For some reason RSpec doesn't execute that method before making a request, but rails does.
+  # http://stackoverflow.com/questions/1987354/how-to-set-locale-default-url-options-for-functional-tests-rails/8920258#8920258
+  
+  class ActionController::TestCase
+    module Behavior
+      def process_with_default_locale(action, parameters = nil, session = nil, flash = nil, http_method = 'GET')
+        parameters = { :locale => I18n.locale }.merge( parameters || {} )
+        process_without_default_locale(action, parameters, session, flash, http_method)
+      end
+      alias_method_chain :process, :default_locale
+    end
+  end
 end
 
 # --- Instructions ---
