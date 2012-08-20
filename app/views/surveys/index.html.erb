@@ -1,6 +1,6 @@
 <h1> All the Surveys </h1>
 
-<%= link_to "Create new Survey", :action => "new" %>
+<%= link_to t(".create_survey"), :action => "new" %>
 
 <% @surveys.each do |survey| %>
   <div>
@@ -9,7 +9,7 @@
       <li>Expires On: <%= survey.expiry_date %></li>
       <li>Description: <%= survey.description %></li>
       <%= link_to "Add a response for this survey", new_survey_response_path(survey.id) %>
-      <%= link_to "Delete this survey", survey_path(survey.id), :method => :delete, :confirm => 'Are you sure?' %>
+      <%= link_to t(".delete_survey"), survey_path(survey.id), :method => :delete, :confirm => t(:confirm) %>
     </ul>
   </div>
 <% end %>

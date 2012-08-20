@@ -1,4 +1,4 @@
-<h1> Give a response for <%= @survey.name %></h1>
+<h1><%= t '.response_for_survey', :survey_name => @survey.name %></h1>
 
 <%= semantic_form_for [@survey, @response] do |f| %>
   <%= f.semantic_fields_for :answers do |f| %>

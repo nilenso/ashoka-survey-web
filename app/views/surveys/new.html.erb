@@ -1,4 +1,4 @@
-<h1> Create a new survey </h1>
+<h1> <%= t ".create_survey" %> </h1>
 
 <div id="survey">
   <%= semantic_form_for @survey do |f| %>
@@ -10,7 +10,7 @@
 
     <div id="questions"></div>
 
-    <%= link_to "Add a Question", '#', :class => 'add_question_field' %>
+    <%= link_to t(".add_question"), '#', :class => 'add_question_field' %>
 
     <%= f.actions do %>
       <%= f.action :submit, :as => :button %>
