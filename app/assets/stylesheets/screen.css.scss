@@ -1,4 +1,5 @@
 @import 'susy';
+@import 'compass/reset';
 
 $total-columns  : 1;             // a 12-column grid
 $column-width   : 960px;            // each column is 4em wide
@@ -7,4 +8,42 @@ $grid-padding   : $gutter-width;  // grid-padding equal to gutters
 
 .container{
   @include container;
+}
+
+.nav{
+  position: relative;
+  padding: 8px 100px;
+  margin: 2em 0em 1em 0em;
+  border-top: solid 1px #FFF;
+  background-color: #003A5F;
+  padding: 0.8em;
+  li {
+    padding-left: 25px;
+    font-size: 14px;
+    color: #BBB;
+    text-decoration: none;
+    display: inline;
+    a { color: #FFF; 
+      text-decoration: none;
+    }
+  }
+}
+
+p.error{
+  background-color: rgb(242, 222, 222);
+  border: 1px solid rgb(238, 211, 215);
+  color: rgb(185, 74, 72);
+  padding: 8px 35px 8px 14px;
+}
+
+p.notice{
+  background-color: rgb(223, 240, 216);
+  border-color: rgb(214, 233, 198);
+  color: rgb(70, 136, 71);
+  padding: 8px 35px 8px 14px;
+}
+
+h1{
+  font-size: 1.8em;
+  margin-bottom: 0.5em;
 }
