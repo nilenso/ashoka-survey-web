@@ -1,0 +1,10 @@
+@import 'susy';
+
+$total-columns  : 1;             // a 12-column grid
+$column-width   : 960px;            // each column is 4em wide
+$gutter-width   : 2px;            // 1em gutters between columns
+$grid-padding   : $gutter-width;  // grid-padding equal to gutters
+
+.container{
+  @include container;
+}
