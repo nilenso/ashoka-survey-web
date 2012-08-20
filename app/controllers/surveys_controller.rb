@@ -14,7 +14,7 @@ class SurveysController < ApplicationController
 
     if @survey.save
       redirect_to root_path
-      flash[:notice] = "Survey successfully created"
+      flash[:notice] = t "flash.survey_created"
     else
       render :new
     end
@@ -23,7 +23,7 @@ class SurveysController < ApplicationController
   def destroy
     survey = Survey.find(params[:id])
     survey.destroy
-    flash[:notice] = "Survey deleted"
+    flash[:notice] = t "flash.survey_deleted"
     redirect_to(surveys_path)
   end
 end

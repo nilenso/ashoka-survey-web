@@ -1,6 +1,11 @@
 fr:
   application_title: "Application de l'enquête"
   confirm: "Etes-vous sûr?"
+
+  flash:
+    survey_created: "Enquête créé avec succès"
+    survey_deleted: "Enquête supprimé"
+
   surveys:
     new:
       create_survey: "Créer un nouveau sondage"
