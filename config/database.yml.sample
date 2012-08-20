@@ -8,7 +8,7 @@ development:
   encoding: utf8
   database: survey_web_dev
   pool: 5
-  username: tim
+  username: 
   password: 
   host: localhost
 
