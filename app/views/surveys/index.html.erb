@@ -5,10 +5,10 @@
 <% @surveys.each do |survey| %>
   <div>
     <ul>
-      <li>Name: <%= survey.name %></li>
-      <li>Expires On: <%= survey.expiry_date %></li>
-      <li>Description: <%= survey.description %></li>
       <%= link_to "Add a response for this survey", new_survey_response_path(survey.id) %>
+      <li><%= Survey.human_attribute_name(:name) %>: <%= survey.name %></li>
+      <li><%= Survey.human_attribute_name(:expiry_date) %>: <%= survey.expiry_date %></li>
+      <li><%= Survey.human_attribute_name(:description) %>: <%= survey.description %></li>
       <%= link_to t(".delete_survey"), survey_path(survey.id), :method => :delete, :confirm => t(:confirm) %>
     </ul>
   </div>
