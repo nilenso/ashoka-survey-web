@@ -29,6 +29,13 @@ en:
       question:
         content: "Content"
 
+# Library strings
+
   formtastic:
     actions:
-      create: "Create %{model}"        
+      create: "Create %{model}"
+
+  will_paginate:
+    previous_label: "&#8592; Previous"
+    next_label: "Next &#8594;"
+    page_gap: "&hellip;"
