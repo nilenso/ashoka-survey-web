@@ -6,5 +6,5 @@ SurveyWeb::Application.routes.draw do
   end
   
   root :to => 'surveys#index'
-  match '/:locale' => 'surveys#index'
+  match "/(:locale)" => 'surveys#index', :as => :root_in_current_locale, :locale => /#{I18n.available_locales.join('|')}/
 end
