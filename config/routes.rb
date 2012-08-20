@@ -1,7 +1,9 @@
 SurveyWeb::Application.routes.draw do
 
-  resources :surveys do
-    resources :responses, :only => [:new, :create, :show]
+  scope '/:locale' do
+    resources :surveys do
+      resources :responses, :only => [:new, :create, :show]
+    end
   end
   root :to => 'surveys#index'
 

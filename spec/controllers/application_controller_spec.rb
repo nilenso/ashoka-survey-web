@@ -21,4 +21,10 @@ describe ApplicationController do
       expect { get :index }.to change { I18n.locale }.from(:fr).to(:en)
     end
   end
+
+  context "when recieving requests without being passed the locale" do
+    it "sets the locale param to I18n.locale" do
+      pending "Not sure how to test this."
+    end
+  end
 end
