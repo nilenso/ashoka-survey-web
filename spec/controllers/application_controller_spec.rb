@@ -1,3 +1,5 @@
+require 'spec_helper'
+
 describe ApplicationController do
   # mocking index action for testing locale
   controller do
