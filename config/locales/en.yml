@@ -22,3 +22,7 @@ en:
 
       question:
         content: "Content"
+
+  formtastic:
+    actions:
+      create: "Create %{model}"        

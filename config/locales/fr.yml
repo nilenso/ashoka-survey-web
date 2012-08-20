@@ -22,4 +22,7 @@ fr:
 
       question:
         content: "Contenu"
-        
+
+  formtastic:
+    actions:
+      create: "Créer %{model}"
