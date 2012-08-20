@@ -1,0 +1,25 @@
+fr:
+  application_title: "Application de l'enquête"
+  confirm: "Etes-vous sûr?"
+  surveys:
+    new:
+      create_survey: "Créer un nouveau sondage"
+      add_question: "Ajouter une question"
+    index:
+      create_survey: "Créer un nouveau sondage"
+      delete_survey: "Supprimer cette enquête"
+
+  responses:
+    new:
+      response_for_survey: "Donner une réponse pour %{survey_name}"
+
+  activerecord:
+    attributes:
+      survey:
+        name: "Nom"
+        expiry_date: "Expire le"
+        description: "Description"
+
+      question:
+        content: "Contenu"
+        
