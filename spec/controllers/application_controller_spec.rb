@@ -17,9 +17,15 @@ describe ApplicationController do
     end
   end
 
-  context "when recieving requests without being passed the locale" do
-    it "sets the locale param to I18n.locale" do
-      pending "Not sure how to test this."
+  context "when generating paths without passing the locale" do
+    it "sets the locale param to fr when the locale is fr" do
+      I18n.locale = 'fr'
+      new_survey_path.should match /fr.*/
+    end
+
+    it "doesn't set the locale param when the locale is en" do
+      I18n.locale = 'en'
+      new_survey_path.should_not match /en.*/
     end
   end
 end

@@ -3,12 +3,13 @@ class ApplicationController < ActionController::Base
   before_filter :set_locale
 
   def default_url_options(options={})
-    { :locale => I18n.locale }
+    return { :locale => I18n.locale } unless I18n.locale == I18n.default_locale
+    return { :locale => nil }
   end
 
   private
 
   def set_locale
-    I18n.locale = params[:locale]
+    I18n.locale = params[:locale] || I18n.default_locale
   end
 end
