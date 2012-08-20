@@ -2,6 +2,9 @@ fr:
   application_title: "Application de l'enquête"
   confirm: "Etes-vous sûr?"
 
+  nav:
+    home: "Page d'accueil"
+
   flash:
     survey_created: "Enquête créé avec succès"
     survey_deleted: "Enquête supprimé"

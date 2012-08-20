@@ -1,6 +1,9 @@
 en:
   application_title: "Survey Application"
   confirm: "Are you sure?"
+
+  nav:
+    home: "Home"
   
   flash:
     survey_created: "Survey created successfully"
