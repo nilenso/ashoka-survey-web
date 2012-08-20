@@ -20,7 +20,7 @@ test:
   encoding: utf8
   database: survey_web_test
   pool: 5
-  username:
+  username: 
   password:
   host: localhost
 
@@ -31,3 +31,8 @@ production:
   pool: 5
   username:
   password:
+
+postgres:
+  adapter: postgresql
+  database: survey_web_test
+  username: postgres
