@@ -4,6 +4,7 @@ gem 'rails', '3.2.6'
 gem 'pg'
 gem 'formtastic'
 gem 'will_paginate'
+gem 'rails-i18n'
 
 
 # Gems used only for assets and not required
