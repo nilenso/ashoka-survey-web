@@ -14,8 +14,9 @@ describe ApplicationController do
       I18n.locale.should == :fr
     end
 
-    it "shouldn't change the locale if params[:locale] is not set" do
-      expect { get :index }.to_not change { I18n.locale }
+    it "reverts to the default locale if params[:locale] is not set " do
+      get :index, :locale => 'fr'
+      expect { get :index }.to change { I18n.locale }.from(:fr).to(:en)
     end
   end
 end
