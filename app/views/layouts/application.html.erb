@@ -7,11 +7,10 @@
 <%= csrf_meta_tags %>
 </head>
 <body>
-<div class = "container"> 
-  <%= link_to_unless_current "English", locale: nil %> | 
-  <%= link_to_unless_current "French", locale: 'fr' %> 
-
-  <%= yield %>
-</div>
+  <div class = "container">
+    <%= render "layouts/nav" %>
+    <%= render "layouts/flash", :flash => flash %> 
+    <%= yield %>
+  </div>
 </body>
 </html>

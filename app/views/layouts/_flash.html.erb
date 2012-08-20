@@ -1,0 +1,7 @@
+<div id="flash_messages">
+  <% flash.each do |type, message| %>
+  <p class='<%= type %>'>
+    <%= format_flash_message(message) %>
+  </p>
+  <% end %>
+</div>
