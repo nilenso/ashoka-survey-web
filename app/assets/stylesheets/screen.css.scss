@@ -12,9 +12,7 @@ $grid-padding   : $gutter-width;  // grid-padding equal to gutters
 
 .nav{
   position: relative;
-  padding: 8px 100px;
   margin: 2em 0em 1em 0em;
-  border-top: solid 1px #FFF;
   background-color: #003A5F;
   padding: 0.8em;
   li {
@@ -46,4 +44,22 @@ p.notice{
 h1{
   font-size: 1.8em;
   margin-bottom: 0.5em;
+}
+
+.footer{
+  position: absolute;
+  bottom: 1em;
+  background-color: #003A5F;
+  padding: 0.8em;
+  width: $column-width;
+  li {
+    padding-left: 25px;
+    font-size: 14px;
+    color: #BBB;
+    text-decoration: none;
+    display: inline;
+    a { color: #FFF; 
+      text-decoration: none;
+    }
+  }
 }
