@@ -5,6 +5,7 @@ gem 'pg'
 gem 'formtastic'
 gem 'will_paginate'
 gem 'rails-i18n'
+gem 'heroku'
 
 
 # Gems used only for assets and not required
