@@ -8,14 +8,4 @@ class SurveyBuilder
     template = Mustache.render($('#question_template').html(), id: @question_count++)
     @form_div.find('#questions').append(template)
 
-  switch_tabs: (event) =>
-    clicked_tab = @sidebar_div.find(event.target)
-    
-    @sidebar_div.children('div').hide()
-    @sidebar_div.find('li').removeClass('active')
-    clicked_tab.addClass('active')
-
-    clicked_tab_target = @sidebar_div.find(clicked_tab.data('tab-target'))
-    clicked_tab_target.show()
-
 SurveyApp.SurveyBuilder = SurveyBuilder

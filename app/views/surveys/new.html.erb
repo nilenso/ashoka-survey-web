@@ -31,5 +31,8 @@
 </div>
 
 <script type="text/javascript">
-  new SurveyApp.SurveyBuilder($(".sidebar"), $('.form_pane'));
+  $(document).ready(function(){
+    new SurveyApp.SurveyBuilder($(".sidebar"), $('.form_pane'));
+    SurveyApp.tabify($('.sidebar'));
+  })
 </script>
