@@ -1,7 +1,7 @@
 describe "Survey", ->
   beforeEach ->
     loadFixtures "survey"
-    new SurveyApp.Survey($(".settings_pane"), $(".form_pane"))
+    new SurveyApp.Survey($(".question_picker_pane"), $(".form_pane"))
 
   it "adds a question to the questions div on clicking", ->
     $(".add_question_field").click()
