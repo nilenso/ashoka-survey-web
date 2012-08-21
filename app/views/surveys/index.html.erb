@@ -45,9 +45,7 @@
 
 <script type="text/javascript">
 $(document).ready(function() {
-  $('.more_description').hide();
-  $('.less_description_link').hide();
-  $('.survey_row').each(function(index, elem) {
+  $('.survey_row').each(function(_, elem) {
     new SurveyApp.SurveyRow($(elem));
   });
 });
