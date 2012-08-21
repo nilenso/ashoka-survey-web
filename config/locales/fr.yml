@@ -13,6 +13,8 @@ fr:
     new:
       create_survey: "Créer un nouveau sondage"
       add_single_line_question: "Ajouter une question simple ligne"
+      pick_question_type: "Choisissez Type de Question"
+      question_settings: "Paramètres"
     index:
       all_surveys: "Tous les sondages"
       create_survey: "Créer un nouveau sondage"
