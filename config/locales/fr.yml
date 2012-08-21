@@ -14,6 +14,7 @@ fr:
       create_survey: "Créer un nouveau sondage"
       add_question: "Ajouter une question"
     index:
+      all_surveys: "Tous les sondages"
       create_survey: "Créer un nouveau sondage"
       delete_survey: "Supprimer cette enquête"
       add_response: "Ajouter une réponse pour cette enquête"
