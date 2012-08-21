@@ -8,6 +8,7 @@
       <th><%= Survey.human_attribute_name(:name) %></th>
       <th><%= Survey.human_attribute_name(:description) %></th>
       <th><%= Survey.human_attribute_name(:expiry_date) %></th>
+      <th><%= Survey.human_attribute_name(:responses) %></th>
       <th><%= t ".operations" %></th>
     </thead>
     <tbody>
@@ -16,6 +17,7 @@
         <td><%= survey.name %></td>
         <td><%= survey.description %></td>
         <td><%= survey.expiry_date %></td>
+        <td><%= survey.responses.count %></td>
         <td>
             <%= link_to t(".add_response"), new_survey_response_path(survey.id) %>
             <%= link_to t(".delete_survey"), survey_path(survey.id), :method => :delete, :confirm => t(:confirm) %>
