@@ -21,6 +21,8 @@ fr:
       delete_survey: "Supprimer cette enquête"
       add_response: "Ajouter une réponse pour cette enquête"
       operations: "Opérations"
+      more: "plus"
+      less: "moins"
 
   responses:
     new:

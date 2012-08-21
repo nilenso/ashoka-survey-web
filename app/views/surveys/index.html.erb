@@ -25,8 +25,8 @@
             <div class="more_description">
               <p><%= survey.description%></p>
             </div>
-            <%= link_to "more", '#', :class => 'more_description_link' %>
-            <%= link_to "less", '#', :class => 'less_description_link' %>
+            <%= link_to t(".more"), '#', :class => 'more_description_link' %>
+            <%= link_to t(".less"), '#', :class => 'less_description_link' %>
           </td>
           <td><%= survey.expiry_date %></td>
           <td><%= survey.responses.count %></td>

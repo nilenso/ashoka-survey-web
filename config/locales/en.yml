@@ -21,6 +21,8 @@ en:
       delete_survey: "Delete this survey"
       add_response: "Add a response for this survey"
       operations: "Operations"
+      more: "more"
+      less: "less"
 
   responses:
     new:
