@@ -35,6 +35,7 @@ group :test, :development do
   gem 'growl'
   gem 'forgery'
   gem 'capybara'
+  gem "capybara-webkit"
 end
 
 gem 'jquery-rails'
