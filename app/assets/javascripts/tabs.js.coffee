@@ -3,11 +3,15 @@ SurveyApp.tabify = (tabsContainer) ->
 
 SurveyApp.switch_tabs = (event) ->
   clicked_tab = $(event.target)
-  sidebar_div = clicked_tab.parent().parent()
+  container = clicked_tab.parent().parent()
 
-  sidebar_div.find('li').removeClass('active')
+  all_tabs = container.find('li')
+  all_tabs.removeClass('active')
+
   clicked_tab.addClass('active')
 
-  sidebar_div.children('div').hide()
-  clicked_tab_target = sidebar_div.find(clicked_tab.data('tab-target'))
-  clicked_tab_target.show()
+  all_panes = container.children('div')
+  all_panes.hide()
+
+  target_pane = container.find(clicked_tab.data('tab-target'))
+  target_pane.show()
