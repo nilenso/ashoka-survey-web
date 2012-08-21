@@ -38,9 +38,6 @@ GEM
       rack-test (>= 0.5.4)
       selenium-webdriver (~> 2.0)
       xpath (~> 0.1.4)
-    capybara-webkit (0.12.1)
-      capybara (>= 1.0.0, < 1.2)
-      json
     childprocess (0.3.5)
       ffi (~> 1.0, >= 1.0.6)
     chunky_png (1.2.6)
@@ -59,6 +56,7 @@ GEM
       compass (>= 0.12.2, < 0.14)
     diff-lcs (1.1.3)
     erubis (2.7.0)
+    eventmachine (0.12.10)
     excon (0.14.3)
     execjs (1.4.0)
       multi_json (~> 1.0)
@@ -67,6 +65,8 @@ GEM
     factory_girl_rails (3.5.0)
       factory_girl (~> 3.5.0)
       railties (>= 3.0.0)
+    faye-websocket (0.4.6)
+      eventmachine (>= 0.12.0)
     ffi (1.1.4)
     forgery (0.5.0)
     formtastic (2.2.1)
@@ -96,6 +96,7 @@ GEM
     heroku-api (0.2.8)
       excon (~> 0.14.3)
     hike (1.2.1)
+    http_parser.rb (0.5.3)
     i18n (0.6.0)
     jasminerice (0.0.9)
       coffee-rails
@@ -122,6 +123,12 @@ GEM
     netrc (0.7.5)
     nokogiri (1.5.5)
     pg (0.14.0)
+    poltergeist (0.7.0)
+      capybara (~> 1.1)
+      childprocess (~> 0.3)
+      faye-websocket (~> 0.4, >= 0.4.4)
+      http_parser.rb (~> 0.5.3)
+      multi_json (~> 1.0)
     polyglot (0.3.3)
     rack (1.4.1)
     rack-cache (1.2)
@@ -211,7 +218,6 @@ PLATFORMS
 
 DEPENDENCIES
   capybara
-  capybara-webkit
   coffee-rails (~> 3.2.1)
   compass-rails
   factory_girl_rails
@@ -225,6 +231,7 @@ DEPENDENCIES
   jasminerice
   jquery-rails
   pg
+  poltergeist
   rails (= 3.2.6)
   rails-i18n
   rspec-http

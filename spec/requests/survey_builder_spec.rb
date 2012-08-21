@@ -1,4 +1,4 @@
-describe 'SurveyBuilder', js: true, driver: :webkit do
+describe 'SurveyBuilder', js: true do
   context "when clicking on 'Add New Question'" do
     it "adds a question to the questions div on clicking the link" do
       visit('/surveys/new')
