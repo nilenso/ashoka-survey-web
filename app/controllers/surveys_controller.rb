@@ -13,7 +13,7 @@ class SurveysController < ApplicationController
     @survey = Survey.new(params[:survey])
 
     if @survey.save
-      redirect_to root_in_current_locale_path
+      redirect_to root_path
       flash[:notice] = t "flash.survey_created"
     else
       render :new
