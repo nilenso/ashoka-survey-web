@@ -2,16 +2,28 @@
 
 <%= link_to t(".create_survey"), :action => "new" %>
 
-<% @surveys.each do |survey| %>
-  <div>
-    <ul>
-      <li><%= Survey.human_attribute_name(:name) %>: <%= survey.name %></li>
-      <li><%= Survey.human_attribute_name(:expiry_date) %>: <%= survey.expiry_date %></li>
-      <li><%= Survey.human_attribute_name(:description) %>: <%= survey.description %></li>
-      <%= link_to t(".add_response"), new_survey_response_path(survey.id) %>
-      <%= link_to t(".delete_survey"), survey_path(survey.id), :method => :delete, :confirm => t(:confirm) %>
-    </ul>
-  </div>
-<% end %>
+<div>
+  <table>
+    <thead>
+      <th><%= Survey.human_attribute_name(:name) %></th>
+      <th><%= Survey.human_attribute_name(:description) %></th>
+      <th><%= Survey.human_attribute_name(:expiry_date) %></th>
+      <th><%= t ".operations" %></th>
+    </thead>
+    <tbody>
+      <% @surveys.each do |survey| %>
+      <tr>
+        <td><%= survey.name %></td>
+        <td><%= survey.description %></td>
+        <td><%= survey.expiry_date %></td>
+        <td>
+            <%= link_to t(".add_response"), new_survey_response_path(survey.id) %>
+            <%= link_to t(".delete_survey"), survey_path(survey.id), :method => :delete, :confirm => t(:confirm) %>
+        </td>
+      </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
 
 <%= will_paginate @surveys %>
