@@ -13,7 +13,7 @@ class ResponsesController < ApplicationController
     @response = Response.new(params[:response])
     @response.survey = Survey.find(params[:survey_id])
     if @response.save
-      redirect_to root_in_current_locale_path
+      redirect_to root_path
     end
   end
 end
