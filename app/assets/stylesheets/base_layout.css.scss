@@ -11,7 +11,7 @@ $base-font-size : 16px;           // font-size to base all the em measurements o
   @include container;
 }
 
-.nav{
+.header{
   position: relative;
   margin: 2em auto;
   background-color: #003A5F;

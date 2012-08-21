@@ -2,7 +2,7 @@ fr:
   application_title: "Application de l'enquête"
   confirm: "Etes-vous sûr?"
 
-  nav:
+  header:
     home: "Page d'accueil"
 
   flash:

@@ -2,7 +2,7 @@ en:
   application_title: "Survey Application"
   confirm: "Are you sure?"
 
-  nav:
+  header:
     home: "Home"
   
   flash:
