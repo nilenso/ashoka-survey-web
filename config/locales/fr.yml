@@ -12,7 +12,7 @@ fr:
   surveys:
     new:
       create_survey: "Créer un nouveau sondage"
-      add_question: "Ajouter une question"
+      add_single_line_question: "Ajouter une question simple ligne"
     index:
       all_surveys: "Tous les sondages"
       create_survey: "Créer un nouveau sondage"
