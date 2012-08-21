@@ -1,0 +1,29 @@
+@import 'susy';
+@import 'base_layout';
+@import "compass/css3/border-radius";
+
+.surveys_table {
+  th {
+    font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
+    sans-serif;
+    color: $e;
+    border-right: 1px solid $b;
+    border-bottom: 1px solid $b;
+    border-top: 1px solid $b;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    text-align: left;
+    padding: 6px 6px 6px 12px;
+    background: $c;
+  }
+
+  td {
+  border-right: 1px solid $b;
+  border-bottom: 1px solid $b;
+  padding: 6px 6px 6px 12px;
+  }
+
+  .survey_expiry_date {
+    width : 10%;
+  }
+}
