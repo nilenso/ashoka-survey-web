@@ -21,11 +21,9 @@
   border-right: 1px solid $b;
   border-bottom: 1px solid $b;
   padding: 6px 6px 6px 12px;
-}
+  }
 
-
-td.alt {
-  background: #F5FAFA;
-  color: #B4AA9D;
-}
+  .survey_expiry_date {
+    width : 10%;
+  }
 }

@@ -32,7 +32,7 @@
             <%= link_to t(".less"), '#', :class => 'less_description_link' %>
           <% end %>
         </td>
-        <td><%= survey.expiry_date %></td>
+        <td class="survey_expiry_date"><%= survey.expiry_date %></td>
         <td><%= survey.responses.count %></td>
         <td>
           <%= link_to image_tag("add.png"), new_survey_response_path(survey.id) %>
