@@ -18,20 +18,16 @@
       <tr class="survey_row">
         <td><%= survey.name %></td>
         <td class="survey_description">
-          <div class="truncated_description">
-            <p>
-              <%= truncate(survey.description, :length => 120)%>
-            </p>
+          <span class="truncated_description">
+            <%= truncate(survey.description, :length => 120)%>
+          </span>
+          <div class="more_description">
+            <%= survey.description%>
           </div>
-          <p>
-            <div class="more_description">
-              <%= survey.description%>
-            </div>
-            <% if survey.description.length > 120 %>
-              <%= link_to t(".more"), '#', :class => 'more_description_link' %>
-              <%= link_to t(".less"), '#', :class => 'less_description_link' %>
-            <% end %>
-          </p>
+          <% if survey.description.length > 120 %>
+            <%= link_to t(".more"), '#', :class => 'more_description_link' %>
+            <%= link_to t(".less"), '#', :class => 'less_description_link' %>
+          <% end %>
         </td>
         <td class="survey_expiry_date"><%= survey.expiry_date %></td>
         <td><%= survey.responses.count %></td>
