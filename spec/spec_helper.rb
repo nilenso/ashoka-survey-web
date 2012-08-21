@@ -4,6 +4,8 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'rubygems'
 require 'spork'
+require 'capybara/rails'
+require 'capybara/rspec'
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,

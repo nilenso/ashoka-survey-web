@@ -34,6 +34,7 @@ group :test, :development do
   gem 'shoulda-matchers'
   gem 'growl'
   gem 'forgery'
+  gem 'capybara'
 end
 
 gem 'jquery-rails'
