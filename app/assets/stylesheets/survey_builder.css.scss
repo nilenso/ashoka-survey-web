@@ -27,6 +27,8 @@ $active_tab_color: lighten($b, 25%);
 }
 
 .settings_pane{
+  border: 1px solid #aaa;
+  padding: 1em;
   display: none;
 }
 
@@ -40,7 +42,7 @@ $active_tab_color: lighten($b, 25%);
     font-family: sans-serif;
     font-size: 0.9em;
     display: inline;
-
+    cursor: pointer;
     a {
       text-decoration: none;
       color: #888;
