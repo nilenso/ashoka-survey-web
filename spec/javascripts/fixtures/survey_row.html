@@ -4,23 +4,15 @@
 
 <table>
   <tr class="survey_row">
-    <td class="survey_description_<%= count %>">
+    <td class="survey_description_1">
       <div class="truncated_description">
-        <p>
-          <%= truncate(survey.description, :length => 150)%>
-        </p>
+        Boo
       </div>
       <div class="more_description">
-        <p><%= survey.description%></p>
+        Boo Yeah
       </div>
       <%= link_to "more", '#', :class => 'more_description_link' %>
       <%= link_to "less", '#', :class => 'less_description_link' %>
-    </td>
-    <td><%= survey.expiry_date %></td>
-    <td><%= survey.responses.count %></td>
-    <td>
-      <%= link_to image_tag("add.png"), new_survey_response_path(survey.id) %>
-      <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :confirm => t(:confirm) %>
     </td>
   </tr>
 </table>
