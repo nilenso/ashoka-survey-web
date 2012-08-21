@@ -19,8 +19,8 @@
         <td><%= survey.expiry_date %></td>
         <td><%= survey.responses.count %></td>
         <td>
-            <%= link_to t(".add_response"), new_survey_response_path(survey.id) %>
-            <%= link_to t(".delete_survey"), survey_path(survey.id), :method => :delete, :confirm => t(:confirm) %>
+            <%= link_to image_tag("add.png"), new_survey_response_path(survey.id) %>
+            <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :confirm => t(:confirm) %>
         </td>
       </tr>
       <% end %>
