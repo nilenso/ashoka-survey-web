@@ -1,8 +1,17 @@
 <%= stylesheet_link_tag 'survey_builder' %>
 <h1> <%= t ".create_survey" %> </h1>
 
-<div class="question_picker_pane">
-  <%= link_to t(".add_single_line_question"), '#', :class => 'add_question_field' %>
+<div class="sidebar">
+  <ul class="tabs">
+    <li class="active"><%= link_to "Pick question", "#" %></li>
+    <li><%= link_to "Settings", "#" %></li>
+  </ul>
+
+  <div class="question_picker_pane">
+    <%= link_to t(".add_single_line_question"), '#', :class => 'add_question_field' %>
+  </div>
+
+  <div class="settings_pane"></div>
 </div>
 
 <div class="form_pane">

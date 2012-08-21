@@ -7,26 +7,41 @@ $gutter-width   : 1px;          // 1em gutters between columns
 $grid-padding   : $gutter-width;  // grid-padding equal to gutters
 $base-font-size : 16px;           // font-size to base all the em measurements on
 
+//Palette
+$a: #F7F2B2;
+$b: #C2BD86;
+$c: #88A33E;
+$d: #8E3557;
+$e: #541E32;
+
+$header_color: $e;
+$footer_color: $e;
+$link_color: $a;
+
 .container{
   @include container;
+}
+
+.header, .footer {
+  width: 960px;
+  a {
+    color: $link_color; 
+    text-decoration: none;
+    &:hover { color: darken($link_color, 20%); }
+  }
 }
 
 .header{
   position: relative;
   margin: 2em auto;
-  background-color: #003A5F;
+  background-color: $header_color;
   padding: 0.8em;
   clear: both;
-  width: 960px;
   li {
     padding-left: 25px;
     font-size: 14px;
-    color: #BBB;
     text-decoration: none;
     display: inline;
-    a { color: #FFF; 
-      text-decoration: none;
-    }
   }
 }
 
@@ -51,18 +66,13 @@ h1{
 
 .footer{
   margin: 2em auto 0 auto;
-  background-color: #003A5F;
+  background-color: $footer_color;
   padding: 0.8em;
   clear: both;
-  width: 960px ;
   li {
     padding-left: 25px;
     font-size: 14px;
-    color: #BBB;
     text-decoration: none;
     display: inline;
-    a { color: #FFF; 
-      text-decoration: none;
-    }
   }
 }
