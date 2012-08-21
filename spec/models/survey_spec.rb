@@ -5,6 +5,7 @@ describe Survey do
   it { should respond_to :expiry_date }
   it { should respond_to :description }
   it { should have_many :questions }
+  it { should have_many :responses }
   it { should accept_nested_attributes_for :questions }
 
   context "when validating" do

@@ -18,6 +18,7 @@ fr:
       create_survey: "Créer un nouveau sondage"
       delete_survey: "Supprimer cette enquête"
       add_response: "Ajouter une réponse pour cette enquête"
+      operations: "Opérations"
 
   responses:
     new:
