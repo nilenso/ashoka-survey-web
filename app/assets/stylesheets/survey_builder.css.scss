@@ -1,0 +1,25 @@
+@import 'susy';
+@import 'compass/reset';
+
+$total-columns  : 3;              // a 12-column grid
+$column-width   : 960px / $total-columns;           // each column is 4em wide
+$gutter-width   : 3px;          // 1em gutters between columns
+$grid-padding   : 0em;  // grid-padding equal to gutters
+$base-font-size : 16px;           // font-size to base all the em measurements on
+
+.container{
+  @include container;
+}
+
+.form_pane {
+  @include span-columns(2 omega, 3);
+  margin-bottom: 1em;
+}
+
+.settings_pane{
+  @include span-columns(1, 3)
+}
+
+.add_question_field {
+ @include span-columns(1, 3) 
+}

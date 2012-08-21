@@ -1,6 +1,11 @@
-<h1> <%= t ".create_survey" %> </h1>
+<%= stylesheet_link_tag 'survey_builder' %>
 
-<div id="survey">
+<div class="settings_pane">
+  <h1> <%= t ".create_survey" %> </h1>
+  <%= link_to t(".add_question"), '#', :class => 'add_question_field' %>
+</div>
+
+<div class="form_pane">
   <%= semantic_form_for @survey do |f| %>
     <%= f.inputs :name, :expiry_date, :description %>
 
@@ -10,8 +15,6 @@
 
     <div id="questions"></div>
 
-    <%= link_to t(".add_question"), '#', :class => 'add_question_field' %>
-
     <%= f.actions do %>
       <%= f.action :submit, :as => :button %>
     <% end %>
@@ -19,5 +22,5 @@
 </div>
 
 <script type="text/javascript">
-  new SurveyApp.Survey($("#survey"));
+  new SurveyApp.Survey($(".settings_pane"), $('.form_pane'));
 </script>
