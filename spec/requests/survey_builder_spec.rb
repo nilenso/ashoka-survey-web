@@ -10,7 +10,7 @@ describe 'SurveyBuilder', js: true do
       visit('/surveys/new')
       click_link("Add a single line Question")
       click_link("Add a single line Question")
-      find("#questions").all('fieldset').each.count.should == 2
+      find("#questions").all('fieldset').should have(2).fieldsets
     end
 
     it "stores the count of questions added in the name attribute of the input" do
