@@ -14,23 +14,24 @@
       <th><%= t ".operations" %></th>
     </thead>
     <tbody>
-      <%count = 0 %>
       <% @surveys.each do |survey| %>
       <tr class="survey_row">
         <td><%= survey.name %></td>
-        <td class="survey_description_<%= count %>">
+        <td class="survey_description">
           <div class="truncated_description">
             <p>
               <%= truncate(survey.description, :length => 120)%>
             </p>
           </div>
-          <div class="more_description">
-            <p><%= survey.description%></p>
-          </div>
-          <% if survey.description.length > 120 %>
-            <%= link_to t(".more"), '#', :class => 'more_description_link' %>
-            <%= link_to t(".less"), '#', :class => 'less_description_link' %>
-          <% end %>
+          <p>
+            <div class="more_description">
+              <%= survey.description%>
+            </div>
+            <% if survey.description.length > 120 %>
+              <%= link_to t(".more"), '#', :class => 'more_description_link' %>
+              <%= link_to t(".less"), '#', :class => 'less_description_link' %>
+            <% end %>
+          </p>
         </td>
         <td class="survey_expiry_date"><%= survey.expiry_date %></td>
         <td><%= survey.responses.count %></td>
@@ -39,9 +40,8 @@
           <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :confirm => t(:confirm) %>
         </td>
       </tr>
-      <% count += 1 %>
       <% end %>
-    </tbody>
+    </tbody>  
   </table>
 </div>
 
@@ -51,8 +51,8 @@
 $(document).ready(function() {
   $('.more_description').hide();
   $('.less_description_link').hide();
-  $('.survey_row').each(function(index) {
-    new SurveyApp.SurveyRow($('.survey_description_' + index));
+  $('.survey_row').each(function(index, elem) {
+    new SurveyApp.SurveyRow($(elem));
   });
 });
 </script>
