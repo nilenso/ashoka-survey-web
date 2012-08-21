@@ -1,3 +1,5 @@
+<%= stylesheet_link_tag 'surveys_table' %>
+
 <h1> <%= t '.all_surveys' %> </h1>
 
 <%= link_to t(".create_survey"), :action => "new" %>
@@ -19,7 +21,7 @@
           <td class="survey_description_<%= count %>">
             <div class="truncated_description">
               <p>
-                <%= truncate(survey.description, :length => 150)%>
+                <%= truncate(survey.description, :length => 120)%>
               </p>
             </div>
             <div class="more_description">
