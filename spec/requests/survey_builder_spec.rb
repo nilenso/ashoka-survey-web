@@ -28,6 +28,11 @@ describe 'SurveyBuilder', js: true do
   end
 
   context "when submitting the form" do
+    before(:each) do
+      Survey.delete_all
+      Question.delete_all
+    end
+
     it "saves the survey details to the database" do
       visit('/surveys/new')
       within('#survey_details') do
@@ -68,11 +73,6 @@ describe 'SurveyBuilder', js: true do
         question.should_not be_nil
         survey.questions.should include question
       end
-    end
-
-    after(:each) do
-      Survey.delete_all
-      Question.delete_all
     end
   end
 end
