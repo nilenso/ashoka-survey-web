@@ -19,7 +19,7 @@
     <%= f.inputs :name, :expiry_date, :description, :id => 'survey_details' %>
 
     <script type="text/html" id="question_template">
-      <%= (render 'questions/new', :f => f) %>
+      <%= (render 'questions/new', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
     </script>
 
     <div id="questions"></div>
