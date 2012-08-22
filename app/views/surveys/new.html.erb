@@ -16,7 +16,7 @@
 
 <div class="form_pane" id="form_pane">
   <%= semantic_form_for @survey do |f| %>
-    <%= f.inputs :name, :expiry_date, :description %>
+    <%= f.inputs :name, :expiry_date, :description, :id => 'survey_details' %>
 
     <script type="text/html" id="question_template">
       <%= (render 'questions/new', :f => f) %>

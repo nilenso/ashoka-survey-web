@@ -26,4 +26,25 @@ describe 'SurveyBuilder', js: true do
       end
     end
   end
+
+  context "when submitting the form" do
+    it "saves the survey details to the database" do
+      visit('/surveys/new')
+      within('#survey_details') do
+        fill_in('Name', :with => 'Sample survey')
+
+        select('2012', :from => 'Year')
+        select('July', :from => 'Month')
+        select('22',   :from => 'Day')
+
+        fill_in('Description', :with => 'Hello')
+      end
+      click_on('Create Survey')
+
+      survey = Survey.find_by_name('Sample survey')
+      survey.should_not be_nil
+      survey.expiry_date.strftime('%Y-%m-%d').should == '2012-07-22'
+      survey.description.should == 'Hello'
+    end
+  end
 end
