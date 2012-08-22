@@ -1,22 +1,12 @@
 @import 'susy';
 @import 'compass/reset';
+@import 'palette';
 
 $total-columns  : 1;              // a 12-column grid
 $column-width   : 960px;           // each column is 4em wide
 $gutter-width   : 1px;          // 1em gutters between columns
 $grid-padding   : $gutter-width;  // grid-padding equal to gutters
 $base-font-size : 16px;           // font-size to base all the em measurements on
-
-//Palette. $a is the lightest; $e is the darkest.
-$a: #F7F2B2;
-$b: #C2BD86;
-$c: #88A33E;
-$d: #8E3557;
-$e: #541E32;
-
-$header_color: $e;
-$footer_color: $e;
-$link_color: $a;
 
 .container{
   @include container;
@@ -46,16 +36,16 @@ $link_color: $a;
 }
 
 p.error{
-  background-color: rgb(242, 222, 222);
-  border: 1px solid rgb(238, 211, 215);
-  color: rgb(185, 74, 72);
+  background-color: $error_bg_color;
+  border: 1px solid $error_border_color;
+  color: $error_color;
   padding: 8px 35px 8px 14px;
 }
 
 p.notice{
-  background-color: rgb(223, 240, 216);
-  border-color: rgb(214, 233, 198);
-  color: rgb(70, 136, 71);
+  background-color: $success_bg_color;
+  border-color: $success_border_color;
+  color: $success_color;
   padding: 8px 35px 8px 14px;
 }
 

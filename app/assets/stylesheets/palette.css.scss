@@ -1,0 +1,33 @@
+@import 'susy';
+@import 'compass/reset';
+
+// Palette. $a is the lightest; $e is the darkest.
+$a: #F7F2B2;
+$b: #C2BD86;
+$c: #88A33E;
+$d: #8E3557;
+$e: #541E32;
+
+
+$header_color: $e;
+$footer_color: $e;
+
+// tables and tabs
+$border_color: $b;
+$tab_header_color: $e;
+$tab_header_bg_color: $c;
+
+$active_tab_color: $tab_header_bg_color;
+
+// on headers and footers
+$link_color: $a;
+$link_hover_color : #555;
+
+// flash and others
+$error_color : #E1484A;
+$error_bg_color: #F2DEDE;
+$error_border_color: #EED3D7;
+
+$success_color : #468847;
+$success_bg_color : #DFF0D8;
+$success_border_color : #D6E9C6;

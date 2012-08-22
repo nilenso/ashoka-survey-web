@@ -2,21 +2,18 @@
 @import 'base_layout';
 @import "compass/css3/border-radius";
 
-$header_color: $e;
-$header_bg_color: $c;
-$border_color: $b;
 
 .surveys_table {
   th {
     font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
     sans-serif;
-    color: $header_color;
+    color: $tab_header_color;
     border: 1px solid $border_color;
     letter-spacing: 2px;
     text-transform: uppercase;
     text-align: left;
     padding: 6px 6px 6px 12px;
-    background: $header_bg_color;
+    background: $tab_header_bg_color;
   }
 
   td {

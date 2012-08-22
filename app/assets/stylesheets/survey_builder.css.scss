@@ -8,8 +8,6 @@ $gutter-width   : 10px;          // 1em gutters between columns
 $grid-padding   : 1em;  // grid-padding equal to gutters
 $base-font-size : 16px;           // font-size to base all the em measurements on
 
-$active_tab_color: lighten($b, 25%);
-
 .container{
   @include container;
 }
@@ -22,12 +20,12 @@ $active_tab_color: lighten($b, 25%);
 .sidebar { @include span-columns(1, 2); }
 
 .question_picker_pane {
-  border: 1px solid #aaa;
+  border: 1px solid $border_color;
   padding: 1em;
 }
 
 .settings_pane{
-  border: 1px solid #aaa;
+  border: 1px solid $border_color;
   padding: 1em;
   display: none;
 }
@@ -36,7 +34,8 @@ $active_tab_color: lighten($b, 25%);
   li {
     @include border-top-left-radius(0.5em);
     @include border-top-right-radius(0.5em);
-    border: 1px solid #aaa;
+    color: $tab_header_color;
+    border: 1px solid $border_color;
     border-bottom: 0;
     padding: 0.2em 0.6em 0 0.6em;
     font-family: sans-serif;
@@ -45,9 +44,9 @@ $active_tab_color: lighten($b, 25%);
     cursor: pointer;
     a {
       text-decoration: none;
-      color: #888;
+      color: $link_color;
       &:hover {
-        color: #555;
+        color: $link_hover_color;
       }
     }
   }
