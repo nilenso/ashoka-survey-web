@@ -11,28 +11,28 @@
     <%= link_to t(".add_single_line_question"), '#', :class => 'add_question_field' %>
   </div>
 
-  <div class="settings_pane" id="settings_pane"></div>
-</div>
+  <div class="settings_pane" id="settings_pane">
+    <%= semantic_form_for @survey do |f| %>
+      <%= f.inputs :name, :expiry_date, :description, :id => 'survey_details' %>
 
-<div class="form_pane" id="form_pane">
-  <%= semantic_form_for @survey do |f| %>
-    <%= f.inputs :name, :expiry_date, :description, :id => 'survey_details' %>
+      <script type="text/html" id="question_template">
+        <%= (render 'questions/new', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
+      </script>
 
-    <script type="text/html" id="question_template">
-      <%= (render 'questions/new', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
-    </script>
+      <div id="questions"></div>
 
-    <div id="questions"></div>
-
-    <%= f.actions do %>
-      <%= f.action :submit, :as => :button %>
+      <%= f.actions do %>
+        <%= f.action :submit, :as => :button %>
+      <% end %>
     <% end %>
-  <% end %>
+  </div>
 </div>
+
+<div class="form_pane" id="form_pane"></div>
 
 <script type="text/javascript">
   $(document).ready(function(){
-    new SurveyApp.SurveyBuilder($(".sidebar"), $('.form_pane'));
+    new SurveyApp.SurveyBuilder($(".sidebar"));
     SurveyApp.tabify($('.sidebar'));
   })
 </script>

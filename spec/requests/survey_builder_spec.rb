@@ -35,6 +35,7 @@ describe 'SurveyBuilder', js: true do
 
     it "saves the survey details to the database" do
       visit('/surveys/new')
+      find('li', :text => 'Settings').click
       within('#survey_details') do
         fill_in('Name', :with => 'Sample survey')
 
@@ -55,6 +56,7 @@ describe 'SurveyBuilder', js: true do
     context "with questions" do
       before(:each) do
         visit('/surveys/new')
+        find('li', :text => 'Settings').click
         within('#survey_details') do
           fill_in('Name', :with => 'Another sample survey')
           select('2013', :from => 'Year')
@@ -64,8 +66,10 @@ describe 'SurveyBuilder', js: true do
       end
 
       it "saves a single line question" do
+        find('li', :text => 'Pick Question').click
         click_on('Add a single line Question')
         fill_in('Content', :with => 'Test question?')
+        find('li', :text => 'Settings').click
         click_on('Create Survey')
 
         survey = Survey.find_by_name('Another sample survey')
