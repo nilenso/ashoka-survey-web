@@ -7,5 +7,6 @@ class SurveyElement
   mirrorKeyup: (event) =>
     name = $(event.target).attr('name')
     @dummy.find("*[name=\"#{name}\"]").val($(event.target).val());
+    @dummy.find("*[name=\"#{name}\"]").text($(event.target).val());
 
 SurveyApp.SurveyElement = SurveyElement

@@ -20,7 +20,11 @@
       <% end %>
 
       <script type="text/html" id="question_template">
-        <%= (render 'questions/new', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
+        <%= (render 'questions/single_line', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
+      </script>
+
+      <script type="text/html" id="dummy_question_template">
+        <%= (render 'questions/dummy_single_line', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
       </script>
 
       <div id="questions"></div>
@@ -39,12 +43,14 @@
       <%= f.input :expiry_date, :as => :string %>
       <%= f.input :description, :input_html => { :rows => 2 } %>
     <% end %>
+    <div id="dummy_questions"></div>
   <% end %>
+
 </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
-    new SurveyApp.SurveyBuilder($(".sidebar"));
+    new SurveyApp.SurveyBuilder($(".sidebar"), $("#dummy_form_display"));
     SurveyApp.tabify($('.sidebar'));
     new SurveyApp.SurveyElement($("#survey_details"), $("#dummy_survey_details"))
     $('#survey_expiry_date').datepicker({ dateFormat: "yy/mm/dd" });
