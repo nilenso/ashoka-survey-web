@@ -2,11 +2,12 @@
 @import 'compass/reset';
 @import 'palette';
 
-$total-columns  : 1;              // a 12-column grid
-$column-width   : 960px;           // each column is 4em wide
-$gutter-width   : 1px;          // 1em gutters between columns
-$grid-padding   : $gutter-width;  // grid-padding equal to gutters
-$base-font-size : 16px;           // font-size to base all the em measurements on
+$app_width      : 960px;
+$total-columns  : 1;
+$column-width   : $app_width;
+$gutter-width   : 1px;
+$grid-padding   : $gutter-width;
+$base-font-size : 16px;
 
 .container{
   @include container;

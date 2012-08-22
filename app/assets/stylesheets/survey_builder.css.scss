@@ -2,11 +2,10 @@
 @import 'base_layout';
 @import "compass/css3/border-radius";
 
-$total-columns  : 2;              // a 12-column grid
-$column-width   : 960px / $total-columns;           // each column is 4em wide
-$gutter-width   : 10px;          // 1em gutters between columns
-$grid-padding   : 1em;  // grid-padding equal to gutters
-$base-font-size : 16px;           // font-size to base all the em measurements on
+$total-columns  : 2;
+$column-width   : $app_width / $total-columns;
+$gutter-width   : 10px;
+$grid-padding   : 1em;
 
 .container{
   @include container;
