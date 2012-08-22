@@ -28,11 +28,16 @@
   </div>
 </div>
 
-<div class="form_pane" id="form_pane"></div>
+<div class="dummy_form_display" id="dummy_form_display">
+  <%= semantic_form_for @survey do |f| %>
+      <%= f.inputs :name, :expiry_date, :description, :id => "dummy_survey_details", :disabled => true %>
+  <% end %>
+</div>
 
 <script type="text/javascript">
   $(document).ready(function(){
     new SurveyApp.SurveyBuilder($(".sidebar"));
     SurveyApp.tabify($('.sidebar'));
+    new SurveyApp.SurveyElement($("#survey_details"), $("#dummy_survey_details"))
   })
 </script>
