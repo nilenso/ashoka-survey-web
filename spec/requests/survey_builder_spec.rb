@@ -46,5 +46,9 @@ describe 'SurveyBuilder', js: true do
       survey.expiry_date.strftime('%Y-%m-%d').should == '2012-07-22'
       survey.description.should == 'Hello'
     end
+    after(:each) do
+      Survey.delete_all
+      Question.delete_all
+    end
   end
 end
