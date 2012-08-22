@@ -38,11 +38,8 @@ describe 'SurveyBuilder', js: true do
       find('li', :text => 'Settings').click
       within('#survey_details') do
         fill_in('Name', :with => 'Sample survey')
-
-        select('2012', :from => 'Year')
-        select('July', :from => 'Month')
-        select('22',   :from => 'Day')
-
+        find_field('Expires on').set("2012/07/22")
+        find_field('Name').click # To hide the datepicker
         fill_in('Description', :with => 'Hello')
       end
       click_on('Create Survey')
@@ -59,9 +56,8 @@ describe 'SurveyBuilder', js: true do
         find('li', :text => 'Settings').click
         within('#survey_details') do
           fill_in('Name', :with => 'Another sample survey')
-          select('2013', :from => 'Year')
-          select('March', :from => 'Month')
-          select('12',   :from => 'Day')
+          fill_in('Expires on', :with => '2012/06/07')
+          find_field('Name').click # To hide the datepicker
         end
       end
 

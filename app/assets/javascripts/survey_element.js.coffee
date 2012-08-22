@@ -2,7 +2,7 @@
 
 class SurveyElement
   constructor: (@actual, @dummy) ->
-    @actual.find('*').keyup(@mirrorKeyup)
+    @actual.find('*').bind('keyup change', @mirrorKeyup)
 
   mirrorKeyup: (event) =>
     name = $(event.target).attr('name')
