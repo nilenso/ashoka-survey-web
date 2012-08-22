@@ -46,6 +46,30 @@ describe 'SurveyBuilder', js: true do
       survey.expiry_date.strftime('%Y-%m-%d').should == '2012-07-22'
       survey.description.should == 'Hello'
     end
+
+    context "with questions" do
+      before(:each) do
+        visit('/surveys/new')
+        within('#survey_details') do
+          fill_in('Name', :with => 'Another sample survey')
+          select('2013', :from => 'Year')
+          select('March', :from => 'Month')
+          select('12',   :from => 'Day')
+        end
+      end
+
+      it "saves a single line question" do
+        click_on('Add a single line Question')
+        fill_in('Content', :with => 'Test question?')
+        click_on('Create Survey')
+
+        survey = Survey.find_by_name('Another sample survey')
+        question = Question.find_by_content('Test question?')
+        question.should_not be_nil
+        survey.questions.should include question
+      end
+    end
+
     after(:each) do
       Survey.delete_all
       Question.delete_all
