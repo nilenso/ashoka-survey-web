@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require jquery_ui
 //= require mustache
 //= require_self
 //= require_tree .
