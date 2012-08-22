@@ -1,0 +1,5 @@
+<%= f.semantic_fields_for(:questions, :child_index => "mustache_id") do |f| %>
+  <%= f.inputs do %>
+    <%= f.input :content, :as => :string %>
+  <% end %>
+<% end %>
