@@ -4,6 +4,10 @@ describe 'SurveyBuilder', js: true do
       visit('/surveys/new')
       click_link("Add a single line Question")
       find("#questions").should have_selector('fieldset')
+      fieldset = find("#questions").first('fieldset')
+      fieldset.should have_field('survey[questions_attributes][0][content]')
+      fieldset.should have_field('survey_questions_attributes_0_content')
+      fieldset.should have_selector('label')
     end
 
     it "adds multiple questions when the link is clicked multiple times" do
