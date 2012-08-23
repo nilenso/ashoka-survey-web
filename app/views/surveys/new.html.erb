@@ -52,7 +52,7 @@
   $(document).ready(function(){
     new SurveyApp.SurveyBuilder($(".sidebar"), $("#dummy_form_display"));
     SurveyApp.tabify($('.sidebar'));
-    new SurveyApp.SurveyElement($("#survey_details"), $("#dummy_survey_details"))
+    new SurveyApp.SurveyElement($("#survey_details"), $("#dummy_survey_details"), $(".sidebar"))
     $('#survey_expiry_date').datepicker({ dateFormat: "yy/mm/dd" });
   })
 </script>

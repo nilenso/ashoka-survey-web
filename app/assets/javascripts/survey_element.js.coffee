@@ -1,7 +1,7 @@
 # Binding between the actual and dummy fieldsets
 
 class SurveyElement
-  constructor: (@actual, @dummy) ->
+  constructor: (@actual, @dummy, @sidebar_div) ->
     @actual.find('*').bind('keyup change', @mirrorKeyup)
     @dummy.bind('click', @showActual)
 
@@ -11,8 +11,8 @@ class SurveyElement
     @dummy.find("*[name=\"#{name}\"]").text($(event.target).val());
 
   showActual: (event) =>
-  	$(".sidebar").find("#survey_details").hide()
-  	$(".sidebar").find("#questions").find('fieldset').hide()
+  	@sidebar_div.find("#survey_details").hide()
+  	@sidebar_div.find("#questions").find('fieldset').hide()
   	@actual.show()
 
 SurveyApp.SurveyElement = SurveyElement

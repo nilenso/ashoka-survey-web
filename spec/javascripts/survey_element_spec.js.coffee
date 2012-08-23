@@ -3,7 +3,8 @@ describe "SurveyElement", ->
     loadFixtures 'survey_element'
     @actual = $("#actual")
     @dummy = $("#dummy")
-    @survey_element = new SurveyApp.SurveyElement(@actual, @dummy)
+    @sidebar_div = $(".sidebar")
+    @survey_element = new SurveyApp.SurveyElement(@actual, @dummy, @sidebar_div)
     
   it "binds the keyup event for all inputs in the actual fieldset", ->
     expect($("#actual").find('input')).toHandleWith('keyup', @survey_element.mirrorKeyup)
@@ -31,7 +32,5 @@ describe "SurveyElement", ->
   describe "when clicking on corresponding dummy", ->
     it "shows only the actual fieldset in the settings pane", ->
       @dummy.click()
-      expect($('.sidebar').find("#survey_details")).toBeHidden
+      expect(@sidebar_div.find("#survey_details")).toBeHidden()
       expect(@actual).toBeVisible()
-
-
