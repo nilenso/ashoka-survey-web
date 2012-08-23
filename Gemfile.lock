@@ -41,6 +41,7 @@ GEM
     childprocess (0.3.5)
       ffi (~> 1.0, >= 1.0.6)
     chunky_png (1.2.6)
+    cocaine (0.2.1)
     coffee-rails (3.2.2)
       coffee-script (>= 2.2.0)
       railties (~> 3.2.0)
@@ -139,6 +140,12 @@ GEM
     omniauth-oauth2 (1.0.2)
       oauth2 (~> 0.6.0)
       omniauth (~> 1.0)
+    paperclip (3.1.4)
+      activemodel (>= 3.0.0)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      cocaine (>= 0.0.2)
+      mime-types
     pg (0.14.0)
     poltergeist (0.7.0)
       capybara (~> 1.1)
@@ -249,6 +256,7 @@ DEPENDENCIES
   jasminerice
   jquery-rails
   omniauth-oauth2
+  paperclip (~> 3.0)
   pg
   poltergeist
   rails (= 3.2.6)

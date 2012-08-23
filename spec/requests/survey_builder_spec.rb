@@ -81,7 +81,9 @@ describe 'SurveyBuilder', js: true do
         fill_in('Content', :with => 'Test question?')
         fill_in('Max length', :with => 100)
         check('Mandatory')
+        # attach_file('Image', 'app/assets/images/rails.png')
         click_on('Create Survey')
+
 
         survey = Survey.find_by_name('Another sample survey')
         question = Question.find_by_content('Test question?')
