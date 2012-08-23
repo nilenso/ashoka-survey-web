@@ -1,10 +1,16 @@
 require 'spec_helper'
 
 describe ApplicationController do
-  # mocking index action for testing locale
   controller do
+    # mocking index action for testing locale
     def index
       redirect_to root_path
+    end
+
+    # mocking create action for testing expired token
+    def create
+      response = RSpec::Mocks::Mock.new(:error= => :error, :parsed => nil, :body => nil, :status => 401)
+      raise OAuth2::Error.new(response)
     end
   end
 
@@ -26,6 +32,19 @@ describe ApplicationController do
     it "doesn't set the locale param when the locale is en" do
       I18n.locale = 'en'
       new_survey_path.should_not match /en.*/
+    end
+  end
+
+  context "when the OAuth2 session token expires" do
+    it "clears the session hash" do
+      session[:user_id] = 'sigurros'
+      session[:access_token] = 'isawesome'
+      
+      post :create
+
+      session[:user_id].should be_nil
+      session[:access_token].should be_nil
+      response.should redirect_to root_path
     end
   end
 end
