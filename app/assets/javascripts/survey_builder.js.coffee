@@ -7,6 +7,7 @@ class SurveyBuilder
     actual = $(Mustache.render(@sidebar_div.find('#question_template').html(), id: @question_count))
     dummy = $(Mustache.render(@sidebar_div.find('#dummy_question_template').html(), id: @question_count++))
     @sidebar_div.find('#questions').append(actual)
+    @sidebar_div.find('#questions').find('fieldset').hide()
     @dummy_div.find('#dummy_questions').append(dummy)
     new SurveyApp.SurveyElement(actual, dummy)
 

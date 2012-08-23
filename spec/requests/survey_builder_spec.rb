@@ -1,28 +1,37 @@
 describe 'SurveyBuilder', js: true do
   context "when clicking on 'Add New Question'" do
-    it "adds a question to the questions div on clicking the link" do
+    before(:each) do
       visit('/surveys/new')
       click_link("Add a single line Question")
+    end
+
+    it "adds a question to the questions div on clicking the link" do
       find("#questions").should have_selector('fieldset')
       fieldset = find("#questions").first('fieldset')
       fieldset.should have_selector('label')
       fieldset.should have_selector('input')
     end
 
+    it "adds a dummy question to the dummy form display" do
+      find("#dummy_questions").should have_selector('input')
+    end
+
     it "adds multiple questions when the link is clicked multiple times" do
-      visit('/surveys/new')
-      click_link("Add a single line Question")
       click_link("Add a single line Question")
       find("#questions").all('fieldset').should have(2).fieldsets
     end
 
     it "stores the count of questions added in the name attribute of the input" do
-      visit('/surveys/new')
-      click_link("Add a single line Question")
       click_link("Add a single line Question")
       
       find("#questions").all('input').each_with_index do |input, i| 
         input[:name].should include(i.to_s)
+      end
+    end
+
+    it "doesn't show the questions added in the sidebar" do
+      within("#questions") do
+        find('fieldset')['style'].should == "display: none; "
       end
     end
   end
