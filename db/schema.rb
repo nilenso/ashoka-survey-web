@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120823105939) do
+ActiveRecord::Schema.define(:version => 20120823124832) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -26,11 +26,14 @@ ActiveRecord::Schema.define(:version => 20120823105939) do
   create_table "questions", :force => true do |t|
     t.text     "content"
     t.integer  "survey_id"
-    t.datetime "created_at",                    :null => false
-    t.datetime "updated_at",                    :null => false
-    t.boolean  "mandatory",  :default => false
-    t.string   "image"
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+    t.boolean  "mandatory",          :default => false
     t.integer  "max_length"
+    t.string   "image_file_name"
+    t.string   "image_content_type"
+    t.integer  "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"
