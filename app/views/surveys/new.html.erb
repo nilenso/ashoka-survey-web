@@ -24,7 +24,7 @@
       </script>
 
       <script type="text/html" id="dummy_question_template">
-        <%= (render 'questions/dummy_single_line', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
+        <%= (render 'dummies/single_line', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
       </script>
 
       <div id="questions"></div>
@@ -37,14 +37,21 @@
 </div>
 
 <div class="dummy_form_display" id="dummy_form_display">
-  <%= semantic_form_for @survey do |f| %>
-    <%= f.inputs :id => "dummy_survey_details", :disabled => true do %>
-      <%= f.input :name %>
-      <%= f.input :expiry_date, :as => :string %>
-      <%= f.input :description, :input_html => { :rows => 2 } %>
-    <% end %>
-    <div id="dummy_questions"></div>
-  <% end %>
+  <fieldset id="dummy_survey_details">
+    <h2>Survey details</h2>
+    <label name="survey[name]" class=" label">
+      Untitled
+    </label>
+    <label name="survey[expiry_date]" class=" label">
+      00/00/00
+    </label>
+    <p name="survey[description]" class=" label">
+      Description
+    </label>
+    <hr />
+  </fieldset>
+
+  <div id="dummy_questions"></div>
 
 </div>
 
