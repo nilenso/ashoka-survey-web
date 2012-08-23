@@ -18,6 +18,8 @@ fr:
       untitled: "Sans Titre"
       description: "Description"
       survey_details: "Détails de l'enquête"
+      expiry_date: "Expire le"
+
 
     index:
       all_surveys: "Tous les sondages"

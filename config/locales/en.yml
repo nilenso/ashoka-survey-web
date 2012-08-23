@@ -18,6 +18,7 @@ en:
       untitled: "Untitled"
       description: "Description"
       survey_details: "Survey Details"
+      expiry_date: "Expires on"
 
     index:
       all_surveys: "All the Surveys"

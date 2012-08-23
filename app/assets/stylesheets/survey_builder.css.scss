@@ -2,21 +2,40 @@
 @import 'base_layout';
 @import "compass/css3/border-radius";
 
-$total-columns  : 2;
-$column-width   : $app_width / $total-columns;
-$gutter-width   : 10px;
-$grid-padding   : 1em;
+$total-columns: 12;
+$column-width: 60px;
+$gutter-width: 20px;
+$grid-padding: 10px;
 
 .container{
   @include container;
 }
 
 .dummy_form_display {
-  @include span-columns(1 omega, 2);
+  @include span-columns(7 omega, 12);
   margin-bottom: 1em;
+  border: 1px solid $border_color;
+  padding: 1em;
+
+  fieldset {
+    &:hover {
+      color: $link_hover_color;
+      border: 1px dashed $border_color;
+    }
+  }
+
+  label {
+    display :block;
+  }
+
+  #dummy_questions {
+    input {
+      width: 100%;
+    }
+  }
 }
 
-.sidebar { @include span-columns(1, 2); }
+.sidebar { @include span-columns(4.5, 12); }
 
 .question_picker_pane {
   border: 1px solid $border_color;
