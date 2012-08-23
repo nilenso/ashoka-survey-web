@@ -11,6 +11,8 @@ class SurveyElement
     @dummy.find("*[name=\"#{name}\"]").text($(event.target).val());
 
   showActual: (event) =>
+  	$(".sidebar").find("#survey_details").hide()
+  	$(".sidebar").find("#questions").find('fieldset').hide()
   	@actual.show()
 
 SurveyApp.SurveyElement = SurveyElement
