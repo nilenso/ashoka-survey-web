@@ -1,4 +1,3 @@
-
 describe "SurveyElement", ->
   beforeEach ->
     loadFixtures 'survey_element'
