@@ -27,3 +27,7 @@ describe "SurveyElement", ->
     @actual.find('textarea[name=1]').keyup()
     expect(@dummy.find('textarea[name=1]')).toHaveValue("some text")
     expect(@dummy.find('textarea[name=2]')).not.toHaveValue("some text")
+
+  it "shows the actual fieldset in the settings pane when clicking on corresponding dummy", ->
+    @dummy.click()
+    expect(@actual).toBeVisible()
