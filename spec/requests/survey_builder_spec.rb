@@ -24,8 +24,10 @@ describe 'SurveyBuilder', js: true do
     it "stores the count of questions added in the name attribute of the input" do
       click_link("Add a single line Question")
       
-      find("#questions").all('input').each_with_index do |input, i| 
-        input[:name].should include(i.to_s)
+      find("#questions").all('fieldset').each_with_index do |fieldset, i| 
+        fieldset.all('input').each do |input|
+          input[:name].should include(i.to_s)
+        end
       end
     end
 
@@ -73,8 +75,12 @@ describe 'SurveyBuilder', js: true do
       it "saves a single line question" do
         find('li', :text => 'Pick Question').click
         click_on('Add a single line Question')
-        fill_in('Content', :with => 'Test question?')
         find('li', :text => 'Settings').click
+        find('#dummy_questions').find('fieldset').click
+
+        fill_in('Content', :with => 'Test question?')
+        fill_in('Max length', :with => 100)
+        check('Mandatory')
         click_on('Create Survey')
 
         survey = Survey.find_by_name('Another sample survey')
