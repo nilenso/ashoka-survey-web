@@ -6,6 +6,8 @@ gem 'formtastic'
 gem 'will_paginate'
 gem 'rails-i18n'
 gem 'heroku'
+gem 'omniauth-oauth2'
+gem 'figaro'
 
 
 # Gems used only for assets and not required
