@@ -16,6 +16,9 @@ en:
       pick_question_type: "Pick Question"
       question_settings: "Settings"
       untitled: "Untitled"
+      description: "Description"
+      survey_details: "Survey Details"
+
     index:
       all_surveys: "All the Surveys"
       create_survey: "Create a new survey"

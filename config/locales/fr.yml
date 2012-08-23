@@ -16,6 +16,9 @@ fr:
       pick_question_type: "Choisissez Type de Question"
       question_settings: "Paramètres"
       untitled: "Sans Titre"
+      description: "Description"
+      survey_details: "Détails de l'enquête"
+
     index:
       all_surveys: "Tous les sondages"
       create_survey: "Créer un nouveau sondage"
