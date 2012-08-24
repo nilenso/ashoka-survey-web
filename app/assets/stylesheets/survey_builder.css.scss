@@ -51,7 +51,7 @@ $grid-padding: 10px;
   }
 }
 
-.sidebar { @include span-columns(4.5, 12); }
+.sidebar { @include span-columns(4, 12); }
 
 .question_picker_pane {
   border: 1px solid $border_color;
