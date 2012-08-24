@@ -9,6 +9,6 @@ class SurveyBuilder
     @sidebar_div.find('#questions').append(actual)
     @sidebar_div.find('#questions').find('fieldset').hide()
     @dummy_div.find('#dummy_questions').append(dummy)
-    new SurveyApp.SurveyElement(actual, dummy, @sidebar_div)
+    new SurveyApp.SurveyElement(actual, dummy, @sidebar_div, @dummy_div)
 
 SurveyApp.SurveyBuilder = SurveyBuilder

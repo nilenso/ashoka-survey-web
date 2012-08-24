@@ -18,10 +18,19 @@ $grid-padding: 10px;
   padding: 1em;
 
   fieldset {
+    padding: 4px;
     &:hover {
       color: $link_hover_color;
       border: 1px dashed $border_color;
+      @include border-radius(4px, 4px);
     }
+  }
+
+  .active {
+    padding: 4px;
+    background: $success_bg_color;
+    @include box-sizing(content-box);
+    @include border-radius(4px, 4px);
   }
 
   label {

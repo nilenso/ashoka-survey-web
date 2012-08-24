@@ -4,7 +4,8 @@ describe "SurveyElement", ->
     @actual = $("#actual")
     @dummy = $("#dummy")
     @sidebar_div = $(".sidebar")
-    @survey_element = new SurveyApp.SurveyElement(@actual, @dummy, @sidebar_div)
+    @dummy_div = $("#dummy_form_display")
+    @survey_element = new SurveyApp.SurveyElement(@actual, @dummy, @sidebar_div, @dummy_div)
     
   it "binds the keyup event for all inputs in the actual fieldset", ->
     expect($("#actual").find('input')).toHandleWith('keyup', @survey_element.mirrorKeyup)
