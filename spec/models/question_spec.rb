@@ -8,4 +8,12 @@ describe Question do
   it { should respond_to :mandatory }
   it { should respond_to :image }
   it { should respond_to :max_length }
+
+  context "mass assignment" do
+    it { should allow_mass_assignment_of(:content) }
+    it { should allow_mass_assignment_of(:mandatory) }
+    it { should allow_mass_assignment_of(:image) }
+    it { should allow_mass_assignment_of(:max_length) }
+    it { should allow_mass_assignment_of(:type) }
+  end
 end

@@ -86,7 +86,7 @@ describe 'SurveyBuilder', js: true do
 
 
         survey = Survey.find_by_name('Another sample survey')
-        question = Question.find_by_content('Test question?')
+        question = SingleLineQuestion.find_by_content('Test question?')
         question.should_not be_nil
         survey.questions.should include question
       end

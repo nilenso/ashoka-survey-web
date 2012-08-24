@@ -4,5 +4,6 @@
     <%= f.input :mandatory, :as => :boolean %>
     <%= f.input :max_length, :as => :number %>
     <%= f.input :image, :as => :file %>
+    <%= f.input :type, :as => :hidden, :input_html => { :value => 'SingleLineQuestion' } %>
   <% end %>
 <% end %>
