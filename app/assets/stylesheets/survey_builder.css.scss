@@ -28,7 +28,7 @@ $grid-padding: 10px;
 
   .active {
     padding: 4px;
-    background: $success_bg_color;
+    background: $survey_details_bg_color;
     @include box-sizing(content-box);
     @include border-radius(4px, 4px);
   }
