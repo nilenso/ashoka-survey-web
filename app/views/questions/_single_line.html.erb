@@ -1,9 +1,17 @@
-<%= f.semantic_fields_for(:questions, :child_index => "mustache_id") do |f| %>
-  <%= f.inputs do %>
-    <%= f.input :content, :as => :string %>
-    <%= f.input :mandatory, :as => :boolean %>
-    <%= f.input :max_length, :as => :number %>
-    <%= f.input :image, :as => :file %>
-    <%= f.input :type, :as => :hidden, :input_html => { :value => 'SingleLineQuestion' } %>
-  <% end %>
-<% end %>
+<fieldset class="inputs" style="display: block; "><ol>
+    <li class="string input required stringish" id="survey_questions_attributes_mustache_id_content_input"><label class=" label" for="foo">Content<abbr title="required">*</abbr></label><input id="foo" name="survey[questions_attributes][mustache_id][content]" type="text">
+
+</li>
+    <li class="number input optional numeric stringish" id="survey_questions_attributes_mustache_id_max_length_input"><label class=" label" for="survey_questions_attributes_mustache_id_max_length">Max length</label><input id="survey_questions_attributes_mustache_id_max_length" name="survey[questions_attributes][mustache_id][max_length]" step="any" type="number">
+
+</li>
+    <li class="file input optional" id="survey_questions_attributes_mustache_id_image_input"><label class=" label" for="survey_questions_attributes_mustache_id_image">Image</label><input id="survey_questions_attributes_mustache_id_image" name="survey[questions_attributes][mustache_id][image]" type="file">
+
+</li>
+    <li class="hidden input optional" id="survey_questions_attributes_mustache_id_type_input"><input id="survey_questions_attributes_mustache_id_type" name="survey[questions_attributes][mustache_id][type]" type="hidden" value="SingleLineQuestion">
+
+</li>
+    <li class="boolean input optional" id="survey_questions_attributes_mustache_id_mandatory_input"><input name="survey[questions_attributes][mustache_id][mandatory]" type="hidden" value="0"><label class="" for="survey_questions_attributes_mustache_id_mandatory"><input id="survey_questions_attributes_mustache_id_mandatory" name="survey[questions_attributes][mustache_id][mandatory]" type="checkbox" value="1">Mandatory</label>
+
+</li>
+</ol></fieldset>

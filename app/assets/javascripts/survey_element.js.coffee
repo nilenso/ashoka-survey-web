@@ -13,6 +13,8 @@ class SurveyElement
     @actual.show()
     if @dummy.attr('id') == "dummy_survey_details"
       @dummy.addClass("details_active")
+      @sidebar_div.find("#questions").hide()
+
     else
       @dummy.addClass("active")    
 

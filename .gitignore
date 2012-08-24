@@ -15,7 +15,7 @@
 /tmp
 /config/database.yml
 /bin
-
+public/system/
 
 # Ignore application configuration
 /config/application.yml
