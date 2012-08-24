@@ -30,7 +30,6 @@ group :test, :development do
   gem 'rspec-rails'
   gem 'rspec-http'
   gem 'spork'
-  gem 'guard-rails'
   gem 'guard-spork'
   gem 'guard-rspec'
   gem 'factory_girl_rails'

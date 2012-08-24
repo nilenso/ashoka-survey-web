@@ -86,8 +86,6 @@ GEM
       guard (>= 1.1.0)
       multi_json
       thor
-    guard-rails (0.1.0)
-      guard (>= 0.2.2)
     guard-rspec (1.2.1)
       guard (>= 1.1)
     guard-spork (1.1.0)
@@ -252,7 +250,6 @@ DEPENDENCIES
   formtastic
   growl
   guard-jasmine
-  guard-rails
   guard-rspec
   guard-spork
   heroku
