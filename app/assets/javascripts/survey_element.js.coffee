@@ -12,6 +12,7 @@ class SurveyElement
 
   showActual: (event) =>
     @sidebar_div.find("#survey_details").hide()
+    @sidebar_div.find("#questions").show()
     @sidebar_div.find("#questions").find('fieldset').hide()
     @actual.show()
     $(".tabs li").last().click()
@@ -21,6 +22,8 @@ class SurveyElement
 
     if @dummy.attr('id') == "dummy_survey_details"
       @dummy.addClass("details_active")
+      @sidebar_div.find("#questions").hide()
+
     else
       @dummy.addClass("active")
 
