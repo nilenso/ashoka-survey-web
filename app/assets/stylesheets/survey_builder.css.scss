@@ -28,7 +28,14 @@ $grid-padding: 10px;
 
   .active {
     padding: 4px;
-    background: $success_bg_color;
+    background: $question_bg_color;
+    @include box-sizing(content-box);
+    @include border-radius(4px, 4px);
+  }
+
+  .details_active {
+    padding: 4px;
+    background: $survey_details_bg_color;
     @include box-sizing(content-box);
     @include border-radius(4px, 4px);
   }
@@ -39,7 +46,7 @@ $grid-padding: 10px;
 
   #dummy_questions {
     input {
-      width: 100%;
+      width: 98%;
     }
   }
 }
@@ -55,6 +62,20 @@ $grid-padding: 10px;
   border: 1px solid $border_color;
   padding: 1em;
   display: none;
+
+  #survey_details {
+    padding: 4px;
+    background: $survey_details_bg_color;
+    @include box-sizing(content-box);
+    @include border-radius(4px, 4px);
+  }
+
+  #questions {
+    padding: 4px;
+    background: $question_bg_color;
+    @include box-sizing(content-box);
+    @include border-radius(4px, 4px);
+  }
 }
 
 .tabs {
