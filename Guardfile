@@ -22,7 +22,7 @@ guard 'rspec', :version => 2, :all_after_pass => false, :cli => "--drb" do
   watch('app/controllers/application_controller.rb')  { "spec/controllers" }
 end
 
-guard 'jasmine', :jasmine_url => 'http://localhost:3000/jasmine' do
+guard 'jasmine', :server => :none, :jasmine_url => 'http://localhost:3000/jasmine', :specdoc => :always do
   watch(%r{spec/javascripts/spec\.(js\.coffee|js|coffee)$})         { "spec/javascripts" }
   watch(%r{spec/javascripts/.+_spec\.(js\.coffee|js|coffee)$})
   watch(%r{app/assets/javascripts/(.+?)\.(js\.coffee|js|coffee)$})  { |m| "spec/javascripts/#{m[1]}_spec.#{m[2]}" }
