@@ -8,8 +8,8 @@ class SurveyBuilder
 
   add_new_question: =>
     type = $(event.target).data('type')
-    actual = $(Mustache.render(@sidebar_div.find("#question_template").html(), id: @question_count))
-    dummy = $(Mustache.render(@sidebar_div.find("#dummy_question_template").html(), id: @question_count++))
+    actual = $(Mustache.render(@sidebar_div.find("##{type}_question_template").html(), id: @question_count))
+    dummy = $(Mustache.render(@sidebar_div.find("##{type}_dummy_question_template").html(), id: @question_count++))
     @sidebar_div.find('#questions').append(actual)
     @sidebar_div.find('#questions').find('fieldset').hide()
     @dummy_div.find('#dummy_questions').append(dummy)
