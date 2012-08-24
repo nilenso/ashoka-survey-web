@@ -1,0 +1,2 @@
+class RadioQuestion < Question 
+end

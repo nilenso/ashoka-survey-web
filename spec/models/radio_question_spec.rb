@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Question do
+describe RadioQuestion do
   it { should respond_to :content }
   it { should belong_to :survey }
   it { should have_many(:answers).dependent(:destroy) }
@@ -8,14 +8,12 @@ describe Question do
   it { should validate_presence_of :content }
   it { should respond_to :mandatory }
   it { should respond_to :image }
-  it { should respond_to :max_length }
   it { should accept_nested_attributes_for(:options) }
 
-  context "mass assignment" do
-    it { should allow_mass_assignment_of(:content) }
-    it { should allow_mass_assignment_of(:mandatory) }
-    it { should allow_mass_assignment_of(:image) }
-    it { should allow_mass_assignment_of(:max_length) }
-    it { should allow_mass_assignment_of(:type) }
-  end
+  it "is a question with type = 'RadioQuestion'" do
+    RadioQuestion.create(:content => "hello")
+    question = Question.find_by_content("hello")
+    question.should be_a RadioQuestion
+    question.type.should == "RadioQuestion"
+  end  
 end
