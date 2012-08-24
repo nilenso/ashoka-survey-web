@@ -23,8 +23,8 @@ describe 'SurveyBuilder', js: true do
 
     it "stores the count of questions added in the name attribute of the input" do
       click_link("Add a single line Question")
-      
-      find("#questions").all('fieldset').each_with_index do |fieldset, i| 
+
+      find("#questions").all('fieldset').each_with_index do |fieldset, i|
         fieldset.all('input').each do |input|
           input[:name].should include(i.to_s)
         end
@@ -89,6 +89,58 @@ describe 'SurveyBuilder', js: true do
         question = SingleLineQuestion.find_by_content('Test question?')
         question.should_not be_nil
         survey.questions.should include question
+      end
+    end
+  end
+
+  context "in the dummy form display" do
+    context "when clicking on the survey heading section" do
+      before(:each) { visit('/surveys/new') }
+
+      it "shows the survey settings" do
+        find("#dummy_survey_details").click
+        find('#settings_pane').should have_content('Name')
+        find('#settings_pane').should have_content('Expires on')
+        find('#settings_pane').should have_content('Description')
+      end
+
+      it "highlights itself" do
+        find("#dummy_survey_details").click
+        find("#dummy_survey_details")['class'].should == 'details_active'
+      end
+    end
+
+    context "when clicking on a question" do
+      before(:each) do
+        visit('/surveys/new')
+        click_on('Add a single line Question')
+      end
+
+      it "shows the settings for that question" do
+        find("#dummy_questions").find('fieldset').click
+        find('#settings_pane').should have_content('Content')
+        find('#settings_pane').should have_content('Max length')
+        find('#settings_pane').should have_content('Image')
+      end
+
+      it "clears the settings pane of previous content" do
+        find("#dummy_survey_details").click
+        find("#dummy_questions").find('fieldset').click
+        find('#survey_details')['style'].should include 'display: none;'
+      end
+
+      it "highlights itself" do
+        find("#dummy_questions").find('fieldset').click
+        find("#dummy_questions").find('fieldset')['class'].should == 'active'
+      end
+
+      it "removes all other highlights in the dummy form display" do
+        click_on('Add a single line Question')
+        first_question, last_question = find("#dummy_questions").all('fieldset').to_a
+        first_question.click
+        last_question.click
+        first_question['class'].should_not == 'active'
+        last_question['class'].should == 'active'
       end
     end
   end

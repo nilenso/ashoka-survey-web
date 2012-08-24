@@ -5,7 +5,7 @@ describe "SurveyElement", ->
     @dummy = $("#dummy")
     @sidebar_div = $(".sidebar")
     @dummy_div = $("#dummy_form_display")
-    @survey_element = new SurveyApp.SurveyElement(@actual, @dummy, @sidebar_div, @dummy_div)
+    @survey_element = new SurveyApp.SurveyElement(@actual, @dummy)
     
   it "binds the keyup event for all inputs in the actual fieldset", ->
     expect($("#actual").find('input')).toHandleWith('keyup', @survey_element.mirrorKeyup)
@@ -30,8 +30,23 @@ describe "SurveyElement", ->
     expect(@dummy.find('textarea[name=1]')).toHaveValue("some text")
     expect(@dummy.find('textarea[name=2]')).not.toHaveValue("some text")
 
-  describe "when clicking on corresponding dummy", ->
-    it "shows only the actual fieldset in the settings pane", ->
-      @dummy.click()
-      expect(@sidebar_div.find("#survey_details")).toBeHidden()
+  describe "when showing itself", ->
+    it "shows the actual fieldset in the settings pane", ->
+      @survey_element.show()
       expect(@actual).toBeVisible()
+
+    it "adds a highlight to the dummy fieldset", ->
+      @survey_element.show()
+      expect(@dummy).toHaveClass('active')
+
+  describe "when hiding itself", ->
+    beforeEach ->
+      @survey_element.show()
+      
+    it "hides the actual fieldset in the settings pane", ->
+      @survey_element.hide()
+      expect(@actual).toBeHidden()
+
+    it "removes the highlight in the dummy fieldset", ->      
+      @survey_element.hide()
+      expect(@dummy).not.toHaveClass('active')
