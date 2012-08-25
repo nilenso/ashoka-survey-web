@@ -23,22 +23,6 @@
         <%= f.input :description, :input_html => { :rows => 2 } %>
       <% end %>
 
-      <script type="text/html" id="single_line_question_template">
-        <%= (render 'questions/single_line', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
-      </script>
-
-      <script type="text/html" id="single_line_dummy_question_template">
-        <%= (render 'dummies/single_line', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
-      </script>    
-
-      <script type="text/html" id="radio_question_template">
-        <%= (render 'questions/radio', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
-      </script>  
-
-      <script type="text/html" id="radio_dummy_question_template">
-        <%= (render 'dummies/radio', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
-      </script>
-
       <div id="questions">
         <% count = 0 %>
         <%= f.semantic_fields_for(:questions) do |f|%>
@@ -53,12 +37,28 @@
         <% end %>
       </div>
 
-
       <%= f.actions do %>
         <%= f.action :submit, :as => :button %>
       <% end %>
     <% end %>
   </div>
+
+  <script type="text/html" id="single_line_question_template">
+    <%= (render 'questions/single_line').gsub('mustache_id', '{{id}}').html_safe %>
+  </script>
+
+  <script type="text/html" id="single_line_dummy_question_template">
+    <%= (render 'dummies/single_line').gsub('mustache_id', '{{id}}').html_safe %>
+  </script>
+
+  <script type="text/html" id="radio_question_template">
+    <%= (render 'questions/radio').gsub('mustache_id', '{{id}}').html_safe %>
+  </script>
+
+  <script type="text/html" id="radio_dummy_question_template">
+    <%= (render 'dummies/radio').gsub('mustache_id', '{{id}}').html_safe %>
+  </script>
+
 </div>
 
 <div class="dummy_form_display" id="dummy_form_display">
