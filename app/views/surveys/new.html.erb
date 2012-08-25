@@ -39,7 +39,20 @@
         <%= (render 'dummies/radio', :f => f).gsub('mustache_id', '{{id}}').html_safe %>
       </script>
 
-      <div id="questions"></div>
+      <div id="questions">
+        <% count = 0 %>
+        <%= f.semantic_fields_for(:questions) do |f|%>
+          <%= f.inputs :id => "question_#{count}" do %>
+            <%= f.input :content, :as => :string %>
+            <%= f.input :max_length, :as => :number %>
+            <%= f.input :image, :as => :file %>
+            <%= f.input :type, :as => :hidden, :input_html => { :value => 'SingleLineQuestion' } %>
+            <%= f.input :mandatory, :as => :boolean %>
+          <% end %>
+          <% count += 1 %>
+        <% end %>
+      </div>
+
 
       <%= f.actions do %>
         <%= f.action :submit, :as => :button %>
@@ -49,6 +62,7 @@
 </div>
 
 <div class="dummy_form_display" id="dummy_form_display">
+  
   <fieldset id="dummy_survey_details">
     <h2>
       <label name="survey[name]">
@@ -64,7 +78,18 @@
     <hr />
   </fieldset>
 
-  <div id="dummy_questions"></div>
+  <div id="dummy_questions">
+    <% if @survey.errors.any? %>
+      <% @survey.questions.each_with_index do |question, index| %>
+        <fieldset id="dummy_question_<%= index %>">
+          <label name="survey[questions_attributes][<%= index %>][content]" class="label">
+            <%= question.content %>
+          </label>
+          <input disabled="true"></input>
+        </fieldset>
+      <% end %>
+    <% end %>
+  </div>
 
 </div>
 
@@ -73,6 +98,11 @@
     var builder = new SurveyApp.SurveyBuilder($(".sidebar"), $("#dummy_form_display"));
     SurveyApp.tabify($('.sidebar'));
     builder.create_element($("#survey_details"), $("#dummy_survey_details"));
+
+    $('#questions').find("fieldset").each(function(index) {
+      builder.create_element($(this), $("#dummy_question_"+index));
+    });
+
     $('#survey_expiry_date').datepicker({ dateFormat: "yy/mm/dd" });
   })
 </script>
