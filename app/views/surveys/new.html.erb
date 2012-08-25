@@ -64,6 +64,9 @@
 <div class="dummy_form_display" id="dummy_form_display">
   
   <fieldset id="dummy_survey_details">
+    <% if @survey.errors.any? %>
+      <%= content_tag(:p, @survey.errors.full_messages, :class => "inline_error") %>
+    <% end %>
     <h2>
       <label name="survey[name]">
         <%= @survey.name || t(".untitled") %>
@@ -82,6 +85,9 @@
     <% if @survey.errors.any? %>
       <% @survey.questions.each_with_index do |question, index| %>
         <fieldset id="dummy_question_<%= index %>">
+          <% if question.errors.any? %>
+            <%= content_tag(:p, question.errors.full_messages.join(''), :class => "inline_error") %>
+          <% end %>
           <label name="survey[questions_attributes][<%= index %>][content]" class="label">
             <%= question.content %>
           </label>

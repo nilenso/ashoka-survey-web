@@ -53,6 +53,10 @@ $app_min_height: 600px;
       width: 98%;
     }
   }
+
+  .inline_error {
+    color: $error_color;
+  }
 }
 
 .sidebar { @include span-columns(4, 12); }
