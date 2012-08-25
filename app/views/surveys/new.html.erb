@@ -16,6 +16,7 @@
   </div>
 
   <div class="settings_pane" id="settings_pane">
+    <% question_count = 0 %>
     <%= semantic_form_for @survey do |f| %>
       <%= f.inputs :id => "survey_details" do %>
         <%= f.input :name %>
@@ -24,16 +25,15 @@
       <% end %>
 
       <div id="questions">
-        <% count = 0 %>
         <%= f.semantic_fields_for(:questions) do |f|%>
-          <%= f.inputs :id => "question_#{count}" do %>
+          <%= f.inputs :id => "question_#{question_count}" do %>
             <%= f.input :content, :as => :string %>
             <%= f.input :max_length, :as => :number %>
             <%= f.input :image, :as => :file %>
             <%= f.input :type, :as => :hidden, :input_html => { :value => 'SingleLineQuestion' } %>
             <%= f.input :mandatory, :as => :boolean %>
           <% end %>
-          <% count += 1 %>
+          <% question_count += 1 %>
         <% end %>
       </div>
 
@@ -96,12 +96,11 @@
       <% end %>
     <% end %>
   </div>
-
 </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
-    var builder = new SurveyApp.SurveyBuilder($(".sidebar"), $("#dummy_form_display"));
+    var builder = new SurveyApp.SurveyBuilder($(".sidebar"), $("#dummy_form_display"), <%= question_count %>);
     SurveyApp.tabify($('.sidebar'));
     builder.create_element($("#survey_details"), $("#dummy_survey_details"));
 
