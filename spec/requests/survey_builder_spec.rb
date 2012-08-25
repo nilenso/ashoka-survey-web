@@ -115,6 +115,33 @@ describe 'SurveyBuilder', js: true do
         find("#dummy_survey_details").should have_content('Expires on can\'t be blank')
         find("#dummy_questions").should have_content('Content can\'t be blank')
       end
+
+      it "allows adding more questions to the form" do
+        click_on('Add a single line Question')
+        find("#questions").all('fieldset').should have(3).fieldsets
+        find("#dummy_questions").all('fieldset').should have(3).fieldsets
+      end
+
+      it "saves the survey successfully after filling required fields" do
+        find("#dummy_survey_details").click
+        within('#survey_details') do
+          fill_in('Name', :with => 'foo survey')
+          fill_in('Expires on', :with => '2012/06/07')
+          find_field('Name').click # To hide the datepicker
+        end
+        find("#dummy_question_1").click
+        fill_in('Content', :with => 'foo question?')
+        click_on('Create Survey')
+
+        survey = Survey.find_by_name('foo survey')
+        survey.should_not be_nil
+        question_1 = SingleLineQuestion.find_by_content('A question?')
+        question_2 = SingleLineQuestion.find_by_content('foo question?')
+        question_1.should_not be_nil
+        question_2.should_not be_nil
+        survey.questions.should include question_1
+        survey.questions.should include question_2
+      end
     end
   end
 
