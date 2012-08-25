@@ -66,14 +66,14 @@
   <fieldset id="dummy_survey_details">
     <h2>
       <label name="survey[name]">
-        <%= t ".untitled" %>
+        <%= @survey.name || t(".untitled") %>
       </label>
     </h2>
     <label name="survey[expiry_date]">
-      <%= t ".expiry_date" %> : 00/00/00
+      <%= @survey.expiry_date || t(".expiry_date") + ": 00/00/00" %>
     </label>
     <label name="survey[description]">
-      <%= t ".description" %>
+      <%= @survey.description || t(".description") %>
     </label>
     <hr />
   </fieldset>
