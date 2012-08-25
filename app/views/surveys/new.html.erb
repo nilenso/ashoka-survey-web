@@ -9,7 +9,10 @@
 
   <div class="question_picker_pane" id="question_picker_pane">
     <div><%= link_to t(".add_single_line_question"), '#', :class => 'add_question_field', :data => { :type => "single_line" } %></div>
-    <div><%= link_to "Add radio button question", '#', :class => 'add_question_field', :data => { :type => "radio" } %></div>
+    
+    <% unless Rails.env.production? %>
+      <div><%= link_to "Add radio button question", '#', :class => 'add_question_field', :data => { :type => "radio" } %></div>
+    <% end %>
   </div>
 
   <div class="settings_pane" id="settings_pane">
