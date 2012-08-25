@@ -75,7 +75,6 @@ describe 'SurveyBuilder', js: true do
       it "saves a single line question" do
         find('li', :text => 'Pick Question').click
         click_on('Add a single line Question')
-        find('li', :text => 'Settings').click
         find('#dummy_questions').find('fieldset').click
 
         fill_in('Content', :with => 'Test question?')
@@ -89,6 +88,32 @@ describe 'SurveyBuilder', js: true do
         question = SingleLineQuestion.find_by_content('Test question?')
         question.should_not be_nil
         survey.questions.should include question
+      end
+    end
+
+    context "without required fields" do
+      before(:each) do
+        visit('/surveys/new')
+        click_on('Add a single line Question')
+        click_on('Add a single line Question')
+        find('#dummy_questions').first('fieldset').click
+        fill_in('Content', :with => 'A question?')
+        click_on('Create Survey')
+      end
+
+      it "returns the form with the added actual and dummy fields" do
+        find("#questions").all('fieldset').should have(2).fieldsets
+        find("#dummy_questions").all('fieldset').should have(2).fieldsets
+      end
+
+      it "restores the content of the dummy fields" do
+        find("#dummy_questions").should have_content('A question?')
+      end
+
+      it "shows errors where appropriate" do
+        find("#dummy_survey_details").should have_content('Name can\'t be blank')
+        find("#dummy_survey_details").should have_content('Expires on can\'t be blank')
+        find("#dummy_questions").should have_content('Content can\'t be blank')
       end
     end
   end
