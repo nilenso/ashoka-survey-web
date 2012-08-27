@@ -8,10 +8,10 @@ describe "SurveyElement", ->
     @survey_element = new SurveyApp.SurveyElement(@actual, @dummy)
     
   it "binds the keyup event for all inputs in the actual fieldset", ->
-    expect($("#actual").find('input')).toHandleWith('keyup', @survey_element.mirrorKeyup)
+    expect($("#actual").find('input')).toHandleWith('keyup', @survey_element.mirror)
 
   it "binds the change event for all inputs in the actual fieldset", ->
-    expect($("#actual").find('input')).toHandleWith('change', @survey_element.mirrorKeyup)  
+    expect($("#actual").find('input')).toHandleWith('change', @survey_element.mirror)
 
   it "fills in the dummy input with the value in the actual input", ->
     @actual.find('input').val("some text")

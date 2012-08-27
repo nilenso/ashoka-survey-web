@@ -2,9 +2,9 @@
 
 class SurveyElement
   constructor: (@actual, @dummy) ->
-    @actual.find('*').bind('keyup change', @mirrorKeyup)
+    @actual.find('*').bind('keyup change', @mirror)
 
-  mirrorKeyup: (event) =>
+  mirror: (event) =>
     name = $(event.target).attr('name')
     @dummy.find("*[name=\"#{name}\"]").val($(event.target).val());
     @dummy.find("*[name=\"#{name}\"]").text($(event.target).val());
