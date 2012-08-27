@@ -65,7 +65,7 @@
   
   <fieldset id="dummy_survey_details">
     <% if @survey.errors.any? %>
-      <%= content_tag(:p, @survey.errors.full_messages, :class => "inline_error") %>
+      <%= content_tag(:p, @survey.errors.full_messages.join(", "), :class => "inline_error") %>
     <% end %>
     <h2>
       <label name="survey[name]">
