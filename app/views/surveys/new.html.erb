@@ -68,14 +68,14 @@
       <%= content_tag(:p, @survey.errors.full_messages.join(", "), :class => "inline_error") %>
     <% end %>
     <h2>
-      <label name="survey[name]">
+      <label name="survey[name]" default_value="<%= t(".untitled") %>">
         <%= @survey.name || t(".untitled") %>
       </label>
     </h2>
-    <label name="survey[expiry_date]">
+    <label name="survey[expiry_date]" default_value="<%= t('.expiry_date') + ': 00/00/00' %>">
       <%= @survey.expiry_date || t(".expiry_date") + ": 00/00/00" %>
     </label>
-    <label name="survey[description]">
+    <label name="survey[description]" default_value="<%= t(".description") %>">
       <%= @survey.description || t(".description") %>
     </label>
     <hr />

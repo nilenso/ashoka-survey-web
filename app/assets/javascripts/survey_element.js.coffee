@@ -8,8 +8,8 @@ class SurveyElement
     name = $(event.target).attr('name')
 
     dummy_val = $(event.target).val()
-    if dummy_val == "" && $(event.target).attr('type') == "text"
-      dummy_val = SurveyApp.SurveyBuilder.translations.untitled
+    if dummy_val == ""
+      dummy_val = @dummy.find("*[name=\"#{name}\"]").attr('default_value')
 
     @dummy.find("*[name=\"#{name}\"]").val(dummy_val);
     @dummy.find("*[name=\"#{name}\"]").text(dummy_val);

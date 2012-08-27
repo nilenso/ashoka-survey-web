@@ -4,7 +4,7 @@
   <% if question && question.errors.any? %>
     <%= content_tag(:p, question.errors.full_messages.join(''), :class => "inline_error") %>
   <% end %>
-  <label name="survey[questions_attributes][<%= index %>][content]" class="label">
+  <label name="survey[questions_attributes][<%= index %>][content]" class="label" default_value="<%= t('surveys.new.untitled') %>">
     <%= question && question.content!="" ? question.content : t("surveys.new.untitled") %>
   </label>
   <input disabled="true"></input>
