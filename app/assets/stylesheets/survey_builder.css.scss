@@ -52,6 +52,9 @@ $app_min_height: 600px;
     input {
       width: 98%;
     }
+    abbr {
+      color: $error_color;
+    }
   }
 
   .inline_error {

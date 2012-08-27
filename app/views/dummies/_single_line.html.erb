@@ -6,6 +6,7 @@
   <% end %>
   <label name="survey[questions_attributes][<%= index %>][content]" class="label" default_value="<%= t('surveys.new.untitled') %>">
     <%= question && question.content!="" ? question.content : t("surveys.new.untitled") %>
+    <abbr title="required" style="display:none">*</abbr>
   </label>
   <input disabled="true"></input>
 </fieldset>

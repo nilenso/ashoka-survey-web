@@ -38,6 +38,11 @@ describe "SurveyElement", ->
     @actual.find('textarea').keyup()
     expect(@dummy.find('textarea')).toHaveValue("default")
 
+  it "shows an asterisk in the dummy if the question is marked mandatory", ->
+    @dummy.find('abbr').hide()
+    @actual.find("input[name=3]").click()
+    expect(@dummy.find("abbr")).toBeVisible()
+
   describe "when showing itself", ->
     it "shows the actual fieldset in the settings pane", ->
       @survey_element.show()

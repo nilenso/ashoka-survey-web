@@ -3,6 +3,7 @@
 class SurveyElement
   constructor: (@actual, @dummy) ->
     @actual.find('*').bind('keyup change', @mirror)
+    @actual.find("*[type='checkbox']").bind('click', @toggle_mandatory)
 
   mirror: (event) =>
     name = $(event.target).attr('name')
@@ -13,6 +14,9 @@ class SurveyElement
 
     @dummy.find("*[name=\"#{name}\"]").val(dummy_val);
     @dummy.find("*[name=\"#{name}\"]").text(dummy_val);
+
+  toggle_mandatory: (event) =>
+    @dummy.find('abbr').toggle()
 
   show: (event) =>
     @actual.show()
