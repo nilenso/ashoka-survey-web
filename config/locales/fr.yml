@@ -4,6 +4,8 @@ fr:
 
   header:
     home: "Page d'accueil"
+    sign_in: "Se connecter"
+    logout: "Déconnexion"
 
   flash:
     survey_created: "Enquête créé avec succès"

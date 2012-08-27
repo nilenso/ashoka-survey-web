@@ -15,6 +15,11 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def user_currently_logged_in?
+    session[:user_id].present?
+  end
+  helper_method :user_currently_logged_in?
+
   private
 
   def set_locale
