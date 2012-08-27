@@ -78,7 +78,7 @@ describe 'SurveyBuilder', js: true do
         find('#dummy_questions').find('fieldset').click
 
         fill_in('Content', :with => 'Test question?')
-        fill_in('Max length', :with => 100)
+        fill_in('Maximum Length', :with => 100)
         check('Mandatory')
         # attach_file('Image', 'app/assets/images/rails.png')
         click_on('Create Survey')
@@ -171,7 +171,7 @@ describe 'SurveyBuilder', js: true do
       it "shows the settings for that question" do
         find("#dummy_questions").find('fieldset').click
         find('#settings_pane').should have_content('Content')
-        find('#settings_pane').should have_content('Max length')
+        find('#settings_pane').should have_content('Maximum Length')
         find('#settings_pane').should have_content('Image')
       end
 
