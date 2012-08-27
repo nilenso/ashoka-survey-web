@@ -29,6 +29,8 @@ fr:
       operations: "Opérations"
       more: "plus"
       less: "moins"
+      sign_in: "Se connecter"
+      logout: "Déconnexion"
 
   responses:
     new:
