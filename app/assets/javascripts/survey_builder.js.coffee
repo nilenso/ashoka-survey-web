@@ -1,6 +1,9 @@
 # Collection of SurveyElements
 
 class SurveyBuilder
+
+  @translations = {}
+
   constructor: (@sidebar_div, @dummy_div, @question_count) ->
     @sidebar_div.find(".add_question_field").click(@add_new_question)
     @elements = []
