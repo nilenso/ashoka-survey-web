@@ -30,6 +30,14 @@ describe "SurveyElement", ->
     expect(@dummy.find('textarea[name=1]')).toHaveValue("some text")
     expect(@dummy.find('textarea[name=2]')).not.toHaveValue("some text")
 
+  it "sets the dummy value to the default value when the actual value is blank", ->
+    @actual.find('input').val("")
+    @actual.find('input').keyup()
+    expect(@dummy.find('input')).toHaveValue("default")
+    @actual.find('textarea').val("")
+    @actual.find('textarea').keyup()
+    expect(@dummy.find('textarea')).toHaveValue("default")
+
   describe "when showing itself", ->
     it "shows the actual fieldset in the settings pane", ->
       @survey_element.show()
