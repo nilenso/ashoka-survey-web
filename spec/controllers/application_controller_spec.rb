@@ -47,4 +47,10 @@ describe ApplicationController do
       response.should redirect_to root_path
     end
   end
+
+  it "knows if a user is currently signed in or not" do
+    controller.user_currently_logged_in?.should be_false
+    session[:user_id] = 1
+    controller.user_currently_logged_in?.should be_true
+  end
 end

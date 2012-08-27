@@ -2,8 +2,11 @@
 
 <h1> <%= t '.all_surveys' %> </h1>
 
-<%= link_to t("Sign In"), '/auth/user_owner' %>
-<%= link_to t("Logout"), signout_path %>
+<% if user_currently_logged_in? %>
+  <%= link_to t(".logout"), signout_path %>
+<% else %>
+  <%= link_to t(".sign_in"), '/auth/user_owner' %>
+<% end %>
 
 <%= link_to t(".create_survey"), :action => "new" %>
 
