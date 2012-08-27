@@ -1,17 +1,17 @@
 <fieldset class="inputs" style="display: block; "><ol>
-    <li class="string input required stringish" id="survey_questions_attributes_mustache_id_content_input"><label class=" label" for="foo">Content<abbr title="required">*</abbr></label><input id="foo" name="survey[questions_attributes][mustache_id][content]" type="text">
+    <li class="string input required stringish" id="survey_questions_attributes_mustache_id_content_input"><label class=" label" for="foo"><%= t('surveys.new.content') %><abbr title="required">*</abbr></label><input id="foo" name="survey[questions_attributes][mustache_id][content]" type="text">
 
 </li>
-    <li class="number input optional numeric stringish" id="survey_questions_attributes_mustache_id_max_length_input"><label class=" label" for="survey_questions_attributes_mustache_id_max_length">Max length</label><input id="survey_questions_attributes_mustache_id_max_length" name="survey[questions_attributes][mustache_id][max_length]" step="any" type="number">
+    <li class="number input optional numeric stringish" id="survey_questions_attributes_mustache_id_max_length_input"><label class=" label" for="survey_questions_attributes_mustache_id_max_length"><%= t('surveys.new.max_length') %></label><input id="survey_questions_attributes_mustache_id_max_length" name="survey[questions_attributes][mustache_id][max_length]" step="any" type="number">
 
 </li>
-    <li class="file input optional" id="survey_questions_attributes_mustache_id_image_input"><label class=" label" for="survey_questions_attributes_mustache_id_image">Image</label><input id="survey_questions_attributes_mustache_id_image" name="survey[questions_attributes][mustache_id][image]" type="file">
+    <li class="file input optional" id="survey_questions_attributes_mustache_id_image_input"><label class=" label" for="survey_questions_attributes_mustache_id_image"><%= t('surveys.new.image') %></label><input id="survey_questions_attributes_mustache_id_image" name="survey[questions_attributes][mustache_id][image]" type="file">
 
 </li>
     <li class="hidden input optional" id="survey_questions_attributes_mustache_id_type_input"><input id="survey_questions_attributes_mustache_id_type" name="survey[questions_attributes][mustache_id][type]" type="hidden" value="SingleLineQuestion">
 
 </li>
-    <li class="boolean input optional" id="survey_questions_attributes_mustache_id_mandatory_input"><input name="survey[questions_attributes][mustache_id][mandatory]" type="hidden" value="0"><label class="" for="survey_questions_attributes_mustache_id_mandatory"><input id="survey_questions_attributes_mustache_id_mandatory" name="survey[questions_attributes][mustache_id][mandatory]" type="checkbox" value="1">Mandatory</label>
+    <li class="boolean input optional" id="survey_questions_attributes_mustache_id_mandatory_input"><input name="survey[questions_attributes][mustache_id][mandatory]" type="hidden" value="0"><label class="" for="survey_questions_attributes_mustache_id_mandatory"><input id="survey_questions_attributes_mustache_id_mandatory" name="survey[questions_attributes][mustache_id][mandatory]" type="checkbox" value="1"><%= t('surveys.new.mandatory') %></label>
 
 </li>
 </ol></fieldset>

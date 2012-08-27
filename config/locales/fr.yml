@@ -21,7 +21,10 @@ fr:
       description: "Description"
       survey_details: "Détails de l'enquête"
       expiry_date: "Expire le"
-
+      content: "Contenu"
+      max_length: "Longueur maximale"
+      image: "Image"
+      mandatory: "Obligatoire"
 
     index:
       all_surveys: "Tous les sondages"
@@ -45,6 +48,9 @@ fr:
 
       question:
         content: "Contenu"
+        max_length: "Longueur maximale"
+        image: "Image"
+        mandatory: "Obligatoire"
 
 # Library strings
 
