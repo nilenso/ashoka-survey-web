@@ -4,6 +4,9 @@ en:
 
   header:
     home: "Home"
+    sign_in: "Sign In"
+    logout: "Log Out"
+
   
   flash:
     survey_created: "Survey created successfully"
@@ -28,8 +31,6 @@ en:
       operations: "Operations"
       more: "more"
       less: "less"
-      sign_in: "Sign In"
-      logout: "Log Out"
 
   responses:
     new:

@@ -1,5 +1,10 @@
 <div class = "header">
   <ul>
     <li><%= link_to t("header.home"), root_path %></li>
+    <% if user_currently_logged_in? %>
+      <li><%= link_to t("header.logout"), signout_path, :class => 'logout' %></li>
+    <% else %>
+      <li><%= link_to t("header.sign_in"), '/auth/user_owner', :class => 'signin' %></li>
+    <% end %>
   </ul>
 </div>

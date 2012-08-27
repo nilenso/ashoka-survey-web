@@ -4,6 +4,8 @@ fr:
 
   header:
     home: "Page d'accueil"
+    sign_in: "Se connecter"
+    logout: "Déconnexion"
 
   flash:
     survey_created: "Enquête créé avec succès"
@@ -29,8 +31,6 @@ fr:
       operations: "Opérations"
       more: "plus"
       less: "moins"
-      sign_in: "Se connecter"
-      logout: "Déconnexion"
 
   responses:
     new:
