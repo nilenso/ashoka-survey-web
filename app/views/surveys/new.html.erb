@@ -97,6 +97,7 @@
     builder.create_element($("#survey_details"), $("#dummy_survey_details"));
 
     $('#questions').find("fieldset").each(function(index) {
+      $(this).hide()
       builder.create_element($(this), $("#dummy_question_"+index));
     });
 
