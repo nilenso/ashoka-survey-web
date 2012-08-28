@@ -92,7 +92,6 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    SurveyApp.SurveyBuilder.translations = { untitled: "<%= t('.untitled') %>"}
     var builder = new SurveyApp.SurveyBuilder($(".sidebar"), $("#dummy_form_display"), <%= question_count %>);
     SurveyApp.tabify($('.sidebar'));
     builder.create_element($("#survey_details"), $("#dummy_survey_details"));
