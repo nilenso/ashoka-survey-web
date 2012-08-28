@@ -25,4 +25,15 @@ class SurveysController < ApplicationController
     flash[:notice] = t "flash.survey_deleted"
     redirect_to(surveys_path)
   end
+
+  def backbone_create
+    @survey = Survey.create(:name => "Untitled", :expiry_date => 7.days.from_now)
+
+    if @survey.save
+      redirect_to surveys_build_path(:id => @survey.id)
+      flash[:notice] = t "flash.survey_created"
+    else
+      render :new
+    end    
+  end
 end

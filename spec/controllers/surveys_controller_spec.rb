@@ -71,4 +71,23 @@ describe SurveysController do
       response.should redirect_to surveys_path
     end
   end
+
+  # Temp route while we're porting to backbone
+  context "POST 'backbone_create'" do
+    it "assigns the survey instance variable" do
+      post :backbone_create
+      assigns(:survey).should_not be_nil
+    end
+
+    it "redirects to the root path" do
+      post :backbone_create
+      created_survey = Survey.find_by_name("Untitled")
+      response.should redirect_to(surveys_build_path(:id => created_survey.id))
+      flash[:notice].should_not be_nil
+    end
+
+    it "creates a survey" do
+      expect { post :backbone_create }.to change { Survey.count }.by(1)
+    end
+  end
 end
