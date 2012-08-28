@@ -2,7 +2,8 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.Model
   urlRoot: window.location.pathname.replace('/build', '') + '/questions'
 
   defaults: {
-    type: 'RadioQuestion'
+    type: 'RadioQuestion',
+    content: 'Untitled question'
   }
 
   initialize: ->

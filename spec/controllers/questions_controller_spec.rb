@@ -4,20 +4,24 @@ describe QuestionsController do
   context "POST 'create'" do
     it "creates a new question" do
       survey = FactoryGirl.create(:survey)
+      question = FactoryGirl.attributes_for(:question)
+
       expect do
-        post :create, :survey_id => survey.id
+        post :create, :survey_id => survey.id, :question => question
       end.to change { Question.count }.by(1)
     end
 
     it "creates a new question based on the type" do
       survey = FactoryGirl.create(:survey)
+      question = FactoryGirl.attributes_for(:question)
+      question['type'] = 'RadioQuestion'
       expect do
-        post :create, :survey_id => survey.id, :type => "RadioQuestion"
+        post :create, :survey_id => survey.id, :question => question
       end.to change { RadioQuestion.count }.by(1)
     end
 
     it "returns the created question as JSON" do
-      expected_json = { content: "untitled question",
+      expected_json = { content: "MyText",
                         created_at: "2012-08-28T08: 22: 50Z",
                         id: 797,
                         image_content_type: nil,
@@ -30,7 +34,9 @@ describe QuestionsController do
                         updated_at: "2012-08-28T08: 22: 50Z"
                       }
       survey = FactoryGirl.create(:survey)
-      post :create, :survey_id => survey.id, :type => "RadioQuestion"
+      question = FactoryGirl.attributes_for(:question)
+      question['type'] = 'RadioQuestion'
+      post :create, :survey_id => survey.id, :question => question
       returned_json = JSON.parse(response.body)
       returned_json.keys.map(&:to_sym).should == expected_json.keys
       returned_json['content'].should == expected_json[:content]

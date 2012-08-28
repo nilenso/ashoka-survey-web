@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :question do
     content "MyText"
-    survey { FactoryGirl.create(:survey) }
+    survey_id { FactoryGirl.create(:survey).id }
 
     factory :question_with_answers do
       after(:create) do |question, evaluator|
