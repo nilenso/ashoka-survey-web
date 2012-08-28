@@ -27,7 +27,7 @@ class SurveysController < ApplicationController
   end
 
   def backbone_create
-    @survey = Survey.create(:name => "Untitled", :expiry_date => 7.days.from_now)
+    @survey = Survey.create(:name => "Untitled", :expiry_date => 7.days.from_now, :description => '')
     flash[:notice] = t "flash.survey_created"
     redirect_to surveys_build_path(:id => @survey.id)
   end

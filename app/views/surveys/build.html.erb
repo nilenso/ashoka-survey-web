@@ -1,0 +1,10 @@
+<%= stylesheet_link_tag 'survey_builder' %>
+<h1> <%= t ".create_survey" %> </h1>
+
+<div id="survey_builder"></div>
+
+<script type="text/javascript">
+  $(function(){
+    var survey_builder = new SurveyBuilder.Views.SurveyBuilderView();
+  });
+</script>
