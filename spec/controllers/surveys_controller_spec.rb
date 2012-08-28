@@ -79,7 +79,7 @@ describe SurveysController do
       assigns(:survey).should_not be_nil
     end
 
-    it "redirects to the root path" do
+    it "redirects to the surveys build path" do
       post :backbone_create
       created_survey = Survey.find_by_name("Untitled")
       response.should redirect_to(surveys_build_path(:id => created_survey.id))
@@ -88,6 +88,14 @@ describe SurveysController do
 
     it "creates a survey" do
       expect { post :backbone_create }.to change { Survey.count }.by(1)
+    end
+  end
+
+  context "GET 'build'" do
+    it "renders the 'build' template" do
+      survey = FactoryGirl.create(:survey)
+      get :build, :id => survey.id
+      response.should render_template(:build)
     end
   end
 end
