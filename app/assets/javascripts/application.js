@@ -19,7 +19,7 @@
 //= require backbone
 //= require backbone_rails_sync
 //= require backbone_datalink
-//= require backbone/survey_web
+//= require backbone/survey_builder
 //= require_tree .
 
 var SurveyApp = {};
