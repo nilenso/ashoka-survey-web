@@ -9,6 +9,7 @@ gem 'heroku'
 gem 'omniauth-oauth2'
 gem 'figaro'
 gem "paperclip", "~> 3.0"
+gem "rails-backbone"
 
 # Gems used only for assets and not required
 # in production environments by default.
