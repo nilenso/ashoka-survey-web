@@ -1,4 +1,4 @@
 class SurveyBuilder.Views.DummyPaneView extends Backbone.View
 
   initialize: ->
-    this.el: $("#dummy_pane")
+    this.el = $("#dummy_pane")
