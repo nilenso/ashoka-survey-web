@@ -2,13 +2,17 @@
 <h1> <%= t ".create_survey" %> </h1>
 
 <div id="survey_builder">
-  <div id="picker_pane"></div>
+  <div id="picker_pane">
+    <%= link_to "Add a Radio Question", "#", :id => "add_radio_question" %>
+  </div>
   <div id="settings_pane"></div>
   <div id="dummy_pane"></div>
 </div>
 
 <script type="text/javascript">
-  $(function(){
-    var survey_builder = new SurveyBuilder.Views.SurveyBuilderView();
+  $(document).ready(function(){
+    window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView();
   });
 </script>
+
+<%= render 'templates/build_mustache_templates' %>
