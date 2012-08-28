@@ -12,5 +12,5 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   new_question: (event, type) ->
     #TODO: Switch tab here.
     model = new SurveyBuilder.Models.RadioQuestionModel
-    #this.dummy_pane.add_question(type, model)
+    this.dummy_pane.add_question(type, model)
     this.settings_pane.add_question(type, model)
