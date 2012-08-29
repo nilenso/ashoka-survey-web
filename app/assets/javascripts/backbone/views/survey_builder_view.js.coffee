@@ -16,3 +16,4 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
         model = new SurveyBuilder.Models.RadioQuestionModel
         this.dummy_pane.add_question(type, model)
         this.settings_pane.add_question(type, model)
+        model.seed()

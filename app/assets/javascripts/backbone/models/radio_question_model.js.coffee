@@ -20,4 +20,10 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
     }
   ]
 
+  #Can't have a blank radio question. Initialize with 3 radio options
+  seed: ->
+    this.get('options').add({content: "First Option"})
+    this.get('options').add({content: "Second Option"})
+    this.get('options').add({content: "Third Option"})
+
 SurveyBuilder.Models.RadioQuestionModel.setup()
