@@ -19,4 +19,10 @@ describe "SurveyBuilder.Models.RadioQuestionModel", ->
     expect(spy.getCall(0).args[0].url).toContain "/questions"
     jQuery.ajax.restore()
 
+  it "contains a collection of OptionModels", ->
+    model = new SurveyBuilder.Models.RadioQuestionModel
+    setTimeout(2000, ->
+      expect(model.get('options')).toEqual(jasmine.any(SurveyBuilder.Collections.OptionsCollection))
+    )
+
 
