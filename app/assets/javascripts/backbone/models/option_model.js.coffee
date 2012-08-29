@@ -1,16 +1,14 @@
 class SurveyBuilder.Models.OptionModel extends Backbone.Model
-  initialize: (content) ->
-    this.set({content: (content || "untitled option")})
+  defaults: {
+    content: 'untitled'
+  }
 
-class SurveyBuilder.Collections.OptionsCollection extends Backbone.Collection
-  model: SurveyBuilder.Models.OptionModel
+  initialize: ->
+    this.on('change:question_id', this.set_url, this)
 
-  initialize: (question_id) ->
+  set_url: ->
     base_url = window.location.pathname.replace('/build', '')
+    question_id = this.get('question_id')
     this.url = "#{base_url}/questions/#{question_id}/options"
-    this.add_initial_options()
+    this.save()
 
-  add_initial_options: ->
-    this.add(new SurveyBuilder.Models.OptionModel('First option'))
-    this.add(new SurveyBuilder.Models.OptionModel('Second option'))
-    this.add(new SurveyBuilder.Models.OptionModel('Third option'))
