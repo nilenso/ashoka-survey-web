@@ -1,8 +1,8 @@
 SurveyBuilder.Views.Dummies ||= {}
 
 class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
-  initialize: (question_id) ->
-    this.model = new SurveyBuilder.Models.OptionModel
+  initialize: (model) ->
+    this.model = model
     this.model.on('change', this.render, this)
 
   render: ->
