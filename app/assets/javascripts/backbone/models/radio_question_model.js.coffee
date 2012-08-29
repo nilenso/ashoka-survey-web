@@ -14,7 +14,8 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
       relatedModel: 'SurveyBuilder.Models.OptionModel'
       collectionType: 'SurveyBuilder.Collections.OptionCollection'
       reverseRelation: {
-        key: 'question_id'
+        key: 'question'
+        keyDestination: 'question_id'
         includeInJSON: 'id'
       }
     }
