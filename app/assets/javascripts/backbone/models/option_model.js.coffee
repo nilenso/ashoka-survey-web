@@ -1,14 +1,11 @@
-class SurveyBuilder.Models.OptionModel extends Backbone.Model
+class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
+  urlRoot: '/api/options'
   defaults: {
     content: 'untitled'
   }
 
-  initialize: ->
-    this.on('change:question_id', this.set_url, this)
+SurveyBuilder.Models.OptionModel.setup()
 
-  set_url: ->
-    base_url = window.location.pathname.replace('/build', '')
-    question_id = this.get('question_id')
-    this.url = "#{base_url}/questions/#{question_id}/options"
-    this.save()
-
+class SurveyBuilder.Collections.OptionCollection extends Backbone.Collection
+  model: SurveyBuilder.Models.OptionModel
+  url: '/api/options'

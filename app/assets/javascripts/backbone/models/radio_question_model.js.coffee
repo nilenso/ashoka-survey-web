@@ -1,12 +1,23 @@
-class SurveyBuilder.Models.RadioQuestionModel extends Backbone.Model
-  urlRoot: window.location.pathname.replace('/build', '') + '/questions'
+class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
+  urlRoot: '/api/questions'
 
   defaults: {
     type: 'RadioQuestion',
     content: 'Untitled question'
   }
 
-  initialize: ->
-    survey_id_match = window.location.pathname.match(/surveys\/build\/(\d+)/)
-    this.set({survey_id: survey_id_match[1]}) if survey_id_match
-    this.save()
+  relations: [
+    {
+      type: Backbone.HasMany,
+      key: 'options'
+      includeInJSON: 'id'
+      relatedModel: 'SurveyBuilder.Models.OptionModel'
+      collectionType: 'SurveyBuilder.Collections.OptionCollection'
+      reverseRelation: {
+        key: 'question_id'
+        includeInJSON: 'id'
+      }
+    }
+  ]
+
+SurveyBuilder.Models.RadioQuestionModel.setup()

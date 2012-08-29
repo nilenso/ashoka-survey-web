@@ -12,11 +12,11 @@ describe "SurveyBuilder.Models.RadioQuestionModel", ->
       model = new SurveyBuilder.Models.RadioQuestionModel
       expect(model.get('content')).toContain('Untitled')
 
-  it "should make the correct server request when it is empty", ->
+  it "should make the correct server request", ->
     model = new SurveyBuilder.Models.RadioQuestionModel
     spy = sinon.spy(jQuery, "ajax")
     model.save()
-    expect(spy.getCall(0).args[0].url).toContain "/questions"
+    expect(spy.getCall(0).args[0].url).toContain "/api/questions"
     jQuery.ajax.restore()
 
 
