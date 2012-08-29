@@ -1,7 +1,6 @@
 SurveyBuilder.Views.Questions ||= {}
 
 class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
-
   events:
     'keyup': 'update_model'
 
@@ -13,4 +12,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     $(this.el).html(Mustache.render(template, this.model.toJSON()))
     return this
 
-  update_model: ->
+  update_model: (event) ->
+    input = $(event.target)
+    this.model.set({content: input.val()})
+    event.stopImmediatePropagation()
