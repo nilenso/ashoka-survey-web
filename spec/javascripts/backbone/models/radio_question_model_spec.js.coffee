@@ -19,5 +19,14 @@ describe "SurveyBuilder.Models.RadioQuestionModel", ->
     expect(spy.getCall(0).args[0].url).toContain "/api/questions"
     jQuery.ajax.restore()
 
+  it "contains options", ->
+    model = new SurveyBuilder.Models.RadioQuestionModel
+    expect(model.get('options')).toEqual(jasmine.any(SurveyBuilder.Collections.OptionCollection))
+
+  it "can seed 3 placeholder options within it", ->
+    model = new SurveyBuilder.Models.RadioQuestionModel
+    model.seed()
+    expect(model.get('options').length).toEqual(3)
+
 
 

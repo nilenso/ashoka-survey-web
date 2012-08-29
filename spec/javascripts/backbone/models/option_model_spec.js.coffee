@@ -14,3 +14,20 @@ describe "SurveyBuilder.Models.OptionModel", ->
     model.save()
     expect(spy.getCall(0).args[0].url).toContain '/api/options'
     jQuery.ajax.restore()   
+
+  describe "SurveyBuilder.Collections.OptionCollection", ->
+    it "can be instantiated", ->
+      collection = new SurveyBuilder.Collections.OptionCollection
+      expect(collection).not.toBeNull
+
+    it "is a collection of OptionModels", ->
+      collection = new SurveyBuilder.Collections.OptionCollection
+      collection.add({content: 'Hello'})
+      expect(collection.models[0]).toEqual(jasmine.any((SurveyBuilder.Models.OptionModel)))
+
+    it "should make the correct server request when creating a new element", ->
+      collection = new SurveyBuilder.Collections.OptionCollection
+      spy = sinon.spy(jQuery, "ajax")
+      collection.create({content: 'Hello'})
+      expect(spy.getCall(0).args[0].url).toContain '/api/options'
+      jQuery.ajax.restore()   
