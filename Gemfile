@@ -39,6 +39,7 @@ group :test, :development do
   gem 'forgery'
   gem 'capybara'
   gem "poltergeist"
+  gem 'pry-rails'
 end
 
 gem 'jquery-rails'
