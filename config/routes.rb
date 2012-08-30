@@ -15,7 +15,7 @@ SurveyWeb::Application.routes.draw do
 
   namespace :api, :defaults => { :format => 'json' } do
     scope :module => :v1 do
-      resources :questions, :only => [:create]
+      resources :questions, :only => [:create, :update]
       resources :options, :only => [:create]
     end
   end

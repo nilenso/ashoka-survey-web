@@ -14,6 +14,6 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
   render: ->
     $(this.el).append($(question.render().el)) for question in @questions
     return this
-      
+
   hide_all: ->
     $(question.el).hide() for question in @questions

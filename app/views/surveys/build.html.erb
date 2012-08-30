@@ -10,11 +10,12 @@
   </div>
 
   <div id="dummy_pane"></div>
+  <input type="button" value="Save" id="save"></input>
 </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
-    window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView();
+    window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView(<%= @survey.id %>);
   });
 </script>
 
