@@ -7,6 +7,7 @@ class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
 
   initialize: (model) ->
     this.model = model
+    this.model.actual_view = this
     this.options = []
     this.model.on('add:options', this.add_new_option, this)
 

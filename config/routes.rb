@@ -5,6 +5,7 @@ SurveyWeb::Application.routes.draw do
 
     match '/surveys/build/:id', :to => 'surveys#build', :as => "surveys_build"
     match '/surveys/backbone_create', :to => 'surveys#backbone_create'
+    match '/surveys/backbone_new', :to => 'surveys#backbone_new'
 
     resources :surveys do
       resources :responses, :only => [:new, :create, :show]

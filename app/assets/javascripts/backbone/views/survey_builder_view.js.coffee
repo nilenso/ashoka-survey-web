@@ -3,6 +3,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   events:
     'new_question': 'new_question'
+    'dummy_click': 'hide_all'
 
   initialize: ->
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
@@ -17,3 +18,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
         this.dummy_pane.add_question(type, model)
         this.settings_pane.add_question(type, model)
         model.seed()
+
+  hide_all: (event) ->
+    this.settings_pane.hide_all()
