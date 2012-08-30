@@ -19,6 +19,8 @@ class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
   update_model: (event) ->
     input = $(event.target)
     this.model.set({content: input.val()})
+    this.model.set({mandatory: input.is(':checked')})
+    this.model.set({image: input.val()})
 
   add_new_option: (model) ->
     option = new SurveyBuilder.Views.Questions.OptionView(model)
