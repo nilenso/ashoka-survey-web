@@ -51,12 +51,13 @@ module Api
           question.reload
           Question.find(question.id).should == question
         end
-        it "redirects to the root path with a flash message when save is successful" do
+
+        it "renders the question with a flash message when save is successful" do
           question = FactoryGirl.create(:question)
           put :update, :id => question.id, :content => "hello"
-          response.should redirect_to(root_path)
           flash[:notice].should_not be_nil
         end
+
         it "renders the question with a flash error when save is unsuccessful" do
           question = FactoryGirl.create(:question)
           put :update, :id => question.id
