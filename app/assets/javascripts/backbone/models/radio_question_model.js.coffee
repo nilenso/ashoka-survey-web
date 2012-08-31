@@ -1,4 +1,4 @@
-# Question with a list of choices to choose
+# Interfaces between the views and the rails model for a radio question with a collection of options
 class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
   urlRoot: '/api/questions'
 

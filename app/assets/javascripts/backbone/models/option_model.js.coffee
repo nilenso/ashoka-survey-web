@@ -1,4 +1,4 @@
-# Choice that belongs to a radio question
+# Interfaces between the views and the rails model for an option
 class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   urlRoot: '/api/options'
   defaults: {
@@ -7,7 +7,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
 
 SurveyBuilder.Models.OptionModel.setup()
 
-# Collecttion of all choices for radio question
+# Collection of all options for radio question
 class SurveyBuilder.Collections.OptionCollection extends Backbone.Collection
   model: SurveyBuilder.Models.OptionModel
   url: '/api/options'
