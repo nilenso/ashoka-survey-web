@@ -1,3 +1,4 @@
+# Collection of all questions' settings
 class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
   el: "#settings_pane"
 

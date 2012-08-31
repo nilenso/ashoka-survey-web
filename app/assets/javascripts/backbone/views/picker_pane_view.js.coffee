@@ -1,3 +1,4 @@
+# Container of list of available question types that can be added
 class SurveyBuilder.Views.PickerPaneView extends Backbone.View
   el: "#picker_pane"
 

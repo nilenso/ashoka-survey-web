@@ -1,5 +1,6 @@
 SurveyBuilder.Views.Questions ||= {}
 
+# The settings of a single radio question in the DOM
 class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
 
   events:

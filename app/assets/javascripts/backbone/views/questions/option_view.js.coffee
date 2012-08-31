@@ -1,5 +1,6 @@
 SurveyBuilder.Views.Questions ||= {}
 
+#  The settings of a single option in the settings pane
 class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
   events:
     'keyup': 'update_model'

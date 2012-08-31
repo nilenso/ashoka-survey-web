@@ -1,3 +1,4 @@
+# Question with a list of choices to choose
 class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
   urlRoot: '/api/questions'
 

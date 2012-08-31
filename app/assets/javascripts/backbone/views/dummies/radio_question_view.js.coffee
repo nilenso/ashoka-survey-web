@@ -1,5 +1,6 @@
 SurveyBuilder.Views.Dummies ||= {}
 
+# Represents a dummy radio question on the DOM
 class SurveyBuilder.Views.Dummies.RadioQuestionView extends Backbone.View
 
   events:

@@ -1,3 +1,4 @@
+# Represents a dummy option in the DOM
 SurveyBuilder.Views.Dummies ||= {}
 
 class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
