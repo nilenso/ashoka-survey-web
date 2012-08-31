@@ -23,6 +23,14 @@ module Api
             returned_json[k.to_s].should == v
           end
         end
+        context "PUT 'update'" do
+          it "updates the option" do
+            option = FactoryGirl .create(:option)
+            put :update, :id => option.id, :option => {:content => "Hello"}
+            response.should be_ok
+            Option.find(option.id).content.should == "Hello"
+          end
+        end
       end
     end
   end

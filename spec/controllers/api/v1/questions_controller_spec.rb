@@ -47,21 +47,8 @@ module Api
       context "PUT 'update'" do
         it "updates the question" do
           question = FactoryGirl.create(:question)
-          put :update, :id => question.id, :content => "hello"
-          question.reload
-          Question.find(question.id).should == question
-        end
-
-        it "renders the question with a flash message when save is successful" do
-          question = FactoryGirl.create(:question)
-          put :update, :id => question.id, :content => "hello"
-          flash[:notice].should_not be_nil
-        end
-
-        it "renders the question with a flash error when save is unsuccessful" do
-          question = FactoryGirl.create(:question)
-          put :update, :id => question.id
-          flash[:error].should_not be_nil
+          put :update, :id => question.id, :question => {:content => "hello"}
+          Question.find(question.id).content.should == "hello"
         end
       end
     end
