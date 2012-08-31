@@ -3,8 +3,8 @@ SurveyBuilder.Views.Questions ||= {}
 class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
 
   events:
-    'keyup': 'update_model_for_content'
-    'change': 'update_model_for_mandatory'
+    'keyup': 'update_model'
+    'change': 'update_model'
 
   initialize: (model) ->
     this.model = model
@@ -17,12 +17,15 @@ class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
     $(this.el).html(Mustache.render(template, this.model.toJSON()))
     return this
 
-  update_model_for_content: (event) ->
+  update_model: (event) ->
     input = $(event.target)
-    this.model.set({content: input.val()})
 
-  update_model_for_mandatory: (event) ->
-    this.model.set({mandatory: $(event.target).is(':checked')})
+    propertyHash = {}
+    if input.attr('name') == "mandatory"
+      propertyHash[input.attr('name')] = input.is(':checked')
+    else
+      propertyHash[input.attr('name')] = input.val()
+    this.model.set(propertyHash)
 
   add_new_option: (model) ->
     option = new SurveyBuilder.Views.Questions.OptionView(model)
