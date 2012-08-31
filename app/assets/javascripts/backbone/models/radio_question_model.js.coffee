@@ -29,4 +29,9 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
     this.get('options').add({content: "Second Option"})
     this.get('options').add({content: "Third Option"})
 
+  save_with_options: ->
+    this.save()
+    this.get('options').each (option) ->
+      option.save()
+
 SurveyBuilder.Models.RadioQuestionModel.setup()

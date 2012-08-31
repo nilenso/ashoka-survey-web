@@ -19,17 +19,15 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
       when 'radio'
         model = new SurveyBuilder.Models.RadioQuestionModel
         model.attributes['survey_id'] = this.survey_id
-        model.save()
         @models.push model
         this.dummy_pane.add_question(type, model)
         this.settings_pane.add_question(type, model)
         model.seed()
+        model.save_with_options()
 
   hide_all: (event) ->
     this.settings_pane.hide_all()
 
   save_all_questions: ->
     for model in @models when model.attributes['type'] == "RadioQuestion"
-      model.save()
-      model.get('options').each (option) ->
-        option.save()
+      model.save_with_options()
