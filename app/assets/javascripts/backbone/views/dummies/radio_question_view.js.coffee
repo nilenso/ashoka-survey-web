@@ -16,6 +16,7 @@ class SurveyBuilder.Views.Dummies.RadioQuestionView extends Backbone.View
   render: ->
     template = $('#dummy_radio_question_template').html()
     $(this.el).html(Mustache.render(template, this.model.toJSON()))
+    $(this.el).find('abbr').show() if this.model.get('mandatory')
     _.each(this.options, (option) =>
         $(this.el).append(option.render().el)
       )
