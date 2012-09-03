@@ -4,11 +4,11 @@
 <div id="survey_builder">
   <div id="sidebar">
     <ul>
-      <li><a href="#picker_pane">Pick a Question</a></li>
-      <li><a href="#settings_pane">Settings</a></li>
+      <li><a href="#picker_pane"><%= t(".pick_question_type") %></a></li>
+      <li><a href="#settings_pane"><%= t(".question_settings") %></a></li>
     </ul>
     <div id="picker_pane">
-      <%= link_to "Add a Radio Question", "#", :id => "add_radio_question" %>
+      <%= link_to t(".add_radio_question"), "#", :id => "add_radio_question" %>
     </div>
     <div id="settings_pane"></div>
   </div>
