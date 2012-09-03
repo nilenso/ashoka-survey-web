@@ -33,7 +33,7 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
   save_with_options: ->
     this.save({}, {error: this.error_callback, success: this.success_callback})
     this.get('options').each (option) ->
-      option.save()
+      option.save_model()
 
   success_callback: (model, response) ->
     console.log("Success!")
