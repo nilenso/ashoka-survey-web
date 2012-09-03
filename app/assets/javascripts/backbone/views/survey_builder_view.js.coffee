@@ -4,7 +4,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   events:
     'new_question': 'new_question'
-    'dummy_click': 'hide_all'
+    'dummy_click': 'handle_dummy_click'
     'click #save': 'save_all_questions'
 
   initialize:(survey_id) ->
@@ -24,8 +24,15 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
         this.settings_pane.add_question(type, model)
         model.save_with_options()
 
+  handle_dummy_click: ->
+    this.hide_all()
+    this.switch_tab()
+    
   hide_all: (event) ->
     this.settings_pane.hide_all()
+
+  switch_tab: ->
+    $("#sidebar").tabs('select', 1)
 
   save_all_questions: ->
     this.survey.save_all_questions()
