@@ -12,7 +12,7 @@ module Api
         if question.update_attributes(params[:question])
           render :json => question
         else
-          render :json => question, :errors => question.errors, :status => :bad_request
+          render :json => question.errors, :status => :bad_request
         end
       end
     end

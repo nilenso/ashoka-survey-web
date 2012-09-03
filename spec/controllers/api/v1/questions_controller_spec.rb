@@ -50,6 +50,21 @@ module Api
           put :update, :id => question.id, :question => {:content => "hello"}
           Question.find(question.id).content.should == "hello"
         end
+
+        it "returns the updated question as JSON" do
+          question = FactoryGirl.create(:question)
+          put :update, :id => question.id, :question => {:content => "someuniquestring"}
+          JSON.parse(response.body)["content"].should == "someuniquestring"
+        end
+
+        context "when update is unsuccessful" do
+          it "returns the errors with a bad request status" do
+            question = FactoryGirl.create(:question)
+            put :update, :id => question.id, :question => {:content => ""}
+            response.status.should == 400
+            JSON.parse(response.body)["content"].join.should =~ /can\'t be blank/
+          end
+        end
       end
     end
   end

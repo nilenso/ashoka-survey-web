@@ -41,6 +41,6 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
 
   error_callback: (model, response) ->
     console.log("Error!")
-    console.log(model, response)
+    console.log(model, JSON.parse(response.responseText))
 
 SurveyBuilder.Models.RadioQuestionModel.setup()
