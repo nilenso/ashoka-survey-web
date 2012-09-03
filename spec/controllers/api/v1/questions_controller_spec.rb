@@ -53,7 +53,7 @@ module Api
             post :create, :survey_id => survey.id, :question => question
 
             response.status.should == 400
-            JSON.parse(response.body)["content"].join.should =~ /can\'t be blank/
+            JSON.parse(response.body).should be_any {|m| m =~ /can\'t be blank/ }
           end
         end
       end
@@ -75,7 +75,7 @@ module Api
             question = FactoryGirl.create(:question)
             put :update, :id => question.id, :question => {:content => ""}
             response.status.should == 400
-            JSON.parse(response.body)["content"].join.should =~ /can\'t be blank/
+            JSON.parse(response.body).should be_any {|m| m =~ /can\'t be blank/ }
           end
         end
       end

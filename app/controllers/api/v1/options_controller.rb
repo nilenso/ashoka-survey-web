@@ -6,7 +6,7 @@ module Api
         if option.save
           render :json => option
         else
-          render :json => option.errors, :status => :bad_request
+          render :json => option.errors.full_messages, :status => :bad_request
         end
       end
 
@@ -15,7 +15,7 @@ module Api
         if option.update_attributes(params[:option])
           render :json => option
         else
-          render :json => option.errors, :status => :bad_request
+          render :json => option.errors.full_messages, :status => :bad_request
         end
       end
     end

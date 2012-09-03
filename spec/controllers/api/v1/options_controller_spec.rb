@@ -30,7 +30,7 @@ module Api
             option_hash[:content] = ''
             post :create, :survey_id => survey.id, :question_id => question.id, :option => option_hash
             response.status.should == 400
-            JSON.parse(response.body)["content"].join.should =~ /can\'t be blank/
+            JSON.parse(response.body).should be_any { |m| m =~ /can\'t be blank/ }
           end
         end
       end
@@ -55,7 +55,7 @@ module Api
             option = FactoryGirl.create(:option)
             put :update, :id => option.id, :option => {:content => ""}
             response.status.should == 400
-            JSON.parse(response.body)["content"].join.should =~ /can\'t be blank/
+            JSON.parse(response.body).should be_any { |m| m =~ /can\'t be blank/ }
           end
         end
       end
