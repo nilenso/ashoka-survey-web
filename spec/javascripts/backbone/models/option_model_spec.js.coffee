@@ -35,5 +35,5 @@ describe "SurveyBuilder.Models.OptionModel", ->
   describe "when saving", ->
     it "knows if a save failed with errors", ->
       model = new SurveyBuilder.Models.OptionModel()
-      model.error_callback()
+      model.error_callback({}, {responseText: JSON.stringify(['xyz'])})
       expect(model.has_errors()).toBeTruthy()

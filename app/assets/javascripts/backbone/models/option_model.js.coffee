@@ -6,16 +6,17 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   }
 
   has_errors: ->
-    this.errors
+    !_.isEmpty(this.errors)
 
   save_model: ->
     this.save({}, {error: this.error_callback, success: this.success_callback})
 
   success_callback: (model, response) =>
-    this.errors = false
+    this.errors = []
 
   error_callback: (model, response) =>
-    this.errors = true
+    this.errors = JSON.parse(response.responseText)
+    console.log(this.errors)
 
 SurveyBuilder.Models.OptionModel.setup()
 
