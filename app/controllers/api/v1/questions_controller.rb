@@ -9,8 +9,11 @@ module Api
 
       def update
         question = Question.find(params[:id])
-        question.update_attributes(params[:question])
-        render :json => question
+        if question.update_attributes(params[:question])
+          render :json => question
+        else
+          render :json => question, :errors => question.errors, :status => :bad_request
+        end
       end
     end
   end
