@@ -32,8 +32,14 @@ describe "SurveyBuilder.Models.OptionModel", ->
       expect(spy.getCall(0).args[0].url).toContain '/api/options'
       jQuery.ajax.restore()   
 
-  describe "when saving", ->
+  describe "after saving", ->
     it "knows if a save failed with errors", ->
       model = new SurveyBuilder.Models.OptionModel()
       model.error_callback({}, {responseText: JSON.stringify(['xyz'])})
       expect(model.has_errors()).toBeTruthy()
+
+    it "can return the error messages as an array", ->
+      model = new SurveyBuilder.Models.OptionModel()
+      model.error_callback({}, {responseText: JSON.stringify(['xyz'])})
+      expect(model.errors).toEqual(jasmine.any(Array))
+      expect(model.errors).toContain('xyz')
