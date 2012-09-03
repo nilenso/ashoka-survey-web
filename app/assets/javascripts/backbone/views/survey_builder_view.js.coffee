@@ -21,7 +21,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
         model = this.survey.add_new_question_model()
         this.dummy_pane.add_question(type, model)
         this.settings_pane.add_question(type, model)
-        model.seed()
         model.save_with_options()
 
   hide_all: (event) ->
