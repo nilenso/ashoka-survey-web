@@ -56,7 +56,13 @@ $app_min_height: 600px;
   }
 }
 
-#sidebar { @include span-columns(4, 12); }
+#sidebar { 
+  @include span-columns(4, 12);
+  font-size: 0.8em;
+  li a {
+    font-size: 0.9em;
+  }
+}
 
 #picker_pane {
   border: 1px solid $border_color;
