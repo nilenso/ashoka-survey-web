@@ -39,6 +39,7 @@ module Api
           question = FactoryGirl.attributes_for(:question)
           question['type'] = 'RadioQuestion'
           post :create, :survey_id => survey.id, :question => question
+          response.should be_ok
           returned_json = JSON.parse(response.body)
           returned_json.keys.map(&:to_sym).should == expected_json.keys
           returned_json['content'].should == expected_json[:content]
