@@ -56,7 +56,7 @@ $app_min_height: 600px;
   }
 }
 
-#tabs { @include span-columns(4, 12); }
+#sidebar { @include span-columns(4, 12); }
 
 #picker_pane {
   border: 1px solid $border_color;

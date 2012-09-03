@@ -13,7 +13,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.dummy_pane    = new SurveyBuilder.Views.DummyPaneView
     this.survey        = new SurveyBuilder.Models.SurveyModel(survey_id)
     $(this.el).ajaxStop(this.display_save_status)
-    $( "#tabs" ).tabs();
+    $( "#sidebar" ).tabs();
 
   new_question: (event, type) ->
     #TODO: Switch tab here.
