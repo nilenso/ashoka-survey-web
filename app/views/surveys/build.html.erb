@@ -15,6 +15,7 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
+    window.flash_view = new SurveyBuilder.Views.FlashView;
     window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView(<%= @survey.id %>);
   });
 </script>
