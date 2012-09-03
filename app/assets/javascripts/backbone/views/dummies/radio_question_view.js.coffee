@@ -13,10 +13,12 @@ class SurveyBuilder.Views.Dummies.RadioQuestionView extends Backbone.View
     this.model.on('change', this.render, this)
     this.model.get('options').on('change', this.render, this)
     this.model.on('add:options', this.add_new_option, this)
+    this.model.on('change:errors', this.render, this)
 
   render: ->
     template = $('#dummy_radio_question_template').html()
-    $(this.el).html(Mustache.render(template, this.model.toJSON()))
+    data = _.extend(this.model.toJSON(), {errors: this.model.errors})
+    $(this.el).html(Mustache.render(template, data))
     $(this.el).find('abbr').show() if this.model.get('mandatory')
     _.each(this.options, (option) =>
         $(this.el).append(option.render().el)
