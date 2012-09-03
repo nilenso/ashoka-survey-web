@@ -3,8 +3,12 @@ module Api
     class QuestionsController < ApplicationController
 
       def create
-        question = Question.create(params[:question])
-        render :json => question
+        question = Question.new(params[:question])
+        if question.save
+          render :json => question
+        else
+          render :json => question.errors, :status => :bad_request
+        end
       end
 
       def update

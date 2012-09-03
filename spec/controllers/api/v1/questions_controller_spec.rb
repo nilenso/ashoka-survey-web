@@ -44,6 +44,18 @@ module Api
           returned_json.keys.map(&:to_sym).should == expected_json.keys
           returned_json['content'].should == expected_json[:content]
         end
+
+        context "when save is unsuccessful" do
+          it "returns the errors with a bad_request status" do
+            survey = FactoryGirl.create(:survey)
+            question = FactoryGirl.attributes_for(:question)
+            question[:content] = ''
+            post :create, :survey_id => survey.id, :question => question
+
+            response.status.should == 400
+            JSON.parse(response.body)["content"].join.should =~ /can\'t be blank/
+          end
+        end
       end
       context "PUT 'update'" do
         it "updates the question" do
