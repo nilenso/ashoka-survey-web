@@ -5,16 +5,17 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     content: 'untitled'
   }
 
+  has_errors: ->
+    this.errors
+
   save_model: ->
     this.save({}, {error: this.error_callback, success: this.success_callback})
 
-  success_callback: (model, response) ->
-    console.log("saved options successfully!")
-    console.log(model, response)
+  success_callback: (model, response) =>
+    this.errors = false
 
-  error_callback: (model, response) ->
-    console.log("Error saving options!")
-    console.log(model, JSON.parse(response.responseText))
+  error_callback: (model, response) =>
+    this.errors = true
 
 SurveyBuilder.Models.OptionModel.setup()
 
@@ -22,3 +23,6 @@ SurveyBuilder.Models.OptionModel.setup()
 class SurveyBuilder.Collections.OptionCollection extends Backbone.Collection
   model: SurveyBuilder.Models.OptionModel
   url: '/api/options'
+
+  has_errors: ->
+    this.any((option) -> option.has_errors())

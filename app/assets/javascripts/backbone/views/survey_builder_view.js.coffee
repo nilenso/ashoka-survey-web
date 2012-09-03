@@ -12,6 +12,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.settings_pane = new SurveyBuilder.Views.SettingsPaneView
     this.dummy_pane    = new SurveyBuilder.Views.DummyPaneView
     this.survey        = new SurveyBuilder.Models.SurveyModel(survey_id)
+    $(this.el).ajaxStop(this.display_save_status)
 
   new_question: (event, type) ->
     #TODO: Switch tab here.
@@ -28,3 +29,9 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   save_all_questions: ->
     this.survey.save_all_questions()
+
+  display_save_status: =>
+    if this.survey.has_errors()
+      window.flash_view.set_error('We had trouble saving your survey.')
+    else
+      window.flash_view.set_notice('Your survey was saved!')

@@ -24,6 +24,9 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
     }
   ]
 
+  has_errors: ->
+    this.errors || this.get('options').has_errors()
+
   #Can't have a blank radio question. Initialize with 3 radio options
   seed: ->
     this.get('options').add({content: "First Option"})
@@ -35,12 +38,10 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
     this.get('options').each (option) ->
       option.save_model()
 
-  success_callback: (model, response) ->
-    console.log("Success!")
-    console.log(model, response)
+  success_callback: (model, response) =>
+    this.errors = false
 
-  error_callback: (model, response) ->
-    console.log("Error!")
-    console.log(model, JSON.parse(response.responseText))
+  error_callback: (model, response) =>
+    this.errors = true
 
 SurveyBuilder.Models.RadioQuestionModel.setup()
