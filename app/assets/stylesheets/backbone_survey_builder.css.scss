@@ -21,7 +21,7 @@ $app_min_height: 600px;
   height: $app_min_height;
   overflow: auto;
 
-  div {
+  > div {
     padding: 4px;
     &:hover {
       color: $link_hover_color;
