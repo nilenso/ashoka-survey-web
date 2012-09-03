@@ -8,8 +8,11 @@ module Api
 
       def update
       	option = Option.find(params[:id])
-      	option.update_attributes(params[:option])
-      	render :json => option
+      	if option.update_attributes(params[:option])
+      	  render :json => option
+        else
+          render :json => option.errors, :status => :bad_request
+        end
       end
     end
   end
