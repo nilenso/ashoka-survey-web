@@ -28,8 +28,8 @@ $app_min_height: 600px;
       border: 1px dashed $border_color;
       @include border-radius(4px, 4px);
     }
-    input {
-      width: 98%;
+    div {
+      margin: 0.4em 0;
     }
   }
 
