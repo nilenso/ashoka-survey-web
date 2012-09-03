@@ -35,3 +35,9 @@ describe "SurveyBuilder.Models.RadioQuestionModel", ->
     model = new SurveyBuilder.Models.RadioQuestionModel
     model.seed()
     expect(model.get('options').length).toEqual(3)
+
+  describe "when saving", ->
+    it "knows if a save failed with errors", ->
+      model = new SurveyBuilder.Models.RadioQuestionModel()
+      model.error_callback()
+      expect(model.has_errors()).toBeTruthy()
