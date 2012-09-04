@@ -49,7 +49,7 @@ describe 'SurveyBuilder', js: true do
       find('li', :text => 'Settings').click
       within('#survey_details') do
         fill_in('Name', :with => 'Sample survey')
-        find_field('Expires on').set("2012/07/22")
+        find_field('Expires on').set("2030/07/22")
         find_field('Name').click # To hide the datepicker
         fill_in('Description', :with => 'Hello')
       end
@@ -57,7 +57,7 @@ describe 'SurveyBuilder', js: true do
 
       survey = Survey.find_by_name('Sample survey')
       survey.should_not be_nil
-      survey.expiry_date.strftime('%Y-%m-%d').should == '2012-07-22'
+      survey.expiry_date.strftime('%Y-%m-%d').should == '2030-07-22'
       survey.description.should == 'Hello'
     end
 
@@ -67,7 +67,7 @@ describe 'SurveyBuilder', js: true do
         find('li', :text => 'Settings').click
         within('#survey_details') do
           fill_in('Name', :with => 'Another sample survey')
-          fill_in('Expires on', :with => '2012/06/07')
+          fill_in('Expires on', :with => '2030/06/07')
           find_field('Name').click # To hide the datepicker
         end
       end
@@ -126,7 +126,7 @@ describe 'SurveyBuilder', js: true do
         find("#dummy_survey_details").click
         within('#survey_details') do
           fill_in('Name', :with => 'foo survey')
-          fill_in('Expires on', :with => '2012/06/07')
+          fill_in('Expires on', :with => '2030/06/07')
           find_field('Name').click # To hide the datepicker
         end
         find("#dummy_question_1").click
