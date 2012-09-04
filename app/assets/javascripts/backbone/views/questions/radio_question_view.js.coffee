@@ -6,6 +6,7 @@ class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
   events:
     'keyup  input[type=text]': 'handle_textbox_keyup'
     'change input[type=checkbox]': 'handle_checkbox_change'
+    'click .add_option': 'add_new_option_model'
 
   initialize: (model) ->
     this.model = model
@@ -18,8 +19,11 @@ class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
     $(this.el).html(Mustache.render(template, this.model.toJSON()))
     return this
 
-  add_new_option: (model) ->
-    option = new SurveyBuilder.Views.Questions.OptionView(model)
+  add_new_option_model: ->
+    this.model.create_new_option()
+
+  add_new_option: (option_model) ->
+    option = new SurveyBuilder.Views.Questions.OptionView(option_model)
     this.options.push option
     $(this.el).append($(option.render().el))
 

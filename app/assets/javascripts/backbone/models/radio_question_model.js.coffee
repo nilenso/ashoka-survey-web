@@ -50,4 +50,7 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
     console.log(this.errors)
     this.trigger('change:errors')
 
+  create_new_option: ->
+    this.get('options').create({content: "Another Option"})
+
 SurveyBuilder.Models.RadioQuestionModel.setup()

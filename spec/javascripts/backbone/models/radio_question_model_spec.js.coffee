@@ -47,3 +47,8 @@ describe "SurveyBuilder.Models.RadioQuestionModel", ->
       model.error_callback({}, {responseText: JSON.stringify(['xyz'])})
       expect(model.errors).toEqual(jasmine.any(Array))
       expect(model.errors).toContain('xyz')
+
+  it "creates a new option in its options collection", ->
+    model = new SurveyBuilder.Models.RadioQuestionModel()
+    model.create_new_option()
+    expect(model.get('options').length).toEqual(1)
