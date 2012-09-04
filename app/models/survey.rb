@@ -11,7 +11,7 @@ class Survey < ActiveRecord::Base
   private
 
   def expiry_date_should_not_be_in_past
-		if !expiry_date.blank? and expiry_date < Date.today
+		if !expiry_date.blank? and expiry_date <= Date.today
 		 	errors.add(:expiry_date, "can't be in the past")
 		end
   end
