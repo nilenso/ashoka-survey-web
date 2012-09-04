@@ -59,6 +59,7 @@ fr:
         image: "Image"
         mandatory: "Obligatoire"
 
+  add_option: "Ajouter une option"
 # Library strings
 
   formtastic:

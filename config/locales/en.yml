@@ -62,6 +62,7 @@ en:
         image: "Image"
         mandatory: "Mandatory"
 
+  add_option: "Add Option"
 # Library strings
 
   formtastic:
