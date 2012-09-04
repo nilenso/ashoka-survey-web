@@ -32,3 +32,4 @@ class SurveyBuilder.Views.Dummies.RadioQuestionView extends Backbone.View
   show_actual: (event) ->
     $(this.el).trigger("dummy_click")
     $(this.model.actual_view.el).show()
+    $(this.el).addClass("active")

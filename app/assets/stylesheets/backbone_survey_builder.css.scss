@@ -23,6 +23,8 @@ $app_min_height: 600px;
 
   > div {
     padding: 4px;
+    margin-bottom: 2px;
+    border: 1px dashed white;
     &:hover {
       color: $link_hover_color;
       border: 1px dashed $border_color;
@@ -35,7 +37,9 @@ $app_min_height: 600px;
 
   .active {
     padding: 4px;
-    background: $question_bg_color;
+    border: 1px solid #d9d6c4;
+    background: #eceadf url(images/ui-bg_fine-grain_10_eceadf_60x60.png) 50% 50% repeat;
+    color: #1f1f1f;
     @include box-sizing(content-box);
     @include border-radius(4px, 4px);
   }
