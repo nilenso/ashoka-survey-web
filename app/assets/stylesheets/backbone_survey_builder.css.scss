@@ -21,15 +21,15 @@ $app_min_height: 600px;
   height: $app_min_height;
   overflow: auto;
 
-  div {
+  > div {
     padding: 4px;
     &:hover {
       color: $link_hover_color;
       border: 1px dashed $border_color;
       @include border-radius(4px, 4px);
     }
-    input {
-      width: 98%;
+    div {
+      margin: 0.4em 0;
     }
   }
 
@@ -56,7 +56,13 @@ $app_min_height: 600px;
   }
 }
 
-#sidebar { @include span-columns(4, 12); }
+#sidebar { 
+  @include span-columns(4, 12);
+  font-size: 0.8em;
+  li a {
+    font-size: 0.9em;
+  }
+}
 
 #picker_pane {
   border: 1px solid $border_color;
@@ -87,27 +93,6 @@ $app_min_height: 600px;
   }
 }
 
-.tabs {
-  li {
-    @include border-top-left-radius(0.5em);
-    @include border-top-right-radius(0.5em);
-    color: $tab_header_color;
-    border: 1px solid $border_color;
-    border-bottom: 0;
-    padding: 0.2em 0.6em 0 0.6em;
-    font-family: sans-serif;
-    font-size: 0.9em;
-    display: inline;
-    cursor: pointer;
-    a {
-      text-decoration: none;
-      color: $link_color;
-      &:hover {
-        color: $link_hover_color;
-      }
-    }
-  }
-  .active {
-    background-color: $active_tab_color;
-  }
+.inline_errors {
+  color: $error_color;
 }

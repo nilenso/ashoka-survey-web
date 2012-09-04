@@ -36,6 +36,15 @@ en:
       more: "more"
       less: "less"
 
+    build:
+      add_radio_question: "Add a Radio Question"
+      pick_question_type: "Pick Question"
+      question_settings: "Settings"
+      pick_question_type: "Pick Question"
+      question_settings: "Settings"
+      option: "Option"
+      question_title: "Question Title"
+
   responses:
     new:
       response_for_survey: "Give a response for %{survey_name}"
