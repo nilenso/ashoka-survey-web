@@ -9,7 +9,7 @@ $grid-padding: 10px;
 
 $app_min_height: 600px;
 
-.container{
+.container {
   @include container;
 }
 
@@ -45,7 +45,7 @@ $app_min_height: 600px;
   }
 
   label {
-    display :block;
+    display: block;
   }
 
   #dummy_questions {
@@ -62,14 +62,16 @@ $app_min_height: 600px;
   }
 }
 
-.sidebar { @include span-columns(4, 12); }
+.sidebar {
+  @include span-columns(4, 12);
+}
 
 .question_picker_pane {
   border: 1px solid $border_color;
   padding: 1em;
 }
 
-.settings_pane{
+.settings_pane {
   border: 1px solid $border_color;
   padding: 1em;
   display: none;
@@ -88,7 +90,7 @@ $app_min_height: 600px;
     @include border-radius(4px, 4px);
     @include clearfix;
 
-    input#foo{
+    input#foo {
       display: block !important;
     }
   }

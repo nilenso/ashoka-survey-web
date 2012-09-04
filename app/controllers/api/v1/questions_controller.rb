@@ -22,7 +22,7 @@ module Api
 
       def image_upload
         question = Question.find(params[:id])
-        question.image = File.open(params[:image].local_path)
+        question.image = File.open(params[:image].path)
         question.save
         render :nothing => true
       end

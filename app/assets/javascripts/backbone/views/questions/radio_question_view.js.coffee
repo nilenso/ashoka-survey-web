@@ -13,6 +13,7 @@ class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
     this.model.actual_view = this
     this.options = []
     this.model.on('add:options', this.add_new_option, this)
+    this.model.on('save:completed', this.renderImageUploader, this)
 
   render: ->
     template = $('#radio_question_template').html()
@@ -41,3 +42,13 @@ class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
 
   update_model: (propertyHash) ->
     this.model.set(propertyHash)
+
+  renderImageUploader: ->
+    options =
+      allowedExt: "jpg|png|jpeg|gif"
+      actionUrl: this.model.imageUploadUrl()
+      fieldName: "image"
+      errorExt: "The supplied file format is not allowed"
+      errorUpload: "Unable to upload file, try again"
+      loadingText: "Loading..."
+    $(this.el).children('.upload_files').uploadOnFly options

@@ -1,13 +1,18 @@
 <label><%= t("surveys.build.question_title") %> </label>
 <input type="text" name="content" value="{{content}}"></input>
 <div>
-	<label><%= t("activerecord.attributes.question.mandatory") %> </label>
-	<input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
+  <label><%= t("activerecord.attributes.question.mandatory") %> </label>
+  <input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
+</div>
+<div class="upload_files">
+  <div class="upload-container">
+    <span class="btn-wrapper btn-success">
+        <span class="add-files">Add files</span>
+    </span>
+  </div>
+  <span class="status-msg"></span>
+  <ul class="file-list"></ul>
 </div>
 <div>
-	<label><%= t("activerecord.attributes.question.image") %> </label>
-	<input type="file" name="image" accept="image/*" />
-</div>
-<div>
-	<%= button_tag t("add_option"), :class => "add_option" %>
+  <%= button_tag t("add_option"), :class => "add_option" %>
 </div>
