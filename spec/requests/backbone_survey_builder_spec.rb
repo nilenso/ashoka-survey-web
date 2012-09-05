@@ -2,8 +2,6 @@ describe 'BackboneSurveyBuilder', js: true do
   self.use_transactional_fixtures = false
   context "when adding a new radio question" do
     before(:each) do
-      Survey.delete_all
-      Question.delete_all
       @survey = FactoryGirl.create(:survey)
       visit(surveys_build_path(:id => @survey.id))
       click_on('Radio Question')
