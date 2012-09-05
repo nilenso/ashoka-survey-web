@@ -44,6 +44,7 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
     this.seed()
     this.errors = []
     this.trigger('change:errors')
+    this.trigger('save:completed')
 
   error_callback: (model, response) =>
     this.errors = JSON.parse(response.responseText)
@@ -52,5 +53,8 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
 
   create_new_option: ->
     this.get('options').create({content: "Another Option"})
+
+  imageUploadUrl: ->
+    "/api/questions/"+this.id+'/image_upload'
 
 SurveyBuilder.Models.RadioQuestionModel.setup()

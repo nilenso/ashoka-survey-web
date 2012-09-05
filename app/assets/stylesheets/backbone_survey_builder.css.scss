@@ -9,7 +9,7 @@ $grid-padding: 10px;
 
 $app_min_height: 600px;
 
-.container{
+.container {
   @include container;
 }
 
@@ -65,7 +65,7 @@ $app_min_height: 600px;
   }
 }
 
-#sidebar { 
+#sidebar {
   @include span-columns(4, 12);
   font-size: 0.8em;
   li a {
@@ -83,7 +83,7 @@ $app_min_height: 600px;
   }
 }
 
-#settings_pane{
+#settings_pane {
   border: 1px solid $border_color;
   padding: 1em;
 
@@ -101,12 +101,29 @@ $app_min_height: 600px;
     @include border-radius(4px, 4px);
     @include clearfix;
 
-    input#foo{
+    input#foo {
       display: block !important;
     }
+  }
+
+  .spinner {
+    float: right;
+    margin-right: 5px;
   }
 }
 
 .inline_errors {
   color: $error_color;
+}
+
+.upload_files{
+  margin: 2px 0px 2px 0px;
+  .btn-wrapper {
+    padding: 2px 5px 2px 2px;
+    text-align: center;
+    color: #fff;
+    @include border-radius(2px);
+    background: #b7a979;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  }
 }

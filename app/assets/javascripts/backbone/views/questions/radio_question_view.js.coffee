@@ -13,6 +13,7 @@ class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
     this.model.actual_view = this
     this.options = []
     this.model.on('add:options', this.add_new_option, this)
+    this.model.on('save:completed', this.renderImageUploader, this)
 
   render: ->
     template = $('#radio_question_template').html()
@@ -41,3 +42,21 @@ class SurveyBuilder.Views.Questions.RadioQuestionView extends Backbone.View
 
   update_model: (propertyHash) ->
     this.model.set(propertyHash)
+
+  renderImageUploader: ->
+    $(".fileupload").fileupload
+      dataType: "json"
+      url: @model.imageUploadUrl()
+      replaceFileInput: false
+      send: (e, data) =>
+        opts =
+          length: 0 # The length of each line
+          width: 4 # The line thickness
+          radius: 8 # The radius of the inner circle
+          corners: 0.9 # Corner roundness (0..1)
+
+        @spinner = $('.spinner').spin(opts)
+      done: (e, data) =>
+        @spinner.spin(false)
+
+
