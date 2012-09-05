@@ -95,6 +95,11 @@ $app_min_height: 600px;
       display: block !important;
     }
   }
+
+  .spinner {
+    float: right;
+    margin-right: 5px;
+  }
 }
 
 .inline_errors {
