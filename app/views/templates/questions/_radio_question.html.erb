@@ -3,8 +3,10 @@
 <div>
   <label><%= t("activerecord.attributes.question.mandatory") %> </label>
   <input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
-  <input class="fileupload" type="file" name="files[]">
-  <div class="spinner"></div>
+  <div class="upload_files">
+    <input class="fileupload" type="file" name="files[]">
+    <div class="spinner"></div>
+  </div>
 </div>
 
 <div>
