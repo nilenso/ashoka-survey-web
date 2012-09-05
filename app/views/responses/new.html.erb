@@ -9,7 +9,7 @@
     <% end %>
     <% if question.type == 'SingleLineQuestion' %>
       <%= image_tag question.image.url(:medium) if question.image.exists? %>
-      <%= f.input :content, :label => question.content, :as => :string, :required => question.mandatory %>
+      <%= f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :hint => "Maximum Length: #{question.max_length || "no limit defined"}" %>
     <% end %>
     <%= f.input :question_id, :as => :hidden %>
   <% end %>

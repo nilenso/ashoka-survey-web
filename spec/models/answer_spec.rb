@@ -12,5 +12,13 @@ describe Answer do
       answer.content = ''
       answer.should_not be_valid
     end
-  end  
+    it "does not save if content of the answer exceeds maximum length" do
+      question = FactoryGirl.create(:question, :max_length => 7)
+      answer = FactoryGirl.create(:answer, :question_id => question.id)
+      question.answers << answer
+
+      answer.content = 'foobarbaz'
+      answer.should_not be_valid
+    end
+  end
 end
