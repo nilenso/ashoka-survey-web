@@ -51,6 +51,10 @@ en:
       response_for_survey: "Give a response for %{survey_name}"
       response_saved: "Response successfully saved"
 
+  answers:
+    validations:
+      mandatory_question: This question is mandatory.
+
   activerecord:
     attributes:
       survey:

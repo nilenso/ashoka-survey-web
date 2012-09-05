@@ -9,7 +9,7 @@ class Answer < ActiveRecord::Base
 
   def mandatory_questions_should_be_answered
     if content.blank? && question.mandatory
-      errors.add(:content, 'This question is mandatory.')
+      errors.add(:content, I18n.t('answers.validations.mandatory_question'))
     end
   end
 end
