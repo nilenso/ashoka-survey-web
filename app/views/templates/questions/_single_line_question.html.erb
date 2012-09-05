@@ -1,0 +1,10 @@
+<label><%= t("surveys.build.question_title") %> </label>
+<input type="text" name="content" value="{{content}}"></input>
+<div>
+	<label><%= t("activerecord.attributes.question.mandatory") %> </label>
+	<input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
+</div>
+<div>
+	<label><%= t("activerecord.attributes.question.image") %> </label>
+	<input type="file" name="image" accept="image/*" />
+</div>

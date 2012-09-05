@@ -38,6 +38,7 @@ fr:
     build:
       build_survey: "Construire votre enquête"
       add_radio_question: "Ajouter une question Radio"
+      add_single_line_question: "Ajouter une question de ligne unique"
       pick_question_type: "Choisissez Type de Question"
       question_settings: "Paramètres"      
       option: "Option"
