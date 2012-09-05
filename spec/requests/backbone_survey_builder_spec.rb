@@ -6,7 +6,7 @@ describe 'BackboneSurveyBuilder', js: true do
       Question.delete_all
       @survey = FactoryGirl.create(:survey)
       visit(surveys_build_path(:id => @survey.id))
-      click_on('Add a Radio Question')
+      click_on('Radio Question')
     end
 
     it "should create a new question in the database" do
