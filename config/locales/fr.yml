@@ -49,6 +49,10 @@ fr:
       response_for_survey: "Donner une réponse pour %{survey_name}"
       response_saved: Réponse enregistrée avec succès
 
+  answers:
+    validations:
+      mandatory_question: Cette question est obligatoire.
+
   activerecord:
     attributes:
       survey:
