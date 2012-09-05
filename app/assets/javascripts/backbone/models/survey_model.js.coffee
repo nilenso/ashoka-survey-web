@@ -12,8 +12,16 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
       when 'single_line'
         question_model = new SurveyBuilder.Models.SingleLineQuestionModel
     question_model.set('survey_id' : this.survey_id)
+    @remove_image_attributes(question_model)
     @question_models.push question_model
     question_model
+
+  remove_image_attributes: (model) ->
+    model.unset('image', {silent: true})
+    model.unset('image_content_type', {silent: true})
+    model.unset('image_file_name', {silent: true})
+    model.unset('image_file_size', {silent: true})
+    model.unset('image_updated', {silent: true})
 
   save_all_questions: ->
     for question_model in @question_models

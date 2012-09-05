@@ -19,6 +19,13 @@ module Api
           render :json => question.errors.full_messages, :status => :bad_request
         end
       end
+
+      def image_upload
+        question = Question.find(params[:id])
+        question.image = File.open(params[:image].path)
+        question.save
+        render :json => {}
+      end
     end
   end
 end

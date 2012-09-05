@@ -15,6 +15,7 @@ SurveyWeb::Application.routes.draw do
     scope :module => :v1 do
       resources :questions, :only => [:create, :update]
       resources :options, :only => [:create, :update]
+      post 'questions/:id/image_upload' => 'questions#image_upload'
     end
   end
 end

@@ -57,6 +57,7 @@ module Api
           end
         end
       end
+
       context "PUT 'update'" do
         it "updates the question" do
           question = FactoryGirl.create(:question)
@@ -77,6 +78,17 @@ module Api
             response.status.should == 400
             JSON.parse(response.body).should be_any {|m| m =~ /can\'t be blank/ }
           end
+        end
+      end
+
+      context "POST image_upload" do
+        it "uploads the image for given question" do
+          question = FactoryGirl.create(:question)
+          @file = fixture_file_upload('/images/sample.jpg', 'text/xml')
+          post :image_upload, :id => question.id, :image => @file
+          response.should be_ok
+          question.reload.image.should be
+          question.reload.image.should_not eq '/images/original/missing.png'
         end
       end
     end
