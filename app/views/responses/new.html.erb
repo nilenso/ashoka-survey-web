@@ -4,7 +4,7 @@
   <%= f.semantic_fields_for :answers do |f| %>
     <% question = f.object.question %>
     <% if question.type == 'RadioQuestion' %>
-      <%= f.input :content, :label => question.content, :as => :radio, :collection => question.options.map(&:content) %>
+      <%= f.input :content, :label => question.content, :as => :radio, :collection => question.options.map(&:content), :required => question.mandatory %>
     <% end %>
     <%= f.input :question_id, :as => :hidden %>
   <% end %>
