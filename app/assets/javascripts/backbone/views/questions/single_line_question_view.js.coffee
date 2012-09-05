@@ -5,6 +5,7 @@ class SurveyBuilder.Views.Questions.SingleLineQuestionView extends Backbone.View
 
   events:
     'keyup  input[type=text]': 'handle_textbox_keyup'
+    'change input[type=number]': 'handle_textbox_keyup'
     'change input[type=checkbox]': 'handle_checkbox_change'
 
   initialize: (model) ->
