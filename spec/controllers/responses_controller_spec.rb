@@ -52,5 +52,15 @@ describe ResponsesController do
         response.should redirect_to root_path
       end
     end
+
+    context "when save is unsuccessful" do
+      it "renders the 'new' page" do
+        question = FactoryGirl.create(:question, :mandatory => true)
+        response['answers_attributes'] = {}
+        response['answers_attributes']['0'] = {'content' => '', 'question_id' => question.id}
+        post :create, :response => response, :survey_id => survey.id
+        response.should render_template :new
+      end
+    end
   end
 end
