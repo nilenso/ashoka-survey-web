@@ -8,7 +8,7 @@ require 'capybara/rails'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
 
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :webkit
 
 Spork.prefork do
   # Loading more in this block will cause your tests to run faster. However,

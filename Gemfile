@@ -38,7 +38,7 @@ group :test, :development do
   gem 'growl'
   gem 'forgery'
   gem 'capybara'
-  gem "poltergeist"
+  gem 'capybara-webkit'
   gem 'pry-rails'
 end
 
