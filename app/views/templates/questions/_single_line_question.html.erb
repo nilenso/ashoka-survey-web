@@ -5,6 +5,10 @@
 	<input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
 </div>
 <div>
+	<label><%= t("activerecord.attributes.question.max_length") %> </label>
+	<input type="number" name="max_length" value="{{max_length}}"></input>
+</div>
+<div>
 	<label><%= t("activerecord.attributes.question.image") %> </label>
 	<input type="file" name="image" accept="image/*" />
 </div>

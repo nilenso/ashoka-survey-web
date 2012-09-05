@@ -7,6 +7,7 @@ class SurveyBuilder.Models.SingleLineQuestionModel extends Backbone.RelationalMo
     content: 'Untitled question'
     mandatory: false
     image: null
+    max_length: null
   }
 
   has_errors: ->
