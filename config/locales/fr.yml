@@ -36,6 +36,7 @@ fr:
       less: "moins"
 
     build:
+      build_survey: "Construire votre enquête"
       add_radio_question: "Ajouter une question Radio"
       pick_question_type: "Choisissez Type de Question"
       question_settings: "Paramètres"      
