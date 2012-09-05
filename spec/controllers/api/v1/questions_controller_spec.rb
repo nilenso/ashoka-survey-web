@@ -85,7 +85,7 @@ module Api
         it "uploads the image for given question" do
           question = FactoryGirl.create(:question)
           @file = fixture_file_upload('/images/sample.jpg', 'text/xml')
-          post :image_upload, :id => question.id, :files => [@file]
+          post :image_upload, :id => question.id, :image => @file
           response.should be_ok
           question.reload.image.should be
           question.reload.image.should_not eq '/images/original/missing.png'
