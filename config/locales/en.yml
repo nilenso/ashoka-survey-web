@@ -48,6 +48,7 @@ en:
   responses:
     new:
       response_for_survey: "Give a response for %{survey_name}"
+      response_saved: "Response successfully saved"
 
   activerecord:
     attributes:
