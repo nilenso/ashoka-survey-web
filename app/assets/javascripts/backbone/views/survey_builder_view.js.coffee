@@ -29,7 +29,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.switch_tab()
     
   hide_all: (event) ->
-    this.dummy_pane.unfocus_all()
+    this.dummy_pane.remove_all_active()
     this.settings_pane.hide_all()
 
   switch_tab: ->
