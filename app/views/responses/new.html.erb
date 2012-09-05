@@ -2,10 +2,11 @@
 
 <%= semantic_form_for [@survey, @response] do |f| %>
   <%= f.semantic_fields_for :answers do |f| %>
-    <%= f.inputs do %>
-      <%= f.input :content, :label => f.object.question.content, :input_html => { :rows => 2 } %>
-      <%= f.input :question_id, :as => :hidden %>
-     <% end %>
+    <% question = f.object.question %>
+    <% if question.type == 'RadioQuestion' %>
+      <%= f.input :content, :label => question.content, :as => :radio, :collection => question.options.map(&:content), :required => question.mandatory %>
+    <% end %>
+    <%= f.input :question_id, :as => :hidden %>
   <% end %>
 
   <%= f.actions do %>
