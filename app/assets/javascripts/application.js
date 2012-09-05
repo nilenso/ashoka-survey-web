@@ -26,5 +26,3 @@
 //= require backbone_datalink
 //= require backbone/survey_builder
 //= require_tree .
-
-var SurveyApp = {};

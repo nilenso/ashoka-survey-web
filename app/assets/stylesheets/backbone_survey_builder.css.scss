@@ -35,6 +35,10 @@ $app_min_height: 600px;
     }
   }
 
+  input {
+    width: 98%;
+  }
+
   .active {
     padding: 4px;
     border: 1px solid #d9d6c4;
@@ -52,7 +56,8 @@ $app_min_height: 600px;
   }
 
   label {
-    display: block;
+    display :block;
+    padding-bottom: 3px;
   }
 
   .inline_error {
@@ -71,6 +76,11 @@ $app_min_height: 600px;
 #picker_pane {
   border: 1px solid $border_color;
   padding: 1em;
+  a {
+    display: block;
+    padding: 5px;
+    text-decoration: none;
+  }
 }
 
 #settings_pane {

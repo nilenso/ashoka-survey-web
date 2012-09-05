@@ -37,7 +37,9 @@ en:
       less: "less"
 
     build:
-      add_radio_question: "Add a Radio Question"
+      build_survey: "Build your survey"
+      add_radio_question: "Radio Question"
+      add_single_line_question: "Single Line Question"
       pick_question_type: "Pick Question"
       question_settings: "Settings"
       pick_question_type: "Pick Question"

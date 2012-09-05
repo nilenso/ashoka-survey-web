@@ -11,6 +11,5 @@
  *= require_self
  *= require base_layout
  *= require jquery_ui
- *= require my_formtastic_changes
  *= require formtastic
  */

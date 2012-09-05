@@ -18,13 +18,13 @@ describe "SurveyBuilder.Models.SurveyModel", ->
     it "creates a new question model and adds it to the list of question models", ->
       survey_id = "321"
       survey_model = new SurveyBuilder.Models.SurveyModel(survey_id)
-      question_model = survey_model.add_new_question_model()
+      question_model = survey_model.add_new_question_model('radio')
       expect(survey_model.question_models).toContain(question_model)
 
   it "saves all the questions present in the list of question models", ->
     survey_id = "321"
     survey_model = new SurveyBuilder.Models.SurveyModel(survey_id)
-    question_model = survey_model.add_new_question_model()
+    question_model = survey_model.add_new_question_model('radio')
     spyOn(question_model, 'save_with_options')
     survey_model.save_all_questions()
     expect(question_model.save_with_options).toHaveBeenCalled()

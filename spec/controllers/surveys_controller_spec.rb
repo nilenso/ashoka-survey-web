@@ -3,48 +3,6 @@ require 'spec_helper'
 describe SurveysController do
   render_views
 
-  context "GET 'new'" do
-    it "assigns the survey instance variable" do
-      get :new
-      assigns(:survey).should_not be_nil
-    end
-
-    it "responds with a new page" do
-      get :new
-      response.should be_ok
-      response.should render_template('new')
-    end
-  end
-
-  context "POST 'create'" do
-    let(:survey) { FactoryGirl.attributes_for(:survey_with_questions) }
-
-    context "when save is successful" do
-      it "assigns the survey instance variable" do
-        post :create, :survey => survey
-        assigns(:survey).should_not be_nil
-      end
-
-      it "redirects to the root page" do
-        post :create, :survey => survey
-        response.should redirect_to(:root)
-        flash[:notice].should_not be_nil
-      end
-
-      it "creates a survey" do
-        expect { post :create, :survey => survey }.to change { Survey.count }.by(1)
-      end
-    end
-
-    context "when save is unsuccessful" do
-      it "renders the new page" do
-        post :create
-        response.should be_ok
-        response.should render_template(:new)
-      end
-    end
-  end
-
   context "GET 'index'" do
     it "assigns the surveys instance variable" do
       get :index
@@ -74,35 +32,36 @@ describe SurveysController do
 
   # Temp route while we're porting to backbone
 
-  context "GET 'backbone_new" do
+  context "GET 'new" do
     it "assigns the survey instance variable" do
-      get :backbone_new
+      get :new
       assigns(:survey).should_not be_nil
     end
   end
-  context "POST 'backbone_create'" do
+  
+  context "POST 'create'" do
     context "when save is unsuccessful" do
       before(:each) do
         @survey_attributes = FactoryGirl.attributes_for(:survey)
       end
 
       it "redirects to the surveys build path" do
-        post :backbone_create, :survey => @survey_attributes
+        post :create, :survey => @survey_attributes
         created_survey = Survey.find_by_name(@survey_attributes[:name])
         response.should redirect_to(surveys_build_path(:id => created_survey.id))
         flash[:notice].should_not be_nil
       end
 
       it "creates a survey" do
-        expect { post :backbone_create,:survey => @survey_attributes }.to change { Survey.count }.by(1)
+        expect { post :create,:survey => @survey_attributes }.to change { Survey.count }.by(1)
       end
     end
 
     context "when save is unsuccessful" do
-      it "renders the backbone_new page" do
-        post :backbone_create, :surveys => { :name => "" }
+      it "renders the new page" do
+        post :create, :surveys => { :name => "" }
         response.should be_ok
-        response.should render_template(:backbone_new)
+        response.should render_template(:new)
       end
     end
   end

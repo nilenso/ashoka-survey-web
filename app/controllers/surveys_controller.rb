@@ -4,21 +4,6 @@ class SurveysController < ApplicationController
     @surveys = Survey.paginate(:page => params[:page], :per_page => 10)
   end
 
-  def new
-    @survey = Survey.new
-  end
-
-  def create
-    @survey = Survey.new(params[:survey])
-
-    if @survey.save
-      redirect_to root_path
-      flash[:notice] = t "flash.survey_created"
-    else
-      render :new
-    end
-  end
-
   def destroy
     survey = Survey.find(params[:id])
     survey.destroy
@@ -26,18 +11,18 @@ class SurveysController < ApplicationController
     redirect_to(surveys_path)
   end
 
-  def backbone_new
+  def new
     @survey = Survey.new()
   end
 
-  def backbone_create
+  def create
     @survey = Survey.new(params[:survey])
 
     if @survey.save
       flash[:notice] = t "flash.survey_created"
       redirect_to surveys_build_path(:id => @survey.id)
     else
-     render :backbone_new
+     render :new
    end
  end
 
