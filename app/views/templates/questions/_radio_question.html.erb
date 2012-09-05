@@ -4,15 +4,7 @@
   <label><%= t("activerecord.attributes.question.mandatory") %> </label>
   <input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
 </div>
-<div class="upload_files">
-  <div class="upload-container">
-    <span class="btn-wrapper btn-success">
-        <span class="add-files">Add files</span>
-    </span>
-  </div>
-  <span class="status-msg"></span>
-  <ul class="file-list"></ul>
-</div>
+<input class="fileupload" type="file" name="files[]">
 <div>
   <%= button_tag t("add_option"), :class => "add_option" %>
 </div>

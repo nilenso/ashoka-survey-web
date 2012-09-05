@@ -17,6 +17,9 @@
 //= require_self
 //= require underscore
 //= require backbone
+//= require jquery.ui.widget
+//= require jquery.iframe-transport
+//= require jquery.fileupload
 //= require backbone_relational
 //= require backbone_rails_sync
 //= require backbone_datalink
