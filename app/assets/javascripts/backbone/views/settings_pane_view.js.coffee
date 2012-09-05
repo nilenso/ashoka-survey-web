@@ -11,7 +11,7 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
         question = new SurveyBuilder.Views.Questions.RadioQuestionView(model)
       when 'single_line'
         question = new SurveyBuilder.Views.Questions.SingleLineQuestionView(model)
-      
+
     @questions.push(question)
     $(this.el).append($(question.render().el))
     $(question.render().el).hide()
