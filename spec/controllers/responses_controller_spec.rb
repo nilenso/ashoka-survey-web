@@ -47,9 +47,10 @@ describe ResponsesController do
         assigns(:response).survey.should ==  survey
       end
 
-      it "redirects to the root path" do
+      it "redirects to the root path with a flash message" do
         post :create, :response => response, :survey_id => survey.id          
         response.should redirect_to root_path
+        flash[:notice].should_not be_nil
       end
     end
 
