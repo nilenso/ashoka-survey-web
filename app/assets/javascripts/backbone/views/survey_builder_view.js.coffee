@@ -29,7 +29,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   handle_dummy_click: ->
     this.hide_all()
     this.switch_tab()
-    
+
   hide_all: (event) ->
     this.dummy_pane.unfocus_all()
     this.settings_pane.hide_all()

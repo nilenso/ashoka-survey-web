@@ -19,10 +19,13 @@ class SurveyBuilder.Models.SingleLineQuestionModel extends Backbone.RelationalMo
   success_callback: (model, response) =>
     this.errors = []
     this.trigger('change:errors')
+    this.trigger('save:completed')
 
   error_callback: (model, response) =>
     this.errors = JSON.parse(response.responseText)
-    console.log(this.errors)
     this.trigger('change:errors')
+
+  imageUploadUrl: ->
+    "/api/questions/"+this.id+'/image_upload'
 
 SurveyBuilder.Models.SingleLineQuestionModel.setup()
