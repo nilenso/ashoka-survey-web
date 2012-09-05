@@ -13,7 +13,7 @@ describe 'BackboneSurveyBuilder', js: true do
       sleep(1)
       Question.find_by_survey_id(@survey.id).should_not be_nil
     end
-    
+
     it "should add a radio question in the dummy" do
       dummy = find("#dummy_pane").find('div')
       dummy['type'].should == "RadioQuestion"
@@ -42,22 +42,35 @@ describe 'BackboneSurveyBuilder', js: true do
       end
     end
 
-    it "saves a question successfully" do
-      pending "poltergeist does not save the question"
-      # actual = find("#settings_pane").find('div')
-      find("#dummy_pane").find('div').click
-      within("#settings_pane") do
-        fill_in('content', :with => 'Some question')
-        check('mandatory')
+    context "when saving" do
+      it "saves a question successfully" do
+        pending "Something to do with poltergiest and ajax timeouts"
+        find("#dummy_pane").find('div').click
+        within("#settings_pane") do
+          fill_in('content', :with => 'Some question')
+          check('mandatory')
+        end
+        p Question.last
+        find("#save").click
+        sleep(10)
+        question = Question.find_by_survey_id(@survey.id)
+        question.content.should == "Some question"
+        question.mandatory.should be_true
+        question.options.length.should == 3
       end
-      p Question.last
-      find("#save").click
-      sleep(10)
-      question = Question.find_by_survey_id(@survey.id)
-      p question
-      question.content.should == "Some question"
-      question.mandatory.should be_true
-    end
 
+      it "saves all options for a question" do
+        pending "Something to do with poltergiest and ajax timeouts"
+        find("#dummy_pane").find('div').click
+        within("#settings_pane") do
+          click_on('Add Option')
+          click_on('Add Option')
+        end
+        find("#save").click
+        sleep(10)
+        question = Question.find_by_survey_id(@survey.id)
+        question.options.length.should == 5
+      end
+    end
   end
 end
