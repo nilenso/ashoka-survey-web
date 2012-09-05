@@ -47,9 +47,20 @@ describe ResponsesController do
         assigns(:response).survey.should ==  survey
       end
 
-      it "redirects to the root path" do
+      it "redirects to the root path with a flash message" do
         post :create, :response => response, :survey_id => survey.id          
         response.should redirect_to root_path
+        flash[:notice].should_not be_nil
+      end
+    end
+
+    context "when save is unsuccessful" do
+      it "renders the 'new' page" do
+        question = FactoryGirl.create(:question, :mandatory => true)
+        response['answers_attributes'] = {}
+        response['answers_attributes']['0'] = {'content' => '', 'question_id' => question.id}
+        post :create, :response => response, :survey_id => survey.id
+        response.should render_template :new
       end
     end
   end
