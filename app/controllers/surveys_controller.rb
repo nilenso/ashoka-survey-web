@@ -11,18 +11,18 @@ class SurveysController < ApplicationController
     redirect_to(surveys_path)
   end
 
-  def backbone_new
+  def new
     @survey = Survey.new()
   end
 
-  def backbone_create
+  def create
     @survey = Survey.new(params[:survey])
 
     if @survey.save
       flash[:notice] = t "flash.survey_created"
       redirect_to surveys_build_path(:id => @survey.id)
     else
-     render :backbone_new
+     render :new
    end
  end
 

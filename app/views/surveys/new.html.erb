@@ -1,5 +1,5 @@
 <h1> <%= t ".create_survey" %> </h1>
-<%= semantic_form_for @survey, :url => surveys_backbone_create_url do |f| %>
+<%= semantic_form_for @survey, :url => surveys_url do |f| %>
 	<%= f.inputs :id => "survey_details" do %>
 		<%= f.input :name %>
 		<%= f.input :expiry_date, :as => :string %>

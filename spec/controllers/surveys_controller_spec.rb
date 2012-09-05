@@ -32,36 +32,36 @@ describe SurveysController do
 
   # Temp route while we're porting to backbone
 
-  context "GET 'backbone_new" do
+  context "GET 'new" do
     it "assigns the survey instance variable" do
-      get :backbone_new
+      get :new
       assigns(:survey).should_not be_nil
     end
   end
   
-  context "POST 'backbone_create'" do
+  context "POST 'create'" do
     context "when save is unsuccessful" do
       before(:each) do
         @survey_attributes = FactoryGirl.attributes_for(:survey)
       end
 
       it "redirects to the surveys build path" do
-        post :backbone_create, :survey => @survey_attributes
+        post :create, :survey => @survey_attributes
         created_survey = Survey.find_by_name(@survey_attributes[:name])
         response.should redirect_to(surveys_build_path(:id => created_survey.id))
         flash[:notice].should_not be_nil
       end
 
       it "creates a survey" do
-        expect { post :backbone_create,:survey => @survey_attributes }.to change { Survey.count }.by(1)
+        expect { post :create,:survey => @survey_attributes }.to change { Survey.count }.by(1)
       end
     end
 
     context "when save is unsuccessful" do
-      it "renders the backbone_new page" do
-        post :backbone_create, :surveys => { :name => "" }
+      it "renders the new page" do
+        post :create, :surveys => { :name => "" }
         response.should be_ok
-        response.should render_template(:backbone_new)
+        response.should render_template(:new)
       end
     end
   end
