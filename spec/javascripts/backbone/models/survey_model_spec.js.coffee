@@ -25,6 +25,6 @@ describe "SurveyBuilder.Models.SurveyModel", ->
     survey_id = "321"
     survey_model = new SurveyBuilder.Models.SurveyModel(survey_id)
     question_model = survey_model.add_new_question_model('radio')
-    spyOn(question_model, 'save_with_options')
+    spyOn(question_model, 'save_model')
     survey_model.save_all_questions()
-    expect(question_model.save_with_options).toHaveBeenCalled()
+    expect(question_model.save_model).toHaveBeenCalled()

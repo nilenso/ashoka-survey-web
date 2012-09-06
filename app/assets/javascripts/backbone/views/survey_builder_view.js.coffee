@@ -21,11 +21,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     model = this.survey.add_new_question_model(type)
     this.dummy_pane.add_question(type, model)
     this.settings_pane.add_question(type, model)
-    switch type
-      when 'radio'
-        model.save_with_options()
-      else
-        model.save_model()
+    model.save_model()
 
   handle_dummy_click: ->
     this.hide_all()

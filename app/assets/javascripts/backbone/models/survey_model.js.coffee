@@ -28,10 +28,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
 
   save_all_questions: ->
     for question_model in @question_models
-      if question_model.attributes['type'] == "RadioQuestion"
-        question_model.save_with_options()
-      else
-        question_model.save_model()
+      question_model.save_model()
 
   has_errors: ->
     _.any(@question_models, (question_model) -> question_model.has_errors())
