@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120824075057) do
+ActiveRecord::Schema.define(:version => 20120906091416) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -44,6 +44,8 @@ ActiveRecord::Schema.define(:version => 20120824075057) do
     t.integer  "image_file_size"
     t.datetime "image_updated_at"
     t.string   "type"
+    t.integer  "max_value"
+    t.integer  "min_value"
   end
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"
