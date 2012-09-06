@@ -54,6 +54,10 @@ fr:
     validations:
       mandatory_question: Cette question est obligatoire.
 
+  questions:
+    validations:
+      min_value_higher: Valeur minimale ne peut pas être supérieure à la valeur maximale
+
   activerecord:
     attributes:
       survey:
