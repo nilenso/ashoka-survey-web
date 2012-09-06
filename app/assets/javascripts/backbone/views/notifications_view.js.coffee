@@ -5,13 +5,11 @@ class SurveyBuilder.Views.NotificationsView extends Backbone.View
   CLEAR_TIMEOUT: 5000 
 
   set_notice: (message) ->
-    @hide_spinner()
     $(this.el).children('p').html(message)
     $(this.el).children('p').addClass('notice')
     setTimeout(this.clear_text, this.CLEAR_TIMEOUT)
 
   set_error: (message) ->
-    @hide_spinner()
     $(this.el).children('p').html(message)
     $(this.el).children('p').addClass('error')
     setTimeout(this.clear_text, this.CLEAR_TIMEOUT)
