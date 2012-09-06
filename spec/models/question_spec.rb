@@ -10,7 +10,6 @@ describe Question do
   it { should respond_to :image }
   it { should respond_to :max_length }
   it { should accept_nested_attributes_for(:options) }
-  it { should validate_presence_of(:order_number)}
 
   context "validation" do
     it "Ensures that the order number for a question is unique within a survey" do

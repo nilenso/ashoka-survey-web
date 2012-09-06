@@ -3,7 +3,7 @@
 class Question < ActiveRecord::Base
   belongs_to :survey
   attr_accessible :content, :mandatory, :max_length, :image, :type, :survey_id, :max_value, :min_value, :order_number
-  validates_presence_of :content, :order_number
+  validates_presence_of :content
   has_many :answers, :dependent => :destroy
   has_many :options, :dependent => :destroy
   has_attached_file :image, :styles => { :medium => "300x300>" }
