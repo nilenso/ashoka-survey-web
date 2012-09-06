@@ -4,7 +4,7 @@ SurveyBuilder.Views.Questions ||= {}
 class SurveyBuilder.Views.Questions.MultilineQuestionView extends Backbone.View
 
   events:
-    'keyup  textarea': 'handle_textbox_keyup'
+    'keyup  input[type=text]': 'handle_textbox_keyup'
     'change input[type=number]': 'handle_textbox_keyup'
     'change input[type=checkbox]': 'handle_checkbox_change'
 
