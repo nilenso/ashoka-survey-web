@@ -40,6 +40,7 @@ en:
       add_radio_question: "Radio Question"
       add_single_line_question: "Single Line Question"
       add_multiline_question: "Multiline Question"
+      add_numeric_question: "Numeric Question"
       pick_question_type: "Pick Question"
       question_settings: "Settings"
       pick_question_type: "Pick Question"
@@ -58,7 +59,7 @@ en:
 
   questions:
     validations:
-      min_value_higher: Minimum value can't be greater than maximum value
+      min_value_higher: can't be greater than maximum value
 
   activerecord:
     attributes:
@@ -72,6 +73,8 @@ en:
         max_length: "Maximum Length"
         image: "Image"
         mandatory: "Mandatory"
+        min_value: Minimum value
+        max_value: Maximum value
 
   add_option: "Add Option"
 # Library strings
