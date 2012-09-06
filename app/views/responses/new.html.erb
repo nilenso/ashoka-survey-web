@@ -3,14 +3,18 @@
 <%= semantic_form_for [@survey, @response] do |f| %>
   <%= f.semantic_fields_for :answers do |f| %>
     <% question = f.object.question %>
+
+    <%= image_tag question.image.url(:medium) if question.image.exists? %>
     <% if question.type == 'RadioQuestion' %>
-      <%= image_tag question.image.url(:medium) if question.image.exists? %>
       <%= f.input :content, :label => question.content, :as => :radio, :collection => question.options.map(&:content), :required => question.mandatory %>
-    <% end %>
-    <% if question.type == 'SingleLineQuestion' %>
-      <%= image_tag question.image.url(:medium) if question.image.exists? %>
+    
+    <% elsif question.type == 'SingleLineQuestion' %>
       <%= f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :hint => question.max_length ? "Maximum Length: #{question.max_length}" : nil %>
+    
+    <% elsif question.type == 'MultilineQuestion' %>
+      <%= f.input :content,  :input_html => { :rows => 4, :cols => 100 }, :label => question.content, :as => :text, :required => question.mandatory, :hint => question.max_length ? "Maximum Length: #{question.max_length}" : nil %>
     <% end %>
+    
     <%= f.input :question_id, :as => :hidden %>
   <% end %>
 
