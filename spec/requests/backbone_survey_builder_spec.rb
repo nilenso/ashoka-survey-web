@@ -1,14 +1,19 @@
 describe 'BackboneSurveyBuilder', js: true do
   self.use_transactional_fixtures = false
+
+  def wait_until_ajax_stop
+    find('#spinner').has_no_selector?('div') # Wait until spinner disappears
+  end
+
   context "when adding a new radio question" do
     before(:each) do
       @survey = FactoryGirl.create(:survey)
       visit(surveys_build_path(:id => @survey.id))
       click_on('Radio Question')
+      wait_until_ajax_stop
     end
 
     it "should create a new question in the database" do
-      sleep(1)
       question = Question.find_by_survey_id(@survey.id)
       question.should_not be_nil
       question.type.should == "RadioQuestion"
@@ -44,15 +49,13 @@ describe 'BackboneSurveyBuilder', js: true do
 
     context "when saving" do
       it "saves a question successfully" do
-        pending "Something to do with poltergiest and ajax timeouts"
         find("#dummy_pane").find('div').click
         within("#settings_pane") do
           fill_in('content', :with => 'Some question')
           check('mandatory')
         end
-        p Question.last
         find("#save").click
-        sleep(10)
+        wait_until_ajax_stop
         question = Question.find_by_survey_id(@survey.id)
         question.content.should == "Some question"
         question.mandatory.should be_true
@@ -60,14 +63,14 @@ describe 'BackboneSurveyBuilder', js: true do
       end
 
       it "saves all options for a question" do
-        pending "Something to do with poltergiest and ajax timeouts"
         find("#dummy_pane").find('div').click
         within("#settings_pane") do
           click_on('Add Option')
           click_on('Add Option')
         end
+        wait_until_ajax_stop
         find("#save").click
-        sleep(10)
+        wait_until_ajax_stop
         question = Question.find_by_survey_id(@survey.id)
         question.options.length.should == 5
       end
@@ -75,15 +78,14 @@ describe 'BackboneSurveyBuilder', js: true do
   end
   context "when adding a new single line question" do
     before(:each) do
-      Survey.delete_all
-      Question.delete_all
       @survey = FactoryGirl.create(:survey)
       visit(surveys_build_path(:id => @survey.id))
       click_on('Single Line Question')
+      wait_until_ajax_stop
     end
 
     it "should create a new question in the database" do
-      sleep(1)
+      wait_until_ajax_stop
       question = Question.find_by_survey_id(@survey.id)
       question.should_not be_nil
       question.type.should == "SingleLineQuestion"
@@ -113,15 +115,13 @@ describe 'BackboneSurveyBuilder', js: true do
 
     context "when saving" do
       it "saves a question successfully" do
-        pending "Something to do with poltergiest and ajax timeouts"
         find("#dummy_pane").find('div').click
         within("#settings_pane") do
           fill_in('content', :with => 'Some question')
           check('mandatory')
         end
-        p Question.last
         find("#save").click
-        sleep(10)
+        wait_until_ajax_stop
         question = Question.find_by_survey_id(@survey.id)
         question.content.should == "Some question"
         question.mandatory.should be_true
