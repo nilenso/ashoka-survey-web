@@ -2,8 +2,9 @@
 class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
 
   initialize:(survey_id) ->
-  	this.survey_id = survey_id
-  	@question_models = []
+    this.survey_id = survey_id
+    this.order_counter = 0
+    @question_models = []
 
   add_new_question_model:(type) ->
     switch type
@@ -16,7 +17,9 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
       when 'numeric'
         question_model = new SurveyBuilder.Models.NumericQuestionModel
 
+    this.order_counter++
     question_model.set('survey_id' : this.survey_id)
+    question_model.set('order_number' : this.order_counter)
     @remove_image_attributes(question_model)
     @question_models.push question_model
     question_model
