@@ -20,5 +20,14 @@ describe Answer do
       answer.content = 'foobarbaz'
       answer.should_not be_valid
     end
+
+    it "does not save if the answer is not within the range of a numeric question" do
+      question = FactoryGirl.create(:question, :type => 'NumericQuestion', :min_value => 5, :max_value => 7)
+      answer = FactoryGirl.build(:answer, :question_id => question.id)
+      question.answers << answer
+
+      answer.content = 3
+      answer.should_not be_valid
+    end
   end
 end
