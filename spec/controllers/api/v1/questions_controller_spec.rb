@@ -23,26 +23,17 @@ module Api
         end
 
         it "returns the created question as JSON" do
-          expected_json = { content: "MyText",
-                            created_at: "2012-08-28T08: 22: 50Z",
-                            id: 797,
-                            image_content_type: nil,
-                            image_file_name: nil,
-                            image_file_size: nil,
-                            image_updated_at: nil,
-                            mandatory: false,
-                            max_length: nil,
-                            survey_id: 811,
-                            updated_at: "2012-08-28T08: 22: 50Z"
-                            }
+          expected_keys = Question.attribute_names
+          # Rails `to_json` doesn't preserve the `type` attribute | https://github.com/rails/rails/issues/3508
+          expected_keys.delete('type')
           survey = FactoryGirl.create(:survey)
-          question = FactoryGirl.attributes_for(:question)
-          question['type'] = 'RadioQuestion'
+          question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion')
           post :create, :survey_id => survey.id, :question => question
+
           response.should be_ok
           returned_json = JSON.parse(response.body)
-          returned_json.keys.map(&:to_sym).should == expected_json.keys
-          returned_json['content'].should == expected_json[:content]
+          returned_json.keys.should =~ expected_keys
+          returned_json['content'].should == question[:content]
         end
 
         context "when save is unsuccessful" do
