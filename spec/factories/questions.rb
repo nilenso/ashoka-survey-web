@@ -4,6 +4,7 @@ FactoryGirl.define do
   factory :question do
     content "MyText"
     survey_id { FactoryGirl.create(:survey).id }
+    sequence(:order_number, 1000)
 
     factory :question_with_answers do
       after(:create) do |question, evaluator|
