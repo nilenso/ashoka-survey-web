@@ -23,6 +23,9 @@
   $(document).ready(function(){
     window.notifications_view = new SurveyBuilder.Views.NotificationsView;
     window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView(<%= @survey.id %>);
+    setTimeout(function(){
+      $("#flash_messages").empty();
+    }, 3000);
   });
 </script>
 
