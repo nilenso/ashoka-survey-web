@@ -47,6 +47,7 @@ en:
       question_settings: "Settings"
       option: "Option"
       question_title: "Question Title"
+      save_survey: "Save Survey"
 
   responses:
     new:

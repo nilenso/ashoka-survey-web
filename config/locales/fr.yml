@@ -45,6 +45,7 @@ fr:
       question_settings: "Paramètres"      
       option: "Option"
       question_title: "Titre de la question"
+      save_survey: Économiser de l'enquête
 
   responses:
     new:
