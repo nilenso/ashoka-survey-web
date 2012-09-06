@@ -6,6 +6,7 @@ require 'rubygems'
 require 'spork'
 require 'capybara/rails'
 require 'capybara/rspec'
+require "paperclip/matchers"
 
 Capybara.javascript_driver = :webkit
 
@@ -44,6 +45,8 @@ Spork.prefork do
     # the seed, which is printed after each run.
     #     --seed 1234
     config.order = "random"
+
+    config.include Paperclip::Shoulda::Matchers
 
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:user_owner] = OmniAuth::AuthHash.new({

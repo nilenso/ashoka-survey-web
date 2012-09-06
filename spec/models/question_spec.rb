@@ -7,7 +7,7 @@ describe Question do
   it { should have_many(:options).dependent(:destroy) }
   it { should validate_presence_of :content }
   it { should respond_to :mandatory }
-  it { should respond_to :image }
+  it { should have_attached_file(:image) }
   it { should respond_to :max_length }
   it { should accept_nested_attributes_for(:options) }
 
