@@ -13,6 +13,10 @@
     
     <% elsif question.type == 'MultilineQuestion' %>
       <%= f.input :content,  :input_html => { :rows => 4, :cols => 100 }, :label => question.content, :as => :text, :required => question.mandatory, :hint => question.max_length ? "Maximum Length: #{question.max_length}" : nil %>
+
+    <% elsif question.type == 'NumericQuestion' %>
+      <% has_range = question.max_value && question.min_value %>
+      <%= f.input :content, :label => question.content, :as => :number, :required => question.mandatory, :hint => has_range ? "The number should be between #{question.min_value} and #{question.max_value}" : nil %>
     <% end %>
     
     <%= f.input :question_id, :as => :hidden %>
