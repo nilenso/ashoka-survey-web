@@ -16,18 +16,6 @@ describe "SurveyBuilder.Models.NumericQuestionModel", ->
       model = new SurveyBuilder.Models.NumericQuestionModel
       expect(model.get('mandatory')).toEqual(false)
 
-    it "sets image to null", ->
-      model = new SurveyBuilder.Models.NumericQuestionModel
-      expect(model.get('image')).toBeNull
-
-    it "sets max_value to null", ->
-      model = new SurveyBuilder.Models.NumericQuestionModel
-      expect(model.get('max_value')).toBeNull
-
-    it "sets min_value to null", ->
-      model = new SurveyBuilder.Models.NumericQuestionModel
-      expect(model.get('min_value')).toBeNull
-
   it "should make the correct server request", ->
     model = new SurveyBuilder.Models.NumericQuestionModel
     spy = sinon.spy(jQuery, "ajax")

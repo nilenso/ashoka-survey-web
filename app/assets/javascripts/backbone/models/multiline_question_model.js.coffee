@@ -6,8 +6,6 @@ class SurveyBuilder.Models.MultilineQuestionModel extends Backbone.RelationalMod
     type: 'MultilineQuestion',
     content: 'Untitled question'
     mandatory: false
-    image: null
-    max_length: null
   }
 
   has_errors: ->

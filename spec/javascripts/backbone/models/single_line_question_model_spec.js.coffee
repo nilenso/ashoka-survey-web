@@ -12,17 +12,9 @@ describe "SurveyBuilder.Models.SingleLineQuestionModel", ->
       model = new SurveyBuilder.Models.SingleLineQuestionModel
       expect(model.get('content')).toContain('Untitled')
 
-    it "sets mandatory to Untitled question", ->
+    it "sets mandatory to false", ->
       model = new SurveyBuilder.Models.SingleLineQuestionModel
       expect(model.get('mandatory')).toEqual(false)
-
-    it "sets image to Untitled question", ->
-      model = new SurveyBuilder.Models.SingleLineQuestionModel
-      expect(model.get('image')).toBeNull
-
-    it "sets max_length to Untitled question", ->
-      model = new SurveyBuilder.Models.SingleLineQuestionModel
-      expect(model.get('max_length')).toBeNull
 
   it "should make the correct server request", ->
     model = new SurveyBuilder.Models.SingleLineQuestionModel

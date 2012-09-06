@@ -6,7 +6,6 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
     type: 'RadioQuestion',
     content: 'Untitled question'
     mandatory: false
-    image: null
   }
 
   relations: [

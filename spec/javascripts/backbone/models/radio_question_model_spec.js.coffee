@@ -12,13 +12,9 @@ describe "SurveyBuilder.Models.RadioQuestionModel", ->
       model = new SurveyBuilder.Models.RadioQuestionModel
       expect(model.get('content')).toContain('Untitled')
 
-    it "sets mandatory to Untitled question", ->
+    it "sets mandatory to false", ->
       model = new SurveyBuilder.Models.RadioQuestionModel
       expect(model.get('mandatory')).toEqual(false)
-
-    it "sets image to Untitled question", ->
-      model = new SurveyBuilder.Models.RadioQuestionModel
-      expect(model.get('image')).toBeNull
 
   it "should make the correct server request", ->
     model = new SurveyBuilder.Models.RadioQuestionModel
