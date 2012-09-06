@@ -63,6 +63,7 @@ describe 'BackboneSurveyBuilder', js: true do
           click_on('Add Option')
           click_on('Add Option')
         end
+        find('#spinner').has_no_selector?('div') # Wait until spinner disappears (AJAX call when adding an option is over)
         find("#save").click
         find('#spinner').has_no_selector?('div') # Wait until spinner disappears (AJAX call ends)
         question = Question.find_by_survey_id(@survey.id)
