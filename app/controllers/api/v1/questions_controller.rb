@@ -24,7 +24,7 @@ module Api
         question = Question.find(params[:id])
         question.image = File.open(params[:image].path)
         question.save
-        render :json => {}
+        render :json => { :image_url => question.image.url(:thumb) }
       end
     end
   end

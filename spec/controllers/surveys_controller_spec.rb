@@ -47,7 +47,7 @@ describe SurveysController do
 
       it "redirects to the surveys build path" do
         post :create, :survey => @survey_attributes
-        created_survey = Survey.find_by_name(@survey_attributes[:name])
+        created_survey = Survey.find_last_by_name(@survey_attributes[:name])
         response.should redirect_to(surveys_build_path(:id => created_survey.id))
         flash[:notice].should_not be_nil
       end

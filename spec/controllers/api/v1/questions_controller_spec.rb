@@ -81,6 +81,14 @@ module Api
           question.reload.image.should be
           question.reload.image.should_not eq '/images/original/missing.png'
         end
+
+        it "returns the url for the image thumb as JSON" do
+          question = FactoryGirl.create(:question)
+          @file = fixture_file_upload('/images/sample.jpg', 'text/xml')
+          post :image_upload, :id => question.id, :image => @file
+          response.should be_ok
+          JSON.parse(response.body).should == { 'image_url' => question.reload.image.url(:thumb) }
+        end
       end
     end
   end

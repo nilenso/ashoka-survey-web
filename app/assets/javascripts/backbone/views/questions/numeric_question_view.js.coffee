@@ -38,3 +38,5 @@ class SurveyBuilder.Views.Questions.NumericQuestionView extends Backbone.View
       dataType: "json"
       url: @model.imageUploadUrl()
       replaceFileInput: false
+      done: (e, data) =>
+        this.model.set('image_url', data.result.image_url)

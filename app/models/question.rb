@@ -6,7 +6,7 @@ class Question < ActiveRecord::Base
   validates_presence_of :content
   has_many :answers, :dependent => :destroy
   has_many :options, :dependent => :destroy
-  has_attached_file :image, :styles => { :medium => "300x300>" }
+  has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
   accepts_nested_attributes_for :options
   validate :min_value_less_than_max_value
   validates_uniqueness_of :order_number, :scope => :survey_id
