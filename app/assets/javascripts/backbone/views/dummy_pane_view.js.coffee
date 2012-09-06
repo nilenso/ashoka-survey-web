@@ -13,6 +13,8 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
         @questions.push(new SurveyBuilder.Views.Dummies.SingleLineQuestionView(model))
       when 'multiline'
         @questions.push(new SurveyBuilder.Views.Dummies.MultilineQuestionView(model))
+      when 'numeric'
+        @questions.push(new SurveyBuilder.Views.Dummies.NumericQuestionView(model))
     this.render()
 
   render: ->

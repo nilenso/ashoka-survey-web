@@ -6,6 +6,7 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
     'click #add_radio_question': 'add_radio_question'
     'click #add_single_line_question': 'add_single_line_question'
     'click #add_multiline_question': 'add_multiline_question'
+    'click #add_numeric_question': 'add_numeric_question'
 
   add_radio_question: ->
     $(this.el).trigger('new_question', 'radio')
@@ -15,4 +16,7 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
 
   add_multiline_question: ->
     $(this.el).trigger('new_question', 'multiline')
+
+  add_numeric_question: ->
+    $(this.el).trigger('new_question', 'numeric')
 

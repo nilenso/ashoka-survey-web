@@ -13,6 +13,8 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
         question = new SurveyBuilder.Views.Questions.SingleLineQuestionView(model)
       when 'multiline'
         question = new SurveyBuilder.Views.Questions.MultilineQuestionView(model)
+      when 'numeric'
+        question = new SurveyBuilder.Views.Questions.NumericQuestionView(model)
 
     @questions.push(question)
     $(this.el).append($(question.render().el))
