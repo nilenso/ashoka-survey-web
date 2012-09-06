@@ -1,11 +1,16 @@
 describe 'BackboneSurveyBuilder', js: true do
   self.use_transactional_fixtures = false
+
+  def wait_until_ajax_stop
+    find('#spinner').has_no_selector?('div') # Wait until spinner disappears
+  end
+
   context "when adding a new radio question" do
     before(:each) do
       @survey = FactoryGirl.create(:survey)
       visit(surveys_build_path(:id => @survey.id))
       click_on('Radio Question')
-      find('#spinner').has_no_selector?('div') # Wait until spinner disappears (AJAX call when adding a question is over)
+      wait_until_ajax_stop
     end
 
     it "should create a new question in the database" do
@@ -50,7 +55,7 @@ describe 'BackboneSurveyBuilder', js: true do
           check('mandatory')
         end
         find("#save").click
-        find('#spinner').has_no_selector?('div') # Wait until spinner disappears (AJAX call ends)
+        wait_until_ajax_stop
         question = Question.find_by_survey_id(@survey.id)
         question.content.should == "Some question"
         question.mandatory.should be_true
@@ -63,9 +68,9 @@ describe 'BackboneSurveyBuilder', js: true do
           click_on('Add Option')
           click_on('Add Option')
         end
-        find('#spinner').has_no_selector?('div') # Wait until spinner disappears (AJAX call when adding an option is over)
+        wait_until_ajax_stop
         find("#save").click
-        find('#spinner').has_no_selector?('div') # Wait until spinner disappears (AJAX call ends)
+        wait_until_ajax_stop
         question = Question.find_by_survey_id(@survey.id)
         question.options.length.should == 5
       end
@@ -76,11 +81,11 @@ describe 'BackboneSurveyBuilder', js: true do
       @survey = FactoryGirl.create(:survey)
       visit(surveys_build_path(:id => @survey.id))
       click_on('Single Line Question')
-      find('#spinner').has_no_selector?('div') # Wait until spinner disappears (AJAX call when adding a question is over)
+      wait_until_ajax_stop
     end
 
     it "should create a new question in the database" do
-      find('#spinner').has_no_selector?('div') # Wait until spinner disappears (AJAX call ends)
+      wait_until_ajax_stop
       question = Question.find_by_survey_id(@survey.id)
       question.should_not be_nil
       question.type.should == "SingleLineQuestion"
@@ -116,7 +121,7 @@ describe 'BackboneSurveyBuilder', js: true do
           check('mandatory')
         end
         find("#save").click
-        find('#spinner').has_no_selector?('div') # Wait until spinner disappears (AJAX call ends)
+        wait_until_ajax_stop
         question = Question.find_by_survey_id(@survey.id)
         question.content.should == "Some question"
         question.mandatory.should be_true
