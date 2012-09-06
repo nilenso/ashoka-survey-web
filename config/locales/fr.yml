@@ -54,6 +54,8 @@ fr:
   answers:
     validations:
       mandatory_question: Cette question est obligatoire.
+      max_length: Vous avez dépassé la durée maximale pour cette question.
+      exceeded_range: Votre réponse n'est pas dans la plage spécifiée.
 
   questions:
     validations:

@@ -17,13 +17,13 @@ class Answer < ActiveRecord::Base
 
   def content_should_not_exceed_max_length
   	if question.max_length && content.length > question.max_length
-  		errors.add(:content, "Maximum length exceeded")
+  		errors.add(:content, I18n.t("answers.validations.max_length"))
   	end
   end
   def content_should_be_in_range
     min_value, max_value = question.min_value, question.max_value
     if min_value && max_value && (min_value..max_value).exclude?(content.to_i)
-      errors.add(:content, "Can't be outside the range")
+      errors.add(:content, I18n.t("answers.validations.exceeded_range"))
     end
   end
 end
