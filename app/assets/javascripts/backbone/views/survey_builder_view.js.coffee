@@ -23,7 +23,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     switch type
       when 'radio'
         model.save_with_options()
-      when 'single_line'
+      else
         model.save_model()
 
   handle_dummy_click: ->

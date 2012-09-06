@@ -1,0 +1,2 @@
+class MultilineQuestion < Question 
+end

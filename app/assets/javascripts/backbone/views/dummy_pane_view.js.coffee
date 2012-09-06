@@ -7,10 +7,12 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
 
   add_question: (type, model) ->
     switch type
-     when 'radio'
-      @questions.push(new SurveyBuilder.Views.Dummies.RadioQuestionView(model))
-     when 'single_line'
-      @questions.push(new SurveyBuilder.Views.Dummies.SingleLineQuestionView(model))
+      when 'radio'
+        @questions.push(new SurveyBuilder.Views.Dummies.RadioQuestionView(model))
+      when 'single_line'
+        @questions.push(new SurveyBuilder.Views.Dummies.SingleLineQuestionView(model))
+      when 'multiline'
+        @questions.push(new SurveyBuilder.Views.Dummies.MultilineQuestionView(model))
     this.render()
 
   render: ->
