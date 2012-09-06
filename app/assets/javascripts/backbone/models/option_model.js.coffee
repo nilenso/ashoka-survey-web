@@ -17,7 +17,6 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
 
   error_callback: (model, response) =>
     this.errors = JSON.parse(response.responseText)
-    console.log(this.errors)
     this.trigger('change:errors')
 
 SurveyBuilder.Models.OptionModel.setup()

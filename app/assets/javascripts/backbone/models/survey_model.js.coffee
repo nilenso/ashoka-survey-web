@@ -11,6 +11,9 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
         question_model = new SurveyBuilder.Models.RadioQuestionModel
       when 'single_line'
         question_model = new SurveyBuilder.Models.SingleLineQuestionModel
+      when 'multiline'
+        question_model = new SurveyBuilder.Models.MultilineQuestionModel
+
     question_model.set('survey_id' : this.survey_id)
     @remove_image_attributes(question_model)
     @question_models.push question_model
