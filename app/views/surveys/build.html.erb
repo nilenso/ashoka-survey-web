@@ -2,6 +2,7 @@
 <h1> <%= t ".build_survey" %> </h1>
 
 <div id="survey_builder">
+  <div id="notifications"></div>
   <div id="sidebar">
     <ul>
       <li><a href="#picker_pane"><%= t(".pick_question_type") %></a></li>
@@ -20,7 +21,7 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    window.flash_view = new SurveyBuilder.Views.FlashView;
+    window.notifications_view = new SurveyBuilder.Views.NotificationsView;
     window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView(<%= @survey.id %>);
   });
 </script>

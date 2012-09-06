@@ -42,6 +42,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   display_save_status: =>
     if this.survey.has_errors()
-      window.flash_view.set_error('We had trouble saving your survey.')
+      window.notifications_view.set_error('We had trouble saving your survey.')
     else
-      window.flash_view.set_notice('Your survey was saved!')
+      window.notifications_view.set_notice('Your survey was saved!')

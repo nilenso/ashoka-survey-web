@@ -1,6 +1,6 @@
 # Controls the Rails flash_messages div.
-class SurveyBuilder.Views.FlashView extends Backbone.View
-  el: "#flash_messages"
+class SurveyBuilder.Views.NotificationsView extends Backbone.View
+  el: "#notifications"
 
   CLEAR_TIMEOUT: 5000 
 
