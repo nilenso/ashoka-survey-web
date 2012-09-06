@@ -38,13 +38,3 @@ class SurveyBuilder.Views.Questions.SingleLineQuestionView extends Backbone.View
       dataType: "json"
       url: @model.imageUploadUrl()
       replaceFileInput: false
-      send: (e, data) =>
-        opts =
-          length: 0 # The length of each line
-          width: 4 # The line thickness
-          radius: 8 # The radius of the inner circle
-          corners: 0.9 # Corner roundness (0..1)
-
-        @spinner = $('.spinner').spin(opts)
-      done: (e, data) =>
-        @spinner.spin(false)

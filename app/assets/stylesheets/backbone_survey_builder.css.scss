@@ -13,6 +13,10 @@ $app_min_height: 600px;
   @include container;
 }
 
+h1#heading {
+  float: left;
+}
+
 #dummy_pane {
   @include span-columns(7 omega, 12);
   margin-bottom: 1em;
@@ -71,6 +75,7 @@ $app_min_height: 600px;
   li a {
     font-size: 0.9em;
   }
+  clear: both;
 }
 
 #picker_pane {
@@ -125,5 +130,24 @@ $app_min_height: 600px;
     @include border-radius(2px);
     background: #b7a979;
     text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.25);
+  }
+}
+
+#save {
+  clear: left;
+}
+
+#notifications {
+  float: right;
+  background: transparent;
+  p {
+    float: left;
+    text-align: center;
+    padding: 8px;
+  }
+  #spinner {
+    width: 50px;
+    height: 50px;
+    float: right;
   }
 }

@@ -1,7 +1,11 @@
 <%= stylesheet_link_tag 'backbone_survey_builder' %>
-<h1> <%= t ".build_survey" %> </h1>
+<h1 id="heading"> <%= t ".build_survey" %> </h1>
 
 <div id="survey_builder">
+  <div id="notifications">
+    <p></p>
+    <div id="spinner"></div>
+  </div>
   <div id="sidebar">
     <ul>
       <li><a href="#picker_pane"><%= t(".pick_question_type") %></a></li>
@@ -16,13 +20,16 @@
   </div>
 
   <div id="dummy_pane"></div>
-  <input type="button" value="Save" id="save"></input>
+  <div id="save"><input type="button" value="Save"></input></div>
 </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
-    window.flash_view = new SurveyBuilder.Views.FlashView;
+    window.notifications_view = new SurveyBuilder.Views.NotificationsView;
     window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView(<%= @survey.id %>);
+    setTimeout(function(){
+      $("#flash_messages").empty();
+    }, 3000);
   });
 </script>
 
