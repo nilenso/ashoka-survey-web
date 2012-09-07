@@ -41,6 +41,7 @@ en:
       add_single_line_question: "Single Line Question"
       add_multiline_question: "Multiline Question"
       add_numeric_question: "Numeric Question"
+      add_date_question: "Date Question"
       pick_question_type: "Pick Question"
       question_settings: "Settings"
       pick_question_type: "Pick Question"

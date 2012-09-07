@@ -1,6 +1,6 @@
 SurveyBuilder.Views.Dummies ||= {}
 
-# Represents a dummy single line question on the DOM
+# Represents a dummy question on the DOM
 class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
 
   events:

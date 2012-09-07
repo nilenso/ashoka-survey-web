@@ -16,6 +16,9 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
         question_model = new SurveyBuilder.Models.QuestionModel({type: 'MultilineQuestion'})
       when 'numeric'
         question_model = new SurveyBuilder.Models.QuestionModel({type: 'NumericQuestion'})
+      when 'date'
+        question_model = new SurveyBuilder.Models.QuestionModel({type: 'DateQuestion'})
+
     this.order_counter++
     question_model.set('survey_id' : this.survey_id)
     question_model.set('order_number' : this.order_counter)

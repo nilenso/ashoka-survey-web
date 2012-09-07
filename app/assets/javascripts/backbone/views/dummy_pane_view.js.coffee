@@ -19,6 +19,10 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       when 'numeric'
         template = $('#dummy_numeric_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
+      when 'date'
+        template = $('#dummy_date_question_template').html()
+        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
+
     this.render()
 
   render: ->

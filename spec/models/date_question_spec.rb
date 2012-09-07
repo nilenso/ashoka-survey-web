@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe NumericQuestion do
+describe DateQuestion do
   it { should respond_to :content }
   it { should respond_to :mandatory }
   it { should respond_to :image }
