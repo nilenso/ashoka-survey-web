@@ -7,9 +7,6 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
 
   add_question: (type, model) ->
     switch type
-      when 'radio'
-        template = $('#radio_question_template').html()
-        question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
       when 'single_line'
         template = $('#single_line_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
@@ -22,6 +19,12 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
       when 'date'
         template = $('#date_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
+      when 'radio'
+        template = $('#radio_question_template').html()
+        question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
+      when 'multi_choice'
+        template = $('#multi_choice_question_template').html()
+        question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
 
     @questions.push(question)
     $(this.el).append($(question.render().el))

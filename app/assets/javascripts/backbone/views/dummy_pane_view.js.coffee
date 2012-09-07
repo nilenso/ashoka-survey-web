@@ -7,9 +7,6 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
 
   add_question: (type, model) ->
     switch type
-      when 'radio'
-        template = $('#dummy_radio_question_template').html()
-        @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
       when 'single_line'
         template = $('#dummy_single_line_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
@@ -22,6 +19,12 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       when 'date'
         template = $('#dummy_date_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
+      when 'radio'
+        template = $('#dummy_radio_question_template').html()
+        @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
+      when 'multi_choice'
+        template = $('#dummy_multi_choice_question_template').html()
+        @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
 
     this.render()
 
