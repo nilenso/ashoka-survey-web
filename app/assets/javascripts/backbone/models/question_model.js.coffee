@@ -2,6 +2,10 @@
 class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   urlRoot: '/api/questions'
 
+  defaults:
+    content: 'Untitled question'
+    mandatory: false
+
   has_errors: ->
     !_.isEmpty(this.errors)
 

@@ -11,11 +11,11 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
       when 'radio'
         question_model = new SurveyBuilder.Models.RadioQuestionModel
       when 'single_line'
-        question_model = new SurveyBuilder.Models.SingleLineQuestionModel
+        question_model = new SurveyBuilder.Models.QuestionModel({type: 'SingleLineQuestion'})
       when 'multiline'
-        question_model = new SurveyBuilder.Models.MultilineQuestionModel
+        question_model = new SurveyBuilder.Models.QuestionModel({type: 'MultilineQuestion'})
       when 'numeric'
-        question_model = new SurveyBuilder.Models.NumericQuestionModel
+        question_model = new SurveyBuilder.Models.QuestionModel({type: 'NumericQuestion'})
 
     this.order_counter++
     question_model.set('survey_id' : this.survey_id)
