@@ -15,7 +15,10 @@ class SurveyBuilder.Views.Dummies.RadioQuestionView extends SurveyBuilder.Views.
 
   render: ->
     template = $('#dummy_radio_question_template').html()
-    super template
+    data = _.extend(this.model.toJSON(), {errors: this.model.errors})
+    $(this.el).html(Mustache.render(template, data))
+    $(this.el).find('abbr').show() if this.model.get('mandatory')
+
     _.each(this.options, (option) =>
         $(this.el).append(option.render().el)
       )

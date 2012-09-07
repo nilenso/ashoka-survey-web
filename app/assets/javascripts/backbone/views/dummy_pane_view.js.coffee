@@ -10,11 +10,14 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       when 'radio'
         @questions.push(new SurveyBuilder.Views.Dummies.RadioQuestionView(model))
       when 'single_line'
-        @questions.push(new SurveyBuilder.Views.Dummies.SingleLineQuestionView(model))
+        template = $('#dummy_single_line_question_template').html()
+        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
       when 'multiline'
-        @questions.push(new SurveyBuilder.Views.Dummies.MultilineQuestionView(model))
+        template = $('#dummy_multiline_question_template').html()
+        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
       when 'numeric'
-        @questions.push(new SurveyBuilder.Views.Dummies.NumericQuestionView(model))
+        template = $('#dummy_numeric_question_template').html()
+        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
     this.render()
 
   render: ->
