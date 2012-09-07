@@ -11,7 +11,7 @@ describe NumericQuestion do
   it { should validate_presence_of :content }
   
   it "is a question with type = 'NumericQuestion'" do
-    NumericQuestion.create(:content => "hello")
+    NumericQuestion.create(:content => "hello",:order_number => 11)
     question = Question.find_by_content("hello")
     question.should be_a NumericQuestion
     question.type.should == "NumericQuestion"
