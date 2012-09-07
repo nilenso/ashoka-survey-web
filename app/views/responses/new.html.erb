@@ -7,10 +7,10 @@
     <%= image_tag question.image.url(:medium) if question.image.exists? %>
     <% if question.type == 'RadioQuestion' %>
       <%= f.input :content, :label => question.content, :as => :radio, :collection => question.options.map(&:content), :required => question.mandatory %>
-    
+
     <% elsif question.type == 'SingleLineQuestion' %>
       <%= f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :hint => question.max_length ? "Maximum Length: #{question.max_length}" : nil %>
-    
+
     <% elsif question.type == 'MultilineQuestion' %>
       <%= f.input :content,  :input_html => { :rows => 4, :cols => 100 }, :label => question.content, :as => :text, :required => question.mandatory, :hint => question.max_length ? "Maximum Length: #{question.max_length}" : nil %>
 
@@ -19,9 +19,9 @@
       <%= f.input :content, :label => question.content, :as => :number, :required => question.mandatory, :hint => has_range ? "The number should be between #{question.min_value} and #{question.max_value}" : nil %>
 
     <% elsif question.type == 'DateQuestion' %>
-      <%= f.input :content, :label => question.content, :as => :date_select, :required => question.mandatory %>
+      <%= f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => 'date' } %>
     <% end %>
-    
+
     <%= f.input :question_id, :as => :hidden %>
   <% end %>
 
@@ -29,3 +29,9 @@
     <%= f.action :submit, :as => :button %>
   <% end %>
 <% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.date').datepicker({ dateFormat: "yy/mm/dd" });
+  })
+</script>
