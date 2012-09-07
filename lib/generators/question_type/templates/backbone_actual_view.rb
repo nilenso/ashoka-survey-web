@@ -1,3 +1,4 @@
+##= require ./question_view
 SurveyBuilder.Views.Questions ||= {}
 
 # Job of the class
