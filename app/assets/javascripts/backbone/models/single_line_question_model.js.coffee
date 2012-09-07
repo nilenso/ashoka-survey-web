@@ -1,3 +1,5 @@
+##= require ./question_model
+
 # Interfaces between the views and the rails model for a single line question
 class SurveyBuilder.Models.SingleLineQuestionModel extends SurveyBuilder.Models.QuestionModel
 

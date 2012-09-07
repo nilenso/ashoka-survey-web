@@ -1,3 +1,4 @@
+##= require ./question_model
 # Interfaces between the views and the rails model for a radio question with a collection of options
 class SurveyBuilder.Models.RadioQuestionModel extends SurveyBuilder.Models.QuestionModel
 
