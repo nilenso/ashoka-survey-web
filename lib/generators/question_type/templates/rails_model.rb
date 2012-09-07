@@ -1,4 +1,4 @@
 # Job of the class goes here
 
-class <%= class_name %> < ActiveRecord::Base
+class <%= class_name %> < Question
 end
