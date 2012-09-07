@@ -2,12 +2,10 @@
 SurveyBuilder.Views.Dummies ||= {}
 
 class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
-  initialize: (model) ->
-    this.model = model
+  initialize: (@model, @template) ->
     this.model.on('change:errors', this.render, this)
 
   render: ->
-    template = $('#dummy_option_template').html()
     data = _.extend(this.model.toJSON(), {errors: this.model.errors})
-    $(this.el).html(Mustache.render(template, data))
+    $(this.el).html(Mustache.render(@template, data))
     return this

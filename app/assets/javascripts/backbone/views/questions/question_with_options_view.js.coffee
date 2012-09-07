@@ -18,6 +18,12 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     this.model.create_new_option()
 
   add_new_option: (option_model) ->
-    option = new SurveyBuilder.Views.Questions.OptionView(option_model)
+    switch this.model.get('type')
+      when 'RadioQuestion'
+        template = $('#radio_option_template').html()
+      when 'MultiChoiceQuestion'
+        template = $('#multi_choice_option_template').html()
+
+    option = new SurveyBuilder.Views.Questions.OptionView(option_model, template)
     this.options.push option
     $(this.el).append($(option.render().el))
