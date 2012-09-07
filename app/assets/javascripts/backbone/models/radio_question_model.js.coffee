@@ -1,9 +1,8 @@
 # Interfaces between the views and the rails model for a radio question with a collection of options
-class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
-  urlRoot: '/api/questions'
+class SurveyBuilder.Models.RadioQuestionModel extends SurveyBuilder.Models.QuestionModel
 
   defaults: {
-    type: 'RadioQuestion',
+    type: 'RadioQuestion'
     content: 'Untitled question'
     mandatory: false
   }
@@ -35,24 +34,15 @@ class SurveyBuilder.Models.RadioQuestionModel extends Backbone.RelationalModel
       this.seeded = true
 
   save_model: ->
-    this.save({}, {error: this.error_callback, success: this.success_callback})
+    super
     this.get('options').each (option) ->
       option.save_model()
 
   success_callback: (model, response) =>
     this.seed()
-    this.errors = []
-    this.trigger('change:errors')
-    this.trigger('save:completed')
-
-  error_callback: (model, response) =>
-    this.errors = JSON.parse(response.responseText)
-    this.trigger('change:errors')
+    super
 
   create_new_option: ->
     this.get('options').create({content: "Another Option"})
-
-  imageUploadUrl: ->
-    "/api/questions/"+this.id+'/image_upload'
 
 SurveyBuilder.Models.RadioQuestionModel.setup()
