@@ -20,4 +20,12 @@ class QuestionTypeGenerator < Rails::Generators::NamedBase
     copy_file "backbone_dummy_template.rb", "app/views/templates/dummies/_#{file_name}.html.erb"
     copy_file "backbone_actual_template.rb", "app/views/templates/questions/_#{file_name}.html.erb"
   end
+
+  def help_message
+    puts
+    puts "Don't forget to add the relevant lines in the following files:"
+    puts " - survey_model.js.coffee"
+    puts " - dummy_pane_view.js.coffee"
+    puts " - settings_pane_view.js.coffee"
+  end
 end

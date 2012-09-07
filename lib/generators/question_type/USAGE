@@ -1,8 +1,15 @@
 Description:
-    Explain the generator
+    Creates a new question type for the Survey Builder
 
 Example:
-    rails generate question_type Thing
+    rails generate question_type date_question
 
     This will create:
-        what/will/it/create
+      app/models/date_question.rb
+      spec/models/date_question_spec.rb
+      app/assets/javascripts/backbone/models/date_question_model.js.coffee
+      spec/javascripts/backbone/models/date_question_model_spec.js.coffee
+      app/assets/javascripts/backbone/views/dummies/date_question_view.js.coffee
+      app/assets/javascripts/backbone/views/questions/date_question_view.js.coffee
+      app/views/templates/dummies/_date_question.html.erb
+      app/views/templates/questions/_date_question.html.erb
