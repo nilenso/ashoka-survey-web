@@ -15,4 +15,9 @@ class QuestionTypeGenerator < Rails::Generators::NamedBase
     template "backbone_dummy_view.rb", "app/assets/javascripts/backbone/views/dummies/#{file_name}_view.js.coffee"
     template "backbone_actual_view.rb", "app/assets/javascripts/backbone/views/questions/#{file_name}_view.js.coffee"
   end
+
+  def create_backbone_templates
+    copy_file "backbone_dummy_template.rb", "app/views/templates/dummies/_#{file_name}.html.erb"
+    copy_file "backbone_actual_template.rb", "app/views/templates/questions/_#{file_name}.html.erb"
+  end
 end
