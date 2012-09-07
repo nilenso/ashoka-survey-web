@@ -9,7 +9,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
   add_new_question_model:(type) ->
     switch type
       when 'radio'
-        question_model = new SurveyBuilder.Models.RadioQuestionModel
+        question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({type: 'RadioQuestion'})
       when 'single_line'
         question_model = new SurveyBuilder.Models.QuestionModel({type: 'SingleLineQuestion'})
       when 'multiline'
