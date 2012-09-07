@@ -10,6 +10,7 @@ class Question < ActiveRecord::Base
   accepts_nested_attributes_for :options
   validate :min_value_less_than_max_value
   validates_uniqueness_of :order_number, :scope => :survey_id
+  default_scope :order => 'order_number'
   private
 
   def min_value_less_than_max_value

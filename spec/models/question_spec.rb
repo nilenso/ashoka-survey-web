@@ -29,4 +29,14 @@ describe Question do
     it { should allow_mass_assignment_of(:max_value) }
     it { should allow_mass_assignment_of(:min_value) }
   end
+
+  context "orders by order number" do
+    it "fetches all question in ascending order of order_number for a particular survey" do
+      survey = FactoryGirl.create(:survey)  
+      question = FactoryGirl.create(:question, :survey => survey)
+      another_question = FactoryGirl.create(:question, :survey => survey)
+      survey.questions == [question, another_question]
+      question.order_number.should be < another_question.order_number
+    end
+  end
 end
