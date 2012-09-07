@@ -27,5 +27,7 @@ class QuestionTypeGenerator < Rails::Generators::NamedBase
     puts " - survey_model.js.coffee"
     puts " - dummy_pane_view.js.coffee"
     puts " - settings_pane_view.js.coffee"
+    puts " - picker_pane_view.js.coffee"
+    puts " - build.html.erb"
   end
 end

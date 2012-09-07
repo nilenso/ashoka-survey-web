@@ -1,3 +1,5 @@
+##= require ./question_model
+
 # Job of the class goes here
 
 class SurveyBuilder.Models.<%= class_name %>Model extends SurveyBuilder.Models.QuestionModel
