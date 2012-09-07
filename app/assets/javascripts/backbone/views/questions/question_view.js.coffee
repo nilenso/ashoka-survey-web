@@ -3,13 +3,17 @@ SurveyBuilder.Views.Questions ||= {}
 # The settings of a single single line question in the DOM
 class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
 
-  initialize: (model) ->
-    this.model = model
+  events:
+    'keyup  input[type=text]': 'handle_textbox_keyup'
+    'change input[type=number]': 'handle_textbox_keyup'
+    'change input[type=checkbox]': 'handle_checkbox_change'
+
+  initialize: (@model, @template) ->
     this.model.actual_view = this
     this.model.on('save:completed', this.renderImageUploader, this)
 
   render:(template) ->
-    $(this.el).html(Mustache.render(template, this.model.toJSON()))
+    $(this.el).html(Mustache.render(this.template, this.model.toJSON()))
     return this
 
   handle_textbox_keyup: (event) ->
