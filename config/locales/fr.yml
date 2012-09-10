@@ -59,6 +59,7 @@ fr:
       mandatory_question: Cette question est obligatoire.
       max_length: Vous avez dépassé la durée maximale pour cette question.
       exceeded_range: Votre réponse n'est pas dans la plage spécifiée.
+      invalid_date: La date que vous avez donné n'est pas valide
 
   questions:
     validations:

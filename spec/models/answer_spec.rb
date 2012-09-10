@@ -31,6 +31,17 @@ describe Answer do
       answer.content = 3
       answer.should_not be_valid
     end
+
+    it "does not save if the answer to a date type question is not a valid date" do
+      question = FactoryGirl.create(:question, :type => 'DateQuestion')
+      answer = FactoryGirl.build(:answer, :question_id => question.id)
+      question.answers << answer
+
+      answer.content = "4235643861"
+      answer.should_not be_valid
+      answer.content = "1990/10/24"
+      answer.should be_valid
+    end
   end
 
   context "when creating choices for a MultiChoiceQuestion" do

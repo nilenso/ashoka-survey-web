@@ -12,7 +12,7 @@ describe Question do
   it { should accept_nested_attributes_for(:options) }
 
   context "validation" do
-    it "Ensures that the order number for a question is unique within a survey" do
+    it "ensures that the order number for a question is unique within a survey" do
       survey = FactoryGirl.create(:survey)
       question_1 = FactoryGirl.create(:question, :survey => survey, :order_number => 1)
       question_2 = FactoryGirl.build(:question, :survey => survey, :order_number => 1)
