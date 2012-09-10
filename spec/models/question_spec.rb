@@ -16,7 +16,7 @@ describe Question do
       survey = FactoryGirl.create(:survey)
       question_1 = FactoryGirl.create(:question, :survey => survey, :order_number => 1)
       question_2 = FactoryGirl.build(:question, :survey => survey, :order_number => 1)
-      question_2.should_not be_valid 
+      question_2.should_not be_valid
     end
   end
 
@@ -32,7 +32,7 @@ describe Question do
 
   context "orders by order number" do
     it "fetches all question in ascending order of order_number for a particular survey" do
-      survey = FactoryGirl.create(:survey)  
+      survey = FactoryGirl.create(:survey)
       question = FactoryGirl.create(:question, :survey => survey)
       another_question = FactoryGirl.create(:question, :survey => survey)
       survey.questions == [question, another_question]
