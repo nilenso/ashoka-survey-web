@@ -15,7 +15,7 @@ class Question < ActiveRecord::Base
 
   def min_value_less_than_max_value
     if min_value && max_value && (min_value > max_value)
-      errors.add(:min_value, I18n.t('questions.validations.min_value_higher')) 
+      errors.add(:min_value, I18n.t('questions.validations.min_value_higher'))
     end
   end
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120906101240) do
+ActiveRecord::Schema.define(:version => 20120907131310) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -26,8 +26,9 @@ ActiveRecord::Schema.define(:version => 20120906101240) do
   create_table "options", :force => true do |t|
     t.string   "content"
     t.integer  "question_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+    t.integer  "order_number"
   end
 
   add_index "options", ["question_id"], :name => "index_options_on_question_id"
