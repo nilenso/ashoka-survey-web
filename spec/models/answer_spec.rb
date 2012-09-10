@@ -31,6 +31,13 @@ describe Answer do
       answer.content = 3
       answer.should_not be_valid
     end
+
+    it "does not save a mandatory multi-choice question if it doesn't have any choices selected" do
+      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
+      lambda do
+        answer = FactoryGirl.create(:answer, :question_id => question.id, :content => [""])
+      end.should raise_error(ActiveRecord::RecordInvalid)
+    end
   end
 
   context "when creating choices for a MultiChoiceQuestion" do
@@ -53,6 +60,5 @@ describe Answer do
       answer = FactoryGirl.create(:answer, :question_id => question.id, :content => choices)
       answer.content.should == "MultipleChoice"
     end
-
   end
 end

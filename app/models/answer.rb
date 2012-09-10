@@ -20,7 +20,7 @@ class Answer < ActiveRecord::Base
   end
 
   def mandatory_questions_should_be_answered
-    if content.blank? && question.mandatory
+    if question.mandatory && has_been_answered?
       errors.add(:content, I18n.t('answers.validations.mandatory_question'))
     end
   end
@@ -35,5 +35,9 @@ class Answer < ActiveRecord::Base
     if min_value && max_value && (min_value..max_value).exclude?(content.to_i)
       errors.add(:content, I18n.t("answers.validations.exceeded_range"))
     end
+  end
+
+  def has_been_answered?
+    content.blank? || (question.is_a?(MultiChoiceQuestion) && choices.blank?)
   end
 end
