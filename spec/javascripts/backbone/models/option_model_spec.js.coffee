@@ -6,14 +6,14 @@ describe "SurveyBuilder.Models.OptionModel", ->
   describe "when using defaults", ->
     it "sets the content to untitled", ->
       model = new SurveyBuilder.Models.OptionModel
-      expect(model.get('content')).toContain('untitled')   
+      expect(model.get('content')).toContain('untitled')
 
   it "should make the correct server request when it is empty", ->
     model = new SurveyBuilder.Models.OptionModel()
     spy = sinon.spy(jQuery, "ajax")
     model.save()
     expect(spy.getCall(0).args[0].url).toContain '/api/options'
-    jQuery.ajax.restore()   
+    jQuery.ajax.restore()
 
   describe "SurveyBuilder.Collections.OptionCollection", ->
     it "can be instantiated", ->
@@ -30,7 +30,7 @@ describe "SurveyBuilder.Models.OptionModel", ->
       spy = sinon.spy(jQuery, "ajax")
       collection.create({content: 'Hello'})
       expect(spy.getCall(0).args[0].url).toContain '/api/options'
-      jQuery.ajax.restore()   
+      jQuery.ajax.restore()
 
   describe "after saving", ->
     it "knows if a save failed with errors", ->

@@ -2,6 +2,9 @@
 # Interfaces between the views and the rails model for a radio question with a collection of options
 class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models.QuestionModel
 
+  initialize: ->
+    @order_counter = 0
+
   relations: [
     {
       type: Backbone.HasMany,
@@ -23,9 +26,9 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
   #Can't have a blank radio question. Initialize with 3 radio options
   seed: ->
     unless this.seeded
-      this.get('options').create({content: "First Option"})
-      this.get('options').create({content: "Second Option"})
-      this.get('options').create({content: "Third Option"})
+      this.get('options').create({content: "First Option", order_number: ++@order_counter})
+      this.get('options').create({content: "Second Option", order_number: ++@order_counter})
+      this.get('options').create({content: "Third Option", order_number: ++@order_counter})
       this.seeded = true
 
   save_model: ->
@@ -38,6 +41,6 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     super
 
   create_new_option: ->
-    this.get('options').create({content: "Another Option"})
+    this.get('options').create({content: "Another Option", order_number: ++@order_counter})
 
 SurveyBuilder.Models.QuestionWithOptionsModel.setup()
