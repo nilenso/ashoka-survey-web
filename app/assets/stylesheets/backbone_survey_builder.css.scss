@@ -52,13 +52,6 @@ h1#heading {
     @include border-radius(4px, 4px);
   }
 
-  .details_active {
-    padding: 4px;
-    background: $survey_details_bg_color;
-    @include box-sizing(content-box);
-    @include border-radius(4px, 4px);
-  }
-
   label {
     display :block;
     padding-bottom: 3px;
@@ -91,13 +84,6 @@ h1#heading {
 #settings_pane {
   border: 1px solid $border_color;
   padding: 1em;
-
-  #survey_details {
-    padding: 4px;
-    background: $survey_details_bg_color;
-    @include box-sizing(content-box);
-    @include border-radius(4px, 4px);
-  }
 
   #questions {
     padding: 4px;
