@@ -3,6 +3,9 @@ require 'spec_helper'
 describe Answer do
   it { should respond_to(:content) }
   it { should belong_to(:question) }
+  it { should have_many(:choices).dependent(:destroy) }
+  it { should accept_nested_attributes_for(:choices) }
+  
   context "validations" do
     it "does not save if a mandatory question is not answered" do
       question = FactoryGirl.create(:question, :mandatory => true)

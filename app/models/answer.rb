@@ -2,10 +2,12 @@
 
 class Answer < ActiveRecord::Base
   belongs_to :question
-  attr_accessible :content, :question_id
+  attr_accessible :content, :question_id, :choices_attributes
   validate :mandatory_questions_should_be_answered
   validate :content_should_not_exceed_max_length
   validate :content_should_be_in_range
+  has_many :choices, :dependent => :destroy
+  accepts_nested_attributes_for :choices
 
   private
 
