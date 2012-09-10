@@ -20,7 +20,7 @@ class Answer < ActiveRecord::Base
   end
 
   def mandatory_questions_should_be_answered
-    if question.mandatory && has_been_answered?
+    if question.mandatory && has_not_been_answered?
       errors.add(:content, I18n.t('answers.validations.mandatory_question'))
     end
   end
@@ -37,7 +37,7 @@ class Answer < ActiveRecord::Base
     end
   end
 
-  def has_been_answered?
-    content.blank? || (question.is_a?(MultiChoiceQuestion) && choices.blank?)
+  def has_not_been_answered?
+    content.blank? || (question.is_a?(MultiChoiceQuestion) && choices.empty?)
   end
 end
