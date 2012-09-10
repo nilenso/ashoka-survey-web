@@ -40,6 +40,7 @@ group :test, :development do
   gem 'capybara'
   gem 'capybara-webkit'
   gem 'pry-rails'
+  gem 'guard-livereload'
 end
 
 gem 'jquery-rails'
