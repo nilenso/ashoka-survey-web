@@ -9,7 +9,16 @@ class Answer < ActiveRecord::Base
   has_many :choices, :dependent => :destroy
   accepts_nested_attributes_for :choices
 
+  after_create :create_multiple_choices, :if => lambda { question.is_a?(MultiChoiceQuestion) }
+
   private
+
+  def create_multiple_choices
+    choice_array = content.delete_if { |choice| choice.blank? }
+    self.content = 'MultipleChoice'
+    choice_array.each { |choice| choices << Choice.new(:content => choice) }
+    save!
+  end
 
   def mandatory_questions_should_be_answered
     if content.blank? && question.mandatory

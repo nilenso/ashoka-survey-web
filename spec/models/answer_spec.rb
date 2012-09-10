@@ -5,7 +5,7 @@ describe Answer do
   it { should belong_to(:question) }
   it { should have_many(:choices).dependent(:destroy) }
   it { should accept_nested_attributes_for(:choices) }
-  
+
   context "validations" do
     it "does not save if a mandatory question is not answered" do
       question = FactoryGirl.create(:question, :mandatory => true)
@@ -32,5 +32,28 @@ describe Answer do
       answer.content = 3
       answer.should_not be_valid
     end
+  end
+
+  context "when creating choices for a MultiChoiceQuestion" do
+    it "creates choices from the answer's content" do
+      choices = ["First", "Second"]
+      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
+      answer = FactoryGirl.create(:answer, :question_id => question.id, :content => choices)
+      answer.choices.map(&:content).should =~ choices
+    end
+
+    it "doesn't create choices for any other question type" do
+      question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
+      answer = FactoryGirl.create(:answer, :question_id => question.id)
+      answer.choices.should == []
+    end
+
+    it "it sets the answer content to 'MultipleChoice'" do
+      choices = ["first"]
+      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
+      answer = FactoryGirl.create(:answer, :question_id => question.id, :content => choices)
+      answer.content.should == "MultipleChoice"
+    end
+
   end
 end
