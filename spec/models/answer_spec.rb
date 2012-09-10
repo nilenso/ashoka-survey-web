@@ -32,11 +32,18 @@ describe Answer do
       answer.should_not be_valid
     end
 
-    it "does not save a mandatory multi-choice question if it doesn't have any choices selected" do
-      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
-      lambda do
-        answer = FactoryGirl.create(:answer, :question_id => question.id, :content => [""])
-      end.should raise_error(ActiveRecord::RecordInvalid)
+    context "for multi-choice questions" do
+      it "does not save if it doesn't have any choices selected" do
+        question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
+        answer = FactoryGirl.build(:answer, :question_id => question.id, :content => [""])
+        answer.should_not be_valid
+      end
+
+      it "saves if even a single choice is selected" do
+        question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
+        answer = FactoryGirl.build(:answer, :question_id => question.id, :content => ["first"])
+        answer.should be_valid
+      end
     end
   end
 
