@@ -42,6 +42,7 @@ fr:
       add_multiline_question: "Question multilignes"
       add_numeric_question: Question Numérique
       add_date_question: "Date de question"
+      add_multi_choice_question: "Question à choix multiples"
       pick_question_type: "Choisissez Type de Question"
       question_settings: "Paramètres"      
       option: "Option"
