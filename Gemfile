@@ -10,6 +10,7 @@ gem 'omniauth-oauth2'
 gem 'figaro'
 gem "paperclip", "~> 3.0"
 gem "rails-backbone"
+gem 'pry-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -39,7 +40,6 @@ group :test, :development do
   gem 'forgery'
   gem 'capybara'
   gem 'capybara-webkit'
-  gem 'pry-rails'
   gem 'guard-livereload'
 end
 
