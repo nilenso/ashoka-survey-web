@@ -44,6 +44,7 @@ describe ApplicationController do
 
       session[:user_id].should be_nil
       session[:access_token].should be_nil
+      flash[:alert].should_not be_empty
       response.should redirect_to root_path
     end
   end
