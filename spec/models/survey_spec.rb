@@ -10,7 +10,10 @@ describe Survey do
 
   context "when validating" do
     it { should validate_presence_of :name }
-    it { should validate_presence_of :expiry_date }
+    it "should not accept an invalid expiry date" do
+      survey = FactoryGirl.build(:survey, :expiry_date => nil)
+      survey.should_not be_valid
+    end
     it "validates the expiry date to not be in the past" do
       date = Date.new(1990,10,24)
       survey = FactoryGirl.build(:survey, :expiry_date => date)
