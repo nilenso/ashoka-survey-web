@@ -2,22 +2,23 @@
 
 class Answer < ActiveRecord::Base
   belongs_to :question
-  attr_accessible :content, :question_id
+  attr_accessible :content, :question_id, :option_ids
   validate :mandatory_questions_should_be_answered
   validate :content_should_not_exceed_max_length
   validate :content_should_be_in_range
   has_many :choices, :dependent => :destroy
   validate :date_should_be_valid
 
-  before_validation :create_multiple_choices, :if => lambda { question.is_a?(MultiChoiceQuestion) }
+  def option_ids
+    self.choices.collect(&:option_id)
+  end
+
+  def option_ids=(ids)
+    ids.shift
+    ids.each { |option_id| choices.new(:option_id => option_id) }
+  end
 
   private
-
-  def create_multiple_choices
-    option_id_array = content.delete_if { |option_id| option_id.blank? }
-    self.content = 'MultipleChoice'
-    option_id_array.each { |option_id| choices << Choice.new(:option_id => option_id) }
-  end
 
   def mandatory_questions_should_be_answered      
     if question.mandatory && has_not_been_answered?
