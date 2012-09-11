@@ -22,7 +22,7 @@
       <%= f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => 'date' } %>
 
     <% elsif question.type == 'MultiChoiceQuestion' %>
-      <%= f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :member_label => Proc.new{ |option_id| question.options.find(option_id).content } %>
+      <%= f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :member_label => method(:get_option_content_from_option_id) %>
     <% end %>
 
     <%= f.input :question_id, :as => :hidden %>
