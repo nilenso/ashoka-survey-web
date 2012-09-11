@@ -33,8 +33,10 @@ class Answer < ActiveRecord::Base
 
   def content_should_be_in_range
     min_value, max_value = question.min_value, question.max_value
-    if min_value && max_value && (min_value..max_value).exclude?(content.to_i)
-      errors.add(:content, I18n.t("answers.validations.exceeded_range"))
+    if min_value && content.to_i < min_value
+      errors.add(:content, I18n.t("answers.validations.exceeded_lower_limit"))
+    elsif max_value && content.to_i > max_value 
+      errors.add(:content, I18n.t("answers.validations.exceeded_higher_limit"))
     end
   end
 
