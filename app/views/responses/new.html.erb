@@ -22,7 +22,7 @@
       <%= f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => 'date' } %>
 
     <% elsif question.type == 'MultiChoiceQuestion' %>
-      <%= f.input :content, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:content) %>
+      <%= f.input :content, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.inject({}) { |hash, option| hash[option.content] = option.id; hash } %>
     <% end %>
 
     <%= f.input :question_id, :as => :hidden %>
