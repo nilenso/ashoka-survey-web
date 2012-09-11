@@ -1,3 +1,4 @@
+<%= stylesheet_link_tag 'responses' %>
 <h1><%= t '.response_for_survey', :survey_name => @survey.name %></h1>
 
 <%= semantic_form_for [@survey, @response] do |f| %>
@@ -35,6 +36,6 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $('.date').datepicker({ dateFormat: "yy/mm/dd" });
+    $('.date').datepicker({ dateFormat: "yy/mm/dd", changeMonth: true, changeYear: true });
   })
 </script>

@@ -1,0 +1,9 @@
+@import 'susy';
+@import 'base_layout';
+@import "compass/css3/border-radius";
+
+#ui-datepicker-div select {
+  margin: 0 5px;
+  width: 40%;
+  text-align: center;
+}
