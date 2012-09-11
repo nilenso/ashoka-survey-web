@@ -34,4 +34,12 @@ describe SessionsController do
       session[:access_token].should be_nil
     end
   end
+
+   context "when authentication fails" do
+    it "redirects to the root path with a flash notice" do
+      get :failure
+      response.should redirect_to(root_path)
+      flash[:notice].should_not be_empty
+    end
+  end
 end

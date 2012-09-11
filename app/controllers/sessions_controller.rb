@@ -12,4 +12,8 @@ class SessionsController < ApplicationController
     session[:access_token] = nil
     redirect_to(root_path)
   end
+
+  def failure
+    redirect_to root_path, :notice => "You are not authorized to use this application"
+  end
 end

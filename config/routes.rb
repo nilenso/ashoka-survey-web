@@ -1,6 +1,7 @@
 SurveyWeb::Application.routes.draw do
   scope "(:locale)", :locale => /#{I18n.available_locales.join('|')}/ do
     match '/auth/:provider/callback', :to => 'sessions#create'
+    match '/auth/failure', :to => 'sessions#failure'
     match '/signout', :to => 'sessions#destroy', :as => 'signout'
 
     match '/surveys/build/:id', :to => 'surveys#build', :as => "surveys_build"
