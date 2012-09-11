@@ -11,7 +11,7 @@ class ApplicationController < ActionController::Base
     if exception.response.status == 401
       session[:user_id] = nil
       session[:access_token] = nil
-      redirect_to root_url, alert: "Access token expired, try signing in again."
+      redirect_to root_url, alert: t(:login_again)
     end
   end
 

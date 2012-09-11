@@ -1,6 +1,7 @@
 fr:
   application_title: "Application de l'enquête"
   confirm: "Etes-vous sûr?"
+  login_again: Votre session a expiré. S'il vous plaît vous connecter à nouveau.
 
   header:
     home: "Page d'accueil"

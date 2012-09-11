@@ -10,6 +10,7 @@ describe Question do
   it { should have_attached_file(:image) }
   it { should respond_to :max_length }
   it { should accept_nested_attributes_for(:options) }
+  it { should validate_numericality_of(:max_length) }
 
   context "validation" do
     it "ensures that the order number for a question is unique within a survey" do
@@ -17,6 +18,12 @@ describe Question do
       question_1 = FactoryGirl.create(:question, :survey => survey, :order_number => 1)
       question_2 = FactoryGirl.build(:question, :survey => survey, :order_number => 1)
       question_2.should_not be_valid
+    end
+
+    it "doesn't allow a negative max-length" do
+      survey = FactoryGirl.create(:survey)
+      question = FactoryGirl.build(:question, :survey => survey, :max_length => -5)
+      question.should_not be_valid
     end
   end
 

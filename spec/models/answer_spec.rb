@@ -42,6 +42,20 @@ describe Answer do
       answer.content = "1990/10/24"
       answer.should be_valid
     end
+
+    context "for multi-choice questions" do
+      it "does not save if it doesn't have any choices selected" do
+        question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
+        answer = FactoryGirl.build(:answer, :question_id => question.id, :content => [""])
+        answer.should_not be_valid
+      end
+
+      it "saves if even a single choice is selected" do
+        question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
+        answer = FactoryGirl.build(:answer, :question_id => question.id, :content => ["first"])
+        answer.should be_valid
+      end
+    end
   end
 
   context "when creating choices for a MultiChoiceQuestion" do
@@ -64,6 +78,5 @@ describe Answer do
       answer = FactoryGirl.create(:answer, :question_id => question.id, :content => choices)
       answer.content.should == "MultipleChoice"
     end
-
   end
 end

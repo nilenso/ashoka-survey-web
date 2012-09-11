@@ -1,6 +1,7 @@
 en:
   application_title: "Survey Application"
   confirm: "Are you sure?"
+  login_again: Your session has expired. Please login again. 
 
   header:
     home: "Home"

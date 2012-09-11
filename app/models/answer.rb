@@ -9,7 +9,7 @@ class Answer < ActiveRecord::Base
   has_many :choices, :dependent => :destroy
   validate :date_should_be_valid
 
-  after_create :create_multiple_choices, :if => lambda { question.is_a?(MultiChoiceQuestion) }
+  before_validation :create_multiple_choices, :if => lambda { question.is_a?(MultiChoiceQuestion) }
 
   private
 
@@ -17,11 +17,10 @@ class Answer < ActiveRecord::Base
     choice_array = content.delete_if { |choice| choice.blank? }
     self.content = 'MultipleChoice'
     choice_array.each { |choice| choices << Choice.new(:content => choice) }
-    save!
   end
 
-  def mandatory_questions_should_be_answered
-    if content.blank? && question.mandatory
+  def mandatory_questions_should_be_answered      
+    if question.mandatory && has_not_been_answered?
       errors.add(:content, I18n.t('answers.validations.mandatory_question'))
     end
   end
@@ -45,5 +44,9 @@ class Answer < ActiveRecord::Base
         errors.add(:content, I18n.t("answers.validations.invalid_date"))
       end
     end
+  end
+
+  def has_not_been_answered?
+    content.blank? || (question.is_a?(MultiChoiceQuestion) && choices.empty?)
   end
 end
