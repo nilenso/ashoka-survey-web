@@ -47,6 +47,10 @@ h1#heading {
     width: 25%;
   }
 
+  abbr{
+    color: $e;
+  }
+
   .active {
     padding: 4px;
     border: 1px solid #d9d6c4;
