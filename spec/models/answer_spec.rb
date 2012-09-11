@@ -58,13 +58,14 @@ describe Answer do
   context "for multi-choice questions" do
     it "does not save if it doesn't have any choices selected" do
       question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
-      answer = FactoryGirl.build(:answer, :question_id => question.id, :content => [""])
+      answer = FactoryGirl.build(:answer, :question_id => question.id)
       answer.should_not be_valid
     end
 
     it "saves if even a single choice is selected" do
-      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
-      answer = FactoryGirl.build(:answer, :question_id => question.id, :content => ["first"])
+      option = FactoryGirl.create(:option)
+      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true, :options => [option])
+      answer = FactoryGirl.build(:answer, :question_id => question.id, :option_ids => [option.id])
       answer.should be_valid
     end
   end
@@ -72,9 +73,10 @@ describe Answer do
   context "when creating choices for a MultiChoiceQuestion" do
     it "creates choices for the selected options" do
       options = FactoryGirl.create_list(:option, 3)
+      option_ids = options.map(&:id).unshift('')
       question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :options => options)
-      answer = FactoryGirl.create(:answer, :question_id => question.id, :content => options.map(&:id))
-      answer.choices.map(&:option_id).should =~ options.map(&:id)
+      answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => option_ids)
+      answer.choices.map(&:option_id).should =~ option_ids
     end
 
     it "doesn't create choices for any other question type" do
@@ -83,11 +85,18 @@ describe Answer do
       answer.choices.should == []
     end
 
-    it "it sets the answer content to 'MultipleChoice'" do
+    it "doesn't change the answer content" do
       choices = ["first"]
       question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
-      answer = FactoryGirl.create(:answer, :question_id => question.id, :content => choices)
-      answer.content.should == "MultipleChoice"
+      answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => choices)
+      answer.content.should == answer.content
+    end
+
+    it "looks at choices instead of content when checking for a mandatory question" do
+      option = FactoryGirl.create(:option)
+      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true, :options => [option])
+      answer = FactoryGirl.build(:answer, :content => nil, :question_id => question.id, :option_ids => [option.id])
+      answer.should be_valid
     end
   end
 end

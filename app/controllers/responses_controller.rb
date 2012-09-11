@@ -6,7 +6,6 @@ class ResponsesController < ApplicationController
       answer = Answer.new
       @response.answers << answer
       answer.question = question
-      answer.choices << Choice.new if question.is_a?(MultiChoiceQuestion)
     end
   end
 
