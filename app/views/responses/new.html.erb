@@ -16,7 +16,7 @@
 
     <% elsif question.type == 'NumericQuestion' %>
       <% has_range = question.max_value && question.min_value %>
-      <%= f.input :content, :label => question.content, :as => :number, :required => question.mandatory, :hint => has_range ? "The number should be between #{question.min_value} and #{question.max_value}" : nil %>
+      <%= f.input :content, :label => question.content, :as => :number, :required => question.mandatory, :hint => numeric_question_hint(question.max_value, question.min_value)%>
 
     <% elsif question.type == 'DateQuestion' %>
       <%= f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => 'date' } %>
