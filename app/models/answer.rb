@@ -14,7 +14,7 @@ class Answer < ActiveRecord::Base
   end
 
   def option_ids=(ids)
-    ids.shift
+    ids.delete_if(&:blank?)
     ids.each { |option_id| choices.new(:option_id => option_id) }
   end
 

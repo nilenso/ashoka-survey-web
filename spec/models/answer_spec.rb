@@ -46,14 +46,14 @@ describe Answer do
     context "for multi-choice questions" do
       it "does not save if it doesn't have any choices selected" do
         question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
-        answer = FactoryGirl.build(:answer, :question_id => question.id, :option_ids => [""])
+        answer = FactoryGirl.build(:answer, :question_id => question.id)
         answer.should_not be_valid
       end
 
       it "saves if even a single choice is selected" do
         option = FactoryGirl.create(:option)
         question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true, :options => [option])
-        answer = FactoryGirl.build(:answer, :question_id => question.id, :option_ids => ["", option.id])
+        answer = FactoryGirl.build(:answer, :question_id => question.id, :option_ids => [option.id])
         answer.should be_valid
       end
     end
@@ -84,7 +84,7 @@ describe Answer do
     it "looks at choices instead of content when checking for a mandatory question" do
       option = FactoryGirl.create(:option)
       question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true, :options => [option])
-      answer = FactoryGirl.build(:answer, :content => "", :question_id => question.id, :option_ids => ["", option.id])
+      answer = FactoryGirl.build(:answer, :content => nil, :question_id => question.id, :option_ids => [option.id])
       answer.should be_valid
     end
   end
