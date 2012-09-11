@@ -14,6 +14,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
     this.model.on('change:errors', this.render, this)
 
   render: ->
+    this.model.set('content', 'Untitled question') if _.isEmpty(this.model.get('content'))
     data = _.extend(this.model.toJSON(), {errors: this.model.errors})
     $(this.el).html(Mustache.render(this.template, data))
     $(this.el).find('abbr').show() if this.model.get('mandatory')
