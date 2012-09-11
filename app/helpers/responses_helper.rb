@@ -5,4 +5,8 @@ module ResponsesHelper
     return "The number should is be less than #{min_value}" if min_value
     nil
   end
+
+  def get_option_content_from_option_id(id)
+    Option.find_by_id(id).try(:content)
+  end
 end
