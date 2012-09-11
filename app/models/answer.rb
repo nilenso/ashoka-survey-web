@@ -48,6 +48,10 @@ class Answer < ActiveRecord::Base
   end
 
   def has_not_been_answered?
-    content.blank? || (question.is_a?(MultiChoiceQuestion) && choices.empty?)
+    if question.is_a?(MultiChoiceQuestion)
+      choices.empty?
+    else
+      content.blank?
+    end
   end
 end

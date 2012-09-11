@@ -74,11 +74,18 @@ describe Answer do
       answer.choices.should == []
     end
 
-    it "it doesn't change the answer content" do
+    it "doesn't change the answer content" do
       choices = ["first"]
       question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
       answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => choices)
       answer.content.should == answer.content
+    end
+
+    it "looks at choices instead of content when checking for a mandatory question" do
+      option = FactoryGirl.create(:option)
+      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true, :options => [option])
+      answer = FactoryGirl.build(:answer, :content => "", :question_id => question.id, :option_ids => ["", option.id])
+      answer.should be_valid
     end
   end
 end
