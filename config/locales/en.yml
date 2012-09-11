@@ -61,7 +61,8 @@ en:
     validations:
       mandatory_question: This question is mandatory.
       max_length: You have exceeded the maximum length for this question.
-      exceeded_range: Your answer is not in the specified range.
+      exceeded_lower_limit: Your answer is lesser than the minimum value.
+      exceeded_higher_limit: Your answer is lesser than the maximum value.
       invalid_date: The date you gave is not valid
 
   questions:
