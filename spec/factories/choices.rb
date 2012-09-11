@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :choice do
-    content "MyString"
+    option_id nil
     answer nil
   end
 end

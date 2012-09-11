@@ -14,9 +14,9 @@ class Answer < ActiveRecord::Base
   private
 
   def create_multiple_choices
-    choice_array = content.delete_if { |choice| choice.blank? }
+    option_id_array = content.delete_if { |option_id| option_id.blank? }
     self.content = 'MultipleChoice'
-    choice_array.each { |choice| choices << Choice.new(:content => choice) }
+    option_id_array.each { |option_id| choices << Choice.new(:option_id => option_id) }
   end
 
   def mandatory_questions_should_be_answered      

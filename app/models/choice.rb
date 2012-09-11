@@ -1,5 +1,5 @@
 class Choice < ActiveRecord::Base
   belongs_to :answer
-  attr_accessible :content
-  validates_presence_of :content
+  belongs_to :option
+  attr_accessible :content, :option_id
 end

@@ -59,11 +59,11 @@ describe Answer do
   end
 
   context "when creating choices for a MultiChoiceQuestion" do
-    it "creates choices from the answer's content" do
-      choices = ["First", "Second"]
-      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
-      answer = FactoryGirl.create(:answer, :question_id => question.id, :content => choices)
-      answer.choices.map(&:content).should =~ choices
+    it "creates choices for the selected options" do
+      options = FactoryGirl.create_list(:option, 3)
+      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :options => options)
+      answer = FactoryGirl.create(:answer, :question_id => question.id, :content => options.map(&:id))
+      answer.choices.map(&:option_id).should =~ options.map(&:id)
     end
 
     it "doesn't create choices for any other question type" do
