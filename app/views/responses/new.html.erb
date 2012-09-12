@@ -24,6 +24,9 @@
 
     <% elsif question.type == 'MultiChoiceQuestion' %>
       <%= f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :member_label => method(:get_option_content_from_option_id) %>
+
+    <% elsif question.type == 'DropDownQuestion' %>
+      <%= f.input :content, :as => :select, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:content) %>
     <% end %>
 
     <%= f.input :question_id, :as => :hidden %>
