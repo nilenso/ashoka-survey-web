@@ -92,6 +92,8 @@ h1#heading {
 #settings_pane {
   border: 1px solid $border_color;
   padding: 1em;
+  max-height: 250px;
+  overflow: auto;
 
   #questions {
     padding: 4px;
