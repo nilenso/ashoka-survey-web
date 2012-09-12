@@ -13,11 +13,15 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     this.model.get('options').on('change', this.render, this)
     this.model.on('add:options', this.add_new_option, this)
 
-  render: ->    
+  render: ->
     super
     _.each(this.options, (option) =>
         $(this.el).append(option.render().el)
       )
+    if this.model.has_drop_down_options()
+      option_value = this.model.get_first_option_value()
+      $(this.el).find('option').text(option_value)
+
     return this
 
   add_new_option: (model) ->
@@ -31,3 +35,4 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
     this.options.push new SurveyBuilder.Views.Dummies.OptionView(model, template)
     this.render()
+
