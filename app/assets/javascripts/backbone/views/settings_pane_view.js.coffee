@@ -25,6 +25,9 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
       when 'multi_choice'
         template = $('#multi_choice_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
+      when 'drop_down'
+        template = $('#drop_down_question_template').html()
+        question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
 
     @questions.push(question)
     $(this.el).append($(question.render().el))

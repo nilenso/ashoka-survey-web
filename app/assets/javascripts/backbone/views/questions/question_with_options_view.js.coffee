@@ -23,6 +23,8 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
         template = $('#radio_option_template').html()
       when 'MultiChoiceQuestion'
         template = $('#multi_choice_option_template').html()
+      when 'DropDownQuestion'
+        template = $('#drop_down_option_template').html()
 
     option = new SurveyBuilder.Views.Questions.OptionView(option_model, template)
     this.options.push option

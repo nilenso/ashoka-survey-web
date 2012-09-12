@@ -44,6 +44,7 @@ en:
       add_numeric_question: "Numeric Question"
       add_date_question: "Date Question"
       add_multi_choice_question: "Multi-choice Question"
+      add_drop_down_question: "Drop Down Question"
       pick_question_type: "Pick Question"
       question_settings: "Settings"
       pick_question_type: "Pick Question"

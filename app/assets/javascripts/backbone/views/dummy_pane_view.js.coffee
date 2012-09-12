@@ -25,6 +25,9 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       when 'multi_choice'
         template = $('#dummy_multi_choice_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
+      when 'drop_down'
+        template = $('#dummy_drop_down_question_template').html()
+        @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
 
     this.render()
 

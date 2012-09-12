@@ -20,6 +20,8 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
         question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({type: 'RadioQuestion'})
       when 'multi_choice'
         question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({type: 'MultiChoiceQuestion'})
+      when 'drop_down'
+        question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({type: 'DropDownQuestion'})
 
     this.order_counter++
     question_model.set('survey_id' : this.survey_id)
