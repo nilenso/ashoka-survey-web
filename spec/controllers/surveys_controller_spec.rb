@@ -17,6 +17,7 @@ describe SurveysController do
 
     context "when filtering" do
       before(:each) do
+        Survey.delete_all
         @unpublished_survey = FactoryGirl.create(:survey, :published => false)
         @published_survey = FactoryGirl.create(:survey, :published => true)
       end
@@ -29,7 +30,6 @@ describe SurveysController do
       end
 
       it "shows all unpublished surveys if filter is unpublished" do
-        pending
         get :index, :published => false
         response.should be_ok
         assigns(:surveys).should include @unpublished_survey
@@ -37,7 +37,6 @@ describe SurveysController do
       end
 
       it "shows all surveys if filter is not specified" do
-        pending
         get :index
         response.should be_ok
         assigns(:surveys).should include @unpublished_survey
