@@ -15,6 +15,7 @@
       <th><%= Survey.human_attribute_name(:name) %></th>
       <th><%= Survey.human_attribute_name(:description) %></th>
       <th><%= Survey.human_attribute_name(:expiry_date) %></th>
+      <th><%= Survey.human_attribute_name(:organization) %></th>
       <th><%= Survey.human_attribute_name(:responses) %></th>
       <th><%= t ".operations" %></th>
     </thead>
@@ -35,6 +36,7 @@
           <% end %>
         </td>
         <td class="survey_expiry_date"><%= survey.expiry_date %></td>
+        <td><%= survey.organization_id %></td>
         <td>
           <%= survey.responses.count %>
           <%= link_to image_tag("add.png", :title => t(".add_response")), new_survey_response_path(survey.id) %>
