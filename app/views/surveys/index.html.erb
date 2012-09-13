@@ -1,8 +1,13 @@
-<%= stylesheet_link_tag 'surveys_table' %>
+<%= stylesheet_link_tag 'surveys_list' %>
 
-<h1> <%= t '.all_surveys' %> </h1>
+<h1> <%= t '.list_of_surveys' %> </h1>
 
 <%= link_to t(".create_survey"), new_survey_path, :action => :post %>
+<div class="filters">
+  <%= t(".show") %> : <%= link_to t(".published"), surveys_path(:published => true) %> |
+  <%= link_to t(".unpublished"), surveys_path(:published => false) %> |
+  <%= link_to t(".all"), surveys_path %>
+</div>
 
 <div>
   <table class="surveys_table">

@@ -14,6 +14,35 @@ describe SurveysController do
       response.should be_ok
       response.should render_template(:index)
     end
+    context "when filtering" do
+      before(:each) do
+        @unpublished_survey = FactoryGirl.create(:survey, :published => false)
+        @published_survey = FactoryGirl.create(:survey, :published => true)
+      end
+
+      it "shows all published surveys if filter is published" do
+        get :index, :published => true
+        response.should be_ok
+        assigns(:surveys).should include @published_survey
+        assigns(:surveys).should_not include @unpublished_survey
+      end
+
+      it "shows all unpublished surveys if filter is unpublished" do
+        pending
+        get :index, :published => false
+        response.should be_ok
+        assigns(:surveys).should include @unpublished_survey
+        assigns(:surveys).should_not include @published_survey
+      end
+
+      it "shows all surveys if filter is not specified" do
+        pending
+        get :index
+        response.should be_ok
+        assigns(:surveys).should include @unpublished_survey
+        assigns(:surveys).should include @published_survey
+      end
+    end
   end
 
   context "DELETE 'destroy'" do

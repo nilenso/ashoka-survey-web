@@ -5,6 +5,7 @@ FactoryGirl.define do
     sequence(:name) { |n| "name_#{n}" }
     expiry_date Date.tomorrow
     description "MyText"
+    published :false
 
     factory :survey_with_questions do
       after(:create) do |survey, evaluator|

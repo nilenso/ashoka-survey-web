@@ -31,7 +31,11 @@ fr:
       mandatory: "Obligatoire"
 
     index:
-      all_surveys: "Tous les sondages"
+      list_of_surveys: "Liste des enquêtes"
+      show: "Montrer"
+      published: "Publié"
+      unpublished: "Inédit"
+      all: "Tous"
       create_survey: "Créer un nouveau sondage"
       delete_survey: "Supprimer cette enquête"
       add_response: "Ajouter une réponse pour cette enquête"

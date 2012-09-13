@@ -1,7 +1,11 @@
 class SurveysController < ApplicationController
 
   def index
-    @surveys = Survey.paginate(:page => params[:page], :per_page => 10)
+    unless params[:published].nil?
+      @surveys = Survey.where(:published => params[:published]).paginate(:page => params[:page], :per_page => 10)
+    else
+      @surveys = Survey.paginate(:page => params[:page], :per_page => 10)
+    end
   end
 
   def destroy
