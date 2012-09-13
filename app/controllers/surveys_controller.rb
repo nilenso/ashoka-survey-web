@@ -51,7 +51,7 @@ class SurveysController < ApplicationController
   end
 
   def require_cso_admin
-    role = session[:user_info][:role]
+    role = session[:user_info][:role] if session[:user_info]
     unless role == 'cso_admin'
       flash[:error] = t "flash.not_authorized"
       redirect_to surveys_path

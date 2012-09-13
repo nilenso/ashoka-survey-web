@@ -14,6 +14,7 @@ en:
     survey_published: "%{survey_name} has been published"
     survey_unpublished: "%{survey_name} has been unpublished"
     reponse_to_unpublished_survey: "Can't add response. %{survey_name} is not published."
+    not_authorized: "You are not authorized to do that"
 
   surveys:
     new:
