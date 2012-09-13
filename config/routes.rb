@@ -9,7 +9,7 @@ SurveyWeb::Application.routes.draw do
     resources :surveys do
       resources :responses, :only => [:new, :create, :show]
     end
-    root :to => 'surveys#index' 
+    root :to => 'surveys#index'
   end
 
   namespace :api, :defaults => { :format => 'json' } do
@@ -17,6 +17,12 @@ SurveyWeb::Application.routes.draw do
       resources :questions, :only => [:create, :update]
       resources :options, :only => [:create, :update]
       post 'questions/:id/image_upload' => 'questions#image_upload'
+    end
+
+    namespace :mobile, :defaults => { :format => 'json'} do
+      scope :module => :v1 do
+        resources :surveys, :only => [:index]
+      end
     end
   end
 end
