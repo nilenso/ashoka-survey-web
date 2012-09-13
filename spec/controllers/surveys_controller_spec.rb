@@ -70,6 +70,7 @@ describe SurveysController do
     context "when save is unsuccessful" do
       before(:each) do
         @survey_attributes = FactoryGirl.attributes_for(:survey)
+        session[:user_info] = { :org_id => 123 }
       end
 
       it "redirects to the surveys build path" do
@@ -82,10 +83,17 @@ describe SurveysController do
       it "creates a survey" do
         expect { post :create,:survey => @survey_attributes }.to change { Survey.count }.by(1)
       end
+
+      it "assigns the organization id of the current user to the survey" do
+        post :create, :survey => @survey_attributes
+        created_survey = Survey.find_last_by_name(@survey_attributes[:name])
+        created_survey.organization_id.should == session[:user_info][:org_id]
+      end
     end
 
     context "when save is unsuccessful" do
       it "renders the new page" do
+        session[:user_info] = { :org_id => 123 }
         post :create, :surveys => { :name => "" }
         response.should be_ok
         response.should render_template(:new)

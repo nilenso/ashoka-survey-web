@@ -16,10 +16,7 @@ describe SessionsController do
     it "assigns user info to the sessions hash" do
       post :create, :provider => 'user_owner'
       response.should redirect_to(root_path)
-      session[:user_name].should == @auth['name']
-      session[:user_role].should == @auth['role']
-      session[:user_email].should == @auth['email']
-      session[:user_org_id].should == @auth['org_id']
+      session[:user_info].should == @auth['info']
     end
     
     it "assigns the access token to the session hash" do

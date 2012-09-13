@@ -21,6 +21,7 @@ class SurveysController < ApplicationController
 
   def create
     @survey = Survey.new(params[:survey])
+    @survey.organization_id = session[:user_info][:org_id]
 
     if @survey.save
       flash[:notice] = t "flash.survey_created"
