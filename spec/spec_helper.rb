@@ -54,6 +54,8 @@ Spork.prefork do
       :uid => '12345',
       :name => 'tim',
       :email => 'smit@smit.smit',
+      :role => 'user',
+      :org_id => '1098',
       :credentials => { :token => "thisisatoken" }
     })
   end
