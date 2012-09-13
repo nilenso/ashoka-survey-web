@@ -11,6 +11,7 @@ en:
   flash:
     survey_created: "Survey created successfully"
     survey_deleted: "Survey deleted"
+    survey_published: "%{survey_name} has been published"
 
   surveys:
     new:

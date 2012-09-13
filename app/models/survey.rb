@@ -9,6 +9,11 @@ class Survey < ActiveRecord::Base
   validate :expiry_date_shoud_be_valid
   accepts_nested_attributes_for :questions
 
+  def publish
+    self.published = true
+    self.save
+  end
+
   private
 
   def expiry_date_should_not_be_in_past

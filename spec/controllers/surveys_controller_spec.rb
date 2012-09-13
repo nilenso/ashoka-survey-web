@@ -38,7 +38,7 @@ describe SurveysController do
       assigns(:survey).should_not be_nil
     end
   end
-  
+
   context "POST 'create'" do
     context "when save is unsuccessful" do
       before(:each) do
@@ -71,6 +71,16 @@ describe SurveysController do
       survey = FactoryGirl.create(:survey)
       get :build, :id => survey.id
       response.should render_template(:build)
+    end
+  end
+
+  context "PUT 'publish'" do
+    it "changes the status of a survey from draft to published" do
+      survey = FactoryGirl.create(:survey)
+      put :publish, :survey_id => survey.id
+      response.should redirect_to(surveys_path)
+      flash[:notice].should_not be_nil
+      Survey.find(survey.id).should be_published
     end
   end
 end

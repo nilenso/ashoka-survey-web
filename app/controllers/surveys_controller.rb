@@ -22,11 +22,18 @@ class SurveysController < ApplicationController
       flash[:notice] = t "flash.survey_created"
       redirect_to surveys_build_path(:id => @survey.id)
     else
-     render :new
-   end
- end
+      render :new
+    end
+  end
 
- def build
-  @survey = Survey.find(params[:id])
- end
+  def build
+    @survey = Survey.find(params[:id])
+  end
+
+  def publish
+    survey = Survey.find(params[:survey_id])
+    survey.publish
+    flash[:notice] = t "flash.survey_published", :survey_name => survey.name
+    redirect_to surveys_path
+  end
 end

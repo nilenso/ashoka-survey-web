@@ -11,6 +11,7 @@ fr:
   flash:
     survey_created: "Enquête créé avec succès"
     survey_deleted: "Enquête supprimé"
+    survey_published: "%{survey_name} a été publié"
 
   surveys:
     new:
