@@ -13,7 +13,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.dummy_pane    = new SurveyBuilder.Views.DummyPaneView
     this.survey        = new SurveyBuilder.Models.SurveyModel(survey_id)
     $(this.el).ajaxStart(window.notifications_view.show_spinner)
-    $(this.el).ajaxStop(this.handle_save_finished)
+    $(this.el).ajaxStop(window.notifications_view.hide_spinner)
     $( "#sidebar" ).tabs();
 
   new_question: (event, type) ->
@@ -35,12 +35,13 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     $("#sidebar").tabs('select', 1)
 
   save_all_questions: ->
+    $(this.el).bind('ajaxStop.save', this.handle_save_finished)
     $(this.el).find("#save input").prop('disabled', true)
     this.survey.save_all_questions()
 
   handle_save_finished: =>
+    $(this.el).unbind('ajaxStop.save');
     $(this.el).find("#save input").prop('disabled', false)
-    window.notifications_view.hide_spinner()
     @display_save_status()
 
   display_save_status: ->
