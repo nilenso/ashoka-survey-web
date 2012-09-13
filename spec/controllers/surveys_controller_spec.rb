@@ -75,12 +75,21 @@ describe SurveysController do
   end
 
   context "PUT 'publish'" do
-    it "changes the status of a survey from draft to published" do
+    it "changes the status of a survey from unpublished to published" do
       survey = FactoryGirl.create(:survey)
       put :publish, :survey_id => survey.id
       response.should redirect_to(surveys_path)
       flash[:notice].should_not be_nil
       Survey.find(survey.id).should be_published
+    end
+  end
+  context "PUT 'unpublish'" do
+    it "changes the status of a survey from published to unpublished" do
+      survey = FactoryGirl.create(:survey, :published => true)
+      put :unpublish, :survey_id => survey.id
+      response.should redirect_to(surveys_path)
+      flash[:notice].should_not be_nil
+      Survey.find(survey.id).should_not be_published
     end
   end
 end

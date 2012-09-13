@@ -36,4 +36,11 @@ class SurveysController < ApplicationController
     flash[:notice] = t "flash.survey_published", :survey_name => survey.name
     redirect_to surveys_path
   end
+
+  def unpublish
+    survey = Survey.find(params[:survey_id])
+    survey.unpublish
+    flash[:notice] = t "flash.survey_unpublished", :survey_name => survey.name
+    redirect_to surveys_path
+  end
 end

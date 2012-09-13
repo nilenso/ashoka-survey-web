@@ -7,7 +7,7 @@ SurveyWeb::Application.routes.draw do
     match '/surveys/build/:id', :to => 'surveys#build', :as => "surveys_build"
 
     resources :surveys do
-      put 'publish'
+      put 'publish', 'unpublish'
       resources :responses, :only => [:new, :create, :show]
     end
     root :to => 'surveys#index'

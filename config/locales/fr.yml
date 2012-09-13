@@ -12,6 +12,7 @@ fr:
     survey_created: "Enquête créé avec succès"
     survey_deleted: "Enquête supprimé"
     survey_published: "%{survey_name} a été publié"
+    survey_published: "%{survey_name} a été publiée"
 
   surveys:
     new:
