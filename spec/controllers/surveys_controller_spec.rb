@@ -14,6 +14,7 @@ describe SurveysController do
       response.should be_ok
       response.should render_template(:index)
     end
+
     context "when filtering" do
       before(:each) do
         @unpublished_survey = FactoryGirl.create(:survey, :published => false)
@@ -58,8 +59,6 @@ describe SurveysController do
       response.should redirect_to surveys_path
     end
   end
-
-  # Temp route while we're porting to backbone
 
   context "GET 'new" do
     it "assigns the survey instance variable" do
