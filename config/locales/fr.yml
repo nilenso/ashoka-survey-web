@@ -13,6 +13,7 @@ fr:
     survey_deleted: "Enquête supprimé"
     survey_published: "%{survey_name} a été publié"
     survey_published: "%{survey_name} a été publiée"
+    reponse_to_unpublished_survey: "Impossible d'ajouter la réponse. %{survey_name} n'est pas publié."
 
   surveys:
     new:
