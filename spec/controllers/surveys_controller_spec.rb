@@ -61,8 +61,25 @@ describe SurveysController do
 
   context "GET 'new" do
     it "assigns the survey instance variable" do
+      session[:user_info] = { :role => 'cso_admin'}
       get :new
       assigns(:survey).should_not be_nil
+    end
+
+    context "allows only a CSO admin to create a survey" do
+      it "does not let a user create a survey" do
+        session[:user_info] = { :role => 'user'}
+        post :create, :survey => @survey_attributes
+        response.should redirect_to surveys_path
+        flash[:error].should_not be_nil
+      end
+
+      it "does not let an admin create a survey" do
+        session[:user_info] = { :role => 'admin'}
+        post :create, :survey => @survey_attributes
+        response.should redirect_to surveys_path
+        flash[:error].should_not be_nil
+      end
     end
   end
 
@@ -70,7 +87,7 @@ describe SurveysController do
     context "when save is unsuccessful" do
       before(:each) do
         @survey_attributes = FactoryGirl.attributes_for(:survey)
-        session[:user_info] = { :org_id => 123 }
+        session[:user_info] = { :org_id => 123, :role => 'cso_admin' }
       end
 
       it "redirects to the surveys build path" do
@@ -93,7 +110,7 @@ describe SurveysController do
 
     context "when save is unsuccessful" do
       it "renders the new page" do
-        session[:user_info] = { :org_id => 123 }
+        session[:user_info] = { :org_id => 123, :role => 'cso_admin' }
         post :create, :surveys => { :name => "" }
         response.should be_ok
         response.should render_template(:new)

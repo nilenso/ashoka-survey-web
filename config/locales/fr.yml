@@ -14,6 +14,7 @@ fr:
     survey_published: "%{survey_name} a été publié"
     survey_published: "%{survey_name} a été publiée"
     reponse_to_unpublished_survey: "Impossible d'ajouter la réponse. %{survey_name} n'est pas publié."
+    not_authorized: "Vous n'êtes pas autorisé à le faire"
 
   surveys:
     new:
