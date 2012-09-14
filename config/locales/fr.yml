@@ -47,6 +47,9 @@ fr:
       more: "plus"
       less: "moins"
 
+    share:
+      share_survey: "Enquête Partager"
+
     build:
       build_survey: "Construire votre enquête"
       add_radio_question: "Question Radio"

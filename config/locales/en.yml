@@ -47,6 +47,9 @@ en:
       more: "more"
       less: "less"
 
+    share:
+      share_survey: "Share Survey"
+
     build:
       build_survey: "Build your survey"
       add_radio_question: "Radio Question"
