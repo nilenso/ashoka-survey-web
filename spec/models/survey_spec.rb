@@ -5,7 +5,7 @@ describe Survey do
   it { should respond_to :expiry_date }
   it { should respond_to :description }
   it { should respond_to :published }
-  it { should respond_to :organization_id }
+  it { should respond_to :owner_org_id }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:responses).dependent(:destroy) }
   it { should accept_nested_attributes_for :questions }
