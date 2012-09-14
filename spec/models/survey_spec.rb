@@ -24,6 +24,11 @@ describe Survey do
       survey = FactoryGirl.build(:survey, :expiry_date => date)
       survey.should_not be_valid
     end
+
+    it "deserializes the shared_org_ids" do
+      survey = FactoryGirl.create(:survey, :shared_org_ids => [1, 2, 3])
+      survey.reload.shared_org_ids.should eq [1, 2, 3]
+    end
   end
 
   context "publish" do
@@ -38,7 +43,6 @@ describe Survey do
       survey.should be_published
     end
   end
-
 
   context "unpublish" do
     it "changes published to false" do
