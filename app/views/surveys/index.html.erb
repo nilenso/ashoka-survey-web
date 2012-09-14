@@ -48,6 +48,7 @@
           <% else %>
             <%= link_to button_tag(t ".unpublish_survey"), survey_unpublish_path(survey.id), :method => :put, :data => { :confirm => t(:confirm) } %>
           <% end %>
+          <%= link_to button_tag(t ".share_survey"), survey_share_path(survey.id) %>
         </td>
       </tr>
       <% end %>

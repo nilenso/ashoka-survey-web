@@ -209,4 +209,17 @@ describe SurveysController do
       Survey.find(@survey.id).should_not be_published
     end
   end
+
+  context "When sharing the survey" do
+    it "renders the share page with a list of organizations except survey's owner organization" do
+      sign_in_as('cso_admin')
+      session[:user_info][:organizations] = [{:id => 123, :name => "foo"}, {:id => 12, :name => "nid"}]
+      survey = FactoryGirl.create(:survey, :owner_org_id => 12)
+
+      get :share, :survey_id => survey.id
+      response.should be_ok
+      response.should render_template :share
+      assigns(:organizations).should == [{"id" => 123, "name" => "foo"}]
+    end
+  end
 end

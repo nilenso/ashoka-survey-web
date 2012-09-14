@@ -57,6 +57,12 @@ class SurveysController < ApplicationController
     redirect_to surveys_path
   end
 
+  def share
+    @survey = Survey.find(params[:survey_id])
+    @organizations = session[:user_info][:organizations]
+    @organizations.select!{ |org| org[:id] != @survey.owner_org_id }
+  end
+
   private
 
   def require_cso_admin
