@@ -18,35 +18,62 @@ describe SurveysController do
     context "when filtering" do
       before(:each) do
         Survey.delete_all
-        @unpublished_survey = FactoryGirl.create(:survey, :published => false)
-        @published_survey = FactoryGirl.create(:survey, :published => true)
       end
 
-      it "shows all published surveys if filter is published" do
-        get :index, :published => true
-        response.should be_ok
-        assigns(:surveys).should include @published_survey
-        assigns(:surveys).should_not include @unpublished_survey
+      context "when CSO admin is logged in" do
+        before(:each) do
+          sign_in_as('cso_admin')
+          @unpublished_survey = FactoryGirl.create(:survey, :published => false)
+          @published_survey = FactoryGirl.create(:survey, :published => true)
+        end
+
+        it "shows all published surveys if filter is published" do
+          get :index, :published => true
+          response.should be_ok
+          assigns(:surveys).should include @published_survey
+          assigns(:surveys).should_not include @unpublished_survey
+        end
+
+        it "shows all unpublished surveys if filter is unpublished" do
+          get :index, :published => false
+          response.should be_ok
+          assigns(:surveys).should include @unpublished_survey
+          assigns(:surveys).should_not include @published_survey
+        end
+
+        it "shows all surveys if filter is not specified" do
+          get :index
+          response.should be_ok
+          assigns(:surveys).should include @unpublished_survey
+          assigns(:surveys).should include @published_survey
+        end
       end
 
-      it "shows all unpublished surveys if filter is unpublished" do
-        get :index, :published => false
-        response.should be_ok
-        assigns(:surveys).should include @unpublished_survey
-        assigns(:surveys).should_not include @published_survey
-      end
-
-      it "shows all surveys if filter is not specified" do
-        get :index
-        response.should be_ok
-        assigns(:surveys).should include @unpublished_survey
-        assigns(:surveys).should include @published_survey
+      context "when a User is logged in" do
+        it "shows only published surveys from the user's organization" do
+          sign_in_as('user')
+          session[:user_info][:org_id] = 123
+          survey = FactoryGirl.create(:survey, :organization_id => 123, :published => true)
+          get :index
+          response.should be_ok
+          assigns(:surveys).should eq [survey]
+        end
       end
     end
   end
 
   context "DELETE 'destroy'" do
     let!(:survey) { FactoryGirl.create(:survey) }
+    before(:each) do
+      sign_in_as('cso_admin')
+    end
+
+    it "requires cso_admin for Deleting a survey" do
+      sign_in_as('user')
+      delete :destroy, :id => survey.id
+      response.should redirect_to(surveys_path)
+      flash[:error].should_not be_empty
+    end
 
     it "deletes a survey" do
       expect { delete :destroy, :id => survey.id }.to change { Survey.count }.by(-1)
@@ -60,36 +87,39 @@ describe SurveysController do
   end
 
   context "GET 'new" do
-    it "assigns the survey instance variable" do
-      session[:user_info] = { :role => 'cso_admin'}
-      get :new
-      assigns(:survey).should_not be_nil
+
+    before(:each) do
+      sign_in_as('cso_admin')
     end
 
-    context "allows only a CSO admin to create a survey" do
-      it "does not let a user create a survey" do
-        session[:user_info] = { :role => 'user'}
-        post :create, :survey => @survey_attributes
-        response.should redirect_to surveys_path
-        flash[:error].should_not be_nil
-      end
+    it "requires cso_admin for creating a survey" do
+      sign_in_as('user')
+      get :new
+      response.should redirect_to(surveys_path)
+      flash[:error].should_not be_empty
+    end
 
-      it "does not let an admin create a survey" do
-        session[:user_info] = { :role => 'admin'}
-        post :create, :survey => @survey_attributes
-        response.should redirect_to surveys_path
-        flash[:error].should_not be_nil
-      end
+    it "assigns the survey instance variable" do
+      get :new
+      assigns(:survey).should_not be_nil
     end
   end
 
   context "POST 'create'" do
-    context "when save is unsuccessful" do
-      before(:each) do
-        @survey_attributes = FactoryGirl.attributes_for(:survey)
-        session[:user_info] = { :org_id => 123, :role => 'cso_admin' }
-      end
+    before(:each) do
+      sign_in_as('cso_admin')
+      session[:user_info][:org_id] = 123
+      @survey_attributes = FactoryGirl.attributes_for(:survey)
+    end
 
+    it "requires cso_admin for creating a survey" do
+      sign_in_as('user')
+      post :create, :survey => @survey_attributes
+      response.should redirect_to(surveys_path)
+      flash[:error].should_not be_empty
+    end
+
+    context "when save is unsuccessful" do
       it "redirects to the surveys build path" do
         post :create, :survey => @survey_attributes
         created_survey = Survey.find_last_by_name(@survey_attributes[:name])
@@ -110,7 +140,6 @@ describe SurveysController do
 
     context "when save is unsuccessful" do
       it "renders the new page" do
-        session[:user_info] = { :org_id => 123, :role => 'cso_admin' }
         post :create, :surveys => { :name => "" }
         response.should be_ok
         response.should render_template(:new)
@@ -119,29 +148,63 @@ describe SurveysController do
   end
 
   context "GET 'build'" do
+    before(:each) do
+      sign_in_as('cso_admin')
+      @survey = FactoryGirl.create(:survey)
+    end
+
+    it "requires cso_admin for building a survey" do
+      sign_in_as('user')
+      get :build, :id => @survey.id
+      response.should redirect_to(surveys_path)
+      flash[:error].should_not be_empty
+    end
+
     it "renders the 'build' template" do
-      survey = FactoryGirl.create(:survey)
-      get :build, :id => survey.id
+      get :build, :id => @survey.id
       response.should render_template(:build)
     end
   end
 
   context "PUT 'publish'" do
+    before(:each) do
+      sign_in_as('cso_admin')
+      @survey = FactoryGirl.create(:survey)
+    end
+
+    it "requires cso_admin for publishing a survey" do
+      sign_in_as('user')
+      put :publish, :survey_id => @survey.id
+      response.should redirect_to(surveys_path)
+      flash[:error].should_not be_empty
+    end
+
     it "changes the status of a survey from unpublished to published" do
-      survey = FactoryGirl.create(:survey)
-      put :publish, :survey_id => survey.id
+      put :publish, :survey_id => @survey.id
       response.should redirect_to(surveys_path)
       flash[:notice].should_not be_nil
-      Survey.find(survey.id).should be_published
+      Survey.find(@survey.id).should be_published
     end
   end
+
   context "PUT 'unpublish'" do
+    before(:each) do
+      sign_in_as('cso_admin')
+      @survey = FactoryGirl.create(:survey, :published => true)
+    end
+
+    it "requires cso_admin for unpublishing a survey" do
+      sign_in_as('user')
+      put :unpublish, :survey_id => @survey.id
+      response.should redirect_to(surveys_path)
+      flash[:error].should_not be_empty
+    end
+
     it "changes the status of a survey from published to unpublished" do
-      survey = FactoryGirl.create(:survey, :published => true)
-      put :unpublish, :survey_id => survey.id
+      put :unpublish, :survey_id => @survey.id
       response.should redirect_to(surveys_path)
       flash[:notice].should_not be_nil
-      Survey.find(survey.id).should_not be_published
+      Survey.find(@survey.id).should_not be_published
     end
   end
 end

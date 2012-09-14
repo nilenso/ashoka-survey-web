@@ -1,5 +1,5 @@
 class SurveysController < ApplicationController
-  before_filter :require_cso_admin, :only => [:create, :new]
+  before_filter :require_cso_admin, :except => :index
 
   def index
     unless params[:published].nil?
@@ -50,8 +50,10 @@ class SurveysController < ApplicationController
     redirect_to surveys_path
   end
 
+  private
+
   def require_cso_admin
-    role = session[:user_info][:role] if session[:user_info]
+    role = session[:user_info][:role] if user_currently_logged_in?
     unless role == 'cso_admin'
       flash[:error] = t "flash.not_authorized"
       redirect_to surveys_path

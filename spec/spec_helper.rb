@@ -67,3 +67,8 @@ Spork.each_run do
   # This code will be run each time you run your specs.
 
 end
+
+def sign_in_as(role)
+  session[:user_id] = 123
+  session[:user_info] = { :role => role }
+end
