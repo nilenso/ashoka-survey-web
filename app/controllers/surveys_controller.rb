@@ -1,5 +1,5 @@
 class SurveysController < ApplicationController
-  before_filter :require_cso_admin, :except => :index
+  before_filter :require_cso_admin, :except => [:index, :build]
 
   def index
     unless params[:published].nil?

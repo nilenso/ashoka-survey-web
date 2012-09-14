@@ -154,6 +154,7 @@ describe SurveysController do
     end
 
     it "requires cso_admin for building a survey" do
+      pending
       sign_in_as('user')
       get :build, :id => @survey.id
       response.should redirect_to(surveys_path)
