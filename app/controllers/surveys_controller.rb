@@ -2,11 +2,18 @@ class SurveysController < ApplicationController
   before_filter :require_cso_admin, :except => [:index, :build]
 
   def index
-    unless params[:published].nil?
-      @surveys = Survey.where(:published => params[:published]).paginate(:page => params[:page], :per_page => 10)
+    filter = {}
+    if !user_currently_logged_in?
+      filter[:name] = 'foo'
+      #temporary fix for 'public' surveys
     else
-      @surveys = Survey.paginate(:page => params[:page], :per_page => 10)
+      filter[:organization_id] = session[:user_info][:org_id]
+      filter[:published] = params[:published] unless params[:published].nil?
+      if session[:user_info][:role] == 'user'
+        filter[:published] = true
+      end
     end
+    @surveys = Survey.where(filter).paginate(:page => params[:page], :per_page => 10)
   end
 
   def destroy

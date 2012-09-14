@@ -54,6 +54,7 @@ describe SurveysController do
           sign_in_as('user')
           session[:user_info][:org_id] = 123
           survey = FactoryGirl.create(:survey, :organization_id => 123, :published => true)
+          another_survey = FactoryGirl.create(:survey, :organization_id => 125, :published => true)
           get :index
           response.should be_ok
           assigns(:surveys).should eq [survey]
