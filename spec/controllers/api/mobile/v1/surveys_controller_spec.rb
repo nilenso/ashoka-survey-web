@@ -12,12 +12,22 @@ module Api
             lambda { JSON.parse(response.body) }.should_not raise_error
           end
 
-          it "responds with the survey names" do
-            surveys = FactoryGirl.create_list(:survey, 5)
+          it "responds with the name, expiry date and the description of the survey" do
+            FactoryGirl.create(:survey)
+            get :index
+            returned_json = JSON.parse(response.body).first
+            returned_json.keys.should =~ ['name', 'description', 'expiry_date']
+          end
+
+          it "responds with details for all the surveys stored" do
+            surveys = FactoryGirl.create_list(:survey, 15)
             get :index
             returned_json = JSON.parse(response.body)
-            surveys.map(&:name).each do |survey_name|
-              returned_json.should include survey_name
+            returned_json.length.should == 15
+            surveys.each_with_index do |survey, index|
+              returned_json[index]['name'].should == survey.name
+              returned_json[index]['description'].should == survey.description
+              Date.parse(returned_json[index]['expiry_date']).should == survey.expiry_date
             end
           end
         end
