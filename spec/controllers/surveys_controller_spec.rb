@@ -23,8 +23,10 @@ describe SurveysController do
       context "when CSO admin is logged in" do
         before(:each) do
           sign_in_as('cso_admin')
-          @unpublished_survey = FactoryGirl.create(:survey, :published => false)
-          @published_survey = FactoryGirl.create(:survey, :published => true)
+          organization = FactoryGirl.create(:organization)
+          session[:user_info][:org_id] = organization.id
+          @unpublished_survey = FactoryGirl.create(:survey, :published => false, :organization => organization)
+          @published_survey = FactoryGirl.create(:survey, :published => true, :organization => organization)
         end
 
         it "shows all published surveys if filter is published" do
@@ -52,8 +54,9 @@ describe SurveysController do
       context "when a User is logged in" do
         it "shows only published surveys from the user's organization" do
           sign_in_as('user')
-          session[:user_info][:org_id] = 123
-          survey = FactoryGirl.create(:survey, :organization_id => 123, :published => true)
+          organization = FactoryGirl.create(:organization)
+          session[:user_info][:org_id] = organization.id
+          survey = FactoryGirl.create(:survey, :organization => organization, :published => true)
           another_survey = FactoryGirl.create(:survey, :organization_id => 125, :published => true)
           get :index
           response.should be_ok
