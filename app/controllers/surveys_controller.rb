@@ -7,7 +7,7 @@ class SurveysController < ApplicationController
       filter[:name] = 'foo'
       #temporary fix for 'public' surveys
     else
-      filter[:owner_org_id] = session[:user_info][:org_id]
+      filter[:organization_id] = session[:user_info][:org_id]
       filter[:published] = params[:published] unless params[:published].nil?
       if session[:user_info][:role] == 'user'
         filter[:published] = true
@@ -29,7 +29,7 @@ class SurveysController < ApplicationController
 
   def create
     @survey = Survey.new(params[:survey])
-    @survey.owner_org_id = session[:user_info][:org_id]
+    @survey.organization_id = session[:user_info][:org_id]
 
     if @survey.save
       flash[:notice] = t "flash.survey_created"
@@ -60,7 +60,7 @@ class SurveysController < ApplicationController
   def share
     @survey = Survey.find(params[:survey_id])
     @organizations = session[:user_info][:organizations]
-    @organizations.select!{ |org| org[:id] != @survey.owner_org_id }
+    @organizations.select!{ |org| org[:id] != @survey.organization_id }
   end
 
   def update_shared_orgs

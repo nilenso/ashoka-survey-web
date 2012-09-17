@@ -53,8 +53,8 @@ describe SurveysController do
         it "shows only published surveys from the user's organization" do
           sign_in_as('user')
           session[:user_info][:org_id] = 123
-          survey = FactoryGirl.create(:survey, :owner_org_id => 123, :published => true)
-          another_survey = FactoryGirl.create(:survey, :owner_org_id => 125, :published => true)
+          survey = FactoryGirl.create(:survey, :organization_id => 123, :published => true)
+          another_survey = FactoryGirl.create(:survey, :organization_id => 125, :published => true)
           get :index
           response.should be_ok
           assigns(:surveys).should eq [survey]
@@ -135,7 +135,7 @@ describe SurveysController do
       it "assigns the organization id of the current user to the survey" do
         post :create, :survey => @survey_attributes
         created_survey = Survey.find_last_by_name(@survey_attributes[:name])
-        created_survey.owner_org_id.should == session[:user_info][:org_id]
+        created_survey.organization_id.should == session[:user_info][:org_id]
       end
     end
 
@@ -214,7 +214,7 @@ describe SurveysController do
     before(:each) do
       sign_in_as('cso_admin')
       session[:user_info][:organizations] = [{:id => 123, :name => "foo"}, {:id => 12, :name => "nid"}]
-      @survey = FactoryGirl.create(:survey, :owner_org_id => 12)
+      @survey = FactoryGirl.create(:survey, :organization_id => 12)
     end
     it "renders the share page with a list of organizations except survey's owner organization" do
       get :share, :survey_id => @survey.id
