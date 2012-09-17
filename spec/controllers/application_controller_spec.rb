@@ -39,7 +39,7 @@ describe ApplicationController do
     it "clears the session hash" do
       session[:user_id] = 'sigurros'
       session[:access_token] = 'isawesome'
-      
+
       post :create
 
       session[:user_id].should be_nil
@@ -53,5 +53,12 @@ describe ApplicationController do
     controller.user_currently_logged_in?.should be_false
     session[:user_id] = 1
     controller.user_currently_logged_in?.should be_true
+  end
+
+  it "knows if the current user is a cso admin" do
+    sign_in_as('cso_admin')
+    controller.signed_in_as_cso_admin?.should be_true
+    sign_in_as('user')
+    controller.signed_in_as_cso_admin?.should be_false
   end
 end

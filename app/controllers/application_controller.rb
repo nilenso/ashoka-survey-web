@@ -18,7 +18,11 @@ class ApplicationController < ActionController::Base
   def user_currently_logged_in?
     session[:user_id].present?
   end
-  helper_method :user_currently_logged_in?
+
+  def signed_in_as_cso_admin?
+    session[:user_info][:role] == "cso_admin" if user_currently_logged_in?
+  end
+  helper_method :user_currently_logged_in?, :signed_in_as_cso_admin?
 
   private
 

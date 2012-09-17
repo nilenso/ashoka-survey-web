@@ -2,12 +2,16 @@
 
 <h1> <%= t '.list_of_surveys' %> </h1>
 
-<%= link_to t(".create_survey"), new_survey_path, :action => :post %>
-<div class="filters">
-  <%= t(".show") %> : <%= link_to t(".published"), surveys_path(:published => true) %> |
-  <%= link_to t(".unpublished"), surveys_path(:published => false) %> |
-  <%= link_to t(".all"), surveys_path %>
-</div>
+<% if signed_in_as_cso_admin? %>
+  <div class="admin_tasks">
+    <%= link_to t(".create_survey"), new_survey_path, :action => :post %>
+    <div class="filters">
+      <%= t(".show") %> : <%= link_to t(".published"), surveys_path(:published => true) %> |
+      <%= link_to t(".unpublished"), surveys_path(:published => false) %> |
+      <%= link_to t(".all"), surveys_path %>
+    </div>
+  </div>
+<% end %>
 
 <div>
   <% unless @surveys.blank? %>
@@ -42,14 +46,16 @@
             <%= survey.responses.count %>
             <%= link_to image_tag("add.png", :title => t(".add_response")), new_survey_response_path(survey.id) %>
           </td>
-          <td>
-            <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } %>
-            <% unless survey.published %>
-              <%= link_to button_tag(t ".publish_survey"), survey_publish_path(survey.id), :method => :put, :data => { :confirm => t(:confirm) } %>
-            <% else %>
-              <%= link_to button_tag(t ".unpublish_survey"), survey_unpublish_path(survey.id), :method => :put, :data => { :confirm => t(:confirm) } %>
+          <td class="cso_admin_operations">
+            <% if signed_in_as_cso_admin? %>
+              <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } %>
+              <% unless survey.published %>
+                <%= link_to button_tag(t ".publish_survey"), survey_publish_path(survey.id), :method => :put, :data => { :confirm => t(:confirm) } %>
+              <% else %>
+                <%= link_to button_tag(t ".unpublish_survey"), survey_unpublish_path(survey.id), :method => :put, :data => { :confirm => t(:confirm) } %>
+              <% end %>
+              <%= link_to button_tag(t ".share_survey"), survey_share_path(survey.id) %>
             <% end %>
-            <%= link_to button_tag(t ".share_survey"), survey_share_path(survey.id) %>
           </td>
         </tr>
         <% end %>
