@@ -15,7 +15,7 @@ Spork.prefork do
 
   RSpec.configure do |config|
     config.fixture_path = "#{::Rails.root}/spec/fixtures"
-    config.use_transactional_fixtures = true
+    config.use_transactional_fixtures = false
     config.infer_base_class_for_anonymous_controllers = false
     config.order = "random"
 
@@ -34,6 +34,15 @@ Spork.prefork do
       },
       :credentials => { :token => "thisisatoken" }
     })
+
+    config.before(:each) do
+      DatabaseCleaner.strategy = Capybara.current_driver == :webkit ? :truncation : :transaction
+      DatabaseCleaner.start
+    end
+
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
   end
 end
 
