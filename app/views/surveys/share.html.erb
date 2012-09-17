@@ -1,7 +1,7 @@
 <h1> <%= t ".share_survey" %> </h1>
 
-<%= semantic_form_for @survey, :url => surveys_url do |f| %>
-<%= f.input :shared_org_ids, :as => :check_boxes, :collection => @organizations.map { |x| x[:name] }, :label => "Choose organizations to share with:" %>
+<%= semantic_form_for @survey, :url => survey_update_shared_orgs_path(@survey.id) do |f| %>
+<%= f.input :shared_org_ids, :as => :check_boxes, :collection => @organizations, :label => "Choose organizations to share with:" %>
 	<%= f.actions do %>
      <%= f.action :submit, :as => :button %>
   <% end %>

@@ -63,6 +63,14 @@ class SurveysController < ApplicationController
     @organizations.select!{ |org| org[:id] != @survey.owner_org_id }
   end
 
+  def update_shared_orgs
+    @survey = Survey.find(params[:survey_id])
+    @survey.shared_org_ids = params[:survey][:shared_org_ids].delete_if { |s| s.blank? }
+    @survey.save
+    flash[:notice] = "Successfully shared..."
+    redirect_to surveys_path
+  end
+
   private
 
   def require_cso_admin

@@ -211,15 +211,24 @@ describe SurveysController do
   end
 
   context "When sharing the survey" do
-    it "renders the share page with a list of organizations except survey's owner organization" do
+    before(:each) do
       sign_in_as('cso_admin')
       session[:user_info][:organizations] = [{:id => 123, :name => "foo"}, {:id => 12, :name => "nid"}]
-      survey = FactoryGirl.create(:survey, :owner_org_id => 12)
-
-      get :share, :survey_id => survey.id
+      @survey = FactoryGirl.create(:survey, :owner_org_id => 12)
+    end
+    it "renders the share page with a list of organizations except survey's owner organization" do
+      get :share, :survey_id => @survey.id
       response.should be_ok
       response.should render_template :share
       assigns(:organizations).should == [{"id" => 123, "name" => "foo"}]
+    end
+
+    it "updates the list of shared organizations" do
+      shared_org_ids = ["12", "45"]
+      put :update_shared_orgs, :survey_id => @survey.id, :survey => {:shared_org_ids => shared_org_ids }
+      response.should redirect_to surveys_path
+      flash[:notice].should_not be_nil
+      @survey.reload.shared_org_ids.should == shared_org_ids
     end
   end
 end
