@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120917071502) do
+ActiveRecord::Schema.define(:version => 20120917084630) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -79,10 +79,10 @@ ActiveRecord::Schema.define(:version => 20120917071502) do
     t.string   "name"
     t.date     "expiry_date"
     t.text     "description"
-    t.datetime "created_at",                        :null => false
-    t.datetime "updated_at",                        :null => false
-    t.boolean  "published",      :default => false
-    t.integer  "owner_org_id"
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
+    t.boolean  "published",       :default => false
+    t.integer  "organization_id"
     t.string   "shared_org_ids"
   end
 

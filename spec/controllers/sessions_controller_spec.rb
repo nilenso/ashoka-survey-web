@@ -24,6 +24,11 @@ describe SessionsController do
       response.should redirect_to(root_path)
       session[:access_token].should == @auth['credentials']['token']
     end
+
+    it "syncs the organizations with the session information" do
+      post :create, :provider => 'user_owner'
+      Organization.find(123).should_not be_nil
+    end
   end
 
   context "when destroying a session" do

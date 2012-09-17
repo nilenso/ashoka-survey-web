@@ -9,6 +9,7 @@ class Survey < ActiveRecord::Base
   validate :expiry_date_shoud_be_valid
   accepts_nested_attributes_for :questions
   serialize :shared_org_ids, Array
+  belongs_to :organization
 
   def publish
     self.published = true
