@@ -11,3 +11,11 @@
 select {
 	min-width: 7%;
 }
+
+form .counter{
+  float: right;
+  margin: 10px 25px 0 0;
+  color:#999;
+  }
+form .warning{color:#600;}  
+form .exceeded{color:#e00;}
