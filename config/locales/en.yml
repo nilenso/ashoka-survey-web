@@ -59,6 +59,7 @@ en:
       add_date_question: "Date Question"
       add_multi_choice_question: "Multi-choice Question"
       add_drop_down_question: "Drop Down Question"
+      add_photo_question: "Photo Question"
       pick_question_type: "Pick Question"
       question_settings: "Settings"
       pick_question_type: "Pick Question"
@@ -94,6 +95,7 @@ en:
       question:
         content: "Content"
         max_length: "Maximum Length"
+        max_size: Maximum Size
         image: "Image"
         mandatory: "Mandatory"
         min_value: Minimum value
