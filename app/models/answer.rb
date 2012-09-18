@@ -8,6 +8,10 @@ class Answer < ActiveRecord::Base
   validate :content_should_be_in_range
   has_many :choices, :dependent => :destroy
   validate :date_should_be_valid
+  attr_accessible :photo
+  has_attached_file :photo, :styles => { :medium => "300x300>"}
+  validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
+  validate :maximum_photo_size
 
   def option_ids
     self.choices.collect(&:option_id)
@@ -20,14 +24,22 @@ class Answer < ActiveRecord::Base
 
   private
 
-  def mandatory_questions_should_be_answered      
+  def maximum_photo_size
+    if question.type == "PhotoQuestion" && question.max_length
+      if question.max_length.megabytes < photo_file_size
+        errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
+      end
+    end
+  end
+
+  def mandatory_questions_should_be_answered
     if question.mandatory && has_not_been_answered?
       errors.add(:content, I18n.t('answers.validations.mandatory_question'))
     end
   end
 
   def content_should_not_exceed_max_length
-    if question.max_length && content.length > question.max_length
+    if question.type != "PhotoQuestion" && question.max_length && content.length > question.max_length
       errors.add(:content, I18n.t("answers.validations.max_length"))
     end
   end

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require "paperclip/matchers"
 
 describe Answer do
   it { should respond_to(:content) }
@@ -97,6 +98,19 @@ describe Answer do
       question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true, :options => [option])
       answer = FactoryGirl.build(:answer, :content => nil, :question_id => question.id, :option_ids => [option.id])
       answer.should be_valid
+    end
+  end
+
+  context "description" do
+    subject { FactoryGirl.create(:answer, :question => FactoryGirl.create(:question))}
+    it { should have_attached_file(:photo) }
+    it { should validate_attachment_content_type(:photo).
+         allowing('image/png').
+         rejecting('image/gif') }
+    it "should have a maximum file size as in question's max length" do
+      question = FactoryGirl.create(:question, :max_length => 2, :type => "PhotoQuestion")
+      answer = FactoryGirl.build(:answer, :question => question, :photo_file_size => 3.megabytes)
+      answer.should_not be_valid
     end
   end
 end
