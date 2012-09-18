@@ -60,6 +60,7 @@ en:
       add_multi_choice_question: "Multi-choice Question"
       add_drop_down_question: "Drop Down Question"
       add_photo_question: "Photo Question"
+      add_rating_question: "Rating Question"
       pick_question_type: "Pick Question"
       question_settings: "Settings"
       pick_question_type: "Pick Question"

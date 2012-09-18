@@ -31,6 +31,9 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       when 'photo'
         template = $('#dummy_photo_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
+      when 'rating'
+        template = $('#dummy_rating_question_template').html()
+        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
 
     this.render()
 

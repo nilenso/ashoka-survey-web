@@ -60,6 +60,7 @@ fr:
       add_multi_choice_question: "Question à choix multiples"
       add_drop_down_question: "Laissez-vous tomber Question"
       add_photo_question: "Question Photo"
+      add_rating_question: "Question Rating"
       pick_question_type: "Choisissez Type de Question"
       question_settings: "Paramètres"
       option: "Option"
