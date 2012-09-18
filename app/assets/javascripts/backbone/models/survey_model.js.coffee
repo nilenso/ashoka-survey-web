@@ -16,6 +16,8 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
         question_model = new SurveyBuilder.Models.QuestionModel({type: 'NumericQuestion'})
       when 'date'
         question_model = new SurveyBuilder.Models.QuestionModel({type: 'DateQuestion'})
+      when 'photo'
+        question_model = new SurveyBuilder.Models.QuestionModel({type: 'PhotoQuestion'})
       when 'radio'
         question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({type: 'RadioQuestion'})
       when 'multi_choice'
