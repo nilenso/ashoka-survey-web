@@ -23,7 +23,7 @@ SurveyWeb::Application.routes.draw do
 
     namespace :mobile, :defaults => { :format => 'json'} do
       scope :module => :v1 do
-        resources :surveys, :only => [:index]
+        resources :surveys, :only => [:index, :show]
       end
     end
   end

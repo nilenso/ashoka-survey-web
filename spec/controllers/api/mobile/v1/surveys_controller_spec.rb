@@ -31,6 +31,19 @@ module Api
             end
           end
         end
+
+        context "GET 'show" do
+          it "responds with all the questions in a survey" do
+            survey = FactoryGirl.create(:survey_with_questions)
+            get :show, :id => survey.id
+            returned_json = JSON.parse(response.body)
+            returned_json.length.should == 5
+            survey.questions.each_with_index do |question, index|
+              returned_json[index]['id'].should == question.id
+              returned_json[index]['content'].should == question.content
+            end
+          end
+        end
       end
     end
   end
