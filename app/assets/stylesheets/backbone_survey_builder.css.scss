@@ -37,6 +37,15 @@ h1#heading {
     div {
       margin: 0.4em 0;
     }
+    .delete_question {
+      float: right;
+      color: lighten($link_hover_color, 10%);
+      text-decoration: none;
+      font-family: sans-serif;
+      &:hover {
+        color: darken($link_hover_color, 20%);
+      }
+    }
   }
 
   textarea, input[type=text] {
