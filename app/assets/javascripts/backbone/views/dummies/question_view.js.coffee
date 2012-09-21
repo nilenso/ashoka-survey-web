@@ -19,7 +19,8 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
     $(this.el).html(Mustache.render(this.template, data))
     $(this.el).find('abbr').show() if this.model.get('mandatory')
     $('.star').raty({
-      readOnly: true
+      readOnly: true,
+      number: this.model.get('max_length') || 5  
     });
     return this
 
