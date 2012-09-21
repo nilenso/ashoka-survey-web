@@ -201,20 +201,25 @@ describe SurveysController do
     before(:each) do
       sign_in_as('cso_admin')
       @survey = FactoryGirl.create(:survey, :published => true)
+      request.env["HTTP_REFERER"] = "http://google.com"
     end
 
     it "requires cso_admin for unpublishing a survey" do
       sign_in_as('user')
       put :unpublish, :survey_id => @survey.id
-      response.should redirect_to(surveys_path)
       flash[:error].should_not be_empty
     end
 
     it "changes the status of a survey from published to unpublished" do
       put :unpublish, :survey_id => @survey.id
-      response.should redirect_to(surveys_path)
       flash[:notice].should_not be_nil
       Survey.find(@survey.id).should_not be_published
+    end
+
+    it "redirects to the last visited page" do
+      request.env["HTTP_REFERER"] = "http://google.com"
+      put :unpublish, :survey_id => @survey.id
+      response.should redirect_to("http://google.com")
     end
   end
 
