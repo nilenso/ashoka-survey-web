@@ -20,6 +20,7 @@
 //= require jquery.ui.widget
 //= require jquery.iframe-transport
 //= require jquery.fileupload
+//= require jquery.raty
 //= require jquery.charCount
 //= require spin
 //= require backbone_relational
