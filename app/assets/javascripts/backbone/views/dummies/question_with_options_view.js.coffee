@@ -6,6 +6,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
   events:
     "click": 'show_actual'
+    "click .delete_question": 'delete'
 
   initialize: (model, template) ->
     super
@@ -23,6 +24,12 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       $(this.el).find('option').text(option_value)
 
     return this
+
+  delete: ->
+    this.model.destroy()
+    this.remove()
+    this.model.actual_view.remove()
+    @destroyed = true
 
   add_new_option: (model) ->
     switch this.model.get('type')
