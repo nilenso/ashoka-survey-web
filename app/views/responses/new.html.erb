@@ -30,9 +30,11 @@
 
     <% elsif question.type == 'PhotoQuestion' %>
       <%= f.input :photo, :as => :file, :required => question.mandatory, :label => question.content %>
+
+    <% elsif question.type == 'RatingQuestion' %>
+      <%= f.input :content, :as => :hidden %>
+      <div class='star'></div>
     <% end %>
-
-
 
     <%= f.input :question_id, :as => :hidden %>
   <% end %>
@@ -50,6 +52,14 @@
         allowed: $(this).data('max-length'),
         warning: 5,
         counterText: 'Characters left: '        
+      });
+    });
+    $('.star').each(function(index){
+      $(this).raty({
+        number: $(this).data('number-of-stars') || 5,
+        click: function() {
+          $(this).prev().children('input').val($(this).raty('score'))
+        }
       });
     });
   })
