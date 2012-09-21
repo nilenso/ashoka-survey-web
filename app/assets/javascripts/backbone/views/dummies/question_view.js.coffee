@@ -5,6 +5,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
 
   events:
     "click": 'show_actual'
+    "click .delete_question": 'delete'
 
   initialize: (model, template) ->
     this.model = model
@@ -23,6 +24,12 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
       number: this.model.get('max_length') || 5  
     });
     return this
+
+  delete: ->
+    this.model.destroy()
+    this.remove()
+    this.model.actual_view.remove()
+
 
   show_actual: (event) ->
     $(this.el).trigger("dummy_click")
