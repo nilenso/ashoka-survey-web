@@ -32,8 +32,13 @@
       <%= f.input :photo, :as => :file, :required => question.mandatory, :label => question.content %>
 
     <% elsif question.type == 'RatingQuestion' %>
+      <%= f.label question.content %>
+      <% if question.mandatory %>
+       <abbr>*</abbr>
+      <% end %>
       <%= f.input :content, :as => :hidden %>
-      <div class='star'></div>
+      <div class='star' data-number-of-stars="<%= question.max_length %>"></div>
+      <%= f.semantic_errors :content %>
     <% end %>
 
     <%= f.input :question_id, :as => :hidden %>
