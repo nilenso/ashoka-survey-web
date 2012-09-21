@@ -43,6 +43,8 @@ class Answer < ActiveRecord::Base
   def content_should_not_exceed_max_length
     if question.type != "PhotoQuestion" && question.max_length && content.length > question.max_length
       errors.add(:content, I18n.t("answers.validations.max_length"))
+    elsif question.type == "RatingQuestion" && question.max_length && content.to_i > question.max_length
+      errors.add(:content, I18n.t("answers.validations.max_length"))
     end
   end
 
