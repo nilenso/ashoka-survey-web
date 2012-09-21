@@ -20,6 +20,15 @@ module Api
         end
       end
 
+      def destroy
+        begin 
+          Question.destroy(params[:id])
+          render :nothing => true
+        rescue ActiveRecord::RecordNotFound
+          render :nothing => true, :status => :bad_request
+        end
+      end
+
       def image_upload
         question = Question.find(params[:id])
         question.image = File.open(params[:image].path)

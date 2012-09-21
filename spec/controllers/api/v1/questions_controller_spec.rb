@@ -72,6 +72,27 @@ module Api
         end
       end
 
+      context "DELETE 'destroy'" do
+        it "deletes the question" do
+          question = FactoryGirl.create(:question)
+          delete :destroy, :id => question.id
+          Question.find_by_id(question.id).should be_nil
+        end
+
+        it "handles an invalid ID passed in" do
+          delete :destroy, :id => '1234567'
+          response.should_not be_ok
+        end
+
+        it "deletes all the answers for that question" do
+          question = FactoryGirl.create(:question)
+          answers = FactoryGirl.create_list(:answer, 5, :question_id => question.id)
+          expect do
+            delete :destroy, :id => question.id
+          end.to change { Answer.count }.by(-5)
+        end
+      end
+
       context "POST image_upload" do
         it "uploads the image for given question" do
           question = FactoryGirl.create(:question)
