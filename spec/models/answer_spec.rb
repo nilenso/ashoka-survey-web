@@ -16,13 +16,24 @@ describe Answer do
       answer.should_not be_valid
     end
 
-    it "does not save if content of the answer exceeds maximum length" do
-      question = FactoryGirl.create(:question, :max_length => 7)
-      answer = FactoryGirl.create(:answer, :question_id => question.id)
-      question.answers << answer
+    context "when validating max length" do
+      it "does not save if the content of the answer is larger than the max-length for a RatingQuestion" do
+        question = FactoryGirl.create(:question, :max_length => 7, :type => 'RatingQuestion')
+        answer = FactoryGirl.create(:answer, :question_id => question.id)
+        question.answers << answer
 
-      answer.content = 'foobarbaz'
-      answer.should_not be_valid
+        answer.content = '8'
+        answer.should_not be_valid
+      end
+
+      it "does not save if content of the answer length exceeds maximum length for all other question types" do
+        question = FactoryGirl.create(:question, :max_length => 7)
+        answer = FactoryGirl.create(:answer, :question_id => question.id)
+        question.answers << answer
+
+        answer.content = 'foobarbaz'
+        answer.should_not be_valid
+      end
     end
 
     it "does not save if the answer is less than the minimum value" do
