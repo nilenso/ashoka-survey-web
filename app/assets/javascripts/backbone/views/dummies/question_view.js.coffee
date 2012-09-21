@@ -29,6 +29,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
     this.model.destroy()
     this.remove()
     this.model.actual_view.remove()
+    @destroyed = true
 
 
   show_actual: (event) ->

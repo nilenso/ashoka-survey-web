@@ -38,7 +38,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     this.render()
 
   render: ->
-    $(this.el).append(question.render().el) for question in @questions
+    ($(this.el).append(question.render().el) unless question.destroyed) for question in @questions 
     return this
 
   unfocus_all: ->
