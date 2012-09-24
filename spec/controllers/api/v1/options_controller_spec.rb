@@ -59,6 +59,19 @@ module Api
           end
         end
       end
+
+      context "DELETE 'destroy'" do
+        it 'deletes the option' do
+          option = FactoryGirl.create(:option)
+          delete :destroy, :id => option.id
+          Option.find_by_id(option.id).should be_nil
+        end
+
+        it "handles an invalid option id" do
+          delete :destroy, :id => 2435678
+          response.should_not be_ok
+        end
+      end
     end
   end
 end

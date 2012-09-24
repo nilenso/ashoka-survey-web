@@ -18,6 +18,15 @@ module Api
           render :json => option.errors.full_messages, :status => :bad_request
         end
       end
+
+      def destroy
+        begin
+          Option.destroy(params[:id])
+          render :nothing => true
+        rescue ActiveRecord::RecordNotFound
+          render :nothing => true, :status => :bad_request
+        end
+      end
     end
   end
 end
