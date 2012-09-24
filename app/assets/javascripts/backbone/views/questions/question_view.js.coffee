@@ -11,18 +11,21 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
   initialize: (@model, @template) ->
     this.model.actual_view = this
     this.model.on('save:completed', this.renderImageUploader, this)
+    this.model.on('change', this.render, this)
 
   render:(template) ->
     $(this.el).html(Mustache.render(this.template, this.model.toJSON()))
     return this
 
   handle_textbox_keyup: (event) ->
+    this.model.off('change', this.render)
     input = $(event.target)
     propertyHash = {}
     propertyHash[input.attr('name')] = input.val()
     this.update_model(propertyHash)
 
   handle_checkbox_change: (event) ->
+    this.model.off('change', this.render)
     input = $(event.target)
     propertyHash = {}
     propertyHash[input.attr('name')] = input.is(':checked')
