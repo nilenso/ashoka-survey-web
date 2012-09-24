@@ -13,6 +13,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     super
     this.options = []
     this.model.on('add:options', this.add_new_option, this)
+    this.model.get('options').on('destroy', this.delete_option_view, this)
 
   add_new_option_model: ->
     this.model.create_new_option()
@@ -29,3 +30,8 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     option = new SurveyBuilder.Views.Questions.OptionView(option_model, template)
     this.options.push option
     $(this.el).append($(option.render().el))
+
+  delete_option_view: (model) ->
+    option = _(@options).find((option) -> option.model == model)
+    @options = _(@options).without(option)
+    option.remove()

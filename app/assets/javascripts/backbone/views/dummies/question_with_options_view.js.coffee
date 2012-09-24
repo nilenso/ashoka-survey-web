@@ -12,6 +12,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     super
     this.options = []
     this.model.get('options').on('change', this.render, this)
+    this.model.get('options').on('destroy', this.delete_option_view, this)
     this.model.on('add:options', this.add_new_option, this)
 
   render: ->
@@ -37,3 +38,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     this.options.push new SurveyBuilder.Views.Dummies.OptionView(model, template)
     this.render()
 
+  delete_option_view: (model) ->
+    option = _(@options).find((option) -> option.model == model )
+    @options = _(@options).without(option)
+    this.render()
