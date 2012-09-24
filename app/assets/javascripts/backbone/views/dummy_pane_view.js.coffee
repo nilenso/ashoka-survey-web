@@ -2,6 +2,9 @@
 class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   el: "#dummy_pane"
 
+  events:
+    'question:delete' : 'delete_question'
+
   initialize: ->
     @questions = []
 
@@ -38,8 +41,13 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     this.render()
 
   render: ->
-    ($(this.el).append(question.render().el) unless question.destroyed) for question in @questions 
+    ($(this.el).append(question.render().el)) for question in @questions 
     return this
 
   unfocus_all: ->
     $(question.el).removeClass("active") for question in @questions
+
+  delete_question: (event) ->
+    question = _(@questions).find((question) -> question.el == event.target )
+    @questions = _(@questions).without(question)
+    
