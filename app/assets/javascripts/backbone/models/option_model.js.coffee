@@ -24,7 +24,9 @@ SurveyBuilder.Models.OptionModel.setup()
 # Collection of all options for radio question
 class SurveyBuilder.Collections.OptionCollection extends Backbone.Collection
   model: SurveyBuilder.Models.OptionModel
-  url: '/api/options'
+
+  url: ->
+    '/api/options?question_id=' + this.question.id
 
   has_errors: ->
     this.any((option) -> option.has_errors())

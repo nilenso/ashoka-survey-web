@@ -31,16 +31,7 @@ module Api
       def index
         question = Question.find_by_id(params[:question_id])
         if question
-          render :json => question.options.select('id')
-        else
-          render :nothing => true, :status => :bad_request
-        end
-      end
-
-      def show
-        option = Option.find_by_id(params[:id])
-        if option
-          render :json => option
+          render :json => question.options
         else
           render :nothing => true, :status => :bad_request
         end
