@@ -134,6 +134,20 @@ module Api
           response.should_not be_ok
         end
       end
+
+      context "GET 'show'" do
+        it "returns the question as JSON" do
+          question = FactoryGirl.create(:question)
+          get :show, :id => question.id
+          response.should be_ok
+          response.body.should == question.to_json
+        end
+
+        it "returns a :bad_request for an invalid question_id" do
+          get :show, :id => 45678787657
+          response.should_not be_ok
+        end
+      end
     end
   end
 end

@@ -44,6 +44,15 @@ module Api
           render :nothing => true, :status => :bad_request
         end
       end
+
+      def show
+        question = Question.find_by_id(params[:id])
+        if question
+          render :json => question.to_json
+        else
+          render :nothing => true, :status => :bad_request
+        end
+      end
     end
   end
 end
