@@ -27,7 +27,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
   delete: ->
     this.model.destroy()
-    $(this.el).trigger('question:delete')
+    $(this.el).trigger('dummy_question_view:delete')
     $(this.el).remove()
 
   add_new_option: (model) ->

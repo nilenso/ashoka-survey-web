@@ -3,7 +3,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   el: "#dummy_pane"
 
   events:
-    'question:delete' : 'delete_question'
+    'dummy_question_view:delete' : 'delete_question'
 
   initialize: ->
     @questions = []
