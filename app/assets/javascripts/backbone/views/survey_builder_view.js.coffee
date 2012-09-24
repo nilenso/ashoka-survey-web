@@ -15,6 +15,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     $(this.el).ajaxStart(window.notifications_view.show_spinner)
     $(this.el).ajaxStop(window.notifications_view.hide_spinner)
     $( "#sidebar" ).tabs();
+    $.getJSON("/api/questions?survey_id=#{survey_id}", this.preload_questions)
 
   new_question: (event, type) ->
     #TODO: Switch tab here.
@@ -22,6 +23,15 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.dummy_pane.add_question(type, model)
     this.settings_pane.add_question(type, model)
     model.save_model()
+
+  preload_questions: (data) =>
+    console.log(data)
+    _(data).each (question) =>
+      model = this.survey.add_new_question_model(question.type)
+      model.set('id', question.id)
+      model.fetch()
+      this.dummy_pane.add_question(question.type, model)
+      this.settings_pane.add_question(question.type, model)
 
   handle_dummy_click: ->
     this.hide_all()
