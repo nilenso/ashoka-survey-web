@@ -32,6 +32,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     question_model.set('order_number' : this.order_counter)
     @remove_image_attributes(question_model)
     @question_models.push question_model
+    question_model.on('destroy', this.delete_question_model, this)
     question_model
 
   remove_image_attributes: (model) ->
@@ -44,6 +45,10 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
   save_all_questions: ->
     for question_model in @question_models
       question_model.save_model()
+
+  delete_question_model: (event_model) ->
+    question_model = _(@question_models).find((question_model) -> question_model == event_model )
+    @question_models = _(@question_models).without(question_model)
 
   has_errors: ->
     _.any(@question_models, (question_model) -> question_model.has_errors())

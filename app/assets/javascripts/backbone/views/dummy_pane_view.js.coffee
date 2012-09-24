@@ -2,9 +2,6 @@
 class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   el: "#dummy_pane"
 
-  events:
-    'dummy_question_view:delete' : 'delete_question'
-
   initialize: ->
     @questions = []
 
@@ -38,6 +35,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
         template = $('#dummy_rating_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
 
+    model.on('destroy', this.delete_question_view, this)
     this.render()
 
   render: ->
@@ -47,7 +45,8 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   unfocus_all: ->
     $(question.el).removeClass("active") for question in @questions
 
-  delete_question: (event) ->
-    question = _(@questions).find((question) -> question.el == event.target )
+  delete_question_view: (model) ->
+    question = _(@questions).find((question) -> question.model == model )
     @questions = _(@questions).without(question)
+    question.remove()
     

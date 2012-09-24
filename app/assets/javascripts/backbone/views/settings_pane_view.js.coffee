@@ -2,9 +2,6 @@
 class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
   el: "#settings_pane"
 
-  events:
-    'actual_question_view:delete' : 'delete_question'
-
   initialize: ->
     @questions = []
 
@@ -39,6 +36,7 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
         question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
 
     @questions.push(question)
+    model.on('destroy', this.delete_question_view, this)
     $(this.el).append($(question.render().el))
     $(question.render().el).hide()
 
@@ -46,9 +44,10 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
     $(this.el).append($(question.render().el)) for question in @questions
     return this
 
-  delete_question: (event) ->
-    question = _(@questions).find((question) -> question.el == event.target )
+  delete_question_view: (model) ->
+    question = _(@questions).find((question) -> question.model == model )
     @questions = _(@questions).without(question)
+    question.remove()
 
   hide_all: ->
     $(question.el).hide() for question in @questions
