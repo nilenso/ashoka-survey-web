@@ -94,6 +94,20 @@ module Api
           JSON.parse(response.body).should be_empty
         end
       end
+      context "GET 'show'" do
+        it "returns an option" do
+          question = FactoryGirl.create(:question)
+          option = FactoryGirl.create(:option, :question => question)
+          get :show, :id => option.id
+          response.should be_ok
+          response.body.should == option.to_json
+        end
+
+        it "returns a :bad_request for an invalid  ID" do
+          get :show, :id => 123567
+          response.should_not be_ok
+        end
+      end
     end
   end
 end

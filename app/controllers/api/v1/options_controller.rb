@@ -36,6 +36,15 @@ module Api
           render :nothing => true, :status => :bad_request
         end
       end
+
+      def show
+        option = Option.find_by_id(params[:id])
+        if option
+          render :json => option
+        else
+          render :nothing => true, :status => :bad_request
+        end
+      end
     end
   end
 end

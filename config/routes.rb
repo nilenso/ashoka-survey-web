@@ -17,7 +17,7 @@ SurveyWeb::Application.routes.draw do
   namespace :api, :defaults => { :format => 'json' } do
     scope :module => :v1 do
       resources :questions, :except => [:edit, :new]
-      resources :options, :only => [:create, :update, :destroy, :index]
+      resources :options, :except => [:edit, :new]
       post 'questions/:id/image_upload' => 'questions#image_upload'
     end
 
