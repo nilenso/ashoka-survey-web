@@ -14,6 +14,12 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     this.options = []
     this.model.on('add:options', this.add_new_option, this)
     this.model.get('options').on('destroy', this.delete_option_view, this)
+    this.model.on('reset:options', this.preload_options, this)
+
+  preload_options: (collection) ->
+    collection.each( (model) =>
+      this.add_new_option(model)
+    )
 
   add_new_option_model: ->
     this.model.create_new_option()
