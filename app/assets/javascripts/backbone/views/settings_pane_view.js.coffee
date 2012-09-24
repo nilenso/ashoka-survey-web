@@ -7,31 +7,31 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
 
   add_question: (type, model) ->
     switch type
-      when 'single_line'
+      when 'SingleLineQuestion'
         template = $('#single_line_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'multiline'
+      when 'MultilineQuestion'
         template = $('#multiline_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'numeric'
+      when 'NumericQuestion'
         template = $('#numeric_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'date'
+      when 'DateQuestion'
         template = $('#date_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'radio'
+      when 'RadioQuestion'
         template = $('#radio_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
-      when 'multi_choice'
+      when 'MultiChoiceQuestion'
         template = $('#multi_choice_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
-      when 'drop_down'
+      when 'DropDownQuestion'
         template = $('#drop_down_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
-      when 'photo'
+      when 'PhotoQuestion'
         template = $('#photo_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'rating'
+      when 'RatingQuestion'
         template = $('#rating_question_template').html()
         question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
 

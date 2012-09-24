@@ -8,24 +8,15 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
 
   add_new_question_model:(type) ->
     switch type
-      when 'single_line'
-        question_model = new SurveyBuilder.Models.QuestionModel({type: 'SingleLineQuestion'})
-      when 'multiline'
-        question_model = new SurveyBuilder.Models.QuestionModel({type: 'MultilineQuestion'})
-      when 'numeric'
-        question_model = new SurveyBuilder.Models.QuestionModel({type: 'NumericQuestion'})
-      when 'date'
-        question_model = new SurveyBuilder.Models.QuestionModel({type: 'DateQuestion'})
-      when 'photo'
-        question_model = new SurveyBuilder.Models.QuestionModel({type: 'PhotoQuestion'})
-      when 'rating'
-        question_model = new SurveyBuilder.Models.QuestionModel({type: 'RatingQuestion'})
-      when 'radio'
-        question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({type: 'RadioQuestion'})
-      when 'multi_choice'
+      when 'MultiChoiceQuestion'
         question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({type: 'MultiChoiceQuestion'})
-      when 'drop_down'
+      when 'DropDownQuestion'
         question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({type: 'DropDownQuestion'})
+      when 'RadioQuestion'
+        question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({type: 'RadioQuestion'})
+      else
+        question_model = new SurveyBuilder.Models.QuestionModel({type: type})
+
 
     this.order_counter++
     question_model.set('survey_id' : this.survey_id)

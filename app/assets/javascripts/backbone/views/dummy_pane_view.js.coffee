@@ -7,31 +7,31 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
 
   add_question: (type, model) ->
     switch type
-      when 'single_line'
+      when 'SingleLineQuestion'
         template = $('#dummy_single_line_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
-      when 'multiline'
+      when 'MultilineQuestion'
         template = $('#dummy_multiline_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
-      when 'numeric'
+      when 'NumericQuestion'
         template = $('#dummy_numeric_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
-      when 'date'
+      when 'DateQuestion'
         template = $('#dummy_date_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
-      when 'radio'
+      when 'RadioQuestion'
         template = $('#dummy_radio_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
-      when 'multi_choice'
+      when 'MultiChoiceQuestion'
         template = $('#dummy_multi_choice_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
-      when 'drop_down'
+      when 'DropDownQuestion'
         template = $('#dummy_drop_down_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
-      when 'photo'
+      when 'PhotoQuestion'
         template = $('#dummy_photo_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
-      when 'rating'
+      when 'RatingQuestion'
         template = $('#dummy_rating_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
 
