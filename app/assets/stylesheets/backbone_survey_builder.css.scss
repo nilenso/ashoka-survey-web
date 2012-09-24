@@ -36,12 +36,6 @@ h1#heading {
     }
     div {
       margin: 0.4em 0;
-      .delete_option {
-        background-image: url('/assets/minus.png');
-        width: 16px;
-        height: 16px;
-        float: right;
-      }
     }
     .delete_question {
       float: right;
@@ -109,6 +103,13 @@ h1#heading {
   padding: 1em;
   max-height: 250px;
   overflow: auto;
+
+  .delete_option {
+    background-image: url('/assets/minus.png');
+    width: 16px;
+    height: 16px;
+    float: right;
+  }
 
   #questions {
     padding: 4px;
