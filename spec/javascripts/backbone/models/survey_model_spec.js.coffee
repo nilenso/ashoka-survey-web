@@ -28,3 +28,10 @@ describe "SurveyBuilder.Models.SurveyModel", ->
     spyOn(question_model, 'save_model')
     survey_model.save_all_questions()
     expect(question_model.save_model).toHaveBeenCalled()
+
+  it "can delete any of it's question models", ->
+    survey_id = "321"
+    survey_model = new SurveyBuilder.Models.SurveyModel(survey_id)
+    question_model = survey_model.add_new_question_model('radio')
+    survey_model.delete_question_model(question_model)
+    expect(survey_model.question_models).not.toContain(question_model)
