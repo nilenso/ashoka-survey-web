@@ -2,9 +2,6 @@
 # Interfaces between the views and the rails model for a radio question with a collection of options
 class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models.QuestionModel
 
-  initialize: ->
-    @order_counter = 0
-
   relations: [
     {
       type: Backbone.HasMany,
@@ -26,15 +23,22 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
   #Can't have a blank radio question. Initialize with 3 radio options
   seed: ->
     unless this.seeded
-      this.get('options').create({content: "First Option", order_number: ++@order_counter})
-      this.get('options').create({content: "Second Option", order_number: ++@order_counter})
-      this.get('options').create({content: "Third Option", order_number: ++@order_counter})
+      this.get('options').create({content: "First Option", order_number: this.get_order_counter() })
+      this.get('options').create({content: "Second Option", order_number: this.get_order_counter() })
+      this.get('options').create({content: "Third Option", order_number: this.get_order_counter() })
       this.seeded = true
 
   save_model: ->
     super
     this.get('options').each (option) ->
       option.save_model()
+
+  get_order_counter: ->
+    if this.get('options').isEmpty()
+      0
+    else
+      prev_order_counter = this.get('options').last().get('order_number')
+      prev_order_counter + 1 
 
   fetch: ->
     super
@@ -46,7 +50,7 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     super
 
   create_new_option: ->
-    this.get('options').create({content: "Another Option", order_number: ++@order_counter})
+    this.get('options').create({content: "Another Option", order_number: this.get_order_counter() })
 
   has_drop_down_options: ->
     this.get('type') == "DropDownQuestion" && this.get('options').first()
