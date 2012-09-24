@@ -25,13 +25,16 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     model.save_model()
 
   preload_questions: (data) =>
-    console.log(data)
+    $(this.el).bind('ajaxStop.preload', ->
+      window.loading_overlay.hide_overlay()
+      $(this.el).unbind('ajaxStop.preload')
+    )
     _(data).each (question) =>
       model = this.survey.add_new_question_model(question.type)
       model.set('id', question.id)
-      model.fetch()
       this.dummy_pane.add_question(question.type, model)
       this.settings_pane.add_question(question.type, model)
+      model.fetch()
 
   handle_dummy_click: ->
     this.hide_all()
