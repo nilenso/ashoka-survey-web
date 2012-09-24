@@ -72,6 +72,28 @@ module Api
           response.should_not be_ok
         end
       end
+
+      context "GET 'index'" do
+        it "returns option IDs for a question" do
+          question = FactoryGirl.create(:question)
+          option = FactoryGirl.create(:option, :question => question)
+          get :index, :question_id => question.id
+          response.should be_ok
+          JSON.parse(response.body).should include({"id" => option.id})
+        end
+
+        it "returns a :bad_request for an invalid question ID" do
+          get :index, :question_id => 123567
+          response.should_not be_ok
+        end
+
+        it "returns nothing for a question without options" do
+          question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
+          get :index, :question_id => question.id
+          response.should be_ok
+          JSON.parse(response.body).should be_empty
+        end
+      end
     end
   end
 end
