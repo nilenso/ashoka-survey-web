@@ -35,6 +35,15 @@ module Api
         question.save
         render :json => { :image_url => question.image.url(:thumb) }
       end
+
+      def index
+        survey = Survey.find_by_id(params[:survey_id])
+        if survey
+          render :json => survey.questions.select("id, type").to_json(:methods => :type)
+        else
+          render :nothing => true, :status => :bad_request
+        end
+      end
     end
   end
 end

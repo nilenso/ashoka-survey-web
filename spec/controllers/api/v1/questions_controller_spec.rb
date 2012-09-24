@@ -111,6 +111,29 @@ module Api
           JSON.parse(response.body).should == { 'image_url' => question.reload.image.url(:thumb) }
         end
       end
+
+      context "GET 'index'" do
+        it "returns question IDs" do
+          survey = FactoryGirl.create(:survey)
+          question = FactoryGirl.create(:question, :survey_id => survey.id)
+          get :index, :survey_id => survey.id
+          response.should be_ok
+          JSON.parse(response.body).map { |hash| hash['id'] }.should include question.id
+        end
+
+        it "returns question types" do
+          survey = FactoryGirl.create(:survey)
+          question = FactoryGirl.create(:question, :survey_id => survey.id, :type => "RadioQuestion")
+          get :index, :survey_id => survey.id
+          response.should be_ok
+          JSON.parse(response.body).map { |hash| hash['type'] }.should include 'RadioQuestion'
+        end
+
+        it "returns a :bad_request if no survey_id is passed" do
+          get :index
+          response.should_not be_ok
+        end
+      end
     end
   end
 end
