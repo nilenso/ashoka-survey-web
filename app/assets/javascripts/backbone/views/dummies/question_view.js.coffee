@@ -28,6 +28,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
   delete: ->
     this.model.destroy()
     $(this.el).trigger('dummy_question_view:delete')
+    this.model.actual_view.delete()
     $(this.el).remove()
 
 

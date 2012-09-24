@@ -31,6 +31,10 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
   update_model: (propertyHash) ->
     this.model.set(propertyHash)
 
+  delete: ->
+    $(this.el).trigger('actual_question_view:delete')
+    $(this.el).remove()
+
   renderImageUploader: ->
     $(this.el).find(".fileupload").fileupload
       dataType: "json"
