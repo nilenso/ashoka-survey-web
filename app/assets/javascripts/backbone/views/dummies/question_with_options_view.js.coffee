@@ -25,11 +25,6 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
     return this
 
-  delete: ->
-    this.model.destroy()
-    $(this.el).trigger('dummy_question_view:delete')
-    $(this.el).remove()
-
   add_new_option: (model) ->
     switch this.model.get('type')
       when 'RadioQuestion'
