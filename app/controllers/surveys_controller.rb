@@ -1,6 +1,6 @@
 class SurveysController < ApplicationController
   before_filter :require_cso_admin, :except => [:index, :build]
-
+  before_filter :survey_unpublished, :only => [:build]
   def index
     filter = {}
     if !user_currently_logged_in?
@@ -78,6 +78,14 @@ class SurveysController < ApplicationController
     unless role == 'cso_admin'
       flash[:error] = t "flash.not_authorized"
       redirect_to surveys_path
+    end
+  end
+
+  def survey_unpublished
+    survey = Survey.find(params[:id])
+    if survey.published?
+      flash[:error] = t "flash.edit_published_survey"
+      redirect_to root_path
     end
   end
 end

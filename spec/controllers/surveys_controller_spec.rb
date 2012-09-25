@@ -169,6 +169,13 @@ describe SurveysController do
       get :build, :id => @survey.id
       response.should render_template(:build)
     end
+
+    it "redirect_to the root path if survey is already published" do
+      @survey.publish
+      get :build, :id => @survey.id
+      response.should redirect_to(root_path)
+      flash[:error].should_not be_nil
+    end 
   end
 
   context "PUT 'publish'" do
