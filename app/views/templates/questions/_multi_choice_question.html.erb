@@ -2,7 +2,12 @@
 <input type="text" name="content" value="{{content}}"></input>
 <div>
   <label><%= t("activerecord.attributes.question.mandatory") %> </label>
-  <input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
+  {{#mandatory}}
+		<input type="checkbox" name="mandatory" value="{{mandatory}}" checked ></input>
+	{{/mandatory}}
+	{{^mandatory}}
+		<input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
+	{{/mandatory}}
   <div class="upload_files">
     <label><%= t("activerecord.attributes.question.image") %> </label>
     <input name="image" class="fileupload" type="file" name="files[]">

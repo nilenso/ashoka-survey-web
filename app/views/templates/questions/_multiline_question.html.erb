@@ -2,7 +2,12 @@
 <input type="text" name="content" value="{{content}}"></input>
 <div>
 	<label><%= t("activerecord.attributes.question.mandatory") %> </label>
-	<input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
+	{{#mandatory}}
+		<input type="checkbox" name="mandatory" value="{{mandatory}}" checked ></input>
+	{{/mandatory}}
+	{{^mandatory}}
+		<input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
+	{{/mandatory}}
 </div>
 <div>
 	<label><%= t("activerecord.attributes.question.max_length") %> </label>
