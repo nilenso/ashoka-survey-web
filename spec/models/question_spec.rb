@@ -46,4 +46,15 @@ describe Question do
       question.order_number.should be < another_question.order_number
     end
   end
+
+  context "image_url" do
+    it "returns the image_url if the question has an image" do
+      question = FactoryGirl.create(:question, :image => File.new(Rails.root + 'spec/fixtures/images/sample.jpg'))
+      question.image_url.should == question.image.url(:thumb)
+    end
+    it "returns nil if the question doesn't have an image" do
+      question = FactoryGirl.create(:question)
+      question.image_url.should be_nil
+    end
+  end
 end

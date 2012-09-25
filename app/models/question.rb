@@ -13,6 +13,12 @@ class Question < ActiveRecord::Base
   validates_numericality_of :max_length, :only => :integer, :greater_than => 0, :allow_nil => true
 
   default_scope :order => 'order_number'
+
+  def image_url
+    return image.url(:thumb) if image.exists?
+    nil
+  end
+
   private
 
   def min_value_less_than_max_value

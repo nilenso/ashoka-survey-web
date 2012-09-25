@@ -140,7 +140,7 @@ module Api
           question = FactoryGirl.create(:question)
           get :show, :id => question.id
           response.should be_ok
-          response.body.should == question.to_json
+          response.body.should == question.to_json(:methods => :image_url)
         end
 
         it "returns a :bad_request for an invalid question_id" do
