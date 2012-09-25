@@ -15,6 +15,7 @@ class ResponsesController < ApplicationController
     @response = Response.new(params[:response])
     @response.survey = Survey.find(params[:survey_id])
     @survey = @response.survey
+    @response.user_id = current_user
     if @response.save
       redirect_to root_path, :notice => t("responses.new.response_saved")
     else

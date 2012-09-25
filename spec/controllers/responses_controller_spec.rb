@@ -54,6 +54,12 @@ describe ResponsesController do
         assigns(:response).survey.should ==  survey
       end
 
+      it "saves the id of the user taking the response" do
+        sign_in_as('user')
+        post :create, :response => response, :survey_id => survey.id
+        Response.find_by_survey_id(survey.id).user_id.should == session[:user_id]
+      end
+
       it "redirects to the root path with a flash message" do
         post :create, :response => response, :survey_id => survey.id          
         response.should redirect_to root_path

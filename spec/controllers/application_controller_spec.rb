@@ -55,6 +55,12 @@ describe ApplicationController do
     controller.user_currently_logged_in?.should be_true
   end
 
+  it "returns current user id" do
+    controller.current_user.should be_nil
+    session[:user_id] = 1
+    controller.current_user.should == 1
+  end
+
   it "knows if the current user is a cso admin" do
     sign_in_as('cso_admin')
     controller.signed_in_as_cso_admin?.should be_true

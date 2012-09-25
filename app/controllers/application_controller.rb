@@ -19,6 +19,10 @@ class ApplicationController < ActionController::Base
     session[:user_id].present?
   end
 
+  def current_user
+    session[:user_id] if session[:user_id]
+  end
+
   def signed_in_as_cso_admin?
     session[:user_info][:role] == "cso_admin" if user_currently_logged_in?
   end
