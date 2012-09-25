@@ -5,7 +5,7 @@ en:
 
   header:
     home: "Home"
-    sign_in: "Sign In"
+    log_in: "Log In"
     logout: "Log Out"
 
   flash:

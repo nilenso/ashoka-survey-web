@@ -5,7 +5,7 @@ fr:
 
   header:
     home: "Page d'accueil"
-    sign_in: "Se connecter"
+    log_in: "Connexion"
     logout: "Déconnexion"
 
   flash:
