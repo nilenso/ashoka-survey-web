@@ -1,0 +1,29 @@
+<%= stylesheet_link_tag 'surveys_list' %>
+
+<h1> <%= t '.list_of_responses' %> </h1>
+
+<% if signed_in_as_cso_admin? %>
+<% end %>
+
+<div>
+  <% unless @responses.blank? %>
+    <table class="surveys_table">
+      <thead>
+        <% @responses.first.five_answers.each do |answer| %> 
+          <th><%= answer.question.content %> </th>
+        <% end %>
+      </thead>
+      <tbody>
+        <% @responses.each do |response| %>
+        <tr class="survey_row">
+          <% response.five_answers.each do |answer| %> 
+            <td><%= answer.content %> </td>
+          <% end %>
+        </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>
+</div>
+
+<%= will_paginate @responses %>

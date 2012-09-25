@@ -9,7 +9,7 @@ SurveyWeb::Application.routes.draw do
     resources :surveys do
       put 'publish', 'unpublish', 'update_shared_orgs'
       get 'share'
-      resources :responses, :only => [:new, :create, :show]
+      resources :responses, :only => [:new, :create, :show, :index]
     end
     root :to => 'surveys#index'
   end

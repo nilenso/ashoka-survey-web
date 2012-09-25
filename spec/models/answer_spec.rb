@@ -124,4 +124,15 @@ describe Answer do
       answer.should_not be_valid
     end
   end
+
+  context "logic" do
+    it "checks whether the answer is of text type" do
+      text_question = FactoryGirl.create(:question, :type => "SingleLineQuestion")
+      text_answer = FactoryGirl.create(:answer, :question => text_question)
+      text_answer.should be_text_type 
+      non_textual_question = FactoryGirl.create(:question, :type => "MultiChoiceQuestion")
+      non_textual_answer = FactoryGirl.create(:answer, :question => non_textual_question)
+      non_textual_answer.should_not be_text_type 
+    end
+  end
 end

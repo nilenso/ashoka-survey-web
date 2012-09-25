@@ -11,6 +11,10 @@ class ResponsesController < ApplicationController
     end
   end
 
+  def index
+    @responses = Response.where(:survey_id => params[:survey_id]).paginate(:page => params[:page], :per_page => 10)
+  end
+
   def create
     @response = Response.new(params[:response])
     @response.survey = Survey.find(params[:survey_id])

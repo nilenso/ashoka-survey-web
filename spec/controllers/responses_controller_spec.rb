@@ -77,4 +77,14 @@ describe ResponsesController do
       end
     end
   end
+
+  context "GET 'index'" do
+    it "renders the list of responses for a survey" do
+      survey = FactoryGirl.create(:survey, :published => true)
+      res = FactoryGirl.attributes_for(:response, :survey => survey)
+      get :index, :survey_id => survey.id
+      response.should be_ok
+      assigns(:responses).should == Response.find_all_by_survey_id(survey.id)
+    end
+  end
 end
