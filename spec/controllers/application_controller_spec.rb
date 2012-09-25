@@ -61,6 +61,13 @@ describe ApplicationController do
     controller.current_user.should == 1
   end
 
+  it "returns current user organization id" do
+    controller.current_user_org.should be_nil
+    session[:user_id] = 12
+    session[:user_info] = {:org_id => 23} 
+    controller.current_user_org.should == 23
+  end
+
   it "knows if the current user is a cso admin" do
     sign_in_as('cso_admin')
     controller.signed_in_as_cso_admin?.should be_true

@@ -20,12 +20,17 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user
-    session[:user_id] if session[:user_id]
+    session[:user_id] if user_currently_logged_in?
   end
 
   def signed_in_as_cso_admin?
     session[:user_info][:role] == "cso_admin" if user_currently_logged_in?
   end
+
+  def current_user_org
+    session[:user_info][:org_id] if user_currently_logged_in?
+  end
+  
   helper_method :user_currently_logged_in?, :signed_in_as_cso_admin?
 
   private

@@ -1,6 +1,6 @@
 class ResponsesController < ApplicationController
   before_filter :survey_published
-
+  before_filter :require_login_of_same_org_user
   def new
     @survey = Survey.find(params[:survey_id])
     @response = Response.new
@@ -12,7 +12,11 @@ class ResponsesController < ApplicationController
   end
 
   def index
-    @responses = Response.where(:survey_id => params[:survey_id]).paginate(:page => params[:page], :per_page => 10)
+    if session[:user_info][:role] == 'user'
+      @responses = Response.where(:survey_id => params[:survey_id], :user_id => current_user).paginate(:page => params[:page], :per_page => 10)
+    else
+      @responses = Response.where(:survey_id => params[:survey_id]).paginate(:page => params[:page], :per_page => 10)
+    end
   end
 
   def create
@@ -34,6 +38,14 @@ class ResponsesController < ApplicationController
     unless survey.published
       flash[:error] = t "flash.reponse_to_unpublished_survey", :survey_name => survey.name
       redirect_to surveys_path
+    end
+  end
+
+  def require_login_of_same_org_user
+    survey = Survey.find(params[:survey_id])
+    if current_user.nil? || current_user_org != survey.organization_id
+      flash[:error] = t "flash.not_authorized"
+      redirect_to root_path
     end
   end
 end

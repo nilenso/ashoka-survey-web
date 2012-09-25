@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe ResponsesController do
   let(:survey) { FactoryGirl.create(:survey_with_questions, :published => true) }
+  before(:each) { sign_in_as('cso_admin')}
 
   context "GET 'new'" do
     it "renders a page to create a new response" do
@@ -79,12 +80,44 @@ describe ResponsesController do
   end
 
   context "GET 'index'" do
-    it "renders the list of responses for a survey" do
+    it "renders the list of responses for a survey if a cso admin is signed in" do
       survey = FactoryGirl.create(:survey, :published => true)
-      res = FactoryGirl.attributes_for(:response, :survey => survey)
+      res = FactoryGirl.create(:response, :survey => survey)
       get :index, :survey_id => survey.id
       response.should be_ok
       assigns(:responses).should == Response.find_all_by_survey_id(survey.id)
+    end
+
+    it "renders only reponses added by a user if a user is signed in" do
+      sign_in_as('user')
+      survey = FactoryGirl.create(:survey, :published => true)
+      response_1 = FactoryGirl.create(:response, :survey => survey, :user_id => session[:user_id])
+      response_2 = FactoryGirl.create(:response, :survey => survey, :user_id => '12345')
+      get :index, :survey_id => survey.id
+      response.should be_ok
+      assigns(:responses).should include response_1
+      assigns(:responses).should_not include response_2
+    end
+  end
+
+  context "not logged in" do
+    it "redirects to the root path with flash error" do
+      survey = FactoryGirl.create(:survey, :published => true)
+      session[:user_id] = nil
+      get :index, :survey_id => survey.id
+      response.should redirect_to root_path
+      flash[:error].should_not be_nil
+    end
+  end
+
+  context "logged in as user of some other organizaation" do
+    it "redirects to the root path with flash error" do
+      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 123)
+      sign_in_as('user')
+      session[:user_info][:org_id] = 12345
+      get :index, :survey_id => survey.id
+      response.should redirect_to root_path
+      flash[:error].should_not be_nil
     end
   end
 end
