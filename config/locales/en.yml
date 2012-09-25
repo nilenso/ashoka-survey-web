@@ -48,6 +48,7 @@ en:
       operations: "Operations"
       more: "more"
       less: "less"
+      list_responses: "List Responses"
 
     share:
       share_survey: "Share Survey"
@@ -75,6 +76,9 @@ en:
     new:
       response_for_survey: "Give a response for %{survey_name}"
       response_saved: "Response successfully saved"
+
+    index:
+      list_of_responses: "List of Responses"
 
   answers:
     validations:
