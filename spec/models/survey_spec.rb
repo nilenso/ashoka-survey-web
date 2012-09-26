@@ -44,12 +44,4 @@ describe Survey do
       survey.should be_published
     end
   end
-
-  context "unpublish" do
-    it "changes published to false" do
-      survey = FactoryGirl.create(:survey, :published => true)
-      survey.unpublish
-      survey.should_not be_published
-    end
-  end
 end

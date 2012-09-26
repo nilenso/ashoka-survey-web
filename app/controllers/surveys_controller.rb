@@ -50,13 +50,6 @@ class SurveysController < ApplicationController
     redirect_to(:back)
   end
 
-  def unpublish
-    survey = Survey.find(params[:survey_id])
-    survey.unpublish
-    flash[:notice] = t "flash.survey_unpublished", :survey_name => survey.name
-    redirect_to :back
-  end
-
   def share
     @survey = Survey.find(params[:survey_id])
     @organizations = session[:user_info][:organizations]

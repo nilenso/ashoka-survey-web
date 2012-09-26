@@ -16,11 +16,6 @@ class Survey < ActiveRecord::Base
     self.save
   end
 
-  def unpublish
-    self.published = false
-    self.save
-  end
-
   private
 
   def expiry_date_should_not_be_in_past

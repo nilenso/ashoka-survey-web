@@ -52,8 +52,6 @@
               <% unless survey.published %>
                 <%= link_to image_tag("edit.png"), surveys_build_path(survey.id), :title => t(".edit_survey")   %>
                 <%= link_to button_tag(t ".publish_survey"), survey_publish_path(survey.id), :method => :put, :data => { :confirm => t(:confirm) } %>
-              <% else %>
-                <%= link_to button_tag(t ".unpublish_survey"), survey_unpublish_path(survey.id), :method => :put, :data => { :confirm => t(:confirm) } %>
               <% end %>
               <%= link_to button_tag(t ".share_survey"), survey_share_path(survey.id) %>
               <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } %>
