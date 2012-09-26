@@ -52,12 +52,13 @@ describe SurveysController do
       end
 
       context "when a User is logged in" do
-        it "shows only published surveys from the user's organization" do
+        it "shows surveys from the user's organization that are shared with him" do
           sign_in_as('user')
           organization = FactoryGirl.create(:organization)
           session[:user_info][:org_id] = organization.id
           survey = FactoryGirl.create(:survey, :organization => organization, :published => true)
-          another_survey = FactoryGirl.create(:survey, :organization_id => 125, :published => true)
+          another_survey = FactoryGirl.create(:survey, :organization => organization, :published => true)
+          survey.survey_users << FactoryGirl.create(:survey_user, :survey_id => survey.id, :user_id => session[:user_id])
           get :index
           response.should be_ok
           assigns(:surveys).should eq [survey]

@@ -1,19 +1,21 @@
+require 'will_paginate/array'
+
 class SurveysController < ApplicationController
   before_filter :require_cso_admin, :except => [:index, :build]
   before_filter :survey_unpublished, :only => [:build]
   def index
-    filter = {}
     if !user_currently_logged_in?
-      filter[:name] = 'foo'
+      @surveys = []
       #temporary fix for 'public' surveys
     else
-      filter[:organization_id] = session[:user_info][:org_id]
-      filter[:published] = params[:published] unless params[:published].nil?
-      if session[:user_info][:role] == 'user'
-        filter[:published] = true
+      @surveys = Survey.find_all_by_organization_id(session[:user_info][:org_id])
+      if session[:user_info][:role] == 'cso_admin'
+        @surveys.select! { |s| s.published.to_s == params[:published] } if params[:published] != nil
+      elsif session[:user_info][:role] == 'user'
+        @surveys.select! { |s| s.users.include?(session[:user_id]) }
       end
     end
-    @surveys = Survey.where(filter).paginate(:page => params[:page], :per_page => 10)
+    @surveys = @surveys.paginate(:page => params[:page], :per_page => 10)
   end
 
   def destroy
