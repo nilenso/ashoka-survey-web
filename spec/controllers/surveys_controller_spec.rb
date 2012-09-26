@@ -30,14 +30,14 @@ describe SurveysController do
         end
 
         it "shows all published surveys if filter is published" do
-          get :index, :published => true
+          get :index, :published => "true"
           response.should be_ok
           assigns(:surveys).should include @published_survey
           assigns(:surveys).should_not include @unpublished_survey
         end
 
         it "shows all unpublished surveys if filter is unpublished" do
-          get :index, :published => false
+          get :index, :published => "false"
           response.should be_ok
           assigns(:surveys).should include @unpublished_survey
           assigns(:surveys).should_not include @published_survey
