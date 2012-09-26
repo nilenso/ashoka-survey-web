@@ -209,17 +209,21 @@ describe SurveysController do
     end
   end
 
-  context "PUT 'publish surveys to'" do
-    it "changes the status of a survey from unpublished to published" do
-      pending
-      Survey.find(@survey.id).should be_published
+  context "PUT 'publish_to_users'" do
+    before(:each) do
+      sign_in_as('cso_admin')
+      @survey = FactoryGirl.create(:survey)
     end
 
-    it "redirects to the last visited page" do
-      pending
-      request.env["HTTP_REFERER"] = "http://google.com"
-      get :publish, :survey_id => @survey.id
-      response.should redirect_to("http://google.com")
+    it "marks the survey published and adds users to survey" do
+      put :publish_to_users, :survey_id => @survey.id, :survey => { :users => [1, 2] }
+      Survey.find(@survey.id).should be_published
+      Survey.find(@survey.id).users.should == [1, 2]
+    end
+
+    it "redirects to the surveys page" do
+      put :publish_to_users, :survey_id => @survey.id, :survey => { :users => [1, 2] }
+      response.should redirect_to surveys_path
     end
   end
 

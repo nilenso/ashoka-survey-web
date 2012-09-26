@@ -10,10 +10,15 @@ class Survey < ActiveRecord::Base
   accepts_nested_attributes_for :questions
   serialize :shared_org_ids, Array
   belongs_to :organization
+  has_many :survey_users, :dependent => :destroy
 
   def publish
     self.published = true
     self.save
+  end
+
+  def users
+    self.survey_users.map(&:user_id)
   end
 
   private
