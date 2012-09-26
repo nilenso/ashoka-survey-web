@@ -178,28 +178,47 @@ describe SurveysController do
     end
   end
 
-  context "PUT 'publish'" do
+  context "GET 'publish'" do
     before(:each) do
       sign_in_as('cso_admin')
       @survey = FactoryGirl.create(:survey)
-      request.env["HTTP_REFERER"] = "http://google.com"
+      session[:access_token] = "123"
+      response = mock(OAuth2::Response)
+      access_token = mock(OAuth2::AccessToken)
+      controller.stub(:access_token).and_return(access_token)
+      access_token.stub(:get).and_return(response)
+      response.stub(:parsed).and_return([{"id" => 123, "name" => "user"}])
     end
 
     it "requires cso_admin for publishing a survey" do
       sign_in_as('user')
-      put :publish, :survey_id => @survey.id
+      get :publish, :survey_id => @survey.id
+      response.should redirect_to surveys_path
       flash[:error].should_not be_empty
     end
 
+    it "renders the publish template" do
+      get :publish, :survey_id => @survey.id
+      response.should be_ok
+      response.should render_template('publish')
+    end
+
+    it "returns a list of users of the survey's organization" do
+      get :publish, :survey_id => @survey.id
+      assigns(:users).should_not be_nil
+    end
+  end
+
+  context "PUT 'publish surveys to'" do
     it "changes the status of a survey from unpublished to published" do
-      put :publish, :survey_id => @survey.id
-      flash[:notice].should_not be_nil
+      pending
       Survey.find(@survey.id).should be_published
     end
 
     it "redirects to the last visited page" do
+      pending
       request.env["HTTP_REFERER"] = "http://google.com"
-      put :publish, :survey_id => @survey.id
+      get :publish, :survey_id => @survey.id
       response.should redirect_to("http://google.com")
     end
   end

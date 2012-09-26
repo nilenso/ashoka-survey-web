@@ -44,10 +44,12 @@ class SurveysController < ApplicationController
   end
 
   def publish
-    survey = Survey.find(params[:survey_id])
-    survey.publish
-    flash[:notice] = t "flash.survey_published", :survey_name => survey.name
-    redirect_to(:back)
+    @survey = Survey.find(params[:survey_id])
+    @users = access_token.get('api/organization_users').parsed
+    # @users = @survey.organization.users(auth)
+    # survey.publish
+    # flash[:notice] = t "flash.survey_published", :survey_name => survey.name
+    # redirect_to(:back)
   end
 
   def share

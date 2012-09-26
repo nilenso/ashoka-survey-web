@@ -33,14 +33,8 @@ class ApplicationController < ActionController::Base
   
   helper_method :user_currently_logged_in?, :signed_in_as_cso_admin?
 
-  private
-
-  def set_locale
-    I18n.locale = params[:locale] || I18n.default_locale
-  end
-
   def oauth_client
-    @oauth_client ||= OAuth2::Client.new(ENV["OAUTH_ID"], ENV["OAUTH_SECRET"], ENV["OAUTH_SERVER_URL"])
+    @oauth_client ||= OAuth2::Client.new(ENV["OAUTH_ID"], ENV["OAUTH_SECRET"], :site => ENV["OAUTH_SERVER_URL"])
   end
 
   def access_token
@@ -48,4 +42,11 @@ class ApplicationController < ActionController::Base
       @access_token ||= OAuth2::AccessToken.new(oauth_client, session[:access_token])
     end
   end
+
+  private
+
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
+
 end
