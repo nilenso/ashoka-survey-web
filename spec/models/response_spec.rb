@@ -5,16 +5,17 @@ describe Response do
   it { should have_many(:answers).dependent(:destroy) }
   it { should accept_nested_attributes_for(:answers) }
   it { should respond_to(:user_id) }
+  it { should validate_presence_of(:survey_id)}
 
   context "logic" do
   	it "returns five answers to display for a response" do
-  	  response = FactoryGirl.create(:response)
+  	  response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey))
       6.times {response.answers << FactoryGirl.create(:answer)}  
       response.five_answers.should == response.answers.limit(5)
     end
 
     it "returns only the text typed answers" do
-      response = FactoryGirl.create(:response)
+      response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey))
       question = FactoryGirl.create(:question, :type => "MultiChoiceQuestion")
       response.answers << FactoryGirl.create(:answer, :question => question)
       response.five_answers.should be_empty
