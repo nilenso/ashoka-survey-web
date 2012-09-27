@@ -233,12 +233,14 @@ describe SurveysController do
     end
 
     it "marks the survey published and adds users to survey" do
+      pending "Moving this to SurveyShareController"
       put :publish_to_users, :survey_id => @survey.id, :survey => { :users => [1, 2] }
       Survey.find(@survey.id).should be_published
       Survey.find(@survey.id).users.should == [1, 2]
     end
 
     it "redirects to the surveys page" do
+      pending "Moving this to SurveyShareController"
       put :publish_to_users, :survey_id => @survey.id, :survey => { :users => [1, 2] }
       response.should redirect_to surveys_path
     end
@@ -261,6 +263,7 @@ describe SurveysController do
       end
 
       it "requires cso_admin for sharing a survey" do
+        pending "Moving this to SurveyShareController"
         sign_in_as('user')
         @survey.publish
         get :share, :survey_id => @survey.id
@@ -269,6 +272,7 @@ describe SurveysController do
       end
 
       it "renders the share page with a list of other organizations" do
+        pending "Moving this to SurveyShareController"
         @survey.publish
         get :share, :survey_id => @survey.id
         response.should be_ok
@@ -277,6 +281,7 @@ describe SurveysController do
       end
 
       it "does not allow sharing of unpublished surveys" do
+        pending "Moving this to SurveyShareController"
         get :share, :survey_id => @survey.id
         response.should redirect_to surveys_path
         flash[:error].should_not be_empty
@@ -285,12 +290,14 @@ describe SurveysController do
 
     context "PUT 'update_shared_orgs'" do
       it "updates the list of shared organizations" do
+        pending "Moving this to SurveyShareController"
         participating_organizations = [12, 45]
         put :update_shared_orgs, :survey_id => @survey.id, :survey => {:participating_organization_ids => participating_organizations }
         @survey.participating_organizations.map(&:organization_id).should == [12, 45]
       end
 
       it "redirects to the surveys page with success flash" do
+        pending "Moving this to SurveyShareController"
         participating_organizations = [12, 45]
         put :update_shared_orgs, :survey_id => @survey.id, :survey => {:participating_organization_ids => participating_organizations }
         flash[:notice].should_not be_nil

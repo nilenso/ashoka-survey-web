@@ -21,32 +21,32 @@ describe SurveyShareController do
   end
 
 
-  context "GET 'new'" do
+  context "GET 'edit'" do
     it "assigns the users in the current organization" do
-      get :new, :survey_id => survey.id
+      get :edit, :survey_id => survey.id
       assigns(:users).should == [{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}]
     end
 
     it "assigns all the other organizations available" do
-      get :new, :survey_id => survey.id
+      get :edit, :survey_id => survey.id
       assigns(:organizations).should == [{"id" => 2, "name" => "Ashoka"}]
     end
 
     it "assigns current survey" do
-      get :new, :survey_id => survey.id
+      get :edit, :survey_id => survey.id
       assigns(:survey).should == survey
     end
 
     it "requires cso_admin for sharing a survey" do
       sign_in_as('user')
-      get :new, :survey_id => survey.id
+      get :edit, :survey_id => survey.id
       response.should redirect_to surveys_path
       flash[:error].should_not be_empty
     end
 
     it "does not allow sharing of unpublished surveys" do
       unpublished_survey = FactoryGirl.create(:survey)
-      get :new, :survey_id => unpublished_survey.id
+      get :edit, :survey_id => unpublished_survey.id
       response.should redirect_to surveys_path
       flash[:error].should_not be_empty
     end

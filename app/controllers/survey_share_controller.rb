@@ -1,7 +1,7 @@
 class SurveyShareController < ApplicationController
-  before_filter :require_cso_admin, :only => :new
+  before_filter :require_cso_admin, :only => :edit
 
-  def new
+  def edit
     @survey = Survey.find_by_id(params[:survey_id])
     if @survey.published?
       @users = access_token.get('/api/organization_users').parsed
