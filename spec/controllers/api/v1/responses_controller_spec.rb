@@ -29,6 +29,36 @@ module Api
           response.should be_ok
           JSON.parse(response.body).keys.should =~ Response.new.attributes.keys
         end
+
+        it "returns a bad request if you give a invalid response" do
+          question = FactoryGirl.create(:question)
+          resp = FactoryGirl.attributes_for(:response, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
+          post :create, :response => resp
+          response.should_not be_ok
+          response.status.should == 400
+        end
+      end
+
+      context "PUT 'update'" do
+        it "updates a response" do
+          survey = FactoryGirl.create(:survey)
+          question = FactoryGirl.create(:question)
+          resp = FactoryGirl.create(:response, :survey => survey)
+          resp_attr = { :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} } }
+          put :update, :id => resp.id, :response => resp_attr
+          response.should be_ok
+          Response.find(resp.id).answers.map(&:content).should include("asdasd")
+        end
+
+        it "returns a bad request if you give a invalid response" do
+          survey = FactoryGirl.create(:survey)
+          question = FactoryGirl.create(:question, :mandatory => true)
+          resp = FactoryGirl.create(:response, :survey => survey)
+          resp_attr = { :answers_attributes =>  { '0' => {'content' => nil, 'question_id' => question.id} } }
+          put :update, :id => resp.id, :response => resp_attr
+          response.should_not be_ok
+          response.status.should == 400
+        end
       end
     end
   end

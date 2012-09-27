@@ -4,8 +4,20 @@ module Api
       def create
         response = Response.new(params[:response])
         response.survey_id = params[:survey_id]
-        response.save
-        render :json => response.to_json
+        if response.save
+          render :json => response.to_json
+        else
+          render :nothing => true, :status => :bad_request
+        end
+      end
+
+      def update
+        response = Response.find(params[:id])
+        if response.update_attributes(params[:response])
+          render :json => response.to_json
+        else
+          render :nothing => true, :status => :bad_request
+        end
       end
     end
   end
