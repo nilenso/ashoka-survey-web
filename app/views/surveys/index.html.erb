@@ -18,6 +18,7 @@
     <table class="surveys_table">
       <thead>
         <th><%= Survey.human_attribute_name(:name) %></th>
+        <th><%= Survey.human_attribute_name(:status) %></th>
         <th><%= Survey.human_attribute_name(:description) %></th>
         <th><%= Survey.human_attribute_name(:expiry_date) %></th>
         <th><%= Survey.human_attribute_name(:organization) %></th>
@@ -28,6 +29,7 @@
         <% @surveys.each do |survey| %>
         <tr class="survey_row">
           <td><%= survey.name %></td>
+          <td><%= survey.published ? "Published" : "Not Published" %></td>
           <td class="survey_description">
             <span class="truncated_description">
               <%= truncate(survey.description, :length => 120)%>
