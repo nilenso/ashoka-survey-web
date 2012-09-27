@@ -1,8 +1,14 @@
 <h1> <%= t ".share_survey" %> </h1>
 
+<h2>Share with an Organization</h2>
 <%= semantic_form_for @survey, :url => survey_update_shared_orgs_path(@survey.id) do |f| %>
-<%= f.input :participating_organizations, :as => :check_boxes, :collection => @organizations, :member_label => Proc.new { |u| u["name"] }, :member_value => Proc.new { |u| u["id"] }, :label => "Choose organizations to share with:" %>
-  <%= f.actions do %>
-     <%= f.action :submit, :as => :button %>
+<% if @organizations.size == 0 %>
+  There are no organizations you can share with. Sorry.
+  <%= link_to_function "Go Back", "history.back()" %>
+<% else %>
+  <%= f.input :participating_organizations, :as => :check_boxes, :collection => @organizations, :member_label => Proc.new { |u| u["name"] }, :member_value => Proc.new { |u| u["id"] }, :label => "Choose organizations to share with:" %>
+    <%= f.actions do %>
+       <%= f.action :submit, :as => :button %>
+    <% end %>
   <% end %>
 <% end %>
