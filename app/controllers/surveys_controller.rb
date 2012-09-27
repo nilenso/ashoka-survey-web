@@ -69,14 +69,16 @@ class SurveysController < ApplicationController
       @organizations.select!{ |org| org["id"] != @survey.organization_id }
     else
       redirect_to surveys_path
-      flash[:error] = "flash.not_authorized"
+      flash[:error] = "Can not share an unpublished survey"
     end
   end
 
   def update_shared_orgs
-    @survey = Survey.find(params[:survey_id])
-    @survey.shared_org_ids = params[:survey][:shared_org_ids].delete_if { |s| s.blank? }
-    @survey.save
+    survey = Survey.find(params[:survey_id])
+    params[:survey][:participating_organization_ids].each do |org_id|
+      ParticipatingOrganization.find_or_create(:survey_id => survey.id, :organization_id => org_id)
+    end
+    survey.save
     flash[:notice] = "Successfully shared..."
     redirect_to surveys_path
   end

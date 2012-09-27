@@ -269,11 +269,16 @@ describe SurveysController do
 
     context "PUT 'update_shared_orgs'" do
       it "updates the list of shared organizations" do
-        shared_org_ids = ["12", "45"]
-        put :update_shared_orgs, :survey_id => @survey.id, :survey => {:shared_org_ids => shared_org_ids }
-        response.should redirect_to surveys_path
+        participating_organizations = [12, 45]
+        put :update_shared_orgs, :survey_id => @survey.id, :survey => {:participating_organization_ids => participating_organizations }
+        @survey.participating_organizations.map(&:organization_id).should == [12, 45]
+      end
+
+      it "redirects to the surveys page with success flash" do
+        participating_organizations = [12, 45]
+        put :update_shared_orgs, :survey_id => @survey.id, :survey => {:participating_organization_ids => participating_organizations }
         flash[:notice].should_not be_nil
-        @survey.reload.shared_org_ids.should == shared_org_ids
+        response.should redirect_to surveys_path
       end
     end
   end
