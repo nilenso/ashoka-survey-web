@@ -1,7 +1,7 @@
 <h1> <%= t ".share_survey" %> </h1>
 
 <h2>Share with Users of Organization</h2>
-<%= semantic_form_for @survey, :url => survey_publish_to_users_path(@survey.id) do |f| %>
+<%= semantic_form_for @survey, :url => survey_share_path(@survey.id) do |f| %>
   <%= f.input :users, :as => :check_boxes, :collection => @users, :member_label => Proc.new { |u| u["name"] }, :member_value => Proc.new { |u| u["id"] }, :label => "Choose users to publish to:" %>
 
   <h2>Share with an Organization</h2>

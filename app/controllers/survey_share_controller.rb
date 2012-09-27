@@ -1,5 +1,5 @@
 class SurveyShareController < ApplicationController
-  before_filter :require_cso_admin, :only => :edit
+  before_filter :require_cso_admin, :only => [:edit, :update]
 
   def edit
     @survey = Survey.find_by_id(params[:survey_id])
@@ -14,7 +14,21 @@ class SurveyShareController < ApplicationController
     end
   end
 
-private
+  def update
+    survey = Survey.find_by_id(params[:survey_id])
+
+    user_ids = params[:survey][:users].reject { |user_id| user_id.blank? }
+    user_ids.each { |user_id| SurveyUser.create(:survey_id => survey.id, :user_id => user_id)}
+
+    organization_ids = params[:survey][:participating_organization_ids].reject { |org_id| org_id.blank? }
+    organization_ids.each { |org_id| ParticipatingOrganization.create(:survey_id => survey.id, :organization_id => org_id) }
+
+    p "HELLO!"
+
+    redirect_to surveys_path, :notice => "Survey has been shared"
+  end
+
+  private
 
   def require_cso_admin
     role = session[:user_info][:role] if user_currently_logged_in?

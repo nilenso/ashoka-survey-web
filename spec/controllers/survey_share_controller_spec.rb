@@ -51,4 +51,31 @@ describe SurveyShareController do
       flash[:error].should_not be_empty
     end
   end
+
+  context "PUT 'update'" do
+    it "adds the users to the survey" do
+      put :update, :survey_id => survey.id, :survey => { :users => [1, 2], :participating_organization_ids => [] }
+      Survey.find(survey.id).users.should == [1, 2]
+    end
+
+    it "requires cso_admin" do
+      sign_in_as('user')
+      put :update, :survey_id => survey.id
+      response.should redirect_to surveys_path
+      flash[:error].should_not be_empty
+    end
+
+    it "updates the list of shared organizations" do
+      participating_organizations = [12, 45]
+      put :update, :survey_id => survey.id, :survey => { :users => [1, 2], :participating_organization_ids => participating_organizations }
+      survey.participating_organizations.map(&:organization_id).should == [12, 45]
+    end
+
+    it "redirects to the surveys page with success flash" do
+      participating_organizations = [12, 45]
+      put :update, :survey_id => survey.id, :survey => { :users => [1,2], :participating_organization_ids => participating_organizations }
+      flash[:notice].should_not be_nil
+      response.should redirect_to surveys_path
+    end
+  end
 end
