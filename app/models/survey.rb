@@ -11,6 +11,7 @@ class Survey < ActiveRecord::Base
   serialize :shared_org_ids, Array
   belongs_to :organization
   has_many :survey_users, :dependent => :destroy
+  has_many :participating_organizations, :dependent => :destroy
 
   def publish
     self.published = true

@@ -9,6 +9,8 @@ describe Survey do
   it { should respond_to :shared_org_ids }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:responses).dependent(:destroy) }
+  it { should have_many(:survey_users).dependent(:destroy) }
+  it { should have_many(:participating_organizations).dependent(:destroy) }
   it { should accept_nested_attributes_for :questions }
   it {should belong_to :organization }
 
