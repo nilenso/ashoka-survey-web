@@ -64,8 +64,13 @@ class SurveysController < ApplicationController
 
   def share
     @survey = Survey.find(params[:survey_id])
-    @organizations = session[:user_info][:organizations]
-    @organizations.select!{ |org| org[:id] != @survey.organization_id }
+    if @survey.published?
+      @organizations = access_token.get('api/organizations').parsed
+      @organizations.select!{ |org| org["id"] != @survey.organization_id }
+    else
+      redirect_to surveys_path
+      flash[:error] = "flash.not_authorized"
+    end
   end
 
   def update_shared_orgs
