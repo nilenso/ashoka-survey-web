@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-    before_filter :set_locale
+  before_filter :set_locale
 
   def default_url_options(options={})
     return { :locale => I18n.locale } unless I18n.locale == I18n.default_locale
@@ -15,12 +15,20 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  def current_ability
+    @current_ability ||= Ability.new(current_user_info)
+  end
+
   def user_currently_logged_in?
     session[:user_id].present?
   end
 
   def current_user
     session[:user_id] if user_currently_logged_in?
+  end
+
+  def current_user_info
+    session[:user_info].merge(:user_id => session[:user_id]) if user_currently_logged_in?
   end
 
   def signed_in_as_cso_admin?
@@ -30,7 +38,7 @@ class ApplicationController < ActionController::Base
   def current_user_org
     session[:user_info][:org_id] if user_currently_logged_in?
   end
-  
+
   helper_method :user_currently_logged_in?, :signed_in_as_cso_admin?
 
   def oauth_client

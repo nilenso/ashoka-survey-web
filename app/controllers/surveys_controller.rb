@@ -1,20 +1,14 @@
 require 'will_paginate/array'
 
 class SurveysController < ApplicationController
+  load_and_authorize_resource :only => :index
+
   before_filter :require_cso_admin, :except => [:index, :build]
   before_filter :survey_unpublished, :only => [:build]
+
   def index
-    if !user_currently_logged_in?
-      @surveys = []
-      #temporary fix for 'public' surveys
-    else
-      @surveys = Survey.find_all_by_organization_id(session[:user_info][:org_id])
-      if session[:user_info][:role] == 'cso_admin'
-        @surveys.select! { |s| s.published.to_s == params[:published] } if params[:published] != nil
-      elsif session[:user_info][:role] == 'user'
-        @surveys.select! { |s| s.user_ids.include?(session[:user_id]) }
-      end
-    end
+    @surveys ||= []
+    @surveys = @surveys.select { |survey| survey.published.to_s == params[:published] } if params[:published].present?
     @surveys = @surveys.paginate(:page => params[:page], :per_page => 10)
     if access_token.present?
       organizations = access_token.get('api/organizations').parsed
@@ -53,9 +47,31 @@ class SurveysController < ApplicationController
   end
 
   def publish
+    @survey = Survey.find(params[:survey_id])
+    @users = access_token.get('api/organization_users').parsed
+    @survey.publish
+    redirect_to :back, :confirm => "Are you sure you want to publish this"
+  end
+
+  def share
+    @survey = Survey.find(params[:survey_id])
+    if @survey.published?
+      @organizations = access_token.get('api/organizations').parsed
+      @organizations.select!{ |org| org["id"] != @survey.organization_id }
+    else
+      redirect_to surveys_path
+      flash[:error] = "Can not share an unpublished survey"
+    end
+  end
+
+  def update_shared_orgs
     survey = Survey.find(params[:survey_id])
-    survey.publish
-    redirect_to :back
+    params[:survey][:participating_organization_ids].each do |org_id|
+      ParticipatingOrganization.create(:survey_id => survey.id, :organization_id => org_id)
+    end
+    survey.save
+    flash[:notice] = "Successfully shared..."
+    redirect_to surveys_path
   end
 
   private

@@ -14,7 +14,7 @@
 <% end %>
 
 <div>
-  <% unless @surveys.blank? %>
+  <% unless @surveys.blank? or @organization_names.blank? %>
     <table class="surveys_table">
       <thead>
         <th><%= Survey.human_attribute_name(:name) %></th>
