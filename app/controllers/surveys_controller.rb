@@ -16,10 +16,12 @@ class SurveysController < ApplicationController
       end
     end
     @surveys = @surveys.paginate(:page => params[:page], :per_page => 10)
-    organizations = access_token.get('api/organizations').parsed
-    @organization_names = organizations.reduce({}) do |hash, org|
-      hash[org['id']] = org['name']
-      hash
+    if access_token.present?
+      organizations = access_token.get('api/organizations').parsed
+      @organization_names = organizations.reduce({}) do |hash, org|
+        hash[org['id']] = org['name']
+        hash
+      end
     end
   end
 
