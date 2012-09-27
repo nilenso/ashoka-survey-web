@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe SurveyShareController do
-  let(:survey) { FactoryGirl.create(:survey) }
+  let(:survey) { FactoryGirl.create(:survey, :organization_id => 1) }
 
   before(:each) do
     sign_in_as('cso_admin')
@@ -29,7 +29,7 @@ describe SurveyShareController do
 
     it "assigns all the other organizations available" do
       get :new, :survey_id => survey.id
-      assigns(:organizations).should == [{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}]
+      assigns(:organizations).should == [{"id" => 2, "name" => "Ashoka"}]
     end
 
     it "assigns current survey" do
