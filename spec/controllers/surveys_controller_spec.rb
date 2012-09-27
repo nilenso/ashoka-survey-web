@@ -4,9 +4,23 @@ describe SurveysController do
   render_views
 
   context "GET 'index'" do
+    before(:each) do
+      session[:access_token] = "123"
+      response = mock(OAuth2::Response)
+      access_token = mock(OAuth2::AccessToken)
+      controller.stub(:access_token).and_return(access_token)
+      access_token.stub(:get).and_return(response)
+      response.stub(:parsed).and_return([{"id" => 123, "name" => "foo"}, {"id" => 12, "name" => "bar"}])
+    end
+
     it "assigns the surveys instance variable" do
       get :index
       assigns(:surveys).should_not be_nil
+    end
+
+    it "assigns a hash of organization_ids mapped to their names" do
+      get :index
+      assigns(:organization_names).should == { 123 => "foo", 12 => "bar" }
     end
 
     it "responds with the index page" do
