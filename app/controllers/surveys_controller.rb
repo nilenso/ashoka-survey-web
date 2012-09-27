@@ -12,7 +12,7 @@ class SurveysController < ApplicationController
       if session[:user_info][:role] == 'cso_admin'
         @surveys.select! { |s| s.published.to_s == params[:published] } if params[:published] != nil
       elsif session[:user_info][:role] == 'user'
-        @surveys.select! { |s| s.users.include?(session[:user_id]) }
+        @surveys.select! { |s| s.user_ids.include?(session[:user_id]) }
       end
     end
     @surveys = @surveys.paginate(:page => params[:page], :per_page => 10)

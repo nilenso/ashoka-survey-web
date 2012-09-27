@@ -17,7 +17,7 @@ class Survey < ActiveRecord::Base
     self.save
   end
 
-  def users
+  def user_ids
     self.survey_users.map(&:user_id)
   end
 

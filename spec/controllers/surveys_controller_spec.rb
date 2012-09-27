@@ -236,7 +236,7 @@ describe SurveysController do
       pending "Moving this to SurveyShareController"
       put :publish_to_users, :survey_id => @survey.id, :survey => { :users => [1, 2] }
       Survey.find(@survey.id).should be_published
-      Survey.find(@survey.id).users.should == [1, 2]
+      Survey.find(@survey.id).user_ids.should == [1, 2]
     end
 
     it "redirects to the surveys page" do

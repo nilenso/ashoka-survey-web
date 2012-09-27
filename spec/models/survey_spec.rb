@@ -42,10 +42,10 @@ describe Survey do
   end
 
   context "users" do
-    it "returns the list of users the survey is published to" do
+    it "returns the list of user ids the survey is published to" do
       survey = FactoryGirl.create(:survey)
       survey_user = FactoryGirl.create(:survey_user, :survey_id => survey.id)
-      survey.users.should == [survey_user.user_id]
+      survey.user_ids.should == [survey_user.user_id]
     end
   end
 end

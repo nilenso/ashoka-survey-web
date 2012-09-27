@@ -54,8 +54,8 @@ describe SurveyShareController do
 
   context "PUT 'update'" do
     it "adds the users to the survey" do
-      put :update, :survey_id => survey.id, :survey => { :users => [1, 2], :participating_organization_ids => [] }
-      Survey.find(survey.id).users.should == [1, 2]
+      put :update, :survey_id => survey.id, :survey => { :user_ids => [1, 2], :participating_organization_ids => [] }
+      Survey.find(survey.id).user_ids.should == [1, 2]
     end
 
     it "requires cso_admin" do
@@ -67,21 +67,21 @@ describe SurveyShareController do
 
     it "updates the list of shared organizations" do
       participating_organizations = [12, 45]
-      put :update, :survey_id => survey.id, :survey => { :users => [1, 2], :participating_organization_ids => participating_organizations }
+      put :update, :survey_id => survey.id, :survey => { :user_ids => [1, 2], :participating_organization_ids => participating_organizations }
       survey.participating_organizations.map(&:organization_id).should == [12, 45]
     end
 
     it "removes the previous shared_users and participating_organizations for the survey" do
       participating_organizations = [12, 45]
-      put :update, :survey_id => survey.id, :survey => { :users => [1, 2], :participating_organization_ids => participating_organizations }
-      put :update, :survey_id => survey.id, :survey => { :users => [1], :participating_organization_ids => [12] }
+      put :update, :survey_id => survey.id, :survey => { :user_ids => [1, 2], :participating_organization_ids => participating_organizations }
+      put :update, :survey_id => survey.id, :survey => { :user_ids => [1], :participating_organization_ids => [12] }
       survey.participating_organizations.map(&:organization_id).should_not include 45
       survey.survey_users.map(&:user_id).should_not include 2
     end
 
     it "redirects to the surveys page with success flash" do
       participating_organizations = [12, 45]
-      put :update, :survey_id => survey.id, :survey => { :users => [1,2], :participating_organization_ids => participating_organizations }
+      put :update, :survey_id => survey.id, :survey => { :user_ids => [1,2], :participating_organization_ids => participating_organizations }
       flash[:notice].should_not be_nil
       response.should redirect_to surveys_path
     end

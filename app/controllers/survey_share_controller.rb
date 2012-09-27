@@ -20,7 +20,7 @@ class SurveyShareController < ApplicationController
     survey.participating_organizations.destroy_all
     survey.survey_users.destroy_all
 
-    user_ids = params[:survey][:users].reject { |user_id| user_id.blank? }
+    user_ids = params[:survey][:user_ids].reject { |user_id| user_id.blank? }
     user_ids.each { |user_id| SurveyUser.create(:survey_id => survey.id, :user_id => user_id)}
 
     organization_ids = params[:survey][:participating_organization_ids].reject { |org_id| org_id.blank? }
