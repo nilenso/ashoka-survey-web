@@ -2,7 +2,7 @@
 
 <h2>Share with Users of Organization</h2>
 <%= semantic_form_for @survey, :url => survey_share_path(@survey.id) do |f| %>
-  <%= f.input :users, :as => :check_boxes, :collection => @users, :member_label => Proc.new { |u| u["name"] }, :member_value => Proc.new { |u| u["id"] }, :label => "Choose users to publish to:" %>
+  <%= f.input :users, :as => :check_boxes, :collection => @users, :member_label => Proc.new { |u| u['name'] }, :member_value => Proc.new { |u| u['id'] if u.is_a?(Hash) }, :label => "Choose users to publish to:" %>
 
   <h2>Share with an Organization</h2>
   <% if @organizations.size == 0 %>
