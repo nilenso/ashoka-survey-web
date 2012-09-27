@@ -2,7 +2,7 @@
 
 <h1> <%= t '.list_of_surveys' %> </h1>
 
-<% if signed_in_as_cso_admin? %>
+<% if can? :create, Survey %>
   <div class="admin_tasks">
     <%= link_to t(".create_survey"), new_survey_path, :action => :post %>
     <div class="filters">
@@ -50,14 +50,12 @@
             <%= link_to button_tag(t ".list_responses"), survey_responses_path(survey.id) %>
           </td>
           <td class="cso_admin_operations">
-            <% if signed_in_as_cso_admin? %>
-              <% unless survey.published %>
-                <%= link_to image_tag("edit.png"), surveys_build_path(survey.id), :title => t(".edit_survey")   %>
-                <%= link_to button_tag(t ".publish_survey"), survey_publish_path(survey.id), :confirm => "Are you sure you want to publish this survey?" %>
-              <% end %>
-              <%= link_to button_tag(t ".share_survey"), survey_share_path(survey.id) %>
-              <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } %>
+            <% unless survey.published %>
+              <%= link_to image_tag("edit.png"), surveys_build_path(survey.id), :title => t(".edit_survey") if can? :publish, Survey %>
+              <%= link_to button_tag(t ".publish_survey"), survey_publish_path(survey.id), :confirm => "Are you sure you want to publish this survey?" if can? :edit, Survey %>
             <% end %>
+            <%= link_to button_tag(t ".share_survey"), survey_share_path(survey.id) if can? :share, Survey %>
+            <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, Survey %>
           </td>
         </tr>
         <% end %>

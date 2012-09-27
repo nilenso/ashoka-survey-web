@@ -15,6 +15,11 @@ class Ability
         can :read, Survey, Survey.where('organization_id' => user_info[:org_id]) do |survey|
           survey.organization_id == user_info[:org_id]
         end
+        can :create, Survey
+        can :publish, Survey
+        can :edit, Survey
+        can :share, Survey
+        can :destroy, Survey
       elsif role == 'user'
         can :read, Survey, 
         Survey.joins(:survey_users).where('survey_users.user_id' => user_info[:user_id])
