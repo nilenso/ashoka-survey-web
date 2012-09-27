@@ -55,18 +55,7 @@ class SurveysController < ApplicationController
   def publish
     @survey = Survey.find(params[:survey_id])
     @users = access_token.get('api/organization_users').parsed
-  end
-
-
-  def publish_to_users
-    survey = Survey.find(params[:survey_id])
-    survey.publish
-    params[:survey][:users].delete_if { |s| s.blank? }
-    params[:survey][:users].each do |user|
-      SurveyUser.create(:survey_id => survey.id, :user_id => user)
-    end
-    flash[:notice] = t "flash.survey_published", :survey_name => survey.name
-    redirect_to(surveys_path)
+    redirect_to :back, :confirm => "Are you sure you want to publish this survey?"
   end
 
   def share

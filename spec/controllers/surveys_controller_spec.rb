@@ -197,6 +197,7 @@ describe SurveysController do
 
   context "GET 'publish'" do
     before(:each) do
+      request.env["HTTP_REFERER"] = 'http://google.com'
       sign_in_as('cso_admin')
       @survey = FactoryGirl.create(:survey)
       session[:access_token] = "123"
@@ -214,35 +215,15 @@ describe SurveysController do
       flash[:error].should_not be_empty
     end
 
-    it "renders the publish template" do
+    it "redirects back to the previous page" do
+      request.env["HTTP_REFERER"] = 'http://google.com'
       get :publish, :survey_id => @survey.id
-      response.should be_ok
-      response.should render_template('publish')
+      response.should redirect_to 'http://google.com'
     end
 
     it "returns a list of users of the survey's organization" do
       get :publish, :survey_id => @survey.id
       assigns(:users).should_not be_nil
-    end
-  end
-
-  context "PUT 'publish_to_users'" do
-    before(:each) do
-      sign_in_as('cso_admin')
-      @survey = FactoryGirl.create(:survey)
-    end
-
-    it "marks the survey published and adds users to survey" do
-      pending "Moving this to SurveyShareController"
-      put :publish_to_users, :survey_id => @survey.id, :survey => { :users => [1, 2] }
-      Survey.find(@survey.id).should be_published
-      Survey.find(@survey.id).user_ids.should == [1, 2]
-    end
-
-    it "redirects to the surveys page" do
-      pending "Moving this to SurveyShareController"
-      put :publish_to_users, :survey_id => @survey.id, :survey => { :users => [1, 2] }
-      response.should redirect_to surveys_path
     end
   end
 
