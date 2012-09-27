@@ -1,14 +1,16 @@
 <h1> <%= t ".share_survey" %> </h1>
 
-<h2>Share with an Organization</h2>
-<%= semantic_form_for @survey, :url => survey_update_shared_orgs_path(@survey.id) do |f| %>
-<% if @organizations.size == 0 %>
-  There are no organizations you can share with. Sorry.
-  <%= link_to_function "Go Back", "history.back()" %>
-<% else %>
-  <%= f.input :participating_organizations, :as => :check_boxes, :collection => @organizations, :member_label => Proc.new { |u| u["name"] }, :member_value => Proc.new { |u| u["id"] }, :label => "Choose organizations to share with:" %>
-    <%= f.actions do %>
-       <%= f.action :submit, :as => :button %>
-    <% end %>
+<h2>Share with Users of Organization</h2>
+<%= semantic_form_for @survey, :url => survey_publish_to_users_path(@survey.id) do |f| %>
+  <%= f.input :users, :as => :check_boxes, :collection => @users, :member_label => Proc.new { |u| u["name"] }, :member_value => Proc.new { |u| u["id"] }, :label => "Choose users to publish to:" %>
+
+  <h2>Share with an Organization</h2>
+  <% if @organizations.size == 0 %>
+    There are no organizations you can share with. Sorry.
+  <% else %>
+    <%= f.input :participating_organizations, :as => :check_boxes, :collection => @organizations, :member_label => Proc.new { |u| u["name"] }, :member_value => Proc.new { |u| u["id"] }, :label => "Choose organizations to share with:" %>
+  <% end %>
+  <%= f.actions do %>
+     <%= f.action :submit, :as => :button %>
   <% end %>
 <% end %>
