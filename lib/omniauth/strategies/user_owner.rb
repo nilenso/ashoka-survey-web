@@ -18,16 +18,11 @@ module OmniAuth
           :email => raw_info["email"],
           :role => raw_info["role"],
           :org_id => raw_info["organization_id"],
-          :organizations => org_info
         }
       end
 
       def raw_info
         @raw_info ||= access_token.get('/api/user').parsed
-      end
-
-      def org_info
-        @org_info ||= access_token.get('/api/organizations').parsed
       end
     end
   end
