@@ -221,9 +221,9 @@ describe SurveysController do
       response.should redirect_to 'http://google.com'
     end
 
-    it "returns a list of users of the survey's organization" do
+    it "publishes the survey" do
       get :publish, :survey_id => @survey.id
-      assigns(:users).should_not be_nil
+      @survey.reload.should be_published
     end
   end
 

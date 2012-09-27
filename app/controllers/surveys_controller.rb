@@ -53,9 +53,9 @@ class SurveysController < ApplicationController
   end
 
   def publish
-    @survey = Survey.find(params[:survey_id])
-    @users = access_token.get('api/organization_users').parsed
-    redirect_to :back, :confirm => "Are you sure you want to publish this survey?"
+    survey = Survey.find(params[:survey_id])
+    survey.publish
+    redirect_to :back
   end
 
   def share
