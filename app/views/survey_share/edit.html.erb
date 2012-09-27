@@ -1,16 +1,16 @@
 <h1> <%= t ".share_survey" %> </h1>
 
 <h2>Share with Users of Organization</h2>
-<%= semantic_form_for @survey, :url => survey_share_path(@survey.id) do |f| %>
+<%= semantic_form_for @survey, :url => survey_share_path(@survey.id), :method => :put do |f| %>
   <% user_ids = @users.map {|u| u['id'] } %>
-  <%= f.input :user_ids, :as => :check_boxes, :collection => user_ids, :member_label => Proc.new { |id| @users.find { |user| user['id'] == id }['name'] }, :label => "Choose users to publish to:" %>
+  <%= f.input :user_ids, :as => :check_boxes, :collection => user_ids, :member_label => Proc.new { |id| @users.find { |user| user['id'] == id }['name'] }, :member_value => Proc.new { |id| id }, :label => "Choose users to publish to:" %>
 
   <h2>Share with an Organization</h2>
   <% if @organizations.size == 0 %>
     There are no organizations you can share with. Sorry.
   <% else %>
     <% participating_organization_ids = @organizations.map { |org| org['id'] } %>
-    <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => participating_organization_ids, :member_label => lambda { |id| @organizations.find { |org| org['id'] == id }['name'] }, :label => "Choose organizations to share with:" %>
+    <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => participating_organization_ids, :member_label => lambda { |id| @organizations.find { |org| org['id'] == id }['name'] }, :member_value => Proc.new { |id| id }, :label => "Choose organizations to share with:" %>
   <% end %>
   <%= f.actions do %>
      <%= f.action :submit, :as => :button %>
