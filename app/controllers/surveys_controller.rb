@@ -76,7 +76,7 @@ class SurveysController < ApplicationController
   def update_shared_orgs
     survey = Survey.find(params[:survey_id])
     params[:survey][:participating_organization_ids].each do |org_id|
-      ParticipatingOrganization.find_or_create(:survey_id => survey.id, :organization_id => org_id)
+      ParticipatingOrganization.create(:survey_id => survey.id, :organization_id => org_id)
     end
     survey.save
     flash[:notice] = "Successfully shared..."
