@@ -47,31 +47,9 @@ class SurveysController < ApplicationController
   end
 
   def publish
-    @survey = Survey.find(params[:survey_id])
-    @users = access_token.get('api/organization_users').parsed
-    @survey.publish
-    redirect_to :back, :confirm => "Are you sure you want to publish this"
-  end
-
-  def share
-    @survey = Survey.find(params[:survey_id])
-    if @survey.published?
-      @organizations = access_token.get('api/organizations').parsed
-      @organizations.select!{ |org| org["id"] != @survey.organization_id }
-    else
-      redirect_to surveys_path
-      flash[:error] = "Can not share an unpublished survey"
-    end
-  end
-
-  def update_shared_orgs
     survey = Survey.find(params[:survey_id])
-    params[:survey][:participating_organization_ids].each do |org_id|
-      ParticipatingOrganization.create(:survey_id => survey.id, :organization_id => org_id)
-    end
-    survey.save
-    flash[:notice] = "Successfully shared..."
-    redirect_to surveys_path
+    survey.publish
+    redirect_to :back
   end
 
   private
