@@ -12,7 +12,7 @@ class Ability
       if role == 'admin'
         can :manage, :all # TODO: Verify this
       elsif role == 'cso_admin'
-        can :read, Survey, ["organization_id = ?", user_info[:org_id]] do |survey|
+        can :read, Survey, Survey.where('organization_id' => user_info[:org_id]) do |survey|
           survey.organization_id == user_info[:org_id]
         end
       elsif role == 'user'
