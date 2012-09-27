@@ -48,4 +48,12 @@ describe Survey do
       survey.user_ids.should == [survey_user.user_id]
     end
   end
+
+  context "participating organizations" do
+    it "returns the ids of all participating organizations" do
+      survey = FactoryGirl.create(:survey)
+      participating_organization = FactoryGirl.create(:participating_organization, :survey_id => survey.id)
+      survey.participating_organization_ids.should == [participating_organization.organization_id]
+    end
+  end
 end

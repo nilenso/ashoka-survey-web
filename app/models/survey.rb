@@ -21,6 +21,10 @@ class Survey < ActiveRecord::Base
     self.survey_users.map(&:user_id)
   end
 
+  def participating_organization_ids
+    self.participating_organizations.map(&:organization_id)
+  end
+
   private
 
   def expiry_date_should_not_be_in_past
