@@ -41,7 +41,7 @@
             <% end %>
           </td>
           <td class="survey_expiry_date"><%= survey.expiry_date %></td>
-          <td><%= survey.organization.name %></td>
+          <td><%= "ORG NAME GOES HERE" %></td>
           <td>
             <%= survey.responses.count %>
             <%= link_to image_tag("add.png", :title => t(".add_response")), new_survey_response_path(survey.id) %>

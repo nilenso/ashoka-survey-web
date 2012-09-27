@@ -6,7 +6,6 @@ describe Survey do
   it { should respond_to :description }
   it { should respond_to :published }
   it { should respond_to :organization_id }
-  it { should respond_to :shared_org_ids }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:responses).dependent(:destroy) }
   it { should have_many(:survey_users).dependent(:destroy) }
@@ -26,11 +25,6 @@ describe Survey do
       date = Date.new(1990,10,24)
       survey = FactoryGirl.build(:survey, :expiry_date => date)
       survey.should_not be_valid
-    end
-
-    it "deserializes the shared_org_ids" do
-      survey = FactoryGirl.create(:survey, :shared_org_ids => [1, 2, 3])
-      survey.reload.shared_org_ids.should eq [1, 2, 3]
     end
   end
 

@@ -8,7 +8,6 @@ class Survey < ActiveRecord::Base
   has_many :responses, :dependent => :destroy
   validate :expiry_date_shoud_be_valid
   accepts_nested_attributes_for :questions
-  serialize :shared_org_ids, Array
   belongs_to :organization
   has_many :survey_users, :dependent => :destroy
   has_many :participating_organizations, :dependent => :destroy

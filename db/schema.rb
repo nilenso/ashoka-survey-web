@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20120927051538) do
+ActiveRecord::Schema.define(:version => 20120927060541) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -102,7 +102,6 @@ ActiveRecord::Schema.define(:version => 20120927051538) do
     t.datetime "updated_at",                         :null => false
     t.boolean  "published",       :default => false
     t.integer  "organization_id"
-    t.string   "shared_org_ids"
   end
 
 end

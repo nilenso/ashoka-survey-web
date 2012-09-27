@@ -16,18 +16,21 @@ describe SurveysController do
     end
 
     context "when filtering" do
+      let(:organization_id) { 12 }
+
       before(:each) do
         Survey.delete_all
       end
 
       context "when CSO admin is logged in" do
+
         before(:each) do
           sign_in_as('cso_admin')
-          organization = FactoryGirl.create(:organization)
-          session[:user_info][:org_id] = organization.id
-          @unpublished_survey = FactoryGirl.create(:survey, :published => false, :organization => organization)
-          @published_survey = FactoryGirl.create(:survey, :published => true, :organization => organization)
+          session[:user_info][:org_id] = organization_id
+          @unpublished_survey = FactoryGirl.create(:survey, :published => false, :organization_id => organization_id)
+          @published_survey = FactoryGirl.create(:survey, :published => true, :organization_id => organization_id)
         end
+
 
         it "shows all published surveys if filter is published" do
           get :index, :published => "true"
@@ -54,10 +57,9 @@ describe SurveysController do
       context "when a User is logged in" do
         it "shows surveys from the user's organization that are shared with him" do
           sign_in_as('user')
-          organization = FactoryGirl.create(:organization)
-          session[:user_info][:org_id] = organization.id
-          survey = FactoryGirl.create(:survey, :organization => organization, :published => true)
-          another_survey = FactoryGirl.create(:survey, :organization => organization, :published => true)
+          session[:user_info][:org_id] = organization_id
+          survey = FactoryGirl.create(:survey, :organization_id => organization_id, :published => true)
+          another_survey = FactoryGirl.create(:survey, :organization_id => organization_id, :published => true)
           survey.survey_users << FactoryGirl.create(:survey_user, :survey_id => survey.id, :user_id => session[:user_id])
           get :index
           response.should be_ok
