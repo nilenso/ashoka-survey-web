@@ -4,7 +4,6 @@ class SessionsController < ApplicationController
     auth = request.env["omniauth.auth"]
     session[:user_id] = auth['uid']
     session[:user_info] = auth['info']
-    Organization.sync(auth['info']['organizations'])
     session[:access_token] = auth['credentials']['token']
     redirect_to request.env['omniauth.origin'] || root_path
   end
