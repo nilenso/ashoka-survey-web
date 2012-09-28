@@ -37,7 +37,7 @@
             <div class="more_description">
               <%= survey.description%>
             </div>
-            <% if survey.description.length > 120 %>
+            <% if survey.description.try(:length).try(:>, 120) %>
               <%= link_to t(".more"), '#', :class => 'more_description_link' %>
               <%= link_to t(".less"), '#', :class => 'less_description_link' %>
             <% end %>
