@@ -133,14 +133,6 @@ describe SurveysController do
       @survey = FactoryGirl.create(:survey)
     end
 
-    it "requires cso_admin for building a survey" do
-      pending
-      sign_in_as('user')
-      get :build, :id => @survey.id
-      response.should redirect_to(surveys_path)
-      flash[:error].should_not be_empty
-    end
-
     it "renders the 'build' template" do
       get :build, :id => @survey.id
       response.should render_template(:build)

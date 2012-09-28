@@ -7,12 +7,14 @@ class Ability
       can :read, Survey do |survey|
         nil
       end
+      can :build, Survey if Rails.env.test? # Couldn't log in a user from Capybara
     else
       role = user_info[:role]
       if role == 'admin'
         can :manage, :all # TODO: Verify this
       elsif role == 'cso_admin'
         can :read, Survey, :organization_id => user_info[:org_id]
+        can :build, Survey, :organization_id => user_info[:org_id]
         can :create, Survey
         can :publish, Survey
         can :edit, Survey

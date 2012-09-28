@@ -22,6 +22,7 @@ describe "Abilities" do
       it { should be_able_to(:edit, Survey.new) }
       it { should be_able_to(:share, Survey.new) }
       it { should be_able_to(:destroy, Survey.new) }
+      it { should be_able_to(:build, Survey.new) }
     end
 
     context "when is a cso admin" do
@@ -31,6 +32,19 @@ describe "Abilities" do
       it { should be_able_to(:publish, Survey.new) }
       it { should be_able_to(:edit, Survey.new) }
       it { should be_able_to(:share, Survey.new) }
+
+      context "when building" do
+        
+        specify "should be able to build surveys belonging to the same organization" do
+          survey = FactoryGirl.create(:survey, :organization_id => 5)
+          ability.should be_able_to(:build, survey)
+        end
+
+        specify "should not be able to build surveys belonging to another organization" do
+          survey = FactoryGirl.create(:survey, :organization_id => 6)
+          ability.should_not be_able_to(:build, survey)
+        end
+      end
 
       context "when destroying" do
 
@@ -69,6 +83,7 @@ describe "Abilities" do
       it { should_not be_able_to(:edit, Survey.new) }
       it { should_not be_able_to(:share, Survey.new) }
       it { should_not be_able_to(:destroy, Survey.new) }
+      it { should_not be_able_to(:build, Survey.new) }
 
       specify "should be able to read surveys shared with him" do
         survey = FactoryGirl.create(:survey, :organization_id => 5)
