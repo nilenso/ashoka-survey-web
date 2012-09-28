@@ -48,7 +48,7 @@ describe "Abilities" do
       end
 
       context "for surveys belonging to another organization" do
-        let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 6) }
+        let(:survey) { FactoryGirl.create(:survey, :organization_id => 6) }
 
         it { should_not be_able_to(:edit, survey) }
         it { should_not be_able_to(:share, survey) }
@@ -59,6 +59,13 @@ describe "Abilities" do
 
         it { should_not be_able_to :create, Response.new(:survey => survey) }
         it { should_not be_able_to :read, Response.new(:survey => survey) }
+      end
+
+      context "for surveys belonging to another organization that have been shared with me" do
+        let(:survey) { FactoryGirl.create(:survey, :organization_id => 50) }
+        before { ParticipatingOrganization.create(:organization_id => user_info[:org_id],  :survey_id => survey.id) }
+
+        it { should be_able_to(:read, survey) }
       end
     end
 

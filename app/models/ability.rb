@@ -14,6 +14,7 @@ class Ability
         can :manage, :all # TODO: Verify this
       elsif role == 'cso_admin'
         can :read, Survey, :organization_id => user_info[:org_id]
+        can :read, Survey, :participating_organizations => { :organization_id => user_info[:org_id] }
         can :build, Survey, :organization_id => user_info[:org_id]
         can :create, Survey
         can :publish, Survey, :organization_id => user_info[:org_id]
