@@ -5,6 +5,7 @@ describe SurveyShareController do
 
   before(:each) do
     sign_in_as('cso_admin')
+    session[:user_info][:org_id] = 1
     survey.publish
 
     session[:access_token] = "123"
@@ -37,15 +38,8 @@ describe SurveyShareController do
       assigns(:survey).should == survey
     end
 
-    it "requires cso_admin for sharing a survey" do
-      sign_in_as('user')
-      get :edit, :survey_id => survey.id
-      response.should redirect_to surveys_path
-      flash[:error].should_not be_empty
-    end
-
     it "does not allow sharing of unpublished surveys" do
-      unpublished_survey = FactoryGirl.create(:survey)
+      unpublished_survey = FactoryGirl.create(:survey, :organization_id => 1)
       get :edit, :survey_id => unpublished_survey.id
       response.should redirect_to surveys_path
       flash[:error].should_not be_empty
@@ -56,13 +50,6 @@ describe SurveyShareController do
     it "adds the users to the survey" do
       put :update, :survey_id => survey.id, :survey => { :user_ids => [1, 2], :participating_organization_ids => [] }
       Survey.find(survey.id).user_ids.should == [1, 2]
-    end
-
-    it "requires cso_admin" do
-      sign_in_as('user')
-      put :update, :survey_id => survey.id
-      response.should redirect_to surveys_path
-      flash[:error].should_not be_empty
     end
 
     it "updates the list of shared organizations" do

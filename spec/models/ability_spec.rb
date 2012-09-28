@@ -29,12 +29,12 @@ describe "Abilities" do
       let(:user_info) { base_user_info.merge(:role => 'cso_admin') }
 
       it { should be_able_to(:create, Survey.new) }
-      it { should be_able_to(:share, Survey.new) }
 
       context "for surveys belonging to the same organization" do
         let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 5) }
 
         it { should be_able_to(:edit, survey) }
+        it { should be_able_to(:share, survey) }
         it { should be_able_to(:build, survey) }
         it { should be_able_to(:destroy, survey) }
         it { should be_able_to(:read, survey) }
@@ -45,6 +45,7 @@ describe "Abilities" do
         let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 6) }
 
         it { should_not be_able_to(:edit, survey) }
+        it { should_not be_able_to(:share, survey) }
         it { should_not be_able_to(:build, survey) }
         it { should_not be_able_to(:publish, survey) }
         it { should_not be_able_to(:destroy, survey) }
