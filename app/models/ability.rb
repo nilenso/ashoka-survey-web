@@ -26,6 +26,7 @@ class Ability
         .where('surveys.organization_id' => user_info[:org_id]) do |survey|
           SurveyUser.find_by_user_id_and_survey_id(user_info[:user_id], survey.id)
         end
+        cannot :destroy, Survey
       end
     end
   end
