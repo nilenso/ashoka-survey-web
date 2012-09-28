@@ -70,13 +70,6 @@ describe SurveysController do
       sign_in_as('cso_admin')
     end
 
-    it "requires cso_admin for Deleting a survey" do
-      sign_in_as('user')
-      delete :destroy, :id => survey.id
-      response.should redirect_to(surveys_path)
-      flash[:error].should_not be_empty
-    end
-
     it "deletes a survey" do
       expect { delete :destroy, :id => survey.id }.to change { Survey.count }.by(-1)
       flash[:notice].should_not be_nil

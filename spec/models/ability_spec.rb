@@ -31,16 +31,33 @@ describe "Abilities" do
       it { should be_able_to(:publish, Survey.new) }
       it { should be_able_to(:edit, Survey.new) }
       it { should be_able_to(:share, Survey.new) }
-      it { should be_able_to(:destroy, Survey.new) }
 
-      specify "should be able to read surveys belonging to the same organization" do
-        survey = FactoryGirl.create(:survey, :organization_id => 5)
-        ability.should be_able_to(:read, survey)
+      context "when destroying" do
+
+        specify "should be able to destroy surveys belonging to the same organization" do
+          survey = FactoryGirl.create(:survey, :organization_id => 5)
+          ability.should be_able_to(:destroy, survey)
+        end
+
+        specify "should not be able to destroy surveys belonging to another organization" do
+          survey = FactoryGirl.create(:survey, :organization_id => 6)
+          ability.should_not be_able_to(:destroy, survey)
+        end
+
       end
 
-      specify "should not be able to read surveys belonging to another organization" do
-        survey = FactoryGirl.create(:survey, :organization_id => 6)
-        ability.should_not be_able_to(:read, survey)
+      context "when reading" do
+
+        specify "should be able to read surveys belonging to the same organization" do
+          survey = FactoryGirl.create(:survey, :organization_id => 5)
+          ability.should be_able_to(:read, survey)
+        end
+
+        specify "should not be able to read surveys belonging to another organization" do
+          survey = FactoryGirl.create(:survey, :organization_id => 6)
+          ability.should_not be_able_to(:read, survey)
+        end
+
       end
     end
 
