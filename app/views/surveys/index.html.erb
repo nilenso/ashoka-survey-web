@@ -56,7 +56,7 @@
               <%= link_to image_tag("edit.png"), surveys_build_path(survey.id), :title => t(".edit_survey") if can? :publish, survey %>
               <%= link_to button_tag(t ".publish_survey"), survey_publish_path(survey.id), :confirm => "Are you sure you want to publish this survey?" if can? :edit, survey %>
             <% end %>
-            <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } %>
+            <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %>
           </td>
         </tr>
         <% end %>
