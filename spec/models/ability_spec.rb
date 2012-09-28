@@ -23,6 +23,9 @@ describe "Abilities" do
       it { should be_able_to(:share, Survey.new) }
       it { should be_able_to(:destroy, Survey.new) }
       it { should be_able_to(:build, Survey.new) }
+
+      it { should be_able_to(:create, Response.new)}
+      it { should be_able_to(:read, Response.new)}
     end
 
     context "when is a cso admin" do
@@ -41,6 +44,7 @@ describe "Abilities" do
         it { should be_able_to(:publish, survey) }
 
         it { should be_able_to :create, Response.new(:survey => survey) }
+        it { should be_able_to :read, Response.new(:survey => survey) }
       end
 
       context "for surveys belonging to another organization" do
@@ -54,6 +58,7 @@ describe "Abilities" do
         it { should_not be_able_to(:read, survey) }
 
         it { should_not be_able_to :create, Response.new(:survey => survey) }
+        it { should_not be_able_to :read, Response.new(:survey => survey) }
       end
     end
 
@@ -68,17 +73,20 @@ describe "Abilities" do
       it { should_not be_able_to(:build, Survey.new) }
 
       context "for a survey shared with him" do
-        let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 5) }
+        let(:survey) { FactoryGirl.create(:survey, :organization_id => 5) }
+        let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => base_user_info[:user_id]) }
         before(:each) do
           SurveyUser.create(:survey_id => survey.id, :user_id => user_info[:user_id])
         end
 
         it { should be_able_to :read, survey }
         it { should be_able_to :create, Response.new(:survey => survey) }
+        it { should be_able_to :read,  response }
       end
 
       context "for a survey not shared with him" do
         let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 7) }
+        let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => 23423423) }
         before(:each) do
           survey = FactoryGirl.create(:survey, :organization_id => 6)
           SurveyUser.create(:survey_id => survey.id, :user_id => 123)
@@ -86,6 +94,7 @@ describe "Abilities" do
 
         it { should_not be_able_to :read, survey }
         it { should_not be_able_to :create, Response.new(:survey => survey) }
+        it { should_not be_able_to :read,  response }
       end
     end
   end

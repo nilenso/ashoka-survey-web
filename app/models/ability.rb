@@ -21,10 +21,12 @@ class Ability
         can :share, Survey, :organization_id => user_info[:org_id]
         can :destroy, Survey, :organization_id => user_info[:org_id]
 
-        can :create, Response, :survey=> { :organization_id => user_info[:org_id] }
+        can :create, Response, :survey => { :organization_id => user_info[:org_id] }
+        can :read, Response, :survey => { :organization_id => user_info[:org_id] } 
       elsif role == 'user'
         can :read, Survey, :survey_users => { :user_id => user_info[:user_id ] }
         can :create, Response, :survey => { :survey_users => { :user_id => user_info[:user_id ] } }
+        can :read, Response, :user_id  => user_info[:user_id]
       end
     end
   end

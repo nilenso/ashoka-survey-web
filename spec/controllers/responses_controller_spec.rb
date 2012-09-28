@@ -90,16 +90,5 @@ describe ResponsesController do
       response.should be_ok
       assigns(:responses).should == Response.find_all_by_survey_id(survey.id)
     end
-
-    it "renders only reponses added by a user if a user is signed in" do
-      sign_in_as('user')
-      survey = FactoryGirl.create(:survey, :published => true)
-      response_1 = FactoryGirl.create(:response, :survey => survey, :user_id => session[:user_id])
-      response_2 = FactoryGirl.create(:response, :survey => survey, :user_id => '12345')
-      get :index, :survey_id => survey.id
-      response.should be_ok
-      assigns(:responses).should include response_1
-      assigns(:responses).should_not include response_2
-    end
   end
 end
