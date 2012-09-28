@@ -28,8 +28,10 @@ group :assets do
   gem 'uglifier', '>= 1.0.3'
 end
 
+
 group :test, :development do
   gem 'jasminerice'
+  gem 'simplecov', :require => false
   gem 'guard-jasmine'
   gem 'rspec-rails'
   gem 'rspec-http'
