@@ -1,9 +1,9 @@
 require 'will_paginate/array'
 
 class SurveysController < ApplicationController
-  load_and_authorize_resource :only => [:index, :destroy, :new]
+  load_and_authorize_resource :only => [:index, :destroy, :new, :create]
 
-  before_filter :require_cso_admin, :except => [:new, :destroy, :index, :build]
+  before_filter :require_cso_admin, :except => [:create, :new, :destroy, :index, :build]
   before_filter :survey_unpublished, :only => [:build]
 
   def index
