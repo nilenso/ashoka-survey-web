@@ -34,52 +34,32 @@ describe SurveysController do
 
       before(:each) do
         Survey.delete_all
+        sign_in_as('cso_admin')
+        session[:user_info][:org_id] = organization_id
+        @unpublished_survey = FactoryGirl.create(:survey, :published => false, :organization_id => organization_id)
+        @published_survey = FactoryGirl.create(:survey, :published => true, :organization_id => organization_id)
       end
 
-      context "when CSO admin is logged in" do
 
-        before(:each) do
-          sign_in_as('cso_admin')
-          session[:user_info][:org_id] = organization_id
-          @unpublished_survey = FactoryGirl.create(:survey, :published => false, :organization_id => organization_id)
-          @published_survey = FactoryGirl.create(:survey, :published => true, :organization_id => organization_id)
-        end
-
-
-        it "shows all published surveys if filter is published" do
-          get :index, :published => "true"
-          response.should be_ok
-          assigns(:surveys).should include @published_survey
-          assigns(:surveys).should_not include @unpublished_survey
-        end
-
-        it "shows all unpublished surveys if filter is unpublished" do
-          get :index, :published => "false"
-          response.should be_ok
-          assigns(:surveys).should include @unpublished_survey
-          assigns(:surveys).should_not include @published_survey
-        end
-
-        it "shows all surveys if filter is not specified" do
-          get :index
-          response.should be_ok
-          assigns(:surveys).should include @unpublished_survey
-          assigns(:surveys).should include @published_survey
-        end
+      it "shows all published surveys if filter is published" do
+        get :index, :published => "true"
+        response.should be_ok
+        assigns(:surveys).should include @published_survey
+        assigns(:surveys).should_not include @unpublished_survey
       end
 
-      context "when a User is logged in" do
-        it "shows surveys from the user's organization that are shared with him" do
-          pending "Need to get Cancan working for a normal user"
-          sign_in_as('user')
-          session[:user_info][:org_id] = organization_id
-          survey = FactoryGirl.create(:survey, :organization_id => organization_id, :published => true)
-          another_survey = FactoryGirl.create(:survey, :organization_id => organization_id, :published => true)
-          survey.survey_users << FactoryGirl.create(:survey_user, :survey_id => survey.id, :user_id => session[:user_id])
-          get :index
-          response.should be_ok
-          assigns(:surveys).should eq [survey]
-        end
+      it "shows all unpublished surveys if filter is unpublished" do
+        get :index, :published => "false"
+        response.should be_ok
+        assigns(:surveys).should include @unpublished_survey
+        assigns(:surveys).should_not include @published_survey
+      end
+
+      it "shows all surveys if filter is not specified" do
+        get :index
+        response.should be_ok
+        assigns(:surveys).should include @unpublished_survey
+        assigns(:surveys).should include @published_survey
       end
     end
   end
