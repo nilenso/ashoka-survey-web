@@ -1,6 +1,9 @@
 class ResponsesController < ApplicationController
+  load_and_authorize_resource :survey, :only => [:new, :create]
+  load_and_authorize_resource :only => [:new, :create], :through => :survey
+
   before_filter :survey_published
-  before_filter :require_login_of_same_org_user
+  before_filter :require_login_of_same_org_user, :except => [:new, :create]
   def new
     @survey = Survey.find(params[:survey_id])
     @response = Response.new
