@@ -82,16 +82,8 @@ describe SurveysController do
   end
 
   context "GET 'new" do
-
     before(:each) do
       sign_in_as('cso_admin')
-    end
-
-    it "requires cso_admin for creating a survey" do
-      sign_in_as('user')
-      get :new
-      response.should redirect_to(surveys_path)
-      flash[:error].should_not be_empty
     end
 
     it "assigns the survey instance variable" do
