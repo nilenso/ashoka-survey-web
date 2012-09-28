@@ -159,13 +159,6 @@ describe SurveysController do
       response.stub(:parsed).and_return([{"id" => 123, "name" => "user"}])
     end
 
-    it "requires cso_admin for publishing a survey" do
-      sign_in_as('user')
-      get :publish, :survey_id => @survey.id
-      response.should redirect_to surveys_path
-      flash[:error].should_not be_empty
-    end
-
     it "redirects back to the previous page" do
       request.env["HTTP_REFERER"] = 'http://google.com'
       get :publish, :survey_id => @survey.id

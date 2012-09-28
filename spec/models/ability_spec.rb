@@ -29,49 +29,26 @@ describe "Abilities" do
       let(:user_info) { base_user_info.merge(:role => 'cso_admin') }
 
       it { should be_able_to(:create, Survey.new) }
-      it { should be_able_to(:publish, Survey.new) }
-      it { should be_able_to(:edit, Survey.new) }
       it { should be_able_to(:share, Survey.new) }
 
-      context "when building" do
-        
-        specify "should be able to build surveys belonging to the same organization" do
-          survey = FactoryGirl.create(:survey, :organization_id => 5)
-          ability.should be_able_to(:build, survey)
-        end
+      context "for surveys belonging to the same organization" do
+        let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 5) }
 
-        specify "should not be able to build surveys belonging to another organization" do
-          survey = FactoryGirl.create(:survey, :organization_id => 6)
-          ability.should_not be_able_to(:build, survey)
-        end
+        it { should be_able_to(:edit, survey) }
+        it { should be_able_to(:build, survey) }
+        it { should be_able_to(:destroy, survey) }
+        it { should be_able_to(:read, survey) }
+        it { should be_able_to(:publish, survey) }
       end
 
-      context "when destroying" do
+      context "for surveys belonging to another organization" do
+        let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 6) }
 
-        specify "should be able to destroy surveys belonging to the same organization" do
-          survey = FactoryGirl.create(:survey, :organization_id => 5)
-          ability.should be_able_to(:destroy, survey)
-        end
-
-        specify "should not be able to destroy surveys belonging to another organization" do
-          survey = FactoryGirl.create(:survey, :organization_id => 6)
-          ability.should_not be_able_to(:destroy, survey)
-        end
-
-      end
-
-      context "when reading" do
-
-        specify "should be able to read surveys belonging to the same organization" do
-          survey = FactoryGirl.create(:survey, :organization_id => 5)
-          ability.should be_able_to(:read, survey)
-        end
-
-        specify "should not be able to read surveys belonging to another organization" do
-          survey = FactoryGirl.create(:survey, :organization_id => 6)
-          ability.should_not be_able_to(:read, survey)
-        end
-
+        it { should_not be_able_to(:edit, survey) }
+        it { should_not be_able_to(:build, survey) }
+        it { should_not be_able_to(:publish, survey) }
+        it { should_not be_able_to(:destroy, survey) }
+        it { should_not be_able_to(:read, survey) }
       end
     end
 

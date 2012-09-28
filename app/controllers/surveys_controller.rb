@@ -1,9 +1,8 @@
 require 'will_paginate/array'
 
 class SurveysController < ApplicationController
-  load_and_authorize_resource :only => [:index, :destroy, :new, :create, :build]
+  load_and_authorize_resource
 
-  before_filter :require_cso_admin, :except => [:create, :new, :destroy, :index, :build]
   before_filter :survey_unpublished, :only => [:build]
 
   def index
@@ -53,15 +52,6 @@ class SurveysController < ApplicationController
   end
 
   private
-
-  def require_cso_admin
-    role = session[:user_info][:role] if user_currently_logged_in?
-    unless role == 'cso_admin'
-      flash[:error] = t "flash.not_authorized"
-      redirect_to surveys_path
-    end
-  end
-
   def survey_unpublished
     survey = Survey.find(params[:id])
     if survey.published?
