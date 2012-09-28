@@ -99,13 +99,6 @@ describe SurveysController do
       @survey_attributes = FactoryGirl.attributes_for(:survey)
     end
 
-    it "requires cso_admin for creating a survey" do
-      sign_in_as('user')
-      post :create, :survey => @survey_attributes
-      response.should redirect_to(surveys_path)
-      flash[:error].should_not be_empty
-    end
-
     context "when save is unsuccessful" do
       it "redirects to the surveys build path" do
         post :create, :survey => @survey_attributes
