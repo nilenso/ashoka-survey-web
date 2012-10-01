@@ -25,7 +25,7 @@ class Ability
         can :create, Survey
         can :publish, Survey, :organization_id => user_info[:org_id]
         can :edit, Survey, :organization_id => user_info[:org_id]
-        can :share, Survey, :organization_id => user_info[:org_id]
+        can :share, Survey
         can :destroy, Survey, :organization_id => user_info[:org_id]
 
         can :create, Response, :survey => { :organization_id => user_info[:org_id] }
