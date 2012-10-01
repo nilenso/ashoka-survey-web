@@ -51,7 +51,6 @@ describe "Abilities" do
         let(:survey) { FactoryGirl.create(:survey, :organization_id => 6) }
 
         it { should_not be_able_to(:edit, survey) }
-        it { should_not be_able_to(:share, survey) }
         it { should_not be_able_to(:build, survey) }
         it { should_not be_able_to(:publish, survey) }
         it { should_not be_able_to(:destroy, survey) }

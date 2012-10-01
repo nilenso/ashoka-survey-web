@@ -6,9 +6,7 @@ class SurveyShareController < ApplicationController
 
     if @survey.published?
       @users = access_token.get('/api/organization_users').parsed
-      @organizations = access_token.get('/api/organizations').parsed.reject do |org|
-        org['id'] == @survey.organization_id
-      end
+      @other_organizations = Organization.all_except(access_token, @survey.organization_id)
     else
       redirect_to surveys_path
       flash[:error] = "Can not share an unpublished survey"

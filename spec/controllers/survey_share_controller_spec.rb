@@ -30,7 +30,7 @@ describe SurveyShareController do
 
     it "assigns all the other organizations available" do
       get :edit, :survey_id => survey.id
-      assigns(:organizations).should == [{"id" => 2, "name" => "Ashoka"}]
+      assigns(:other_organizations).should == [{"id" => 2, "name" => "Ashoka"}]
     end
 
     it "assigns current survey" do
