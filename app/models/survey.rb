@@ -21,6 +21,16 @@ class Survey < ActiveRecord::Base
     self.survey_users.map(&:user_id)
   end
 
+  def share_with_users(users)
+    users.each { |user_id| self.survey_users.create(:user_id => user_id) }
+  end
+
+  def share_with_organizations(organizations)
+    organizations.each do |organization_id| 
+      self.participating_organizations.create(:organization_id => organization_id) 
+    end
+  end
+
   def participating_organization_ids
     self.participating_organizations.map(&:organization_id)
   end

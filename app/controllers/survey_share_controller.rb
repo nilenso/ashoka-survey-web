@@ -20,12 +20,11 @@ class SurveyShareController < ApplicationController
     survey.participating_organizations.destroy_all
     survey.survey_users.destroy_all
 
-    user_ids = Sanitizer.clean_params(params[:survey][:user_ids])
-    user_ids.each { |user_id| SurveyUser.create(:survey_id => survey.id, :user_id => user_id)}
+    users = Sanitizer.clean_params(params[:survey][:user_ids])
+    survey.share_with_users(users)
 
-    organization_ids = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
-    organization_ids.each { |org_id| ParticipatingOrganization.create(:survey_id => survey.id, :organization_id => org_id) }
-
+    organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
+    survey.share_with_organizations(organizations)
     redirect_to surveys_path, :notice => "Survey has been shared"
   end
 end

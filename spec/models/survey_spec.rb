@@ -47,6 +47,13 @@ describe Survey do
       survey_user = FactoryGirl.create(:survey_user, :survey_id => survey.id)
       survey.user_ids.should == [survey_user.user_id]
     end
+
+    it "shares survey with the given users" do
+      survey = FactoryGirl.create(:survey)
+      users = [1, 2]
+      survey.share_with_users(users)
+      survey.user_ids.should == users
+    end
   end
 
   context "participating organizations" do
@@ -54,6 +61,13 @@ describe Survey do
       survey = FactoryGirl.create(:survey)
       participating_organization = FactoryGirl.create(:participating_organization, :survey_id => survey.id)
       survey.participating_organization_ids.should == [participating_organization.organization_id]
+    end
+
+    it "shares survey with the given organizations" do
+      survey = FactoryGirl.create(:survey)
+      organizations = [1, 2]
+      survey.share_with_organizations(organizations)
+      survey.participating_organization_ids.should == organizations
     end
   end
 end
