@@ -25,6 +25,10 @@ class Survey < ActiveRecord::Base
     User.find_by_organization(access_token, organization_id).select { |user| self.user_ids.include?(user.id) }
   end
 
+  def organizations(access_token, organization_id)
+    Organization.all_except(access_token, organization_id).select { |org| self.participating_organization_ids.include?(org.id) }
+  end
+
   def share_with_users(users)
     users.each { |user_id| self.survey_users.create(:user_id => user_id) }
   end

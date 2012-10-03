@@ -8,7 +8,9 @@ class SurveyShareController < ApplicationController
       users = Organization.users(access_token, current_user_org)
       @shared_users = @survey.users(access_token, current_user_org)
       @unshared_users = users.reject { |user| @shared_users.map(&:id).include?(user.id) }
-      @other_organizations = Organization.all_except(access_token, @survey.organization_id)
+      other_organizations = Organization.all_except(access_token, @survey.organization_id)
+      @shared_organizations = @survey.organizations(access_token, current_user_org)
+      @unshared_organizations = other_organizations.reject { |org| @shared_organizations.map(&:id).include?(org.id) }
     else
       redirect_to surveys_path
       flash[:error] = "Can not share an unpublished survey"

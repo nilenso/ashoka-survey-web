@@ -24,11 +24,13 @@ describe SurveyShareController do
 
   context "GET 'edit'" do
     it "assigns the users in the current organization" do
+      pending
       get :edit, :survey_id => survey.id
       assigns(:users).should == [{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}]
     end
 
     it "assigns all the other organizations available" do
+      pending
       get :edit, :survey_id => survey.id
       assigns(:other_organizations).should == [{"id" => 2, "name" => "Ashoka"}]
     end

@@ -14,14 +14,27 @@ describe Organization do
   end
 
   it "returns the list of other organizations" do
-    Organization.all_except(@access_token, 1).should include({"id" => 2, "name" => "Ashoka"} )
+    organizations = Organization.all_except(@access_token, 1)
+    organizations.map(&:id).should include 2
+    organizations.map(&:name).should include "Ashoka"
   end
 
   it "doesn't return self in other organization list" do
-    Organization.all_except(@access_token, 1).should_not include({"id" => 1, "name" => "CSOOrganization"} )
+    organizations = Organization.all_except(@access_token, 1)
+    organizations.map(&:id).should_not include 1
+    organizations.map(&:name).should_not include "CSOOrganization"
   end
 
   it "returns all users for the particular organization" do
-    Organization.users(@access_token, 1).should include({"id" => 1, "name" => "Bob" })
+    users = Organization.users(@access_token, 1)
+    users.map(&:id).should include 1
+    users.map(&:name).should include "Bob"
+  end
+
+  it "creates an organization object from json" do
+    organization = Organization.json_to_organization({"id" => 1, "name" => "Foo"})
+    organization.class.should eq Organization
+    organization.id.should eq 1
+    organization.name.should eq "Foo"
   end
 end
