@@ -21,6 +21,10 @@ class Survey < ActiveRecord::Base
     self.survey_users.map(&:user_id)
   end
 
+  def users(access_token, organization_id)
+    User.find_by_organization(access_token, organization_id).select { |user| self.user_ids.include?(user.id) }
+  end
+
   def share_with_users(users)
     users.each { |user_id| self.survey_users.create(:user_id => user_id) }
   end

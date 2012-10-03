@@ -5,7 +5,7 @@ class Organization
     end
   end
 
-  def self.users(access_token, organization_id)
-    access_token.get("/api/organizations/#{organization_id}/users").parsed
+  def self.users(client, organization_id)
+    User.find_by_organization(client, organization_id)
   end
 end

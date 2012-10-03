@@ -5,7 +5,9 @@ class SurveyShareController < ApplicationController
     authorize! :share, @survey
 
     if @survey.published?
-      @users = Organization.users(access_token, current_user_org)
+      users = Organization.users(access_token, current_user_org)
+      @shared_users = @survey.users(access_token, current_user_org)
+      @unshared_users = users.reject { |user| @shared_users.map(&:id).include?(user.id) }
       @other_organizations = Organization.all_except(access_token, @survey.organization_id)
     else
       redirect_to surveys_path

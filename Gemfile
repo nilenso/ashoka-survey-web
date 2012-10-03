@@ -31,6 +31,7 @@ end
 
 group :test, :development do
   gem 'jasminerice'
+  gem 'quiet_assets'
   gem 'simplecov', :require => false
   gem 'guard-jasmine'
   gem 'rspec-rails'
