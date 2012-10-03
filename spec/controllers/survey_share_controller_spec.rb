@@ -14,7 +14,7 @@ describe SurveyShareController do
     access_token = mock(OAuth2::AccessToken)
     controller.stub(:access_token).and_return(access_token)
 
-    access_token.stub(:get).with('/api/organization_users').and_return(users_response)
+    access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
     users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
 
     access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
