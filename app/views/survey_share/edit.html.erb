@@ -10,8 +10,8 @@
     <% if @other_organizations.size == 0 %>
       There are no organizations you can share with. Sorry.
     <% else %>
-      <% participating_organization_ids = @organizations.map { |org| org['id'] } %>
-      <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => participating_organization_ids, :member_label => lambda { |id| @organizations.find { |org| org['id'] == id }['name'] }, :member_value => Proc.new { |id| id }, :label => "Choose organizations to share with:" %>
+      <% participating_organization_ids = @other_organizations.map { |org| org['id'] } %>
+      <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => participating_organization_ids, :member_label => lambda { |id| @other_organizations.find { |org| org['id'] == id }['name'] }, :member_value => Proc.new { |id| id }, :label => "Choose organizations to share with:" %>
     <% end %>
   <% end %>
   <%= f.actions do %>
