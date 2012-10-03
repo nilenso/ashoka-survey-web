@@ -58,14 +58,6 @@ describe SurveyShareController do
       survey.participating_organizations.map(&:organization_id).should == [12, 45]
     end
 
-    it "removes the previous shared_users and participating_organizations for the survey" do
-      participating_organizations = [12, 45]
-      put :update, :survey_id => survey.id, :survey => { :user_ids => [1, 2], :participating_organization_ids => participating_organizations }
-      put :update, :survey_id => survey.id, :survey => { :user_ids => [1], :participating_organization_ids => [12] }
-      survey.participating_organizations.map(&:organization_id).should_not include 45
-      survey.survey_users.map(&:user_id).should_not include 2
-    end
-
     it "redirects to the surveys page with success flash" do
       participating_organizations = [12, 45]
       put :update, :survey_id => survey.id, :survey => { :user_ids => [1,2], :participating_organization_ids => participating_organizations }

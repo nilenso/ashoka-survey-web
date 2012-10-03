@@ -20,9 +20,9 @@ class SurveyShareController < ApplicationController
 
     authorize! :share, survey
 
-    survey.share_with_users(users, access_token)
-
+    survey.share_with_users(users)
     survey.share_with_organizations(organizations)
+
     redirect_to surveys_path, :notice => "Survey has been shared"
   end
 end
