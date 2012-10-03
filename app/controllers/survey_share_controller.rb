@@ -5,7 +5,7 @@ class SurveyShareController < ApplicationController
     authorize! :share, @survey
 
     if @survey.published?
-      @users = access_token.get('/api/organization_users').parsed
+      @users = Organization.users(access_token, current_user_org)
       @other_organizations = Organization.all_except(access_token, @survey.organization_id)
     else
       redirect_to surveys_path
