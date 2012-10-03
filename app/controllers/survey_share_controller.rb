@@ -15,15 +15,13 @@ class SurveyShareController < ApplicationController
 
   def update
     survey = Survey.find_by_id(params[:survey_id])
+    organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
+    users = Sanitizer.clean_params(params[:survey][:user_ids])
+
     authorize! :share, survey
 
-    survey.participating_organizations.destroy_all
-    survey.survey_users.destroy_all
+    survey.share_with_users(users, access_token)
 
-    users = Sanitizer.clean_params(params[:survey][:user_ids])
-    survey.share_with_users(users)
-
-    organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
     survey.share_with_organizations(organizations)
     redirect_to surveys_path, :notice => "Survey has been shared"
   end
