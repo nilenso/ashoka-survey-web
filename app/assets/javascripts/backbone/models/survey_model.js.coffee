@@ -1,9 +1,9 @@
 # Wr
-class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
-
-  initialize:(survey_id) ->
-    this.survey_id = survey_id
+class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel  
+  initialize:(@survey_id) ->
     @question_models = []
+    this.urlRoot = "/api/surveys/#{survey_id}"
+    this.fetch()
 
   add_new_question_model:(type) ->
     switch type

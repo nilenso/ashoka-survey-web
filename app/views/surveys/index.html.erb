@@ -4,7 +4,7 @@
 
 <% if can? :create, Survey %>
   <div class="admin_tasks">
-    <%= link_to t(".create_survey"), new_survey_path, :action => :post %>
+    <%= link_to t(".create_survey"), surveys_path, :method => :post %>
     <div class="filters">
       <%= t(".show") %> : <%= link_to t(".published"), surveys_path(:published => true) %> |
       <%= link_to t(".unpublished"), surveys_path(:published => false) %> |

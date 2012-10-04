@@ -32,15 +32,17 @@ module Api
       end
 
       context "GET 'show" do
-        it "responds with all the questions in a survey" do
-          survey = FactoryGirl.create(:survey_with_questions)
+        let(:survey) { FactoryGirl.create :survey }
+
+        it "returns the survey information as JSON" do
           get :show, :id => survey.id
-          returned_json = JSON.parse(response.body)
-          returned_json.length.should == 5
-          survey.questions.each_with_index do |question, index|
-            returned_json[index]['id'].should == question.id
-            returned_json[index]['content'].should == question.content
-          end
+          response.should be_ok
+          JSON.parse(response.body).should == JSON.parse(survey.to_json)
+        end
+
+        it "returns a :bad_request if the survey isn't found" do
+          get :show, :id => 1234
+          response.should_not be_ok
         end
       end
     end

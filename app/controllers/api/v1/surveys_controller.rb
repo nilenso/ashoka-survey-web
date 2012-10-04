@@ -6,8 +6,12 @@ module Api
       end
 
       def show
-        survey = Survey.find(params[:id])
-        render :json => survey.questions.select("id, content")
+        survey = Survey.find_by_id(params[:id])
+        if survey
+          render :json => survey.to_json
+        else
+          render :nothing => true, :status => :bad_request
+        end
       end
     end
   end

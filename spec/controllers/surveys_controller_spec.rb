@@ -116,13 +116,9 @@ describe SurveysController do
         created_survey = Survey.find_last_by_name(@survey_attributes[:name])
         created_survey.organization_id.should == session[:user_info][:org_id]
       end
-    end
 
-    context "when save is unsuccessful" do
-      it "renders the new page" do
-        post :create, :surveys => { :name => "" }
-        response.should be_ok
-        response.should render_template(:new)
+      it "creates a survey with placeholder attrs if params[:survey] doesn't exist" do
+        expect { post :create }.to change { Survey.count }.by(1)
       end
     end
   end
