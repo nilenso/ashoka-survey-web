@@ -18,21 +18,27 @@ describe SurveyShareController do
     users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
 
     access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
-    orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
+    orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}, {"id" => 3, "name" => "FooOrganization"} ])
   end
 
 
   context "GET 'edit'" do
-    it "assigns the users in the current organization" do
-      pending
+    it "assigns shared and unshared users in the current organization" do
+      survey.survey_users << FactoryGirl.create(:survey_user, :user_id => 1, :survey_id => survey.id)
       get :edit, :survey_id => survey.id
-      assigns(:users).should == [{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}]
+      assigns(:shared_users).map{ |user| {:id => user.id, :name => user.name} }
+      .should include({:id=>1, :name=>"Bob"})
+      assigns(:unshared_users).map{ |user| {:id => user.id, :name => user.name} }
+      .should include({:id=>2, :name=>"John"})
     end
 
     it "assigns all the other organizations available" do
-      pending
+      survey.participating_organizations << FactoryGirl.create(:participating_organization, :organization_id => 2, :survey_id => survey.id)
       get :edit, :survey_id => survey.id
-      assigns(:other_organizations).should == [{"id" => 2, "name" => "Ashoka"}]
+      assigns(:shared_organizations).map{ |org| {:id => org.id, :name => org.name} }
+      .should include({:id=>2, :name=>"Ashoka"})
+      assigns(:unshared_organizations).map{ |org| {:id => org.id, :name => org.name} }
+      .should include({:id=>3, :name=>"FooOrganization"})
     end
 
     it "assigns current survey" do
