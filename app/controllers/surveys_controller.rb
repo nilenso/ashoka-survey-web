@@ -79,6 +79,19 @@ class SurveysController < ApplicationController
     end
   end
 
+  def update_share_with_organizations
+    survey = Survey.find(params[:survey_id])
+    organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
+    if organizations.present?
+      survey.share_with_organizations(organizations)
+      flash[:notice] = t "flash.survey_shared", :survey_name => survey.name
+      redirect_to surveys_path
+    else
+      flash[:error] = t "flash.organizations_not_selected"
+      redirect_to(:back)
+    end
+  end
+
   private
   def survey_unpublished
     survey = Survey.find(params[:id])

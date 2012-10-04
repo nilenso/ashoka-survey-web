@@ -19,6 +19,7 @@ en:
     sharing_unpublished_survey: "You can't share an unpublished survey"
     survey_shared: "%{survey_name} has been shared"
     user_not_selected: "You haven't selected any user to publish the survey to"
+    organizations_not_selected: "You haven't selected any organizations to share the survey with"
 
   surveys:
     new:
