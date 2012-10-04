@@ -45,6 +45,26 @@ module Api
           response.should_not be_ok
         end
       end
+
+      context "PUT 'update'" do
+        let(:survey) { FactoryGirl.create :survey }
+
+        it "updates the relevant survey" do
+          put :update, :id => survey.id, :survey => { :name => "Smit" }
+          response.should be_ok
+          survey.reload.name.should == "Smit"
+        end
+
+        it "returns a :bad_request if the survey_id is invalid" do
+          put :update, :id => 123, :survey => { :name => "Smit" }
+          response.should_not be_ok
+        end
+
+        it "returns a :bad_request if survey save fails" do
+          put :update, :id => survey.id, :survey => { :expiry_date => -5.days.from_now }
+          response.should_not be_ok
+        end
+      end
     end
   end
 end

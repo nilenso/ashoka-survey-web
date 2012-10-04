@@ -20,7 +20,7 @@ SurveyWeb::Application.routes.draw do
     scope :module => :v1 do
       resources :questions, :except => [:edit, :new]
       resources :options, :except => [:edit, :new, :show]
-      resources :surveys, :only => [:index, :show]
+      resources :surveys, :only => [:index, :show, :update]
       resources :responses, :only => [:create, :update]
       post 'questions/:id/image_upload' => 'questions#image_upload'
     end
