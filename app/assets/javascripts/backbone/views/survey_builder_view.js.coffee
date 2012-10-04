@@ -15,7 +15,10 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     $(this.el).ajaxStart(window.notifications_view.show_spinner)
     $(this.el).ajaxStop(window.notifications_view.hide_spinner)
     $( "#sidebar" ).tabs();
-    $.getJSON("/api/questions?survey_id=#{survey_id}", this.preload_questions)
+    this.survey.on('change', => 
+      $.getJSON("/api/questions?survey_id=#{survey_id}", this.preload_questions)
+      this.survey.off('change')
+    )
 
   new_question: (event, type) ->
     #TODO: Switch tab here.
