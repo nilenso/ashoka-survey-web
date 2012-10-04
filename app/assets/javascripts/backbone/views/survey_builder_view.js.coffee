@@ -19,6 +19,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
     this.survey.fetch({
         success: (data) => 
+          this.dummy_pane.render()
           $.getJSON("/api/questions?survey_id=#{survey_id}", this.preload_questions)
       })
 
