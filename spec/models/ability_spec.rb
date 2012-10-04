@@ -65,6 +65,11 @@ describe "Abilities" do
         before { ParticipatingOrganization.create(:organization_id => user_info[:org_id],  :survey_id => survey.id) }
 
         it { should be_able_to(:read, survey) }
+        it "should be able to read responses added by members of his organizations" do
+          response = Response.new(:survey => survey)
+          response.organization_id = user_info[:org_id]
+          should be_able_to :read, response
+        end
       end
     end
 
