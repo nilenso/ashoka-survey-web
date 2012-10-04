@@ -20,8 +20,8 @@ describe 'BackboneSurveyBuilder', js: true do
     end
 
     it "should add a radio question in the dummy" do
-      dummy = find("#dummy_pane").find('div')
-      dummy['type'].should == "RadioQuestion"
+      dummy = find("#dummy_pane").find('div[type=RadioQuestion]')
+      dummy.should_not be_nil
       dummy.should have_content("Untitled question")
       dummy.should have_content("First Option")
       dummy.should have_content("Second Option")
@@ -29,7 +29,7 @@ describe 'BackboneSurveyBuilder', js: true do
     end
 
     it "should add a hidden radio question in the settings pane" do
-      actual = find("#settings_pane").find('div')
+      actual = find("#settings_pane").find('div[type=RadioQuestion]')
       actual['type'].should == "RadioQuestion"
       actual['style'].should == "display: none; "
       actual.should have_button("Add Option")
@@ -92,14 +92,14 @@ describe 'BackboneSurveyBuilder', js: true do
     end
 
     it "should add a single line question in the dummy" do
-      dummy = find("#dummy_pane").find('div')
-      dummy['type'].should == "SingleLineQuestion"
+      dummy = find("#dummy_pane").find('div[type=SingleLineQuestion]')
+      dummy.should_not be_nil
       dummy.should have_content("Untitled question")
     end
 
     it "should add a hidden single line question in the settings pane" do
-      actual = find("#settings_pane").find('div')
-      actual['type'].should == "SingleLineQuestion"
+      actual = find("#settings_pane").find('div[type=SingleLineQuestion]')
+      actual.should_not be_nil
       actual['style'].should == "display: none; "
       actual.should have_field('content', :type => 'text')
       actual.should have_field('mandatory', :type => 'checkbox')
