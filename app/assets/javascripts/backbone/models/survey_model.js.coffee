@@ -37,6 +37,13 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     model.unset('image_file_size', {silent: true})
     model.unset('image_updated', {silent: true})
 
+  save: ->
+    super({}, {error: this.error_callback})
+
+  error_callback: (model, response) =>
+    this.errors = JSON.parse(response.responseText)
+    this.trigger('change:errors')
+
   save_all_questions: ->
     for question_model in @question_models
       question_model.save_model()

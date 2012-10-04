@@ -55,6 +55,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   save_all_questions: ->
     $(this.el).bind('ajaxStop.save', this.handle_save_finished)
     $(this.el).find("#save input").prop('disabled', true)
+    this.survey.save()
     this.survey.save_all_questions()
 
   handle_save_finished: =>
