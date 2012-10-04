@@ -16,6 +16,8 @@ fr:
     reponse_to_unpublished_survey: "Impossible d'ajouter la réponse. %{survey_name} n'est pas publié."
     not_authorized: "Vous n'êtes pas autorisé à le faire"
     edit_published_survey: "Vous ne pouvez pas éditer un sondage publié"
+    sharing_unpublished_survey: "In french: You can't share an unpublished survey"
+    survey_shared: "In french: %{survey_name} has been shared"
 
   surveys:
     new:

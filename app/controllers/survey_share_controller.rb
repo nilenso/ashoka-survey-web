@@ -13,7 +13,7 @@ class SurveyShareController < ApplicationController
       @unshared_organizations = other_organizations.reject { |org| @shared_organizations.map(&:id).include?(org.id) }
     else
       redirect_to surveys_path
-      flash[:error] = "Can not share an unpublished survey"
+      flash[:error] = t "flash.sharing_unpublished_survey"
     end
   end
 
@@ -27,6 +27,6 @@ class SurveyShareController < ApplicationController
     survey.share_with_users(users)
     survey.share_with_organizations(organizations)
 
-    redirect_to surveys_path, :notice => "Survey has been shared"
+    redirect_to surveys_path, :notice => t("flash.survey_shared", :survey_name => survey.name)
   end
 end

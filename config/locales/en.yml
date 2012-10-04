@@ -16,6 +16,8 @@ en:
     reponse_to_unpublished_survey: "Can't add response. %{survey_name} is not published."
     not_authorized: "You are not authorized to do that"
     edit_published_survey: "You can't edit a published survey"
+    sharing_unpublished_survey: "You can't share an unpublished survey"
+    survey_shared: "%{survey_name} has been shared"
 
   surveys:
     new:
