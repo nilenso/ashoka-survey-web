@@ -148,7 +148,6 @@ describe SurveysController do
     before(:each) do
       sign_in_as('cso_admin')
       session[:user_info][:org_id] = 1
-      survey.publish
 
       session[:access_token] = "123"
       users_response = mock(OAuth2::Response)
@@ -176,8 +175,7 @@ describe SurveysController do
     end
 
     context "PUT 'update_publish_to_users'" do
-
-      it "publishes the survey" do
+      it "publishes the survey to chosen users and marks the survey published" do
         put :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
         survey.reload.should be_published
         survey.user_ids.should == [1, 2]
@@ -190,11 +188,73 @@ describe SurveysController do
       end
 
       it "redirects back to the previous page with an error when no user ids are selected" do
-      request.env["HTTP_REFERER"] = 'http://google.com'
+        request.env["HTTP_REFERER"] = 'http://google.com'
         get :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => []}
         response.should redirect_to 'http://google.com'
         flash[:error].should_not be_nil
       end
     end
+  end
+
+  context "when sharing surveys with other organizations" do
+    let(:survey) { FactoryGirl.create(:survey, :organization_id => 1) }
+
+    before(:each) do
+      sign_in_as('cso_admin')
+      session[:user_info][:org_id] = 1
+      survey.publish
+
+      session[:access_token] = "123"
+      orgs_response = mock(OAuth2::Response)
+      access_token = mock(OAuth2::AccessToken)
+      controller.stub(:access_token).and_return(access_token)
+
+      access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
+      orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}, {"id" => 3, "name" => "FooOrganization"} ])
+    end
+
+    context "GET 'share with organizations'" do
+      it "assigns shared and unshared organizations" do
+        survey.participating_organizations << FactoryGirl.create(:participating_organization, :organization_id => 2, :survey_id => survey.id)
+        get :share_with_organizations, :survey_id => survey.id
+        assigns(:shared_organizations).map{ |org| {:id => org.id, :name => org.name} }
+        .should include({:id=>2, :name=>"Ashoka"})
+        assigns(:unshared_organizations).map{ |org| {:id => org.id, :name => org.name} }
+        .should include({:id=>3, :name=>"FooOrganization"})
+      end
+
+      it "assigns current survey" do
+        get :share_with_organizations, :survey_id => survey.id
+        assigns(:survey).should == survey
+      end
+
+      it "does not allow sharing of unpublished surveys" do
+        unpublished_survey = FactoryGirl.create(:survey, :organization_id => 1)
+        get :share_with_organizations, :survey_id => unpublished_survey.id
+        response.should redirect_to surveys_path
+        flash[:error].should_not be_empty
+      end
+    end
+
+    # context "PUT 'update_publish_to_users'" do
+    #   it "publishes the survey" do
+    #     put :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
+    #     survey.reload.should be_published
+    #     survey.user_ids.should == [1, 2]
+    #     flash[:notice].should_not be_nil
+    #   end
+
+    #   it "redirects back to the surveys page" do
+    #     get :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
+    #     response.should redirect_to surveys_path
+    #   end
+
+    #   it "redirects back to the previous page with an error when no user ids are selected" do
+    #     request.env["HTTP_REFERER"] = 'http://google.com'
+    #     get :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => []}
+    #     response.should redirect_to 'http://google.com'
+    #     flash[:error].should_not be_nil
+    #   end
+    # end
   end
 end

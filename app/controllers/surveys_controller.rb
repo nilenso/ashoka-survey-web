@@ -58,11 +58,24 @@ class SurveysController < ApplicationController
     users = Sanitizer.clean_params(params[:survey][:user_ids])
     if users.present?
       survey.publish_to_users(users)
+      survey.publish unless survey.published
       flash[:notice] = t "flash.survey_published", :survey_name => survey.name
       redirect_to surveys_path
     else
       flash[:error] = t "flash.user_not_selected"
       redirect_to(:back)
+    end
+  end
+
+  def share_with_organizations
+    @survey = Survey.find(params[:survey_id])
+    if @survey.published?
+      other_organizations = Organization.all_except(access_token, @survey.organization_id)
+      @shared_organizations = @survey.organizations(access_token, current_user_org)
+      @unshared_organizations = other_organizations.reject { |org| @shared_organizations.map(&:id).include?(org.id) }
+    else
+      redirect_to surveys_path
+      flash[:error] = t "flash.sharing_unpublished_survey"
     end
   end
 

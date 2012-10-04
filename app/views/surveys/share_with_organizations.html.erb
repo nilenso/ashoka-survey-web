@@ -1,0 +1,21 @@
+<h1> <%= t ".share_survey" %> </h1>
+
+<%= semantic_form_for @survey, :url => survey_share_path(@survey.id), :method => :put do |f| %>
+  <% if @survey.organization_id == current_user_org %>
+    <h2>Share with an Organization</h2>
+    <h3> Shared with: </h3>
+    <ul>
+      <% @shared_organizations.each do |org| %>
+        <li><%= org.name %></li>
+      <% end %>
+    </ul>
+    <% if @unshared_organizations.empty? %>
+      There are no organizations you can share with. Sorry.
+    <% else %>
+      <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => @unshared_organizations, :member_label => Proc.new { |org| org.name }, :label => "Choose organizations to share with:" %>
+	  <%= f.actions do %>
+	     <%= f.action :submit, :as => :button %>
+	  <% end %>
+    <% end %>
+  <% end %>
+<% end %>
