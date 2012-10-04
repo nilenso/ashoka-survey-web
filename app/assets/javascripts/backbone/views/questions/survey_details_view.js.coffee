@@ -5,6 +5,7 @@ class SurveyBuilder.Views.Questions.SurveyDetailsView extends Backbone.View
 
   events:
     'keyup  input[type=text]': 'handle_textbox_keyup'
+    'change input[type=text]': 'handle_textbox_keyup'
 
   initialize: ->
     this.model.actual_view = this
