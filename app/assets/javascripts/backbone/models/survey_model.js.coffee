@@ -38,7 +38,12 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     model.unset('image_updated', {silent: true})
 
   save: ->
-    super({}, {error: this.error_callback})
+    super({}, {error: this.error_callback, success: this.success_callback})
+
+  success_callback: (model, response) =>
+    this.errors = []
+    this.trigger('change:errors')
+    this.trigger('save:completed')
 
   error_callback: (model, response) =>
     this.errors = JSON.parse(response.responseText)
