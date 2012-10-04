@@ -2,8 +2,9 @@
 class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
   el: "#settings_pane"
 
-  initialize: ->
+  initialize: (survey_model) ->
     @questions = []
+    @add_survey_details(survey_model)
 
   add_question: (type, model) ->
     switch type
@@ -37,6 +38,13 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
 
     @questions.push(question)
     model.on('destroy', this.delete_question_view, this)
+    $(this.el).append($(question.render().el))
+    $(question.render().el).hide()
+
+  add_survey_details: (survey_model) ->
+    template = $("#survey_details_template").html()
+    question = new SurveyBuilder.Views.Questions.SurveyDetailsView({ model: survey_model, template: template })
+    @questions.push(question)
     $(this.el).append($(question.render().el))
     $(question.render().el).hide()
 
