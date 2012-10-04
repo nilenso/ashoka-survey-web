@@ -129,12 +129,12 @@ module Api
           JSON.parse(response.body).map { |hash| hash['type'] }.should include 'RadioQuestion'
         end
 
-        it "returns all attributes of the question" do
+        it "returns all attributes of the question as well as the image_url" do
           survey = FactoryGirl.create(:survey)
           question = FactoryGirl.create(:question, :survey_id => survey.id, :type => "RadioQuestion")
           get :index, :survey_id => survey.id
           response.should be_ok
-          response.body.should include question.to_json(:methods => :type)
+          response.body.should include question.to_json(:methods => [:type, :image_url])
         end
 
         it "returns a :bad_request if no survey_id is passed" do

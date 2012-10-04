@@ -47,6 +47,7 @@ group :test, :development do
   gem 'capybara-webkit'
   gem 'guard-livereload'
   gem 'database_cleaner'
+  gem 'fuubar'
 end
 
 gem 'jquery-rails'
