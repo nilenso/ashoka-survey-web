@@ -42,10 +42,23 @@ describe Survey do
   end
 
   context "users" do
-    it "returns the list of user ids the survey is published to" do
+    it "returns a list of user-ids the survey is published to" do
       survey = FactoryGirl.create(:survey)
       survey_user = FactoryGirl.create(:survey_user, :survey_id => survey.id)
       survey.user_ids.should == [survey_user.user_id]
+    end
+
+    it "returns a list of users the survey is published to" do
+      access_token = mock(OAuth2::AccessToken)
+      users_response = mock(OAuth2::Response)
+      users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
+      access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
+
+      survey = FactoryGirl.create(:survey)
+      user = { :id => 1, :name => "Bob"}
+      FactoryGirl.create(:survey_user, :survey_id => survey.id, :user_id => user[:id])
+      survey.users(access_token, 1).map{|user| {:id => user.id, :name => user.name} }.should include user
+      survey.users(access_token, 1).map{|user| {:id => user.id, :name => user.name} }.should_not include({:id => 2, :name => "John"})
     end
 
     it "shares survey with the given users" do
@@ -61,6 +74,20 @@ describe Survey do
       survey = FactoryGirl.create(:survey)
       participating_organization = FactoryGirl.create(:participating_organization, :survey_id => survey.id)
       survey.participating_organization_ids.should == [participating_organization.organization_id]
+    end
+
+    it "returns a list of organizations the survey is shared with" do
+      access_token = mock(OAuth2::AccessToken)
+      organizations_response = mock(OAuth2::Response)
+      organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Org name"}])
+      access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
+
+      survey = FactoryGirl.create(:survey)
+      organization = { :id => 2, :name => "Org name"}
+      FactoryGirl.create(:participating_organization, :survey_id => survey.id, :organization_id => organization[:id])
+      survey.organizations(access_token, 1).map{|org| {:id => org.id, :name => org.name} }.should include organization
+      survey.organizations(access_token, 1).map{|org| {:id => org.id, :name => org.name} }
+      .should_not include({:id => 1, :name => "CSOOrganization"})
     end
 
     it "shares survey with the given organizations" do
