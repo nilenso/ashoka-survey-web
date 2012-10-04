@@ -29,7 +29,7 @@ class Survey < ActiveRecord::Base
     Organization.all_except(access_token, organization_id).select { |org| self.participating_organization_ids.include?(org.id) }
   end
 
-  def share_with_users(users)
+  def publish_to_users(users)
     users.each { |user_id| self.survey_users.create(:user_id => user_id) }
   end
 

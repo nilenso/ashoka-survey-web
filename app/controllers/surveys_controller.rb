@@ -46,10 +46,24 @@ class SurveysController < ApplicationController
     @survey = Survey.find(params[:id])
   end
 
-  def publish
+  def publish_to_users
+    @survey = Survey.find(params[:survey_id])
+    users = Organization.users(access_token, current_user_org)
+    @shared_users = @survey.users(access_token, current_user_org)
+    @unshared_users = users.reject { |user| @shared_users.map(&:id).include?(user.id) }
+  end
+
+  def update_publish_to_users
     survey = Survey.find(params[:survey_id])
-    survey.publish
-    redirect_to :back
+    users = Sanitizer.clean_params(params[:survey][:user_ids])
+    if users.present?
+      survey.publish_to_users(users)
+      flash[:notice] = t "flash.survey_published", :survey_name => survey.name
+      redirect_to surveys_path
+    else
+      flash[:error] = t "flash.user_not_selected"
+      redirect_to(:back)
+    end
   end
 
   private

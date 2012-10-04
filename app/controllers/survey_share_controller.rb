@@ -24,7 +24,7 @@ class SurveyShareController < ApplicationController
 
     authorize! :share, survey
 
-    survey.share_with_users(users)
+    survey.publish_to_users(users)
     survey.share_with_organizations(organizations)
 
     redirect_to surveys_path, :notice => t("flash.survey_shared", :survey_name => survey.name)

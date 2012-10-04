@@ -1,0 +1,14 @@
+<h1> <%= t ".publish_survey_to_users" %> </h1>
+
+<h3> Shared with: </h3>
+<ul>
+  <% @shared_users.each do |user| %>
+    <li><%= user.name %></li>
+  <% end %>
+</ul>
+<%= semantic_form_for @survey, :url => survey_update_publish_to_users_path(@survey.id), :method => :put do |f| %>
+  <%= f.input :user_ids, :as => :check_boxes, :collection => @unshared_users, :member_label => Proc.new { |user| user.name }, :label => "Choose users to publish to:" %>
+  <%= f.actions do %>
+     <%= f.action :submit, :as => :button %>
+  <% end %>
+<% end %>

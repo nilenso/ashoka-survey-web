@@ -18,6 +18,7 @@ en:
     edit_published_survey: "You can't edit a published survey"
     sharing_unpublished_survey: "You can't share an unpublished survey"
     survey_shared: "%{survey_name} has been shared"
+    user_not_selected: "You haven't selected any user to publish the survey to"
 
   surveys:
     new:

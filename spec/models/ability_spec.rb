@@ -18,7 +18,8 @@ describe "Abilities" do
 
       it { should be_able_to(:read, Survey.new) }
       it { should be_able_to(:create, Survey.new) }
-      it { should be_able_to(:publish, Survey.new) }
+      it { should be_able_to(:publish_to_users, Survey.new) }
+      it { should be_able_to(:update_publish_to_users, Survey.new) }
       it { should be_able_to(:edit, Survey.new) }
       it { should be_able_to(:share, Survey.new) }
       it { should be_able_to(:destroy, Survey.new) }
@@ -41,7 +42,8 @@ describe "Abilities" do
         it { should be_able_to(:build, survey) }
         it { should be_able_to(:destroy, survey) }
         it { should be_able_to(:read, survey) }
-        it { should be_able_to(:publish, survey) }
+        it { should be_able_to(:publish_to_users, survey) }
+        it { should be_able_to(:update_publish_to_users, survey) }
 
         it { should be_able_to :create, Response.new(:survey => survey) }
         it { should be_able_to :read, Response.new(:survey => survey) }
@@ -52,7 +54,8 @@ describe "Abilities" do
 
         it { should_not be_able_to(:edit, survey) }
         it { should_not be_able_to(:build, survey) }
-        it { should_not be_able_to(:publish, survey) }
+        it { should_not be_able_to(:publish_to_users, survey) }
+        it { should_not be_able_to(:update_publish_to_users, survey) }
         it { should_not be_able_to(:destroy, survey) }
         it { should_not be_able_to(:read, survey) }
 
@@ -77,7 +80,8 @@ describe "Abilities" do
       let(:user_info) { base_user_info.merge(:role => 'user') }
 
       it { should_not be_able_to(:create, Survey.new) }
-      it { should_not be_able_to(:publish, Survey.new) }
+      it { should_not be_able_to(:publish_to_users, Survey.new) }
+      it { should_not be_able_to(:update_publish_to_users, Survey.new) }
       it { should_not be_able_to(:edit, Survey.new) }
       it { should_not be_able_to(:share, Survey.new) }
       it { should_not be_able_to(:destroy, Survey.new) }

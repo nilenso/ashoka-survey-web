@@ -142,28 +142,59 @@ describe SurveysController do
     end
   end
 
-  context "GET 'publish'" do
+  context "when publishing" do
+    let(:survey) { FactoryGirl.create(:survey, :organization_id => 1) }
+
     before(:each) do
-      request.env["HTTP_REFERER"] = 'http://google.com'
       sign_in_as('cso_admin')
-      @survey = FactoryGirl.create(:survey)
+      session[:user_info][:org_id] = 1
+      survey.publish
+
       session[:access_token] = "123"
-      response = mock(OAuth2::Response)
+      users_response = mock(OAuth2::Response)
       access_token = mock(OAuth2::AccessToken)
       controller.stub(:access_token).and_return(access_token)
-      access_token.stub(:get).and_return(response)
-      response.stub(:parsed).and_return([{"id" => 123, "name" => "user"}])
+
+      access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
+      users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
     end
 
-    it "redirects back to the previous page" do
+    context "GET 'publish to users'" do
+      it "assigns shared and unshared users in the current organization" do
+        survey.survey_users << FactoryGirl.create(:survey_user, :user_id => 1, :survey_id => survey.id)
+        get :publish_to_users, :survey_id => survey.id
+        assigns(:shared_users).map{ |user| {:id => user.id, :name => user.name} }
+        .should include({:id=>1, :name=>"Bob"})
+        assigns(:unshared_users).map{ |user| {:id => user.id, :name => user.name} }
+        .should include({:id=>2, :name=>"John"})
+      end
+
+      it "assigns current survey" do
+        get :publish_to_users, :survey_id => survey.id
+        assigns(:survey).should == survey
+      end
+    end
+
+    context "PUT 'update_publish_to_users'" do
+
+      it "publishes the survey" do
+        put :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
+        survey.reload.should be_published
+        survey.user_ids.should == [1, 2]
+        flash[:notice].should_not be_nil
+      end
+
+      it "redirects back to the surveys page" do
+        get :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
+        response.should redirect_to surveys_path
+      end
+
+      it "redirects back to the previous page with an error when no user ids are selected" do
       request.env["HTTP_REFERER"] = 'http://google.com'
-      get :publish, :survey_id => @survey.id
-      response.should redirect_to 'http://google.com'
-    end
-
-    it "publishes the survey" do
-      get :publish, :survey_id => @survey.id
-      @survey.reload.should be_published
+        get :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => []}
+        response.should redirect_to 'http://google.com'
+        flash[:error].should_not be_nil
+      end
     end
   end
 end

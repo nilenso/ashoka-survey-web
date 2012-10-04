@@ -23,7 +23,8 @@ class Ability
 
         can :build, Survey, :organization_id => user_info[:org_id]
         can :create, Survey
-        can :publish, Survey, :organization_id => user_info[:org_id]
+        can :publish_to_users, Survey, :organization_id => user_info[:org_id]
+        can :update_publish_to_users, Survey, :organization_id => user_info[:org_id]
         can :edit, Survey, :organization_id => user_info[:org_id]
         can :share, Survey
         can :destroy, Survey, :organization_id => user_info[:org_id]

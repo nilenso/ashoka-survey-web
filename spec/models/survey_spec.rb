@@ -61,10 +61,10 @@ describe Survey do
       survey.users(access_token, 1).map{|user| {:id => user.id, :name => user.name} }.should_not include({:id => 2, :name => "John"})
     end
 
-    it "shares survey with the given users" do
+    it "publishes survey to the given users" do
       survey = FactoryGirl.create(:survey)
       users = [1, 2]
-      survey.share_with_users(users)
+      survey.publish_to_users(users)
       survey.user_ids.should == users
     end
   end
