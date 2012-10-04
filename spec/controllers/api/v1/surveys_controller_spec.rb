@@ -60,9 +60,10 @@ module Api
           response.should_not be_ok
         end
 
-        it "returns a :bad_request if survey save fails" do
+        it "returns the errors if survey save fails" do
           put :update, :id => survey.id, :survey => { :expiry_date => -5.days.from_now }
           response.should_not be_ok
+          response.body.should =~ /in the past/
         end
       end
     end

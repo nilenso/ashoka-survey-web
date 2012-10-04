@@ -19,7 +19,7 @@ module Api
         if survey && survey.update_attributes(params[:survey])
           render :json => survey.to_json
         else
-          render :nothing => true, :status => :bad_request
+          render :json => survey.try(:errors).try(:full_messages), :status => :bad_request
         end
       end
     end
