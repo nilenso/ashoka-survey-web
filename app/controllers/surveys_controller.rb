@@ -33,12 +33,13 @@ class SurveysController < ApplicationController
     @survey = Survey.new(params[:survey])
     @survey.organization_id = session[:user_info][:org_id]
 
-    if @survey.save
-      flash[:notice] = t "flash.survey_created"
-      redirect_to surveys_build_path(:id => @survey.id)
-    else
-      render :new
-    end
+    @survey.name ||= "Untitled Survey"
+    @survey.expiry_date ||= 5.days.from_now
+    @survey.description ||= "Description goes here"
+
+    @survey.save
+    flash[:notice] = t "flash.survey_created"
+    redirect_to surveys_build_path(:id => @survey.id)
   end
 
   def build
