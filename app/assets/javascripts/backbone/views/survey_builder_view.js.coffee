@@ -10,15 +10,17 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   initialize:(survey_id) ->
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
     this.settings_pane = new SurveyBuilder.Views.SettingsPaneView
-    this.dummy_pane    = new SurveyBuilder.Views.DummyPaneView
     this.survey        = new SurveyBuilder.Models.SurveyModel(survey_id)
+    this.dummy_pane    = new SurveyBuilder.Views.DummyPaneView(this.survey)
     $(this.el).ajaxStart(window.notifications_view.show_spinner)
     $(this.el).ajaxStop(window.notifications_view.hide_spinner)
+    
     $( "#sidebar" ).tabs();
-    this.survey.on('change', => 
-      $.getJSON("/api/questions?survey_id=#{survey_id}", this.preload_questions)
-      this.survey.off('change')
-    )
+
+    this.survey.fetch({
+        success: (data) => 
+          $.getJSON("/api/questions?survey_id=#{survey_id}", this.preload_questions)
+      })
 
   new_question: (event, type) ->
     #TODO: Switch tab here.

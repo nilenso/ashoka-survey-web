@@ -2,8 +2,9 @@
 class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   el: "#dummy_pane"
 
-  initialize: ->
+  initialize: (survey_model) ->
     @questions = []
+    @add_survey_details(survey_model)
 
   add_question: (type, model) ->
     switch type
@@ -37,6 +38,10 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
 
     model.on('destroy', this.delete_question_view, this)
     this.render()
+
+  add_survey_details: (survey_model) ->
+    template = $("#dummy_survey_details_template").html()
+    @questions.push(new SurveyBuilder.Views.Dummies.SurveyDetailsView({ model: survey_model, template: template}))
 
   render: ->
     ($(this.el).append(question.render().el)) for question in @questions 
