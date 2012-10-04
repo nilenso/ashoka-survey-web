@@ -10,10 +10,10 @@ class SurveyBuilder.Views.Questions.SurveyDetailsView extends Backbone.View
     this.model.actual_view = this
     @template = this.options.template
     this.model.on('change', this.render, this)
-    console.log(@template)
 
   render:(template) ->
     $(this.el).html(Mustache.render(this.template, this.model.toJSON()))
+    $('#expiry_date').datepicker({ dateFormat: "yy-mm-dd" });
     return this
 
   handle_textbox_keyup: (event) ->
