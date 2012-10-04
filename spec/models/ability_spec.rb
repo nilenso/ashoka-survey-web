@@ -80,7 +80,7 @@ describe "Abilities" do
 
       context "for a survey shared with him" do
         let(:survey) { FactoryGirl.create(:survey, :organization_id => 5) }
-        let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => base_user_info[:user_id]) }
+        let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => base_user_info[:user_id], :organization_id => 1) }
         before(:each) do
           SurveyUser.create(:survey_id => survey.id, :user_id => user_info[:user_id])
         end
@@ -92,7 +92,7 @@ describe "Abilities" do
 
       context "for a survey not shared with him" do
         let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 7) }
-        let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => 23423423) }
+        let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => 23423423, :organization_id => 1) }
         before(:each) do
           survey = FactoryGirl.create(:survey, :organization_id => 6)
           SurveyUser.create(:survey_id => survey.id, :user_id => 123)

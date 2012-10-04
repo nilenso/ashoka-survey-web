@@ -6,6 +6,7 @@ class Response < ActiveRecord::Base
   accepts_nested_attributes_for :answers
   attr_accessible :survey, :answers_attributes, :mobile_id
   validates_presence_of :survey_id
+  validates_presence_of :organization_id
 
   def five_answers
   	answers_show = answers.select { |answer| answer.text_type?}

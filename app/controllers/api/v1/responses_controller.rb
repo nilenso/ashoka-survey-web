@@ -4,6 +4,7 @@ module Api
       def create
         response = Response.new(params[:response])
         response.survey_id = params[:survey_id]
+        response.organization_id = 0 #Temporary fix for no user logged in on mobile side 
         if response.save
           render :json => response.to_json
         else
