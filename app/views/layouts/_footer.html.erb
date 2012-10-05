@@ -1,6 +1,8 @@
 <div class = "footer">
-  <ul>
-    <li><%= link_to "English", locale: nil %></li>
-    <li><%= link_to "French", locale: 'fr' %></li>
-  </ul>
+  <% unless request.post? || request.put? %>
+    <ul class = "locales">
+      <li><%= link_to "English", root_path, locale: nil %></li>
+      <li><%= link_to "French", root_path(locale: 'fr') %></li>
+    </ul>
+  <% end %> 
 </div>
