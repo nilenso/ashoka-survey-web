@@ -74,6 +74,12 @@ fr:
       question_title: "Titre de la question"
       save_survey: Économiser de l'enquête
 
+    share_with_organizations:
+      share_survey: "In french: Share Survey"
+
+    publish_to_users:
+      publish_survey: "In French: Publish Survey"
+
   responses:
     new:
       response_for_survey: "Donner une réponse pour %{survey_name}"

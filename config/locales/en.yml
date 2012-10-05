@@ -76,6 +76,13 @@ en:
       question_title: "Question Title"
       save_survey: "Save Survey"
 
+    share_with_organizations:
+      share_survey: "Share Survey"
+    
+    publish_to_users:
+      publish_survey: "Publish Survey"
+
+
   responses:
     new:
       response_for_survey: "Give a response for %{survey_name}"

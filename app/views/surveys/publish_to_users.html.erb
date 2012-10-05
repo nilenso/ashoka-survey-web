@@ -12,7 +12,7 @@
     <% else %>
 	  <%= f.input :user_ids, :as => :check_boxes, :collection => @unshared_users, :member_label => Proc.new { |user| user.name }, :label => "Choose users to publish to:" %>
   	<%= f.actions do %>
-      <%= f.action :submit, :as => :button %>
+      <%= f.action :submit, :as => :button, :label => t('.publish_survey') %>
     <% end %>
   <% end %>
 <% end %>

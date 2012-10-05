@@ -14,7 +14,7 @@
     <% else %>
       <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => @unshared_organizations, :member_label => Proc.new { |org| org.name }, :label => "Choose organizations to share with:" %>
 	  <%= f.actions do %>
-	     <%= f.action :submit, :as => :button %>
+	     <%= f.action :submit, :as => :button , :label => t('.share_survey')%>
 	  <% end %>
     <% end %>
   <% end %>
