@@ -85,7 +85,8 @@ describe ResponsesController do
   context "GET 'index'" do
     it "renders the list of responses for a survey if a cso admin is signed in" do
       survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey, :organization_id => 1)
+      res = FactoryGirl.create(:response, :survey => survey,
+       :organization_id => 1, :user_id => 1)
       get :index, :survey_id => survey.id
       response.should be_ok
       assigns(:responses).should == Response.find_all_by_survey_id(survey.id)
