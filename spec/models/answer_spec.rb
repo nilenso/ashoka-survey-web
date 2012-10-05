@@ -135,4 +135,10 @@ describe Answer do
       non_textual_answer.should_not be_text_type 
     end
   end
+
+  it "returns content of its question" do
+    text_question = FactoryGirl.create(:question, :type => "SingleLineQuestion")
+    text_answer = FactoryGirl.create(:answer, :question => text_question)
+    text_answer.question_content.should == text_question.content
+  end
 end

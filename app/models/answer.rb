@@ -26,6 +26,9 @@ class Answer < ActiveRecord::Base
     question.type != "MultiChoiceQuestion" && question.type != "PhotoQuestion"
   end
 
+  def question_content
+    question.content
+  end
   private
 
   def maximum_photo_size

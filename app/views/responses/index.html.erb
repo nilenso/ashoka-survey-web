@@ -10,7 +10,7 @@
     <table class="surveys_table">
       <thead>
         <% @responses.first.five_answers.each do |answer| %> 
-          <th><%= answer.question.content %> </th>
+          <th><%= answer.question_content %> </th>
         <% end %>
       </thead>
       <tbody>
