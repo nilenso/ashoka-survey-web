@@ -155,7 +155,7 @@ describe SurveysController do
       controller.stub(:access_token).and_return(access_token)
 
       access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
-      users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
+      users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}, {"id" => session[:user_id], "name" => "CSOAdmin"}])
     end
 
     context "GET 'publish to users'" do
@@ -171,6 +171,12 @@ describe SurveysController do
       it "assigns current survey" do
         get :publish_to_users, :survey_id => survey.id
         assigns(:survey).should == survey
+      end
+
+      it "doesn't assign the currently logged in user" do
+        get :publish_to_users, :survey_id => survey.id
+        assigns(:shared_users).map(&:id).should_not include session[:user_id]
+        assigns(:unshared_users).map(&:id).should_not include session[:user_id]
       end
     end
 
