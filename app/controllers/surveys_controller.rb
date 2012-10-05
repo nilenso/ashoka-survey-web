@@ -43,7 +43,7 @@ class SurveysController < ApplicationController
   end
 
   def build
-    @survey = Survey.find(params[:id])
+    @survey = SurveyDecorator.find(params[:id])
   end
 
   def publish_to_users
