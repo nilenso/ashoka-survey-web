@@ -48,6 +48,7 @@ group :test, :development do
   gem 'guard-livereload'
   gem 'database_cleaner'
   gem 'fuubar'
+  gem "rails_best_practices"
 end
 
 gem 'jquery-rails'
