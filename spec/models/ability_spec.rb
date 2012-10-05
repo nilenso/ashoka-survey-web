@@ -80,8 +80,8 @@ describe "Abilities" do
       end
     end
 
-    context "when is a regular user" do
-      let(:user_info) { base_user_info.merge(:role => 'user') }
+    context "when is a field agent" do
+      let(:user_info) { base_user_info.merge(:role => 'field_agent') }
 
       it { should_not be_able_to(:create, Survey.new) }
       it { should_not be_able_to(:publish_to_users, Survey.new) }
