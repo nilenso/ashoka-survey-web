@@ -6,42 +6,7 @@
     <% question = f.object.question %>
 
     <%= image_tag question.image.url(:medium) if question.image.exists? %>
-    <% if question.type == 'RadioQuestion' %>
-      <%= f.input :content, :label => question.content, :as => :radio, :collection => question.options.map(&:content), :required => question.mandatory %>
-
-    <% elsif question.type == 'SingleLineQuestion' %>
-      <%= f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length } } %>
-
-    <% elsif question.type == 'MultilineQuestion' %>
-      <%= f.input :content, :label => question.content, :as => :text, :required => question.mandatory, :input_html => { :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length }, :rows => 4 } %>
-
-    <% elsif question.type == 'NumericQuestion' %>
-      <% has_range = question.max_value && question.min_value %>
-      <%= f.input :content, :label => question.content, :as => :number, :required => question.mandatory, :hint => numeric_question_hint(question.max_value, question.min_value)%>
-
-    <% elsif question.type == 'DateQuestion' %>
-      <%= f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => 'date' } %>
-
-    <% elsif question.type == 'MultiChoiceQuestion' %>
-      <%= f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :member_label => method(:get_option_content_from_option_id) %>
-
-    <% elsif question.type == 'DropDownQuestion' %>
-      <%= f.input :content, :as => :select, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:content) %>
-
-    <% elsif question.type == 'PhotoQuestion' %>
-      <%= f.input :photo, :as => :file, :required => question.mandatory, :label => question.content %>
-
-    <% elsif question.type == 'RatingQuestion' %>
-        <div class='rating'>
-          <%= f.label question.content %>
-          <% if question.mandatory %>
-            <abbr>*</abbr>
-          <% end %>
-          <%= f.input :content, :as => :hidden %>
-          <div class='star' data-number-of-stars="<%= question.max_length %>"></div>
-          <%= f.semantic_errors :content %>
-        </div>
-    <% end %>
+    <%= @response.input_tag_for(question, f) %>
 
     <%= f.input :question_id, :as => :hidden %>
   <% end %>
