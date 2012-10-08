@@ -84,17 +84,6 @@ describe SurveysController do
     end
   end
 
-  context "GET 'new" do
-    before(:each) do
-      sign_in_as('cso_admin')
-    end
-
-    it "assigns the survey instance variable" do
-      get :new
-      assigns(:survey).should_not be_nil
-    end
-  end
-
   context "POST 'create'" do
     before(:each) do
       sign_in_as('cso_admin')

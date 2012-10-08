@@ -21,10 +21,6 @@ class SurveysController < ApplicationController
     redirect_to(surveys_path)
   end
 
-  def new
-    @survey = Survey.new
-  end
-
   def create
     @survey = Survey.new(params[:survey])
     @survey.organization_id = session[:user_info][:org_id]
