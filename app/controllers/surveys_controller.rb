@@ -62,9 +62,10 @@ class SurveysController < ApplicationController
 
   def share_with_organizations
     @survey = Survey.find(params[:survey_id])
-    other_organizations = Organization.all(access_token, :except => @survey.organization_id)
-    @shared_organizations = @survey.organizations(access_token, current_user_org)
-    @unshared_organizations = other_organizations.reject { |org| @shared_organizations.map(&:id).include?(org.id) }
+    organizations = Organization.all(access_token, :except => @survey.organization_id)
+    @shared_organizations, @unshared_organizations = organizations.partition do |organization|
+      @survey.participating_organization_ids.include? organization.id
+    end
   end
 
   def update_share_with_organizations
