@@ -23,7 +23,7 @@ class SurveysController < ApplicationController
 
   def create
     @survey = Survey.new(params[:survey])
-    @survey.organization_id = session[:user_info][:org_id]
+    @survey.organization_id = current_user_org
 
     @survey.name ||= "Untitled Survey"
     @survey.expiry_date ||= 5.days.from_now
