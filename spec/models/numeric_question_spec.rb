@@ -20,4 +20,6 @@ describe NumericQuestion do
     numeric_question = NumericQuestion.new(:content => "foo", :min_value => 5, :max_value => 5)
     numeric_question.should be_valid
   end
+
+  it_behaves_like "a question"
 end

@@ -10,5 +10,7 @@ describe RatingQuestion do
     question.type.should == "RatingQuestion"
   end
 
+  it_behaves_like "a question"
+
   it_behaves_like "a question with max length"
 end

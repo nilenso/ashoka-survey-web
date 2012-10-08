@@ -20,4 +20,6 @@ describe PhotoQuestion do
       question.should_not be_valid
     end
   end
+
+  it_behaves_like "a question"
 end

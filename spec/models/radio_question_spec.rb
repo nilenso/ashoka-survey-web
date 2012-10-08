@@ -9,5 +9,8 @@ describe RadioQuestion do
     question = Question.find_by_content("hello")
     question.should be_a RadioQuestion
     question.type.should == "RadioQuestion"
-  end  
+  end 
+
+  it_behaves_like "a question"
+ 
 end

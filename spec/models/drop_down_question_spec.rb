@@ -10,4 +10,6 @@ describe DropDownQuestion do
     question.should be_a DropDownQuestion
     question.type.should == "DropDownQuestion"
   end
+
+  it_behaves_like "a question"
 end

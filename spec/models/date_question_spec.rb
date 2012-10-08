@@ -8,4 +8,6 @@ describe DateQuestion do
     question.should be_a DateQuestion
     question.type.should == "DateQuestion"
   end
+
+  it_behaves_like "a question"
 end

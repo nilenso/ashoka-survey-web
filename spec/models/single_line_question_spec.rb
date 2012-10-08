@@ -9,4 +9,6 @@ describe SingleLineQuestion do
   end
 
   it_behaves_like "a question with max length"
+
+  it_behaves_like "a question"
 end
