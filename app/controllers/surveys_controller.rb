@@ -12,9 +12,8 @@ class SurveysController < ApplicationController
     @surveys = @surveys.paginate(:page => params[:page], :per_page => 10)
     @surveys = SurveyDecorator.decorate(@surveys)
     if access_token.present?
-      organizations = access_token.get('api/organizations').parsed
-      @organization_names = organizations.reduce({}) do |hash, org|
-        hash[org['id']] = org['name']
+      @organization_names = Organization.all(access_token).reduce({}) do |hash, org|
+        hash[org.id] = org.name
         hash
       end
     end
