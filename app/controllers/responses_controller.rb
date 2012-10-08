@@ -19,7 +19,7 @@ class ResponsesController < ApplicationController
   end
 
   def create
-    @response = Response.new(params[:response])
+    @response = ResponseDecorator.new(Response.new(params[:response]))
     @response.survey = Survey.find(params[:survey_id])
     @survey = @response.survey
     @response.user_id = current_user
