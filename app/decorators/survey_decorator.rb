@@ -8,6 +8,13 @@ class SurveyDecorator < Draper::Base
     end.html_safe
   end
 
+  def more_less_links
+    if model.description.try(:length).try(:>, 120)
+      h.link_to(h.translate(".more"), '#', :class => 'more_description_link') +
+      h.link_to(h.translate(".less"), '#', :class => 'less_description_link')
+    end
+  end
+
   private
 
   def template_tag(content, id)

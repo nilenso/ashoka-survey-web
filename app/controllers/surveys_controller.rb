@@ -9,6 +9,7 @@ class SurveysController < ApplicationController
     @surveys ||= []
     @surveys = @surveys.select { |survey| survey.published.to_s == params[:published] } if params[:published].present?
     @surveys = @surveys.paginate(:page => params[:page], :per_page => 10)
+    @surveys = SurveyDecorator.decorate(@surveys)
     if access_token.present?
       organizations = access_token.get('api/organizations').parsed
       @organization_names = organizations.reduce({}) do |hash, org|
