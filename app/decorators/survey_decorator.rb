@@ -15,6 +15,10 @@ class SurveyDecorator < Draper::Base
     end
   end
 
+  def organization_name(organizations)
+    organizations.find { |org| org.id == model.organization_id }.name
+  end
+
   private
 
   def template_tag(content, id)

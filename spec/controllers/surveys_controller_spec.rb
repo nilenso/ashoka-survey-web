@@ -18,9 +18,12 @@ describe SurveysController do
       assigns(:surveys).should_not be_nil
     end
 
-    it "assigns a hash of organization_ids mapped to their names" do
+    it "assigns all the organizations" do
       get :index
-      assigns(:organization_names).should == { 123 => "foo", 12 => "bar" }
+      assigns(:organizations).length.should == 2
+      assigns(:organizations).first.should be_a Organization
+      assigns(:organizations).first.id.should == 123
+      assigns(:organizations).first.name.should == "foo"
     end
 
     it "responds with the index page" do

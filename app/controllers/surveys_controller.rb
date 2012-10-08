@@ -12,10 +12,7 @@ class SurveysController < ApplicationController
     @surveys = @surveys.paginate(:page => params[:page], :per_page => 10)
     @surveys = SurveyDecorator.decorate(@surveys)
     if access_token.present?
-      @organization_names = Organization.all(access_token).reduce({}) do |hash, org|
-        hash[org.id] = org.name
-        hash
-      end
+      @organizations = Organization.all(access_token)
     end
   end
 
