@@ -50,7 +50,7 @@ class SurveysController < ApplicationController
     users = Sanitizer.clean_params(params[:survey][:user_ids])
     if users.present?
       survey.publish_to_users(users)
-      survey.publish unless survey.published
+      survey.publish
       flash[:notice] = t "flash.survey_published", :survey_name => survey.name
       redirect_to surveys_path
     else
