@@ -1,14 +1,9 @@
 require 'spec_helper'
 
 describe Question do
-  it { should respond_to :content }
-  it { should belong_to :survey }
-  it { should have_many(:answers).dependent(:destroy) }
   it { should have_many(:options).dependent(:destroy) }
-  it { should validate_presence_of :content }
-  it { should respond_to :mandatory }
-  it { should have_attached_file(:image) }
   it { should accept_nested_attributes_for(:options) }
+    it { should allow_mass_assignment_of(:type) }
 
   context "validation" do
     it "ensures that the order number for a question is unique within a survey" do
@@ -17,13 +12,6 @@ describe Question do
       question_2 = FactoryGirl.build(:question, :survey => survey, :order_number => 1)
       question_2.should_not be_valid
     end
-  end
-
-  context "mass assignment" do
-    it { should allow_mass_assignment_of(:content) }
-    it { should allow_mass_assignment_of(:mandatory) }
-    it { should allow_mass_assignment_of(:image) }
-    it { should allow_mass_assignment_of(:type) }
   end
 
   context "orders by order number" do
@@ -36,14 +24,5 @@ describe Question do
     end
   end
 
-  context "image_url" do
-    it "returns the image_url if the question has an image" do
-      question = FactoryGirl.create(:question, :image => File.new(Rails.root + 'spec/fixtures/images/sample.jpg'))
-      question.image_url.should == question.image.url(:thumb)
-    end
-    it "returns nil if the question doesn't have an image" do
-      question = FactoryGirl.create(:question)
-      question.image_url.should be_nil
-    end
-  end
+  include_examples 'a question'
 end
