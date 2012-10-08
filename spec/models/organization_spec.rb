@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Organization do
-  before(:each) do 
+  before(:each) do
     orgs_response = mock(OAuth2::Response)
     users_response = mock(OAuth2::Response)
     @access_token = mock(OAuth2::AccessToken)
@@ -13,16 +13,22 @@ describe Organization do
     users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
   end
 
-  it "returns the list of all organizations" do
-    organizations = Organization.all(@access_token)
-    organizations.map(&:id).should include 2
-    organizations.map(&:name).should include "Ashoka"
-  end
+  context "#all" do
+    it "returns the list of all organizations" do
+      organizations = Organization.all(@access_token)
+      organizations.map(&:id).should include 2
+      organizations.map(&:name).should include "Ashoka"
+    end
 
-  it "returns the list of all organizations except a specified organization" do
-    organizations = Organization.all(@access_token, :except => 1)
-    organizations.map(&:id).should_not include 1
-    organizations.map(&:name).should_not include "CSOOrganization"
+    it "returns the list of all organizations except a specified organization" do
+      organizations = Organization.all(@access_token, :except => 1)
+      organizations.map(&:id).should_not include 1
+      organizations.map(&:name).should_not include "CSOOrganization"
+    end
+
+    it "returns nil if access_token is nil" do
+      Organization.all(nil).should be_nil
+    end
   end
 
   it "returns all users for the particular organization" do

@@ -7,8 +7,10 @@ class Organization
   end
 
   def self.all(access_token, options={})
-    organizations = access_token.get('/api/organizations').parsed.map { |org_json| self.json_to_organization(org_json) }
-    organizations.reject { |org| org.id == options[:except] }
+    if access_token
+      organizations = access_token.get('/api/organizations').parsed.map { |org_json| self.json_to_organization(org_json) }
+      organizations.reject { |org| org.id == options[:except] }
+    end
   end
 
   def self.json_to_organization(org_json)

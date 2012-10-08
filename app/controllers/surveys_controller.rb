@@ -11,9 +11,7 @@ class SurveysController < ApplicationController
     @surveys = @surveys.where(:published => false) if params[:unpublished].present?
     @surveys = @surveys.paginate(:page => params[:page], :per_page => 10)
     @surveys = SurveyDecorator.decorate(@surveys)
-    if access_token.present?
-      @organizations = Organization.all(access_token)
-    end
+    @organizations = Organization.all(access_token)
   end
 
   def destroy
