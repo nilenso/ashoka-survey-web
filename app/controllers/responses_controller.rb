@@ -7,11 +7,7 @@ class ResponsesController < ApplicationController
   def new
     @survey = Survey.find(params[:survey_id])
     @response = ResponseDecorator.new(Response.new)
-    @survey.questions.each do |question|
-      answer = Answer.new
-      @response.answers << answer
-      answer.question = question
-    end
+    @survey.questions.each { |question| @response.answers << Answer.new(:question_id => question.id) }
   end
 
   def index
