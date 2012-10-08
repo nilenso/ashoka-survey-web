@@ -16,7 +16,7 @@ class SurveyDecorator < Draper::Base
   end
 
   def organization_name(organizations)
-    organizations.find { |org| org.id == model.organization_id }.name
+    organizations.find { |org| org.id == model.organization_id }.try(:name)
   end
 
   private
