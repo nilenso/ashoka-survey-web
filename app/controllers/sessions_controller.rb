@@ -9,9 +9,7 @@ class SessionsController < ApplicationController
   end
 
   def destroy
-    session[:user_id] = nil
-    session[:user_info] = nil
-    session[:access_token] = nil
+    reset_session
     redirect_to(root_path)
   end
 
