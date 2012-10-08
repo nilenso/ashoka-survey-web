@@ -28,15 +28,16 @@ class ResponseDecorator < Draper::Base
       f.input :photo, :as => :file, :required => question.mandatory, :label => question.content
 
     elsif question.type == 'RatingQuestion'
-      string = ''
-      string << "<div class='rating'>"
-      string << (f.label question.content)
-      string << "<abbr>*</abbr>" if question.mandatory
-      string << (f.input :content, :as => :hidden)
-      string << "<div class='star' data-number-of-stars='#{question.max_length}'></div>"
-      string << (f.semantic_errors :content) if (f.semantic_errors :content)
-      string << "</div>"
-      string.html_safe
+      string = ERB.new "
+      <div class='rating'>
+        <%= f.label question.content %>
+        <%= '<abbr>*</abbr>' if question.mandatory %>
+        <%= f.input :content, :as => :hidden %>
+        <div class='star' data-number-of-stars='<%= question.max_length %>'></div>
+        <%= f.semantic_errors :content if (f.semantic_errors :content) %>
+      </div>"
+
+      string.result(binding).html_safe
     end
   end
 end
