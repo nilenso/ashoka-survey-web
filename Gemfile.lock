@@ -93,10 +93,6 @@ GEM
     formtastic (2.2.1)
       actionpack (>= 3.0)
     fssm (0.2.9)
-    fuubar (1.1.0)
-      rspec (~> 2.0)
-      rspec-instafail (~> 0.2.0)
-      ruby-progressbar (~> 1.0.0)
     growl (1.0.3)
     guard (1.3.0)
       listen (>= 0.4.2)
@@ -236,14 +232,12 @@ GEM
       diff-lcs (~> 1.1.3)
     rspec-http (0.10.0)
       rspec (~> 2.0)
-    rspec-instafail (0.2.4)
     rspec-mocks (2.11.1)
     rspec-rails (2.11.0)
       actionpack (>= 3.0)
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec (~> 2.11.0)
-    ruby-progressbar (1.0.1)
     rubyzip (0.9.9)
     sass (3.2.1)
     sass-rails (3.2.5)
@@ -303,7 +297,6 @@ DEPENDENCIES
   figaro
   forgery
   formtastic
-  fuubar
   growl
   guard-jasmine
   guard-livereload
