@@ -7,7 +7,7 @@
     <%= link_to t(".create_survey"), surveys_path, :method => :post %>
     <div class="filters">
       <%= t(".show") %> : <%= link_to t(".published"), surveys_path(:published => true) %> |
-      <%= link_to t(".unpublished"), surveys_path(:published => false) %> |
+      <%= link_to t(".unpublished"), surveys_path(:unpublished => true) %> |
       <%= link_to t(".all"), surveys_path %>
     </div>
   </div>
