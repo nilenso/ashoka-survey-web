@@ -5,7 +5,7 @@ describe RadioQuestion do
   it { should accept_nested_attributes_for(:options) }
 
   it "is a question with type = 'RadioQuestion'" do
-    RadioQuestion.create(:content => "hello")
+    RadioQuestion.create(:content => "hello", :order_number => 12345)
     question = Question.find_by_content("hello")
     question.should be_a RadioQuestion
     question.type.should == "RadioQuestion"
