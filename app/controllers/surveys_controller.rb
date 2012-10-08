@@ -3,7 +3,8 @@ require 'will_paginate/array'
 class SurveysController < ApplicationController
   load_and_authorize_resource
 
-  before_filter :require_unpublished_survey, :only => [:build, :share_with_organizations]
+  before_filter :require_unpublished_survey, :only => [:build]
+  before_filter :require_published_survey, :only => [:share_with_organizations]
 
   def index
     @surveys ||= []
@@ -61,14 +62,9 @@ class SurveysController < ApplicationController
 
   def share_with_organizations
     @survey = Survey.find(params[:survey_id])
-    if @survey.published?
-      other_organizations = Organization.all(access_token, :except => @survey.organization_id)
-      @shared_organizations = @survey.organizations(access_token, current_user_org)
-      @unshared_organizations = other_organizations.reject { |org| @shared_organizations.map(&:id).include?(org.id) }
-    else
-      redirect_to surveys_path
-      flash[:error] = t "flash.sharing_unpublished_survey"
-    end
+    other_organizations = Organization.all(access_token, :except => @survey.organization_id)
+    @shared_organizations = @survey.organizations(access_token, current_user_org)
+    @unshared_organizations = other_organizations.reject { |org| @shared_organizations.map(&:id).include?(org.id) }
   end
 
   def update_share_with_organizations
@@ -90,6 +86,14 @@ class SurveysController < ApplicationController
     if survey.published?
       flash[:error] = t "flash.edit_published_survey"
       redirect_to root_path
+    end
+  end
+
+  def require_published_survey
+    survey = Survey.find(params[:survey_id])
+    unless survey.published?
+      redirect_to surveys_path
+      flash[:error] = t "flash.sharing_unpublished_survey"
     end
   end
 end
