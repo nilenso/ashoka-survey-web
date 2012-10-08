@@ -72,7 +72,7 @@ class SurveysController < ApplicationController
   def share_with_organizations
     @survey = Survey.find(params[:survey_id])
     if @survey.published?
-      other_organizations = Organization.all_except(access_token, @survey.organization_id)
+      other_organizations = Organization.all(access_token, :except => @survey.organization_id)
       @shared_organizations = @survey.organizations(access_token, current_user_org)
       @unshared_organizations = other_organizations.reject { |org| @shared_organizations.map(&:id).include?(org.id) }
     else

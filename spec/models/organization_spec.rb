@@ -13,14 +13,14 @@ describe Organization do
     users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
   end
 
-  it "returns the list of other organizations" do
-    organizations = Organization.all_except(@access_token, 1)
+  it "returns the list of all organizations" do
+    organizations = Organization.all(@access_token)
     organizations.map(&:id).should include 2
     organizations.map(&:name).should include "Ashoka"
   end
 
-  it "doesn't return self in other organization list" do
-    organizations = Organization.all_except(@access_token, 1)
+  it "returns the list of all organizations except a specified organization" do
+    organizations = Organization.all(@access_token, :except => 1)
     organizations.map(&:id).should_not include 1
     organizations.map(&:name).should_not include "CSOOrganization"
   end

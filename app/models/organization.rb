@@ -6,12 +6,9 @@ class Organization
     @name = name
   end
 
-  def self.all_except(access_token, organization_id)
-    organizations = []
-    access_token.get('/api/organizations').parsed.each do |org_json|
-      organizations.push self.json_to_organization(org_json)
-    end
-    organizations.reject { |org| org.id == organization_id }
+  def self.all(access_token, options={})
+    organizations = access_token.get('/api/organizations').parsed.map { |org_json| self.json_to_organization(org_json) }
+    organizations.reject { |org| org.id == options[:except] }
   end
 
   def self.json_to_organization(org_json)

@@ -26,7 +26,7 @@ class Survey < ActiveRecord::Base
   end
 
   def organizations(access_token, organization_id)
-    Organization.all_except(access_token, organization_id).select { |org| self.participating_organization_ids.include?(org.id) }
+    Organization.all(access_token, :except => organization_id).select { |org| self.participating_organization_ids.include?(org.id) }
   end
 
   def publish_to_users(users)
