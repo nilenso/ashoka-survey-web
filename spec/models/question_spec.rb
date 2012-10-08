@@ -33,8 +33,6 @@ describe Question do
     it { should allow_mass_assignment_of(:image) }
     it { should allow_mass_assignment_of(:max_length) }
     it { should allow_mass_assignment_of(:type) }
-    it { should allow_mass_assignment_of(:max_value) }
-    it { should allow_mass_assignment_of(:min_value) }
   end
 
   context "orders by order number" do
