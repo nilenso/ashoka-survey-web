@@ -14,7 +14,7 @@ gem "rails-backbone"
 gem 'pry-rails'
 gem 'cancan'
 gem 'draper'
-
+ 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
@@ -41,7 +41,7 @@ group :test, :development do
   gem 'guard-spork'
   gem 'guard-rspec'
   gem 'factory_girl_rails'
-  gem 'shoulda-matchers'
+  gem "shoulda-matchers"
   gem 'growl'
   gem 'forgery'
   gem 'capybara'
