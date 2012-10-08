@@ -57,8 +57,8 @@ describe Survey do
       survey = FactoryGirl.create(:survey)
       user = { :id => 1, :name => "Bob"}
       FactoryGirl.create(:survey_user, :survey_id => survey.id, :user_id => user[:id])
-      survey.users(access_token, 1).map{|user| {:id => user.id, :name => user.name} }.should include user
-      survey.users(access_token, 1).map{|user| {:id => user.id, :name => user.name} }.should_not include({:id => 2, :name => "John"})
+      survey.users_for_organization(access_token, 1).map{|user| {:id => user.id, :name => user.name} }.should include user
+      survey.users_for_organization(access_token, 1).map{|user| {:id => user.id, :name => user.name} }.should_not include({:id => 2, :name => "John"})
     end
 
     it "publishes survey to the given users" do
