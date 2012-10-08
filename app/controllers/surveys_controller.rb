@@ -3,7 +3,7 @@ require 'will_paginate/array'
 class SurveysController < ApplicationController
   load_and_authorize_resource
 
-  before_filter :survey_unpublished, :only => [:build]
+  before_filter :require_unpublished_survey, :only => [:build, :share_with_organizations]
 
   def index
     @surveys ||= []
@@ -85,7 +85,7 @@ class SurveysController < ApplicationController
   end
 
   private
-  def survey_unpublished
+  def require_unpublished_survey
     survey = Survey.find(params[:id])
     if survey.published?
       flash[:error] = t "flash.edit_published_survey"
