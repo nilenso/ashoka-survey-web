@@ -14,7 +14,7 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     this.model.on('change', this.render, this)
 
   render:(template) ->
-    $(this.el).html(Mustache.render(this.template, this.model.toJSON()))
+    $(this.el).html(Mustache.render(this.template, this.model.toJSON().question))
     return this
 
   handle_textbox_keyup: (event) ->

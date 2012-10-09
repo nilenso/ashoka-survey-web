@@ -24,4 +24,10 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   imageUploadUrl: ->
     "/api/questions/"+this.id+'/image_upload'
 
+  toJSON: ->
+    question_attrs = {}
+    _.each @attributes, (val, key) ->
+      question_attrs[key] = val  if val?
+    { question: _.omit( question_attrs, ['created_at', 'updated_at', 'id']) }
+
 SurveyBuilder.Models.QuestionModel.setup()
