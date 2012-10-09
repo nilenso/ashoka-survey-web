@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe Question do
-  it { should have_many(:options).dependent(:destroy) }
     it { should allow_mass_assignment_of(:type) }
 
   context "validation" do

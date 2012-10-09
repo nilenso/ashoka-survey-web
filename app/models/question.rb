@@ -5,7 +5,6 @@ class Question < ActiveRecord::Base
   attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number
   validates_presence_of :content
   has_many :answers, :dependent => :destroy
-  has_many :options, :dependent => :destroy
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
   validates_uniqueness_of :order_number, :scope => :survey_id
 

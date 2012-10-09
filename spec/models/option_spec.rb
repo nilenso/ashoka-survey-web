@@ -10,7 +10,7 @@ describe Option do
 
   context "validation" do
     it "Ensures that the order number for an option is unique within a question" do
-      question = FactoryGirl.create(:question, :type => "RadioQuestion")
+      question = RadioQuestion.create( :type => "RadioQuestion", :content => "hollo!")
       option_1 = FactoryGirl.create(:option, :question => question, :order_number => 1)
       option_2 = FactoryGirl.build(:option, :question => question, :order_number => 1)
       option_2.should_not be_valid
@@ -19,7 +19,7 @@ describe Option do
 
   context "orders by order number" do
     it "fetches all option in ascending order of order_number for a particular question" do
-      question = FactoryGirl.create(:question)
+      question = RadioQuestion.create( :content => "hollo!")
       option = FactoryGirl.create(:option, :question => question, :order_number => 2)
       another_option = FactoryGirl.create(:option, :question => question, :order_number => 1)
       question.options.last.should == option

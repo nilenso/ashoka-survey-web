@@ -75,7 +75,7 @@ module Api
 
       context "GET 'index'" do
         it "returns all options for a question" do
-          question = FactoryGirl.create(:question)
+          question = RadioQuestion.create(:content => "question with options")
           option = FactoryGirl.create(:option, :question => question)
           get :index, :question_id => question.id
           response.should be_ok
@@ -88,6 +88,7 @@ module Api
         end
 
         it "returns nothing for a question without options" do
+          pending "will have to be fixed with a QuestionWithOptions model"
           question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
           get :index, :question_id => question.id
           response.should be_ok
