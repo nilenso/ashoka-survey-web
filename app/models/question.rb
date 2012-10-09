@@ -7,7 +7,6 @@ class Question < ActiveRecord::Base
   has_many :answers, :dependent => :destroy
   has_many :options, :dependent => :destroy
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
-  accepts_nested_attributes_for :options
   validates_uniqueness_of :order_number, :scope => :survey_id
 
   default_scope :order => 'order_number'

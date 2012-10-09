@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe RadioQuestion do
   it { should have_many(:options).dependent(:destroy) }
-  it { should accept_nested_attributes_for(:options) }
 
   it "is a question with type = 'RadioQuestion'" do
     RadioQuestion.create(:content => "hello", :order_number => 12345)
