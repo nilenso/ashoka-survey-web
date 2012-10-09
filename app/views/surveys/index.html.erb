@@ -43,7 +43,7 @@
           <td><%= survey.organization_name(@organizations) %></td>
           <td>
             <%= survey.responses.count %>
-            <%= link_to image_tag("add.png", :title => t(".add_response")), new_survey_response_path(survey.id) %>
+            <%= link_to image_tag("add.png", :title => t(".add_response")), survey_responses_path(survey.id), :method => :post %>
             <%= link_to button_tag(t ".list_responses"), survey_responses_path(survey.id) %>
           </td>
           <td class="cso_admin_operations">
