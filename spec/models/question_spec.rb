@@ -27,7 +27,7 @@ describe Question do
   it "creates a question of a given type" do
     question_params = { content: "Untitled question", survey_id: 18, order_number: 1}
     type = "SingleLineQuestion"
-    question = Question.new_question_type(type, question_params)
+    question = Question.new_question_by_type(type, question_params)
     question.class.name.should == "SingleLineQuestion"
   end
 

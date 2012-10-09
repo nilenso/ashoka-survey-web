@@ -17,7 +17,7 @@ class Question < ActiveRecord::Base
     nil
   end
 
-  def self.new_question_type(type, question_params)
+  def self.new_question_by_type(type, question_params)
     question_class = type.classify.constantize
     question_class.new(question_params)
   end
