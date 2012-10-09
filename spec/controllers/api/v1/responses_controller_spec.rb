@@ -3,11 +3,11 @@ require 'spec_helper'
 module Api
   module V1
     describe ResponsesController do
+     
       context "POST 'create'" do
         it "creates an response" do
           survey = FactoryGirl.create(:survey)
           resp = FactoryGirl.attributes_for(:response)
-          p resp
           expect {
             post :create, :survey_id => survey.id, :reponse => resp
           }.to change { Response.count }.by 1
@@ -17,7 +17,6 @@ module Api
           survey = FactoryGirl.create(:survey)
           question = FactoryGirl.create(:question)
           resp = FactoryGirl.attributes_for(:response, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
-          p resp
           expect {
             post :create, :survey_id => survey.id, :response => resp
           }.to change { Answer.count }.by 1
