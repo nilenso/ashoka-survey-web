@@ -26,6 +26,21 @@ class ResponsesController < ApplicationController
     end
   end
 
+  def edit
+    @survey = Survey.find(params[:survey_id])
+    @response = ResponseDecorator.find(params[:id])
+  end
+
+  def update
+    response = Response.find(params[:id])
+    if response.update_attributes(params[:response])
+      redirect_to survey_responses_path, :notice => "Successfully updated"
+    else
+      flash[:error] = "Error"
+      render :edit
+    end
+  end
+
   private
 
   def survey_published

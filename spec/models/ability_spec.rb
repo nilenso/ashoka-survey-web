@@ -47,7 +47,7 @@ describe "Abilities" do
         it { should be_able_to(:publish_to_users, survey) }
         it { should be_able_to(:update_publish_to_users, survey) }
 
-        it { should be_able_to :create, Response.new(:survey => survey) }
+        it { should be_able_to :manage, Response.new(:survey => survey) }
         it { should be_able_to :read, Response.new(:survey => survey) }
       end
 
