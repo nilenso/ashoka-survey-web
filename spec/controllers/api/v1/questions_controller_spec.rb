@@ -6,7 +6,7 @@ module Api
       context "POST 'create'" do
         it "creates a new question" do
           survey = FactoryGirl.create(:survey)
-          question = FactoryGirl.attributes_for(:question)
+          question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion')
 
           expect do
             post :create, :survey_id => survey.id, :question => question
@@ -39,7 +39,7 @@ module Api
         context "when save is unsuccessful" do
           it "returns the errors with a bad_request status" do
             survey = FactoryGirl.create(:survey)
-            question = FactoryGirl.attributes_for(:question)
+            question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion')
             question[:content] = ''
             post :create, :survey_id => survey.id, :question => question
 

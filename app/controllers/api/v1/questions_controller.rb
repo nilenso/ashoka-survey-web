@@ -3,7 +3,7 @@ module Api
     class QuestionsController < ApplicationController
 
       def create
-        question = Question.new(params[:question])
+        question = Question.new_question_by_type(params[:question][:type], params[:question])
         if question.save
           render :json => question
         else
