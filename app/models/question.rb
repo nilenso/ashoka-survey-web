@@ -16,4 +16,9 @@ class Question < ActiveRecord::Base
     return image.url(:thumb) if image.exists?
     nil
   end
+
+  def self.new_question_type(type, question_params)
+    question_class = type.classify.constantize
+    question_class.new(question_params)
+  end
 end
