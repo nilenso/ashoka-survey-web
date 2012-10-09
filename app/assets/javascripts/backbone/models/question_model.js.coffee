@@ -27,7 +27,7 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   toJSON: ->
     question_attrs = {}
     _.each @attributes, (val, key) ->
-      question_attrs[key] = val  if val?
+      question_attrs[key] = val  if val? and not _.isObject(val)
     { question: _.omit( question_attrs, ['created_at', 'updated_at', 'id']) }
 
 SurveyBuilder.Models.QuestionModel.setup()
