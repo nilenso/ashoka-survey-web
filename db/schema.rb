@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121008122915) do
+ActiveRecord::Schema.define(:version => 20121009085823) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -81,11 +81,12 @@ ActiveRecord::Schema.define(:version => 20121008122915) do
 
   create_table "responses", :force => true do |t|
     t.integer  "survey_id"
-    t.datetime "created_at",      :null => false
-    t.datetime "updated_at",      :null => false
+    t.datetime "created_at",                         :null => false
+    t.datetime "updated_at",                         :null => false
     t.integer  "user_id"
     t.integer  "mobile_id"
     t.integer  "organization_id"
+    t.boolean  "complete",        :default => false
   end
 
   add_index "responses", ["organization_id"], :name => "index_responses_on_organization_id"
