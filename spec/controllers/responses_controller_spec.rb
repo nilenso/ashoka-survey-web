@@ -7,6 +7,37 @@ describe ResponsesController do
     session[:user_info][:org_id] = 1
   end
 
+  context "GET 'new'" do
+    it "renders a page to create a new response" do
+      get :new, :survey_id => survey.id
+      response.should be_ok
+      response.should render_template(:new)
+    end
+
+    it "assigns a new response" do
+      get :new, :survey_id => survey.id
+      assigns(:response).should_not be_nil
+    end
+
+    it "assigns the appropriate survey" do
+      get :new, :survey_id => survey.id
+      assigns(:survey).should == survey
+    end
+
+    it "assigns new answers to the response corresponding to the survey questions" do
+      get :new, :survey_id => survey.id
+      assigns(:response).answers.size.should == survey.questions.size
+      assigns(:response).answers.each { |answer| answer.should be_an Answer }
+    end
+
+    it "does not allow adding a response to a survey that is not published" do
+      survey = FactoryGirl.create(:survey, :organization_id => 1)
+      get :new, :survey_id => survey.id
+      response.should redirect_to(surveys_path)
+      flash[:error].should_not be_nil
+    end
+  end
+
   context "POST 'create'" do
     let(:response) { FactoryGirl.attributes_for(:response_with_answers)}
 
@@ -15,32 +46,39 @@ describe ResponsesController do
       assigns(:response).should_not be_nil
     end
 
-    it "assigns new answers to the response corresponding to the survey questions" do
-      post :create, :response => response, :survey_id => survey.id
-      Response.find_by_survey_id(survey.id).answers.size.should == survey.questions.size
-      Response.find_by_survey_id(survey.id).answers.each { |answer| answer.should be_an Answer }
-    end
+    context "when save is successful" do
+      it "saves the response" do
+        expect do
+          post :create, :response => response, :survey_id => survey.id
+        end.to change { Response.count }.by(1)
+      end
 
-    it "saves the response" do
-      expect do
+      it "saves the response to the right survey" do
         post :create, :response => response, :survey_id => survey.id
-      end.to change { Response.count }.by(1)
+        assigns(:response).survey.should ==  survey
+      end
+
+      it "saves the id of the user taking the response" do
+        session[:user_id] = 1234
+        post :create, :response => response, :survey_id => survey.id
+        Response.find_by_survey_id(survey.id).user_id.should == 1234
+      end
+
+      it "redirects to the root path with a flash message" do
+        post :create, :response => response, :survey_id => survey.id
+        response.should redirect_to root_path
+        flash[:notice].should_not be_nil
+      end
     end
 
-    it "saves the response to the right survey" do
-      post :create, :response => response, :survey_id => survey.id
-      Response.find_by_survey_id(survey.id).should_not be_nil
-    end
-
-    it "saves the id of the user taking the response" do
-      session[:user_id] = 1234
-      post :create, :response => response, :survey_id => survey.id
-    end
-
-    it "redirects to the edit path" do
-      post :create, :response => response, :survey_id => survey.id
-      res = Response.find_by_survey_id(survey.id)
-      response.should redirect_to edit_survey_response_path(:id => res.id, :survey_id => survey.id)
+    context "when save is unsuccessful" do
+      it "renders the 'new' page" do
+        question = FactoryGirl.create(:question, :mandatory => true)
+        response['answers_attributes'] = {}
+        response['answers_attributes']['0'] = {'content' => '', 'question_id' => question.id}
+        post :create, :response => response, :survey_id => survey.id
+        response.should render_template :new
+      end
     end
   end
 
