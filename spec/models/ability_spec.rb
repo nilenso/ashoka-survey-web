@@ -17,16 +17,6 @@ describe "Abilities" do
       let(:user_info) { base_user_info.merge(:role => 'admin') }
 
       it { should be_able_to(:read, Survey.new) }
-      it { should be_able_to(:create, Survey.new) }
-      it { should be_able_to(:publish_to_users, Survey.new) }
-      it { should be_able_to(:update_publish_to_users, Survey.new) }
-      it { should be_able_to(:edit, Survey.new) }
-      it { should be_able_to(:share_with_organizations, Survey.new) }
-      it { should be_able_to(:update_share_with_organizations, Survey.new) }
-      it { should be_able_to(:destroy, Survey.new) }
-      it { should be_able_to(:build, Survey.new) }
-
-      it { should be_able_to(:create, Response.new)}
       it { should be_able_to(:read, Response.new)}
     end
 

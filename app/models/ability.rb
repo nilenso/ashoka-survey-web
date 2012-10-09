@@ -11,7 +11,8 @@ class Ability
     else
       role = user_info[:role]
       if role == 'admin'
-        can :manage, :all # TODO: Verify this
+        can :read, Survey # TODO: Verify this
+        can :read, Response # TODO: Verify this
       elsif role == 'cso_admin'
         can :read, Survey, ['
           surveys.id in (SELECT "surveys".id FROM "surveys" 
