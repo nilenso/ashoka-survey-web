@@ -2,6 +2,9 @@ require 'spec_helper'
 
 describe Question do
     it { should allow_mass_assignment_of(:type) }
+    it { should allow_mass_assignment_of(:parent_id) }
+    it { should belong_to(:parent).class_name(Question) }
+    it { should have_many(:children).class_name(Question) }
 
   context "validation" do
     it "ensures that the order number for a question is unique within a survey" do
