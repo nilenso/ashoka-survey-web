@@ -6,7 +6,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @questions = []
     @add_survey_details(survey_model)
 
-  add_question: (type, model) ->
+  add_question: (type, model, parent) ->
     switch type
       when 'SingleLineQuestion'
         template = $('#dummy_single_line_question_template').html()
@@ -35,6 +35,13 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       when 'RatingQuestion'
         template = $('#dummy_rating_question_template').html()
         @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
+
+    if parent
+      question = @questions.pop()
+      index = @questions.indexOf(_(@questions).find((view) ->
+          view.model.get('options').contains(parent) if view.model.get('options')
+        ))
+      @questions.splice(index + 1, 0, question)
 
     model.on('destroy', this.delete_question_view, this)
     this.render()

@@ -25,9 +25,9 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   new_question: (event, data) ->
     type = data.type
-    #TODO: Switch tab here.
-    model = this.survey.add_new_question_model(type, data.parent)
-    this.dummy_pane.add_question(type, model)
+    parent = data.parent
+    model = this.survey.add_new_question_model(type, parent)
+    this.dummy_pane.add_question(type, model, parent)
     this.settings_pane.add_question(type, model)
     model.save_model()
 
