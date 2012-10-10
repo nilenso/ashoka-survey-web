@@ -42,7 +42,7 @@ describe 'BackboneSurveyBuilder', js: true do
 
     context "when clicking on a dummy" do
       it "should show a radio question in the settings pane" do
-        find("#dummy_pane").find('div').click
+        find("#dummy_pane").find('div').find('div').click
         find("#settings_pane").find('div')['style'].should == "display: block; "
       end
     end
@@ -108,7 +108,7 @@ describe 'BackboneSurveyBuilder', js: true do
 
     context "when clicking on a dummy" do
       it "should show a single line question in the settings pane" do
-        find("#dummy_pane").find('div').click
+        find("#dummy_pane").find('div').find('div').click
         find("#settings_pane").find('div')['style'].should == "display: block; "
       end
     end
