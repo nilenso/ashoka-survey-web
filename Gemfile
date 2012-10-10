@@ -14,6 +14,7 @@ gem "rails-backbone"
 gem 'pry-rails'
 gem 'cancan'
 gem 'draper'
+gem 'awesome_nested_set'
  
 # Gems used only for assets and not required
 # in production environments by default.
