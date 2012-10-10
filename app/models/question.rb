@@ -17,6 +17,14 @@ class Question < ActiveRecord::Base
     nil
   end
 
+  def as_json(options={})
+    super(options.merge({:except => [:lft, :rgt]}))
+  end
+
+  def to_json(options={})
+    super(options.merge({:except => [:lft, :rgt]}))
+  end
+
   def self.new_question_by_type(type, question_params)
     question_class = type.classify.constantize
     question_class.new(question_params)
