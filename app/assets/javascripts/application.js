@@ -21,6 +21,7 @@
 //= require jquery.iframe-transport
 //= require jquery.fileupload
 //= require jquery.raty
+//= require jquery_sortable
 //= require jquery.charCount
 //= require spin
 //= require backbone_relational

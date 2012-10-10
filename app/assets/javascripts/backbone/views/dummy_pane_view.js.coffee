@@ -5,6 +5,14 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   initialize: (survey_model) ->
     @questions = []
     @add_survey_details(survey_model)
+    # ($(this.el).find("#dummy_questions")).sortable update: (event, ui) ->
+    #   $("div", this).each (i) ->
+    #     id = $(this).attr("id")
+    #     question_view = (_.find @questions, (q) -> q.id is id)
+    #     question_model = question_view.model
+    #     question_model.set({order_number: i + 1})
+
+
 
   add_question: (type, model, parent) ->
     switch type
