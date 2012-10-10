@@ -144,25 +144,16 @@ module Api
       end
 
       context "GET 'show'" do
-        let(:question) { FactoryGirl.create(:question) }
-        it "returns the question as JSON" do          
+        it "returns the question as JSON" do
+          question = FactoryGirl.create(:question)
           get :show, :id => question.id
           response.should be_ok
-          JSON.parse(response.body).each do |key, value|
-            question[key].should == value unless key =~ /\w+_at/
-          end
+          response.body.should == question.to_json(:methods => :image_url)
         end
 
         it "returns a :bad_request for an invalid question_id" do
           get :show, :id => 45678787657
           response.should_not be_ok
-        end
-
-        it "doesn't render the 'lft' and 'rgt' attributes" do
-          get :show, :id => question.id
-          response.should be_ok
-          JSON.parse(response.body).keys.should_not include 'lft'
-          JSON.parse(response.body).keys.should_not include 'rgt'
         end
       end
     end
