@@ -14,28 +14,28 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
     'click #add_rating_question': 'add_rating_question'
 
   add_radio_question: ->
-    $(this.el).trigger('new_question', 'RadioQuestion')
+    $(this.el).trigger('new_question', { type: 'RadioQuestion' })
 
   add_single_line_question: ->
-    $(this.el).trigger('new_question', 'SingleLineQuestion')
+    $(this.el).trigger('new_question', { type: 'SingleLineQuestion' })
 
   add_multiline_question: ->
-    $(this.el).trigger('new_question', 'MultilineQuestion')
+    $(this.el).trigger('new_question', { type: 'MultilineQuestion' })
 
   add_numeric_question: ->
-    $(this.el).trigger('new_question', 'NumericQuestion')
+    $(this.el).trigger('new_question', { type: 'NumericQuestion' })
 
   add_date_question: ->
-    $(this.el).trigger('new_question', 'DateQuestion')
+    $(this.el).trigger('new_question', { type: 'DateQuestion' })
 
   add_multi_choice_question: ->
-    $(this.el).trigger('new_question', 'MultiChoiceQuestion')
+    $(this.el).trigger('new_question', { type: 'MultiChoiceQuestion' })
 
   add_drop_down_question: ->
-    $(this.el).trigger('new_question', 'DropDownQuestion')
+    $(this.el).trigger('new_question', { type: 'DropDownQuestion' })
 
   add_photo_question: ->
-    $(this.el).trigger('new_question', 'PhotoQuestion')
+    $(this.el).trigger('new_question', { type: 'PhotoQuestion' })
 
   add_rating_question: ->
-    $(this.el).trigger('new_question', 'RatingQuestion')
+    $(this.el).trigger('new_question', { type: 'RatingQuestion' })

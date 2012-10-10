@@ -4,6 +4,7 @@ SurveyBuilder.Views.Questions ||= {}
 class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
   events:
     'keyup': 'update_model'
+    'click .add_sub_question' : 'add_sub_question'
 
   initialize: (@model, @template) ->
     this.model.on('change:errors', this.render, this)
@@ -21,3 +22,6 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
 
   delete: =>
     this.model.destroy()
+
+  add_sub_question: ->
+    $(this.el).trigger('new_question', {type : 'SingleLineQuestion', parent : this.model})

@@ -5,7 +5,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     this.urlRoot = "/api/surveys"
     this.set('id', survey_id)
 
-  add_new_question_model:(type) ->
+  add_new_question_model:(type, parent) ->
     switch type
       when 'MultiChoiceQuestion'
         question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({type: 'MultiChoiceQuestion'})
@@ -18,6 +18,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
 
     question_model.set('survey_id' : this.survey_id)
     question_model.set('order_number' : this.get_order_counter())
+    question_model.set('parent_id' : parent.get('id')) if parent
     @remove_image_attributes(question_model)
     @question_models.push question_model
     question_model.on('destroy', this.delete_question_model, this)

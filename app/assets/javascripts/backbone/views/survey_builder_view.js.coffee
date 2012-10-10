@@ -23,9 +23,10 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
           $.getJSON("/api/questions?survey_id=#{survey_id}", this.preload_questions)
       })
 
-  new_question: (event, type) ->
+  new_question: (event, data) ->
+    type = data.type
     #TODO: Switch tab here.
-    model = this.survey.add_new_question_model(type)
+    model = this.survey.add_new_question_model(type, data.parent)
     this.dummy_pane.add_question(type, model)
     this.settings_pane.add_question(type, model)
     model.save_model()
