@@ -12,6 +12,20 @@ describe Question do
       question_2 = FactoryGirl.build(:question, :survey => survey, :order_number => 1)
       question_2.should_not be_valid
     end
+
+    it "ensures that the order number for a question is unique within its parent's scope" do
+      survey = FactoryGirl.create(:survey)
+      question_1 = FactoryGirl.create(:question, :survey => survey, :order_number => 1, :parent_id => 5)
+      question_2 = FactoryGirl.build(:question, :survey => survey, :order_number => 1, :parent_id => 5)
+      question_2.should_not be_valid
+    end
+
+    it "allows duplicate order numbers for questions with different parents within a survey" do
+      survey = FactoryGirl.create(:survey)
+      question_1 = FactoryGirl.create(:question, :survey => survey, :order_number => 1, :parent_id => 1)
+      question_2 = FactoryGirl.create(:question, :survey => survey, :order_number => 1, :parent_id => 2)
+      question_2.should be_valid
+    end
   end
 
   context "orders by order number" do
