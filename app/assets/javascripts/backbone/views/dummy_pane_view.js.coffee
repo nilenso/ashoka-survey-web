@@ -41,13 +41,15 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
 
   add_survey_details: (survey_model) ->
     template = $("#dummy_survey_details_template").html()
-    @questions.push(new SurveyBuilder.Views.Dummies.SurveyDetailsView({ model: survey_model, template: template}))
+    @dummy_survey_details = new SurveyBuilder.Views.Dummies.SurveyDetailsView({ model: survey_model, template: template})
 
   render: ->
-    ($(this.el).append(question.render().el)) for question in @questions 
+    ($(this.el).find("#dummy_survey_details").append(@dummy_survey_details.render().el)) 
+    ($(this.el).find("#dummy_questions").append(question.render().el)) for question in @questions 
     return this
 
   unfocus_all: ->
+    $(@dummy_survey_details.el).removeClass("active")
     $(question.el).removeClass("active") for question in @questions
 
   delete_question_view: (model) ->

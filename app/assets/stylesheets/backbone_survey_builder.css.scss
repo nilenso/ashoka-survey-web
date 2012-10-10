@@ -25,7 +25,7 @@ h1#heading {
   height: $app_min_height;
   overflow: auto;
 
-  > div {
+  > div > div {
     padding: 4px;
     margin-bottom: 2px;
     border: 1px dashed white;
