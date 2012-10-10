@@ -91,7 +91,7 @@ module Api
           question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
           get :index, :question_id => question.id
           response.should be_bad_request
-          JSON.parse(response.body).should be_empty
+          response.body.should be_blank
         end
       end
     end
