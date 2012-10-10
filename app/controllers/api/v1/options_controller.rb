@@ -30,7 +30,7 @@ module Api
 
       def index
         question = Question.find_by_id(params[:question_id])
-        if question
+        if question.respond_to?(:options)
           render :json => question.options
         else
           render :nothing => true, :status => :bad_request

@@ -87,11 +87,10 @@ module Api
           response.should_not be_ok
         end
 
-        it "returns nothing for a question without options" do
-          pending "will have to be fixed with a QuestionWithOptions model"
+        it "returns a bad request for a question without options" do
           question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
           get :index, :question_id => question.id
-          response.should be_ok
+          response.should be_bad_request
           JSON.parse(response.body).should be_empty
         end
       end
