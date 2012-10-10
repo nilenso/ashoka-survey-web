@@ -29,13 +29,5 @@ describe Question do
     question.class.name.should == "SingleLineQuestion"
   end
 
-  its "json representation doesn't contain lft and rgt attributes" do
-    question = FactoryGirl.create(:question)
-    JSON.parse(question.to_json).keys.should_not include 'lft'
-    JSON.parse(question.to_json).keys.should_not include 'rgt'
-    question.as_json.keys.should_not include 'rgt' 
-    question.as_json.keys.should_not include 'rgt'
-  end
-
   include_examples 'a question'
 end
