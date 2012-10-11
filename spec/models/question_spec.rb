@@ -50,6 +50,37 @@ describe Question do
     question = Question.new_question_by_type(type, question_params)
     question.class.name.should == "SingleLineQuestion"
   end
-  
+
+  context "when fetching its subquestions" do
+    it "fetches all the questions nested directly under it for a RadioQuestion" do
+      question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
+      question.options << Option.create(content: "Option", order_number: 1)
+      nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
+      question.with_subquestions.should include(nested_question)
+    end
+
+    it "fetches all the questions nested directly under it for a DropDownQuestion" do
+      question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
+      question.options << Option.create(content: "Option", order_number: 1)
+      nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
+      question.with_subquestions.should include(nested_question)
+    end
+
+    it "returns self for all other types of questions" do
+      question = Question.create({content: "Untitled question", survey_id: 18, order_number: 1})
+      question.with_subquestions.should include(question)
+    end
+
+    it "returns questions nested all levels below it" do
+      question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
+      question.options << Option.create(content: "Option", order_number: 2)
+      nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
+      nested_question.options << Option.create(content: "Nested Option", order_number: 1)
+      second_nested_question = RadioQuestion.create({content: "Nested Again", survey_id: 18, order_number: 1, parent_id: nested_question.options.first.id})
+      question.with_subquestions.should include(nested_question)
+      question.with_subquestions.should include(second_nested_question)
+    end
+  end
+
   include_examples 'a question'
 end

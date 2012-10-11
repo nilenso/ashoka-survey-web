@@ -11,5 +11,13 @@ FactoryGirl.define do
         FactoryGirl.create_list(:answer, 5, :question => question)
       end
     end
+
+    factory :question_with_options do
+      after(:create) do |question, evaluator|
+        question.type = 'RadioQuestion'
+        FactoryGirl.create_list(:option, 5, :question => question)
+        question.save
+      end
+    end
   end
 end
