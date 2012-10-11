@@ -27,28 +27,4 @@ describe Option do
       question.options.first.should == another_option
     end
   end
-
-  context "when fetching all the sub_questions of an option" do
-    let(:question) { FactoryGirl.create :question }
-
-    it "fetches all the directly nested sub_questions" do      
-      option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
-      nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: option.id})
-      option.sub_questions.should include nested_question
-    end
-
-    it "fetches the nested subquestions at all levels" do      
-      option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
-      nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: option.id})
-      nested_question.options << Option.create(content: "Option", order_number: 2, :question_id => nested_question.id)
-      another_nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: nested_question.options.first.id})
-      option.sub_questions.should include nested_question
-      option.sub_questions.should include another_nested_question
-    end
-
-    it "returns an empty array when there are no sub_questions" do      
-      option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
-      option.sub_questions.should == []
-    end
-  end
 end

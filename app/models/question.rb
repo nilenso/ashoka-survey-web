@@ -20,9 +20,4 @@ class Question < ActiveRecord::Base
     question_class = type.classify.constantize
     question_class.new(question_params)
   end
-
-  def with_subquestions
-    return options.map(&:sub_questions).flatten.unshift(self) if respond_to? :options
-    return [self]
-  end
 end
