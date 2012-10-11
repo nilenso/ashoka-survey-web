@@ -22,6 +22,7 @@
 //= require jquery.fileupload
 //= require jquery.raty
 //= require jquery.charCount
+//= require jquery_sortable
 //= require spin
 //= require backbone_relational
 //= require backbone_rails_sync
