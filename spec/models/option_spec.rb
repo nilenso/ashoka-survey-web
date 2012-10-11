@@ -34,7 +34,7 @@ describe Option do
     it "fetches all the directly nested sub_questions" do      
       option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
       nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: option.id})
-      option.sub_questions.should include nested_question
+      option.as_json[:questions].should include nested_question.as_json
     end
 
     it "fetches the nested subquestions at all levels" do      
@@ -42,13 +42,13 @@ describe Option do
       nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: option.id})
       nested_question.options << Option.create(content: "Option", order_number: 2, :question_id => nested_question.id)
       another_nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: nested_question.options.first.id})
-      option.sub_questions.should include nested_question
-      option.sub_questions.should include another_nested_question
+      option.as_json[:questions].should include nested_question.as_json
+      option.as_json[:questions].should_not include  another_nested_question.as_json
     end
 
-    it "returns an empty array when there are no sub_questions" do      
+    it "returns itself when there are no sub_questions" do      
       option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
-      option.sub_questions.should == []
+      option.as_json.should == option.as_json
     end
   end
 end

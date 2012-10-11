@@ -16,13 +16,13 @@ class Question < ActiveRecord::Base
     nil
   end
 
+  def as_json(opts={})
+    return super(opts).merge({:options => options.map(&:as_json)}) if respond_to? :options
+    return super(opts)
+  end
+
   def self.new_question_by_type(type, question_params)
     question_class = type.classify.constantize
     question_class.new(question_params)
-  end
-
-  def with_subquestions
-    return options.map(&:sub_questions).flatten.unshift(self) if respond_to? :options
-    return [self]
   end
 end

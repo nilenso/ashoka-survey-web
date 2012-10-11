@@ -6,7 +6,7 @@ class Option < ActiveRecord::Base
   validates_presence_of :content, :question_id
   default_scope :order => 'order_number'
 
-  def sub_questions
-     questions.map(&:with_subquestions).flatten
+  def as_json(opts={})
+    super(opts).merge({:questions => questions.map(&:as_json)})
   end
 end
