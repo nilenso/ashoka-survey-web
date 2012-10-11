@@ -5,6 +5,9 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     content: 'untitled'
   }
 
+  initialize: ->
+    @sub_question_order_counter = 0
+
   has_errors: ->
     !_.isEmpty(this.errors)
 
@@ -18,6 +21,9 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   error_callback: (model, response) =>
     this.errors = JSON.parse(response.responseText)
     this.trigger('change:errors')
+
+  get_sub_question_order_counter: ->
+    @sub_question_order_counter++
 
 SurveyBuilder.Models.OptionModel.setup()
 

@@ -17,9 +17,6 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     }
   ]
 
-  initialize: ->
-    @sub_question_order_counter = 0
-
   has_errors: ->
     !_.isEmpty(this.errors) || this.get('options').has_errors()
 
@@ -42,9 +39,6 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     else
       prev_order_counter = this.get('options').last().get('order_number')
       prev_order_counter + 1
-
-  get_sub_question_order_counter: ->
-    @sub_question_order_counter++
 
   fetch: ->
     super
