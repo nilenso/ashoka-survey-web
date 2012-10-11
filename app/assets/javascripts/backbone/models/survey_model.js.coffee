@@ -25,18 +25,19 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     question_model.on('destroy', this.delete_question_model, this)
     question_model
 
-  get_order_counter: ->
+  next_order_number: ->
     if _(@question_models).isEmpty()
       0
     else
-      prev_order_counter = _(@question_models).last().get('order_number')
-      prev_order_counter + 1 
+      _.max(@question_models, (question_model) ->
+        question_model.get "order_number"
+      ).get('order_number') + 1
 
   set_order_number_for_question: (model, parent) ->
     if parent
-      model.set('order_number' : parent.get_sub_question_order_counter())
+      model.set('order_number' : parent.next_sub_question_order_number())
     else
-      model.set('order_number' : this.get_order_counter())
+      model.set('order_number' : this.next_order_number())
 
   remove_image_attributes: (model) ->
     model.unset('image', {silent: true})
@@ -60,6 +61,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
   save_all_questions: ->
     if this.get('questions_order_changed')
       this.reset_and_save_reordered_questions()
+
     else
       for question_model in @question_models
         question_model.save_model()

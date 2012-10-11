@@ -22,7 +22,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     this.errors = JSON.parse(response.responseText)
     this.trigger('change:errors')
 
-  get_sub_question_order_counter: ->
+  next_sub_question_order_number: ->
     @sub_question_order_counter++
 
 SurveyBuilder.Models.OptionModel.setup()
