@@ -6,6 +6,12 @@ describe Question do
     it { should belong_to(:parent).class_name(Option) }
 
   context "validation" do
+    it "allows multiple rows to have nil for order_number" do
+      survey = FactoryGirl.create(:survey)
+      FactoryGirl.create(:question, :order_number => nil, :survey_id => survey.id)
+      another_question = FactoryGirl.build(:question, :order_number => nil, :survey_id => survey.id)
+      another_question.should be_valid
+    end
     it "ensures that the order number for a question is unique within a survey" do
       survey = FactoryGirl.create(:survey)
       question_1 = FactoryGirl.create(:question, :survey => survey, :order_number => 1)

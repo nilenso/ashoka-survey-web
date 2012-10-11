@@ -7,7 +7,7 @@ class Question < ActiveRecord::Base
   validates_presence_of :content
   has_many :answers, :dependent => :destroy
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
-  validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id]
+  validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id], :allow_nil => true
 
   default_scope :order => 'order_number'
 
