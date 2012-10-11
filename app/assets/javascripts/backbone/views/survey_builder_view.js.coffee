@@ -7,6 +7,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'dummy_click': 'handle_dummy_click'
     'click #save': 'save_all_questions'
     'reset_order_numbers': 'reset_order_numbers'
+    'save_all_questions': 'save_all_questions'
 
   initialize:(survey_id) ->
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
@@ -64,6 +65,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   handle_save_finished: =>
     $(this.el).unbind('ajaxStop.save');
     $(this.el).find("#save input").prop('disabled', false)
+    $(this.el).trigger('save_finished')
     @display_save_status()
     
 
