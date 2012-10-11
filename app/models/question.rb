@@ -22,6 +22,7 @@ class Question < ActiveRecord::Base
   end
 
   def with_subquestions
-    options.map(&:questions).flatten
+    return options.map(&:questions).flatten.map(&:with_subquestions).flatten.unshift(self) if respond_to? :options
+    return [self]
   end
 end
