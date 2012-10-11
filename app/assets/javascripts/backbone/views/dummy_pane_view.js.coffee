@@ -12,47 +12,48 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     #     question_model = question_view.model
     #     question_model.set({order_number: i + 1})
 
-
-
   add_question: (type, model, parent) ->
+    insert_at_index = @questions.indexOf(_(@questions).find((view) ->
+      view.model.get('options').contains(parent) if view.model.get('options')
+    ))
+
     switch type
       when 'SingleLineQuestion'
         template = $('#dummy_single_line_question_template').html()
-        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
+        @insert_view_at_index(new SurveyBuilder.Views.Dummies.QuestionView(model, template), insert_at_index)
       when 'MultilineQuestion'
         template = $('#dummy_multiline_question_template').html()
-        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
+        @insert_view_at_index(new SurveyBuilder.Views.Dummies.QuestionView(model, template), insert_at_index)
       when 'NumericQuestion'
         template = $('#dummy_numeric_question_template').html()
-        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
+        @insert_view_at_index(new SurveyBuilder.Views.Dummies.QuestionView(model, template), insert_at_index)
       when 'DateQuestion'
         template = $('#dummy_date_question_template').html()
-        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
+        @insert_view_at_index(new SurveyBuilder.Views.Dummies.QuestionView(model, template), insert_at_index)
       when 'RadioQuestion'
         template = $('#dummy_radio_question_template').html()
-        @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
+        @insert_view_at_index(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template), insert_at_index)
       when 'MultiChoiceQuestion'
         template = $('#dummy_multi_choice_question_template').html()
-        @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
+        @insert_view_at_index(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template), insert_at_index)
       when 'DropDownQuestion'
         template = $('#dummy_drop_down_question_template').html()
-        @questions.push(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template))
+        @insert_view_at_index(new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template), insert_at_index)
       when 'PhotoQuestion'
         template = $('#dummy_photo_question_template').html()
-        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
+        @insert_view_at_index(new SurveyBuilder.Views.Dummies.QuestionView(model, template), insert_at_index)
       when 'RatingQuestion'
         template = $('#dummy_rating_question_template').html()
-        @questions.push(new SurveyBuilder.Views.Dummies.QuestionView(model, template))
-
-    if parent
-      question = @questions.pop()
-      index = @questions.indexOf(_(@questions).find((view) ->
-          view.model.get('options').contains(parent) if view.model.get('options')
-        ))
-      @questions.splice(index + 1, 0, question)
+        @insert_view_at_index(new SurveyBuilder.Views.Dummies.QuestionView(model, template), insert_at_index)
 
     model.on('destroy', this.delete_question_view, this)
     this.render()
+
+  insert_view_at_index: (view, index) ->
+    if index == -1
+      @questions.push(view)
+    else
+      @questions.splice(index + 1, 0, view)
 
   add_survey_details: (survey_model) ->
     template = $("#dummy_survey_details_template").html()
