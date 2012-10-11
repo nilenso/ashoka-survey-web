@@ -56,7 +56,9 @@ describe Question do
       question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
       question.options << Option.create(content: "Option", order_number: 1)
       nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-      question.as_json[:options][0][:questions][0].should eq(nested_question.as_json)
+      question.as_json[:options][0][:questions][0].each do |key, value|
+        nested_question.as_json[key].should == value
+      end 
     end
 
     it "fetches all the questions nested directly under it for a DropDownQuestion" do
