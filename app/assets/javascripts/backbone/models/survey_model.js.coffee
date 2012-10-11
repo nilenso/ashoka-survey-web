@@ -66,4 +66,8 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
   has_errors: ->
     _.any(@question_models, (question_model) -> question_model.has_errors())
 
+  reset_order_numbers: ->
+    for question_model in @question_models
+      question_model.set( {order_number : ""} )
+
 SurveyBuilder.Models.SurveyModel.setup()
