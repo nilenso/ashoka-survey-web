@@ -17,7 +17,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
         question_model = new SurveyBuilder.Models.QuestionModel({type: type})
 
     question_model.set('survey_id' : this.survey_id)
-    question_model.set('order_number' : this.get_order_counter())
+    @set_order_number_for_question(question_model, parent)
     question_model.set('parent_id' : parent.get('id')) if parent
     @remove_image_attributes(question_model)
     @question_models.push question_model
@@ -30,6 +30,12 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     else
       prev_order_counter = _(@question_models).last().get('order_number')
       prev_order_counter + 1 
+
+  set_order_number_for_question: (model, parent) ->
+    if parent
+      model.set('order_number' : parent.get_sub_question_order_counter())
+    else
+      model.set('order_number' : this.get_order_counter())
 
   remove_image_attributes: (model) ->
     model.unset('image', {silent: true})
