@@ -6,7 +6,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'new_question': 'new_question'
     'dummy_click': 'handle_dummy_click'
     'click #save': 'save_all_questions'
-    'reordered_survey_questions': 'reordered_survey_questions'
 
   initialize:(survey_id) ->
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
@@ -67,12 +66,8 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     $(this.el).trigger('save_finished')
     @display_save_status()
     
-
   display_save_status: ->
     if this.survey.has_errors()
       window.notifications_view.set_error('We had trouble saving your survey.')
     else
       window.notifications_view.set_notice('Your survey was saved!')
-
-  reordered_survey_questions: ->
-    this.survey.questions_order_changed()

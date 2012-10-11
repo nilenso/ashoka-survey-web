@@ -4,7 +4,6 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     @question_models = []
     this.urlRoot = "/api/surveys"
     this.set('id', survey_id)
-    this.set('questions_order_changed', false)
 
   add_new_question_model:(type, parent) ->
     switch type
@@ -59,25 +58,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     this.trigger('change:errors')
 
   save_all_questions: ->
-    if this.get('questions_order_changed')
-      this.reset_and_save_reordered_questions()
-
-    else
-      for question_model in @question_models
-        question_model.save_model()
-
-  reset_and_save_reordered_questions: ->
-    $("#survey_builder").bind('ajaxStop.save', this.save_reordered_questions)
     for question_model in @question_models
-      question_model.set( {temp_order_number : question_model.get('order_number')} )
-      question_model.set( {order_number : ""} )
-      question_model.save_model()
-    this.set('questions_order_changed', false)
-
-  save_reordered_questions: =>
-    $("#survey_builder").unbind('ajaxStop.save')
-    for question_model in @question_models
-      question_model.set( {order_number : question_model.get('temp_order_number')} )
       question_model.save_model()
 
   delete_question_model: (model) ->
@@ -85,8 +66,5 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
 
   has_errors: ->
     _.any(@question_models, (question_model) -> question_model.has_errors())
-
-  questions_order_changed: ->
-    this.set('questions_order_changed', true)
 
 SurveyBuilder.Models.SurveyModel.setup()
