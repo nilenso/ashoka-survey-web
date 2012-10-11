@@ -20,4 +20,8 @@ class Question < ActiveRecord::Base
     question_class = type.classify.constantize
     question_class.new(question_params)
   end
+
+  def with_subquestions
+    options.map(&:questions).flatten
+  end
 end
