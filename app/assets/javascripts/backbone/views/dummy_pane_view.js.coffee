@@ -5,7 +5,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   initialize: (survey_model) ->
     @questions = []
     @add_survey_details(survey_model)
-    ($(this.el).find("#dummy_questions")).sortable({update : this.reset_and_reoder_questions})
+    ($(this.el).find("#dummy_questions")).sortable({update : this.reorder_questions})
 
   add_question: (type, model, parent) ->
     insert_at_index = @questions.indexOf(_(@questions).find((view) ->
@@ -68,12 +68,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @questions = _(@questions).without(question)
     question.remove()
 
-  reset_and_reoder_questions: (event, ui) =>
-    $(this.el).trigger('reset_order_numbers')
-    $(this.el).bind('save_finished', this.reorder_questions(event, ui))
-
   reorder_questions: (event, ui) =>
-    $(this.el).unbind('save_finished');
     question_views = @questions
     $("div.dummy_question", $(this.el).find("#dummy_questions")).each (i) ->
       id = parseInt( $(this).attr("id") )
@@ -82,4 +77,4 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       )
       question_model = question_view.model
       question_model.set({order_number: i + 1})
-    $(this.el).trigger('save_all_questions')
+    $(this.el).trigger('reordered_survey_questions')
