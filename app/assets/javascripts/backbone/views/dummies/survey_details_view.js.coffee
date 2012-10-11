@@ -16,6 +16,5 @@ class SurveyBuilder.Views.Dummies.SurveyDetailsView extends Backbone.View
 
   show_actual: (event) ->
     $(this.el).trigger("dummy_click")
-    console.log($(this.model.actual_view.el))
     $(this.model.actual_view.el).show()
     $(this.el).addClass("active")
