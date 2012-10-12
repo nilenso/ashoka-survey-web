@@ -12,7 +12,8 @@
   <% end %>
 
   <%= f.actions do %>
-    <%= f.action :submit, :as => :button %>
+    <%= f.action :submit, :as => :button, :label => t('.save') %>
+    <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' } %>
   <% end %>
 <% end %>
 
@@ -34,5 +35,9 @@
         }
       });
     });
+    $('#complete_button').click(function(){
+      var action = $('form.response').attr('action')
+      $('form.response').attr('action', action + '/complete')
+    })
   })
 </script>
