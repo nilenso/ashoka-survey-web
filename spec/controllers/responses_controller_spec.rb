@@ -146,4 +146,19 @@ describe ResponsesController do
       flash[:error].should_not be_empty
     end
   end
+
+  context "PUT 'complete'" do
+    let(:resp) { FactoryGirl.create(:response, :survey_id => survey.id, :organization_id => 1, :user_id => 1) }
+
+    it "marks the survey complete" do
+      put :complete, :id => resp.id, :survey_id => resp.survey_id
+      resp.reload.should be_complete
+    end
+
+    it "redirects to the response index page on success" do
+      put :complete, :id => resp.id, :survey_id => resp.survey_id
+      response.should redirect_to(survey_responses_path(resp.survey_id))
+    end
+  end
+
 end

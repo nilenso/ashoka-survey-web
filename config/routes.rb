@@ -1,4 +1,5 @@
-SurveyWeb::Application.routes.draw do
+SurveyWeb::Application.routes.draw do  
+
   scope "(:locale)", :locale => /#{I18n.available_locales.join('|')}/ do
     match '/auth/:provider/callback', :to => 'sessions#create'
     match '/auth/failure', :to => 'sessions#failure'
@@ -9,7 +10,9 @@ SurveyWeb::Application.routes.draw do
     resources :surveys,:only => [:new, :create, :destroy, :index] do
       get 'publish_to_users', 'share_with_organizations'
       put 'update_publish_to_users', 'update_share_with_organizations'
-      resources :responses, :only => [:new, :create, :index, :edit, :update]
+      resources :responses, :only => [:new, :create, :index, :edit, :update] do
+        member { put "complete" }
+      end
     end
 
     root :to => 'surveys#index'

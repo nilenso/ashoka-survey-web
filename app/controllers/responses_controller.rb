@@ -41,6 +41,12 @@ class ResponsesController < ApplicationController
     end
   end
 
+  def complete
+    response = Response.find(params[:id])
+    response.complete_response
+    redirect_to survey_responses_path(response.survey_id)
+  end
+
   private
 
   def survey_published
