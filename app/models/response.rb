@@ -13,4 +13,8 @@ class Response < ActiveRecord::Base
   	answers_show = answers.select { |answer| answer.text_type?}
   	answers_show.slice(0, 5)
   end
+
+  def complete
+    self.complete = true
+  end
 end

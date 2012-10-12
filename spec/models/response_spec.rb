@@ -30,4 +30,13 @@ describe Response do
       response.five_answers.each { |i| i.should be_text_type }
     end 
   end
+
+  context "when completing a response" do
+    it "marks the response complete" do
+      survey = FactoryGirl.create(:survey)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
+      response.complete
+      response.should be_complete
+    end
+  end
 end
