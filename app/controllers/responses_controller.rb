@@ -32,8 +32,8 @@ class ResponsesController < ApplicationController
   end
 
   def update
-    response = Response.find(params[:id])
-    if response.update_attributes(params[:response])
+    @response = ResponseDecorator.find(params[:id])
+    if @response.update_attributes(params[:response])
       redirect_to survey_responses_path, :notice => "Successfully updated"
     else
       flash[:error] = "Error"
