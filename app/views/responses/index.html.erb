@@ -13,6 +13,7 @@
           <th><%= answer.question_content %> </th>
         <% end %>
         <th><%= t('Actions') %></th>
+        <th><%= t('Status') %></th>
       </thead>
       <tbody>
         <% @responses.each do |response| %>
@@ -21,6 +22,7 @@
             <td><%= answer.content %> </td>
           <% end %>
           <td><%= link_to 'Edit', edit_survey_response_path(:id => response.id) %></td>
+          <td><%= response.complete? ? t(".completed") : t(".incomplete") %></td>
         </tr>
         <% end %>
       </tbody>
