@@ -14,6 +14,9 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
 
   save_model: ->
     this.save({}, {error: this.error_callback, success: this.success_callback})
+    _.each @sub_question_models, (question) ->
+      console.log(question)
+      question.save_model()
 
   success_callback: (model, response) =>
     this.errors = []
@@ -27,7 +30,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     @sub_question_order_counter++
 
   add_sub_question: (type) ->
-    sub_question_model = new SurveyBuilder.Models.QuestionModel({ type: type, parent_id: this.id })
+    sub_question_model = new SurveyBuilder.Models.QuestionModel({ type: type, parent_id: this.id, survey_id: this.get('question').get('survey_id') })
     @sub_question_models.push sub_question_model 
     this.trigger('add:sub_question', sub_question_model)
 
@@ -36,6 +39,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
       question_model = new SurveyBuilder.Models.QuestionModel({ id: question.id })
       question_model.fetch()
       @sub_question_models.push question_model
+    this.trigger('change:preload_questions', @sub_question_models)
 
 SurveyBuilder.Models.OptionModel.setup()
 
