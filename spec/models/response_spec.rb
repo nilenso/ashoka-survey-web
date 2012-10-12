@@ -34,8 +34,8 @@ describe Response do
     it "marks the response complete" do
       survey = FactoryGirl.create(:survey)
       response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
-      response.complete
-      response.should be_complete
+      response.complete_response
+      response.reload.should be_complete
     end
   end
 end

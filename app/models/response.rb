@@ -14,7 +14,7 @@ class Response < ActiveRecord::Base
   	answers_show.slice(0, 5)
   end
 
-  def complete
-    self.complete = true
+  def complete_response
+    self.update_attribute(:complete, true)
   end
 end
