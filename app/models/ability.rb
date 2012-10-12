@@ -34,11 +34,14 @@ class Ability
         can :manage, Response, :survey => { :organization_id => user_info[:org_id] }
         can :read, Response, :survey => { :organization_id => user_info[:org_id] }
         can :read, Response, :organization_id => user_info[:org_id] 
+        can :complete, Response, :survey => { :organization_id => user_info[:org_id] }
+        can :complete, Response, :organization_id => user_info[:org_id] 
 
       elsif role == 'field_agent'
         can :read, Survey, :survey_users => { :user_id => user_info[:user_id ] }
         can :create, Response, :survey => { :survey_users => { :user_id => user_info[:user_id ] } }
         can :read, Response, :user_id  => user_info[:user_id]
+        can :complete, Response, :user_id  => user_info[:user_id]
       end
     end
   end
