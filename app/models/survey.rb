@@ -43,6 +43,10 @@ class Survey < ActiveRecord::Base
     self.participating_organizations.map(&:organization_id)
   end
 
+  def first_level_questions
+    questions.where(:parent_id => nil)
+  end
+
   private
 
   def expiry_date_should_not_be_in_past

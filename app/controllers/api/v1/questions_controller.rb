@@ -39,7 +39,7 @@ module Api
       def index
         survey = Survey.find_by_id(params[:survey_id])
         if survey
-          render :json => survey.questions.to_json(:methods => [:type, :image_url])
+          render :json => survey.first_level_questions.to_json(:methods => [:type, :image_url])
         else
           render :nothing => true, :status => :bad_request
         end

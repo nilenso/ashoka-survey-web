@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Question do
-    it { should allow_mass_assignment_of(:type) }
-    it { should allow_mass_assignment_of(:parent_id) }
-    it { should belong_to(:parent).class_name(Option) }
+  it { should allow_mass_assignment_of(:type) }
+  it { should allow_mass_assignment_of(:parent_id) }
+  it { should belong_to(:parent).class_name(Option) }
 
   context "validation" do
     it "allows multiple rows to have nil for order_number" do

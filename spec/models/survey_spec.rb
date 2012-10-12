@@ -97,4 +97,13 @@ describe Survey do
       survey.participating_organization_ids.should == organizations
     end
   end
+
+  it "returns a list of first level questions" do
+    survey = FactoryGirl.create(:survey)
+    question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
+    question.options << Option.create(content: "Option", order_number: 2)
+    nested_question = RadioQuestion.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
+    survey.first_level_questions.should include question
+    survey.first_level_questions.should_not include nested_question
+  end
 end
