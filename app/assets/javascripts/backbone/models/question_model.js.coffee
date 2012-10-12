@@ -12,7 +12,15 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   save_model: ->
     this.save({}, {error: this.error_callback, success: this.success_callback})
 
+  remove_image_attributes: ->
+    this.unset('image', {silent: true})
+    this.unset('image_content_type', {silent: true})
+    this.unset('image_file_name', {silent: true})
+    this.unset('image_file_size', {silent: true})
+    this.unset('image_updated_at', {silent: true})
+
   success_callback: (model, response) =>
+    @remove_image_attributes()
     this.errors = []
     this.trigger('change:errors')
     this.trigger('save:completed')
@@ -28,6 +36,6 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     question_attrs = {}
     _.each @attributes, (val, key) ->
       question_attrs[key] = val  if val? and not _.isObject(val)
-    { question: _.omit( question_attrs, ['created_at', 'updated_at', 'id', 'temp_order_number']) }
+    { question: _.omit( question_attrs, ['created_at', 'updated_at', 'id', 'temp_order_number', 'image_url']) }
 
 SurveyBuilder.Models.QuestionModel.setup()

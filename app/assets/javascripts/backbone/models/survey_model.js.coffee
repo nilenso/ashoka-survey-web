@@ -19,7 +19,6 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     question_model.set('survey_id' : this.survey_id)
     @set_order_number_for_question(question_model, parent)
     question_model.set('parent_id' : parent.get('id')) if parent
-    @remove_image_attributes(question_model)
     @question_models.push question_model
     question_model.on('destroy', this.delete_question_model, this)
     question_model
@@ -37,13 +36,6 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
       model.set('order_number' : parent.next_sub_question_order_number())
     else
       model.set('order_number' : this.next_order_number())
-
-  remove_image_attributes: (model) ->
-    model.unset('image', {silent: true})
-    model.unset('image_content_type', {silent: true})
-    model.unset('image_file_name', {silent: true})
-    model.unset('image_file_size', {silent: true})
-    model.unset('image_updated', {silent: true})
 
   save: ->
     super({}, {error: this.error_callback, success: this.success_callback})
