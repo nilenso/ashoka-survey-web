@@ -2,6 +2,9 @@
 class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
   el: "#settings_pane"
 
+  events:
+    'add_actual_sub_question': 'add_sub_question'
+
   initialize: (survey_model) ->
     @questions = []
     @add_survey_details(survey_model)
@@ -59,3 +62,10 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
 
   hide_all: ->
     $(question.el).hide() for question in @questions
+
+  add_sub_question: (event, sub_question_model) =>
+    template = $('#single_line_question_template').html()
+    question = new SurveyBuilder.Views.Questions.QuestionView(sub_question_model, template)
+    this.questions.push question
+    $(this.el).append($(question.render().el))
+    $(question.render().el).hide()

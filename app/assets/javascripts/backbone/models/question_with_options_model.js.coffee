@@ -42,8 +42,10 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
 
   fetch: ->
     super
+    this.get('options').fetch
+      success: (model, response) ->
+        model.set_questions()
     this.seeded = true
-    this.get('options').fetch()
 
   success_callback: (model, response) =>
     this.seed()

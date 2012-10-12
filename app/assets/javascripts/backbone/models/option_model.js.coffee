@@ -7,6 +7,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
 
   initialize: ->
     @sub_question_order_counter = 0
+    @sub_question_models = []
 
   has_errors: ->
     !_.isEmpty(this.errors)
@@ -25,6 +26,17 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   next_sub_question_order_number: ->
     @sub_question_order_counter++
 
+  add_sub_question: (type) ->
+    sub_question_model = new SurveyBuilder.Models.QuestionModel({ type: type, parent_id: this.id })
+    @sub_question_models.push sub_question_model 
+    this.trigger('add:sub_question', sub_question_model)
+
+  set_questions: ->
+    _.each this.get('questions'), (question) =>
+      question_model = new SurveyBuilder.Models.QuestionModel({ id: question.id })
+      question_model.fetch()
+      @sub_question_models.push question_model
+
 SurveyBuilder.Models.OptionModel.setup()
 
 # Collection of all options for radio question
@@ -36,3 +48,7 @@ class SurveyBuilder.Collections.OptionCollection extends Backbone.Collection
 
   has_errors: ->
     this.any((option) -> option.has_errors())
+ 
+  set_questions: ->
+    _.each this.models, (option_model) ->
+      option_model.set_questions()
