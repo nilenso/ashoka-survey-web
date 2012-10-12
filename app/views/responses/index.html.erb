@@ -12,6 +12,7 @@
         <% @responses.first.five_answers.each do |answer| %> 
           <th><%= answer.question_content %> </th>
         <% end %>
+        <th><%= t('Actions') %></th>
       </thead>
       <tbody>
         <% @responses.each do |response| %>
@@ -19,6 +20,7 @@
           <% response.five_answers.each do |answer| %> 
             <td><%= answer.content %> </td>
           <% end %>
+          <td><%= link_to 'Edit', edit_survey_response_path(:id => response.id) %></td>
         </tr>
         <% end %>
       </tbody>
