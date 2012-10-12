@@ -3,7 +3,6 @@ require 'spec_helper'
 describe Response do
   it { should belong_to(:survey) }
   it { should have_db_column(:complete).with_options(default: false) }
-  it { should allow_mass_assignment_of(:complete) }
   it { should have_many(:answers).dependent(:destroy) }
   it { should accept_nested_attributes_for(:answers) }
   it { should respond_to(:user_id) }
