@@ -34,7 +34,8 @@ describe Option do
     it "fetches all the directly nested sub_questions" do      
       option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
       nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: option.id})
-      option.as_json[:questions].should include nested_question.as_json
+      # Need to do a #to_s because for some reason the direct hash comparison fails on ActiveSupport::TimeWithZone objects on Linux machines
+      option.as_json[:questions].map(&:to_s).should include nested_question.as_json.to_s
     end
 
     it "fetches the nested subquestions at all levels" do      
@@ -42,8 +43,8 @@ describe Option do
       nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: option.id})
       nested_question.options << Option.create(content: "Option", order_number: 2, :question_id => nested_question.id)
       another_nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: nested_question.options.first.id})
-      option.as_json[:questions].should include nested_question.as_json
-      option.as_json[:questions].should_not include  another_nested_question.as_json
+      option.as_json[:questions].map(&:to_s).should include nested_question.as_json.to_s
+      option.as_json[:questions].map(&:to_s).should_not include  another_nested_question.as_json.to_s
     end
 
     it "returns itself when there are no sub_questions" do      
