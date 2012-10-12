@@ -24,7 +24,6 @@ module Api
 
         it "returns the created question as JSON" do
           expected_keys = Question.attribute_names
-          expected_keys.push('options')
           # Rails `to_json` doesn't preserve the `type` attribute | https://github.com/rails/rails/issues/3508
           expected_keys.delete('type')
           survey = FactoryGirl.create(:survey)
@@ -135,7 +134,7 @@ module Api
           question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id))
           get :index, :survey_id => survey.id
           response.should be_ok
-          response.body.should include question.to_json(:methods => [:type, :image_url], :include => :options)
+          response.body.should include question.to_json(:methods => [:type, :image_url])
         end
 
         it "returns a :bad_request if no survey_id is passed" do

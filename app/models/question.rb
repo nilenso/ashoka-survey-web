@@ -16,9 +16,9 @@ class Question < ActiveRecord::Base
     nil
   end
 
-  def as_json(opts={})
-    return super(opts).merge({:options => options.map(&:as_json)}) if respond_to? :options
-    return super(opts)
+  def json(opts={})
+    return as_json(opts).merge({:options => options.map(&:as_json)}) if respond_to? :options
+    return as_json(opts)
   end
 
   def self.new_question_by_type(type, question_params)

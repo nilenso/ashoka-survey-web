@@ -51,26 +51,26 @@ describe Question do
     question.class.name.should == "SingleLineQuestion"
   end
 
-  context "#as_json" do
+  context "#json" do
     it "fetches all the questions nested directly under it for a RadioQuestion" do
       question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
       question.options << Option.create(content: "Option", order_number: 1)
       nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
       nested_json = nested_question.as_json
       # Need to do a #to_s because for some reason the direct hash comparison fails on ActiveSupport::TimeWithZone objects on Linux machines
-      question.as_json[:options][0][:questions].map(&:to_s).should include nested_json.to_s
+      question.json[:options][0][:questions].map(&:to_s).should include nested_json.to_s
     end
 
     it "fetches all the questions nested directly under it for a DropDownQuestion" do
       question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
       question.options << Option.create(content: "Option", order_number: 1)
       nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-      question.as_json[:options][0][:questions].map(&:to_s).should include nested_question.as_json.to_s
+      question.json[:options][0][:questions].map(&:to_s).should include nested_question.as_json.to_s
     end
 
     it "returns self for all other types of questions" do
       question = Question.create({content: "Untitled question", survey_id: 18, order_number: 1})
-      question.as_json.should include(question.as_json)
+      question.json.should include(question.as_json)
     end
 
     it "returns questions nested all levels below it" do
@@ -79,8 +79,8 @@ describe Question do
       nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
       nested_question.options << Option.create(content: "Nested Option", order_number: 1)
       second_nested_question = RadioQuestion.create({content: "Nested Again", survey_id: 18, order_number: 1, parent_id: nested_question.options.first.id})
-      question.as_json[:options][0][:questions].map(&:to_s).should include(nested_question.as_json.to_s)
-      question.as_json[:options][0][:questions][0][:options][0][:questions].map(&:to_s).should include(second_nested_question.as_json.to_s)
+      question.json[:options][0][:questions].map(&:to_s).should include(nested_question.json.to_s)
+      question.json[:options][0][:questions][0][:options][0][:questions].map(&:to_s).should include(second_nested_question.json.to_s)
     end
   end
 
