@@ -34,7 +34,10 @@ class ResponseDecorator < Draper::Base
         <%= f.label question.content %>
         <%= '<abbr>*</abbr>' if question.mandatory %>
         <%= f.input :content, :as => :hidden %>
-        <div class='star' data-number-of-stars='<%= question.max_length %>'></div>
+        <div class='star'
+            data-number-of-stars='<%= question.max_length %>'
+            data-score='<%= Answer.find_by_question_id_and_response_id(question.id, id).content %>'>
+        </div>
         <%= f.semantic_errors :content if (f.semantic_errors :content) %>
       </div>"
 

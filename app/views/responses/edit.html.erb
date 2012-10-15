@@ -32,11 +32,13 @@
     $('.star').each(function(index){
       $(this).raty({
         number: $(this).data('number-of-stars') || 5,
+        score: $(this).data('score'),
         click: function() {
           $(this).prev().children('input').val($(this).raty('score'))
         }
       });
     });
+
     $('#complete_button').click(function(){
       var action = $('form.response').attr('action')
       $('form.response').attr('action', action + '/complete')
