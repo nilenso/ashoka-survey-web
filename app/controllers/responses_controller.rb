@@ -4,12 +4,6 @@ class ResponsesController < ApplicationController
 
   before_filter :survey_published
   
-  def new
-    @survey = Survey.find(params[:survey_id])
-    @response = ResponseDecorator.new(Response.new)
-    @survey.questions.each { |question| @response.answers << Answer.new(:question_id => question.id) }
-  end
-
   def index
     @responses = @responses.paginate(:page => params[:page], :per_page => 10)
   end

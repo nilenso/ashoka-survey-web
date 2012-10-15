@@ -7,37 +7,6 @@ describe ResponsesController do
     session[:user_info][:org_id] = 1
   end
 
-  context "GET 'new'" do
-    it "renders a page to create a new response" do
-      get :new, :survey_id => survey.id
-      response.should be_ok
-      response.should render_template(:new)
-    end
-
-    it "assigns a new response" do
-      get :new, :survey_id => survey.id
-      assigns(:response).should_not be_nil
-    end
-
-    it "assigns the appropriate survey" do
-      get :new, :survey_id => survey.id
-      assigns(:survey).should == survey
-    end
-
-    it "assigns new answers to the response corresponding to the survey questions" do
-      get :new, :survey_id => survey.id
-      assigns(:response).answers.size.should == survey.questions.size
-      assigns(:response).answers.each { |answer| answer.should be_an Answer }
-    end
-
-    it "does not allow adding a response to a survey that is not published" do
-      survey = FactoryGirl.create(:survey, :organization_id => 1)
-      get :new, :survey_id => survey.id
-      response.should redirect_to(surveys_path)
-      flash[:error].should_not be_nil
-    end
-  end
-
   context "POST 'create'" do
     let(:survey) { FactoryGirl.create(:survey, :published => true, :organization_id => 1)}
     let(:question) { FactoryGirl.create(:question)}
