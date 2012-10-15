@@ -8,7 +8,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
 
   initialize: (@model, @template) ->
     this.model.on('change:errors', this.render, this)
-    this.model.on('add:sub_question', this.add_sub_question)
+    this.model.on('add:sub_question', this.add_sub_question, this)
 
   render: ->
     data = _.extend(this.model.toJSON(), {errors: this.model.errors})
