@@ -49,7 +49,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       when 'MultiChoiceQuestion'
         template = $('#dummy_multi_choice_option_template').html()
       when 'DropDownQuestion'
-        return
+        template = $('#dummy_drop_down_option_template').html()
 
     view = new SurveyBuilder.Views.Dummies.OptionView(model, template)
     this.options.push view
