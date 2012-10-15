@@ -65,7 +65,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
 
   unfocus_all: ->
     $(@dummy_survey_details.el).removeClass("active")
-    $(question.el).removeClass("active") for question in @questions
+    question.unfocus() for question in @questions
 
   delete_question_view: (model) ->
     question = _(@questions).find((question) -> question.model == model )

@@ -36,3 +36,6 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
     $(this.el).trigger("dummy_click")
     $(this.model.actual_view.el).show()
     $(this.el).children('.dummy_question_content').addClass("active")
+
+  unfocus: ->
+    $(this.el).children('.dummy_question_content').removeClass("active")    
