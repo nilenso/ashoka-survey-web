@@ -25,8 +25,10 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       )
 
     _(this.options).each (option) =>
+      div = $("<div class='sub_question_group'>")
       _(option.sub_questions).each (sub_question) =>
-        $(this.el).append(sub_question.render().el)
+        div.append(sub_question.render().el)
+      $(this.el).append(div) unless _(option.sub_questions).isEmpty()
 
     if this.model.has_drop_down_options()
       option_value = this.model.get_first_option_value()

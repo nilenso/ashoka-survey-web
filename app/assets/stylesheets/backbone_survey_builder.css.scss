@@ -25,15 +25,11 @@ h1#heading {
   height: $app_min_height;
   overflow: auto;
 
-
-  div#dummy_questions {
-    div.dummy_question {
-      margin-left: 25px;
-    }
-
-    > div {
-      margin-left: 0px !important;
-    }  
+  div.sub_question_group {
+    border: 1px dotted $border_color;
+    @include border-radius(4px, 4px);
+    margin: 15px 0 15px 25px;
+    background-color: lighten(adjust_hue($c, 10), 46%);
   }
 
   div.dummy_question_content {
