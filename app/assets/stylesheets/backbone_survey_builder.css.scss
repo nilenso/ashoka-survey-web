@@ -30,6 +30,15 @@ h1#heading {
     @include border-radius(4px, 4px);
     margin: 15px 0 15px 25px;
     background-color: lighten(adjust_hue($c, 10), 46%);
+
+    .sub_question_group_message {
+      font-size : 0.8em;
+      font-family: sans-serif;
+      text-align: center;
+      padding: 5px 0 1px 0;
+      color: #888;
+      font-style: italic;
+    }
   }
 
   div.dummy_question_content {
