@@ -103,7 +103,7 @@ describe ResponsesController do
       survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
-      get :edit, :id => res.id, :survey_id => survey.id 
+      get :edit, :id => res.id, :survey_id => survey.id
       response.should be_ok
       response.should render_template('edit')
     end
@@ -112,9 +112,9 @@ describe ResponsesController do
       survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
-      get :edit, :id => res.id, :survey_id => survey.id 
-       assigns(:response).should == Response.find(res.id)
-       assigns(:survey).should == survey
+      get :edit, :id => res.id, :survey_id => survey.id
+      assigns(:response).should == Response.find(res.id)
+      assigns(:survey).should == survey
     end
   end
 
@@ -127,16 +127,16 @@ describe ResponsesController do
                                :organization_id => 1, :user_id => 2)
       answer_1 = FactoryGirl.create(:answer, :question => question_1, :response => res)
       answer_2 = FactoryGirl.create(:answer, :question => question_2, :response => res)
-      res.answers << answer_1 
-      res.answers << answer_2 
+      res.answers << answer_1
+      res.answers << answer_2
 
-      put :update, :id => res.id, :survey_id => survey.id, :response => 
-      { :answers_attributes => { "0" => { :content => "", :id => answer_2.id}, 
-                                 "1" => { :content => "hello", :id => answer_1.id} } }
+      put :update, :id => res.id, :survey_id => survey.id, :response =>
+        { :answers_attributes => { "0" => { :content => "", :id => answer_2.id},
+                                   "1" => { :content => "hello", :id => answer_1.id} } }
 
-      answer_1.reload.content.should == "hello"
+        answer_1.reload.content.should == "hello"
       response.should redirect_to survey_responses_path
-      flash[:notice].should_not be_nil      
+      flash[:notice].should_not be_nil
     end
 
     it "updates the response" do
@@ -147,13 +147,13 @@ describe ResponsesController do
       answer = FactoryGirl.create(:answer, :question => question)
       res.answers << answer
 
-      put :update, :id => res.id, :survey_id => survey.id, :response => 
-      { :answers_attributes => { "0" => { :content => "yeah123", :id => answer.id} } }
+      put :update, :id => res.id, :survey_id => survey.id, :response =>
+        { :answers_attributes => { "0" => { :content => "yeah123", :id => answer.id} } }
 
       Answer.find(answer.id).content.should == "yeah123"
       response.should redirect_to survey_responses_path
       flash[:notice].should_not be_nil
-    end 
+    end
 
     it "renders edit page in case of any validations error" do
       survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
@@ -162,8 +162,8 @@ describe ResponsesController do
                                :organization_id => 1, :user_id => 2, :complete => true)
       answer = FactoryGirl.create(:answer, :question => question)
       res.answers << answer
-      put :update, :id => res.id, :survey_id => survey.id, :response => 
-      { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+      put :update, :id => res.id, :survey_id => survey.id, :response =>
+        { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
 
       response.should render_template('edit')
       answer.reload.content.should == "MyText"
@@ -174,7 +174,7 @@ describe ResponsesController do
   context "PUT 'complete'" do
     let(:resp) { FactoryGirl.create(:response, :survey_id => survey.id, :organization_id => 1, :user_id => 1) }
 
-    it "marks the survey complete" do
+    it "marks the response complete" do
       put :complete, :id => resp.id, :survey_id => resp.survey_id
       resp.reload.should be_complete
     end
@@ -183,6 +183,34 @@ describe ResponsesController do
       put :complete, :id => resp.id, :survey_id => resp.survey_id
       response.should redirect_to(survey_responses_path(resp.survey_id))
     end
-  end
 
+    it "updates the response" do
+      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      question = FactoryGirl.create(:question, :survey => survey)
+      res = FactoryGirl.create(:response, :survey => survey,
+                               :organization_id => 1, :user_id => 2)
+      answer = FactoryGirl.create(:answer, :question => question)
+      res.answers << answer
+
+      put :complete, :id => res.id, :survey_id => survey.id, :response =>
+        { :answers_attributes => { "0" => { :content => "yeah123", :id => answer.id} } }
+
+      Answer.find(answer.id).content.should == "yeah123"
+      response.should redirect_to survey_responses_path
+      flash[:notice].should_not be_nil
+    end
+
+    it "marks the response incomplete if save is unsuccessful" do
+      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
+      res = FactoryGirl.create(:response, :survey => survey,
+                               :organization_id => 1, :user_id => 2)
+      answer = FactoryGirl.create(:answer, :question => question)
+      res.answers << answer
+
+      put :complete, :id => res.id, :survey_id => survey.id, :response =>
+        { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+      res.reload.should_not be_complete
+    end
+  end
 end
