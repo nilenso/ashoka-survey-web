@@ -50,8 +50,8 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
     view = new SurveyBuilder.Views.Dummies.OptionView(model, template)
     this.options.push view
-    view.on('change:preloaded_sub_questions', this.render, this)
-    view.on('change:added_sub_question', this.render, this)
+    view.on('render_preloaded_sub_questions', this.render, this)
+    view.on('render_added_sub_question', this.render, this)
     this.render()
 
   delete_option_view: (model) ->

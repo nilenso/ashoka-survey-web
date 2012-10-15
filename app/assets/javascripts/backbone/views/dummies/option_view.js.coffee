@@ -18,12 +18,11 @@ class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
     template = $('#dummy_single_line_question_template').html()
     question = new SurveyBuilder.Views.Dummies.QuestionView(sub_question_model, template)
     this.sub_questions.push question
-    this.trigger('change:added_sub_question')
+    this.trigger('render_added_sub_question')
     this.render()
 
   preload_sub_questions: (collection) =>
     _.each(collection, (question) =>
       this.add_sub_question(question)
     )
-    this.trigger('change:preloaded_sub_questions')
-    this.render()
+    this.trigger('render_preloaded_sub_questions')
