@@ -40,9 +40,15 @@ class ResponsesController < ApplicationController
   end
 
   def complete
-    response = Response.find(params[:id])
-    response.complete_response
-    redirect_to survey_responses_path(response.survey_id)
+    @response = ResponseDecorator.find(params[:id])
+    @response.mark_complete
+    if @response.update_attributes(params[:response])
+      redirect_to survey_responses_path(@response.survey_id), :notice => "Successfully updated"
+    else
+      @response.mark_incomplete
+      flash[:error] = "Error"
+      render :edit
+    end
   end
 
   private

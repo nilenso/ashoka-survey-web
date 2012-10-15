@@ -14,8 +14,12 @@ class Response < ActiveRecord::Base
   	answers_show.slice(0, 5)
   end
 
-  def complete_response
+  def mark_complete
     self.update_attribute(:complete, true)
+  end
+
+  def mark_incomplete
+    self.update_attribute(:complete, false)
   end
 
   def self.save_with_answers(answers_attributes, survey_id, user_id = 0, organization_id = 0)

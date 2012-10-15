@@ -34,8 +34,17 @@ describe Response do
     it "marks the response complete" do
       survey = FactoryGirl.create(:survey)
       response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
-      response.complete_response
+      response.mark_complete
       response.reload.should be_complete
+    end
+  end
+
+  context "when marking a response incomplete" do
+    it "marks the response incomplete" do
+      survey = FactoryGirl.create(:survey)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
+      response.mark_incomplete
+      response.reload.should_not be_complete
     end
   end
 
