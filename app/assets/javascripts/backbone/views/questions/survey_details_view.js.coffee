@@ -26,3 +26,6 @@ class SurveyBuilder.Views.Questions.SurveyDetailsView extends Backbone.View
 
   update_model: (propertyHash) ->
     this.model.set(propertyHash)
+
+  hide : ->
+    $(this.el).hide()

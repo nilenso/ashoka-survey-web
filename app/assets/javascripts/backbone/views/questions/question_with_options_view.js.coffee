@@ -41,3 +41,9 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     option = _(@options).find((option) -> option.model == model)
     @options = _(@options).without(option)
     option.remove()
+
+  hide : ->
+    super
+    _(this.options).each (option) =>
+        _(option.sub_questions).each (sub_question) =>
+          sub_question.hide()

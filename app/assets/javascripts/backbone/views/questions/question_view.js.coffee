@@ -41,3 +41,6 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
       replaceFileInput: false
       done: (e, data) =>
         this.model.set('image_url', data.result.image_url)
+
+  hide : ->
+    $(this.el).hide()
