@@ -25,6 +25,17 @@ h1#heading {
   height: $app_min_height;
   overflow: auto;
 
+
+  div#dummy_questions {
+    div.dummy_question {
+      margin-left: 25px;
+    }
+
+    > div {
+      margin-left: 0px !important;
+    }  
+  }
+
   div.dummy_question_content {
     padding: 4px;
     margin-bottom: 2px;
