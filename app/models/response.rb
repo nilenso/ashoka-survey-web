@@ -17,4 +17,18 @@ class Response < ActiveRecord::Base
   def complete_response
     self.update_attribute(:complete, true)
   end
+
+  def self.save_with_answers(answers_attributes, survey_id, user_id = 0, organization_id = 0)
+    response = Response.new
+    response.set(survey_id, user_id, organization_id)
+    response.update_attributes(answers_attributes) if response.save
+    response
+  end
+
+  
+  def set(survey_id, user_id, organization_id)
+    self.survey_id = survey_id
+    self.organization_id = organization_id
+    self.user_id = user_id
+  end
 end

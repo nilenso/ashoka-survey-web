@@ -38,4 +38,11 @@ describe Response do
       response.reload.should be_complete
     end
   end
+
+  it "creates a response and answers for attributes given" do
+    question = FactoryGirl.create(:question)
+    survey = FactoryGirl.create(:survey)
+    answers_attributes =  { :answers_attributes => {'0' => {'content' => 'asdasd', 'question_id' => question.id} }}
+    Response.save_with_answers(answers_attributes, survey.id)
+  end
 end

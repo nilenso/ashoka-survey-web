@@ -2,8 +2,9 @@
 
 class Answer < ActiveRecord::Base
   belongs_to :question
+  belongs_to :response
   attr_accessible :content, :question_id, :option_ids
-  validate :mandatory_questions_should_be_answered
+  validate :mandatory_questions_should_be_answered, :if => :response_complete?
   validate :content_should_not_exceed_max_length
   validate :content_should_be_in_range
   has_many :choices, :dependent => :destroy
@@ -29,7 +30,12 @@ class Answer < ActiveRecord::Base
   def question_content
     question.content
   end
+
   private
+
+  def response_complete?
+    response.complete?
+  end
 
   def maximum_photo_size
     if question.type == "PhotoQuestion"
@@ -40,6 +46,7 @@ class Answer < ActiveRecord::Base
       end
     end
   end
+
 
   def mandatory_questions_should_be_answered
     if question.mandatory && has_not_been_answered?
@@ -56,27 +63,31 @@ class Answer < ActiveRecord::Base
   end
 
   def content_should_be_in_range
-    min_value, max_value = question.min_value, question.max_value
-    if min_value && content.to_i < min_value
-      errors.add(:content, I18n.t("answers.validations.exceeded_lower_limit"))
-    elsif max_value && content.to_i > max_value
-      errors.add(:content, I18n.t("answers.validations.exceeded_higher_limit"))
+    unless has_not_been_answered?
+      min_value, max_value = question.min_value, question.max_value
+      if min_value && content.to_i < min_value
+        errors.add(:content, I18n.t("answers.validations.exceeded_lower_limit"))
+      elsif max_value && content.to_i > max_value
+        errors.add(:content, I18n.t("answers.validations.exceeded_higher_limit"))
+      end
     end
   end
 
   def date_should_be_valid
+   unless has_not_been_answered?
     if question.type == "DateQuestion"
       unless content =~ /\A\d{4}\/(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[1-2]\d|3[01])\Z/
         errors.add(:content, I18n.t("answers.validations.invalid_date"))
       end
     end
   end
+end
 
-  def has_not_been_answered?
-    if question.is_a?(MultiChoiceQuestion)
-      choices.empty?
-    else
-      content.blank?
-    end
+def has_not_been_answered?
+  if question.is_a?(MultiChoiceQuestion)
+    choices.empty?
+  else
+    content.blank?
   end
+end
 end

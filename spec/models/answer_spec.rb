@@ -4,10 +4,11 @@ require "paperclip/matchers"
 describe Answer do
   it { should respond_to(:content) }
   it { should belong_to(:question) }
+  it { should belong_to(:response) }
   it { should have_many(:choices).dependent(:destroy) }
 
   context "validations" do
-    it "does not save if a mandatory question is not answered" do
+    it "does not save if a mandatory question is not answered for a complete response" do
       question = FactoryGirl.create(:question, :mandatory => true)
       answer = FactoryGirl.create(:answer, :question_id => question.id)
       question.answers << answer
