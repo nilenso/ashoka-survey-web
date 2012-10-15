@@ -9,13 +9,12 @@ class ResponsesController < ApplicationController
   end
 
   def create
-    res = Response.save_with_answers(params[:response], params[:survey_id], current_user, current_user_org)
-    @response = ResponseDecorator.new(res)
-    if @response.valid?
-      redirect_to root_path, :notice => t("responses.new.response_saved")
-    else
-      render :new
-    end
+    response = ResponseDecorator.new(Response.new)
+    response.set(params[:survey_id], current_user, current_user_org)
+    survey = Survey.find(params[:survey_id])
+    survey.questions.each { |question| response.answers << Answer.new(:question_id => question.id) }
+    response.save(:validate => false)
+    redirect_to edit_survey_response_path(:id => response.id), :notice => t("responses.new.response_created")
   end
 
   def edit

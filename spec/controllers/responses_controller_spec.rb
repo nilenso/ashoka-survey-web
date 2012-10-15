@@ -10,49 +10,29 @@ describe ResponsesController do
   context "POST 'create'" do
     let(:survey) { FactoryGirl.create(:survey, :published => true, :organization_id => 1)}
     let(:question) { FactoryGirl.create(:question)}
-    let(:response) {{ :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} } }}
 
-    it "sets the response instance variable" do
-      post :create, :response => response, :survey_id => survey.id
-      assigns(:response).should_not be_nil
+    it "saves the response" do
+      expect {
+        post :create, :survey_id => survey.id
+
+      }.to change { Response.count }.by(1)
     end
 
-    context "when save is successful" do
-      it "saves the response" do
-        expect {
-          post :create, :response => response, :survey_id => survey.id
-
-        }.to change { Response.count }.by(1)
-      end
-
-      it "saves the response to the right survey" do
-        post :create, :response => response, :survey_id => survey.id
-        assigns(:response).survey.should ==  survey
-      end
-
-      it "saves the id of the user taking the response" do
-        session[:user_id] = 1234
-        post :create, :response => response, :survey_id => survey.id
-        Response.find_by_survey_id(survey.id).user_id.should == 1234
-      end
-
-      it "redirects to the root path with a flash message" do
-        post :create, :response => response, :survey_id => survey.id
-        response.should redirect_to root_path
-        flash[:notice].should_not be_nil
-      end
+    it "saves the response to the right survey" do
+      post :create, :survey_id => survey.id
+      assigns(:response).survey.should ==  survey
     end
 
-    context "when save is unsuccessful" do
-      it "renders the 'new' page" do
-        pending "will be fixed in unification of new and edit"
-        question = FactoryGirl.create(:question, :mandatory => true)
-        resp = { :complete => true}
-        resp['answers_attributes'] = {}
-        resp['answers_attributes']['0'] = {'content' => '', 'question_id' => question.id}
-        post :create, :response => resp, :survey_id => survey.id
-        response.should render_template :new
-      end
+    it "saves the id of the user taking the response" do
+      session[:user_id] = 1234
+      post :create, :survey_id => survey.id
+      Response.find_by_survey_id(survey.id).user_id.should == 1234
+    end
+
+    it "redirects to the root path with a flash message" do
+      post :create, :survey_id => survey.id
+      response.should redirect_to edit_survey_response_path(:id => Response.find_by_survey_id(survey.id).id)
+      flash[:notice].should_not be_nil
     end
   end
 
