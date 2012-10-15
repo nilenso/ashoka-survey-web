@@ -7,6 +7,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     'click .add_sub_question' : 'add_sub_question_model'
 
   initialize: (@model, @template) ->
+    this.sub_questions = []
     this.model.on('change:errors', this.render, this)
     this.model.on('add:sub_question', this.add_sub_question, this)
 
@@ -28,4 +29,8 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     this.model.add_sub_question('SingleLineQuestion')
 
   add_sub_question: (sub_question_model) =>
-    $(this.el).trigger('add_actual_sub_question', sub_question_model)
+    template = $('#single_line_question_template').html()
+    question = new SurveyBuilder.Views.Questions.QuestionView(sub_question_model, template)
+    this.sub_questions.push question
+    $('#settings_pane').append($(question.render().el))
+    $(question.render().el).hide()
