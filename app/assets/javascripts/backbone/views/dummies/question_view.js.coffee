@@ -3,9 +3,6 @@ SurveyBuilder.Views.Dummies ||= {}
 # Represents a dummy question on the DOM
 class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
 
-  events:
-    "click .delete_question": 'delete'
-
   initialize: (model, template) ->
     this.model = model
     this.template = template
@@ -26,6 +23,8 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
 
     $(this.el).children(".dummy_question_content").click (e) =>
       @show_actual(e)
+
+    $(this.el).children('.dummy_question_content').children(".delete_question").click (e) => @delete(e)
 
     return this
 

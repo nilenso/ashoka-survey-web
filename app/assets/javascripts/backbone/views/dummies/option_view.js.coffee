@@ -15,6 +15,7 @@ class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
     return this
 
   add_sub_question: (sub_question_model) =>
+    sub_question_model.on('destroy', this.delete_sub_question, this)
     template = $('#dummy_single_line_question_template').html()
     question = new SurveyBuilder.Views.Dummies.QuestionView(sub_question_model, template)
     this.sub_questions.push question
@@ -26,3 +27,8 @@ class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
       this.add_sub_question(question)
     )
     this.trigger('render_preloaded_sub_questions')
+
+  delete_sub_question: (sub_question_model) ->
+    view = sub_question_model.dummy_view
+    @sub_questions = _(@sub_questions).without(view)
+    view.remove()

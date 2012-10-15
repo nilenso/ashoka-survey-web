@@ -4,9 +4,6 @@ SurveyBuilder.Views.Dummies ||= {}
 # Represents a dummy radio question on the DOM
 class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.Views.Dummies.QuestionView
 
-  events:
-    "click .delete_question": 'delete'
-
   initialize: (model, template) ->
     super
     this.options = []
@@ -19,6 +16,8 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     super
     $(this.el).children(".dummy_question_content").click (e) =>
       @show_actual(e)
+
+    $(this.el).children('.dummy_question_content').children(".delete_question").click (e) => @delete(e)
 
     _.each(this.options, (option) =>
         $(this.el).children('.dummy_question_content').append(option.render().el)

@@ -30,6 +30,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     this.model.add_sub_question('SingleLineQuestion')
 
   add_sub_question: (sub_question_model) =>
+    sub_question_model.on('destroy', this.delete_sub_question, this)
     template = $('#single_line_question_template').html()
     question = new SurveyBuilder.Views.Questions.QuestionView(sub_question_model, template)
     this.sub_questions.push question
@@ -40,3 +41,8 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     _.each(collection, (question) =>
       this.add_sub_question(question)
     )
+
+  delete_sub_question: (sub_question_model) ->
+    view = sub_question_model.actual_view
+    @sub_questions = _(@sub_questions).without(view)
+    view.remove()

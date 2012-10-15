@@ -31,7 +31,12 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   add_sub_question: (type) ->
     sub_question_model = new SurveyBuilder.Models.QuestionModel({ type: type, parent_id: this.id, survey_id: this.get('question').get('survey_id') })
     @sub_question_models.push sub_question_model 
+    sub_question_model.on('destroy', this.delete_sub_question, this)
     this.trigger('add:sub_question', sub_question_model)
+
+
+  delete_sub_question: (sub_question_model) ->
+    @sub_question_models = _(@sub_question_models).without(sub_question_model)
 
   set_questions: ->
     _.each this.get('questions'), (question) =>
