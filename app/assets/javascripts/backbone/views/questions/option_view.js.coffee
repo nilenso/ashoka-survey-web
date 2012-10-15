@@ -10,6 +10,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     this.sub_questions = []
     this.model.on('change:errors', this.render, this)
     this.model.on('add:sub_question', this.add_sub_question, this)
+    this.model.on('change:preload_questions', this.preload_sub_questions)
 
   render: ->
     data = _.extend(this.model.toJSON(), {errors: this.model.errors})
@@ -34,3 +35,8 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     this.sub_questions.push question
     $('#settings_pane').append($(question.render().el))
     $(question.render().el).hide()
+
+  preload_sub_questions: (collection) =>
+    _.each(collection, (question) =>
+      this.add_sub_question(question)
+    )
