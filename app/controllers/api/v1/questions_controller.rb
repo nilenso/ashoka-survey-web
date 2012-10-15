@@ -48,7 +48,7 @@ module Api
       def show
         question = Question.find_by_id(params[:id])
         if question
-          render :json => question.to_json(:methods => :image_url)
+          render :json => question.to_json(:methods => [:type, :image_url])
         else
           render :nothing => true, :status => :bad_request
         end
