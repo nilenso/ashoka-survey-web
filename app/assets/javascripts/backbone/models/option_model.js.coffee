@@ -15,7 +15,6 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   save_model: ->
     this.save({}, {error: this.error_callback, success: this.success_callback})
     _.each @sub_question_models, (question) ->
-      console.log(question)
       question.save_model()
 
   success_callback: (model, response) =>
