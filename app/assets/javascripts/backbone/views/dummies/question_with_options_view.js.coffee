@@ -68,7 +68,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       _(option.sub_questions).each (sub_question) =>
         sub_question.unfocus()
 
-  reorder_questions: (event, ui, a, b) =>
+  reorder_questions: (event, ui) =>
     _(@options).each (option) ->
       unless _(option.sub_questions).isEmpty()
         last_order_number = _.chain(option.sub_questions)
