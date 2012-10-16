@@ -1,6 +1,8 @@
+
 module Api
   module V1
     class QuestionsController < ApplicationController
+      before_filter :dont_cache
 
       def create
         question = Question.new_question_by_type(params[:question][:type], params[:question])
@@ -21,7 +23,7 @@ module Api
       end
 
       def destroy
-        begin 
+        begin
           Question.destroy(params[:id])
           render :nothing => true
         rescue ActiveRecord::RecordNotFound
@@ -52,6 +54,11 @@ module Api
         else
           render :nothing => true, :status => :bad_request
         end
+      end
+
+      private
+      def dont_cache
+        expires_now
       end
     end
   end

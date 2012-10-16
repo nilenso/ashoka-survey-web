@@ -1,6 +1,8 @@
 module Api
   module V1
     class OptionsController < ApplicationController
+      before_filter :dont_cache
+
       def create
         option = Option.new(params[:option])
         if option.save
@@ -35,6 +37,11 @@ module Api
         else
           render :nothing => true, :status => :bad_request
         end
+      end
+
+      private
+      def dont_cache
+        expires_now
       end
     end
   end
