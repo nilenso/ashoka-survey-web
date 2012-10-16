@@ -73,16 +73,12 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     question.remove()
 
   reorder_questions: (event, ui) =>
-    survey_model = @survey_model
-    question_views = @questions
-    next_order_number = survey_model.next_order_number()
-    ($(this.el).find("#dummy_questions").children("div")).each (i) ->
-      id = parseInt( $(this).attr("id") )
-      question_view = _.find(question_views, (question) ->
-        question.id is id
-      )
-      question_model = question_view.model
-      question_model.set({order_number: i + 1 + next_order_number})
+    last_order_number = @survey_model.next_order_number()
+    _(@questions).each (question) =>
+      index = $(question.el).index()
+      question.model.set({order_number: last_order_number + index + 1})
+    @questions = _(@questions).sortBy (question) ->
+      question.model.get('order_number')
 
   add_sub_question: (event, sub_question_model) =>
     template = $('#dummy_single_line_question_template').html()
