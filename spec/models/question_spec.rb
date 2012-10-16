@@ -56,7 +56,7 @@ describe Question do
       question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
       question.options << Option.create(content: "Option", order_number: 1)
       nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-      nested_json = nested_question.as_json
+      nested_json = nested_question.as_json(:methods => :type)
       # Need to do a #to_s because for some reason the direct hash comparison fails on ActiveSupport::TimeWithZone objects on Linux machines
       question.json[:options][0][:questions].map(&:to_s).should include nested_json.to_s
     end
@@ -65,7 +65,7 @@ describe Question do
       question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
       question.options << Option.create(content: "Option", order_number: 1)
       nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-      question.json[:options][0][:questions].map(&:to_s).should include nested_question.as_json.to_s
+      question.json[:options][0][:questions].map(&:to_s).should include nested_question.as_json(:methods => :type).to_s
     end
 
     it "returns self for all other types of questions" do
@@ -79,8 +79,8 @@ describe Question do
       nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
       nested_question.options << Option.create(content: "Nested Option", order_number: 1)
       second_nested_question = RadioQuestion.create({content: "Nested Again", survey_id: 18, order_number: 1, parent_id: nested_question.options.first.id})
-      question.json[:options][0][:questions].map(&:to_s).should include(nested_question.json.to_s)
-      question.json[:options][0][:questions][0][:options][0][:questions].map(&:to_s).should include(second_nested_question.json.to_s)
+      question.json[:options][0][:questions].map(&:to_s).should include(nested_question.json(:methods => :type).to_s)
+      question.json[:options][0][:questions][0][:options][0][:questions].map(&:to_s).should include(second_nested_question.json(:methods => :type).to_s)
     end
   end
 
