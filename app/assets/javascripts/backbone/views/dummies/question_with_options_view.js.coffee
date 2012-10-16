@@ -34,6 +34,8 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       option_value = this.model.get_first_option_value()
       $(this.el).find('option').text(option_value)
 
+    ($(this.el).find(".sub_question_group")).sortable({items: "> div"})
+
     return this
 
   preload_options: (collection) ->
