@@ -77,4 +77,5 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
         _(option.sub_questions).each (sub_question) =>
             index = $(sub_question.el).index()
             sub_question.model.set({order_number: last_order_number + index + 1})
-
+        option.sub_questions = _(option.sub_questions).sortBy (sub_question) ->
+          sub_question.model.get('order_number')
