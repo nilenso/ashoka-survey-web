@@ -24,8 +24,6 @@ module Api
 
         it "returns the created question as JSON" do
           expected_keys = Question.attribute_names
-          # Rails `to_json` doesn't preserve the `type` attribute | https://github.com/rails/rails/issues/3508
-          expected_keys.delete('type')
           survey = FactoryGirl.create(:survey)
           question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion')
           post :create, :survey_id => survey.id, :question => question
@@ -56,10 +54,15 @@ module Api
           Question.find(question.id).content.should == "hello"
         end
 
-        it "returns the updated question as JSON" do
-          question = FactoryGirl.create(:question)
+        it "returns the updated question as JSON, including it's type" do
+          expected_keys = Question.attribute_names
+          question = FactoryGirl.create(:question, :type => 'RadioQuestion')
           put :update, :id => question.id, :question => {:content => "someuniquestring"}
-          JSON.parse(response.body)["content"].should == "someuniquestring"
+
+          response.should be_ok
+          returned_json = JSON.parse(response.body)
+          returned_json.keys.should =~ expected_keys
+          returned_json['content'].should == 'someuniquestring'
         end
 
         context "when update is unsuccessful" do

@@ -5,7 +5,7 @@ module Api
       def create
         question = Question.new_question_by_type(params[:question][:type], params[:question])
         if question.save
-          render :json => question
+          render :json => question.to_json(:methods => :type)
         else
           render :json => question.errors.full_messages, :status => :bad_request
         end
@@ -14,7 +14,7 @@ module Api
       def update
         question = Question.find(params[:id])
         if question.update_attributes(params[:question])
-          render :json => question
+          render :json => question.to_json(:methods => :type)
         else
           render :json => question.errors.full_messages, :status => :bad_request
         end
