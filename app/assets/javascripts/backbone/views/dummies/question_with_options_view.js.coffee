@@ -25,6 +25,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
     _(this.options).each (option) =>
       group = $("<div class='sub_question_group'>")
+      group.sortable({items: "> div", update: @reorder_questions})
       group.append("<p class='sub_question_group_message'>Questions for #{option.model.get('content')}</p>")
       _(option.sub_questions).each (sub_question) =>
         group.append(sub_question.render().el)
@@ -33,8 +34,6 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     if this.model.has_drop_down_options()
       option_value = this.model.get_first_option_value()
       $(this.el).find('option').text(option_value)
-
-    ($(this.el).find(".sub_question_group")).sortable({items: "> div"})
 
     return this
 
@@ -68,4 +67,14 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     _(this.options).each (option) =>
       _(option.sub_questions).each (sub_question) =>
         sub_question.unfocus()
+
+  reorder_questions: (event, ui, a, b) =>
+    _(@options).each (option) ->
+      unless _(option.sub_questions).isEmpty()
+        last_order_number = _.chain(option.sub_questions)
+          .map((sub_question) -> sub_question.model.get('order_number'))
+          .max().value()
+        _(option.sub_questions).each (sub_question) =>
+            index = $(sub_question.el).index()
+            sub_question.model.set({order_number: last_order_number + index + 1})
 
