@@ -35,11 +35,10 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     sub_question_model.save_model()
     this.trigger('add:sub_question', sub_question_model)
 
-
   delete_sub_question: (sub_question_model) ->
     @sub_question_models = _(@sub_question_models).without(sub_question_model)
 
-  set_questions: ->
+  preload_sub_questions: ->
     _.each this.get('questions'), (question) =>
       question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({ id: question.id })
       question_model.fetch()
@@ -58,6 +57,6 @@ class SurveyBuilder.Collections.OptionCollection extends Backbone.Collection
   has_errors: ->
     this.any((option) -> option.has_errors())
  
-  set_questions: ->
+  preload_sub_questions: ->
     _.each this.models, (option_model) ->
-      option_model.set_questions()
+      option_model.preload_sub_questions()
