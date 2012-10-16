@@ -7,6 +7,6 @@ class Option < ActiveRecord::Base
   default_scope :order => 'order_number'
 
   def as_json(opts={})
-    super(opts).merge({:questions => questions.map(&:json)})
+    super(opts).merge({:questions => questions.map { |question| question.json(:methods => :type) }})
   end
 end

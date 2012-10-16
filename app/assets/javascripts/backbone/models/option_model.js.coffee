@@ -40,7 +40,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
 
   preload_sub_questions: ->
     _.each this.get('questions'), (question) =>
-      question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({ id: question.id })
+      question_model = new SurveyBuilder.Models.QuestionWithOptionsModel({ type: question.type, id: question.id })
       question_model.fetch({success: => this.trigger('change:preload_sub_questions', @sub_question_models) })
       @sub_question_models.push question_model
     
