@@ -8,6 +8,7 @@ SurveyWeb::Application.routes.draw do
     match '/surveys/build/:id', :to => 'surveys#build', :as => "surveys_build"
 
     resources :surveys,:only => [:new, :create, :destroy, :index] do
+      member { post "duplicate" } 
       get 'publish_to_users', 'share_with_organizations'
       put 'update_publish_to_users', 'update_share_with_organizations'
       resources :responses, :only => [:new, :create, :index, :edit, :update] do

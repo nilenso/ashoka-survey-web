@@ -77,6 +77,15 @@ class SurveysController < ApplicationController
     redirect_to surveys_path
   end
 
+  def duplicate
+    survey = Survey.find(params[:id])
+    if survey.duplicate.save
+      redirect_to :back, :notice => t('.survey_duplicated')
+    else
+      redirect_to :back, :error => t('.duplication_error')
+    end
+  end
+
   private
 
   def require_organizations_to_be_selected
