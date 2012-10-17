@@ -80,6 +80,10 @@ fr:
     publish_to_users:
       publish_survey: "In French: Publish Survey"
 
+    duplicate:
+      survey_duplicated: Enquête dupliqué avec succès!
+      duplication_error: Une erreur s'est produite dupliquer l'enquête. Désolé!
+
   responses:
     new:
       response_for_survey: "Donner une réponse pour %{survey_name}"

@@ -80,9 +80,9 @@ class SurveysController < ApplicationController
   def duplicate
     survey = Survey.find(params[:id])
     if survey.duplicate.save
-      redirect_to :back, :notice => t('.survey_duplicated')
+      redirect_to :back, :notice => t('surveys.duplicate.survey_duplicated')
     else
-      redirect_to :back, :error => t('.duplication_error')
+      redirect_to :back, :error => t('surveys.duplicate.duplication_error')
     end
   end
 
