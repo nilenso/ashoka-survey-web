@@ -17,7 +17,6 @@ class Survey < ActiveRecord::Base
     self.save
   end
 
-  amoeba { enable }
 
   def user_ids
     self.survey_users.map(&:user_id)
@@ -25,6 +24,15 @@ class Survey < ActiveRecord::Base
 
   def users_for_organization(access_token, organization_id)
     User.find_by_organization(access_token, organization_id).select { |user| self.user_ids.include?(user.id) }
+  end
+
+  amoeba { enable }
+  
+  def duplicate!
+    survey = self.dup
+    survey.published = false
+    survey.save
+    survey
   end
 
   def organizations(access_token, organization_id)
