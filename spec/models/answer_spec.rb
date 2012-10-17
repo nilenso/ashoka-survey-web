@@ -47,6 +47,16 @@ describe Answer do
     end
 
     context "when validating numeric questions"
+
+    it "does not save if the answer is not a number" do
+      question = FactoryGirl.create(:question, :type => 'NumericQuestion')
+      answer = FactoryGirl.build(:answer, :question_id => question.id)
+      question.answers << answer
+
+      answer.content = 'as'
+      answer.should_not be_valid
+    end
+
     it "does not save if the answer is greater than the maximum value" do
       question = FactoryGirl.create(:question, :type => 'NumericQuestion', :max_value => 5)
       answer = FactoryGirl.build(:answer, :question_id => question.id)
@@ -130,10 +140,10 @@ describe Answer do
     it "checks whether the answer is of text type" do
       text_question = FactoryGirl.create(:question, :type => "SingleLineQuestion")
       text_answer = FactoryGirl.create(:answer, :question => text_question)
-      text_answer.should be_text_type 
+      text_answer.should be_text_type
       non_textual_question = FactoryGirl.create(:question, :type => "MultiChoiceQuestion")
       non_textual_answer = FactoryGirl.create(:answer, :question => non_textual_question)
-      non_textual_answer.should_not be_text_type 
+      non_textual_answer.should_not be_text_type
     end
   end
 

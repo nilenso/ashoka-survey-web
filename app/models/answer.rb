@@ -13,6 +13,8 @@ class Answer < ActiveRecord::Base
   has_attached_file :photo, :styles => { :medium => "300x300>"}
   validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
   validate :maximum_photo_size
+  validates_numericality_of :content, :if => Proc.new {|answer| answer.question.type == 'NumericQuestion'}
+
 
   def option_ids
     self.choices.collect(&:option_id)
@@ -74,20 +76,20 @@ class Answer < ActiveRecord::Base
   end
 
   def date_should_be_valid
-   unless has_not_been_answered?
-    if question.type == "DateQuestion"
-      unless content =~ /\A\d{4}\/(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[1-2]\d|3[01])\Z/
-        errors.add(:content, I18n.t("answers.validations.invalid_date"))
+    unless has_not_been_answered?
+      if question.type == "DateQuestion"
+        unless content =~ /\A\d{4}\/(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[1-2]\d|3[01])\Z/
+          errors.add(:content, I18n.t("answers.validations.invalid_date"))
+        end
       end
     end
   end
-end
 
-def has_not_been_answered?
-  if question.is_a?(MultiChoiceQuestion)
-    choices.empty?
-  else
-    content.blank?
+  def has_not_been_answered?
+    if question.is_a?(MultiChoiceQuestion)
+      choices.empty?
+    else
+      content.blank?
+    end
   end
-end
 end
