@@ -37,7 +37,7 @@ describe 'BackboneSurveyBuilder', js: true do
       actual.should have_field('mandatory', :type => 'checkbox')
       actual.should have_field('image', :type => 'file')
       actual.should have_content("Option")
-      actual.should have_selector('input', :count => 6 )
+      actual.should have_selector('input', :count => 7 )
     end
 
     context "when clicking on a dummy" do
