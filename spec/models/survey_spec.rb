@@ -28,6 +28,13 @@ describe Survey do
     end
   end
 
+  context "when duplicating" do
+    it "duplicates the nested associations as well" do
+      survey = FactoryGirl.create :survey_with_questions
+      survey.dup.questions.should_not be_empty
+    end
+  end
+
   context "publish" do
     it "should not be published by default" do
       survey = FactoryGirl.create(:survey)

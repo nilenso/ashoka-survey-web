@@ -14,6 +14,7 @@ gem "rails-backbone"
 gem 'pry-rails'
 gem 'cancan'
 gem 'draper'
+gem 'amoeba'
  
 # Gems used only for assets and not required
 # in production environments by default.
