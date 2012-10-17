@@ -7,39 +7,11 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
     @add_survey_details(survey_model)
 
   add_question: (type, model) ->
-    switch type
-      when 'SingleLineQuestion'
-        template = $('#single_line_question_template').html()
-        question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'MultilineQuestion'
-        template = $('#multiline_question_template').html()
-        question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'NumericQuestion'
-        template = $('#numeric_question_template').html()
-        question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'DateQuestion'
-        template = $('#date_question_template').html()
-        question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'RadioQuestion'
-        template = $('#radio_question_template').html()
-        question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
-      when 'MultiChoiceQuestion'
-        template = $('#multi_choice_question_template').html()
-        question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
-      when 'DropDownQuestion'
-        template = $('#drop_down_question_template').html()
-        question = new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
-      when 'PhotoQuestion'
-        template = $('#photo_question_template').html()
-        question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'RatingQuestion'
-        template = $('#rating_question_template').html()
-        question = new SurveyBuilder.Views.Questions.QuestionView(model, template)
-
-    @questions.push(question)
+    view = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, model)    
+    @questions.push(view)
     model.on('destroy', this.delete_question_view, this)
-    $(this.el).append($(question.render().el))
-    $(question.render().el).hide()
+    $(this.el).append($(view.render().el))
+    $(view.render().el).hide()
 
   add_survey_details: (survey_model) ->
     template = $("#survey_details_template").html()
