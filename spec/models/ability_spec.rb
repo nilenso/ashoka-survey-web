@@ -40,6 +40,7 @@ describe "Abilities" do
         it { should be_able_to :manage, Response.new(:survey => survey) }
         it { should be_able_to :complete, Response.new(:survey => survey) }
         it { should be_able_to :read, Response.new(:survey => survey) }
+        it { should be_able_to :duplicate, Response.new(:survey => survey) }
       end
 
       context "for surveys belonging to another organization" do
@@ -57,6 +58,7 @@ describe "Abilities" do
         it { should_not be_able_to :create, Response.new(:survey => survey) }
         it { should_not be_able_to :complete, Response.new(:survey => survey) }
         it { should_not be_able_to :read, Response.new(:survey => survey) }
+        it { should_not be_able_to :duplicate, Response.new(:survey => survey) }
       end
 
       context "for surveys belonging to another organization that have been shared with me" do
@@ -64,6 +66,8 @@ describe "Abilities" do
         before { ParticipatingOrganization.create(:organization_id => user_info[:org_id],  :survey_id => survey.id) }
 
         it { should be_able_to(:read, survey) }
+        it { should be_able_to :duplicate, survey }
+
         it "should be able to read responses added by members of his organizations" do
           response = Response.new(:survey => survey)
           response.organization_id = user_info[:org_id]
@@ -83,6 +87,7 @@ describe "Abilities" do
       it { should_not be_able_to(:update_share_with_organizations, Survey.new) }
       it { should_not be_able_to(:destroy, Survey.new) }
       it { should_not be_able_to(:build, Survey.new) }
+      it { should_not be_able_to(:duplicate, Survey) }
 
       context "for a survey shared with him" do
         let(:survey) { FactoryGirl.create(:survey, :organization_id => 5) }

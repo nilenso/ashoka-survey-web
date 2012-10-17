@@ -22,6 +22,14 @@ class Ability
           survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
         end
 
+        can :duplicate, Survey, ['
+          surveys.id in (SELECT "surveys".id FROM "surveys" 
+          LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id 
+          WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
+        user_info[:org_id], user_info[:org_id]] do |survey|
+          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
+        end
+
         can :build, Survey, :organization_id => user_info[:org_id]
         can :create, Survey
         can :publish_to_users, Survey, :organization_id => user_info[:org_id]
@@ -36,7 +44,6 @@ class Ability
         can :read, Response, :organization_id => user_info[:org_id] 
         can :complete, Response, :survey => { :organization_id => user_info[:org_id] }
         can :complete, Response, :organization_id => user_info[:org_id] 
-
       elsif role == 'field_agent'
         can :read, Survey, :survey_users => { :user_id => user_info[:user_id ] }
         can :create, Response, :survey => { :survey_users => { :user_id => user_info[:user_id ] } }
