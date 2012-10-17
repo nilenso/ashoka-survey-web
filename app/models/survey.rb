@@ -26,7 +26,10 @@ class Survey < ActiveRecord::Base
     User.find_by_organization(access_token, organization_id).select { |user| self.user_ids.include?(user.id) }
   end
 
-  amoeba { enable }
+  amoeba do 
+    enable 
+    include_field :questions
+  end
   
   def duplicate
     survey = self.dup

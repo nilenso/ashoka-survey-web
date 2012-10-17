@@ -29,9 +29,15 @@ describe Survey do
   end
 
   context "when duplicating" do
-    it "duplicates the nested associations as well" do
+    it "duplicates the nested questions as well" do
       survey = FactoryGirl.create :survey_with_questions
       survey.duplicate.questions.should_not be_empty
+    end
+
+    it "doesn't duplicate the other associations" do
+      survey = FactoryGirl.create :survey_with_questions
+      survey.survey_users << SurveyUser.create
+      survey.duplicate.survey_users.should be_empty
     end
 
     it "unpublishes the duplicated survey" do
