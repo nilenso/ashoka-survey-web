@@ -5,6 +5,7 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   defaults:
     content: 'Untitled question'
     mandatory: false
+    identifier: false
 
   has_errors: ->
     !_.isEmpty(this.errors)
