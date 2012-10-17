@@ -9,7 +9,7 @@
   <% unless @responses.blank? %>
     <table class="surveys_table">
       <thead>
-        <% @responses.first.five_answers.each do |answer| %> 
+        <% @responses.first.answers_for_identifier_questions.each do |answer| %> 
           <th><%= answer.question_content %> </th>
         <% end %>
         <th><%= t('Actions') %></th>
@@ -18,7 +18,7 @@
       <tbody>
         <% @responses.each do |response| %>
         <tr class="survey_row">
-          <% response.five_answers.each do |answer| %> 
+          <% response.answers_for_identifier_questions.each do |answer| %> 
             <td><%= answer.content %> </td>
           <% end %>
           <td><%= link_to 'Edit', edit_survey_response_path(:id => response.id) %></td>

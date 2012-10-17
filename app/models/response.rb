@@ -9,9 +9,8 @@ class Response < ActiveRecord::Base
   validates_presence_of :organization_id
   validates_presence_of :user_id
 
-  def five_answers
-  	answers_show = answers.select { |answer| answer.text_type?}
-  	answers_show.slice(0, 5)
+  def answers_for_identifier_questions
+    answers.find_all { |answer| answer.question.identifier? }
   end
 
   def mark_complete

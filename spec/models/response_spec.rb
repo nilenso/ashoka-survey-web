@@ -10,24 +10,14 @@ describe Response do
   it { should validate_presence_of(:organization_id)}
   it { should validate_presence_of(:user_id)}
 
-  context "logic" do
-  	it "returns five answers to display for a response" do
-  	  response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey),
-       :organization_id => 1, :user_id => 1)
-      6.times {response.answers << FactoryGirl.create(:answer)}  
-      response.five_answers.should == response.answers.limit(5)
-    end
 
-    it "returns only the text typed answers" do
-      response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey),
-       :organization_id => 1, :user_id => 1)
-      question = FactoryGirl.create(:question, :type => "MultiChoiceQuestion")
-      response.answers << FactoryGirl.create(:answer, :question => question)
-      response.five_answers.should be_empty
-      3.times {response.answers << FactoryGirl.create(:answer)}  
-      response.five_answers.should_not be_empty
-      response.five_answers.each { |i| i.should be_text_type }
-    end 
+  it "fetches the answers for the identifier questions" do
+    response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
+    identifier_question = FactoryGirl.create :question, :identifier => true
+    normal_question = FactoryGirl.create :question, :identifier => false
+    response.answers << FactoryGirl.create(:answer, :question_id => identifier_question.id,  :response_id => response.id) 
+    response.answers << FactoryGirl.create(:answer, :question_id => normal_question.id,  :response_id => response.id) 
+    response.answers_for_identifier_questions.should == identifier_question.answers
   end
 
   context "when completing a response" do
