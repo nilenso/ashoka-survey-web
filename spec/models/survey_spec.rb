@@ -39,6 +39,12 @@ describe Survey do
       new_survey = survey.duplicate
       new_survey.should_not be_published
     end
+
+    it "appends (copy) to the survey name" do
+      survey = FactoryGirl.create :survey_with_questions
+      new_survey = survey.duplicate
+      new_survey.name.should =~ /\(copy\)/i
+    end
   end
 
   context "publish" do

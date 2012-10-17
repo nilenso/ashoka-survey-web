@@ -106,6 +106,7 @@ fr:
         name: "Nom"
         expiry_date: "Expire le"
         description: "Description"
+        copied: (de Copie)
 
       question:
         content: "Contenu"

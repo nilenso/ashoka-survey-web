@@ -31,6 +31,7 @@ class Survey < ActiveRecord::Base
   def duplicate
     survey = self.dup
     survey.published = false
+    survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
     survey
   end
 
