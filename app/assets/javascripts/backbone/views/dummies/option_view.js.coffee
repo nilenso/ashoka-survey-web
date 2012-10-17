@@ -16,8 +16,8 @@ class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
 
   add_sub_question: (sub_question_model) =>
     sub_question_model.on('destroy', this.delete_sub_question, this)
-    template = $('#dummy_radio_question_template').html()
-    question = new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(sub_question_model, template)
+    type = 'RadioQuestion'    
+    question = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, sub_question_model)
     this.sub_questions.push question
     this.trigger('render_added_sub_question')
     this.render()
