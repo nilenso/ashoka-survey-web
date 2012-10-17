@@ -3,9 +3,6 @@
 class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   el: "#dummy_pane"
 
-  events:
-    'add_dummy_sub_question': 'add_sub_question'
-
   initialize: (survey_model) ->
     @questions = []
     @survey_model = survey_model
@@ -49,9 +46,3 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       question.model.set({order_number: last_order_number + index + 1})
     @questions = _(@questions).sortBy (question) ->
       question.model.get('order_number')
-
-  add_sub_question: (event, sub_question_model) =>
-    template = $('#dummy_single_line_question_template').html()
-    question = new SurveyBuilder.Views.Dummies.QuestionView(sub_question_model, template)
-    this.questions.push question
-    this.render()
