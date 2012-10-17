@@ -31,18 +31,13 @@ describe Survey do
   context "when duplicating" do
     it "duplicates the nested associations as well" do
       survey = FactoryGirl.create :survey_with_questions
-      survey.duplicate!.questions.should_not be_empty
+      survey.duplicate.questions.should_not be_empty
     end
 
     it "unpublishes the duplicated survey" do
       survey = FactoryGirl.create :survey_with_questions
-      new_survey = survey.duplicate!
+      new_survey = survey.duplicate
       new_survey.should_not be_published
-    end
-
-    it "saves the duplicated survey" do
-      survey = FactoryGirl.create :survey_with_questions
-      expect { survey.duplicate! }.to change { Survey.count }.by 1
     end
   end
 

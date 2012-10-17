@@ -28,10 +28,9 @@ class Survey < ActiveRecord::Base
 
   amoeba { enable }
   
-  def duplicate!
+  def duplicate
     survey = self.dup
     survey.published = false
-    survey.save
     survey
   end
 
