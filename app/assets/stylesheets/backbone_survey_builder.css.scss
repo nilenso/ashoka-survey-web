@@ -45,6 +45,10 @@ h1#heading {
     padding: 4px;
     margin-bottom: 2px;
     border: 1px dashed white;
+    label, .identifier_icon {
+      display: inline;
+      padding: 2px 2px;
+    }
     &:hover {
       color: $link_hover_color;
       border: 1px dashed $border_color;
