@@ -44,7 +44,6 @@ class ResponseDecorator < Draper::Base
       string.result(binding).html_safe
     end
   end
-
   private
   
   def numeric_question_hint(min_value, max_value)
@@ -52,5 +51,9 @@ class ResponseDecorator < Draper::Base
     return "The number should is be greater than #{max_value}" if max_value
     return "The number should is be less than #{min_value}" if min_value
     nil
+  end
+
+  def get_option_content_from_option_id(id)
+    Option.find_by_id(id).try(:content)
   end
 end
