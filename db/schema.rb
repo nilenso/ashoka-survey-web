@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121010101056) do
+ActiveRecord::Schema.define(:version => 20121017102341) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(:version => 20121010101056) do
     t.integer  "min_value"
     t.integer  "order_number"
     t.integer  "parent_id"
+    t.boolean  "identifier",         :default => false
   end
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"
