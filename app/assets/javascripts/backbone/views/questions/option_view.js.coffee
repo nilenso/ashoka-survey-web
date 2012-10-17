@@ -26,12 +26,13 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
   delete: =>
     this.model.destroy()
 
-  add_sub_question_model: ->
-    this.model.add_sub_question('RadioQuestion')
+  add_sub_question_model: (event) ->
+    type = $(event.target).prev().val()
+    this.model.add_sub_question(type)
 
   add_sub_question: (sub_question_model) =>
     sub_question_model.on('destroy', this.delete_sub_question, this)
-    type = 'RadioQuestion'
+    type = sub_question_model.get('type')
     question = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, sub_question_model)
     this.sub_questions.push question
     $('#settings_pane').append($(question.render().el))

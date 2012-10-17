@@ -1,0 +1,13 @@
+<% types = [
+            '<option value="SingleLineQuestion">Single Line Question</option>',
+            '<option value="RadioQuestion">Radio Question</option>',
+            '<option value="MultilineQuestion">Multi Line Question</option>',
+            '<option value="NumericQuestion">Numeric Question</option>',
+            '<option value="DateQuestion">Date Question</option>',
+            '<option value="MultiChoiceQuestion">MultiChoice Question</option>',
+            '<option value="DropDownQuestion">DropDown Question</option>',
+            '<option value="PhotoQuestion">Photo Question</option>',
+            '<option value="RatingQuestion">Rating Question</option>'
+          ] 
+%>
+<%= select_tag "questions", types.join.html_safe %>
