@@ -15,7 +15,6 @@ class Answer < ActiveRecord::Base
   validate :maximum_photo_size
   validates_numericality_of :content, :if => Proc.new {|answer| (answer.content.present?) && (answer.question.type == 'NumericQuestion') }
 
-
   def option_ids
     self.choices.collect(&:option_id)
   end

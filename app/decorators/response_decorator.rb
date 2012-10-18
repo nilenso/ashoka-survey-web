@@ -34,7 +34,7 @@ class ResponseDecorator < Draper::Base
       f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => 'date' }
 
     when 'MultiChoiceQuestion'
-      f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :member_label => method(:get_option_content_from_option_id)
+      f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :member_label => Proc.new { |id| Option.find_by_id(id).try(:content)}
 
     when 'DropDownQuestion'
       f.input :content, :as => :select, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:content)
