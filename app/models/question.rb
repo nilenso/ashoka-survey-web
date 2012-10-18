@@ -25,4 +25,8 @@ class Question < ActiveRecord::Base
     question_class = type.classify.constantize
     question_class.new(question_params)
   end
+
+  def first_level?
+    self.parent == nil
+  end
 end

@@ -85,5 +85,13 @@ describe Question do
     end
   end
 
+  it "knows if it is a first level question" do
+    question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
+    question.options << Option.create(content: "Option", order_number: 2)
+    sub_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
+    question.first_level?.should be_true
+    sub_question.first_level?.should be_false
+  end
+
   include_examples 'a question'
 end
