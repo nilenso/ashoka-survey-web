@@ -13,9 +13,7 @@
     <% question = f.object.question %>
 
     <%= image_tag question.image.url(:medium) if question.image.exists? %>
-    <% if question.first_level? %>
-      <%= @response.render_question_with_sub_questions(question, f) %>
-    <% end %>
+    <%= @response.render_question_with_sub_questions(question, f) %>
     <%= f.input :question_id, :as => :hidden %>
   <% end %>
 
