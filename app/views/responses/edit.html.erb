@@ -1,4 +1,11 @@
 <%= stylesheet_link_tag 'responses' %>
+<style type="text/css">
+  .question {
+    padding-top: 10px;
+    margin-left: 20px;
+    border: 1px dashed black;
+  }
+</style>
 <h1> Edit Response</h1>
 
 <%= semantic_form_for [@survey, @response], :html => { :multipart => true } do |f| %>
@@ -6,8 +13,9 @@
     <% question = f.object.question %>
 
     <%= image_tag question.image.url(:medium) if question.image.exists? %>
-    <%= @response.input_tag_for(question, f) %>
-
+    <% if question.first_level? %>
+      <%= @response.render_question_with_sub_questions(question, f) %>
+    <% end %>
     <%= f.input :question_id, :as => :hidden %>
   <% end %>
 
