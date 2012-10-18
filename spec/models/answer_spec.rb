@@ -46,24 +46,33 @@ describe Answer do
       answer.should_not be_valid
     end
 
-    context "when validating numeric questions"
+    context "when validating numeric questions" do
+      it "does not save if the answer is not a number" do
+        question = FactoryGirl.create(:question, :type => 'NumericQuestion')
+        answer = FactoryGirl.build(:answer, :question_id => question.id)
+        question.answers << answer
 
-    it "does not save if the answer is not a number" do
-      question = FactoryGirl.create(:question, :type => 'NumericQuestion')
-      answer = FactoryGirl.build(:answer, :question_id => question.id)
-      question.answers << answer
+        answer.content = 'as'
+        answer.should_not be_valid
+      end
 
-      answer.content = 'as'
-      answer.should_not be_valid
-    end
+      it "does not save if the answer is greater than the maximum value" do
+        question = FactoryGirl.create(:question, :type => 'NumericQuestion', :max_value => 5)
+        answer = FactoryGirl.build(:answer, :question_id => question.id)
+        question.answers << answer
 
-    it "does not save if the answer is greater than the maximum value" do
-      question = FactoryGirl.create(:question, :type => 'NumericQuestion', :max_value => 5)
-      answer = FactoryGirl.build(:answer, :question_id => question.id)
-      question.answers << answer
+        answer.content = 8
+        answer.should_not be_valid
+      end
 
-      answer.content = 8
-      answer.should_not be_valid
+      it "doesn't error out if the answer is blank" do
+        question = FactoryGirl.create(:question, :type => 'NumericQuestion')
+        answer = FactoryGirl.build(:answer, :question_id => question.id)
+        question.answers << answer
+
+        answer.content = ''
+        answer.should be_valid
+      end
     end
 
     it "does not save if the answer to a date type question is not a valid date" do
@@ -76,63 +85,63 @@ describe Answer do
       answer.content = "1990/10/24"
       answer.should be_valid
     end
-  end
 
-  context "for multi-choice questions" do
-    it "does not save if it doesn't have any choices selected" do
-      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
-      answer = FactoryGirl.build(:answer, :question_id => question.id)
-      answer.should_not be_valid
+    context "for multi-choice questions" do
+      it "does not save if it doesn't have any choices selected" do
+        question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
+        answer = FactoryGirl.build(:answer, :question_id => question.id)
+        answer.should_not be_valid
+      end
+
+      it "saves if even a single choice is selected" do
+        question = MultiChoiceQuestion.create(:type => 'MultiChoiceQuestion', :mandatory => true, :content => "some question")
+        option = FactoryGirl.create(:option, :question_id => question.id)
+        answer = FactoryGirl.build(:answer, :question_id => question.id, :option_ids => [option.id])
+        answer.should be_valid
+      end
     end
 
-    it "saves if even a single choice is selected" do
-      question = MultiChoiceQuestion.create(:type => 'MultiChoiceQuestion', :mandatory => true, :content => "some question")
-      option = FactoryGirl.create(:option, :question_id => question.id)
-      answer = FactoryGirl.build(:answer, :question_id => question.id, :option_ids => [option.id])
-      answer.should be_valid
-    end
-  end
+    context "when creating choices for a MultiChoiceQuestion" do
+      it "creates choices for the selected options" do
+        question = MultiChoiceQuestion.create(:type => 'MultiChoiceQuestion', :content => 'some question')
+        options = FactoryGirl.create_list(:option, 3, :question_id => question.id)
+        option_ids = options.map(&:id).unshift('')
+        answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => option_ids)
+        answer.choices.map(&:option_id).should =~ option_ids
+      end
 
-  context "when creating choices for a MultiChoiceQuestion" do
-    it "creates choices for the selected options" do
-      question = MultiChoiceQuestion.create(:type => 'MultiChoiceQuestion', :content => 'some question')
-      options = FactoryGirl.create_list(:option, 3, :question_id => question.id)
-      option_ids = options.map(&:id).unshift('')
-      answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => option_ids)
-      answer.choices.map(&:option_id).should =~ option_ids
+      it "doesn't create choices for any other question type" do
+        question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
+        answer = FactoryGirl.create(:answer, :question_id => question.id)
+        answer.choices.should == []
+      end
+
+      it "doesn't change the answer content" do
+        choices = ["first"]
+        question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
+        answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => choices)
+        answer.content.should == answer.content
+      end
+
+      it "looks at choices instead of content when checking for a mandatory question" do
+        question = MultiChoiceQuestion.create(:type => 'MultiChoiceQuestion', :mandatory => true, :content => "multi-choice-question")
+        option = FactoryGirl.create(:option, :question_id => question.id)
+        answer = FactoryGirl.build(:answer, :content => nil, :question_id => question.id, :option_ids => [option.id])
+        answer.should be_valid
+      end
     end
 
-    it "doesn't create choices for any other question type" do
-      question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
-      answer = FactoryGirl.create(:answer, :question_id => question.id)
-      answer.choices.should == []
-    end
-
-    it "doesn't change the answer content" do
-      choices = ["first"]
-      question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
-      answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => choices)
-      answer.content.should == answer.content
-    end
-
-    it "looks at choices instead of content when checking for a mandatory question" do
-      question = MultiChoiceQuestion.create(:type => 'MultiChoiceQuestion', :mandatory => true, :content => "multi-choice-question")
-      option = FactoryGirl.create(:option, :question_id => question.id)
-      answer = FactoryGirl.build(:answer, :content => nil, :question_id => question.id, :option_ids => [option.id])
-      answer.should be_valid
-    end
-  end
-
-  context "description" do
-    subject { FactoryGirl.create(:answer, :question => FactoryGirl.create(:question))}
-    it { should have_attached_file(:photo) }
-    it { should validate_attachment_content_type(:photo).
-         allowing('image/png').
-         rejecting('image/gif') }
-    it "should have a maximum file size as in question's max length" do
-      question = FactoryGirl.create(:question, :max_length => 2, :type => "PhotoQuestion")
-      answer = FactoryGirl.build(:answer, :question => question, :photo_file_size => 3.megabytes)
-      answer.should_not be_valid
+    context "description" do
+      subject { FactoryGirl.create(:answer, :question => FactoryGirl.create(:question))}
+      it { should have_attached_file(:photo) }
+      it { should validate_attachment_content_type(:photo).
+           allowing('image/png').
+           rejecting('image/gif') }
+      it "should have a maximum file size as in question's max length" do
+        question = FactoryGirl.create(:question, :max_length => 2, :type => "PhotoQuestion")
+        answer = FactoryGirl.build(:answer, :question => question, :photo_file_size => 3.megabytes)
+        answer.should_not be_valid
+      end
     end
   end
 

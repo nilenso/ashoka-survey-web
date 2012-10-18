@@ -13,7 +13,7 @@ class Answer < ActiveRecord::Base
   has_attached_file :photo, :styles => { :medium => "300x300>"}
   validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
   validate :maximum_photo_size
-  validates_numericality_of :content, :if => Proc.new {|answer| answer.question.type == 'NumericQuestion'}
+  validates_numericality_of :content, :if => Proc.new {|answer| (answer.content.present?) && (answer.question.type == 'NumericQuestion') }
 
 
   def option_ids
