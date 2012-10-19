@@ -100,6 +100,7 @@ describe "Abilities" do
         it { should be_able_to :create, Response.new(:survey => survey) }
         it { should be_able_to :read,  response }
         it { should be_able_to :complete,  response }
+        it { should be_able_to :destroy,  response }
       end
 
       context "for a survey not shared with him" do
@@ -114,6 +115,7 @@ describe "Abilities" do
         it { should_not be_able_to :create, Response.new(:survey => survey) }
         it { should_not be_able_to :read,  response }
         it { should_not be_able_to :complete,  response }
+        it { should_not be_able_to :destroy,  response }
       end
     end
   end
