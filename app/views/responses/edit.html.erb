@@ -13,9 +13,11 @@
   <%= f.semantic_fields_for :answers do |f| %>
     <% question = f.object.question %>
 
-    <%= image_tag question.image.url(:medium) if question.image.exists? %>
-    <%= @response.input_tag_for(question, f) %>
-    <%= f.input :question_id, :as => :hidden %>
+    <div class="<%= "hidden" unless question.first_level?  %>">
+      <%= image_tag question.image.url(:medium) if question.image.exists? %>
+      <%= @response.input_tag_for(question, f) %>
+      <%= f.input :question_id, :as => :hidden %>
+    </div>
   <% end %>
 
   <%= f.actions do %>
