@@ -47,11 +47,6 @@
         }
       });
     });
-    $(".question").each(function(i, div) {
-      if (!$(div).hasClass('level-0')) {
-        // $(div).hide();
-      }
-    })
     $('#complete_button').click(function(){
       var action = $('form.response').attr('action')
       $('form.response').attr('action', action + '/complete')
