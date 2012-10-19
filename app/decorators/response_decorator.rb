@@ -4,7 +4,10 @@ class ResponseDecorator < Draper::Base
   def input_tag_for(question, f)
     case question.type
     when 'RadioQuestion'
-      f.input :content, :label => question.content, :as => :radio, :collection => question.options.map(&:content), :required => question.mandatory
+      f.input :content, :label => question.content, :as => :radio, :collection => question.options.map { |o| [o.content, o.content, {:data => { :option_id => o.id } }] }, :required => question.mandatory
+
+    when 'DropDownQuestion'
+      f.input :content, :as => :select, :label => question.content, :required => question.mandatory, :collection => question.options.map { |o| [o.content, o.content, {'data-option-id' => o.id }] }
 
     when 'SingleLineQuestion'
       f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length } }
@@ -21,9 +24,6 @@ class ResponseDecorator < Draper::Base
 
     when 'MultiChoiceQuestion'
       f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :member_label => Proc.new { |id| Option.find_by_id(id).try(:content)}
-
-    when 'DropDownQuestion'
-      f.input :content, :as => :select, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:content)
 
     when 'PhotoQuestion'
       f.input :photo, :as => :file, :required => question.mandatory, :label => question.content
