@@ -21,13 +21,24 @@ describe Response do
     response.answers << FactoryGirl.create(:answer, :question_id => normal_question.id,  :response_id => response.id) 
     response.answers_for_identifier_questions.should == identifier_question.answers
   end
-  
+
   context "when marking a response incomplete" do
     it "marks the response incomplete" do
       survey = FactoryGirl.create(:survey)
       response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
       response.mark_incomplete
       response.reload.should_not be_complete
+    end
+  end
+
+  context "#set" do
+    it "sets the survey_id, user_id and organization_id" do
+      survey = FactoryGirl.create(:survey)
+      response = FactoryGirl.build(:response)
+      response.set(survey.id, 5, 6)
+      response.survey_id.should == survey.id
+      response.user_id.should == 5
+      response.organization_id.should == 6
     end
   end
 end
