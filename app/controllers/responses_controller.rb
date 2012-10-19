@@ -20,7 +20,8 @@ class ResponsesController < ApplicationController
   def edit
     @survey = Survey.find(params[:survey_id])
     @response = ResponseDecorator.find(params[:id])
-    @response.answers.select!{|answer| answer.question.first_level? }
+    question_ids_in_order = @survey.question_ids_in_order
+    @response.answers.sort_by! { |answer| question_ids_in_order.index(answer.question.id) }
   end
 
   def update

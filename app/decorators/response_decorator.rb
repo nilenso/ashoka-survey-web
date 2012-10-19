@@ -1,20 +1,6 @@
 class ResponseDecorator < Draper::Base
   decorates :response
 
-  def render_question_with_sub_questions(question, f, level)
-    question_view = input_tag_for(question, f)
-    if question.respond_to?(:options)
-      question.options.each do |option|
-        option.questions.each do |sub_question|
-          question_view += render_question_with_sub_questions(sub_question, f, level + 1)
-        end
-      end
-    end
-    h.content_tag :div, question_view, :class => 'question level-'+level.to_s
-  end
-
-  private
-
   def input_tag_for(question, f)
     case question.type
     when 'RadioQuestion'
@@ -58,6 +44,8 @@ class ResponseDecorator < Draper::Base
       string.result(binding).html_safe
     end
   end
+
+  private
 
   def numeric_question_hint(min_value, max_value)
     return "The number should be between #{min_value} and #{max_value}" if min_value && max_value

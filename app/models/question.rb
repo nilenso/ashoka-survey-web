@@ -16,6 +16,10 @@ class Question < ActiveRecord::Base
     nil
   end
 
+  def with_sub_questions_in_order
+    [self]
+  end
+
   def json(opts={})
     return as_json(opts).merge({:options => options.map(&:as_json)}) if respond_to? :options
     return as_json(opts)

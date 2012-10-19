@@ -14,7 +14,7 @@
     <% question = f.object.question %>
 
     <%= image_tag question.image.url(:medium) if question.image.exists? %>
-    <%= @response.render_question_with_sub_questions(question, f, 0) %>
+    <%= @response.input_tag_for(question, f) %>
     <%= f.input :question_id, :as => :hidden %>
   <% end %>
 
