@@ -9,14 +9,14 @@ module Api
           survey = FactoryGirl.create(:survey)
           resp = FactoryGirl.attributes_for(:response)
           expect {
-            post :create, :survey_id => survey.id, :reponse => resp
+            post :create, :survey_id => survey.id, :response => resp
           }.to change { Response.count }.by 1
         end
 
         it "creates the nested answers" do
           survey = FactoryGirl.create(:survey)
           question = FactoryGirl.create(:question)
-          resp = FactoryGirl.attributes_for(:response, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
+          resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
           expect {
             post :create, :survey_id => survey.id, :response => resp
           }.to change { Answer.count }.by 1
@@ -25,8 +25,8 @@ module Api
         it "should return the newly created response as JSON" do
           survey = FactoryGirl.create(:survey)
           question = FactoryGirl.create(:question)
-          resp = FactoryGirl.attributes_for(:response, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
-          post :create, :survey_id => survey.id, :reponse => resp
+          resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
+          post :create, :response => resp
           response.should be_ok
           JSON.parse(response.body).keys.should =~ Response.new.attributes.keys
         end
