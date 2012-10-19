@@ -4,6 +4,7 @@
     padding-top: 10px;
     margin-left: 20px;
     border: 1px dashed black;
+    }
   }
 </style>
 <h1> Edit Response</h1>
@@ -13,7 +14,7 @@
     <% question = f.object.question %>
 
     <%= image_tag question.image.url(:medium) if question.image.exists? %>
-    <%= @response.render_question_with_sub_questions(question, f) %>
+    <%= @response.render_question_with_sub_questions(question, f, 0) %>
     <%= f.input :question_id, :as => :hidden %>
   <% end %>
 
@@ -44,7 +45,11 @@
         }
       });
     });
-
+    $(".question").each(function(i, div) {
+      if (!$(div).hasClass('level-0')) {
+        // $(div).hide();
+      }
+    })
     $('#complete_button').click(function(){
       var action = $('form.response').attr('action')
       $('form.response').attr('action', action + '/complete')
