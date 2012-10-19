@@ -162,4 +162,19 @@ describe ResponsesController do
       res.reload.should_not be_complete
     end
   end
+
+  context "DELETE 'destroy'" do
+    let!(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :published => true) }
+    let!(:res) { FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 2) }
+
+    it "deletes a survey" do
+      expect { delete :destroy, :id => res.id, :survey_id => survey.id }.to change { Response.count }.by(-1)
+      flash[:notice].should_not be_nil
+    end
+
+    it "redirects to the survey index page" do
+      delete :destroy, :id => res.id, :survey_id => survey.id
+      response.should redirect_to survey_responses_path
+    end
+  end
 end

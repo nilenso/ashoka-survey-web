@@ -11,7 +11,7 @@ SurveyWeb::Application.routes.draw do
       member { post "duplicate" } 
       get 'publish_to_users', 'share_with_organizations'
       put 'update_publish_to_users', 'update_share_with_organizations'
-      resources :responses, :only => [:new, :create, :index, :edit, :update] do
+      resources :responses, :only => [:new, :create, :index, :edit, :update, :destroy] do
         member { put "complete" }
       end
     end

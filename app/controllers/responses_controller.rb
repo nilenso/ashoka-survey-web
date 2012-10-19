@@ -45,6 +45,13 @@ class ResponsesController < ApplicationController
     end
   end
 
+  def destroy
+    response = Response.find(params[:id])
+    response.destroy
+    flash[:notice] = t "flash.response_deleted"
+    redirect_to(survey_responses_path)
+  end
+
   private
 
   def survey_published
