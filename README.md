@@ -1,4 +1,4 @@
-survey-web
+survey-web [![Build Status](https://secure.travis-ci.org/c42/survey-web.png)](http://travis-ci.org/c42/survey-web)
 ==========
 
 A web application to create and conduct surveys
