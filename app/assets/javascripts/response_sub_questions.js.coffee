@@ -18,7 +18,7 @@
       hide_sub_questions_of(option) for option in sub_question.find('input[type=radio]')
 
   clear_content_of = (sub_question) ->
-    $(sub_question).find('input').val('')
+    $(sub_question).find('input[type!=hidden]').val('')
     $(sub_question).find('textarea').val('') # For multi_line questions
     $(sub_question).find('input').prop('checked', false) # For radio_buttons and check_boxes
     $(sub_question).find('option').prop('selected', false) # For drop_downs
