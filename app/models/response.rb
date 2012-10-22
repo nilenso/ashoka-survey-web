@@ -8,6 +8,7 @@ class Response < ActiveRecord::Base
   validates_presence_of :survey_id
   validates_presence_of :organization_id
   validates_presence_of :user_id
+  validates_associated :answers
 
   def answers_for_identifier_questions
     answers.find_all { |answer| answer.question.identifier? }
