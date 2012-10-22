@@ -4,8 +4,14 @@
     sibling_options = $("input[name='#{$(this).attr('name')}']").not(this)
     sibling_options.each (index, option) ->
       hide_sub_questions_of(option)
-
     show_sub_questions_of($(this))
+
+  $('select').change ->
+    option = this.options[this.selectedIndex]
+    sibling_options = $(this.options).not(option)
+    sibling_options.each (index, option) ->
+      hide_sub_questions_of(option)
+    show_sub_questions_of(option)  
 
   show_sub_questions_of = (option) ->
     $(sub_question).show() for sub_question in sub_questions_for(option)
@@ -15,7 +21,7 @@
       sub_question = $(this)
       clear_content_of sub_question
       sub_question.hide()
-      hide_sub_questions_of(option) for option in sub_question.find('input[type=radio]')
+      hide_sub_questions_of(option) for option in sub_question.find('input[type=radio],option')
 
   clear_content_of = (sub_question) ->
     $(sub_question).find('input[type!=hidden]').val('')
