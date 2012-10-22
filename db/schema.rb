@@ -94,6 +94,16 @@ ActiveRecord::Schema.define(:version => 20121017102341) do
   add_index "responses", ["organization_id"], :name => "index_responses_on_organization_id"
   add_index "responses", ["survey_id"], :name => "index_responses_on_survey_id"
 
+  create_table "shares", :force => true do |t|
+    t.integer  "survey_id"
+    t.integer  "user_id"
+    t.integer  "organization_id"
+    t.datetime "created_at",      :null => false
+    t.datetime "updated_at",      :null => false
+  end
+
+  add_index "shares", ["survey_id"], :name => "index_shares_on_survey_id"
+
   create_table "survey_users", :force => true do |t|
     t.integer  "survey_id"
     t.integer  "user_id"

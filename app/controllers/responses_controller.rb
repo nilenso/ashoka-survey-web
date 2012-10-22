@@ -20,8 +20,7 @@ class ResponsesController < ApplicationController
   def edit
     @survey = Survey.find(params[:survey_id])
     @response = ResponseDecorator.find(params[:id])
-    question_ids_in_order = @survey.question_ids_in_order
-    @response.answers.sort_by! { |answer| question_ids_in_order.index(answer.question.id) }
+    sort_questions_by_order_number(@response)
   end
 
   def update
@@ -30,6 +29,7 @@ class ResponsesController < ApplicationController
       redirect_to survey_responses_path, :notice => "Successfully updated"
     else
       flash[:error] = "Error"
+      sort_questions_by_order_number(@response)
       render :edit
     end
   end
@@ -41,6 +41,7 @@ class ResponsesController < ApplicationController
       redirect_to survey_responses_path(@response.survey_id), :notice => "Successfully updated"
     else
       @response.mark_incomplete
+      sort_questions_by_order_number(@response)
       flash[:error] = "Error"
       render :edit
     end
@@ -54,6 +55,11 @@ class ResponsesController < ApplicationController
   end
 
   private
+
+  def sort_questions_by_order_number(response)
+    question_ids_in_order = response.survey.question_ids_in_order
+    response.answers.sort_by! { |answer| question_ids_in_order.index(answer.question.id) }
+  end
 
   def survey_published
     survey = Survey.find(params[:survey_id])
