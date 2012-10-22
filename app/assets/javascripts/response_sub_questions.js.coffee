@@ -12,6 +12,8 @@
     sibling_options.each (index, option) ->
       hide_sub_questions_of(option)
     show_sub_questions_of(option)  
+  initialize = ->
+    show_sub_questions_of(option) for option in $('input[type=radio]:checked,option:checked')
 
   show_sub_questions_of = (option) ->
     $(sub_question).show() for sub_question in sub_questions_for(option)
@@ -35,3 +37,4 @@
     $('.sub_question').filter ->
       sub_question = $(this)
       $(option).data('option-id') == sub_question.data('parent-id')
+  initialize()
