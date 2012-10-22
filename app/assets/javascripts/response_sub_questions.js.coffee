@@ -28,6 +28,8 @@
     $(sub_question).find('textarea').val('') # For multi_line questions
     $(sub_question).find('input').prop('checked', false) # For radio_buttons and check_boxes
     $(sub_question).find('option').prop('selected', false) # For drop_downs
+    $(sub_question).find('.rating').find('li.hidden').children('input').val('') # Rating question
+    $(sub_question).find('.star').raty('cancel')
 
   sub_questions_for = (option) ->
     $('.sub_question').filter ->
