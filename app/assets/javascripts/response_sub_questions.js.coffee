@@ -43,6 +43,9 @@
       $(option).data('option-id') == sub_question.data('parent-id')
 
   remove_hidden_sub_questions = () ->
-    $('.hidden.sub_question').remove()
+    $('.hidden.sub_question').each ->
+      hidden_field_name = $(this).find('input[type=hidden]').attr('name').replace('[question_id]', '[id]')
+      $(this).remove()
+      $("[name=\"#{hidden_field_name}\"]").remove()
 
   initialize()
