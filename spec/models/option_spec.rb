@@ -31,14 +31,14 @@ describe Option do
   context "when fetching all the sub_questions of an option" do
     let(:question) { FactoryGirl.create :question }
 
-    it "fetches all the directly nested sub_questions" do      
+    it "fetches all the directly nested sub_questions" do
       option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
       nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: option.id})
       # Need to do a #to_s because for some reason the direct hash comparison fails on ActiveSupport::TimeWithZone objects on Linux machines
       option.as_json[:questions].map(&:to_s).should include nested_question.json(:methods => :type).to_s
     end
 
-    it "fetches the nested subquestions at all levels" do      
+    it "fetches the nested subquestions at all levels" do
       option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
       nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: option.id})
       nested_question.options << Option.create(content: "Option", order_number: 2, :question_id => nested_question.id)
@@ -47,9 +47,17 @@ describe Option do
       option.as_json[:questions].map(&:to_s).should_not include  another_nested_question.json(:methods => :type).to_s
     end
 
-    it "returns itself when there are no sub_questions" do      
+    it "returns itself when there are no sub_questions" do
       option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
       option.as_json.should == option.as_json
+    end
+  end
+
+  context "reports" do
+    it "counts the number of times it has been the answer to its question" do
+      option = FactoryGirl.create(:option)
+      5.times { FactoryGirl.create(:answer, :content => option.content, :question_id => option.question_id) }
+      option.report_data.should == 5
     end
   end
 end

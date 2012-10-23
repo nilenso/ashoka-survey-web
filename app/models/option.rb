@@ -9,4 +9,8 @@ class Option < ActiveRecord::Base
   def as_json(opts={})
     super(opts).merge({:questions => questions.map { |question| question.json(:methods => :type) }})
   end
+
+  def report_data
+    Answer.joins(:response).where("answers.question_id = ? AND responses.complete = true AND answers.content = ?", question_id, content).count
+  end
 end
