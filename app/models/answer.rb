@@ -21,7 +21,7 @@ class Answer < ActiveRecord::Base
 
   def option_ids=(ids)
     ids.delete_if(&:blank?)
-    ids.each { |option_id| choices.new(:option_id => option_id) }
+    ids.each { |option_id| choices << Choice.new(:option_id => option_id) }
   end
 
   def text_type?
