@@ -86,6 +86,9 @@ class SurveysController < ApplicationController
     end
   end
 
+  def report
+  end
+
   private
 
   def require_organizations_to_be_selected

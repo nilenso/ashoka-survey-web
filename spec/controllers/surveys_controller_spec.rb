@@ -276,5 +276,18 @@ describe SurveysController do
         flash[:notice].should_not be_nil
       end
     end
+
+    context "GET 'report'" do
+      before(:each) do
+        sign_in_as('cso_admin')
+        session[:user_info][:org_id] = 123
+      end
+
+      it "renders the `report` template" do
+        survey = FactoryGirl.create :survey, :organization_id => 123
+        get :report, :id => survey.id
+        response.should render_template :report
+      end
+    end
   end
 end
