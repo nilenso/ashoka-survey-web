@@ -120,5 +120,11 @@ describe Question do
     end
   end
 
+  context "reports" do
+    it "has no report data" do
+      FactoryGirl.create(:question).report_data.should be_empty
+    end
+  end
+
   include_examples 'a question'
 end

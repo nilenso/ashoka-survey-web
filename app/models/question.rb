@@ -33,4 +33,8 @@ class Question < ActiveRecord::Base
   def first_level?
     self.parent == nil
   end
+
+  def report_data
+    []
+  end
 end
