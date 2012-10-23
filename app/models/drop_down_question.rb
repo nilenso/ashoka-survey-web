@@ -4,4 +4,8 @@ class DropDownQuestion < Question
   def with_sub_questions_in_order
     options.map(&:questions).flatten.map(&:with_sub_questions_in_order).flatten.unshift(self)
   end
+
+  def report_data
+    options.map { |option| [option.content, option.report_data] }
+  end
 end
