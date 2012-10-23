@@ -288,6 +288,12 @@ describe SurveysController do
         get :report, :id => survey.id
         response.should render_template :report
       end
+
+      it "assigns the survey for the view" do
+        survey = FactoryGirl.create :survey, :organization_id => 123
+        get :report, :id => survey.id
+        assigns(:survey).should be_true
+      end
     end
   end
 end

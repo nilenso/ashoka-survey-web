@@ -1,0 +1,29 @@
+<html>
+  <head>
+    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(drawChart);
+      function drawChart() {
+
+        var options = {
+          title: 'My Daily Activities'
+        };
+
+        var chart, data;
+
+        <% @survey.questions.each do |question| %>          
+          data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
+          chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
+          chart.draw(data, options);
+        <% end %>
+      }
+    </script>
+  </head>
+  <body>
+    <% @survey.questions.each do |question| %>
+      <%= question.content %>
+      <div id="chart_div_<%= question.id %>" style="width: 500px; height: 300px;"></div>
+    <% end %>
+  </body>
+</html>

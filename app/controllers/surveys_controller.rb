@@ -87,6 +87,7 @@ class SurveysController < ApplicationController
   end
 
   def report
+    @survey = SurveyDecorator.find(params[:id])
   end
 
   private

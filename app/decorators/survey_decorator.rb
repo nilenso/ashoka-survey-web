@@ -19,6 +19,17 @@ class SurveyDecorator < Draper::Base
     organizations.find { |org| org.id == model.organization_id }.try(:name)
   end
 
+  def report_data_for(question)
+    [
+      ['Task', 'Hours per Day'],
+      ['Work',     11],
+      ['Eat',      2],
+      ['Commute',  2],
+      ['Watch TV', 2],
+      ['Sleep',    7]
+    ].to_json.html_safe
+  end
+
   private
 
   def template_tag(content, id)

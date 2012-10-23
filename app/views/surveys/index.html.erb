@@ -55,6 +55,7 @@
             <%= link_to button_tag(t ".publish_survey"), survey_publish_to_users_path(survey.id) if can? :publish_to_users, survey %>
             <%= link_to image_tag("duplicate.png"), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %>
             <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %>
+            <%= link_to image_tag("report.png"), report_survey_path(survey.id) if can? :report, survey %>
           </td>
         </tr>
         <% end %>
