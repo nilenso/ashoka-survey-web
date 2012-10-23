@@ -11,7 +11,7 @@ class SurveyDecorator < Draper::Base
   def more_less_links
     if model.description.try(:length).try(:>, 120)
       h.link_to(h.translate(".more"), '#', :class => 'more_description_link') +
-      h.link_to(h.translate(".less"), '#', :class => 'less_description_link')
+        h.link_to(h.translate(".less"), '#', :class => 'less_description_link')
     end
   end
 
@@ -20,14 +20,11 @@ class SurveyDecorator < Draper::Base
   end
 
   def report_data_for(question)
-    [
-      ['Task', 'Hours per Day'],
-      ['Work',     11],
-      ['Eat',      2],
-      ['Commute',  2],
-      ['Watch TV', 2],
-      ['Sleep',    7]
-    ].to_json.html_safe
+    return if question.type != 'RadioQuestion'
+    header = [question.content, 'No. of Answers']
+    question.options.map do |option|
+      [option.content, question.answers.joins(:response).where("responses.complete = true AND answers.content = ?", option.content).count]
+    end.unshift(header).to_json.html_safe
   end
 
   private
