@@ -20,7 +20,7 @@ class SurveyDecorator < Draper::Base
   end
 
   def report_data_for(question)
-    return if question.type != 'RadioQuestion'
+    return unless ['RadioQuestion', 'DropDownQuestion'].include? question.type
     header = [question.content, 'No. of Answers']
     question.options.map do |option|
       [option.content, question.answers.joins(:response).where("responses.complete = true AND answers.content = ?", option.content).count]
