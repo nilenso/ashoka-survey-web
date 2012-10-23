@@ -4,7 +4,7 @@ class Response < ActiveRecord::Base
   belongs_to :survey
   has_many :answers, :dependent => :destroy
   accepts_nested_attributes_for :answers
-  attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :complete
+  attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id
   validates_presence_of :survey_id
   validates_presence_of :organization_id
   validates_presence_of :user_id
@@ -14,12 +14,24 @@ class Response < ActiveRecord::Base
     answers.find_all { |answer| answer.question.identifier? }
   end
 
-  def mark_complete
-    self.update_attribute(:complete, true)
+  def complete
+    self.update_attribute(:status, 'complete')
   end
 
-  def mark_incomplete
-    self.update_attribute(:complete, false)
+  def incomplete
+    self.update_attribute(:status, 'incomplete')
+  end
+
+  def validating
+    self.update_attribute(:status, 'validating')
+  end
+
+  def complete?
+    status == 'complete'
+  end
+
+  def validating?
+    status == 'validating'
   end
   
   def set(survey_id, user_id, organization_id)

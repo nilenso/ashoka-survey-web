@@ -137,8 +137,8 @@ describe Survey do
       survey = FactoryGirl.create(:survey)
       question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey_id => survey.id).id)
       another_question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey_id => survey.id).id)
-      5.times { question.answers << FactoryGirl.create(:answer, :content => question.options.first.content) }
-      3.times { question.answers << FactoryGirl.create(:answer, :content => question.options.last.content) }
+      5.times { question.answers << FactoryGirl.create(:answer_with_complete_response, :content => question.options.first.content) }
+      3.times { question.answers << FactoryGirl.create(:answer_with_complete_response, :content => question.options.last.content) }
       survey.questions_with_report_data.should == [question]
     end
   end

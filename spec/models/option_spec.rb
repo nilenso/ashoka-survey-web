@@ -56,7 +56,7 @@ describe Option do
   context "reports" do
     it "counts the number of times it has been the answer to its question" do
       option = FactoryGirl.create(:option)
-      5.times { FactoryGirl.create(:answer, :content => option.content, :question_id => option.question_id) }
+      5.times { FactoryGirl.create(:answer_with_complete_response, :content => option.content, :question_id => option.question_id) }
       option.report_data.should == 5
     end
   end

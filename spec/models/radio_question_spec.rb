@@ -15,8 +15,8 @@ describe RadioQuestion do
   context "reports" do
     it "counts all its answers grouped by the option's content " do
       question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)
-      5.times { question.answers << FactoryGirl.create(:answer, :content => question.options.first.content) }
-      3.times { question.answers << FactoryGirl.create(:answer, :content => question.options.last.content) }
+      5.times { question.answers << FactoryGirl.create(:answer_with_complete_response, :content => question.options.first.content) }
+      3.times { question.answers << FactoryGirl.create(:answer_with_complete_response, :content => question.options.last.content) }
       question.report_data.should include [question.options.first.content, 5]
       question.report_data.should include [question.options.last.content, 3]
     end

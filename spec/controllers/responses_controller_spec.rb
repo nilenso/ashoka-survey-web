@@ -108,7 +108,7 @@ describe ResponsesController do
       survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
       question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
       res = FactoryGirl.create(:response, :survey => survey,
-                               :organization_id => 1, :user_id => 2, :complete => true)
+                               :organization_id => 1, :user_id => 2, :status => 'validating')
       answer = FactoryGirl.create(:answer, :question => question)
       res.answers << answer
       put :update, :id => res.id, :survey_id => survey.id, :response =>

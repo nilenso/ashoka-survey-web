@@ -54,7 +54,7 @@ module Api
         it "returns a bad request if you give a invalid response" do
           survey = FactoryGirl.create(:survey)
           question = FactoryGirl.create(:question, :mandatory => true)
-          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1, :complete => true)
+          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1, :status => 'incomplete`')
           resp_attr = { :answers_attributes =>  { '0' => {'content' => nil, 'question_id' => question.id} } }
           put :update, :id => resp.id, :response => resp_attr
           response.should_not be_ok

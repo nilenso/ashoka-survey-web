@@ -11,6 +11,6 @@ class Option < ActiveRecord::Base
   end
 
   def report_data
-    Answer.joins(:response).where("answers.question_id = ? AND responses.complete = true AND answers.content = ?", question_id, content).count
+    Answer.joins(:response).where("answers.question_id = ? AND responses.status = 'complete' AND answers.content = ?", question_id, content).count
   end
 end

@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Response do
   it { should belong_to(:survey) }
-  it { should have_db_column(:complete).with_options(default: false) }
+  it { should have_db_column(:status).with_options(default: 'incomplete') }
   it { should have_many(:answers).dependent(:destroy) }
   it { should accept_nested_attributes_for(:answers) }
   it { should respond_to(:user_id) }
@@ -10,7 +10,6 @@ describe Response do
   it { should validate_presence_of(:organization_id)}
   it { should validate_presence_of(:user_id)}
   it { should allow_mass_assignment_of(:survey_id) }
-  it { should allow_mass_assignment_of(:complete) }
 
 
   it "fetches the answers for the identifier questions" do
@@ -26,8 +25,17 @@ describe Response do
     it "marks the response incomplete" do
       survey = FactoryGirl.create(:survey)
       response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
-      response.mark_incomplete
+      response.incomplete
       response.reload.should_not be_complete
+      response.complete
+      response.reload.should be_complete
+    end
+
+    it "returns whether a response is complete or not" do
+     survey = FactoryGirl.create(:survey)
+     response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
+     response.validating
+     response.reload.should be_validating 
     end
   end
 

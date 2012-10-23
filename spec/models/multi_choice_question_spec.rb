@@ -14,7 +14,7 @@ describe MultiChoiceQuestion do
     it "returns the number of answers grouped by option content" do
       question = MultiChoiceQuestion.find(FactoryGirl.create(:question_with_options, :type => 'MultiChoiceQuestion').id)
       5.times do
-        answer = FactoryGirl.create(:answer)
+        answer = FactoryGirl.create(:answer_with_complete_response)
         answer.choices << FactoryGirl.create(:choice, :option_id => question.options.first.id)
         question.answers << answer
       end
