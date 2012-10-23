@@ -5,25 +5,19 @@
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
       function drawChart() {
-
-        var options = {
-          title: 'My Daily Activities'
-        };
-
         var chart, data;
 
-        <% @survey.questions.each do |question| %>          
+        <% @survey.questions_with_report_data.each do |question| %>          
           data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
           chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
-          chart.draw(data, options);
+          chart.draw(data, { title: "<%= question.content %>"});
         <% end %>
       }
     </script>
   </head>
   <body>
-    <% @survey.questions.each do |question| %>
-      <%= question.content %>
-      <div id="chart_div_<%= question.id %>" style="width: 500px; height: 300px;"></div>
+    <% @survey.questions_with_report_data.each do |question| %>
+      <div id="chart_div_<%= question.id %>"></div>
     <% end %>
   </body>
 </html>
