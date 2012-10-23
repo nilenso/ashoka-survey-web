@@ -131,4 +131,15 @@ describe Survey do
     survey.first_level_questions.should include question
     survey.first_level_questions.should_not include nested_question
   end
+
+  context "reports" do
+    it "finds all questions which have report data" do
+      survey = FactoryGirl.create(:survey)
+      question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey_id => survey.id).id)
+      another_question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey_id => survey.id).id)
+      5.times { question.answers << FactoryGirl.create(:answer, :content => question.options.first.content) }
+      3.times { question.answers << FactoryGirl.create(:answer, :content => question.options.last.content) }
+      survey.questions_with_report_data.should == [question]
+    end
+  end
 end

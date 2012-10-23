@@ -64,6 +64,10 @@ class Survey < ActiveRecord::Base
     first_level_questions.map(&:with_sub_questions_in_order).flatten.map(&:id)
   end
 
+  def questions_with_report_data
+    questions.reject { |question| question.report_data.blank? }
+  end
+
   private
 
   def expiry_date_should_not_be_in_past
