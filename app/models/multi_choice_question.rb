@@ -2,4 +2,9 @@
 
 class MultiChoiceQuestion < Question
   has_many :options, :dependent => :destroy,  :foreign_key => :question_id
+
+  def report_data
+    choice_ids = Choice.joins(:answer => :response).where(:responses => {:complete => true}, :option_id => options.map(&:id)).map(&:option_id)
+    options.map { |option| [option.content, choice_ids.count(option.id)] }
+  end
 end
