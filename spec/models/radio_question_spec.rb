@@ -20,5 +20,10 @@ describe RadioQuestion do
       question.report_data.should include [question.options.first.content, 5]
       question.report_data.should include [question.options.last.content, 3]
     end
+
+    it "returns an empty array if no answers exist for the question" do
+      question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)
+      question.report_data.should be_empty
+    end
   end
 end

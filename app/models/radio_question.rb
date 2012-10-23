@@ -6,6 +6,7 @@ class RadioQuestion < Question
   end
 
   def report_data
+    return [] if answers.select { |answer| answer.response.complete? }.blank?
     options.map { |option| [option.content, option.report_data] }
   end
 end
