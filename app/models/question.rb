@@ -1,7 +1,7 @@
 # A specificaton for a piece of info that the survey designer wants to collect.
 
 class Question < ActiveRecord::Base
-  belongs_to :parent, :class_name => Option  
+  belongs_to :parent, :class_name => Option
   belongs_to :survey
   attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number, :parent_id, :identifier
   validates_presence_of :content

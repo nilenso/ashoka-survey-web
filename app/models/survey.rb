@@ -26,11 +26,11 @@ class Survey < ActiveRecord::Base
     User.find_by_organization(access_token, organization_id).select { |user| self.user_ids.include?(user.id) }
   end
 
-  amoeba do 
-    enable 
+  amoeba do
+    enable
     include_field :questions
   end
-  
+
   def duplicate
     survey = self.dup
     survey.published = false
@@ -47,8 +47,8 @@ class Survey < ActiveRecord::Base
   end
 
   def share_with_organizations(organizations)
-    organizations.each do |organization_id| 
-      self.participating_organizations.create(:organization_id => organization_id) 
+    organizations.each do |organization_id|
+      self.participating_organizations.create(:organization_id => organization_id)
     end
   end
 
