@@ -6,18 +6,44 @@
       google.setOnLoadCallback(drawChart);
         var chart, data, params={};
 
+
+      function dateReportData(report_data_json) {
+        var report_data = _(JSON.parse(report_data_json)).rest()
+
+        _(report_data).each(function(dateString){
+          dateString[0] = new Date(dateString[0]);
+        });
+
+        return report_data;
+      }
+
       function drawChart() {
         <% @survey.questions_with_report_data.each do |question| %>
           data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
           <% if question.respond_to? :options %>
             chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
+
+          <% elsif question.type == 'DateQuestion'%>
+            data = new google.visualization.DataTable();
+            chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
+
+            data.addColumn('date', 'Value');
+            data.addColumn('number', 'Answer / Count');
+
+            var report_data = dateReportData('<%= @survey.report_data_for(question) %>')
+
+            data.addRows(report_data)
+            params = {
+              vAxis: {'title': 'Count'},
+              hAxis: {'title': 'Answer'},
+            }
           <% else %>
             chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
             params = {
               vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %> },
               hAxis: {'title': 'Answer', minValue: <%= question.min_value_for_report %> , maxValue: <%= question.max_value_for_report %>},
             }
-        <% end %>
+          <% end %>
           params['title'] = '<%= question.content %>' ;
           chart.draw(data, params);
         <% end %>
