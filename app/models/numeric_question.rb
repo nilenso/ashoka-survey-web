@@ -4,6 +4,13 @@ class NumericQuestion < Question
   attr_accessible  :max_value, :min_value
   validate :min_value_less_than_max_value
 
+  def report_data
+    answers_content = answers.map(&:content)
+    answers_content.uniq.inject([]) do |data, content|
+      data.push [content.to_i, answers_content.count(content)]
+    end
+  end
+
   private
 
   def min_value_less_than_max_value

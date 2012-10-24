@@ -33,7 +33,7 @@ class Response < ActiveRecord::Base
   def validating?
     status == 'validating'
   end
-  
+
   def set(survey_id, user_id, organization_id)
     self.survey_id = survey_id
     self.organization_id = organization_id

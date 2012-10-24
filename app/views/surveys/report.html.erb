@@ -4,13 +4,22 @@
     <script type="text/javascript">
       google.load("visualization", "1", {packages:["corechart"]});
       google.setOnLoadCallback(drawChart);
-      function drawChart() {
-        var chart, data;
+        var chart, data, params={};
 
-        <% @survey.questions_with_report_data.each do |question| %>          
+      function drawChart() {
+        <% @survey.questions_with_report_data.each do |question| %>
           data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
-          chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
-          chart.draw(data, { title: "<%= question.content %>"});
+          <% if question.respond_to? :options %>
+            chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
+          <% else %>
+            chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
+            params = {
+              vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %>},
+              hAxis: {'title': 'Answer', minValue: <%= question.min_value.to_i %> , maxValue: <%= question.max_value.to_i %>},
+            }
+        <% end %>
+          params['title'] = '<%= question.content %>' ;
+          chart.draw(data, params);
         <% end %>
       }
     </script>
