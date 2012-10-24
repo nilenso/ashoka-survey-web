@@ -6,7 +6,12 @@ class DropDownQuestion < Question
   end
 
   def report_data
-    return [] if answers.select { |answer| answer.response.complete? }.blank?
+    return [] if no_answers?
     options.map { |option| [option.content, option.report_data] }
+  end
+
+  private
+  def no_answers?
+    answers.select { |answer| answer.response.complete? }.blank?
   end
 end
