@@ -20,7 +20,7 @@ class SurveyDecorator < Draper::Base
   end
 
   def report_data_for(question)
-    header = [question.content, 'No. of Answers']
+    header = [question.content, 'Answer / Count']
     question.report_data.unshift(header).to_json.html_safe
   end
 
