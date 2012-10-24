@@ -21,8 +21,10 @@
           <% response.answers_for_identifier_questions.each do |answer| %> 
             <td><%= answer.content %> </td>
           <% end %>
-          <td><%= link_to 'Edit', edit_survey_response_path(:id => response.id) %></td>
-          <td><%= link_to image_tag("delete.png"), survey_response_path(:id => response.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, response %></td>
+          <td>
+            <%= link_to 'Edit', edit_survey_response_path(:id => response.id) %>
+            <%= link_to image_tag("delete.png"), survey_response_path(:id => response.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, response %>
+          </td>
           <td><%= response.complete? ? t(".completed") : t(".incomplete") %></td>
         </tr>
         <% end %>
