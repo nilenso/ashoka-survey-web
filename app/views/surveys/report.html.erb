@@ -14,8 +14,8 @@
           <% else %>
             chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
             params = {
-              vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %>},
-              hAxis: {'title': 'Answer', minValue: <%= question.min_value.to_i %> , maxValue: <%= question.max_value.to_i %>},
+              vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %> },
+              hAxis: {'title': 'Answer', minValue: <%= question.min_value_for_report %> , maxValue: <%= question.max_value_for_report %>},
             }
         <% end %>
           params['title'] = '<%= question.content %>' ;

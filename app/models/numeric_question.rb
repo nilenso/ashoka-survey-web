@@ -11,6 +11,14 @@ class NumericQuestion < Question
     end
   end
 
+  def min_value_for_report
+    min_value || 0
+  end
+
+  def max_value_for_report
+    max_value || answers.map(&:content).max
+  end
+
   private
 
   def min_value_less_than_max_value
