@@ -15,15 +15,15 @@ class Response < ActiveRecord::Base
   end
 
   def complete
-    self.update_attribute(:status, 'complete')
+    update_attribute(:status, 'complete')
   end
 
   def incomplete
-    self.update_attribute(:status, 'incomplete')
+   update_attribute(:status, 'incomplete')
   end
 
   def validating
-    self.update_attribute(:status, 'validating')
+   update_attribute(:status, 'validating')
   end
 
   def complete?

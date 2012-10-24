@@ -3,7 +3,7 @@ class ResponsesController < ApplicationController
   load_and_authorize_resource :through => :survey
 
   before_filter :survey_published
-  
+
   def index
     @responses = @responses.paginate(:page => params[:page], :per_page => 10)
   end
