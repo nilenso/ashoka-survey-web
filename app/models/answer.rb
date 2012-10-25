@@ -35,6 +35,7 @@ class Answer < ActiveRecord::Base
   end
 
   def content_for_excel(server_url='')
+    # TODO: Refactor these `if`s when implementing STI for the Answer model
     return choices.map(&:content).join(", ") if question.type == 'MultiChoiceQuestion'
     return (server_url + photo.url) if question.type == 'PhotoQuestion'
     return content
