@@ -45,6 +45,12 @@ describe ResponsesController do
       response.should be_ok
       assigns(:responses).should == Response.find_all_by_survey_id(survey.id)
     end
+
+    it "responds to XLS" do
+      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      get :index, :survey_id => survey.id, :format => :xls
+      response.should be_ok
+    end
   end
 
   context "GET 'edit'" do

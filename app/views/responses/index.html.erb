@@ -2,6 +2,7 @@
 
 <h1> <%= t '.list_of_responses' %> </h1>
 <%= link_to 'Add response', survey_responses_path(@survey), :method => :post%>
+<%= link_to t('Download Excel'), survey_responses_path(format: :xls) %>
 <div>
   <% unless @responses.blank? %>
     <table class="surveys_table">

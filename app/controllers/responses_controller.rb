@@ -6,6 +6,10 @@ class ResponsesController < ApplicationController
 
   def index
     @responses = @responses.paginate(:page => params[:page], :per_page => 10)
+    respond_to do |format|
+      format.html
+      format.xls
+    end
   end
 
   def create
