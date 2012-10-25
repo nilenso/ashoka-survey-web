@@ -40,7 +40,11 @@ class ApplicationController < ActionController::Base
     session[:user_info][:org_id] if user_currently_logged_in?
   end
 
-  helper_method :user_currently_logged_in?, :signed_in_as_cso_admin?, :current_user_org
+  def current_username
+    current_user_info[:name]
+  end
+
+  helper_method :user_currently_logged_in?, :signed_in_as_cso_admin?, :current_user_org, :current_username
 
   def oauth_client
     @oauth_client ||= OAuth2::Client.new(ENV["OAUTH_ID"], ENV["OAUTH_SECRET"], :site => ENV["OAUTH_SERVER_URL"])

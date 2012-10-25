@@ -74,4 +74,10 @@ describe ApplicationController do
     sign_in_as('user')
     controller.signed_in_as_cso_admin?.should be_false
   end
+
+  it "returns current user's name" do
+    sign_in_as('cso_admin')
+    session[:user_info][:name] = 'Tim'
+    controller.current_username.should == 'Tim'
+  end
 end
