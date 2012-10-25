@@ -16,7 +16,7 @@
         <Row>
           <% response.questions.each do |question| %>
             <% answer = response.answers.find_by_question_id(question.id) %>
-            <Cell><Data ss:Type="String"><%= answer.content %></Data></Cell>        
+            <Cell><Data ss:Type="String"><%= answer.content_for_excel(server_url) %></Data></Cell>
           <% end %>
         </Row>
       <% end %>

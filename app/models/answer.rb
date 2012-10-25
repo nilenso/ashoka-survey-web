@@ -1,6 +1,8 @@
 # A piece of information for a question
 
 class Answer < ActiveRecord::Base
+  include Rails.application.routes.url_helpers
+
   belongs_to :question
   belongs_to :response
   attr_accessible :content, :question_id, :option_ids
@@ -32,8 +34,9 @@ class Answer < ActiveRecord::Base
     question.content
   end
 
-  def content_for_excel
+  def content_for_excel(server_url='')
     return choices.map(&:content).join(", ") if question.type == 'MultiChoiceQuestion'
+    return (server_url + photo.url) if question.type == 'PhotoQuestion'
     return content
   end
 

@@ -34,4 +34,7 @@ SurveyWeb::Application.configure do
 
   # Print deprecation notices to the stderr
   config.active_support.deprecation = :stderr
+
+  # Use `url_for` in a spec.
+  Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 end

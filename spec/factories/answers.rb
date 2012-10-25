@@ -1,5 +1,6 @@
 # Read about factories at https://github.com/thoughtbot/factory_girl
 
+include ActionDispatch::TestProcess
 FactoryGirl.define do
   factory :answer do
     content "MyText"
@@ -18,6 +19,11 @@ FactoryGirl.define do
     factory :answer_with_choices do
       question { FactoryGirl.create(:question, :type => 'MultiChoiceQuestion') }
       choices  { FactoryGirl.create_list(:choice, 5) }
+    end
+
+    factory :answer_with_image do
+      question { FactoryGirl.create(:question, :type => 'PhotoQuestion') }
+      photo { fixture_file_upload(Rails.root.to_s + '/spec/fixtures/images/sample.jpg', 'image/jpeg') }
     end
   end
 end
