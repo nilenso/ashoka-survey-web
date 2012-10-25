@@ -5,11 +5,16 @@
     xmlns:x="urn:schemas-microsoft-com:office:excel"
     xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet"
     xmlns:html="http://www.w3.org/TR/REC-html40">
+    <Styles>
+      <Style ss:ID="bold">
+          <Font ss:Bold="1"/>
+      </Style>
+    </Styles>
     <Worksheet ss:Name="Sheet1">
       <Table>
         <Row>
           <% @responses.first.questions.each do |question| %>
-            <Cell><Data ss:Type="String"><%= question.content %></Data></Cell>
+            <Cell ss:StyleID="bold"><Data ss:Type="String"><%= question.content %></Data></Cell>
           <% end %>
         </Row>
       <% @responses.each do |response| %>
