@@ -15,8 +15,9 @@ module Api
           response.complete
           render :nothing => true
         else
-          response.incomplete
-          render :json => response.to_json, :status => :bad_request
+          response_json = response.to_json
+          response.destroy
+          render :json => response_json, :status => :bad_request
         end
       end
 

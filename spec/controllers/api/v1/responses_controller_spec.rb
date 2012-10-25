@@ -9,9 +9,9 @@ module Api
         let (:question) { FactoryGirl.create(:question) }
 
         it "creates an response" do
-          resp = FactoryGirl.attributes_for(:response)
+          resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>{})
           expect {
-            post :create, :survey_id => survey.id, :response => resp
+            post :create, :response => resp
           }.to change { Response.count }.by 1
         end
 
@@ -36,10 +36,12 @@ module Api
           response.body.should be_blank
         end
 
-        it "should mark a complete response as incomplete and return it if it fails the validation" do
+        it "should not create the response and should return it if it fails the validation" do
           question = FactoryGirl.create(:question, :type => 'SingleLineQuestion', :mandatory => true)
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :status => 'complete', :answers_attributes =>  { '0' => {'content' => "", 'question_id' => question.id} })
-          post :create, :response => resp
+          expect {
+            post :create, :response => resp
+          }.to change {Response.count}.by 0
           response.should_not be_ok
           response.status.should == 400
           JSON.parse(response.body).keys.should =~ Response.new.attributes.keys
