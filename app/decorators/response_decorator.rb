@@ -17,7 +17,7 @@ class ResponseDecorator < Draper::Base
 
     when 'NumericQuestion'
       has_range = question.max_value && question.min_value
-      f.input :content, :label => question.content, :as => :number, :required => question.mandatory, :hint => numeric_question_hint(question.max_value, question.min_value)
+      f.input :content, :label => question.content, :as => :number, :required => question.mandatory, :hint => numeric_question_hint(question.min_value, question.max_value)
 
     when 'DateQuestion'
       f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => 'date' }
