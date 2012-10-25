@@ -7,7 +7,10 @@ class ResponsesController < ApplicationController
   def index
     respond_to do |format|
       format.html { @responses = @responses.paginate(:page => params[:page], :per_page => 10) }
-      format.xls  { @responses.select! { |response| response.complete? } }
+      format.xls  do
+        @responses.select! { |response| response.complete? }
+        headers["Content-Disposition"] = "attachment; filename=\"#{@responses.first.try(:filename_for_excel)}\""
+      end
     end
   end
 

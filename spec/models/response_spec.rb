@@ -55,4 +55,12 @@ describe Response do
     response = FactoryGirl.build(:response, :survey_id => survey.id)
     response.questions.should == survey.questions
   end
+
+  it "provides the filename for the excel file" do
+    survey = FactoryGirl.create(:survey)
+    response = FactoryGirl.build(:response, :survey_id => survey.id)
+    response.filename_for_excel.should =~ /#{survey.name}/
+    response.filename_for_excel.should include Time.now.to_s
+    response.filename_for_excel.should =~ /.*xls$/
+  end
 end

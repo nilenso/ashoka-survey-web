@@ -43,4 +43,8 @@ class Response < ActiveRecord::Base
     self.organization_id = organization_id
     self.user_id = user_id
   end
+
+  def filename_for_excel
+    "#{survey.name} - #{Time.now}.xls"
+  end
 end
