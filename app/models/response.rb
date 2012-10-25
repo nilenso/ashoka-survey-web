@@ -34,6 +34,10 @@ class Response < ActiveRecord::Base
     status == 'validating'
   end
 
+  def questions
+    survey.questions
+  end
+
   def set(survey_id, user_id, organization_id)
     self.survey_id = survey_id
     self.organization_id = organization_id

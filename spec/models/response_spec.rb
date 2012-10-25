@@ -49,4 +49,10 @@ describe Response do
       response.organization_id.should == 6
     end
   end
+
+  it "gets the questions that it contains answers for" do
+    survey = FactoryGirl.create(:survey)
+    response = FactoryGirl.build(:response, :survey_id => survey.id)
+    response.questions.should == survey.questions
+  end
 end
