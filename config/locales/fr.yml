@@ -7,6 +7,7 @@ fr:
     home: "Page d'accueil"
     log_in: "Connexion"
     logout: "Déconnexion"
+    logged_in_as: "Bonjour, %{username}!"
 
   flash:
     survey_created: "Enquête créé avec succès"

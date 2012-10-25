@@ -7,6 +7,7 @@ en:
     home: "Home"
     log_in: "Log In"
     logout: "Log Out"
+    logged_in_as: "Hello, %{username}!"
 
   flash:
     survey_created: "Survey created successfully"

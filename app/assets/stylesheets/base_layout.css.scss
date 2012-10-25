@@ -26,6 +26,13 @@ $base-font-size : 16px;
     }
   }
 
+  .username {
+    float: right;
+    padding: 0.1em 1em;
+    color: $link_color;
+  }
+
+
   a {
     color: $link_color; 
     text-decoration: none;
