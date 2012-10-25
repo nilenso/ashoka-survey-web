@@ -5,10 +5,9 @@ class ResponsesController < ApplicationController
   before_filter :survey_published
 
   def index
-    @responses = @responses.paginate(:page => params[:page], :per_page => 10)
     respond_to do |format|
-      format.html
-      format.xls
+      format.html { @responses = @responses.paginate(:page => params[:page], :per_page => 10) }
+      format.xls  { @responses.select! { |response| response.complete? } }
     end
   end
 

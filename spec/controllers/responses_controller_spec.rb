@@ -46,10 +46,21 @@ describe ResponsesController do
       assigns(:responses).should == Response.find_all_by_survey_id(survey.id)
     end
 
-    it "responds to XLS" do
-      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
-      get :index, :survey_id => survey.id, :format => :xls
-      response.should be_ok
+    context "excel" do
+      it "responds to XLS" do
+        survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+        get :index, :survey_id => survey.id, :format => :xls
+        response.should be_ok
+      end
+
+      it "assigns only the completed responses" do
+        survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+        response = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+        incomplete_response = FactoryGirl.create(:response, :status => 'incomplete', :survey => survey)
+        validating_response = FactoryGirl.create(:response, :status => 'validating', :survey => survey)
+        get :index, :survey_id => survey.id, :format => :xls
+        assigns(:responses).should == [response]
+      end
     end
   end
 
