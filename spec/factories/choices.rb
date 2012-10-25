@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :choice do
-    option_id nil
+    option { FactoryGirl.create :option }
     answer nil
   end
 end

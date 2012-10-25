@@ -14,5 +14,10 @@ FactoryGirl.define do
         answer.save
       end
     end
+
+    factory :answer_with_choices do
+      question { FactoryGirl.create(:question, :type => 'MultiChoiceQuestion') }
+      choices  { FactoryGirl.create_list(:choice, 5) }
+    end
   end
 end

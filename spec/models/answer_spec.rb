@@ -5,6 +5,7 @@ describe Answer do
   it { should respond_to(:content) }
   it { should belong_to(:question) }
   it { should belong_to(:response) }
+
   it { should have_many(:choices).dependent(:destroy) }
 
   context "validations" do
@@ -153,6 +154,24 @@ describe Answer do
       non_textual_question = FactoryGirl.create(:question, :type => "MultiChoiceQuestion")
       non_textual_answer = FactoryGirl.create(:answer, :question => non_textual_question)
       non_textual_answer.should_not be_text_type
+    end
+
+    context "#content_for_excel" do
+      it "returns a comma-separated list of choices for a MultiChoiceQuestion" do
+        question = FactoryGirl.create :question, :type => 'MultiChoiceQuestion'
+        answer = FactoryGirl.create :answer_with_choices, :question => question
+        answer.content_for_excel.should == answer.choices.map(&:content).join(', ')
+      end
+
+      it "returns the `image_url` for a PhotoQuestion" do
+        
+      end
+
+      it "returns the value of the `content` column for all other types" do
+        question = FactoryGirl.create :question, :type => 'SingleLineQuestion'
+        answer = FactoryGirl.create :answer_with_choices, :question => question, :content => "xyz"
+        answer.content_for_excel.should == "xyz"
+      end 
     end
   end
 

@@ -15,7 +15,7 @@ describe MultiChoiceQuestion do
       question = MultiChoiceQuestion.find(FactoryGirl.create(:question_with_options, :type => 'MultiChoiceQuestion').id)
       5.times do
         answer = FactoryGirl.create(:answer_with_complete_response)
-        answer.choices << FactoryGirl.create(:choice, :option_id => question.options.first.id)
+        answer.choices << FactoryGirl.create(:choice, :option => question.options.first)
         question.answers << answer
       end
       question.reload.report_data.should include [question.options.first.content, 5]

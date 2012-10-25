@@ -32,6 +32,11 @@ class Answer < ActiveRecord::Base
     question.content
   end
 
+  def content_for_excel
+    return choices.map(&:content).join(", ") if question.type == 'MultiChoiceQuestion'
+    return content
+  end
+
   private
 
   def response_validating?
