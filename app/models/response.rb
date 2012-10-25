@@ -4,7 +4,7 @@ class Response < ActiveRecord::Base
   belongs_to :survey
   has_many :answers, :dependent => :destroy
   accepts_nested_attributes_for :answers
-  attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id
+  attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status
   validates_presence_of :survey_id
   validates_presence_of :organization_id
   validates_presence_of :user_id
@@ -28,6 +28,10 @@ class Response < ActiveRecord::Base
 
   def complete?
     status == 'complete'
+  end
+
+  def incomplete?
+    status == 'incomplete'
   end
 
   def validating?

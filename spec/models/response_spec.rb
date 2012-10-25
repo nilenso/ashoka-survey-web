@@ -10,14 +10,15 @@ describe Response do
   it { should validate_presence_of(:organization_id)}
   it { should validate_presence_of(:user_id)}
   it { should allow_mass_assignment_of(:survey_id) }
+  it { should allow_mass_assignment_of(:status) }
 
 
   it "fetches the answers for the identifier questions" do
     response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
     identifier_question = FactoryGirl.create :question, :identifier => true
     normal_question = FactoryGirl.create :question, :identifier => false
-    response.answers << FactoryGirl.create(:answer, :question_id => identifier_question.id,  :response_id => response.id) 
-    response.answers << FactoryGirl.create(:answer, :question_id => normal_question.id,  :response_id => response.id) 
+    response.answers << FactoryGirl.create(:answer, :question_id => identifier_question.id,  :response_id => response.id)
+    response.answers << FactoryGirl.create(:answer, :question_id => normal_question.id,  :response_id => response.id)
     response.answers_for_identifier_questions.should == identifier_question.answers
   end
 
@@ -35,7 +36,14 @@ describe Response do
      survey = FactoryGirl.create(:survey)
      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
      response.validating
-     response.reload.should be_validating 
+     response.reload.should be_validating
+    end
+
+    it "returns whether a response is incomplete or not" do
+     survey = FactoryGirl.create(:survey)
+     response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
+     response.incomplete
+     response.reload.should be_incomplete
     end
   end
 
