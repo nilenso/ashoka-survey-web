@@ -6,6 +6,8 @@
     <% else %>
       <li><%= link_to t("header.log_in"), '/auth/user_owner', :class => 'signin' %></li>
     <% end %>
-    <a class='logout'><%= "You are a #{current_user_info.try(:[], :role)}" unless Rails.env.production? %></a>
+    <% unless Rails.env.production? %>
+        <a class='logout'><%= "You are a #{current_user_info.try(:[], :role)}" %></a>
+    <% end %>
   </ul>
 </div>
