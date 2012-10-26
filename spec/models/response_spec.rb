@@ -11,6 +11,7 @@ describe Response do
   it { should validate_presence_of(:user_id)}
   it { should allow_mass_assignment_of(:survey_id) }
   it { should allow_mass_assignment_of(:status) }
+  it { should allow_mass_assignment_of(:updated_at) }
 
 
   it "fetches the answers for the identifier questions" do

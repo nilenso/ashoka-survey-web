@@ -5,7 +5,7 @@ class Answer < ActiveRecord::Base
 
   belongs_to :question
   belongs_to :response
-  attr_accessible :content, :question_id, :option_ids
+  attr_accessible :content, :question_id, :option_ids, :updated_at
   validate :mandatory_questions_should_be_answered, :if => :response_validating?
   validate :content_should_not_exceed_max_length
   validate :content_should_be_in_range

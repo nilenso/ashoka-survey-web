@@ -7,6 +7,7 @@ describe Answer do
   it { should belong_to(:response) }
 
   it { should have_many(:choices).dependent(:destroy) }
+  it { should allow_mass_assignment_of(:updated_at) }
 
   context "validations" do
     it "does not save if a mandatory question is not answered for a complete response" do
