@@ -10,12 +10,12 @@ module Api
         response.update_attributes({:answers_attributes => answers_attributes}) if response.save
 
         if response.incomplete? && response.valid?
-          render :json => response.to_json
+          render :json => response.to_json(:methods => :answers)
         elsif response.validating? && response.valid?
           response.complete
           render :nothing => true
         else
-          response_json = response.to_json
+          response_json = response.to_json(:methods => :answers)
           response.destroy
           render :json => response_json, :status => :bad_request
         end
@@ -23,6 +23,10 @@ module Api
 
       def update
         response = Response.find(params[:id])
+        # TODO
+        # validate as appropriate
+        # merge response and its answers based on update time in model
+        # follow same logic as create for giving back response with answers
         response.validating
         if response.update_attributes(params[:response])
           response.complete

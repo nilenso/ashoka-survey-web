@@ -22,11 +22,11 @@ module Api
           }.to change { Answer.count }.by 1
         end
 
-        it "should return the newly created response as JSON if it is incomplete" do
+        it "should return the newly created response with answers as JSON if it is incomplete" do
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
           post :create, :response => resp
           response.should be_ok
-          JSON.parse(response.body).keys.should =~ Response.new.attributes.keys
+          JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
         end
 
         it "should not return the newly created response if it is complete" do
@@ -36,7 +36,7 @@ module Api
           response.body.should be_blank
         end
 
-        it "should not create the response and should return it if it fails the validation" do
+        it "should not create the response and should return it with answers if it fails the validation" do
           question = FactoryGirl.create(:question, :type => 'SingleLineQuestion', :mandatory => true)
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :status => 'complete', :answers_attributes =>  { '0' => {'content' => "", 'question_id' => question.id} })
           expect {
@@ -44,7 +44,7 @@ module Api
           }.to change {Response.count}.by 0
           response.should_not be_ok
           response.status.should == 400
-          JSON.parse(response.body).keys.should =~ Response.new.attributes.keys
+          JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
         end
 
         it "returns the response with a bad_request if you give a invalid response" do
