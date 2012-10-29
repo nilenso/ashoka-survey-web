@@ -118,6 +118,15 @@ describe Answer do
         answer.choices.should == []
       end
 
+      it "doesn't create duplicate choices for an answer" do
+        question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
+        options = FactoryGirl.create_list(:option, 3, :question_id => question.id)
+        option_ids = options.map(&:id)
+        answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => option_ids)
+        answer.option_ids = [options.first.id]
+        answer.choices.map(&:option_id).should =~ [options.first.id]
+      end
+
       it "doesn't change the answer content" do
         choices = ["first"]
         question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
