@@ -97,6 +97,9 @@ en:
     index:
       list_of_responses: "List of Responses"
 
+    edit:
+      delete: "Delete"
+
   answers:
     validations:
       mandatory_question: This question is mandatory.

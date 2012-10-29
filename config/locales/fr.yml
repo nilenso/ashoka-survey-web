@@ -94,6 +94,9 @@ fr:
     index:
       list_of_responses: "Liste des réponses"
 
+    edit:
+      delete: "Delete-fr"
+
   answers:
     validations:
       mandatory_question: Cette question est obligatoire.
