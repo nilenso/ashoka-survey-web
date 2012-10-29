@@ -22,7 +22,7 @@ describe 'BackboneSurveyBuilder', js: true do
     it "should add a radio question in the dummy" do
       dummy = find("#dummy_pane").find('div[type=RadioQuestion]')
       dummy.should_not be_nil
-      dummy.should have_content("Untitled question")
+      dummy.should have_content("Untitled Question")
       dummy.should have_content("First Option")
       dummy.should have_content("Second Option")
       dummy.should have_content("Third Option")
@@ -94,7 +94,7 @@ describe 'BackboneSurveyBuilder', js: true do
     it "should add a single line question in the dummy" do
       dummy = find("#dummy_pane").find('div[type=SingleLineQuestion]')
       dummy.should_not be_nil
-      dummy.should have_content("Untitled question")
+      dummy.should have_content("Untitled Question")
     end
 
     it "should add a hidden single line question in the settings pane" do
