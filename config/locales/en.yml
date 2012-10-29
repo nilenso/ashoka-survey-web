@@ -1,7 +1,7 @@
 en:
   application_title: "Survey Application"
   confirm: "Are you sure?"
-  login_again: Your session has expired. Please login again. 
+  login_again: Your session has expired. Please login again.
 
   header:
     home: "Home"
@@ -76,10 +76,11 @@ en:
       option: "Option"
       question_title: "Question Title"
       save_survey: "Save Survey"
+      delete_survey: "Delete Survey"
 
     share_with_organizations:
       share_survey: "Share Survey"
-    
+
     publish_to_users:
       publish_survey: "Publish Survey"
 

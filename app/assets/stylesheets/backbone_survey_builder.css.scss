@@ -165,8 +165,13 @@ h1#heading {
   }
 }
 
-#save {
-  clear: left;
+#actions {
+  @include span-columns(4, 12);
+  text-align: center;
+  input {
+    width : 50%;
+    margin-top: 4px;
+  }
 }
 
 #notifications {

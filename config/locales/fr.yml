@@ -74,6 +74,7 @@ fr:
       option: "Option"
       question_title: "Titre de la question"
       save_survey: Économiser de l'enquête
+      delete_survey: Delete de l'enquête
 
     share_with_organizations:
       share_survey: "In french: Share Survey"
@@ -133,4 +134,4 @@ fr:
     previous_label: "&#8592; Précédent"
     next_label: "Suivant &#8594;"
     page_gap: "&hellip;"
-   
+
