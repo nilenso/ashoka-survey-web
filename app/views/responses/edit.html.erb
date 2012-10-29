@@ -16,6 +16,7 @@
     <% unless @response.complete? %>
       <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' } %>
     <% end %>
+    <%= button_to t(".delete"), survey_response_path(@response.id),:class => "formtastic button", :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, @response %>
   <% end %>
 <% end %>
 
@@ -26,7 +27,7 @@
       $(this).charCount({
         allowed: $(this).data('max-length'),
         warning: 5,
-        counterText: 'Characters left: '        
+        counterText: 'Characters left: '
       });
     });
     $('.star').each(function(index){

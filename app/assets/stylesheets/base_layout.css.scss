@@ -34,7 +34,7 @@ $base-font-size : 16px;
 
 
   a {
-    color: $link_color; 
+    color: $link_color;
     text-decoration: none;
     &:hover { color: darken($link_color, 20%); }
   }
@@ -93,4 +93,8 @@ h2{
 
 li {
   list-style-type: none;
+}
+
+.formtastic.button {
+  padding:3px 8px;
 }
