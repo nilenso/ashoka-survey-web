@@ -27,9 +27,8 @@ module Api
         answers_attributes = params[:response].delete(:answers_attributes)
         response.update_attributes(params[:response]) # Response isn't saved before the answers, so we need to create the answers after this.
         response.validating if params[:response][:status] == "complete"
-        response.update_attributes({:answers_attributes => answers_attributes}) if response.save
-        # TODO
-        # merge response and its answers based on update time in model
+        answers_to_update = response.select_new_answers(answers_attributes)
+        response.update_attributes({ :answers_attributes => answers_to_update }) if response.save
         if response.incomplete? && response.valid?
           render :json => response.to_json(:methods => :answers)
         elsif response.validating? && response.valid?

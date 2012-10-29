@@ -51,4 +51,11 @@ class Response < ActiveRecord::Base
   def filename_for_excel
     "#{survey.name} - #{Time.now}.xls"
   end
+
+  def select_new_answers(answers_attributes)
+    answers_attributes.reject do |_, answer_attributes|
+      existing_answer = answers.find_by_id(answer_attributes['id'])
+      existing_answer && (Time.parse(answer_attributes['updated_at']) < existing_answer.updated_at)
+    end
+  end
 end

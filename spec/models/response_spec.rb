@@ -72,4 +72,19 @@ describe Response do
     response.filename_for_excel.should include Time.now.to_s
     response.filename_for_excel.should =~ /.*xls$/
   end
+
+  context "when updating answers" do
+    it "selects only the new answers to update" do
+      survey = FactoryGirl.create(:survey)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
+      question_1 = FactoryGirl.create(:question, :survey_id => survey.id)
+      question_2 = FactoryGirl.create(:question, :survey_id => survey.id)
+      answer_1 = FactoryGirl.create(:answer, :question_id => question_1.id, :updated_at => Time.now, :content => "older", :response_id => response.id)
+      answer_2 = FactoryGirl.create(:answer, :question_id => question_2.id, :updated_at => 5.hours.from_now, :content => "newer", :response_id => response.id)
+      answers_attributes = { '0' => {"question_id" => question_1.id, "updated_at" => 5.hours.from_now.to_s, "id" => answer_1.id, "content" => "newer"},
+                             '1' => {"question_id" => question_2.id, "updated_at" => Time.now.to_s, "id" => answer_2.id, "content" => "older"}}
+      selected_answers = response.select_new_answers(answers_attributes)
+      selected_answers.keys.should == ['0']
+    end
+  end
 end
