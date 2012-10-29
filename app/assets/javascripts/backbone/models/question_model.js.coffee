@@ -7,6 +7,9 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     mandatory: false
     identifier: false
 
+
+  initialize: ->
+    this.set('content', I18n.t('application_title'))
   has_errors: ->
     !_.isEmpty(this.errors)
 

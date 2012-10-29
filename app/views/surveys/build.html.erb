@@ -63,6 +63,7 @@
       $("#flash_messages").empty();
     }, 3000);
   });
+  I18n.locale = "<%= locale %>";
 </script>
 
 <%= @survey.build_mustache_templates %>

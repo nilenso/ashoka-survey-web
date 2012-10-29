@@ -32,6 +32,7 @@ SurveyWeb::Application.configure do
   # Do not compress assets
   config.assets.compress = false
 
+  config.assets.initialize_on_precompile = true
   # Expands the lines which load the assets
   config.assets.debug = true
 
@@ -39,3 +40,4 @@ SurveyWeb::Application.configure do
 
   Rails.application.routes.default_url_options[:host] = 'localhost:3000'
 end
+""
