@@ -139,3 +139,11 @@ fr:
     next_label: "Suivant &#8594;"
     page_gap: "&hellip;"
 
+  js:
+    untitled_survey: fr Untitled Survey
+    untitled_question: fr Untitled Question
+    save_successful: fr Your survey was saved!
+    save_unsuccessful: fr We had trouble saving your survey.
+    first_option: fr First Option
+    second_option: fr econd Option
+    third_option: fr Third Option

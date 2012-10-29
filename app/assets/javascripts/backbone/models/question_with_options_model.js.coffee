@@ -23,9 +23,9 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
   #Can't have a blank radio question. Initialize with 3 radio options
   seed: ->
     unless this.seeded
-      this.get('options').create({content: "First Option", order_number: this.get_order_counter() })
-      this.get('options').create({content: "Second Option", order_number: this.get_order_counter() })
-      this.get('options').create({content: "Third Option", order_number: this.get_order_counter() })
+      this.get('options').create({content: I18n.t('js.first_option'), order_number: this.get_order_counter() })
+      this.get('options').create({content: I18n.t('js.second_option'), order_number: this.get_order_counter() })
+      this.get('options').create({content: I18n.t('js.third_option'), order_number: this.get_order_counter() })
       this.seeded = true
 
   save_model: ->

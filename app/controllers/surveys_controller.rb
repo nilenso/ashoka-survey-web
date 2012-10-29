@@ -27,7 +27,7 @@ class SurveysController < ApplicationController
     @survey = Survey.new(params[:survey])
     @survey.organization_id = current_user_org
 
-    @survey.name ||= "Untitled Survey"
+    @survey.name ||= I18n.t('js.untitled_survey')
     @survey.expiry_date ||= 5.days.from_now
     @survey.description ||= "Description goes here"
 

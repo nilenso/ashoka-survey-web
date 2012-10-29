@@ -14,11 +14,11 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.dummy_pane    = new SurveyBuilder.Views.DummyPaneView(this.survey)
     $(this.el).ajaxStart(window.notifications_view.show_spinner)
     $(this.el).ajaxStop(window.notifications_view.hide_spinner)
-    
+
     $( "#sidebar" ).tabs();
 
     this.survey.fetch({
-        success: (data) => 
+        success: (data) =>
           this.dummy_pane.render()
           $.getJSON("/api/questions?survey_id=#{survey_id}", this.preload_questions)
       })
@@ -65,9 +65,9 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     $(this.el).find("#save input").prop('disabled', false)
     $(this.el).trigger('save_finished')
     @display_save_status()
-    
+
   display_save_status: ->
     if this.survey.has_errors()
-      window.notifications_view.set_error('We had trouble saving your survey.')
+      window.notifications_view.set_error(I18n.t('js.save_successful'),)
     else
-      window.notifications_view.set_notice('Your survey was saved!')
+      window.notifications_view.set_notice(I18n.t('js.save_unsuccessful'),)

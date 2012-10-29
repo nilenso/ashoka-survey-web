@@ -1,13 +1,13 @@
 <% types = [
-            '<option value="SingleLineQuestion">Single Line Question</option>',
-            '<option value="RadioQuestion">Radio Question</option>',
-            '<option value="MultilineQuestion">Multi Line Question</option>',
-            '<option value="NumericQuestion">Numeric Question</option>',
-            '<option value="DateQuestion">Date Question</option>',
-            '<option value="MultiChoiceQuestion">MultiChoice Question</option>',
-            '<option value="DropDownQuestion">DropDown Question</option>',
-            '<option value="PhotoQuestion">Photo Question</option>',
-            '<option value="RatingQuestion">Rating Question</option>'
-          ] 
+            "<option value='SingleLineQuestion'>#{t 'surveys.build.add_single_line_question'}</option>",
+            "<option value='RadioQuestion'>#{t 'surveys.build.add_radio_question'}</option>",
+            "<option value='MultilineQuestion'>#{t 'surveys.build.add_multiline_question'}</option>",
+            "<option value='NumericQuestion'>#{t 'surveys.build.add_numeric_question'}</option>",
+            "<option value='DateQuestion'>#{t 'surveys.build.add_date_question'}</option>",
+            "<option value='MultiChoiceQuestion'>#{t 'surveys.build.add_multi_choice_question'}</option>",
+            "<option value='DropDownQuestion'>#{t 'surveys.build.add_drop_down_question'}</option>",
+            "<option value='PhotoQuestion'>#{t 'surveys.build.add_photo_question'}</option>",
+            "<option value='RatingQuestion'>#{t 'surveys.build.add_rating_question'}</option>"
+          ]
 %>
-<%= select_tag "questions", types.join.html_safe %>
+<%= select_tag 'questions', types.join.html_safe %>

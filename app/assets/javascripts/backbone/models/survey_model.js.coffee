@@ -1,5 +1,5 @@
 # Wr
-class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel  
+class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
   initialize:(@survey_id) ->
     @question_models = []
     this.urlRoot = "/api/surveys"
