@@ -77,6 +77,7 @@ en:
       question_title: "Question Title"
       save_survey: "Save Survey"
       delete_survey: "Delete Survey"
+      mark_identifier: "Mark as identifier?"
 
     share_with_organizations:
       share_survey: "Share Survey"
