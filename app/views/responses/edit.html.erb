@@ -45,5 +45,6 @@
       $('form.response').attr('action', action + '/complete')
     })
     organize_sub_questions()
-  })
+    $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
+  });
 </script>

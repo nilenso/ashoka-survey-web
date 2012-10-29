@@ -25,6 +25,8 @@
 //= require jquery_sortable
 //= require spin
 //= require i18n
+//= require datepicker-fr
+//= require datepicker-en
 //= require i18n/translations
 //= require backbone_relational
 //= require backbone_rails_sync

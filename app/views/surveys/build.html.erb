@@ -62,8 +62,9 @@
     setTimeout(function(){
       $("#flash_messages").empty();
     }, 3000);
-  });
+  $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
   I18n.locale = "<%= locale %>";
+  });
 </script>
 
 <%= @survey.build_mustache_templates %>
