@@ -5,7 +5,6 @@ describe Answer do
   it { should respond_to(:content) }
   it { should belong_to(:question) }
   it { should belong_to(:response) }
-
   it { should have_many(:choices).dependent(:destroy) }
   it { should allow_mass_assignment_of(:updated_at) }
 
@@ -154,6 +153,14 @@ describe Answer do
         answer.should_not be_valid
       end
     end
+
+    it "Ensures that it is the only answer for a question within the response" do
+      response = FactoryGirl.create(:response, :organization_id => 1, :user_id => 2, :survey_id => 3)
+      question = RadioQuestion.create( :type => "RadioQuestion", :content => "hollo!")
+      answer_1 = FactoryGirl.create(:answer, :question_id => question.id, :response_id => response.id)
+      answer_2 = FactoryGirl.build(:answer, :question_id => question.id, :response_id => response.id)
+      answer_2.should_not be_valid
+    end
   end
 
   context "logic" do
@@ -183,7 +190,7 @@ describe Answer do
         question = FactoryGirl.create :question, :type => 'SingleLineQuestion'
         answer = FactoryGirl.create :answer_with_choices, :question => question, :content => "xyz"
         answer.content_for_excel.should == "xyz"
-      end 
+      end
     end
   end
 

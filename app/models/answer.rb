@@ -9,6 +9,7 @@ class Answer < ActiveRecord::Base
   validate :mandatory_questions_should_be_answered, :if => :response_validating?
   validate :content_should_not_exceed_max_length
   validate :content_should_be_in_range
+  validates_uniqueness_of :question_id, :scope => [:response_id]
   has_many :choices, :dependent => :destroy
   validate :date_should_be_valid
   attr_accessible :photo
