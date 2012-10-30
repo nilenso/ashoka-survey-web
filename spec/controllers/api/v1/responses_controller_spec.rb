@@ -29,11 +29,11 @@ module Api
           JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
         end
 
-        it "should not return the newly created response if it is complete" do
+        it "should return the newly created response if it is complete" do
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :status => 'complete', :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
           post :create, :response => resp
           response.should be_ok
-          response.body.should be_blank
+          JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
         end
 
         it "should not create the response and should return it with answers if it fails the validation" do

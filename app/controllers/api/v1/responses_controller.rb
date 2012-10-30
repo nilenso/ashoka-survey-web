@@ -13,7 +13,7 @@ module Api
           render :json => response.to_json_with_answers_and_choices
         elsif response.validating? && response.valid?
           response.complete
-          render :nothing => true 
+          render :json => response.to_json_with_answers_and_choices 
         else
           response_json = response.to_json_with_answers_and_choices
           response.destroy
