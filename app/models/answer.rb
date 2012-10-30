@@ -29,10 +29,6 @@ class Answer < ActiveRecord::Base
     ids.each { |option_id| choices << Choice.new(:option_id => option_id) }
   end
 
-  def text_type?
-    question.type != "MultiChoiceQuestion" && question.type != "PhotoQuestion"
-  end
-
   def question_content
     question.content
   end
