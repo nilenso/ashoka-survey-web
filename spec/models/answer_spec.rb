@@ -164,15 +164,6 @@ describe Answer do
   end
 
   context "logic" do
-    it "checks whether the answer is of text type" do
-      text_question = FactoryGirl.create(:question, :type => "SingleLineQuestion")
-      text_answer = FactoryGirl.create(:answer, :question => text_question)
-      text_answer.should be_text_type
-      non_textual_question = FactoryGirl.create(:question, :type => "MultiChoiceQuestion")
-      non_textual_answer = FactoryGirl.create(:answer, :question => non_textual_question)
-      non_textual_answer.should_not be_text_type
-    end
-
     context "#content_for_excel" do
       it "returns a comma-separated list of choices for a MultiChoiceQuestion" do
         question = FactoryGirl.create :question, :type => 'MultiChoiceQuestion'
