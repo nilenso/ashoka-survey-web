@@ -29,12 +29,16 @@ class Answer < ActiveRecord::Base
     ids.each { |option_id| choices << Choice.new(:option_id => option_id) }
   end
 
-  def text_type?
-    question.type != "MultiChoiceQuestion" && question.type != "PhotoQuestion"
-  end
-
   def question_content
     question.content
+  end
+
+  def content
+    if question.type == "MultiChoiceQuestion"
+      choices.map(&:content).join(", ")
+    else
+      self[:content]
+    end
   end
 
   def content_for_excel(server_url='')

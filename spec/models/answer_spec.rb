@@ -127,7 +127,7 @@ describe Answer do
       end
 
       it "doesn't change the answer content" do
-        choices = ["first"]
+        choices = [FactoryGirl.create(:option).id]
         question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
         answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => choices)
         answer.content.should == answer.content
@@ -164,13 +164,10 @@ describe Answer do
   end
 
   context "logic" do
-    it "checks whether the answer is of text type" do
-      text_question = FactoryGirl.create(:question, :type => "SingleLineQuestion")
-      text_answer = FactoryGirl.create(:answer, :question => text_question)
-      text_answer.should be_text_type
-      non_textual_question = FactoryGirl.create(:question, :type => "MultiChoiceQuestion")
-      non_textual_answer = FactoryGirl.create(:answer, :question => non_textual_question)
-      non_textual_answer.should_not be_text_type
+    it "returns the comma separated options list as content for a multi choice answer" do
+      question = FactoryGirl.create :question, :type => 'MultiChoiceQuestion'
+      answer = FactoryGirl.create :answer_with_choices, :question => question
+      answer.content.should == answer.choices.map(&:content).join(", ")
     end
 
     context "#content_for_excel" do
