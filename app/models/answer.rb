@@ -17,6 +17,7 @@ class Answer < ActiveRecord::Base
   validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
   validate :maximum_photo_size
   validates_numericality_of :content, :if => Proc.new {|answer| (answer.content.present?) && (answer.question.type == 'NumericQuestion') }
+  after_save :touch_multi_choice_answer
 
   def option_ids
     self.choices.collect(&:option_id)
@@ -101,5 +102,10 @@ class Answer < ActiveRecord::Base
     else
       content.blank?
     end
+  end
+
+  # Editing choices doesn't change the `updated_at` for the answer by default.
+  def touch_multi_choice_answer
+    touch if question.type == "MultiChoiceQuestion"
   end
 end
