@@ -96,6 +96,11 @@ module Api
           put :update, :id => resp.id, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_s }
           resp.reload.should be_complete
         end
+
+        it "returns a 410 if the response doesn't exist on the server anymore" do
+          put :update, :id => 42, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_s } 
+          response.code.should == "410"
+        end
       end
     end
   end
