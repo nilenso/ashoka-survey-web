@@ -90,6 +90,12 @@ module Api
           resp.reload.answers.map(&:content).should include 'newer'
           resp.reload.answers.map(&:content).should_not include 'older'
         end
+
+        it "chooses whether to update the response status based on `updated_at`" do
+          resp = FactoryGirl.create(:response, :organization_id => 1, :user_id => 1, :status => 'complete')
+          put :update, :id => resp.id, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_s }
+          resp.reload.should be_complete
+        end
       end
     end
   end

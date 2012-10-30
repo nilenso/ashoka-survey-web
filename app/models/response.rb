@@ -56,17 +56,20 @@ class Response < ActiveRecord::Base
     answers_attributes.reject do |_, answer_attributes|
       existing_answer = answers.find_by_id(answer_attributes['id'])
       existing_answer && (Time.parse(answer_attributes['updated_at']) < existing_answer.updated_at)
-def merge_status(params)
-  return unless params[:updated_at]
-  if Time.parse(params[:updated_at]) > updated_at
-    case params[:status]
-    when 'complete'
-      complete
-    when 'incomplete'
-      incomplete 
     end
   end
-end
+  
+  def merge_status(params)
+    return unless params[:updated_at]
+    if Time.parse(params[:updated_at]) > updated_at
+      case params[:status]
+      when 'complete'
+        complete
+      when 'incomplete'
+        incomplete
+      end
+    end
+  end
 
   def to_json_with_answers_and_choices
     to_json(:include => {:answers => {:include => :choices}})
