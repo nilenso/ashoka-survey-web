@@ -48,7 +48,7 @@ module Api
         end
 
         it "returns the response with a bad_request if you give a invalid response" do
-          resp = FactoryGirl.attributes_for(:response, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
+          resp = FactoryGirl.attributes_for(:response, :survey => nil, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
           post :create, :response => resp
           response.should_not be_ok
           response.status.should == 400

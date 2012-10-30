@@ -10,12 +10,12 @@ module Api
         response.update_attributes({:answers_attributes => answers_attributes}) if response.save
 
         if response.incomplete? && response.valid?
-          render :json => response.to_json(:methods => :answers)
+          render :json => response.to_json_with_answers_and_choices
         elsif response.validating? && response.valid?
           response.complete
           render :nothing => true
         else
-          response_json = response.to_json(:methods => :answers)
+          response_json = response.to_json_with_answers_and_choices
           response.destroy
           render :json => response_json, :status => :bad_request
         end
@@ -28,14 +28,14 @@ module Api
         response.update_attributes(params[:response]) # Response isn't saved before the answers, so we need to create the answers after this.
         response.validating if params[:response][:status] == "complete"
         answers_to_update = response.select_new_answers(answers_attributes)
-        response.update_attributes({ :answers_attributes => answers_to_update }) if response.save
+        response.update_attributes({ :answers_attributes => answers_to_update }) if response.save        
         if response.incomplete? && response.valid?
-          render :json => response.to_json(:methods => :answers)
+          render :json => response.to_json_with_answers_and_choices
         elsif response.validating? && response.valid?
           response.complete
           render :nothing => true
         else
-          response_json = response.to_json(:methods => :answers)
+          response_json = response.to_json_with_answers_and_choices
           response.destroy
           render :json => response_json, :status => :bad_request
         end

@@ -87,4 +87,21 @@ describe Response do
       selected_answers.keys.should == ['0']
     end
   end
+
+  context "#to_json_with_answers_and_choices" do
+    it "renders the answers" do
+      response = (FactoryGirl.create :response_with_answers).reload
+      response_json = JSON.parse(response.to_json_with_answers_and_choices)
+      response_json.should have_key('answers')
+      response_json['answers'].size.should == response.answers.size
+    end
+
+    it "renders the answers' choices if any" do
+      response = (FactoryGirl.create :response).reload
+      response.answers << FactoryGirl.create(:answer_with_choices)
+      response_json = JSON.parse(response.to_json_with_answers_and_choices)
+      response_json['answers'][0].should have_key('choices')
+      response_json['answers'][0]['choices'].size.should == response.answers[0].choices.size
+    end
+  end
 end

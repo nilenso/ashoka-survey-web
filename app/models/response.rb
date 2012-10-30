@@ -58,4 +58,8 @@ class Response < ActiveRecord::Base
       existing_answer && (Time.parse(answer_attributes['updated_at']) < existing_answer.updated_at)
     end
   end
+
+  def to_json_with_answers_and_choices
+    to_json(:include => {:answers => {:include => :choices}})
+  end
 end
