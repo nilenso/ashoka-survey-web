@@ -23,6 +23,14 @@ describe Response do
     response.answers_for_identifier_questions.should == identifier_question.answers
   end
 
+  it "merges the response status based on updated_at" do 
+    response = FactoryGirl.create :response, :organization_id => 1, :user_id => 1, :status => 'complete'
+    response.merge_status({ :status => 'incomplete', :updated_at => 5.days.ago.to_s })
+    response.should be_complete
+    response.merge_status({ :status => 'incomplete', :updated_at => 5.days.from_now.to_s })
+    response.should be_incomplete
+  end
+
   context "when marking a response incomplete" do
     it "marks the response incomplete" do
       survey = FactoryGirl.create(:survey)
