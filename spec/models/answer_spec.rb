@@ -192,18 +192,6 @@ describe Answer do
         answer.content_for_excel.should == "xyz"
       end
     end
-
-    context "JSON" do
-      it "renders its choices as json if the question is a multi-choice question" do
-        answer = FactoryGirl.create :answer_with_choices
-        answer.as_json[:choices].should == answer.choices.as_json
-      end
-
-      it "renders only the answer if the question is not a multi-choice question" do
-        answer = FactoryGirl.create :answer
-        answer.as_json.should_not have_key :choices
-      end
-    end
   end
 
   it "returns content of its question" do
