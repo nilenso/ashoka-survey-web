@@ -127,7 +127,7 @@ describe Answer do
       end
 
       it "doesn't change the answer content" do
-        choices = ["first"]
+        choices = [FactoryGirl.create(:option).id]
         question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
         answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => choices)
         answer.content.should == answer.content
@@ -164,6 +164,12 @@ describe Answer do
   end
 
   context "logic" do
+    it "returns the comma separated options list as content for a multi choice answer" do
+      question = FactoryGirl.create :question, :type => 'MultiChoiceQuestion'
+      answer = FactoryGirl.create :answer_with_choices, :question => question
+      answer.content.should == answer.choices.map(&:content).join(", ")
+    end
+
     context "#content_for_excel" do
       it "returns a comma-separated list of choices for a MultiChoiceQuestion" do
         question = FactoryGirl.create :question, :type => 'MultiChoiceQuestion'

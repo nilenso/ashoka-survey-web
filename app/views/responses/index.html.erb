@@ -17,14 +17,7 @@
         <% @responses.each do |response| %>
         <tr class="survey_row">
           <% response.answers_for_identifier_questions.each do |answer| %>
-            <td>
-              <% if answer.question.type == "MultiChoiceQuestion" %>
-                <% options = answer.option_ids.collect { |option_id| Option.find(option_id).content } %>
-                <%= options.join(', ') %>
-              <%else%>
-                <%= answer.content %>
-              <%end%>
-            </td>
+            <td><%= answer.content %> </td>
           <% end %>
           <td>
             <%= link_to 'Edit', edit_survey_response_path(:id => response.id) %>
