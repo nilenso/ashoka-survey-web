@@ -43,6 +43,11 @@ class Answer < ActiveRecord::Base
     return content
   end
 
+  def as_json(options={})
+    options.merge!({ :include => :choices }) if question.type == 'MultiChoiceQuestion'
+    super(options)
+  end
+
   private
 
   def response_validating?
