@@ -56,6 +56,7 @@ a.create_survey {
   }
   &:hover {
     color: lighten($a, 5%) !important;
+    background-color: darken($d, 5%);
   }
 }
 
