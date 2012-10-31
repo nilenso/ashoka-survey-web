@@ -1,75 +1,64 @@
+
 <%= stylesheet_link_tag 'surveys_list' %>
 
-<h1> <%= t '.list_of_surveys' %> </h1>
 
 <% if can? :create, Survey %>
-  <div class="admin_tasks">
-    <%= link_to t(".create_survey"), surveys_path, :method => :post %>
-    <div class="filters">
-      <%= t(".show") %> : <%= link_to t(".published"), surveys_path(:published => true) %> |
-      <%= link_to t(".unpublished"), surveys_path(:unpublished => true) %> |
-      <%= link_to t(".all"), surveys_path %>
-    </div>
+<div class="admin_tasks">
+  <%= link_to icon_for('icon-plus', t(".create_survey")), surveys_path, :method => :post, :class => "create_survey" %>
+  <div class="filters">
+    <%= link_to t(".published"), surveys_path(:published => true) %> |
+    <%= link_to t(".unpublished"), surveys_path(:unpublished => true) %> |
+    <%= link_to t(".all"), surveys_path %>
   </div>
+</div>
 <% end %>
 
-<div>
+<h1><%= t('.surveys') %></h1>
+<div class="surveys_list">
   <% unless @surveys.blank? or @organizations.blank? %>
-    <table class="surveys_table">
-      <thead>
-        <th><%= Survey.human_attribute_name(:name) %></th>
-        <th><%= Survey.human_attribute_name(:status) %></th>
-        <th><%= Survey.human_attribute_name(:description) %></th>
-        <th><%= Survey.human_attribute_name(:expiry_date) %></th>
-        <th><%= Survey.human_attribute_name(:organization) %></th>
-        <th><%= Survey.human_attribute_name(:responses) %></th>
-        <th><%= t ".operations" %></th>
-      </thead>
-      <tbody>
-        <% @surveys.each do |survey| %>
-        <tr class="survey_row">
-          <td><%= survey.name %></td>
-          <td><%= survey.published ? "Published" : "Not Published" %></td>
-          <td class="survey_description">
-            <span class="truncated_description">
-              <%= truncate(survey.description, :length => 120)%>
-            </span>
-            <div class="more_description">
-              <%= survey.description%>
-            </div>
-            <%= survey.more_less_links %>
-          </td>
-          <td class="survey_expiry_date"><%= survey.expiry_date %></td>
-          <td><%= survey.organization_name(@organizations) %></td>
-          <td>
-            <%= survey.responses.count %>
-            <%= link_to image_tag("add.png", :title => t(".add_response")), survey_responses_path(survey.id), :method => :post%>
-            <%= link_to button_tag(t ".list_responses"), survey_responses_path(survey.id) %>
-          </td>
-          <td class="cso_admin_operations">
-            <% if survey.published %>
-              <%= link_to button_tag(t ".share_survey"), survey_share_with_organizations_path(survey.id) if can? :share_with_organizations, survey %>
-            <% else %>
-              <%= link_to image_tag("edit.png"), surveys_build_path(survey.id), :title => t(".edit_survey") if can? :edit, survey %>
-            <% end %>
-            <%= link_to button_tag(t ".publish_survey"), survey_publish_to_users_path(survey.id) if can? :publish_to_users, survey %>
-            <%= link_to image_tag("duplicate.png"), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %>
-            <%= link_to image_tag("delete.png"), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %>
-            <%= link_to image_tag("report.png"), report_survey_path(survey.id) if can? :report, survey %>
-          </td>
-        </tr>
+  <% @surveys.each do |survey| %>
+  <div class="survey <%= survey.published? ? 'published' : 'unpublished' %>">
+    <div class="status">
+      <%= pluralize(survey.responses.count, "response") if survey.responses.count > 0 %>  <!-- TODO: I18n-->      
+    </div>
+    <div class="survey_details">
+      <h2 class="name"><%= survey.name %></h2>
+      <span class="organization_name"><%= survey.organization_name(@organizations) %></span>
+      <p class="expiry_date"><%= "Expires on #{survey.expiry_date.to_formatted_s(:long_ordinal)}" %></p>
+      <p class="description">
+        <%= survey.description %>
+      </p>
+    </div>
+
+    <ul class="operations">
+      <div class="response_operations">
+          <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey_responses_path(survey.id), :method => :post, :class => survey.class_for_disabled %></li>
+          <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled %></li>
+      </div>
+
+      <div class="cso_admin_operations">
+        <% if survey.published %>
+          <li><%= link_to icon_for('icon-group', t(".share")), survey_share_with_organizations_path(survey.id) if can? :share_with_organizations, survey %></li>
+        <% else %>
+          <li><%= link_to icon_for('icon-edit', t('.edit')), surveys_build_path(survey.id)  if can? :edit, survey %></li>
         <% end %>
-      </tbody>
-    </table>
+        <li><%= link_to icon_for('icon-arrow-up', t(".publish")), survey_publish_to_users_path(survey.id) if can? :publish_to_users, survey %></li>
+        <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
+        <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %></li>
+        <li><%= link_to icon_for('icon-bar-chart', t('.reports')), report_survey_path(survey.id) if can? :report, survey %></li>
+      </div>
+    </ul>
+  </div>
+  <% end %>
   <% end %>
 </div>
 
 <%= will_paginate @surveys %>
 
 <script type="text/javascript">
-$(document).ready(function() {
-  $('.survey_row').each(function(_, elem) {
-    new SurveyApp.SurveyRow($(elem));
+  $(document).ready(function(){    
+    $('a.disabled').click(function(){
+      return false;
+    })
   });
-});
 </script>

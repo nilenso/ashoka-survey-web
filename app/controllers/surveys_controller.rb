@@ -11,7 +11,7 @@ class SurveysController < ApplicationController
     @surveys ||= []
     @surveys = @surveys.where(:published => true)  if params[:published].present?
     @surveys = @surveys.where(:published => false) if params[:unpublished].present?
-    @surveys = @surveys.paginate(:page => params[:page], :per_page => 10)
+    @surveys = @surveys.paginate(:page => params[:page], :per_page => 5)
     @surveys = SurveyDecorator.decorate(@surveys)
     @organizations = Organization.all(access_token)
   end

@@ -1,32 +1,194 @@
 @import 'susy';
 @import 'base_layout';
-@import "compass/css3/border-radius";
+@import "compass/css3";
 
+$total-columns: 12;
+$column-width: 60px;
+$gutter-width: 20px;
+$grid-padding: 10px;
+$disabled-action: lighten($c, 16%);
 
-.surveys_table {
-  th {
-    font: bold 11px "Trebuchet MS", Verdana, Arial, Helvetica,
-    sans-serif;
-    color: $tab_header_color;
-    border: 1px solid $border_color;
-    letter-spacing: 2px;
-    text-transform: uppercase;
-    text-align: left;
-    padding: 6px 6px 6px 12px;
-    background: $tab_header_bg_color;
+$app_min_height: 600px;
+
+@import url(http://fonts.googleapis.com/css?family=Dosis:600|Abel|PT+Sans:400,700italic&subset=latin,latin-ext);
+
+.container {
+  @include container;
+}
+
+h1 {
+  font-family: 'PT Sans', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.03em; 
+  font-size: 3em;
+  display: inline;
+}
+
+.admin_tasks {
+  display: inline;
+  float :right;
+  a {
+    color: $e;
+    text-decoration: none;
   }
-
-  td {
-  border: 1px solid $border_color;
-  padding: 6px 6px 6px 12px;
-  }
-
-  .survey_expiry_date {
-    width : 10%;
+  .filters {
+    display: block;
+    margin-top: 40px;
+    a {
+      color: $e;
+      &:hover { text-decoration: underline; }
+    }
   }
 }
 
-.filters {
-  display: inline;
+a.create_survey {
+  color: $a !important;
+  padding: 6px 10px;
+  float: right;
+  background-color: $d;
+  font-size: 1.1em;
+  font-family: 'Abel', sans-serif;
+  text-decoration: none;
+  vertical-align: middle;
+  @include border-radius(9px);
+  i {
+    margin-right: 5px;
+  }
+  &:hover {
+    color: lighten($a, 5%) !important;
+  }
+}
+
+.pagination {
+  clear: both;
+  text-align: center;
+  padding: 1em;
+  cursor: default;
+  font-family: 'PT Sans', sans-serif;
+
+  & a, & span {
+    padding: 0.2em 0.3em; 
+  }
+  & .disabled {
+    color: $disabled-action; 
+  }
+  & .current {
+    font-style: normal;
+    font-weight: bold;
+    background-color: $a;
+    display: inline-block;
+    width: 1.4em;
+    height: 1.4em;
+    line-height: 1.5;
+  }
+  & a {
+    text-decoration: none;
+    color: $d;
+  }
+  & a:hover, & a:focus {
+    text-decoration: underline;
+  }
+}
+
+.surveys_list {
+  @include span-columns(12, 12);
+  margin: 25px 0 20px 0;
+}
+
+.survey {
+  padding: 10px 15px;
+  margin-top: 5px;
+  font-family: 'Abel', sans-serif;
+
+  &.unpublished {
+    background-color: $a;
+    &:hover { background-color: darken($a, 3%); }
+  }
+
+  &.published {
+    background-color: $b;
+    &:hover { background-color: darken($b, 3%); }
+  }
+
+  .organization_name {
+    color: $d;
+    margin-left: 5px;
+    font-size: 0.9em;
+    font-family: 'PT Sans', sans-serif;
+    font-style: italic;
+  }
+
+  .cso_admin_operations {
+    display: none;
+    float: right;
+  }
+
+  .description {
+    margin: 15px 25px;
+    text-align: justify;
+  }
+
+  .expiry_date {
+    margin: 15px 25px;
+    font-family: 'PT Sans', sans-serif;
+    margin-top: 10px;
+    font-size: 0.8em;
+    font-style: italic;
+  }
+
+  .name {
+    display: inline;
+    font-size: 1.8em;
+    color: $e;
+    font-family: 'Dosis', sans-serif;
+  }
+  .response_operations {
+    display: inline;
+  }
+
+  &:hover .cso_admin_operations, &.hover .cso_admin_operations { display: inline; }
+  .operations {
+    li {
+      display: inline;
+      a.disabled {
+        color: $disabled-action;
+        i { color: $disabled-action; }
+        &:hover {
+          color: $disabled-action;
+          text-decoration: none;
+          cursor: default;
+          i { color: $disabled-action; }
+        }
+      }
+      a {
+        i {
+          margin-right: 3px;
+          font-size: 1.1em;
+          color: $d;
+          text-decoration: none !important;
+        }
+        &:hover {
+          color: darken($d, 20%);
+          text-decoration: underline;
+          i { color: darken($d, 20%); }
+        }
+        color: $d;
+        font-family: 'Dosis', sans-serif;
+        font-size: 0.9em;
+        display: inline;
+        padding-left: 5px;
+        text-decoration: none;
+      }
+    }
+  }
+}
+
+.name {
+  color: $a;
+  font-weight: bold;
+}
+.status {
+  font-size: 0.9em;
+  color: $d;
   float: right;
 }
