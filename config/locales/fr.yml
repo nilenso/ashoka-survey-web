@@ -39,6 +39,7 @@ fr:
 
     index:
       surveys: "Enquêtes"
+      responses: "Réponse"
       show: "Montrer"
       published: "Publié"
       unpublished: "Inédit"

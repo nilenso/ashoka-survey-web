@@ -26,7 +26,7 @@
   <% @surveys.each do |survey| %>
   <div class="survey <%= survey.published? ? 'published' : 'unpublished' %>">
     <div class="status">
-      <%= pluralize(survey.responses.count, "response") if survey.responses.count > 0 %>  <!-- TODO: I18n-->      
+      <%= pluralize(survey.responses.count, t(".responses")) if survey.responses.count > 0 %>
     </div>
     <div class="survey_details">
       <h2 class="name"><%= survey.name %></h2>

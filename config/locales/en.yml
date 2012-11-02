@@ -39,6 +39,7 @@ en:
 
     index:
       surveys: "Surveys"
+      responses: "Response"
       show: "Show"
       published: "Published"
       unpublished: "Unpublished"
