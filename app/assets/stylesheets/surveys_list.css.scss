@@ -35,22 +35,7 @@ $app_min_height: 600px;
 }
 
 a.create_survey {
-  color: $a !important;
-  padding: 6px 10px;
-  float: right;
-  background-color: $d;
-  font-size: 1.1em;
-  font-family: 'Abel', sans-serif;
-  text-decoration: none;
-  vertical-align: middle;
-  @include border-radius(9px);
-  i {
-    margin-right: 5px;
-  }
-  &:hover {
-    color: lighten($a, 5%) !important;
-    background-color: darken($d, 5%);
-  }
+  @include call_to_action;
 }
 
 .pagination {

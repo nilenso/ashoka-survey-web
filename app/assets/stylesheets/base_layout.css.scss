@@ -97,3 +97,22 @@ h2{
 li {
   list-style-type: none;
 }
+
+@mixin call_to_action {
+  color: $a !important;
+  padding: 6px 10px;
+  float: right;
+  background-color: $d;
+  font-size: 1.1em;
+  font-family: 'Abel', sans-serif;
+  text-decoration: none;
+  vertical-align: middle;
+  @include border-radius(9px);
+  i {
+    margin-right: 5px;
+  }
+  &:hover {
+    color: lighten($a, 5%) !important;
+    background-color: darken($d, 5%);
+  }
+}
