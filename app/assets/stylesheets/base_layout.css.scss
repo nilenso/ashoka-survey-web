@@ -68,9 +68,12 @@ p.notice{
   padding: 8px 35px 8px 14px;
 }
 
-h1{
-  font-size: 1.8em;
-  margin-bottom: 0.5em;
+h1 {
+  font-family: 'PT Sans', sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.03em; 
+  font-size: 3em;
+  display: inline;
 }
 
 h2{
