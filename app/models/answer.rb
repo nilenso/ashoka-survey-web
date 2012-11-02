@@ -19,7 +19,7 @@ class Answer < ActiveRecord::Base
   validates_numericality_of :content, :if => Proc.new {|answer| (answer.content.present?) && (answer.question.type == 'NumericQuestion') }
   after_save :touch_multi_choice_answer
 
-  default_scope joins(:question).order('questions.order_number')
+  default_scope includes('question').order('questions.order_number')
 
   def option_ids
     self.choices.collect(&:option_id)
