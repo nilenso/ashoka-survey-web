@@ -3,6 +3,8 @@
 @import "compass/css3/border-radius";
 @import 'palette';
 
+@import url(http://fonts.googleapis.com/css?family=Dosis:600|Abel|PT+Sans:400,700italic&subset=latin,latin-ext);
+
 $app_width      : 960px;
 $total-columns  : 1;
 $column-width   : $app_width;
@@ -18,6 +20,7 @@ $disabled-action: lighten($c, 16%);
 
 .header, .footer {
   width: 960px;
+  font-family: 'Abel', sans-serif;
   .signin, .logout {
     float: right;
     padding: 0.1em 1em;
@@ -42,15 +45,15 @@ $disabled-action: lighten($c, 16%);
   }
 }
 
-.header{
+.header {
   position: relative;
-  margin: 2em auto;
+  margin: 0 auto 2em auto;
   background-color: $header_color;
   padding: 0.8em;
   clear: both;
   li {
     padding-left: 25px;
-    font-size: 14px;
+    font-size: 1em;
     text-decoration: none;
     display: inline;
   }
