@@ -99,6 +99,10 @@ fr:
 
     index:
       list_of_responses: "Liste des réponses"
+      add_response: "Ajouter Réponse"
+      download_excel: "Télécharger Excel"
+      incomplete: Incomplet
+      complete: "Compléter"      
 
     edit:
       delete: "Delete-fr"
