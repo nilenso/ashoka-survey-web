@@ -38,6 +38,16 @@ describe Answer do
       end
     end
 
+    context "ordering" do
+      it "fetches answers in the ascending order of their questions' order numbers" do
+        question_1 = FactoryGirl.create(:question, :order_number => 1)
+        question_2 = FactoryGirl.create(:question, :order_number => 2)
+        answer_2 = FactoryGirl.create(:answer, :question_id => question_2.id)
+        answer_1 = FactoryGirl.create(:answer, :question_id => question_1.id)
+        Answer.all.should == [answer_1, answer_2]
+      end
+    end
+
     it "does not save if the answer is less than the minimum value" do
       question = FactoryGirl.create(:question, :type => 'NumericQuestion', :min_value => 5)
       answer = FactoryGirl.build(:answer, :question_id => question.id)
