@@ -5,15 +5,22 @@
 <% if can? :create, Survey %>
 <div class="admin_tasks">
   <%= link_to icon_for('icon-plus', t(".create_survey")), surveys_path, :method => :post, :class => "create_survey" %>
-  <div class="filters">
-    <%= link_to t(".published"), surveys_path(:published => true) %> |
-    <%= link_to t(".unpublished"), surveys_path(:unpublished => true) %> |
-    <%= link_to t(".all"), surveys_path %>
-  </div>
+  <% if @surveys.present? %>
+    <div class="filters">
+      <%= link_to t(".published"), surveys_path(:published => true) %> |
+      <%= link_to t(".unpublished"), surveys_path(:unpublished => true) %> |
+      <%= link_to t(".all"), surveys_path %>
+    </div>
+  <% end %>
 </div>
 <% end %>
 
 <h1><%= t('.surveys') %></h1>
+
+<% if @surveys.blank? %>
+  <p class="no_surveys"><%= t('.no_surveys') %></p>
+<% end %>
+
 <div class="surveys_list">
   <% unless @surveys.blank? or @organizations.blank? %>
   <% @surveys.each do |survey| %>

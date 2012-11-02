@@ -56,6 +56,7 @@ en:
       list_responses: "List Responses"
       duplicate: "Duplicate"
       reports: "Reports"
+      no_surveys: "There are no surveys yet."
 
     share:
       share_survey: "Share Survey"

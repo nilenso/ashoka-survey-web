@@ -46,6 +46,7 @@ fr:
       create: "Créer sondage"
       delete: "Effacer"
       publish: "Publier"
+      create_survey: "Créer Enquête"
       unpublish: "Dépublier"
       share: "Partager"
       add_response: "Ajouter Réponse"
@@ -56,6 +57,7 @@ fr:
       list_responses: "Liste Réponses"
       duplicate: "Dupliquer"
       reports: "Rapports"
+      no_surveys: "Il n'y a pas encore d'enquêtes."
 
     share:
       share_survey: "Enquête Partager"

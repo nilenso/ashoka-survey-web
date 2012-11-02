@@ -35,6 +35,7 @@ h1 {
     display: block;
     margin-top: 40px;
     a {
+      font-family: 'Abel', sans-serif;
       color: $e;
       &:hover { text-decoration: underline; }
     }
@@ -94,6 +95,14 @@ a.create_survey {
 .surveys_list {
   @include span-columns(12, 12);
   margin: 25px 0 20px 0;
+}
+
+.no_surveys {
+  @include span-columns(12, 12);
+  margin-top: 40px;
+  text-align: center;
+  font-family: 'Abel', sans-serif;
+  font-size: 2em;
 }
 
 .survey {
