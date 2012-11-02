@@ -1,0 +1,37 @@
+@import 'susy';
+@import 'base_layout';
+
+@import url(http://fonts.googleapis.com/css?family=Dosis:600|Abel|PT+Sans:400,700italic&subset=latin,latin-ext);
+
+table.surveys_table {  
+  margin-top: 30px;
+  padding: 10px 15px;
+  
+  th { font-family: 'Dosis', sans-serif; }
+
+  tr { 
+    font-family: 'PT Sans', sans-serif;
+    background-color: $a;
+  }
+  tbody {
+    margin-bottom: 500px !important;
+  }
+
+  td, th {
+    text-align: center;
+    padding: 10px 20px;
+  }
+}
+
+a.download_excel { 
+  @include call_to_action(lighten($d, 20%));
+  margin-right: 10px;
+  font-size: 0.9em;
+  display: inline;
+}
+
+a.add_response { 
+  clear: right;
+  display: inline;
+  @include call_to_action($d);
+}

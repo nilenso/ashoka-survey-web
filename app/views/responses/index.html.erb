@@ -1,8 +1,8 @@
-<%= stylesheet_link_tag 'surveys_list' %>
+<%= stylesheet_link_tag 'responses_index' %>
 
 <h1> <%= t '.list_of_responses' %> </h1>
-<%= link_to 'Add response', survey_responses_path(@survey), :method => :post%>
-<%= link_to t('Download Excel'), survey_responses_path(format: :xls) %>
+<%= link_to icon_for('icon-plus', 'Add response'), survey_responses_path(@survey), :method => :post, :class => 'add_response' %>
+<%= link_to icon_for('icon-table', t('Download Excel')), survey_responses_path(format: :xls), :class => 'download_excel' %>
 <div>
   <% unless @responses.blank? %>
     <table class="surveys_table">
