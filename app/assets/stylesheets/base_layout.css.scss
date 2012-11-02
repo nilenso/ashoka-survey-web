@@ -98,11 +98,11 @@ li {
   list-style-type: none;
 }
 
-@mixin call_to_action {
+@mixin call_to_action($background-color) {
   color: $a !important;
   padding: 6px 10px;
   float: right;
-  background-color: $d;
+  background-color: $background-color;
   font-size: 1.1em;
   font-family: 'Abel', sans-serif;
   text-decoration: none;
@@ -113,6 +113,6 @@ li {
   }
   &:hover {
     color: lighten($a, 5%) !important;
-    background-color: darken($d, 5%);
+    background-color: darken($background-color, 5%);
   }
 }

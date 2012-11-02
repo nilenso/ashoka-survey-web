@@ -35,7 +35,7 @@ $app_min_height: 600px;
 }
 
 a.create_survey {
-  @include call_to_action;
+  @include call_to_action($d);
 }
 
 .pagination {
