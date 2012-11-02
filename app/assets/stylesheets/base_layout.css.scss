@@ -10,6 +10,8 @@ $gutter-width   : 1px;
 $grid-padding   : $gutter-width;
 $base-font-size : 16px;
 
+$disabled-action: lighten($c, 16%);
+
 .container{
   @include container;
 }
@@ -114,5 +116,36 @@ li {
   &:hover {
     color: lighten($a, 5%) !important;
     background-color: darken($background-color, 5%);
+  }
+}
+
+.pagination {
+  clear: both;
+  text-align: center;
+  padding: 1em;
+  cursor: default;
+  font-family: 'PT Sans', sans-serif;
+
+  & a, & span {
+    padding: 0.2em 0.3em; 
+  }
+  & .disabled {
+    color: $disabled-action; 
+  }
+  & .current {
+    font-style: normal;
+    font-weight: bold;
+    background-color: $a;
+    display: inline-block;
+    width: 1.4em;
+    height: 1.4em;
+    line-height: 1.5;
+  }
+  & a {
+    text-decoration: none;
+    color: $d;
+  }
+  & a:hover, & a:focus {
+    text-decoration: underline;
   }
 }
