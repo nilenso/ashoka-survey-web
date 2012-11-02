@@ -4,23 +4,51 @@
 @import url(http://fonts.googleapis.com/css?family=Dosis:600|Abel|PT+Sans:400,700italic&subset=latin,latin-ext);
 
 table.surveys_table {  
-  margin-top: 30px;
+  margin: 30px auto 0 auto;
   padding: 10px 15px;
+  border-collapse: separate; 
+  border-spacing: 0 10px;
   
-  th { font-family: 'Dosis', sans-serif; }
+  th {
+    font-family: 'Dosis', sans-serif;
+    font-size: 1.1em;
+  }
 
-  tr { 
+  tbody tr {
     font-family: 'PT Sans', sans-serif;
     background-color: $a;
   }
-  tbody {
-    margin-bottom: 500px !important;
-  }
 
   td, th {
+    &.actions {
+      a {
+        font-family: 'PT Sans', sans-serif;      
+        font-size: 1em;
+        display: inline;
+        margin-left: 10px;
+        color: lighten($d, 30%);
+        &:hover {
+          text-decoration: underline;
+        }
+      }
+      .status {
+        font-family: 'Abel', sans-serif;      
+        font-size: 1.2em;
+        display: inline;
+        color: $d;
+      }
+    }
     text-align: center;
     padding: 10px 20px;
   }
+}
+
+a {
+  i {
+    margin-right: 5px;
+  }
+  text-decoration: none;
+  color: $e;
 }
 
 a.download_excel { 

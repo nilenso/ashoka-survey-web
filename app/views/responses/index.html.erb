@@ -10,8 +10,6 @@
         <% @responses.first.answers_for_identifier_questions.each do |answer| %>
           <th><%= answer.question_content %> </th>
         <% end %>
-        <th><%= t('Actions') %></th>
-        <th><%= t('Status') %></th>
       </thead>
       <tbody>
         <% @responses.each do |response| %>
@@ -19,11 +17,11 @@
           <% response.answers_for_identifier_questions.each do |answer| %>
             <td><%= answer.content %> </td>
           <% end %>
-          <td>
-            <%= link_to 'Edit', edit_survey_response_path(:id => response.id) %>
-            <%= link_to image_tag("delete.png"), survey_response_path(:id => response.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, response %>
+          <td class="actions">
+            <p class="status"><%= "This response is #{response.status}." %></p>
+            <%= link_to icon_for('icon-edit', 'Edit'), edit_survey_response_path(:id => response.id) %>
+            <%= link_to icon_for('icon-trash', 'Delete'), survey_response_path(:id => response.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, response %>
           </td>
-          <td><%= response.status %></td>
         </tr>
         <% end %>
       </tbody>
