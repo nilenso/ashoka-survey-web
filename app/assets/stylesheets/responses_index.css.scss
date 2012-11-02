@@ -16,22 +16,26 @@ table.surveys_table {
 
   tbody tr {
     font-family: 'PT Sans', sans-serif;
-    background-color: $a;
+    background-color: $b;
+    &.incomplete {
+      background-color: $a;
+    }
   }
 
   td, th {
     &.actions {
       a {
-        font-family: 'PT Sans', sans-serif;      
+        font-family: 'Abel', sans-serif;      
         font-size: 1em;
         display: inline;
         margin-left: 10px;
-        color: lighten($d, 30%);
+        color: $c;
         &:hover {
           text-decoration: underline;
         }
       }
-      .status {
+      p.status {
+        text-align: left !important;
         font-family: 'Abel', sans-serif;      
         font-size: 1.2em;
         display: inline;

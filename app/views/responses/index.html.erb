@@ -13,12 +13,16 @@
       </thead>
       <tbody>
         <% @responses.each do |response| %>
-        <tr class="survey_row">
+        <tr class="survey_row <%= response.status %>">
           <% response.answers_for_identifier_questions.each do |answer| %>
             <td><%= answer.content %> </td>
           <% end %>
           <td class="actions">
-            <p class="status"><%= "This response is #{response.status}." %></p>
+            <% if response.status == 'complete' %>
+              <p class="status"><%= t('.complete') %></p>
+            <% else %>
+              <p class="status"><%= t('.incomplete') %></p>
+            <% end %>
             <%= link_to icon_for('icon-edit', 'Edit'), edit_survey_response_path(:id => response.id) %>
             <%= link_to icon_for('icon-trash', 'Delete'), survey_response_path(:id => response.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, response %>
           </td>
