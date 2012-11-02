@@ -17,14 +17,18 @@
           <% response.answers_for_identifier_questions.each do |answer| %>
             <td><%= answer.content %> </td>
           <% end %>
+
+          <td>
+          <% if response.status == 'complete' %>
+            <p class="status"><%= t('.complete') %></p>
+          <% else %>
+            <p class="status"><%= t('.incomplete') %></p>
+          <% end %>
+          </td>
+
           <td class="actions">
-            <% if response.status == 'complete' %>
-              <p class="status"><%= t('.complete') %></p>
-            <% else %>
-              <p class="status"><%= t('.incomplete') %></p>
-            <% end %>
-            <%= link_to icon_for('icon-edit', 'Edit'), edit_survey_response_path(:id => response.id) %>
-            <%= link_to icon_for('icon-trash', 'Delete'), survey_response_path(:id => response.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, response %>
+            <%= link_to icon_for('icon-edit', 'Edit'), edit_survey_response_path(:id => response.id), :class => 'edit_response' %>
+            <%= link_to icon_for('icon-remove', ''), survey_response_path(:id => response.id), :method => :delete, :class => 'delete_response', :data => { :confirm => t(:confirm) } if can? :destroy, response %>
           </td>
         </tr>
         <% end %>

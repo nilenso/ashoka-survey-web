@@ -24,6 +24,7 @@ table.surveys_table {
 
   td, th {
     &.actions {
+      float: right;
       a {
         font-family: 'Abel', sans-serif;      
         font-size: 1em;
@@ -32,15 +33,19 @@ table.surveys_table {
         color: $c;
         &:hover {
           text-decoration: underline;
+          color: darken($c, 5%);
+        }
+        &.delete_response {
+          margin-left: 15px;
         }
       }
-      p.status {
+    }
+    p.status {
         text-align: left !important;
         font-family: 'Abel', sans-serif;      
         font-size: 1.2em;
         display: inline;
         color: $d;
-      }
     }
     text-align: center;
     padding: 10px 20px;
