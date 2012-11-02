@@ -68,6 +68,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   display_save_status: ->
     if this.survey.has_errors()
-      window.notifications_view.set_error(I18n.t('js.save_successful'),)
+      window.notifications_view.set_error(I18n.t('js.save_unsuccessful'),)
     else
-      window.notifications_view.set_notice(I18n.t('js.save_unsuccessful'),)
+      window.notifications_view.set_notice(I18n.t('js.save_successful'),)
