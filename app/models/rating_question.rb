@@ -4,6 +4,8 @@ class RatingQuestion < Question
   attr_accessible :max_length
   validates_numericality_of :max_length, :only => :integer, :greater_than => 0, :allow_nil => true
 
+  DEFAULT_MAX_LENGTH = 5
+
   def report_data
     answers_content = answers.map(&:content)
     answers_content.uniq.inject([]) do |data, content|
@@ -16,6 +18,6 @@ class RatingQuestion < Question
   end
 
   def max_value_for_report
-    max_length
+    max_length || DEFAULT_MAX_LENGTH
   end
 end
