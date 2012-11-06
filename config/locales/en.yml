@@ -98,12 +98,13 @@ en:
     new:
       response_for_survey: "Give a response for %{survey_name}"
       response_saved: "Response successfully saved"
+      response_created: "Response successfully created!"
 
     index:
       list_of_responses: "List of Responses"
 
     edit:
-      delete: "Delete"
+      delete: "Delete"      
       edit_response: "Edit Response"
 
   answers:

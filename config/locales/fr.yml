@@ -96,6 +96,7 @@ fr:
     new:
       response_for_survey: "Donner une réponse pour %{survey_name}"
       response_saved: Réponse enregistrée avec succès
+      response_created: "Réponse créé avec succès!"
 
     index:
       list_of_responses: "Liste des réponses"
@@ -106,7 +107,7 @@ fr:
 
     edit:
       delete: "Delete-fr"
-      edit_response: "Edit Response"
+      edit_response: "Edit Response-fr"
 
   answers:
     validations:
