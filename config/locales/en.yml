@@ -104,6 +104,7 @@ en:
 
     edit:
       delete: "Delete"
+      edit_response: "Edit Response"
 
   answers:
     validations:

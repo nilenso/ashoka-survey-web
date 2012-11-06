@@ -106,6 +106,7 @@ fr:
 
     edit:
       delete: "Delete-fr"
+      edit_response: "Edit Response"
 
   answers:
     validations:
