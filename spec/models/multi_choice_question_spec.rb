@@ -22,5 +22,12 @@ describe MultiChoiceQuestion do
     end
   end
 
+  context "duplication" do
+    it "duplicates its options when it is duplicated" do
+      question = MultiChoiceQuestion.find_by_id(FactoryGirl.create(:question_with_options, :type => 'MultiChoiceQuestion').id)
+      question.dup.options.should_not be_empty
+    end
+  end
+
   it_behaves_like "a question"
 end

@@ -5,6 +5,11 @@ class DropDownQuestion < Question
     options.map(&:questions).flatten.map(&:with_sub_questions_in_order).flatten.unshift(self)
   end
 
+  amoeba do
+    enable
+    include_field :options
+  end
+
   def report_data
     return [] if no_answers?
     options.map { |option| [option.content, option.report_data] }

@@ -9,6 +9,11 @@ class MultiChoiceQuestion < Question
     options.map { |option| [option.content, choice_ids.count(option.id)] }
   end
 
+  amoeba do
+    enable
+    include_field :options
+  end
+
   private
 
   def choices

@@ -16,6 +16,7 @@ class Question < ActiveRecord::Base
     nil
   end
 
+
   def with_sub_questions_in_order
     [self]
   end
