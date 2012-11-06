@@ -21,6 +21,7 @@ fr:
     survey_shared: "In french: %{survey_name} has been shared"
     user_not_selected: "In francais: You haven't selected any user to publish the survey to"
     organizations_not_selected: "French: You haven't selected any organizations to share the survey with"
+    response_deleted: "La réponse a été supprimé"
 
   surveys:
     new:
