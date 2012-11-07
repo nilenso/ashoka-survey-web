@@ -12,3 +12,13 @@
   <label><%= t("activerecord.attributes.survey.description") %></label>
   <input type="text" name="description" value="{{description}}"></input>
 </div>
+
+<div>
+  <label><%= t("activerecord.attributes.survey.public") %></label>
+  {{#public}}
+    <input type="checkbox" name="public" value="{{public}}" checked ></input>
+  {{/public}}
+  {{^public}}
+    <input type="checkbox" name="public" value="{{public}}"></input>
+  {{/public}}
+</div>
