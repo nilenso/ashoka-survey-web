@@ -39,8 +39,8 @@
 
     <ul class="operations">
       <div class="response_operations">
-          <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey_responses_path(survey.id), :method => :post, :class => survey.class_for_disabled %></li>
-          <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled %></li>
+          <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey_responses_path(survey.id), :method => :post, :class => survey.class_for_disabled if can? :create, survey %></li>
+          <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can? :read, survey.responses %></li>
       </div>
 
       <div class="cso_admin_operations">
