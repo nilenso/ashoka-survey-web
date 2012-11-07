@@ -12,6 +12,7 @@
     </div>
   <% end %>
 
+  <%= recaptcha_tags if @response.survey.public? %>
   <%= f.actions do %>
     <%= f.action :submit, :as => :button, :label => t('.save') unless @response.survey.public? %>
     <% unless @response.complete? %>
