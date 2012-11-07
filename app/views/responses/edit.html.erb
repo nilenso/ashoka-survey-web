@@ -13,7 +13,7 @@
   <% end %>
 
   <%= f.actions do %>
-    <%= f.action :submit, :as => :button, :label => t('.save') %>
+    <%= f.action :submit, :as => :button, :label => t('.save') unless @response.survey.public? %>
     <% unless @response.complete? %>
       <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' } %>
     <% end %>
