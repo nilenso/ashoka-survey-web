@@ -1,7 +1,7 @@
 # Collection of questions
 
 class Survey < ActiveRecord::Base
-  attr_accessible :name, :expiry_date, :description, :questions_attributes, :published
+  attr_accessible :name, :expiry_date, :description, :questions_attributes, :published, :public
   validates_presence_of :name
   validate :expiry_date_should_not_be_in_past
   has_many :questions, :dependent => :destroy

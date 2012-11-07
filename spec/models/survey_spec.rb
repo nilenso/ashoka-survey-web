@@ -6,12 +6,15 @@ describe Survey do
   it { should respond_to :description }
   it { should respond_to :published }
   it { should respond_to :organization_id }
+  it { should respond_to :public }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:responses).dependent(:destroy) }
   it { should have_many(:survey_users).dependent(:destroy) }
   it { should have_many(:participating_organizations).dependent(:destroy) }
   it { should accept_nested_attributes_for :questions }
   it {should belong_to :organization }
+  it { should allow_mass_assignment_of(:public) }
+
 
   context "when validating" do
     it { should validate_presence_of :name }
