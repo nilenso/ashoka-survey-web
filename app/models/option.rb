@@ -6,11 +6,6 @@ class Option < ActiveRecord::Base
   validates_presence_of :content, :question_id
   default_scope :order => 'order_number'
 
-  amoeba do
-    enable
-    include_field :questions
-  end
-
   def as_json(opts={})
     super(opts).merge({:questions => questions.map { |question| question.json(:methods => :type) }})
   end
