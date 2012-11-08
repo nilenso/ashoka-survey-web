@@ -7,7 +7,7 @@
 
     <div class="question <%= "hidden sub_question" unless question.first_level?  %>" data-parent-id="<%= question.parent_id %>">
       <%= image_tag question.image.url(:medium) if question.image.exists? %>
-      <%= @response.order_number(question) %>
+      <%= ResponseDecorator.order_number(question) %>
       <%= @response.input_tag_for(question, f) %>
       <%= f.input :question_id, :as => :hidden %>
     </div>
