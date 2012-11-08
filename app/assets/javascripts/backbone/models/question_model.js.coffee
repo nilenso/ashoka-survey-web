@@ -36,6 +36,11 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   imageUploadUrl: ->
     "/api/questions/"+this.id+'/image_upload'
 
+  question_number: =>
+    parent_question = this.get('parent_question')
+    return "#{this.get('order_number') + 1}" unless parent_question
+    return "#{parent_question.question_number()}.#{this.get('order_number') + 1}"
+
   toJSON: ->
     question_attrs = {}
     _.each @attributes, (val, key) ->

@@ -29,13 +29,27 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     @sub_question_order_counter++
 
   add_sub_question: (type) ->
-    sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel
-      type: type
-      parent_id: this.id
-      survey_id: this.get('question').get('survey_id')
-      order_number: @next_sub_question_order_number()
 
-    @sub_question_models.push sub_question_model 
+    question = {
+      type: type,
+      parent_id: this.id,
+      survey_id: this.get('question').get('survey_id'),
+      order_number: @next_sub_question_order_number(),
+      parent_question: this.get('question')
+    };
+
+    switch question.type
+      when 'MultiChoiceQuestion'
+        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
+      when 'DropDownQuestion'
+        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
+      when 'RadioQuestion'
+        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
+      else
+        sub_question_model = new SurveyBuilder.Models.QuestionModel(question)
+
+
+    @sub_question_models.push sub_question_model
     sub_question_model.on('destroy', this.delete_sub_question, this)
     sub_question_model.save_model()
     this.trigger('add:sub_question', sub_question_model)
@@ -45,6 +59,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
 
   preload_sub_questions: ->
     _.each this.get('questions'), (question) =>
+      _(question).extend({parent_question: this.get('question')})
       switch question.type
         when 'MultiChoiceQuestion'
           question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
@@ -59,8 +74,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
       question_model.fetch()
 
     this.trigger('change:preload_sub_questions', @sub_question_models)
-    @sub_question_order_counter = _(@sub_question_models).max (question) -> question.get('order_number') 
-    
+    @sub_question_order_counter = _(@sub_question_models).max (question) -> question.get('order_number')
 
 SurveyBuilder.Models.OptionModel.setup()
 
