@@ -40,6 +40,16 @@ module Api
           render :json => response_json, :status => :bad_request
         end
       end
+
+      def image_upload
+        answer = Answer.find_by_id(params[:answer_id])
+        answer.photo = params[:media] if answer
+        if answer && answer.save
+          render :nothing => true
+        else
+          render :nothing => true, :status => :bad_request
+        end
+      end
     end
   end
 end
