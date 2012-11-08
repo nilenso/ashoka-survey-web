@@ -20,7 +20,9 @@
     show_sub_questions_of(option) for option in $('input[type=radio]:checked,option:checked')
 
   show_sub_questions_of = (option) ->
-    $(sub_question).removeClass('hidden') for sub_question in sub_questions_for(option)
+    for sub_question in sub_questions_for(option)
+      $(sub_question).removeClass('hidden')
+      $(sub_question).css('margin-left', $(sub_question).data('nesting-level')*15)
 
   hide_sub_questions_of = (option) ->
     sub_questions_for(option).each (index) ->

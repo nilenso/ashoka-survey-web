@@ -41,4 +41,9 @@ class Question < ActiveRecord::Base
   def report_data
     []
   end
+
+  def nesting_level
+    return 1 unless parent
+    return parent_question.nesting_level + 1
+  end
 end

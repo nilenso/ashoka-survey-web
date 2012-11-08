@@ -126,7 +126,18 @@ describe Question do
       nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
       nested_question.parent_question.should == question
   end
-  
+
+  it "returns its level of nesting" do
+      question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+      question.options << Option.create(content: "Option", order_number: 0)
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
+      nested_question.options << Option.create(content: "Option", order_number: 0)
+      second_nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: nested_question.options.first.id})
+      question.nesting_level.should == 1
+      nested_question.nesting_level.should == 2
+      second_nested_question.nesting_level.should == 3
+  end
+
   context "reports" do
     it "has no report data" do
       FactoryGirl.create(:question).report_data.should be_empty
