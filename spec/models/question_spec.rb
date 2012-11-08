@@ -120,6 +120,13 @@ describe Question do
     end
   end
 
+  it "returns parent question of current child question" do
+      question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+      question.options << Option.create(content: "Option", order_number: 0)
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
+      nested_question.parent_question.should == question
+  end
+  
   context "reports" do
     it "has no report data" do
       FactoryGirl.create(:question).report_data.should be_empty

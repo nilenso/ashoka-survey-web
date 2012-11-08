@@ -16,6 +16,9 @@ class Question < ActiveRecord::Base
     nil
   end
 
+  def parent_question
+    parent.question
+  end
 
   def with_sub_questions_in_order
     [self]
