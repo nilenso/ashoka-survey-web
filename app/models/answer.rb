@@ -13,7 +13,7 @@ class Answer < ActiveRecord::Base
   has_many :choices, :dependent => :destroy
   validate :date_should_be_valid
   attr_accessible :photo
-  has_attached_file :photo, :styles => { :medium => "300x300>"}
+  has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>"}
   validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
   validate :maximum_photo_size
   validates_numericality_of :content, :if => Proc.new {|answer| (answer.content.present?) && (answer.question.type == 'NumericQuestion') }
@@ -48,6 +48,14 @@ class Answer < ActiveRecord::Base
     return choices.map(&:content).join(", ") if question.type == 'MultiChoiceQuestion'
     return (server_url + photo.url) if question.type == 'PhotoQuestion'
     return content
+  end
+
+  def image?
+    question.type == "PhotoQuestion"
+  end
+
+  def thumb_url
+    photo.url(:thumb) if image?
   end
 
   private

@@ -206,4 +206,16 @@ describe Answer do
     text_answer = FactoryGirl.create(:answer, :question => text_question)
     text_answer.question_content.should == text_question.content
   end
+
+  it "checks whether the answer is an image" do
+    question = FactoryGirl.create :question, :type => 'PhotoQuestion'
+    answer = FactoryGirl.create :answer_with_image, :question => question
+    answer.should be_image
+  end
+
+  it "returns the thumb url if the answer is an image" do
+    question = FactoryGirl.create :question, :type => 'PhotoQuestion'
+    answer = FactoryGirl.create :answer_with_image, :question => question
+    answer.thumb_url.should == answer.photo.url(:thumb)
+  end
 end

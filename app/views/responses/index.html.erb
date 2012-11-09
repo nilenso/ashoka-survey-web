@@ -15,7 +15,13 @@
         <% @responses.each do |response| %>
         <tr class="survey_row <%= response.status %>">
           <% response.answers_for_identifier_questions.each do |answer| %>
-            <td><%= answer.content %> </td>
+            <td>
+            <% if answer.image? %>
+              <%= image_tag answer.thumb_url %>
+            <% else %>  
+              <%= answer.content %> 
+            <% end %>
+            </td>
           <% end %>
 
           <td>
