@@ -45,9 +45,17 @@ class ResponseDecorator < Draper::Base
     end
   end
 
-  def self.order_number(question)
-    return question.order_number + 1 unless question.parent
-    return "#{order_number(question.parent_question)}.#{question.order_number + 1}"
+  def self.question_number(question)
+    if question.parent
+      sibling_questions = question.parent.questions
+    else
+      sibling_questions = question.survey.first_level_questions
+    end
+
+    factor = sibling_questions.minimum('order_number')
+
+    return question.order_number - factor + 1 unless question.parent
+    return "#{question_number(question.parent_question)}.#{question.order_number - factor + 1}"
   end
 
   private
