@@ -26,8 +26,8 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @dummy_survey_details = new SurveyBuilder.Views.Dummies.SurveyDetailsView({ model: survey_model, template: template})
 
   render: ->
-    ($(this.el).find("#dummy_survey_details").append(@dummy_survey_details.render().el)) 
-    ($(this.el).find("#dummy_questions").append(question.render().el)) for question in @questions 
+    ($(this.el).find("#dummy_survey_details").append(@dummy_survey_details.render().el))
+    ($(this.el).find("#dummy_questions").append(question.render().el)) for question in @questions
     return this
 
   unfocus_all: ->
@@ -44,5 +44,8 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     _(@questions).each (question) =>
       index = $(question.el).index()
       question.model.set({order_number: last_order_number + index + 1})
+      question.model.question_number = index + 1
     @questions = _(@questions).sortBy (question) ->
       question.model.get('order_number')
+    this.render()
+
