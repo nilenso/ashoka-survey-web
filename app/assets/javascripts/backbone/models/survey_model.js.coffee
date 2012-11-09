@@ -18,8 +18,8 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
 
     question_model.set('survey_id' : this.survey_id)
     @set_order_number_for_question(question_model)
-    @set_question_number_for_question(question_model)
     @question_models.push question_model
+    @set_question_number_for_question(question_model)
     question_model.on('destroy', this.delete_question_model, this)
     question_model
 
@@ -35,7 +35,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     question_model.set('order_number' : this.next_order_number())
 
   set_question_number_for_question: (question_model) ->
-    question_model.question_number = @question_models.length + 1
+    question_model.question_number = @question_models.length
 
   save: ->
     super({}, {error: this.error_callback, success: this.success_callback})
