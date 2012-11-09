@@ -13,7 +13,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
   render: ->
     this.model.set('content', 'Untitled question') if _.isEmpty(this.model.get('content'))
     data = _.extend(this.model.toJSON().question, {errors: this.model.errors, image_url: this.model.get('image_url')})
-    data = _(data).extend({question_number: this.model.question_number()})
+    data = _(data).extend({question_number: this.model.question_number})
     $(this.el).html('<div class="dummy_question_content">' + Mustache.render(this.template, data) + '</div>')
     $(this.el).addClass("dummy_question")
     $(this.el).find('abbr').show() if this.model.get('mandatory')
@@ -38,4 +38,4 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
     $(this.el).children('.dummy_question_content').addClass("active")
 
   unfocus: ->
-    $(this.el).children('.dummy_question_content').removeClass("active")    
+    $(this.el).children('.dummy_question_content').removeClass("active")
