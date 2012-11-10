@@ -11,6 +11,8 @@ class Survey < ActiveRecord::Base
   belongs_to :organization
   has_many :survey_users, :dependent => :destroy
   has_many :participating_organizations, :dependent => :destroy
+  scope :published, where(:published => true)
+  scope :unpublished, where(:published => false)
 
   def publish
     self.published = true

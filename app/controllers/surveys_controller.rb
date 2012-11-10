@@ -9,8 +9,8 @@ class SurveysController < ApplicationController
 
   def index
     @surveys ||= []
-    @surveys = @surveys.where(:published => true)  if params[:published].present?
-    @surveys = @surveys.where(:published => false) if params[:unpublished].present?
+    @surveys = @surveys.published  if params[:published].present?
+    @surveys = @surveys.unpublished if params[:unpublished].present?
     @surveys = @surveys.paginate(:page => params[:page], :per_page => 5)
     @surveys = SurveyDecorator.decorate(@surveys)
     @organizations = Organization.all(access_token)

@@ -67,6 +67,20 @@ describe Survey do
       survey.publish
       survey.should be_published
     end
+
+    it "returns a list of published surveys" do
+      survey = FactoryGirl.create(:survey)
+      another_survey = FactoryGirl.create(:survey, :published => true)
+      Survey.unpublished.should include(survey)
+      Survey.unpublished.should_not include(another_survey)
+    end
+
+    it "returns a list of published surveys" do
+      survey = FactoryGirl.create(:survey)
+      another_survey = FactoryGirl.create(:survey, :published => true)
+      Survey.published.should_not include(survey)
+      Survey.published.should include(another_survey)
+    end
   end
 
   context "users" do
