@@ -1,5 +1,6 @@
 SurveyWeb::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
+
   config.action_dispatch.rack_cache = {
       :metastore    => Dalli::Client.new,
       :entitystore  => 'file:tmp/cache/rack/body',
