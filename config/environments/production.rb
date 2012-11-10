@@ -1,4 +1,3 @@
-require 'rack-cache'
 SurveyWeb::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
   config.action_dispatch.rack_cache = {
