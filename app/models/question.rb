@@ -10,14 +10,11 @@ class Question < ActiveRecord::Base
   validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id], :allow_nil => true
 
   default_scope :order => 'order_number'
+  delegate :question, :to => :parent, :prefix => true
 
   def image_url
     return image.url(:thumb) if image.exists?
     nil
-  end
-
-  def parent_question
-    parent.question
   end
 
   def with_sub_questions_in_order

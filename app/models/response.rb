@@ -9,6 +9,7 @@ class Response < ActiveRecord::Base
   validates_presence_of :organization_id
   validates_presence_of :user_id
   validates_associated :answers
+  delegate :questions, :to => :survey
 
   def answers_for_identifier_questions
     answers.find_all { |answer| answer.question.identifier? }
@@ -36,10 +37,6 @@ class Response < ActiveRecord::Base
 
   def validating?
     status == 'validating'
-  end
-
-  def questions
-    survey.questions
   end
 
   def set(survey_id, user_id, organization_id)

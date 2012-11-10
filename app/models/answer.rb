@@ -20,6 +20,8 @@ class Answer < ActiveRecord::Base
   after_save :touch_multi_choice_answer
 
   default_scope includes('question').order('questions.order_number')
+  delegate :content, :to => :question, :prefix => true
+  delegate :validating?, :to => :response, :prefix => true
 
   def option_ids
     self.choices.collect(&:option_id)
@@ -29,10 +31,6 @@ class Answer < ActiveRecord::Base
     ids.delete_if(&:blank?)
     choices.destroy_all
     ids.each { |option_id| choices << Choice.new(:option_id => option_id) }
-  end
-
-  def question_content
-    question.content
   end
 
   def content
@@ -59,10 +57,6 @@ class Answer < ActiveRecord::Base
   end
 
   private
-
-  def response_validating?
-    response.validating?
-  end
 
   def maximum_photo_size
     if question.type == "PhotoQuestion"
