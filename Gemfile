@@ -19,7 +19,6 @@ gem 'i18n-js'
 gem 'airbrake'
 gem "recaptcha", :require => "recaptcha/rails"
 gem 'dalli'
-gem 'turbolinks'
 
 # Gems used only for assets and not required
 # in production environments by default.
