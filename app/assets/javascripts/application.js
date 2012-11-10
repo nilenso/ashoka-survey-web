@@ -31,6 +31,7 @@
 //= require backbone_relational
 //= require backbone_rails_sync
 //= require backbone_datalink
+//= require turbolinks
 //= require backbone/survey_builder
 //= require_tree .
 
