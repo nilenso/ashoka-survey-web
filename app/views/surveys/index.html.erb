@@ -4,7 +4,9 @@
 
 <% if can? :create, Survey %>
 <div class="admin_tasks">
-  <%= link_to icon_for('icon-plus', t(".create_survey")), surveys_path, :method => :post, :class => "create_survey" %>
+  <div data-no-turbolink>
+    <%= link_to icon_for('icon-plus', t(".create_survey")), surveys_path, :method => :post, :class => "create_survey" %>
+  </div>
   <% if @surveys.present? %>
     <div class="filters">
       <%= link_to t(".published"), surveys_path(:published => true) %> |
@@ -47,7 +49,7 @@
         <% if survey.published %>
           <li><%= link_to icon_for('icon-group', t(".share")), survey_share_with_organizations_path(survey.id) if can? :share_with_organizations, survey %></li>
         <% else %>
-          <li><%= link_to icon_for('icon-edit', t('.edit')), surveys_build_path(survey.id)  if can? :edit, survey %></li>
+          <li><div data-no-turbolink><%= link_to icon_for('icon-edit', t('.edit')), surveys_build_path(survey.id)  if can? :edit, survey %></div></li>
         <% end %>
         <li><%= link_to icon_for('icon-arrow-up', t(".publish")), survey_publish_to_users_path(survey.id) if can? :publish_to_users, survey %></li>
         <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
