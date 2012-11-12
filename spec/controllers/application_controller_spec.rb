@@ -68,12 +68,21 @@ describe ApplicationController do
     controller.current_user_org.should == 23
   end
   
-  it "returns current user info along with the user_id and the session_token" do
-    session[:user_id] = 12
-    session[:user_info] = {:org_id => 23} 
-    session[:session_token] = "foo"
-    controller.current_user_info.should == { :org_id => 23, :user_id => 12, :session_token => "foo" }
+  context "#current_user_info" do
+    it "returns current user info along with the user_id and the session_token" do
+      session[:user_id] = 12
+      session[:user_info] = {:org_id => 23} 
+      session[:session_token] = "foo"
+      controller.current_user_info.should == { :org_id => 23, :user_id => 12, :session_token => "foo" }
+    end    
+    
+    it "returns the session_token if no user is logged in" do
+      session[:session_token] = "foo"
+      controller.current_user_info.should == { :session_token => "foo" }
+    end
   end
+  
+
 
   it "knows if the current user is a cso admin" do
     sign_in_as('cso_admin')

@@ -29,7 +29,11 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user_info
-    session[:user_info].merge(:user_id => session[:user_id], :session_token => session_token) if user_currently_logged_in?
+    if user_currently_logged_in?
+      session[:user_info].merge(:user_id => session[:user_id], :session_token => session_token) 
+    else
+      { :session_token => session_token }
+    end
   end
 
   def signed_in_as_cso_admin?
