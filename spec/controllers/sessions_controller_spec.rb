@@ -24,6 +24,12 @@ describe SessionsController do
       response.should redirect_to(root_path)
       session[:access_token].should == @auth['credentials']['token']
     end
+    
+    it "clears the previous session_token" do
+      session[:session_token] = "foo"
+      post :create, :provider => 'user_owner'
+      session[:session_token].should be_nil
+    end
   end
 
   context "when destroying a session" do
