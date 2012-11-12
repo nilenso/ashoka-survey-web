@@ -55,6 +55,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     this.options.push view
     view.on('render_preloaded_sub_questions', this.render, this)
     view.on('render_added_sub_question', this.render, this)
+    view.on('destroy:sub_question', this.reorder_questions, this)
     this.render()
 
   delete_option_view: (model) ->

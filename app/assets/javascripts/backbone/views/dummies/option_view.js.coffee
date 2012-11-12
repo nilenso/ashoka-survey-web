@@ -32,3 +32,4 @@ class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
     view = sub_question_model.dummy_view
     @sub_questions = _(@sub_questions).without(view)
     view.remove()
+    this.trigger('destroy:sub_question')

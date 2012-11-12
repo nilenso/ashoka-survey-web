@@ -38,6 +38,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     question = _(@questions).find((question) -> question.model == model )
     @questions = _(@questions).without(question)
     question.remove()
+    @reorder_questions()
 
   reorder_questions: (event, ui) =>
     last_order_number = @survey_model.next_order_number()
