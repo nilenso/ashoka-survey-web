@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :set_locale
+  before_filter :set_locale, :session_token
   helper_method :current_user_info
 
   def default_url_options(options={})
@@ -29,7 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_user_info
-    session[:user_info].merge(:user_id => session[:user_id]) if user_currently_logged_in?
+    session[:user_info].merge(:user_id => session[:user_id], :session_token => session_token) if user_currently_logged_in?
   end
 
   def signed_in_as_cso_admin?
@@ -44,6 +44,10 @@ class ApplicationController < ActionController::Base
     current_user_info[:name]
   end
 
+  def session_token
+    session[:session_token] ||= SecureRandom.urlsafe_base64
+  end
+  
   helper_method :user_currently_logged_in?, :signed_in_as_cso_admin?, :current_user_org, :current_username
 
   def oauth_client

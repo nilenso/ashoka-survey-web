@@ -67,6 +67,13 @@ describe ApplicationController do
     session[:user_info] = {:org_id => 23} 
     controller.current_user_org.should == 23
   end
+  
+  it "returns current user info along with the user_id and the session_token" do
+    session[:user_id] = 12
+    session[:user_info] = {:org_id => 23} 
+    session[:session_token] = "foo"
+    controller.current_user_info.should == { :org_id => 23, :user_id => 12, :session_token => "foo" }
+  end
 
   it "knows if the current user is a cso admin" do
     sign_in_as('cso_admin')
@@ -79,5 +86,17 @@ describe ApplicationController do
     sign_in_as('cso_admin')
     session[:user_info][:name] = 'Tim'
     controller.current_username.should == 'Tim'
+  end
+  
+  context "session token" do
+    it "retrieves the current session token" do
+      session[:session_token] = "foo"
+      controller.session_token.should == "foo"
+    end
+    
+    it "generates a new session token if one does not exist" do
+      session[:session_token] = nil
+      controller.session_token.should be_present
+    end
   end
 end
