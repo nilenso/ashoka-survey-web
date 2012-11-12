@@ -22,7 +22,7 @@ class NumericQuestion < Question
   private
 
   def max_value_in_answers
-    answers.map(&:content).max || 0
+    answers.map(&:content).compact.max
   end
 
   def min_value_less_than_max_value

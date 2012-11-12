@@ -51,10 +51,6 @@ describe NumericQuestion do
       numeric_question.max_value_for_report.should == 10
     end
 
-    it "returns 0 if max value for answers is nil" do
-      numeric_question.max_value_for_report.should == 0
-    end
-
     it "returns max value as greatest answer for the question if it is not defined" do
       numeric_question.answers << FactoryGirl.create( :answer_with_complete_response, :content=>2)
       numeric_question.answers << FactoryGirl.create( :answer_with_complete_response, :content=>5)
