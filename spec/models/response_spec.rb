@@ -72,6 +72,12 @@ describe Response do
     response = FactoryGirl.build(:response, :survey_id => survey.id)
     response.questions.should == survey.questions
   end
+  
+  it "gets the public status of its survey" do
+    survey = FactoryGirl.create(:survey, :public => true)
+    response = FactoryGirl.build(:response, :survey_id => survey.id)
+    response.survey_public?.should be_true
+  end
 
   it "provides the filename for the excel file" do
     survey = FactoryGirl.create(:survey)

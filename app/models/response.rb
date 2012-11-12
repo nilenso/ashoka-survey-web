@@ -10,6 +10,7 @@ class Response < ActiveRecord::Base
   validates_presence_of :user_id
   validates_associated :answers
   delegate :questions, :to => :survey
+  delegate :public?, :to => :survey, :prefix => true
 
   def answers_for_identifier_questions
     answers.find_all { |answer| answer.question.identifier? }

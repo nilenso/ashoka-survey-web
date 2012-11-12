@@ -13,11 +13,13 @@
     </div>
   <% end %>
 
-  <%= recaptcha_tags if @response.survey.public? %>
   <%= f.actions do %>
-    <%= f.action :submit, :as => :button, :label => t('.save') unless @response.survey.public? %>
-    <% unless @response.complete? %>
-      <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' } %>
+  <% if @response.survey_public? %>
+      <%= recaptcha_tags :display => { :theme => :clean } %>
+      <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'complete_button' } %>
+    <% else %>
+      <%= f.action :submit, :as => :button, :label => t('.save') %>
+      <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' } unless @response.complete? %>
     <% end %>
   <% end %>
 <% end %>
