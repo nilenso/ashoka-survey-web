@@ -6,8 +6,7 @@ class Response < ActiveRecord::Base
   accepts_nested_attributes_for :answers
   attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status, :updated_at
   validates_presence_of :survey_id
-  validates_presence_of :organization_id
-  validates_presence_of :user_id
+  validates_presence_of :organization_id, :user_id, :unless => :survey_public?
   validates_associated :answers
   delegate :questions, :to => :survey
   delegate :public?, :to => :survey, :prefix => true, :allow_nil => true

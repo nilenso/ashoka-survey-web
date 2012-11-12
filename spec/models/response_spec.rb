@@ -30,6 +30,12 @@ describe Response do
     response.merge_status({ :status => 'incomplete', :updated_at => 5.days.from_now.to_s })
     response.should be_incomplete
   end
+  
+  it "doesn't require a user_id and organization_id if it's survey is public" do
+    survey = FactoryGirl.create :survey, :public => true
+    response = Response.new(:survey => survey)
+    response.should be_valid
+  end
 
   context "when marking a response incomplete" do
     it "marks the response incomplete" do
