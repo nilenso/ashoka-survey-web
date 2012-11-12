@@ -3,14 +3,13 @@ class Ability
 
   def initialize(user_info)
 
-    if !user_info # guest user (not logged in)
+    if user_info[:user_id].blank? # guest user (not logged in)
       can :read, Survey do |survey|
         nil
       end
       can :build, Survey if Rails.env.test? # Couldn't log in a user from Capybara
-      can :read, Survey
-      can :create, Response, :survey => {:public => true}
-      can :edit, Response,   :survey => {:public => true}
+      can :read, Survey, :public => true
+      can :manage, Response, :session_token => user_info[:session_token]
     else
       role = user_info[:role]
       if role == 'admin'

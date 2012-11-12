@@ -122,11 +122,26 @@ describe "Abilities" do
     
     context "when is not logged in" do
       let(:public_survey) { FactoryGirl.create :survey, :public => true  }
-      let(:user_info) { nil }
+      let(:user_info) { { :session_token => "foo" } }
+      let(:response) { Response.create(:survey => public_survey) }
       
-      it { should be_able_to :create, Response.new(:survey => public_survey) }
-      it { should be_able_to :edit, Response.new(:survey => public_survey) }
-      it { should be_able_to :read, public_survey }
+      context "can manage a response that he created" do
+        before(:each) do
+          response.session_token = "foo"
+          response.save
+        end
+        
+        it { should be_able_to :manage, response }
+      end
+      
+      context "cannot manage a response that he didn't create" do
+        before(:each) do
+          response.session_token = "fooabc"
+          response.save
+        end
+        
+        it { should_not be_able_to :manage, response }
+      end
     end
   end
 end
