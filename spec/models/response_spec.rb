@@ -57,13 +57,14 @@ describe Response do
   end
 
   context "#set" do
-    it "sets the survey_id, user_id and organization_id" do
+    it "sets the survey_id, user_id, organization_id and session_token" do
       survey = FactoryGirl.create(:survey)
       response = FactoryGirl.build(:response)
-      response.set(survey.id, 5, 6)
+      response.set(survey.id, 5, 6, "foo")
       response.survey_id.should == survey.id
       response.user_id.should == 5
       response.organization_id.should == 6
+      response.session_token.should == "foo"
     end
   end
 

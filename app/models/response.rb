@@ -10,7 +10,7 @@ class Response < ActiveRecord::Base
   validates_presence_of :user_id
   validates_associated :answers
   delegate :questions, :to => :survey
-  delegate :public?, :to => :survey, :prefix => true
+  delegate :public?, :to => :survey, :prefix => true, :allow_nil => true
 
   def answers_for_identifier_questions
     answers.find_all { |answer| answer.question.identifier? }
@@ -40,10 +40,11 @@ class Response < ActiveRecord::Base
     status == 'validating'
   end
 
-  def set(survey_id, user_id, organization_id)
+  def set(survey_id, user_id, organization_id, session_token)
     self.survey_id = survey_id
     self.organization_id = organization_id
     self.user_id = user_id
+    self.session_token = session_token
   end
 
   def filename_for_excel
