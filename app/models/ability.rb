@@ -8,6 +8,9 @@ class Ability
         nil
       end
       can :build, Survey if Rails.env.test? # Couldn't log in a user from Capybara
+      can :read, Survey
+      can :create, Response, :survey => {:public => true}
+      can :edit, Response,   :survey => {:public => true}
     else
       role = user_info[:role]
       if role == 'admin'

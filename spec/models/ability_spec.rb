@@ -119,5 +119,14 @@ describe "Abilities" do
         it { should_not be_able_to :destroy,  response }
       end
     end
+    
+    context "when is not logged in" do
+      let(:public_survey) { FactoryGirl.create :survey, :public => true  }
+      let(:user_info) { nil }
+      
+      it { should be_able_to :create, Response.new(:survey => public_survey) }
+      it { should be_able_to :edit, Response.new(:survey => public_survey) }
+      it { should be_able_to :read, public_survey }
+    end
   end
 end
