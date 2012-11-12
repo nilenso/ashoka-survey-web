@@ -107,6 +107,7 @@ en:
     edit:
       delete: "Delete"      
       edit_response: "Edit Response"
+      error_saving_response: "Error saving response"
 
   answers:
     validations:
@@ -157,4 +158,8 @@ en:
     first_option: First Option
     second_option: Second Option
     third_option: Third Option
-
+    
+  recaptcha:
+    errors:
+      verification_failed: "Word verification response is incorrect, please try again."
+      recaptcha_unavailable: "The CAPTCHA service is unavailable."
