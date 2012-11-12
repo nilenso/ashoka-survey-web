@@ -16,7 +16,7 @@ SurveyWeb::Application.routes.draw do
       put 'update_publish_to_users', 'update_share_with_organizations'
       match  "public_response" => "responses#create"
       resources :responses, :only => [:new, :create, :index, :edit, :update, :destroy] do
-        member { get "complete" }
+        member { put "complete" }
       end
     end
 
