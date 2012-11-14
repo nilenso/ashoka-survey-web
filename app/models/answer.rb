@@ -22,6 +22,7 @@ class Answer < ActiveRecord::Base
   default_scope includes('question').order('questions.order_number')
   delegate :content, :to => :question, :prefix => true
   delegate :validating?, :to => :response, :prefix => true
+  delegate :identifier?, :to => :question
 
   def option_ids
     self.choices.collect(&:option_id)

@@ -12,7 +12,8 @@ class Response < ActiveRecord::Base
   delegate :public?, :to => :survey, :prefix => true, :allow_nil => true
 
   def answers_for_identifier_questions
-    answers.find_all { |answer| answer.question.identifier? }
+    identifier_answers = answers.find_all { |answer| answer.identifier? }
+    identifier_answers.blank? ? five_answers : identifier_answers
   end
 
   def complete
@@ -20,11 +21,11 @@ class Response < ActiveRecord::Base
   end
 
   def incomplete
-   update_attribute(:status, 'incomplete')
+    update_attribute(:status, 'incomplete')
   end
 
   def validating
-   update_attribute(:status, 'validating')
+    update_attribute(:status, 'validating')
   end
 
   def complete?
@@ -56,7 +57,7 @@ class Response < ActiveRecord::Base
       existing_answer && (Time.parse(answer_attributes['updated_at']) < existing_answer.updated_at)
     end
   end
-  
+
   def merge_status(params)
     return unless params[:updated_at]
     if Time.parse(params[:updated_at]) > updated_at
@@ -71,5 +72,11 @@ class Response < ActiveRecord::Base
 
   def to_json_with_answers_and_choices
     to_json(:include => {:answers => {:include => :choices}})
+  end
+
+  private
+
+  def five_answers
+    answers.limit(5).to_a
   end
 end
