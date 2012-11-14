@@ -3,6 +3,7 @@ class ResponsesController < ApplicationController
   load_and_authorize_resource :through => :survey
 
   before_filter :survey_published
+  before_filter :authorize_public_response, :only => :create
 
   def index
     respond_to do |format|
@@ -75,6 +76,13 @@ class ResponsesController < ApplicationController
     unless survey.published
       flash[:error] = t "flash.reponse_to_unpublished_survey", :survey_name => survey.name
       redirect_to surveys_path
+    end
+  end
+
+  def authorize_public_response
+    survey = Survey.find(params[:survey_id])
+    if survey.public? && !user_currently_logged_in?
+      raise CanCan::AccessDenied.new("Not authorized!", :create, Response) unless params[:auth_key] == survey.auth_key
     end
   end
 end
