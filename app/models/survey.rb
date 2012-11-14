@@ -15,6 +15,7 @@ class Survey < ActiveRecord::Base
   scope :published, where(:published => true)
   scope :unpublished, where(:published => false)
   before_create :generate_auth_key, :if => :public?
+  default_scope :order => 'created_at DESC'
 
   def publish
     self.published = true

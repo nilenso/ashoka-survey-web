@@ -34,6 +34,14 @@ describe Survey do
     end
   end
 
+  context "orders by newest to oldest" do
+    it "fetches all surveys in descending order of created_at" do
+      survey = FactoryGirl.create(:survey)
+      another_survey = FactoryGirl.create(:survey)
+      Survey.all.should == [another_survey, survey]
+    end
+  end
+
   context "when duplicating" do
     it "duplicates the nested questions as well" do
       survey = FactoryGirl.create :survey_with_questions
