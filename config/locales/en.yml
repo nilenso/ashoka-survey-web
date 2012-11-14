@@ -60,6 +60,7 @@ en:
       reports: "Reports"
       no_surveys: "There are no surveys yet."
       copy_public_link: "Copy public link"
+      copied: "Copied!"
 
     share:
       share_survey: "Share Survey"

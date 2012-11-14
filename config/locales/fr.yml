@@ -61,6 +61,7 @@ fr:
       reports: "Rapports"
       no_surveys: "Il n'y a pas encore d'enquêtes."
       copy_public_link: "Copier le lien public"
+      copied: "Copié!"
 
     share:
       share_survey: "Enquête Partager"

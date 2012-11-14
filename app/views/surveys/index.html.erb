@@ -75,7 +75,7 @@
         copy: $(this).data('public-link'),
         afterCopy: function() {
           var cache = $(this).html();
-          $(this).text('Copied!');
+          $(this).text("<%= t('.copied') %>");
           var that = $(this);
           setTimeout(function(){
             that.html(cache);
