@@ -56,6 +56,14 @@ class Answer < ActiveRecord::Base
     photo.url(:thumb) if image?
   end
 
+  def select_latest_image(params)
+    if photo_updated_at.nil?
+      self.photo = params[:media]
+    elsif photo_updated_at < Time.parse(params['photo_updated_at'])
+      self.photo = params[:media]
+    end
+  end
+
   private
 
   def maximum_photo_size

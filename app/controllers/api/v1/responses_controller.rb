@@ -43,9 +43,9 @@ module Api
 
       def image_upload
         answer = Answer.find_by_id(params[:answer_id])
-        answer.photo = params[:media] if answer
+        answer.select_latest_image(params) if answer
         if answer && answer.save
-          render :nothing => true
+          render :json => { :image_url => answer.thumb_url, :photo_updated_at => answer.photo_updated_at }
         else
           render :nothing => true, :status => :bad_request
         end

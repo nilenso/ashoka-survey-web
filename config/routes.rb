@@ -29,7 +29,7 @@ SurveyWeb::Application.routes.draw do
       resources :options, :except => [:edit, :new, :show]
       resources :surveys, :only => [:index, :show, :update]
       resources :responses, :only => [:create, :update] do
-        member { post "image_upload" }
+        member { put "image_upload" }
       end
       post 'questions/:id/image_upload' => 'questions#image_upload'
     end

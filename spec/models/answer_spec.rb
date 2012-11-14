@@ -218,4 +218,15 @@ describe Answer do
     answer = FactoryGirl.create :answer_with_image, :question => question
     answer.thumb_url.should == answer.photo.url(:thumb)
   end
+
+  it "selects the latest image to update" do
+    question = FactoryGirl.create :question, :type => 'PhotoQuestion'
+    answer = FactoryGirl.create :answer_with_image, :question => question
+    photo = Rack::Test::UploadedFile.new('spec/fixtures/images/another.jpg')
+    photo.content_type = 'image/jpeg'
+    params = {'photo_updated_at' => Time.now.to_s, 'media' => photo }
+    answer.select_latest_image(params)
+    answer.save
+    answer.reload.photo.url.should_not =~ /sample/
+  end
 end
