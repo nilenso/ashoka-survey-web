@@ -11,14 +11,15 @@ class Survey < ActiveRecord::Base
   belongs_to :organization
   has_many :survey_users, :dependent => :destroy
   has_many :participating_organizations, :dependent => :destroy
+  validates_uniqueness_of :auth_key, :allow_nil => true
   scope :published, where(:published => true)
   scope :unpublished, where(:published => false)
+  before_create :generate_auth_key, :if => :public?
 
   def publish
     self.published = true
     self.save
   end
-
 
   def user_ids
     self.survey_users.map(&:user_id)
@@ -71,6 +72,10 @@ class Survey < ActiveRecord::Base
   end
 
   private
+
+  def generate_auth_key
+    self.auth_key = SecureRandom.urlsafe_base64
+  end
 
   def expiry_date_should_not_be_in_past
     if !expiry_date.blank? and expiry_date < Date.current

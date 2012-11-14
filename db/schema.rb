@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121112191031) do
+ActiveRecord::Schema.define(:version => 20121114061152) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -110,6 +110,7 @@ ActiveRecord::Schema.define(:version => 20121112191031) do
     t.boolean  "published",       :default => false
     t.integer  "organization_id"
     t.boolean  "public",          :default => false
+    t.string   "auth_key"
   end
 
   add_index "surveys", ["organization_id"], :name => "index_surveys_on_organization_id"

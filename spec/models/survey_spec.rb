@@ -1,12 +1,15 @@
 require 'spec_helper'
 
 describe Survey do
+  #subject { FactoryGirl.create :survey }
+
   it { should respond_to :name }
   it { should respond_to :expiry_date }
   it { should respond_to :description }
   it { should respond_to :published }
   it { should respond_to :organization_id }
   it { should respond_to :public }
+  it { should respond_to(:auth_key) }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:responses).dependent(:destroy) }
   it { should have_many(:survey_users).dependent(:destroy) }
@@ -157,6 +160,26 @@ describe Survey do
       5.times { question.answers << FactoryGirl.create(:answer_with_complete_response, :content => question.options.first.content) }
       3.times { question.answers << FactoryGirl.create(:answer_with_complete_response, :content => question.options.last.content) }
       survey.questions_with_report_data.should == [question]
+    end
+  end
+
+  context "authorization key for public surveys" do
+    it "contains a urlsafe random string" do
+      survey = FactoryGirl.create :survey, :public => true
+      survey.auth_key.should_not be_blank
+      survey.auth_key.should =~ /[A-Za-z0-9\-_]+/
+    end
+
+    it "is nil for non public surveys" do
+      survey = FactoryGirl.create :survey, :public => false
+      survey.auth_key.should be_nil
+    end
+
+    it "is unique" do
+      survey = FactoryGirl.create :survey, :auth_key => 'foo'
+      dup_survey = FactoryGirl.build :survey, :auth_key => 'foo'
+      dup_survey.should_not be_valid
+      dup_survey.errors.full_messages.should include "Auth key has already been taken"
     end
   end
 end
