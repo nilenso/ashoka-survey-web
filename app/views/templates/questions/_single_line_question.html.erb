@@ -17,13 +17,16 @@
     <label><%= t("activerecord.attributes.question.image") %> </label>
     <input name="image" class="fileupload" type="file" name="files[]">
     <div class="spinner"></div>
- </div>
-<div>
-  <label><%= t "surveys.build.mark_identifier" %></label>
-  {{#identifier}}
-    <input type="checkbox" name="identifier" value="{{identifier}}" checked ></input>
-  {{/identifier}}
-  {{^identifier}}
-    <input type="checkbox" name="identifier" value="{{identifier}}"></input>
-  {{/identifier}}
 </div>
+
+{{^parent_id}}
+  <div>
+    <label><%= t "surveys.build.mark_identifier" %></label>
+    {{#identifier}}
+      <input type="checkbox" name="identifier" value="{{identifier}}" checked ></input>
+    {{/identifier}}
+    {{^identifier}}
+      <input type="checkbox" name="identifier" value="{{identifier}}"></input>
+    {{/identifier}}
+  </div>
+{{/parent_id}}

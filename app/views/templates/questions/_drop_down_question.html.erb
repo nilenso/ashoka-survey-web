@@ -15,15 +15,18 @@
   </div>
 </div>
 
-<div>
-  <label><%= t "surveys.build.mark_identifier" %></label>
-  {{#identifier}}
-    <input type="checkbox" name="identifier" value="{{identifier}}" checked ></input>
-  {{/identifier}}
-  {{^identifier}}
-    <input type="checkbox" name="identifier" value="{{identifier}}"></input>
-  {{/identifier}}
-</div>
+{{^parent_id}}
+  <div>
+    <label><%= t "surveys.build.mark_identifier" %></label>
+    {{#identifier}}
+      <input type="checkbox" name="identifier" value="{{identifier}}" checked ></input>
+    {{/identifier}}
+    {{^identifier}}
+      <input type="checkbox" name="identifier" value="{{identifier}}"></input>
+    {{/identifier}}
+  </div>
+{{/parent_id}}
+
 
 <div>
   <%= button_tag t("add_option"), :class => "add_option" %>
