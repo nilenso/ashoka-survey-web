@@ -39,8 +39,9 @@
 
     <ul class="operations">
       <div class="response_operations">
-          <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey_responses_path(survey.id), :method => :post, :class => survey.class_for_disabled if can?(:create, survey) && !survey.expired? %></li>
-          <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can? :read, survey %></li>
+          <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled if can? :create, survey %></li>
+          <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can?(:read, survey) && !survey.expired? %></li>
+          <li><%= link_to icon_for('icon-paste', t(".copy_public_link")), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url } if can?(:read, survey) && survey.public? %></li>
       </div>
 
       <div class="cso_admin_operations">
@@ -63,9 +64,24 @@
 <%= will_paginate @surveys %>
 
 <script type="text/javascript">
-  $(document).ready(function(){    
+  $(document).ready(function(){
     $('a.disabled').click(function(){
       return false;
-    })
+    });
+
+    $('a.copy_public_link').each(function(){
+      $(this).zclip({
+        path: 'assets/ZeroClipboard.swf',
+        copy: $(this).data('public-link'),
+        afterCopy: function() {
+          var cache = $(this).html();
+          $(this).text("<%= t('.copied') %>");
+          var that = $(this);
+          setTimeout(function(){
+            that.html(cache);
+          }, 3000)
+        }
+      });
+    });
   });
 </script>

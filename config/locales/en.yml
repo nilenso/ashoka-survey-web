@@ -60,6 +60,8 @@ en:
       duplicate: "Duplicate"
       reports: "Reports"
       no_surveys: "There are no surveys yet."
+      copy_public_link: "Copy public link"
+      copied: "Copied!"
 
     share:
       share_survey: "Share Survey"
@@ -106,7 +108,7 @@ en:
       list_of_responses: "List of Responses"
 
     edit:
-      delete: "Delete"      
+      delete: "Delete"
       edit_response: "Edit Response"
       error_saving_response: "Error saving response"
 
@@ -159,7 +161,7 @@ en:
     first_option: First Option
     second_option: Second Option
     third_option: Third Option
-    
+
   recaptcha:
     errors:
       verification_failed: "Word verification response is incorrect, please try again."
