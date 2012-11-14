@@ -60,6 +60,7 @@ fr:
       duplicate: "Dupliquer"
       reports: "Rapports"
       no_surveys: "Il n'y a pas encore d'enquêtes."
+      copy_public_link: "Copier le lien public"
 
     share:
       share_survey: "Enquête Partager"
@@ -104,7 +105,7 @@ fr:
       add_response: "Ajouter Réponse"
       download_excel: "Télécharger Excel"
       incomplete: Incomplet
-      complete: "Compléter"      
+      complete: "Compléter"
 
     edit:
       delete: "Delete-fr"
@@ -160,9 +161,9 @@ fr:
     first_option: fr First Option
     second_option: fr econd Option
     third_option: fr Third Option
-  
+
   recaptcha:
     errors:
       verification_failed: "La réponse de vérification Parole est incorrecte, s'il vous plaît essayer à nouveau."
       recaptcha_unavailable: "Le service CAPTCHA n'est pas disponible."
-      
+

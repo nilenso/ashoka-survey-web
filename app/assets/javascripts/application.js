@@ -23,6 +23,7 @@
 //= require jquery.raty
 //= require jquery.charCount
 //= require jquery_sortable
+//= require jquery.zclip
 //= require spin
 //= require i18n
 //= require datepicker-fr
