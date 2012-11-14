@@ -14,8 +14,8 @@ class Survey < ActiveRecord::Base
   validates_uniqueness_of :auth_key, :allow_nil => true
   scope :published, where(:published => true)
   scope :unpublished, where(:published => false)
-  before_create :generate_auth_key, :if => :public?
   default_scope :order => 'created_at DESC'
+  before_save :generate_auth_key, :if => :public?
 
   def publish
     self.published = true

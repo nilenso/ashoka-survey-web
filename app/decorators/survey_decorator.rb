@@ -22,10 +22,18 @@ class SurveyDecorator < Draper::Base
   def report_data_for(question)
     header = [question.content, 'Answer / Count']
     question.report_data.unshift(header).to_json.html_safe
-  end  
+  end
 
   def class_for_disabled
     model.published? ? '' : 'disabled'
+  end
+
+  def public_url
+    if survey.public?
+      h.survey_public_response_url(model.id) + "?auth_key=#{model.auth_key}"
+    else
+      h.survey_responses_url(model.id)
+    end
   end
 
   private
