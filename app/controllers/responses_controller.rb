@@ -51,6 +51,7 @@ class ResponsesController < ApplicationController
     else
       @response.incomplete
       sort_questions_by_order_number(@response)
+      @response.attributes = params[:response]
       flash.delete(:recaptcha_error)
       flash[:error] = @response.errors.messages[:captcha] || t("responses.edit.error_saving_response")
       render :edit
