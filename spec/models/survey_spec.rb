@@ -190,4 +190,12 @@ describe Survey do
       dup_survey.errors.full_messages.should include "Auth key has already been taken"
     end
   end
+
+  it "checks whether the survey has expired" do
+    survey = FactoryGirl.create(:survey)
+    survey.update_attribute(:expiry_date, 2.days.ago)
+    survey.should be_expired
+    another_survey = FactoryGirl.create(:survey)
+    another_survey.should_not be_expired
+  end
 end

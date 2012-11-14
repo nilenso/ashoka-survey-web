@@ -35,6 +35,10 @@ class Survey < ActiveRecord::Base
     include_field :questions
   end
 
+  def expired?
+    expiry_date < Date.today
+  end
+
   def duplicate
     survey = self.dup
     survey.published = false
