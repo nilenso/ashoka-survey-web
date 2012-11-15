@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe Survey do
-  #subject { FactoryGirl.create :survey }
-
   it { should respond_to :name }
   it { should respond_to :expiry_date }
   it { should respond_to :description }
@@ -38,7 +36,7 @@ describe Survey do
     it "fetches all surveys in descending order of created_at" do
       survey = FactoryGirl.create(:survey)
       another_survey = FactoryGirl.create(:survey)
-      Survey.all.should == [another_survey, survey]
+      Survey.all.first(2).should == [another_survey, survey]
     end
   end
 
