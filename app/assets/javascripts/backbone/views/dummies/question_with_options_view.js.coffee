@@ -26,7 +26,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     _(this.options).each (option) =>
       group = $("<div class='sub_question_group'>")
       group.sortable({items: "> div", update: @reorder_questions})
-      group.append("<p class='sub_question_group_message'>Questions for #{option.model.get('content')}</p>")
+      group.append("<p class='sub_question_group_message'> #{I18n.t('js.questions_for')} #{option.model.get('content')}</p>")
       _(option.sub_questions).each (sub_question) =>
         group.append(sub_question.render().el)
       $(this.el).append(group) unless _(option.sub_questions).isEmpty()

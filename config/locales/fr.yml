@@ -163,6 +163,7 @@ fr:
     first_option: fr First Option
     second_option: fr econd Option
     third_option: fr Third Option
+    questions_for: fr Questions for
 
   recaptcha:
     errors:
