@@ -23,7 +23,7 @@ module Api
           get :index
           returned_json = JSON.parse(response.body)
           returned_json.length.should == 15
-          surveys.each_with_index do |survey, index|
+          Survey.all.each_with_index do |survey, index|
             returned_json[index]['name'].should == survey.name
             returned_json[index]['description'].should == survey.description
             Date.parse(returned_json[index]['expiry_date']).should == survey.expiry_date
