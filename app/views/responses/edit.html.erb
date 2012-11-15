@@ -18,7 +18,7 @@
       <%= recaptcha_tags :display => { :theme => :clean } %>
       <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'complete_button' } %>
     <% else %>
-      <%= f.action :submit, :as => :button, :label => t('.save') %>
+      <%= f.action :submit, :as => :button, :label => t('.save_as_draft') %>
       <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' } unless @response.complete? %>
     <% end %>
   <% end %>
