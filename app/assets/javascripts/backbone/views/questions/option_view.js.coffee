@@ -4,7 +4,6 @@ SurveyBuilder.Views.Questions ||= {}
 class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
   events:
     'keyup': 'update_model'
-    'click .add_sub_question' : 'add_sub_question_model'
 
   initialize: (@model, @template) ->
     this.sub_questions = []
@@ -15,6 +14,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
   render: ->
     data = _.extend(this.model.toJSON(), {errors: this.model.errors})
     $(this.el).html(Mustache.render(@template, data))
+    $(this.el).children('div').children('.add_sub_question').bind('click', this.add_sub_question_model)
     $(this.el).children('.delete_option').bind('click', this.delete)
     return this
 
@@ -26,7 +26,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
   delete: =>
     this.model.destroy()
 
-  add_sub_question_model: (event) ->
+  add_sub_question_model: (event) =>
     type = $(event.target).prev().val()
     this.model.add_sub_question(type)
 
