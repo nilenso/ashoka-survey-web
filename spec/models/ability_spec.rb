@@ -156,9 +156,6 @@ describe "Abilities" do
         :session_token => "foo"
       }
 
-      public_survey = FactoryGirl.create :survey, :public => true
-      response = Response.create(:survey => public_survey)
-
 
       roles =  ['admin', 'cso_admin', 'field_agent']
       user_info_array = roles.map { |role| base_user_info.merge(:role => role) }
@@ -167,24 +164,28 @@ describe "Abilities" do
       user_info_array.each do |user_info|
         context "a #{user_info[:role]} can manage a public response that he created" do
           before(:each) do
-            response.session_token = "foo"
-            response.save
+            public_survey = FactoryGirl.create :survey, :public => true
+            @response = Response.create(:survey => public_survey)
+            @response.session_token = "foo"
+            @response.save
           end
 
           let!(:user_info) { user_info }
 
-          it { should be_able_to :manage, response }
+          it { should be_able_to :manage, @response }
         end
 
         context "a #{user_info[:role]} cannot manage a public response that he didn't create" do
           before(:each) do
-            response.session_token = "fooabc"
-            response.save
+            public_survey = FactoryGirl.create :survey, :public => true
+            @response = Response.create(:survey => public_survey)            
+            @response.session_token = "fooabc"
+            @response.save
           end
 
           let!(:user_info) { user_info }
 
-          it { should_not be_able_to :manage, response }
+          it { should_not be_able_to :manage, @response }
         end
       end
     end
