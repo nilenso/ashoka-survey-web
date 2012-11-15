@@ -109,7 +109,7 @@ en:
 
     edit:
       delete: "Delete"
-      edit_response: "Edit Response"
+      edit_response: "Edit response for"
       error_saving_response: "Error saving response"
 
   answers:

@@ -111,7 +111,7 @@ fr:
 
     edit:
       delete: "Delete-fr"
-      edit_response: "Edit Response-fr"
+      edit_response: "Edit response-fr for"
       error_saving_response: "La réponse économie erreur"
 
   answers:
