@@ -144,5 +144,17 @@ describe Question do
     end
   end
 
+  context "Duplicate" do
+    it "duplicates question with sub questions" do
+      question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+      question.options << Option.create(content: "Option", order_number: 0)
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
+      duplicated_question = question.duplicate
+      duplicated_question.id.should_not == question.id
+      duplicated_question.content.should == question.content
+      duplicated_question.options.first.questions.size.should == question.options.first.questions.size
+    end
+  end
+
   include_examples 'a question'
 end

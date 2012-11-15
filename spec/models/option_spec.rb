@@ -60,4 +60,15 @@ describe Option do
       option.report_data.should == 5
     end
   end
+
+  context "duplicate" do
+    it "dupicates option and its sub questions" do
+      option = FactoryGirl.create(:option)
+      option.questions << FactoryGirl.create(:question)
+      duplicated_option = option.duplicate
+      duplicated_option.id.should_not == option.id
+      duplicated_option.content.should == option.content
+      duplicated_option.questions.size == option.questions.size
+    end
+  end
 end

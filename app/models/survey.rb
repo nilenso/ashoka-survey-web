@@ -30,10 +30,6 @@ class Survey < ActiveRecord::Base
     User.find_by_organization(access_token, organization_id).select { |user| self.user_ids.include?(user.id) }
   end
 
-  amoeba do
-    enable
-    include_field :questions
-  end
 
   def expired?
     expiry_date < Date.today
@@ -43,6 +39,7 @@ class Survey < ActiveRecord::Base
     survey = self.dup
     survey.published = false
     survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
+    survey.questions << first_level_questions.map(&:duplicate)
     survey
   end
 

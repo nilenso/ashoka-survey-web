@@ -6,6 +6,13 @@ class Option < ActiveRecord::Base
   validates_presence_of :content, :question_id
   default_scope :order => 'order_number'
 
+  def duplicate
+    option = self.dup
+    option.questions << questions.map(&:duplicate)
+    option.save(:validate => false)
+    option
+  end
+
   def as_json(opts={})
     super(opts).merge({:questions => questions.map { |question| question.json(:methods => :type) }})
   end

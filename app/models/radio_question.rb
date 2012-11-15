@@ -10,11 +10,6 @@ class RadioQuestion < Question
     options.map { |option| [option.content, option.report_data] }
   end
 
-  amoeba do
-    enable
-    include_field :options
-  end
-
   private
 
   def no_answers?

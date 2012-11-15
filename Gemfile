@@ -14,7 +14,6 @@ gem "rails-backbone"
 gem 'pry-rails'
 gem 'cancan'
 gem 'draper'
-gem 'amoeba'
 gem 'i18n-js'
 gem 'airbrake'
 gem "recaptcha", :require => "recaptcha/rails"

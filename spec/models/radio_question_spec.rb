@@ -26,11 +26,4 @@ describe RadioQuestion do
       question.report_data.should be_empty
     end
   end
-
-  context "duplication" do
-    it "duplicates its options when it is duplicated" do
-      question = RadioQuestion.find_by_id(FactoryGirl.create(:question_with_options).id)
-      question.dup.options.should_not be_empty
-    end
-  end
 end

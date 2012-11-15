@@ -32,8 +32,6 @@ GEM
     airbrake (3.1.6)
       builder
       girl_friday
-    amoeba (1.2.1)
-      activerecord (>= 3.0)
     arel (3.0.2)
     awesome_print (1.1.0)
     builder (3.0.0)
@@ -299,7 +297,6 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake
-  amoeba
   cancan
   capybara
   capybara-webkit

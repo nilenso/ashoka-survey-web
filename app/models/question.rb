@@ -17,6 +17,13 @@ class Question < ActiveRecord::Base
     nil
   end
 
+  def duplicate
+    question = self.dup
+    question.options << options.map(&:duplicate) if self.respond_to? :options
+    question.save(:validate => false)
+    question
+  end
+
   def with_sub_questions_in_order
     [self]
   end
