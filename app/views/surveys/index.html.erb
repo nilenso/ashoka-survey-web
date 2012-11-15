@@ -39,8 +39,8 @@
 
     <ul class="operations">
       <div class="response_operations">
-          <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled if can? :create, survey %></li>
-          <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can?(:read, survey) && !survey.expired? %></li>
+          <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled if can?(:create, survey) && !survey.expired? %></li>
+          <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can? :read, survey %></li>
           <li><%= link_to icon_for('icon-paste', t(".copy_public_link")), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url } if can?(:read, survey) && survey.public? %></li>
       </div>
 
