@@ -26,6 +26,7 @@ class SurveyBuilder.Views.NotificationsView extends Backbone.View
       trail: 41 # Afterglow percentage
       top: "5px" # Top position relative to parent in px
       left: "25px" # Left position relative to parent in px
+      zIndex: 99998 # The z-index (defaults to 2000000000)
 
     $("#spinner").spin(opts)
 
