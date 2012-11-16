@@ -76,6 +76,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
           question_model = new SurveyBuilder.Models.QuestionModel(question)
 
       @sub_question_models.push question_model
+      question_model.on('destroy', this.delete_sub_question, this)
       @set_question_number_for_sub_question(question_model)
       question_model.fetch()
 
