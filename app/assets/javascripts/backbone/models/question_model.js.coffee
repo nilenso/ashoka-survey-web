@@ -16,6 +16,9 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   save_model: ->
     this.save({}, {error: this.error_callback, success: this.success_callback})
 
+  fetch: ->
+    super({error: this.error_callback, success: this.success_callback})
+
   remove_image_attributes: ->
     this.unset('image', {silent: true})
     this.unset('image_content_type', {silent: true})
