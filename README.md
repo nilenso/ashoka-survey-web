@@ -6,20 +6,28 @@ A web application to create and conduct surveys
 Terminology
 ===========
 
-Survey   - Collection of Questions
-Question - A specificaton for a piece of info that the survey designer wants to collect.
-Answer   - A piece of information for a question
-Response - The set of a user's answers for a particular survey
+- Survey   - Collection of Questions
+- Question - A specificaton for a piece of info that the survey designer wants to collect.
+- Answer   - A piece of information for a question
+- Response - The set of a user's answers for a particular survey
 
-OAuth
+Setup
 =====
 
-To use this app with an instance of the [user-owner](http://user-owner-staging.herokuapp.com/) OAuth2 provider, add a file `config/application.yml` with the following options:
+This app works with an OAuth Provider that you'll need to set up as well.
+You can clone it at http://github.com/c42/user-owner
+
+- Login as admin in the user-owner app
+- Click on ***Add a new application***
+- The redirect uri would be `http://SURVEY_WEB_URL/auth/user_owner/callback` (`SURVEY_WEB_URL` is the URL where the survey-web app is hosted)
+- You will then have the Application ID and the Secret.
+- Create a config/application.yml file in this (survey-web) app
+
+- Add the following to it:
 
 ```yaml
-OAUTH_ID: # Application ID of the provider.
-OAUTH_SECRET: # Secret of the provider.
-OAUTH_SERVER_URL: # URL where the user-owner instance is hosted.
+OAUTH_ID: # Application ID of the OAuth provider.
+OAUTH_SECRET: # Secret of the OAuth provider.
+OAUTH_SERVER_URL: # URL where the OAuth Provider instance is hosted.
 ```
-
-You can register this app with the OAuth provider at `$OAUTH_SERVER_URL/oauth/applications`
+Restart the survey-web app.
