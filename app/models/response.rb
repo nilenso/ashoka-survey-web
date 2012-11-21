@@ -4,7 +4,7 @@ class Response < ActiveRecord::Base
   belongs_to :survey
   has_many :answers, :dependent => :destroy
   accepts_nested_attributes_for :answers
-  attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status, :updated_at
+  attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status, :updated_at, :latitude, :longitude
   validates_presence_of :survey_id
   validates_presence_of :organization_id, :user_id, :unless => :survey_public?
   validates_associated :answers

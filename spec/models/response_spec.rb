@@ -14,6 +14,8 @@ describe Response do
   it { should allow_mass_assignment_of(:survey_id) }
   it { should allow_mass_assignment_of(:status) }
   it { should allow_mass_assignment_of(:updated_at) }
+  it { should allow_mass_assignment_of(:latitude) }
+  it { should allow_mass_assignment_of(:longitude) }
 
 
   it "fetches the answers for the identifier questions" do
