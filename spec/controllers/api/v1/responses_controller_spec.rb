@@ -3,9 +3,15 @@ require 'spec_helper'
 module Api
   module V1
     describe ResponsesController do
+      let(:organization_id) { 12 }
+
+      before(:each) do
+        sign_in_as('cso_admin')
+        session[:user_info][:org_id] = organization_id
+      end
 
       context "POST 'create'" do
-        let (:survey) { FactoryGirl.create(:survey) }
+        let (:survey) { FactoryGirl.create(:survey, :organization_id => organization_id) }
         let (:question) { FactoryGirl.create(:question) }
 
         it "creates an response" do
@@ -57,9 +63,9 @@ module Api
 
       context "PUT 'update'" do
         it "updates a response" do
-          survey = FactoryGirl.create(:survey)
+          survey = FactoryGirl.create(:survey, :organization_id => organization_id)
           question = FactoryGirl.create(:question)
-          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
+          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => organization_id, :user_id => 1)
           resp_attr = { :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id, 'updated_at' => Time.now.to_s} } }
           put :update, :id => resp.id, :response => resp_attr
           response.should be_ok
@@ -67,9 +73,9 @@ module Api
         end
 
         it "returns a bad request if you give a invalid response" do
-          survey = FactoryGirl.create(:survey)
+          survey = FactoryGirl.create(:survey, :organization_id => organization_id)
           question = FactoryGirl.create(:question, :mandatory => true)
-          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1, :status => 'complete')
+          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => organization_id, :user_id => 1, :status => 'complete')
           resp_attr = { :answers_attributes =>  { '0' => {'content' => nil, 'question_id' => question.id } } }
           put :update, :id => resp.id, :response => resp_attr
           response.should_not be_ok
@@ -77,7 +83,7 @@ module Api
         end
 
         it "updates only the answers which are newer than their corresponding answers in the DB" do
-          survey = FactoryGirl.create(:survey)
+          survey = FactoryGirl.create(:survey, :organization_id => organization_id)
           question_1 = FactoryGirl.create(:question)
           question_2 = FactoryGirl.create(:question)
           resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
@@ -92,7 +98,8 @@ module Api
         end
 
         it "chooses whether to update the response status based on `updated_at`" do
-          resp = FactoryGirl.create(:response, :organization_id => 1, :user_id => 1, :status => 'complete')
+          survey = FactoryGirl.create(:survey, :organization_id => organization_id)
+          resp = FactoryGirl.create(:response, :organization_id => organization_id, :user_id => 1, :status => 'complete', :survey => survey)
           put :update, :id => resp.id, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_s }
           resp.reload.should be_complete
         end
@@ -105,7 +112,8 @@ module Api
 
       context "POST 'image_upload'" do
         it "saves the photo for an answer" do
-          answer = FactoryGirl.create :answer
+          resp = FactoryGirl.create :response, :organization_id => organization_id
+          answer = FactoryGirl.create :answer, :response => resp
           request.env['enctype'] = 'multipart/form-data'
           photo = Rack::Test::UploadedFile.new('spec/fixtures/images/sample.jpg')
           photo.content_type = 'image/jpeg'
@@ -118,7 +126,7 @@ module Api
           request.env['enctype'] = 'multipart/form-data'
           photo = Rack::Test::UploadedFile.new('spec/fixtures/images/sample.jpg')
           photo.content_type = 'image/jpeg'
-          post :image_upload, :answer_id => 1231235123, :id => FactoryGirl.create(:response).id, :media => photo
+          post :image_upload, :answer_id => 1231235123, :id => FactoryGirl.create(:response, :organization_id => organization_id).id, :media => photo
           response.should_not be_ok
           response.status.should == 400
         end

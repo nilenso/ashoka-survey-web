@@ -46,6 +46,7 @@ describe "Abilities" do
         it { should be_able_to :complete, Response.new(:survey => survey) }
         it { should be_able_to :read, Response.new(:survey => survey) }
         it { should be_able_to :duplicate, Response.new(:survey => survey) }
+        it { should be_able_to :image_upload, Response.new(:survey => survey) }
       end
 
       context "for surveys belonging to another organization" do
@@ -65,6 +66,7 @@ describe "Abilities" do
         it { should_not be_able_to :complete, Response.new(:survey => survey) }
         it { should_not be_able_to :read, Response.new(:survey => survey) }
         it { should_not be_able_to :duplicate, Response.new(:survey => survey) }
+        it { should_not be_able_to :image_upload, Response.new(:survey => survey) }
       end
 
       context "for surveys belonging to another organization that have been shared with me" do
@@ -105,6 +107,7 @@ describe "Abilities" do
         it { should be_able_to :read, survey }
         it { should be_able_to :create, Response.new(:survey => survey) }
         it { should be_able_to :read,  response }
+        it { should be_able_to :image_upload,  response }
         it { should be_able_to :complete,  response }
         it { should be_able_to :destroy,  response }
       end
@@ -118,6 +121,7 @@ describe "Abilities" do
         end
 
         it { should_not be_able_to :read, survey }
+        it { should_not be_able_to :image_upload,  response }
         it { should_not be_able_to :create, Response.new(:survey => survey) }
         it { should_not be_able_to :read,  response }
         it { should_not be_able_to :complete,  response }

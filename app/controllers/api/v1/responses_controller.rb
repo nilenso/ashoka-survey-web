@@ -1,6 +1,9 @@
 module Api
   module V1
     class ResponsesController < ApplicationController
+      load_resource :except => :update
+      authorize_resource
+
       def create
         response = Response.new
         response.user_id = response.organization_id = 0 # temporary fix for no login on mobile

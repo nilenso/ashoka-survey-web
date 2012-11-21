@@ -26,7 +26,7 @@ module Api
         end
 
         it "responds with details for all the surveys stored" do
-          surveys = FactoryGirl.create_list(:survey, 15)
+          FactoryGirl.create_list(:survey, 15)
           get :index
           returned_json = JSON.parse(response.body)
           returned_json.length.should == 15
