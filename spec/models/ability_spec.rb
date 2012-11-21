@@ -28,12 +28,14 @@ describe "Abilities" do
 
       context "for surveys belonging to the same organization" do
         let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 5) }
+        let(:published_survey) { survey = FactoryGirl.create(:survey, :organization_id => 5, :published => true) }
 
         it { should be_able_to(:edit, survey) }
         it { should be_able_to(:share_with_organizations, survey) }
         it { should be_able_to(:update_share_with_organizations, survey) }
         it { should be_able_to(:build, survey) }
         it { should be_able_to(:destroy, survey) }
+        it { should_not be_able_to(:destroy, published_survey) }
         it { should be_able_to(:read, survey) }
         it { should be_able_to(:publish_to_users, survey) }
         it { should be_able_to(:update_publish_to_users, survey) }
