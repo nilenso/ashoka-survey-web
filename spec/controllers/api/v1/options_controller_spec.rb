@@ -3,12 +3,18 @@ require 'spec_helper'
 module Api
   module V1
     describe OptionsController do
+      let(:organization_id) { 12 }
+      let(:survey) { FactoryGirl.create(:survey, :organization_id => organization_id) }
+      let(:question) { FactoryGirl.create(:question, :survey => survey) }
+
+      before(:each) do
+        sign_in_as('cso_admin')
+        session[:user_info][:org_id] = organization_id
+      end
       context "POST 'create'" do
-        let(:survey) { FactoryGirl.create(:survey) }
-        let(:question) { FactoryGirl.create(:question) }
 
         it "creates a new option" do
-          option = FactoryGirl.attributes_for(:option)
+          option = FactoryGirl.attributes_for(:option, :question_id => question.id)
 
           expect do
             post :create, :survey_id => survey.id, :question_id => question.id, :option => option
@@ -16,7 +22,7 @@ module Api
         end
 
         it "responds with json" do
-          option_hash = FactoryGirl.attributes_for(:option)
+          option_hash = FactoryGirl.attributes_for(:option, :question_id => question.id)
           post :create, :survey_id => survey.id, :question_id => question.id, :option => option_hash
           returned_json = JSON.parse(response.body)
           option_hash.each do |k,v|
@@ -26,7 +32,7 @@ module Api
 
         context "when create is unsuccessful" do
           it "returns the errors with a bad request status" do
-            option_hash = FactoryGirl.attributes_for(:option)
+            option_hash = FactoryGirl.attributes_for(:option, :question_id => question.id)
             option_hash[:content] = ''
             post :create, :survey_id => survey.id, :question_id => question.id, :option => option_hash
             response.status.should == 400
@@ -37,14 +43,14 @@ module Api
 
       context "PUT 'update'" do
         it "updates the option" do
-          option = FactoryGirl .create(:option)
+          option = FactoryGirl.create(:option, :question => question)
           put :update, :id => option.id, :option => {:content => "Hello"}
           response.should be_ok
           Option.find(option.id).content.should == "Hello"
         end
 
         it "responds with JSON" do
-          option = FactoryGirl.create(:option)
+          option = FactoryGirl.create(:option, :question => question)
           put :update, :id => option.id, :option => {:content => "Hello"}
           response.should be_ok
           lambda { JSON.parse(response.body) }.should_not raise_error(JSON::ParserError)
@@ -52,7 +58,7 @@ module Api
 
         context "when update is unsuccessful" do
           it "returns the errors with a bad request status" do
-            option = FactoryGirl.create(:option)
+            option = FactoryGirl.create(:option, :question => question)
             put :update, :id => option.id, :option => {:content => ""}
             response.status.should == 400
             JSON.parse(response.body).should be_any { |m| m =~ /can\'t be blank/ }
@@ -62,7 +68,7 @@ module Api
 
       context "DELETE 'destroy'" do
         it 'deletes the option' do
-          option = FactoryGirl.create(:option)
+          option = FactoryGirl.create(:option, :question => question)
           delete :destroy, :id => option.id
           Option.find_by_id(option.id).should be_nil
         end
@@ -76,6 +82,8 @@ module Api
       context "GET 'index'" do
         it "returns all options for a question" do
           question = RadioQuestion.create(:content => "question with options")
+          question.survey = survey
+          question.save
           option = FactoryGirl.create(:option, :question => question)
           get :index, :question_id => question.id
           response.should be_ok
@@ -88,7 +96,7 @@ module Api
         end
 
         it "returns a bad request for a question without options" do
-          question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
+          question = FactoryGirl.create(:question, :type => 'SingleLineQuestion', :survey => survey)
           get :index, :question_id => question.id
           response.should be_bad_request
           response.body.should be_blank

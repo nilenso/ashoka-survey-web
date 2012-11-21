@@ -29,6 +29,7 @@ describe "Abilities" do
       context "for surveys belonging to the same organization" do
         let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 5) }
         let(:question) { FactoryGirl.create(:question, :survey => survey) }
+        let(:option) { FactoryGirl.create(:option, :question => question) }
         let(:published_survey) { survey = FactoryGirl.create(:survey, :organization_id => 5, :published => true) }
 
         it { should be_able_to(:edit, survey) }
@@ -45,6 +46,8 @@ describe "Abilities" do
 
         it { should be_able_to(:manage, question) }
 
+        it { should be_able_to(:manage, option) }
+
         it { should be_able_to :manage, Response.new(:survey => survey) }
         it { should be_able_to :complete, Response.new(:survey => survey) }
         it { should be_able_to :read, Response.new(:survey => survey) }
@@ -56,6 +59,7 @@ describe "Abilities" do
       context "for surveys belonging to another organization" do
         let(:survey) { FactoryGirl.create(:survey, :organization_id => 6) }
         let(:question) { FactoryGirl.create(:question, :survey => survey) }
+        let(:option) { FactoryGirl.create(:option, :question => question) }
 
         it { should_not be_able_to(:edit, survey) }
         it { should_not be_able_to(:build, survey) }
@@ -68,6 +72,8 @@ describe "Abilities" do
         it { should_not be_able_to(:update_share_with_organizations, survey) }
 
         it { should_not be_able_to(:manage, question) }
+
+        it { should_not be_able_to(:manage, option) }
 
         it { should_not be_able_to :create, Response.new(:survey => survey) }
         it { should_not be_able_to :complete, Response.new(:survey => survey) }
