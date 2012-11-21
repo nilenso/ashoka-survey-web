@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121120173849) do
+ActiveRecord::Schema.define(:version => 20121121132733) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -91,6 +91,7 @@ ActiveRecord::Schema.define(:version => 20121120173849) do
     t.string   "session_token"
     t.float    "latitude"
     t.float    "longitude"
+    t.string   "location"
   end
 
   add_index "responses", ["organization_id"], :name => "index_responses_on_organization_id"

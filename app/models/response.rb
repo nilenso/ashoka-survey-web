@@ -10,6 +10,8 @@ class Response < ActiveRecord::Base
   validates_associated :answers
   delegate :questions, :to => :survey
   delegate :public?, :to => :survey, :prefix => true, :allow_nil => true
+  reverse_geocoded_by :latitude, :longitude, :address => :location
+  after_validation :reverse_geocode
 
   def answers_for_identifier_questions
     identifier_answers = answers.find_all { |answer| answer.identifier? }
