@@ -80,7 +80,11 @@ class Answer < ActiveRecord::Base
 
   def mandatory_questions_should_be_answered
     if question.mandatory && has_not_been_answered?
-      errors.add(:content, I18n.t('answers.validations.mandatory_question'))
+      if question.is_a?(PhotoQuestion)
+        errors.add(:photo, I18n.t('answers.validations.mandatory_question'))
+      else
+        errors.add(:content, I18n.t('answers.validations.mandatory_question'))
+      end
     end
   end
 

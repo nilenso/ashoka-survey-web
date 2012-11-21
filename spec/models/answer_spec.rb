@@ -9,13 +9,35 @@ describe Answer do
   it { should allow_mass_assignment_of(:updated_at) }
 
   context "validations" do
-    it "does not save if a mandatory question is not answered for a complete response" do
-      question = FactoryGirl.create(:question, :mandatory => true)
-      answer = FactoryGirl.create(:answer, :question_id => question.id)
-      question.answers << answer
+    context "for mandatory questions" do
+      it "does not save if a mandatory question is not answered for a complete response" do
+        question = FactoryGirl.create(:question, :mandatory => true)
+        answer = FactoryGirl.create(:answer, :question_id => question.id)
+        question.answers << answer
 
-      answer.content = ''
-      answer.should_not be_valid
+        answer.content = ''
+        answer.should_not be_valid
+      end
+
+      it "adds errors to the content field for a non photo type question" do
+        question = FactoryGirl.create(:question, :mandatory => true)
+        answer = FactoryGirl.create(:answer, :question_id => question.id)
+        question.answers << answer
+
+        answer.content = ''
+        answer.save
+        answer.errors.to_hash[:content].should_not be_empty
+      end
+      
+      it "adds errors to the photo field for non photo type question" do
+        question = FactoryGirl.create(:question, :mandatory => true, :type => "PhotoQuestion")
+        answer = FactoryGirl.create(:answer, :question_id => question.id)
+        question.answers << answer
+
+        answer.content = ''
+        answer.save
+        answer.errors.to_hash[:photo].should_not be_empty
+      end
     end
 
     context "when validating max length" do
