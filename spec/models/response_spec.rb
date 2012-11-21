@@ -6,6 +6,8 @@ describe Response do
   it { should have_many(:answers).dependent(:destroy) }
   it { should accept_nested_attributes_for(:answers) }
   it { should respond_to(:user_id) }
+  it { should respond_to(:latitude) }
+  it { should respond_to(:longitude) }
   it { should validate_presence_of(:survey_id)}
   it { should validate_presence_of(:organization_id)}
   it { should validate_presence_of(:user_id)}
