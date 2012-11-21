@@ -98,6 +98,7 @@ GEM
     formtastic (2.2.1)
       actionpack (>= 3.0)
     fssm (0.2.9)
+    geocoder (1.1.5)
     girl_friday (0.10.0)
       connection_pool (~> 0.9.0)
     growl (1.0.3)
@@ -309,6 +310,7 @@ DEPENDENCIES
   figaro
   forgery
   formtastic
+  geocoder
   growl
   guard-jasmine
   guard-livereload
