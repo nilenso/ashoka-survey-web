@@ -40,6 +40,7 @@ describe "Abilities" do
         it { should be_able_to(:publish_to_users, survey) }
         it { should be_able_to(:update_publish_to_users, survey) }
         it { should be_able_to(:report, survey) }
+        it { should be_able_to(:update, survey) }
 
         it { should be_able_to :manage, Response.new(:survey => survey) }
         it { should be_able_to :complete, Response.new(:survey => survey) }
@@ -56,6 +57,7 @@ describe "Abilities" do
         it { should_not be_able_to(:update_publish_to_users, survey) }
         it { should_not be_able_to(:destroy, survey) }
         it { should_not be_able_to(:read, survey) }
+        it { should_not be_able_to(:update, survey) }
         it { should_not be_able_to(:share_with_organizations, survey) }
         it { should_not be_able_to(:update_share_with_organizations, survey) }
 

@@ -1,6 +1,8 @@
 module Api
   module V1
     class SurveysController < ApplicationController
+      authorize_resource
+
       def index
         render :json => Survey.select("id, name, description, expiry_date")
       end

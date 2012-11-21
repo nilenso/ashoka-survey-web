@@ -3,9 +3,16 @@ require 'spec_helper'
 module Api
   module V1
     describe SurveysController do
+      let(:organization_id) { 12 }
+      let(:survey) { FactoryGirl.create :survey, :organization_id => organization_id }
+
+      before(:each) do
+        sign_in_as('cso_admin')
+        session[:user_info][:org_id] = organization_id
+      end
+
       context "GET 'index'" do
         it "responds with JSON" do
-          surveys = FactoryGirl.create(:survey)
           get :index
           response.should be_ok
           lambda { JSON.parse(response.body) }.should_not raise_error
@@ -32,7 +39,6 @@ module Api
       end
 
       context "GET 'show" do
-        let(:survey) { FactoryGirl.create :survey }
 
         it "returns the survey information as JSON" do
           get :show, :id => survey.id
@@ -47,7 +53,6 @@ module Api
       end
 
       context "PUT 'update'" do
-        let(:survey) { FactoryGirl.create :survey }
 
         it "updates the relevant survey" do
           put :update, :id => survey.id, :survey => { :name => "Smit" }
