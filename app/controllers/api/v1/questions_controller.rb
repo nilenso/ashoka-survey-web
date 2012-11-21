@@ -3,6 +3,8 @@ module Api
   module V1
     class QuestionsController < ApplicationController
       before_filter :dont_cache
+      load_resource :except => [:destroy, :show]
+      authorize_resource
 
       def create
         question = Question.new_question_by_type(params[:question][:type], params[:question])

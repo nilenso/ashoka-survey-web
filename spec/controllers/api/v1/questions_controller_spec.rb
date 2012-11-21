@@ -3,10 +3,16 @@ require 'spec_helper'
 module Api
   module V1
     describe QuestionsController do
+      let(:organization_id) { 12 }
+      let(:survey) { FactoryGirl.create(:survey, :organization_id => organization_id) }
+
+      before(:each) do
+        sign_in_as('cso_admin')
+        session[:user_info][:org_id] = organization_id
+      end
       context "POST 'create'" do
         it "creates a new question" do
-          survey = FactoryGirl.create(:survey)
-          question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion')
+          question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion', :survey_id => survey.id)
 
           expect do
             post :create, :survey_id => survey.id, :question => question
@@ -14,8 +20,7 @@ module Api
         end
 
         it "creates a new question based on the type" do
-          survey = FactoryGirl.create(:survey)
-          question = FactoryGirl.attributes_for(:question)
+          question = FactoryGirl.attributes_for(:question, :survey_id => survey.id)
           question['type'] = 'RadioQuestion'
           expect do
             post :create, :survey_id => survey.id, :question => question
@@ -24,8 +29,7 @@ module Api
 
         it "returns the created question as JSON" do
           expected_keys = Question.attribute_names
-          survey = FactoryGirl.create(:survey)
-          question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion')
+          question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion', :survey_id => survey.id)
           post :create, :survey_id => survey.id, :question => question
 
           response.should be_ok
@@ -36,8 +40,7 @@ module Api
 
         context "when save is unsuccessful" do
           it "returns the errors with a bad_request status" do
-            survey = FactoryGirl.create(:survey)
-            question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion')
+            question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion', :survey_id => survey.id)
             question[:content] = ''
             post :create, :survey_id => survey.id, :question => question
 
@@ -49,14 +52,14 @@ module Api
 
       context "PUT 'update'" do
         it "updates the question" do
-          question = FactoryGirl.create(:question)
+          question = FactoryGirl.create(:question, :survey => survey)
           put :update, :id => question.id, :question => {:content => "hello"}
           Question.find(question.id).content.should == "hello"
         end
 
         it "returns the updated question as JSON, including it's type" do
           expected_keys = Question.attribute_names
-          question = FactoryGirl.create(:question, :type => 'RadioQuestion')
+          question = FactoryGirl.create(:question, :type => 'RadioQuestion', :survey => survey)
           put :update, :id => question.id, :question => {:content => "someuniquestring"}
 
           response.should be_ok
@@ -67,7 +70,7 @@ module Api
 
         context "when update is unsuccessful" do
           it "returns the errors with a bad request status" do
-            question = FactoryGirl.create(:question)
+            question = FactoryGirl.create(:question, :survey => survey)
             put :update, :id => question.id, :question => {:content => ""}
             response.status.should == 400
             JSON.parse(response.body).should be_any {|m| m =~ /can\'t be blank/ }
@@ -77,7 +80,7 @@ module Api
 
       context "DELETE 'destroy'" do
         it "deletes the question" do
-          question = FactoryGirl.create(:question)
+          question = FactoryGirl.create(:question, :survey => survey)
           delete :destroy, :id => question.id
           Question.find_by_id(question.id).should be_nil
         end
@@ -88,7 +91,7 @@ module Api
         end
 
         it "deletes all the answers for that question" do
-          question = FactoryGirl.create(:question)
+          question = FactoryGirl.create(:question, :survey => survey)
           answers = FactoryGirl.create_list(:answer, 5, :question_id => question.id)
           expect do
             delete :destroy, :id => question.id
@@ -98,7 +101,7 @@ module Api
 
       context "POST image_upload" do
         it "uploads the image for given question" do
-          question = FactoryGirl.create(:question)
+          question = FactoryGirl.create(:question, :survey => survey)
           @file = fixture_file_upload('/images/sample.jpg', 'text/xml')
           post :image_upload, :id => question.id, :image => @file
           response.should be_ok
@@ -107,7 +110,7 @@ module Api
         end
 
         it "returns the url for the image thumb as JSON" do
-          question = FactoryGirl.create(:question)
+          question = FactoryGirl.create(:question, :survey => survey)
           @file = fixture_file_upload('/images/sample.jpg', 'text/xml')
           post :image_upload, :id => question.id, :image => @file
           response.should be_ok
@@ -117,7 +120,6 @@ module Api
 
       context "GET 'index'" do
         it "returns question IDs" do
-          survey = FactoryGirl.create(:survey)
           question = FactoryGirl.create(:question, :survey_id => survey.id)
           get :index, :survey_id => survey.id
           response.should be_ok
@@ -125,7 +127,6 @@ module Api
         end
 
         it "returns question types" do
-          survey = FactoryGirl.create(:survey)
           question = FactoryGirl.create(:question, :survey_id => survey.id, :type => "RadioQuestion")
           get :index, :survey_id => survey.id
           response.should be_ok
@@ -133,7 +134,6 @@ module Api
         end
 
         it "returns all attributes of the question as well as the image_url" do
-          survey = FactoryGirl.create(:survey)
           question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id))
           get :index, :survey_id => survey.id
           response.should be_ok
@@ -148,14 +148,14 @@ module Api
 
       context "GET 'show'" do
         it "returns the question as JSON" do
-          question = FactoryGirl.create(:question)
+          question = FactoryGirl.create(:question, :survey => survey)
           get :show, :id => question.id
           response.should be_ok
           response.body.should == question.to_json(:methods => [:type, :image_url])
         end
 
         it "returns a :bad_request for an invalid question_id" do
-          get :show, :id => 45678787657
+          get :show, :id => 456787
           response.should_not be_ok
         end
       end
