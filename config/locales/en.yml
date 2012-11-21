@@ -141,6 +141,9 @@ en:
         min_value: Minimum value
         max_value: Maximum value
 
+      response:
+        location: "Location"
+
   add_option: "Add Option"
 # Library strings
 

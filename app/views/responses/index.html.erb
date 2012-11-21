@@ -10,6 +10,7 @@
         <% @responses.first.answers_for_identifier_questions.each do |answer| %>
           <th><%= answer.question_content %> </th>
         <% end %>
+        <th><%= t("activerecord.attributes.response.location") %></th>
       </thead>
       <tbody>
         <% @responses.each do |response| %>
@@ -23,7 +24,9 @@
             <% end %>
             </td>
           <% end %>
-
+          <td>
+            <%= response.latitude %>
+          </td>
           <td>
           <% if response.status == 'complete' %>
             <p class="status"><%= t('.complete') %></p>

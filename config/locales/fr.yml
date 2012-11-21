@@ -143,6 +143,9 @@ fr:
         min_value: Valeur minimale
         max_value: Valeur maximale
 
+      response:
+        location: "frlocation"
+
   add_option: "Ajouter une option"
 # Library strings
 
