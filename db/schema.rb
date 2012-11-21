@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121114061152) do
+ActiveRecord::Schema.define(:version => 20121120173849) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -89,6 +89,8 @@ ActiveRecord::Schema.define(:version => 20121114061152) do
     t.integer  "organization_id"
     t.string   "status",          :default => "incomplete"
     t.string   "session_token"
+    t.float    "latitude"
+    t.float    "longitude"
   end
 
   add_index "responses", ["organization_id"], :name => "index_responses_on_organization_id"
