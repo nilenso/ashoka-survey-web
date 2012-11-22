@@ -21,6 +21,7 @@ class ResponsesController < ApplicationController
     response.set(params[:survey_id], current_user, current_user_org, session_token)
     survey = Survey.find(params[:survey_id])
     survey.questions.each { |question| response.answers << Answer.new(:question_id => question.id) }
+    response.ip_address = request.remote_ip
     response.save(:validate => false)
     redirect_to edit_survey_response_path(:id => response.id), :notice => t("responses.new.response_created")
   end

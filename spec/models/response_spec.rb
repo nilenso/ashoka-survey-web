@@ -8,6 +8,8 @@ describe Response do
   it { should respond_to(:user_id) }
   it { should respond_to(:latitude) }
   it { should respond_to(:longitude) }
+  it { should respond_to(:ip_address) }
+  it { should respond_to(:location) }
   it { should validate_presence_of(:survey_id)}
   it { should validate_presence_of(:organization_id)}
   it { should validate_presence_of(:user_id)}
@@ -16,6 +18,7 @@ describe Response do
   it { should allow_mass_assignment_of(:updated_at) }
   it { should allow_mass_assignment_of(:latitude) }
   it { should allow_mass_assignment_of(:longitude) }
+  it { should allow_mass_assignment_of(:ip_address) }
 
 
   it "fetches the answers for the identifier questions" do

@@ -4,7 +4,7 @@ class Response < ActiveRecord::Base
   belongs_to :survey
   has_many :answers, :dependent => :destroy
   accepts_nested_attributes_for :answers
-  attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status, :updated_at, :latitude, :longitude
+  attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status, :updated_at, :latitude, :longitude, :ip_address
   validates_presence_of :survey_id
   validates_presence_of :organization_id, :user_id, :unless => :survey_public?
   validates_associated :answers
@@ -12,6 +12,8 @@ class Response < ActiveRecord::Base
   delegate :public?, :to => :survey, :prefix => true, :allow_nil => true
   reverse_geocoded_by :latitude, :longitude, :address => :location
   after_validation :reverse_geocode
+  geocoded_by :ip_address, :latitude => :latitude, :longitude => :longitude
+  before_validation :geocode
 
   def answers_for_identifier_questions
     identifier_answers = answers.find_all { |answer| answer.identifier? }
