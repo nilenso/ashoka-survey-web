@@ -97,6 +97,8 @@ en:
       survey_duplicated: Survey duplicated successfully!
       duplication_error: There was an error duplicating the survey. Sorry!
 
+    report:
+      location: Location Map
 
   responses:
     new:
