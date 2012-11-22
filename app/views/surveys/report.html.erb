@@ -54,5 +54,6 @@
     <% @survey.questions_with_report_data.each do |question| %>
       <div id="chart_div_<%= question.id %>"></div>
     <% end %>
+    <div id="location_map"><%= gmaps4rails(@markers) %></div>
   </body>
 </html>

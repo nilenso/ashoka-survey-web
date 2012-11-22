@@ -14,6 +14,11 @@ class Response < ActiveRecord::Base
   after_validation :reverse_geocode
   geocoded_by :ip_address, :latitude => :latitude, :longitude => :longitude
   before_validation :geocode
+  acts_as_gmappable :lat => :latitude, :lng => :longitude, :check_process => false, :process_geocoding => false
+
+  def gmaps4rails_infowindow
+    location
+  end
 
   def answers_for_identifier_questions
     identifier_answers = answers.find_all { |answer| answer.identifier? }
