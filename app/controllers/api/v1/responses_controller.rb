@@ -1,8 +1,8 @@
 module Api
   module V1
     class ResponsesController < ApplicationController
-      load_resource :except => :update
-      authorize_resource
+      # load_resource :except => :update
+      # authorize_resource
 
       def create
         response = Response.new
