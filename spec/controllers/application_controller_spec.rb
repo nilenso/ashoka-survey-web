@@ -23,6 +23,28 @@ describe ApplicationController do
     end
   end
 
+  context "#current_ability" do
+    controller(ApplicationController) do
+      def index
+        params[:controller] = 'responses' # RSpec sets this to `anonymous`. Couldn't get around it.
+        render :text => "Foo!"
+      end
+    end
+
+    context "for the responses controller" do
+      it "creates a `PublicResponseAbility`" do
+        get :index
+        controller.current_ability.class.should == PublicResponseAbility
+      end
+    end
+
+    context "for any other controller" do
+      it "creates an `Ability`" do
+        controller.current_ability.class.should == Ability
+      end
+    end
+  end
+
   context "when generating paths without passing the locale" do
     it "sets the locale param to fr when the locale is fr" do
       I18n.locale = 'fr'
