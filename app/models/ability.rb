@@ -61,8 +61,5 @@ class Ability
         can :image_upload, Response, :user_id => user_info[:user_id]
       end
     end
-
-    can :read, Survey, :public => true
-    can :manage, Response, :session_token => user_info[:session_token]
   end
 end
