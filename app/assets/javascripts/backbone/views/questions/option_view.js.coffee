@@ -2,9 +2,6 @@ SurveyBuilder.Views.Questions ||= {}
 
 #  The settings of a single option in the settings pane
 class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
-  events:
-    'keyup': 'update_model'
-
   initialize: (@model, @template) ->
     this.sub_questions = []
     this.model.on('change:errors', this.render, this)
@@ -16,9 +13,10 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     $(this.el).html(Mustache.render(@template, data))
     $(this.el).children('div').children('.add_sub_question').bind('click', this.add_sub_question_model)
     $(this.el).children('.delete_option').bind('click', this.delete)
+    $(this.el).children('input').bind('keyup', this.update_model)
     return this
 
-  update_model: (event) ->
+  update_model: (event) =>
     input = $(event.target)
     this.model.set({content: input.val()})
     event.stopImmediatePropagation()
