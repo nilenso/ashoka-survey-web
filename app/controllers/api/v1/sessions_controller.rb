@@ -12,6 +12,11 @@ module Api
 
         render :json => session.select { |key,_| [:user_id, :user_info].include? key.to_sym }
       end
+
+      def destroy
+        reset_session
+        render :nothing => true
+      end
     end
   end
 end

@@ -52,6 +52,17 @@ module Api
           }
         end
       end
+
+      context "DELETE 'destroy'" do
+        context "when destroying a session" do
+          it "clears the session hash" do
+            session[:user_id] = "xyz"
+            delete :destroy
+            response.should be_ok
+            session.should == {}
+          end
+        end
+      end
     end
   end
 end
