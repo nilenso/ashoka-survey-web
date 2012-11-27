@@ -28,8 +28,7 @@ SurveyWeb::Application.routes.draw do
       resources :questions, :except => [:edit, :new]
       resources :options, :except => [:edit, :new, :show]
       resources :surveys, :only => [:index, :show, :update]
-      match '/login', :to => 'sessions#create'
-      match '/logout', :to => 'sessions#destroy'
+      match '/login', :to => 'auth#create'
       resources :responses, :only => [:create, :update] do
         member { put "image_upload" }
       end
