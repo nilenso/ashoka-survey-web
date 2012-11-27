@@ -24,10 +24,10 @@ module Api
           response.stub(:parsed).and_return(parsed_response)
         end
 
-        it "renders the OAuth token as JSON" do
+        it "renders the OAuth token and the username as JSON" do
           post :create, :email => 'admin@admin.com', :password => 'admin'
           response.should be_ok
-          JSON.parse(response.body).should == { 'access_token' => "TOKEN!" }
+          JSON.parse(response.body).should == { 'access_token' => "TOKEN!", 'username' => 'admin' }
         end
       end
     end
