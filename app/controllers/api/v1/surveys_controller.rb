@@ -1,6 +1,6 @@
 module Api
   module V1
-    class SurveysController < ApplicationController
+    class SurveysController < APIApplicationController
       load_resource :only => :index
       authorize_resource
 

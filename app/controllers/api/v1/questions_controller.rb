@@ -1,7 +1,7 @@
 
 module Api
   module V1
-    class QuestionsController < ApplicationController
+    class QuestionsController < APIApplicationController
       before_filter :dont_cache
       # load_resource :except => [:destroy, :show]
       # authorize_resource
