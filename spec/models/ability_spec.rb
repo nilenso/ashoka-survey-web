@@ -18,6 +18,8 @@ describe "Abilities" do
       let(:user_info) { base_user_info.merge(:role => 'admin') }
 
       it { should be_able_to(:read, Survey.new) }
+      it { should be_able_to(:read, Question.new) }
+      it { should be_able_to(:read, Option.new) }
       it { should be_able_to(:read, Response.new)}
     end
 

@@ -13,6 +13,8 @@ class Ability
       role = user_info[:role]
       if role == 'admin'
         can :read, Survey # TODO: Verify this
+        can :read, Question
+        can :read, Option
         can :read, Response # TODO: Verify this
         #can :manage, Response, :session_token => user_info[:session_token]
       elsif role == 'cso_admin'
