@@ -1,6 +1,7 @@
 module Api
   module V1
     class ResponsesController < APIApplicationController
+      authorize_resource
 
       def create
         response = Response.new
