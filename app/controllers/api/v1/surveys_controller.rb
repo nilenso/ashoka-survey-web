@@ -6,7 +6,7 @@ module Api
 
       def index
         @surveys ||= []
-        render :json => @surveys
+        render :json => @surveys.select(&:published?)
       end
 
       def show

@@ -4,7 +4,7 @@ module Api
   module V1
     describe SurveysController do
       let(:organization_id) { 12 }
-      let(:survey) { FactoryGirl.create :survey, :organization_id => organization_id }
+      let(:survey) { FactoryGirl.create :survey, :organization_id => organization_id, :published => true }
 
       before(:each) do
         sign_in_as('cso_admin')
@@ -31,14 +31,23 @@ module Api
         end
 
         it "responds with the details of the survey as JSON" do
-          FactoryGirl.create(:survey, :organization_id => 12)
+          FactoryGirl.create(:survey, :organization_id => 12, :published => true)
           get :index
           returned_json = JSON.parse(response.body).first
           returned_json.keys.should =~ Survey.attribute_names
         end
 
+        it "returns only the published surveys" do
+          survey = FactoryGirl.create(:survey, :organization_id => 12)
+          published_survey = FactoryGirl.create(:survey, :organization_id => 12, :published => true, :name => 'Published Survey')
+          get :index
+          returned_json = JSON.parse(response.body)
+          returned_json.length.should == 1
+          returned_json.first['name'].should == 'Published Survey'
+        end
+
         it "responds with details for all the surveys stored" do
-          FactoryGirl.create_list(:survey, 15, :organization_id => 12)
+          FactoryGirl.create_list(:survey, 15, :organization_id => 12, :published => true)
           get :index
           returned_json = JSON.parse(response.body)
           returned_json.length.should == 15
