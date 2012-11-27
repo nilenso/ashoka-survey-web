@@ -8,6 +8,18 @@ module Api
       before(:each) do
         sign_in_as('cso_admin')
         session[:user_info][:org_id] = organization_id
+        response = double('response')
+        parsed_response = { "email" => "admin@admin.com",
+                            "id" => 1,
+                            "name" => "cso_admin",
+                            "organization_id" => 12,
+                            "role" => "cso_admin"
+                            }
+
+        access_token = double('access_token')
+        OAuth2::AccessToken.stub(:new).and_return(access_token)
+        access_token.stub(:get).and_return(response)
+        response.stub(:parsed).and_return(parsed_response)
       end
 
       context "POST 'create'" do
@@ -90,8 +102,8 @@ module Api
           resp.answers << FactoryGirl.create(:answer, :question_id => question_1.id)
           resp.answers << FactoryGirl.create(:answer, :question_id => question_2.id)
           resp_attr = { :answers_attributes =>
-                            { '0' => {'content' => 'newer', 'question_id' => question_1.id, 'updated_at' => 5.hours.from_now.to_s, 'id' => resp.answers.first.id},
-                              '1' => {'content' => 'older', 'question_id' => question_2.id, 'updated_at' => 5.hours.ago.to_s, 'id' => resp.answers.last.id }} }
+                        { '0' => {'content' => 'newer', 'question_id' => question_1.id, 'updated_at' => 5.hours.from_now.to_s, 'id' => resp.answers.first.id},
+                          '1' => {'content' => 'older', 'question_id' => question_2.id, 'updated_at' => 5.hours.ago.to_s, 'id' => resp.answers.last.id }} }
           put :update, :id => resp.id, :response => resp_attr
           resp.reload.answers.map(&:content).should include 'newer'
           resp.reload.answers.map(&:content).should_not include 'older'
@@ -105,7 +117,7 @@ module Api
         end
 
         it "returns a 410 if the response doesn't exist on the server anymore" do
-          put :update, :id => 42, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_s } 
+          put :update, :id => 42, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_s }
           response.code.should == "410"
         end
       end

@@ -10,6 +10,18 @@ module Api
       before(:each) do
         sign_in_as('cso_admin')
         session[:user_info][:org_id] = organization_id
+        response = double('response')
+        parsed_response = { "email" => "admin@admin.com",
+                            "id" => 1,
+                            "name" => "cso_admin",
+                            "organization_id" => 12,
+                            "role" => "cso_admin"
+                            }
+
+        access_token = double('access_token')
+        OAuth2::AccessToken.stub(:new).and_return(access_token)
+        access_token.stub(:get).and_return(response)
+        response.stub(:parsed).and_return(parsed_response)
       end
       context "POST 'create'" do
 
