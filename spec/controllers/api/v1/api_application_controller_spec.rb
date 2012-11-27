@@ -1,4 +1,8 @@
 require 'spec_helper'
 
-describe APIApplicationController do
+module Api
+  module V1
+    describe APIApplicationController do
+    end
+  end
 end
