@@ -65,10 +65,17 @@ describe Option do
     it "dupicates option and its sub questions" do
       option = FactoryGirl.create(:option)
       option.questions << FactoryGirl.create(:question)
-      duplicated_option = option.duplicate
+      duplicated_option = option.duplicate(0)
       duplicated_option.id.should_not == option.id
       duplicated_option.content.should == option.content
       duplicated_option.questions.size == option.questions.size
+    end
+
+    it "sets the sub-question's survey ID to the survey ID of the new survey which is passed in" do
+      option = FactoryGirl.create(:option)
+      option.questions << FactoryGirl.create(:question)
+      duplicated_option = option.duplicate(15)
+      duplicated_option.questions[0].survey_id.should == 15
     end
   end
 end

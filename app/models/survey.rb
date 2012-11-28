@@ -39,7 +39,8 @@ class Survey < ActiveRecord::Base
     survey = self.dup
     survey.published = false
     survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
-    survey.questions << first_level_questions.map(&:duplicate)
+    survey.save(:validate => false)
+    survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
     survey
   end
 

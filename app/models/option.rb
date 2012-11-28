@@ -6,9 +6,9 @@ class Option < ActiveRecord::Base
   validates_presence_of :content, :question_id
   default_scope :order => 'order_number'
 
-  def duplicate
+  def duplicate(survey_id)
     option = self.dup
-    option.questions << questions.map(&:duplicate)
+    option.questions << questions.map { |question| question.duplicate(survey_id) }
     option.save(:validate => false)
     option
   end

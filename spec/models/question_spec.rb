@@ -149,10 +149,18 @@ describe Question do
       question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
       question.options << Option.create(content: "Option", order_number: 0)
       nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
-      duplicated_question = question.duplicate
+      duplicated_question = question.duplicate(0)
       duplicated_question.id.should_not == question.id
       duplicated_question.content.should == question.content
       duplicated_question.options.first.questions.size.should == question.options.first.questions.size
+    end
+
+    it "sets the sub-questions' survey ID to the new survey's ID which is passed in" do
+      question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+      question.options << Option.create(content: "Option", order_number: 0)
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
+      duplicated_question = question.duplicate(18)
+      duplicated_question.options[0].questions[0].survey_id.should == 18
     end
   end
 

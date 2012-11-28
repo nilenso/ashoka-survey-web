@@ -63,6 +63,20 @@ describe Survey do
       new_survey = survey.duplicate
       new_survey.name.should =~ /\(copy\)/i
     end
+
+    it "saves the survey so it has an ID" do
+      survey = FactoryGirl.create :survey_with_questions
+      expect { survey.duplicate }.to change { Survey.count }.by 1
+    end
+
+    it "duplicates the questions and sub-questions, all with the survey ID of the new survey" do
+      survey = FactoryGirl.create :survey
+      radio_question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)
+      survey.questions << radio_question
+      radio_question.options[0].questions << FactoryGirl.create(:question, :survey_id => survey.id)
+      new_survey = survey.duplicate
+      new_survey.questions.count.should == 2
+    end
   end
 
   context "publish" do
