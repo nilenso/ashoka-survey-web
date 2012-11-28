@@ -27,7 +27,7 @@ module Api
         it "renders the OAuth token and the username as JSON" do
           post :create, :email => 'admin@admin.com', :password => 'admin'
           response.should be_ok
-          JSON.parse(response.body).should == { 'access_token' => "TOKEN!", 'username' => 'admin' }
+          JSON.parse(response.body).should == { 'access_token' => "TOKEN!", 'username' => 'admin', 'user_id' => 1}
         end
       end
     end
