@@ -111,10 +111,14 @@ describe "Abilities" do
       it { should_not be_able_to(:destroy, Survey.new) }
       it { should_not be_able_to(:build, Survey.new) }
       it { should_not be_able_to(:duplicate, Survey) }
+      it {should_not be_able_to :manage, Question.new }
+      it {should_not be_able_to :manage, Option.new }
 
       context "for a survey shared with him" do
         let(:survey) { FactoryGirl.create(:survey, :organization_id => 5) }
         let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => base_user_info[:user_id], :organization_id => 1) }
+        let(:question) { FactoryGirl.create(:question, :survey => survey) }
+        let(:option) { FactoryGirl.create(:option, :question => question) }
         before(:each) do
           SurveyUser.create(:survey_id => survey.id, :user_id => user_info[:user_id])
         end
@@ -125,11 +129,15 @@ describe "Abilities" do
         it { should be_able_to :image_upload,  response }
         it { should be_able_to :complete,  response }
         it { should be_able_to :destroy,  response }
+        it { should be_able_to :manage, question }
+        it { should be_able_to :manage, option }
       end
 
       context "for a survey not shared with him" do
         let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 7) }
         let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => 23423423, :organization_id => 1) }
+        let(:question) { FactoryGirl.create(:question, :survey => survey) }
+        let(:option) { FactoryGirl.create(:option, :question => question) }
         before(:each) do
           survey = FactoryGirl.create(:survey, :organization_id => 6)
           SurveyUser.create(:survey_id => survey.id, :user_id => 123)
@@ -141,6 +149,8 @@ describe "Abilities" do
         it { should_not be_able_to :read,  response }
         it { should_not be_able_to :complete,  response }
         it { should_not be_able_to :destroy,  response }
+        it { should_not be_able_to :manage, question }
+        it { should_not be_able_to :manage, option }
       end
     end
   end

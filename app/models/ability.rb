@@ -61,6 +61,8 @@ class Ability
         can :complete, Response, :user_id  => user_info[:user_id]
         can :destroy, Response, :user_id  => user_info[:user_id]
         can :image_upload, Response, :user_id => user_info[:user_id]
+        can :manage, Question, :survey => { :organization_id => user_info[:org_id] }
+        can :manage, Option, :question => { :survey => {:organization_id => user_info[:org_id] }}
       end
     end
   end
