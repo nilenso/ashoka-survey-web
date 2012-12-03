@@ -21,7 +21,7 @@ div#banner{
       a{
         display: block;
         position: relative;
-        margin: 0; padding: 40px 0 0 0;
+        margin: 0;
 
         color: $secondary-color;
         text-align: center;
@@ -38,6 +38,12 @@ div#banner{
           font-size: 36px;
           font-family: "FontAwesome";
           -webkit-font-smoothing: antialiased;
+        }
+
+        &.home, &.add, &.users,
+        &.organization, &.signin,
+        &.logout, &.register{
+          padding: 40px 0 0 0;
         }
 
         &.home:after{ content: "\f015";}
@@ -57,7 +63,7 @@ div#banner{
 h1{
   height: 80px; line-height: 80px;
   font-weight: 300;
-  @include span-columns(10 omega);
+  @include span-columns(11 omega);
 
   a{color: $secondary-color-light;}
 }

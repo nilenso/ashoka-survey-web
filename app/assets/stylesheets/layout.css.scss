@@ -17,8 +17,10 @@ div#content{
   min-height: 400px;
   @include box-shadow(0 0 10px rgba($black, 0.2));
 
-  div div{padding: 10px 20px;}
+  div {padding: 10px 20px;}
+  div div{padding: 0;}
 
+  div#flash_messages{margin: 0; padding: 0;}
   p.flash{
     display: block;
     background: $primary-color;
@@ -63,5 +65,3 @@ table{
   color: $secondary-color-light; text-align: right;
   a{color: white;}
 }
-
-.text{padding: 10px 20px;}
