@@ -15,7 +15,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     $(this.el).ajaxStart(window.notifications_view.show_spinner)
     $(this.el).ajaxStop(window.notifications_view.hide_spinner)
 
-    $( "#sidebar" ).tabs();
+    $( "#sidebar" ).tabs()
 
     this.survey.fetch({
         success: (data) =>
@@ -61,7 +61,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.survey.save_all_questions()
 
   handle_save_finished: =>
-    $(this.el).unbind('ajaxStop.save');
+    $(this.el).unbind('ajaxStop.save')
     $(this.el).find("#save input").prop('disabled', false)
     $(this.el).trigger('save_finished')
     @display_save_status()

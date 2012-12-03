@@ -26,7 +26,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     this.trigger('change:errors')
 
   next_sub_question_order_number: ->
-    @sub_question_order_counter++
+    ++@sub_question_order_counter
 
   add_sub_question: (type) ->
 
@@ -36,7 +36,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
       survey_id: this.get('question').get('survey_id'),
       order_number: @next_sub_question_order_number(),
       parent_question: this.get('question')
-    };
+    }
 
     switch question.type
       when 'MultiChoiceQuestion'
@@ -63,8 +63,9 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     @sub_question_models = _(@sub_question_models).without(sub_question_model)
 
   preload_sub_questions: ->
-    _.each this.get('questions'), (question) =>
-      _(question).extend({parent_question: this.get('question')})
+    _.each this.get('questions'), (question, counter) =>
+      parent_question = this.get('question')
+      _(question).extend({parent_question: parent_question, order_number: counter})
       switch question.type
         when 'MultiChoiceQuestion'
           question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
@@ -81,7 +82,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
       question_model.fetch()
 
     this.trigger('change:preload_sub_questions', @sub_question_models)
-    @sub_question_order_counter = _(@sub_question_models).max (question) -> question.get('order_number')
+    @sub_question_order_counter = this.get('questions').length
 
 SurveyBuilder.Models.OptionModel.setup()
 
