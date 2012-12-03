@@ -11,9 +11,9 @@ module Api
         response.validating if params[:response][:status] == "complete"
         response.update_attributes({:answers_attributes => answers_attributes}) if response.save
 
-        if response.incomplete? && response.valid?
+        if response.incomplete? && response.valid? && survey_valid?(params)
           render :json => response.to_json_with_answers_and_choices
-        elsif response.validating? && response.valid?
+        elsif response.validating? && response.valid? && survey_valid?(params)
           response.complete
           render :json => response.to_json_with_answers_and_choices 
         else
@@ -32,9 +32,9 @@ module Api
         response.validating if response.complete?
         answers_to_update = response.select_new_answers(answers_attributes)
         response.update_attributes({ :answers_attributes => answers_to_update }) if response.save        
-        if response.incomplete? && response.valid?
+        if response.incomplete? && response.valid? && survey_valid?(params)
           render :json => response.to_json_with_answers_and_choices
-        elsif response.validating? && response.valid?
+        elsif response.validating? && response.valid? && survey_valid?(params)
           response.complete
           render :json => response.to_json_with_answers_and_choices
         else
@@ -51,6 +51,13 @@ module Api
         else
           render :nothing => true, :status => :bad_request
         end
+      end
+
+      private
+      
+      def survey_valid?(params)
+        survey = Survey.find_by_id(params['survey_id'])
+        survey && survey.expiry_date >= Date.today
       end
     end
   end
