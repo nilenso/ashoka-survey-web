@@ -66,7 +66,7 @@ describe ResponsesController do
         incomplete_response = FactoryGirl.create(:response, :status => 'incomplete', :survey => survey)
         validating_response = FactoryGirl.create(:response, :status => 'validating', :survey => survey)
         get :index, :survey_id => survey.id, :format => :xls
-        assigns(:responses).should == [response]
+        assigns(:complete_responses).should == [response]
       end
     end
   end
