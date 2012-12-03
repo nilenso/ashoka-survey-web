@@ -1,9 +1,7 @@
-<div class = "footer">
+<div class="footer">
   <% unless request.post? || request.put? %>
-    <ul class = "locales">
-      <li><%= link_to "English", root_path(locale: nil) %></li>
-      <li><%= link_to "French", root_path(locale: 'fr') %></li>
-    </ul>
+    <%= link_to "English", root_path(locale: nil) %> |
+    <%= link_to "French", root_path(locale: 'fr') %>
   <% end %> 
 	<%= yield :scripts %>
 </div>

@@ -1,0 +1,97 @@
+@font-face {
+    font-family: 'ptsans';
+    src: image-url('font/PTS76F-webfont.eot');
+    src: image-url('font/PTS76F-webfont.eot?#iefix') format('embedded-opentype'),
+         image-url('font/PTS76F-webfont.woff') format('woff'),
+         image-url('font/PTS76F-webfont.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'ptsans';
+    src: image-url('font/PTS75F-webfont.eot');
+    src: image-url('font/PTS75F-webfont.eot?#iefix') format('embedded-opentype'),
+         image-url('font/PTS75F-webfont.woff') format('woff'),
+         image-url('font/PTS75F-webfont.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ptsans';
+    src: image-url('font/PTS56F-webfont.eot');
+    src: image-url('font/PTS56F-webfont.eot?#iefix') format('embedded-opentype'),
+         image-url('font/PTS56F-webfont.woff') format('woff'),
+         image-url('font/PTS56F-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'ptsans';
+    src: image-url('font/PTS55F-webfont.eot');
+    src: image-url('font/PTS55F-webfont.eot?#iefix') format('embedded-opentype'),
+         image-url('font/PTS55F-webfont.woff') format('woff'),
+         image-url('font/PTS55F-webfont.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+}
+
+html,body,input,select,textarea{font-family: 'ptsans', 'Gill sans', 'Trebuchet MS', sans;}
+
+html, body{
+  font-weight: 400;
+  font-size: 13px;
+  line-height: 18px;
+}
+
+h1, h2, h3, h4{margin: 10px 0 4px 0; color: $black; font-weight: 700;}
+
+h2{font-size: 18px;}
+h3{font-size: 16px;}
+h4{font-size: 13px;}
+h2 span, h3 span, h4 span{font-weight: normal; color: $gray; display: block;}
+
+header{
+  padding: 10px 20px;
+  background: $secondary-color-light;
+  h2, h3, h2 span, h3 span{color: $primary-color-light;}
+  h2{font-weight: 300; font-size: 24px; line-height: 30px;}
+  h4{font-weight: 400;}
+  h4 a{font-weight: 700;}
+
+}
+
+form h2{
+  color: $primary-color;
+  font-weight: 300;
+  font-size: 24px;
+  padding-bottom: 4px;
+  border-bottom: solid 1px $gray-xlight;
+}
+
+div[role="complementary"]{
+  h2, h3, h4{color: $gray-dark; margin: 8px 10px 4px 10px;}
+  div{
+    margin: 4px 10px;
+    h2, h3, h4{margin: 4px 0;}
+  }
+  h2{
+    text-transform: uppercase;
+    font-weight: 300;
+    border-bottom: solid 1px $gray-light;
+
+    a.view-all{
+      float: right;
+      text-transform: none;
+      font-size: 13px;
+      font-weight: 400;
+    }
+  }
+  h3{font-size: 15px;}
+}
+
+a{color: $primary-color; text-decoration: none;}
+a:hover{border-bottom: dotted 1px;}
+
