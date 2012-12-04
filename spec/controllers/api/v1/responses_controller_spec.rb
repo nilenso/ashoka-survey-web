@@ -29,27 +29,27 @@ module Api
         it "creates an response" do
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>{})
           expect {
-            post :create, :response => resp
+            post :create, :response => resp, :user_id => 15, :organization_id => 42
           }.to change { Response.count }.by 1
         end
 
         it "creates the nested answers" do
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
           expect {
-            post :create, :survey_id => survey.id, :response => resp
+            post :create, :survey_id => survey.id, :response => resp, :user_id => 15, :organization_id => 42
           }.to change { Answer.count }.by 1
         end
 
         it "should return the newly created response with answers as JSON if it is incomplete" do
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
-          post :create, :response => resp
+          post :create, :response => resp, :user_id => 15, :organization_id => 42
           response.should be_ok
           JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
         end
 
         it "should return the newly created response if it is complete" do
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :status => 'complete', :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
-          post :create, :response => resp
+          post :create, :response => resp, :user_id => 15, :organization_id => 42
           response.should be_ok
           JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
         end
@@ -67,9 +67,17 @@ module Api
 
         it "returns the response with a bad_request if you give a invalid response" do
           resp = FactoryGirl.attributes_for(:response, :survey => nil, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
-          post :create, :response => resp
+          post :create, :response => resp, :user_id => 15, :organization_id => 42
           response.should_not be_ok
           response.status.should == 400
+        end
+
+        it "sets the user_id and organization_id for the response" do
+          resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes => {})
+          post :create, :response => resp, :user_id => 15, :organization_id => 42
+          resp = Response.find_by_id(JSON.parse(response.body)['id'])
+          resp.user_id.should == 15
+          resp.organization_id.should == 42
         end
       end
 
