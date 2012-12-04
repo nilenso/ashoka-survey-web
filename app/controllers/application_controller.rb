@@ -16,6 +16,14 @@ class ApplicationController < ActionController::Base
     end
   end
 
+  rescue_from CanCan::AccessDenied do |exception|
+    logger.debug "Can can access denied. Exception: #{exception.inspect}"
+    error_message = exception.message
+    error_message += " " + t("flash.denied_access", :action => exception.action, :subject => exception.subject)
+    flash[:error] = error_message
+    redirect_to root_url
+  end
+
   def current_ability
     if params[:controller] == 'responses'
       @current_ability ||= PublicResponseAbility.new(current_user_info)
@@ -34,7 +42,7 @@ class ApplicationController < ActionController::Base
 
   def current_user_info
     if user_currently_logged_in?
-      session[:user_info].merge(:user_id => session[:user_id], :session_token => session_token) 
+      session[:user_info].merge(:user_id => session[:user_id], :session_token => session_token)
     else
       { :session_token => session_token }
     end
@@ -55,7 +63,7 @@ class ApplicationController < ActionController::Base
   def session_token
     session[:session_token] ||= SecureRandom.urlsafe_base64
   end
-  
+
   helper_method :user_currently_logged_in?, :signed_in_as_cso_admin?, :current_user_org, :current_username
 
   def oauth_client

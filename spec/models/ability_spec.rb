@@ -125,10 +125,9 @@ describe "Abilities" do
 
         it { should be_able_to :read, survey }
         it { should be_able_to :create, Response.new(:survey => survey) }
-        it { should be_able_to :read,  response }
+        it { should be_able_to :manage,  response }
         it { should be_able_to :image_upload,  response }
         it { should be_able_to :complete,  response }
-        it { should be_able_to :destroy,  response }
         it { should be_able_to :manage, question }
         it { should be_able_to :manage, option }
       end
