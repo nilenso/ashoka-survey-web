@@ -17,7 +17,7 @@ class ApplicationController < ActionController::Base
   end
 
   rescue_from CanCan::AccessDenied do |exception|
-    Logger.debug "Can can access denied. Exception: #{exception.inspect}"
+    logger.debug "Can can access denied. Exception: #{exception.inspect}"
     error_message = exception.message
     error_message += " " + t("flash.denied_access", :action => exception.action, :subject => exception.subject)
     flash[:error] = error_message
