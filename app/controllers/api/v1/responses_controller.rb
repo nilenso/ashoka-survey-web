@@ -27,12 +27,11 @@ module Api
       def update
         response = Response.find_by_id(params[:id])
         return render :nothing => true, :status => :gone if response.nil?
-        response.user_id = response.organization_id = 0 # temporary fix for no login on mobile
         answers_attributes = params[:response].delete(:answers_attributes)
         response.merge_status(params[:response])
         response.validating if response.complete?
         answers_to_update = response.select_new_answers(answers_attributes)
-        response.update_attributes({ :answers_attributes => answers_to_update }) if response.save        
+        response.update_attributes({ :answers_attributes => answers_to_update }) if response.save
         if response.incomplete? && response.valid?
           render :json => response.to_json_with_answers_and_choices
         elsif response.validating? && response.valid?
