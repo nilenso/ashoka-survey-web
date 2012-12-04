@@ -86,24 +86,24 @@ describe ApplicationController do
   it "returns current user organization id" do
     controller.current_user_org.should be_nil
     session[:user_id] = 12
-    session[:user_info] = {:org_id => 23} 
+    session[:user_info] = {:org_id => 23}
     controller.current_user_org.should == 23
   end
-  
+
   context "#current_user_info" do
     it "returns current user info along with the user_id and the session_token" do
       session[:user_id] = 12
-      session[:user_info] = {:org_id => 23} 
+      session[:user_info] = {:org_id => 23}
       session[:session_token] = "foo"
       controller.current_user_info.should == { :org_id => 23, :user_id => 12, :session_token => "foo" }
-    end    
-    
+    end
+
     it "returns the session_token if no user is logged in" do
       session[:session_token] = "foo"
       controller.current_user_info.should == { :session_token => "foo" }
     end
   end
-  
+
 
 
   it "knows if the current user is a cso admin" do
@@ -118,16 +118,30 @@ describe ApplicationController do
     session[:user_info][:name] = 'Tim'
     controller.current_username.should == 'Tim'
   end
-  
+
   context "session token" do
     it "retrieves the current session token" do
       session[:session_token] = "foo"
       controller.session_token.should == "foo"
     end
-    
+
     it "generates a new session token if one does not exist" do
       session[:session_token] = nil
       controller.session_token.should be_present
+    end
+  end
+
+  context "cancan - access denied" do
+    controller(ApplicationController) do
+      def create
+        raise CanCan::AccessDenied.new("Not authorized!", :create, Survey)
+      end
+    end
+    it "redirectd to root and shows a flash error " do
+      sign_in_as('field_agent')
+      post :create
+      response.should redirect_to('/')
+      flash[:error].should_not be_nil
     end
   end
 end

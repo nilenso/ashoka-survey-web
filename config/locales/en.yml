@@ -23,6 +23,7 @@ en:
     user_not_selected: "You haven't selected any user to publish the survey to"
     organizations_not_selected: "You haven't selected any organizations to share the survey with"
     response_deleted: "The response was deleted"
+    denied_access: "Denied access to %{action} %{subject}"
 
   surveys:
     new:
