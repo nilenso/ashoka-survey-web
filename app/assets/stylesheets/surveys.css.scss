@@ -1,0 +1,48 @@
+div#content{
+  div.survey{
+    display: block;
+    border-bottom: solid 1px $gray-xlight;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    position: relative;
+
+    div.info{
+      @include span-columns(5,7);
+      padding: 10px 20px;
+    }
+
+    div.operations{
+      @include span-columns(1 omega,7);
+
+      ul{
+        display: block; margin: 0; padding: 0;
+        position: absolute;
+        bottom: 10px; right: 10px;
+        @include span-columns(1 omega,7);
+
+        li{
+          display: block; margin: 0 4px 4px 0; padding: 0;
+          list-style: none;
+
+          a{
+            display: block;
+            background: $secondary-color-light;
+            color: $primary-color;
+            @include border-radius(2px);
+            text-align: center;
+            line-height: 20px;
+
+            &:hover{
+              background: $primary-color;
+              color: $secondary-color-light;
+              border: none;
+            }
+
+            &.disabled{display: none;}
+          }
+        }
+      }
+    }
+  }
+}

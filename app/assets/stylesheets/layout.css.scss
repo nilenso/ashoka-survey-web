@@ -13,7 +13,7 @@ body{background: transparent;}
 div#content{
   display: block;
   background: $white;
-  @include span-columns(11 omega);
+  @include span-columns(7);
   min-height: 400px;
   @include box-shadow(0 0 10px rgba($black, 0.2));
 
@@ -39,6 +39,11 @@ div#content{
     font-size: 16px; 
     font-weight: normal;
   }
+}
+
+div#help{
+  @include span-columns(4 omega);
+  color: $secondary-color-light;
 }
 
 #user_list{

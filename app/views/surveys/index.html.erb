@@ -1,60 +1,72 @@
-<% if can? :create, Survey %>
-  <% if @surveys.present? %>
-    <div class="filters">
-      <%= link_to t(".published"), surveys_path(:published => true) %> |
-      <%= link_to t(".unpublished"), surveys_path(:unpublished => true) %> |
-      <%= link_to t(".all"), surveys_path %>
-    </div>
+<header>
+  <% if can? :create, Survey %>
+    <% if @surveys.present? %>
+      <ul class="filters">
+        <li><%= link_to t(".all"), surveys_path, :class => "#{'selected' unless params[:published] or params[:unpublished]}"  %></li>
+        <li><%= link_to t(".published"), surveys_path(:published => true), :class => "#{'selected' if params[:published]}" %></li>
+        <li><%= link_to t(".unpublished"), surveys_path(:unpublished => true), :class => "#{'selected' if params[:unpublished]}" %></li>
+      </ul>
+    <% end %>
   <% end %>
+
+  <h2><%= t('.surveys') %></h2>
+  </header>
+
+<% if @surveys.blank? %>
+  <p class="no_surveys"><%= t('.no_surveys') %></p>
 <% end %>
 
-<header>
-  <h2><%= t('.surveys') %></h2>
-</header>
-
-<div class="surveys_list">
-  <% if @surveys.blank? %>
-    <p class="no_surveys"><%= t('.no_surveys') %></p>
-  <% end %>
-
-  <% unless @surveys.blank? or @organizations.blank? %>
-  <% @surveys.each do |survey| %>
-  <div class="survey <%= survey.published? ? 'published' : 'unpublished' %>">
+<% unless @surveys.blank? or @organizations.blank? %>
+<% @surveys.each do |survey| %>
+<div class="survey <%= survey.published? ? 'published' : 'unpublished' %>">
+  <div class="info">
     <div class="status">
       <%= pluralize(survey.responses.count, t(".responses")) if survey.responses.count > 0 %>
     </div>
-    <div class="survey_details">
-      <h2 class="name"><%= survey.name %></h2>
-      <span class="organization_name"><%= survey.organization_name(@organizations) %></span>
-      <p class="expiry_date"><%= "Expires on #{survey.expiry_date.to_formatted_s(:long_ordinal)}" %></p>
-      <p class="description">
-        <%= survey.description %>
-      </p>
-    </div>
+    <h2 class="name"><%= survey.name %></h2>
+    <span class="organization_name"><%= survey.organization_name(@organizations) %></span>
+    <p class="expiry_date"><%= "Expires on #{survey.expiry_date.to_formatted_s(:long_ordinal)}" %></p>
+    <p class="description">
+      <%= survey.description %>
+    </p>
+  </div>
 
-    <ul class="operations">
-      <div class="response_operations">
-          <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled if can?(:create, Response.new(:survey => survey)) && !survey.expired? %></li>
-          <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can? :read, survey %></li>
-          <li><%= link_to icon_for('icon-paste', t(".copy_public_link")), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url } if can?(:read, survey) && survey.public? %></li>
-      </div>
+  <div class="operations">
+    <ul class="response_operations">
+      <% if can?(:create, Response.new(:survey => survey)) && !survey.expired? %>
+        <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled  %></li>
+      <% end %>
+      <% if can? :read, survey %>
+        <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled %></li>
+      <% end %>
+      <% if can?(:read, survey) && survey.public? %>
+        <li><%= link_to icon_for('icon-paste', t(".copy_public_link")), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url }  %></li>
+      <% end %>
+    </ul>
 
-      <div class="cso_admin_operations">
-        <% if survey.published %>
-          <li><%= link_to icon_for('icon-group', t(".share")), survey_share_with_organizations_path(survey.id) if can? :share_with_organizations, survey %></li>
-        <% else %>
-          <li><%= link_to icon_for('icon-edit', t('.edit')), surveys_build_path(survey.id)  if can? :edit, survey %></li>
-        <% end %>
-        <li><%= link_to icon_for('icon-arrow-up', t(".publish")), survey_publish_to_users_path(survey.id) if can? :publish_to_users, survey %></li>
-        <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
-        <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %></li>
+    <ul class="cso_admin_operations">
+      <% if survey.published %>
+        <li><%= link_to icon_for('icon-group', t(".share")), survey_share_with_organizations_path(survey.id) if can? :share_with_organizations, survey %></li>
+      <% else %>
+        <li><%= link_to icon_for('icon-edit', t('.edit')), surveys_build_path(survey.id)  if can? :edit, survey %></li>
+      <% end %>
+      <% if can? :publish_to_users, survey %>
+        <li><%= link_to icon_for('icon-arrow-up', t(".publish")), survey_publish_to_users_path(survey.id) %></li>
+      <% end %>
+      <% if can? :duplicate, survey %>
+        <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } %></li>
+      <% end %>
+      <% if can? :destroy, survey %>
+        <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } %></li>
+      <% end %>
+      <% if can?(:report, survey) && survey.published? %>
         <li><%= link_to icon_for('icon-bar-chart', t('.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.published? %></li>
-      </div>
+      <% end %>
     </ul>
   </div>
-  <% end %>
-  <% end %>
 </div>
+<% end %>
+<% end %>
 
 <%= will_paginate @surveys %>
 
@@ -80,3 +92,12 @@
     });
   });
 </script>
+
+<% content_for :help do %>
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+<% end %>
