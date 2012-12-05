@@ -29,7 +29,7 @@ module Api
         return render :nothing => true, :status => :gone if response.nil?
         answers_attributes = params[:response].delete(:answers_attributes)
         convert_to_datetime(answers_attributes)
-        response.merge_status(params[:response])
+        response.merge_status(answers_attributes)
         response.validating if response.complete?
         answers_to_update = response.select_new_answers(answers_attributes)
         response.update_attributes({ :answers_attributes => answers_to_update }) if response.save
