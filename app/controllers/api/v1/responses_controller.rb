@@ -28,6 +28,7 @@ module Api
         response = Response.find_by_id(params[:id])
         return render :nothing => true, :status => :gone if response.nil?
         answers_attributes = params[:response].delete(:answers_attributes)
+        convert_to_datetime(answers_attributes)
         response.merge_status(params[:response])
         response.validating if response.complete?
         answers_to_update = response.select_new_answers(answers_attributes)
@@ -50,6 +51,14 @@ module Api
           render :json => { :image_url => answer.thumb_url, :photo_updated_at => answer.photo_updated_at }
         else
           render :nothing => true, :status => :bad_request
+        end
+      end
+
+      private
+
+      def convert_to_datetime(answers_attributes)
+        answers_attributes.each do |key, answer_attributes|
+          answer_attributes["updated_at"] = Time.at(answer_attributes["updated_at"].to_i).to_s
         end
       end
     end

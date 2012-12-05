@@ -110,8 +110,8 @@ module Api
           resp.answers << FactoryGirl.create(:answer, :question_id => question_1.id)
           resp.answers << FactoryGirl.create(:answer, :question_id => question_2.id)
           resp_attr = { :answers_attributes =>
-                        { '0' => {'content' => 'newer', 'question_id' => question_1.id, 'updated_at' => 5.hours.from_now.to_s, 'id' => resp.answers.first.id},
-                          '1' => {'content' => 'older', 'question_id' => question_2.id, 'updated_at' => 5.hours.ago.to_s, 'id' => resp.answers.last.id }} }
+                        { '0' => {'content' => 'newer', 'question_id' => question_1.id, 'updated_at' => 5.hours.from_now.to_i, 'id' => resp.answers.first.id},
+                          '1' => {'content' => 'older', 'question_id' => question_2.id, 'updated_at' => 5.hours.ago.to_i, 'id' => resp.answers.last.id }} }
           put :update, :id => resp.id, :response => resp_attr
           resp.reload.answers.map(&:content).should include 'newer'
           resp.reload.answers.map(&:content).should_not include 'older'
