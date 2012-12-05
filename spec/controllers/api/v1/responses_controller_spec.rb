@@ -120,12 +120,12 @@ module Api
         it "chooses whether to update the response status based on `updated_at`" do
           survey = FactoryGirl.create(:survey, :organization_id => organization_id)
           resp = FactoryGirl.create(:response, :organization_id => organization_id, :user_id => 1, :status => 'complete', :survey => survey)
-          put :update, :id => resp.id, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_s }
+          put :update, :id => resp.id, :response => { :status => 'incomplete', :answers_attributes => {}, 'updated_at' => 5.hours.ago.to_i }
           resp.reload.should be_complete
         end
 
         it "returns a 410 if the response doesn't exist on the server anymore" do
-          put :update, :id => 42, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_s }
+          put :update, :id => 42, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_i }
           response.code.should == "410"
         end
       end

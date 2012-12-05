@@ -28,8 +28,9 @@ module Api
         response = Response.find_by_id(params[:id])
         return render :nothing => true, :status => :gone if response.nil?
         answers_attributes = params[:response].delete(:answers_attributes)
-        convert_to_datetime(answers_attributes)
-        response.merge_status(answers_attributes)
+        convert_to_datetime(answers_attributes) unless answers_attributes.blank?
+        updated_at_to_datetime(params[:response]) unless params[:response].nil?
+        response.merge_status(params[:response])
         response.validating if response.complete?
         answers_to_update = response.select_new_answers(answers_attributes)
         response.update_attributes({ :answers_attributes => answers_to_update }) if response.save
@@ -60,6 +61,10 @@ module Api
         answers_attributes.each do |key, answer_attributes|
           answer_attributes["updated_at"] = Time.at(answer_attributes["updated_at"].to_i).to_s
         end
+      end
+
+      def updated_at_to_datetime(response_params)
+        response_params["updated_at"] = Time.at(response_params["updated_at"].to_i).to_s
       end
     end
   end
