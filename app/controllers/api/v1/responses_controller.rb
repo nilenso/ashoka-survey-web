@@ -8,6 +8,8 @@ module Api
         response.user_id = params[:user_id]
         response.organization_id = params[:organization_id]
         answers_attributes = params[:response].delete(:answers_attributes)
+        convert_to_datetime(answers_attributes) unless answers_attributes.blank?
+        updated_at_to_datetime(params[:response]) unless params[:response].nil?
         response.update_attributes(params[:response]) # Response isn't created before the answers, so we need to create the answers after this.
         response.validating if params[:response][:status] == "complete"
         response.update_attributes({:answers_attributes => answers_attributes}) if response.save
