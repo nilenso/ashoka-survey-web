@@ -61,7 +61,7 @@ en:
       duplicate: "Duplicate"
       reports: "Reports"
       no_surveys: "There are no surveys yet."
-      copy_public_link: "Copy public link"
+      crowd_source: "Copy crowd source link"
       copied: "Copied!"
 
     share:
@@ -134,6 +134,7 @@ en:
         expiry_date: "Expires on"
         description: "Description"
         copied: "(Copy)"
+        crowd_source: 'Crowd source'
 
       question:
         content: "Content"

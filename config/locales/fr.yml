@@ -62,7 +62,7 @@ fr:
       duplicate: "Dupliquer"
       reports: "Rapports"
       no_surveys: "Il n'y a pas encore d'enquêtes."
-      copy_public_link: "Copier le lien public"
+      crowd_source: "fr Copy crowd source link"
       copied: "Copié!"
 
     share:
@@ -137,6 +137,7 @@ fr:
         expiry_date: "Expire le"
         description: "Description"
         copied: (de Copie)
+        crowd_source: 'fr Crowd source'
 
       question:
         content: "Contenu"
