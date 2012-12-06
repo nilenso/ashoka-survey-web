@@ -8,8 +8,8 @@ module Api
         response.user_id = params[:user_id]
         response.organization_id = params[:organization_id]
         answers_attributes = params[:response].delete(:answers_attributes)
-        convert_to_datetime(answers_attributes) unless answers_attributes.blank?
-        updated_at_to_datetime(params[:response]) unless params[:response].nil?
+        convert_to_datetime!(answers_attributes) unless answers_attributes.blank?
+        updated_at_to_datetime!(params[:response]) unless params[:response].nil?
         response.update_attributes(params[:response]) # Response isn't created before the answers, so we need to create the answers after this.
         response.validating if params[:response][:status] == "complete"
         response.update_attributes({:answers_attributes => answers_attributes}) if response.save
@@ -18,7 +18,7 @@ module Api
           render :json => response.to_json_with_answers_and_choices
         elsif response.validating? && response.valid?
           response.complete
-          render :json => response.to_json_with_answers_and_choices 
+          render :json => response.to_json_with_answers_and_choices
         else
           response_json = response.to_json_with_answers_and_choices
           response.destroy
@@ -30,8 +30,8 @@ module Api
         response = Response.find_by_id(params[:id])
         return render :nothing => true, :status => :gone if response.nil?
         answers_attributes = params[:response].delete(:answers_attributes)
-        convert_to_datetime(answers_attributes) unless answers_attributes.blank?
-        updated_at_to_datetime(params[:response]) unless params[:response].nil?
+        convert_to_datetime!(answers_attributes) unless answers_attributes.blank?
+        updated_at_to_datetime!(params[:response]) unless params[:response].nil?
         response.merge_status(params[:response])
         response.validating if response.complete?
         answers_to_update = response.select_new_answers(answers_attributes)
@@ -49,6 +49,7 @@ module Api
 
       def image_upload
         answer = Answer.find_by_id(params[:answer_id])
+        updated_at_to_datetime!(params)
         answer.select_latest_image(params) if answer
         if answer && answer.save
           render :json => { :image_url => answer.thumb_url, :photo_updated_at => answer.photo_updated_at }
@@ -59,14 +60,18 @@ module Api
 
       private
 
-      def convert_to_datetime(answers_attributes)
+      def convert_to_datetime!(answers_attributes)
         answers_attributes.each do |key, answer_attributes|
           answer_attributes["updated_at"] = Time.at(answer_attributes["updated_at"].to_i).to_s
         end
       end
 
-      def updated_at_to_datetime(response_params)
-        response_params["updated_at"] = Time.at(response_params["updated_at"].to_i).to_s
+      def updated_at_to_datetime!(response_attr)
+        response_attr['updated_at'] = Time.at(response_attr['updated_at'].to_i).to_s
+      end
+
+      def photo_updated_at_to_datetime!(response_attr)
+        response_attr['photo_updated_at'] = Time.at(response_attr['photo_updated_at'].to_i).to_s
       end
     end
   end
