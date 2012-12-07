@@ -46,19 +46,50 @@ module Api
           returned_json.first['name'].should == 'Published Survey'
         end
 
-        context "for expired surveys" do
-          it "doesn't return any expired surveys by default" do
-            expired_surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :published => true
-            expired_surveys.each { |survey| survey.update_attribute :expiry_date, 5.days.ago }
-            surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :expiry_date => 5.days.from_now, :published => true
-            get :index
+        it "doesn't return any expired surveys by default" do
+          expired_surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :published => true
+          expired_surveys.each { |survey| survey.update_attribute :expiry_date, 5.days.ago }
+          surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :expiry_date => 5.days.from_now, :published => true
+          get :index
+          returned_json = JSON.parse response.body
+          returned_json.length.should == 5
+          returned_json.each do |survey|
+            (Time.now < Time.parse(survey['expiry_date'])).should == true
+          end
+        end
+
+        context "when fetching extra expired surveys" do
+          it "returns all the surveys specified in params[:extra_surveys]" do
+            FactoryGirl.create_list :survey, 5, :organization_id => 12, :published => true
+            first_expired_survey = FactoryGirl.create(:survey, :organization_id => 12, :published => true, :name => 'First EXPIRED!')
+            second_expired_survey = FactoryGirl.create(:survey, :organization_id => 12, :published => true, :name => 'Second EXPIRED!')
+            first_expired_survey.update_attribute :expiry_date, 5.days.ago
+            second_expired_survey.update_attribute :expiry_date, 5.days.ago
+
+            get :index, :extra_surveys => "#{first_expired_survey.id},#{second_expired_survey.id}"
             returned_json = JSON.parse response.body
-            returned_json.length.should == 5
-            returned_json.each do |survey|
-              (Time.now < Time.parse(survey['expiry_date'])).should == true
-            end
+            returned_json.length.should == 7
+            returned_json.map { |survey| survey['name'] }.should include "First EXPIRED!"
+            returned_json.map { |survey| survey['name'] }.should include "Second EXPIRED!"
           end
 
+          it "resolves duplicates" do
+            survey = FactoryGirl.create :survey, :organization_id => 12, :published => true
+            get :index, :extra_surveys => "#{survey.id}"
+            returned_json = JSON.parse response.body
+            returned_json.length.should == 1
+          end
+
+          it "ignores the surveys that the user doesn't have access to" do
+            survey = FactoryGirl.create :survey, :organization_id => 12, :published => true
+            off_limits_survey = FactoryGirl.create :survey, :organization_id => 1234, :published => true, :name => "OFF!"
+            p off_limits_survey
+            get :index            
+            returned_json = JSON.parse response.body
+            p returned_json
+            returned_json.length.should == 1
+            returned_json.map { |survey| survey['name'] }.should_not include "OFF!"
+          end
         end
 
         it "responds with details for all the surveys stored" do
