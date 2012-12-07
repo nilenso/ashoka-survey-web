@@ -37,13 +37,13 @@ module Api
           returned_json.keys.should =~ Survey.attribute_names
         end
 
-        it "returns only the published surveys" do
+        it "returns only the finalized surveys" do
           survey = FactoryGirl.create(:survey, :organization_id => 12)
-          published_survey = FactoryGirl.create(:survey, :organization_id => 12, :finalized => true, :name => 'Published Survey')
+          finalized_survey = FactoryGirl.create(:survey, :organization_id => 12, :finalized => true, :name => 'Finalized Survey')
           get :index
           returned_json = JSON.parse(response.body)
           returned_json.length.should == 1
-          returned_json.first['name'].should == 'Published Survey'
+          returned_json.first['name'].should == 'Finalized Survey'
         end
 
         it "doesn't return any expired surveys by default" do

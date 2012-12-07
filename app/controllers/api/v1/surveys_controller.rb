@@ -2,7 +2,7 @@ module Api
   module V1
     class SurveysController < APIApplicationController
       load_resource :only => :index
-      before_filter :only_published_and_unexpired_surveys, :only => :index
+      before_filter :only_finalized_and_unexpired_surveys, :only => :index
       authorize_resource
 
       def index
@@ -30,13 +30,13 @@ module Api
 
       private
 
-      def only_published_and_unexpired_surveys
-        @surveys = @surveys.published.not_expired | extra_surveys
+      def only_finalized_and_unexpired_surveys
+        @surveys = @surveys.finalized.not_expired | extra_surveys
       end
 
       def extra_surveys
         extra_survey_ids = params[:extra_surveys] || ""
-        @surveys.published.where('id in (?)', extra_survey_ids.split(',').map(&:to_i))
+        @surveys.finalized.where('id in (?)', extra_survey_ids.split(',').map(&:to_i))
       end
     end
   end
