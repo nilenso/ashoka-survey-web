@@ -39,30 +39,30 @@ describe SurveysController do
         Survey.delete_all
         sign_in_as('cso_admin')
         session[:user_info][:org_id] = organization_id
-        @unpublished_survey = FactoryGirl.create(:survey, :published => false, :organization_id => organization_id)
-        @published_survey = FactoryGirl.create(:survey, :published => true, :organization_id => organization_id)
+        @draft_survey = FactoryGirl.create(:survey, :finalized => false, :organization_id => organization_id)
+        @finalized_survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => organization_id)
       end
 
 
-      it "shows all published surveys if filter is published" do
-        get :index, :published => true
+      it "shows all finalized surveys if filter is finalized" do
+        get :index, :finalized => true
         response.should be_ok
-        assigns(:surveys).should include @published_survey
-        assigns(:surveys).should_not include @unpublished_survey
+        assigns(:surveys).should include @finalized_survey
+        assigns(:surveys).should_not include @draft_survey
       end
 
-      it "shows all unpublished surveys if filter is unpublished" do
-        get :index, :unpublished => true
+      it "shows all draft surveys if filter is draft" do
+        get :index, :drafts => true
         response.should be_ok
-        assigns(:surveys).should include @unpublished_survey
-        assigns(:surveys).should_not include @published_survey
+        assigns(:surveys).should include @draft_survey
+        assigns(:surveys).should_not include @finalized_survey
       end
 
       it "shows all surveys if filter is not specified" do
         get :index
         response.should be_ok
-        assigns(:surveys).should include @unpublished_survey
-        assigns(:surveys).should include @published_survey
+        assigns(:surveys).should include @draft_survey
+        assigns(:surveys).should include @finalized_survey
       end
     end
   end
@@ -126,8 +126,8 @@ describe SurveysController do
       response.should render_template(:build)
     end
 
-    it "redirect_to the root path if survey is already published" do
-      @survey.publish
+    it "redirect_to the root path if survey is already finalized" do
+      @survey.finalize
       get :build, :id => @survey.id
       response.should redirect_to(root_path)
       flash[:error].should_not be_nil
@@ -175,7 +175,7 @@ describe SurveysController do
     context "PUT 'update_publish_to_users'" do
       it "publishes the survey to chosen users and marks the survey published" do
         put :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
-        survey.reload.should be_published
+        survey.reload.should be_finalized
         survey.user_ids.should == [1, 2]
         flash[:notice].should_not be_nil
       end
@@ -200,7 +200,7 @@ describe SurveysController do
     before(:each) do
       sign_in_as('cso_admin')
       session[:user_info][:org_id] = 1
-      survey.publish
+      survey.finalize
 
       session[:access_token] = "123"
       orgs_response = mock(OAuth2::Response)
@@ -226,9 +226,9 @@ describe SurveysController do
         assigns(:survey).should == survey
       end
 
-      it "does not allow sharing of unpublished surveys" do
-        unpublished_survey = FactoryGirl.create(:survey, :organization_id => 1)
-        get :share_with_organizations, :survey_id => unpublished_survey.id
+      it "does not allow sharing of draft surveys" do
+        draft_survey = FactoryGirl.create(:survey, :organization_id => 1)
+        get :share_with_organizations, :survey_id => draft_survey.id
         response.should redirect_to surveys_path
         flash[:error].should_not be_empty
       end
@@ -261,11 +261,11 @@ describe SurveysController do
         request.env["HTTP_REFERER"] = 'http://google.com'
       end
 
-      it "creates a new survey" do        
+      it "creates a new survey" do
         survey = FactoryGirl.create :survey, :organization_id => 123
         expect {
           post :duplicate, :id => survey.id
-        }.to change { Survey.count }.by 1 
+        }.to change { Survey.count }.by 1
       end
 
       it "redirects to previous page" do

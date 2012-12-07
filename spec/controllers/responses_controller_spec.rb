@@ -1,14 +1,14 @@
 require 'spec_helper'
 
 describe ResponsesController do
-  let(:survey) { FactoryGirl.create(:survey_with_questions, :published => true, :organization_id => 1) }
+  let(:survey) { FactoryGirl.create(:survey_with_questions, :finalized => true, :organization_id => 1) }
   before(:each) do
     sign_in_as('cso_admin')
     session[:user_info][:org_id] = 1
   end
 
   context "POST 'create'" do
-    let(:survey) { FactoryGirl.create(:survey, :published => true, :organization_id => 1)}
+    let(:survey) { FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)}
     let(:question) { FactoryGirl.create(:question)}
 
     it "saves the response" do
@@ -45,7 +45,7 @@ describe ResponsesController do
 
   context "GET 'index'" do
     it "renders the list of responses for a survey if a cso admin is signed in" do
-      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 1)
       get :index, :survey_id => survey.id
@@ -55,13 +55,13 @@ describe ResponsesController do
 
     context "excel" do
       it "responds to XLS" do
-        survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
         get :index, :survey_id => survey.id, :format => :xls
         response.should be_ok
       end
 
       it "assigns only the completed responses" do
-        survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
         response = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
         incomplete_response = FactoryGirl.create(:response, :status => 'incomplete', :survey => survey)
         validating_response = FactoryGirl.create(:response, :status => 'validating', :survey => survey)
@@ -73,7 +73,7 @@ describe ResponsesController do
 
   context "GET 'edit'" do
     it "renders the edit page" do
-      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
       get :edit, :id => res.id, :survey_id => survey.id
@@ -82,7 +82,7 @@ describe ResponsesController do
     end
 
     it "assigns a survey and response" do
-      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
       get :edit, :id => res.id, :survey_id => survey.id
@@ -93,7 +93,7 @@ describe ResponsesController do
 
   context "PUT 'update'" do
     it "doesn't run validations on answers that are empty" do
-      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       question_1 = FactoryGirl.create(:question, :survey => survey, :max_length => 15)
       question_2 = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
       res = FactoryGirl.create(:response, :survey => survey,
@@ -113,7 +113,7 @@ describe ResponsesController do
     end
 
     it "updates the response" do
-      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       question = FactoryGirl.create(:question, :survey => survey)
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
@@ -129,7 +129,7 @@ describe ResponsesController do
     end
 
     it "renders edit page in case of any validations error" do
-      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2, :status => 'validating')
@@ -158,7 +158,7 @@ describe ResponsesController do
     end
 
     it "updates the response" do
-      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       question = FactoryGirl.create(:question, :survey => survey)
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
@@ -174,7 +174,7 @@ describe ResponsesController do
     end
 
     it "marks the response incomplete if save is unsuccessful" do
-      survey = FactoryGirl.create(:survey, :published => true, :organization_id => 1)
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
@@ -188,7 +188,7 @@ describe ResponsesController do
   end
 
   context "DELETE 'destroy'" do
-    let!(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :published => true) }
+    let!(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :finalized => true) }
     let!(:res) { FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 2) }
 
     it "deletes a survey" do

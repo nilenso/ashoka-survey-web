@@ -25,7 +25,7 @@ class SurveyDecorator < Draper::Base
   end
 
   def class_for_disabled
-    model.published? ? '' : 'disabled'
+    model.finalized? ? '' : 'disabled'
   end
 
   def public_url

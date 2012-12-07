@@ -32,14 +32,14 @@ describe "Abilities" do
         let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 5) }
         let(:question) { FactoryGirl.create(:question, :survey => survey) }
         let(:option) { FactoryGirl.create(:option, :question => question) }
-        let(:published_survey) { survey = FactoryGirl.create(:survey, :organization_id => 5, :published => true) }
+        let(:finalized_survey) { survey = FactoryGirl.create(:survey, :organization_id => 5, :finalized => true) }
 
         it { should be_able_to(:edit, survey) }
         it { should be_able_to(:share_with_organizations, survey) }
         it { should be_able_to(:update_share_with_organizations, survey) }
         it { should be_able_to(:build, survey) }
         it { should be_able_to(:destroy, survey) }
-        it { should_not be_able_to(:destroy, published_survey) }
+        it { should_not be_able_to(:destroy, finalized_survey) }
         it { should be_able_to(:read, survey) }
         it { should be_able_to(:publish_to_users, survey) }
         it { should be_able_to(:update_publish_to_users, survey) }
@@ -55,7 +55,7 @@ describe "Abilities" do
         it { should be_able_to :read, Response.new(:survey => survey) }
         it { should be_able_to :duplicate, Response.new(:survey => survey) }
         it { should be_able_to :image_upload, Response.new(:survey => survey) }
-        
+
       end
 
       context "for surveys belonging to another organization" do

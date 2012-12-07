@@ -3,14 +3,14 @@ require 'will_paginate/array'
 class SurveysController < ApplicationController
   load_and_authorize_resource
 
-  before_filter :require_unpublished_survey, :only => [:build]
-  before_filter :require_published_survey, :only => [:share_with_organizations]
+  before_filter :require_draft_survey, :only => [:build]
+  before_filter :require_finalized_survey, :only => [:share_with_organizations]
   before_filter :require_organizations_to_be_selected, :only => [:update_share_with_organizations]
 
   def index
     @surveys ||= []
-    @surveys = @surveys.published  if params[:published].present?
-    @surveys = @surveys.unpublished if params[:unpublished].present?
+    @surveys = @surveys.finalized  if params[:finalized].present?
+    @surveys = @surveys.drafts if params[:drafts].present?
     @surveys = @surveys.paginate(:page => params[:page], :per_page => 5)
     @surveys = SurveyDecorator.decorate(@surveys)
     @organizations = Organization.all(access_token)
@@ -52,8 +52,8 @@ class SurveysController < ApplicationController
     users = Sanitizer.clean_params(params[:survey][:user_ids])
     if users.present?
       survey.publish_to_users(users)
-      survey.publish
-      flash[:notice] = t "flash.survey_published", :survey_name => survey.name
+      survey.finalize
+      flash[:notice] = t "flash.survey_finalized", :survey_name => survey.name
       redirect_to surveys_path
     else
       flash[:error] = t "flash.user_not_selected"
@@ -101,19 +101,19 @@ class SurveysController < ApplicationController
     end
   end
 
-  def require_unpublished_survey
+  def require_draft_survey
     survey = Survey.find(params[:id])
-    if survey.published?
-      flash[:error] = t "flash.edit_published_survey"
+    if survey.finalized?
+      flash[:error] = t "flash.edit_finalized_survey"
       redirect_to root_path
     end
   end
 
-  def require_published_survey
+  def require_finalized_survey
     survey = Survey.find(params[:survey_id])
-    unless survey.published?
+    unless survey.finalized?
       redirect_to surveys_path
-      flash[:error] = t "flash.sharing_unpublished_survey"
+      flash[:error] = t "flash.sharing_draft_survey"
     end
   end
 end

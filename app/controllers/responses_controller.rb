@@ -2,7 +2,7 @@ class ResponsesController < ApplicationController
   load_and_authorize_resource :survey
   load_and_authorize_resource :through => :survey
 
-  before_filter :survey_published
+  before_filter :survey_finalized
   before_filter :authorize_public_response, :only => :create
   before_filter :survey_not_expired, :only => :create
 
@@ -74,10 +74,10 @@ class ResponsesController < ApplicationController
     response.answers.sort_by! { |answer| question_ids_in_order.index(answer.question.id) }
   end
 
-  def survey_published
+  def survey_finalized
     survey = Survey.find(params[:survey_id])
-    unless survey.published
-      flash[:error] = t "flash.response_to_unpublished_survey", :survey_name => survey.name
+    unless survey.finalized
+      flash[:error] = t "flash.response_to_draft_survey", :survey_name => survey.name
       redirect_to surveys_path
     end
   end

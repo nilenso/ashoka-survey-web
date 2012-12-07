@@ -4,7 +4,7 @@ module Api
   module V1
     describe SurveysController do
       let(:organization_id) { 12 }
-      let(:survey) { FactoryGirl.create :survey, :organization_id => organization_id, :published => true }
+      let(:survey) { FactoryGirl.create :survey, :organization_id => organization_id, :finalized => true }
 
       before(:each) do
         sign_in_as('cso_admin')
@@ -31,7 +31,7 @@ module Api
         end
 
         it "responds with the details of the survey as JSON" do
-          FactoryGirl.create(:survey, :organization_id => 12, :published => true)
+          FactoryGirl.create(:survey, :organization_id => 12, :finalized => true)
           get :index
           returned_json = JSON.parse(response.body).first
           returned_json.keys.should =~ Survey.attribute_names
@@ -39,7 +39,7 @@ module Api
 
         it "returns only the published surveys" do
           survey = FactoryGirl.create(:survey, :organization_id => 12)
-          published_survey = FactoryGirl.create(:survey, :organization_id => 12, :published => true, :name => 'Published Survey')
+          published_survey = FactoryGirl.create(:survey, :organization_id => 12, :finalized => true, :name => 'Published Survey')
           get :index
           returned_json = JSON.parse(response.body)
           returned_json.length.should == 1
@@ -47,9 +47,9 @@ module Api
         end
 
         it "doesn't return any expired surveys by default" do
-          expired_surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :published => true
+          expired_surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :finalized => true
           expired_surveys.each { |survey| survey.update_attribute :expiry_date, 5.days.ago }
-          surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :expiry_date => 5.days.from_now, :published => true
+          surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :expiry_date => 5.days.from_now, :finalized => true
           get :index
           returned_json = JSON.parse response.body
           returned_json.length.should == 5
@@ -60,9 +60,9 @@ module Api
 
         context "when fetching extra expired surveys" do
           it "returns all the surveys specified in params[:extra_surveys]" do
-            FactoryGirl.create_list :survey, 5, :organization_id => 12, :published => true
-            first_expired_survey = FactoryGirl.create(:survey, :organization_id => 12, :published => true, :name => 'First EXPIRED!')
-            second_expired_survey = FactoryGirl.create(:survey, :organization_id => 12, :published => true, :name => 'Second EXPIRED!')
+            FactoryGirl.create_list :survey, 5, :organization_id => 12, :finalized => true
+            first_expired_survey = FactoryGirl.create(:survey, :organization_id => 12, :finalized => true, :name => 'First EXPIRED!')
+            second_expired_survey = FactoryGirl.create(:survey, :organization_id => 12, :finalized => true, :name => 'Second EXPIRED!')
             first_expired_survey.update_attribute :expiry_date, 5.days.ago
             second_expired_survey.update_attribute :expiry_date, 5.days.ago
 
@@ -74,17 +74,17 @@ module Api
           end
 
           it "resolves duplicates" do
-            survey = FactoryGirl.create :survey, :organization_id => 12, :published => true
+            survey = FactoryGirl.create :survey, :organization_id => 12, :finalized => true
             get :index, :extra_surveys => "#{survey.id}"
             returned_json = JSON.parse response.body
             returned_json.length.should == 1
           end
 
           it "ignores the surveys that the user doesn't have access to" do
-            survey = FactoryGirl.create :survey, :organization_id => 12, :published => true
-            off_limits_survey = FactoryGirl.create :survey, :organization_id => 1234, :published => true, :name => "OFF!"
+            survey = FactoryGirl.create :survey, :organization_id => 12, :finalized => true
+            off_limits_survey = FactoryGirl.create :survey, :organization_id => 1234, :finalized => true, :name => "OFF!"
             p off_limits_survey
-            get :index            
+            get :index
             returned_json = JSON.parse response.body
             p returned_json
             returned_json.length.should == 1
@@ -93,7 +93,7 @@ module Api
         end
 
         it "responds with details for all the surveys stored" do
-          FactoryGirl.create_list(:survey, 15, :organization_id => 12, :published => true)
+          FactoryGirl.create_list(:survey, 15, :organization_id => 12, :finalized => true)
           get :index
           returned_json = JSON.parse(response.body)
           returned_json.length.should == 15

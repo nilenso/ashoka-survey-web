@@ -4,7 +4,7 @@ describe Survey do
   it { should respond_to :name }
   it { should respond_to :expiry_date }
   it { should respond_to :description }
-  it { should respond_to :published }
+  it { should respond_to :finalized }
   it { should respond_to :organization_id }
   it { should respond_to :public }
   it { should respond_to(:auth_key) }
@@ -52,10 +52,10 @@ describe Survey do
       survey.duplicate.survey_users.should be_empty
     end
 
-    it "unpublishes the duplicated survey" do
+    it "makes the duplicated survey a draft" do
       survey = FactoryGirl.create :survey_with_questions
       new_survey = survey.duplicate
-      new_survey.should_not be_published
+      new_survey.should_not be_finalized
     end
 
     it "appends (copy) to the survey name" do
@@ -79,30 +79,29 @@ describe Survey do
     end
   end
 
-  context "publish" do
-    it "should not be published by default" do
+  context "finalize" do
+    it "should not be finalized by default" do
       survey = FactoryGirl.create(:survey)
-      survey.should_not be_published
+    survey.should_not be_finalized    end
+
+    it "changes finalized to true" do
+      survey = FactoryGirl.create(:survey)
+      survey.finalize
+      survey.should be_finalized
     end
 
-    it "changes published to true" do
+    it "returns a list of finalized surveys" do
       survey = FactoryGirl.create(:survey)
-      survey.publish
-      survey.should be_published
+      another_survey = FactoryGirl.create(:survey, :finalized => true)
+      Survey.drafts.should include(survey)
+      Survey.drafts.should_not include(another_survey)
     end
 
-    it "returns a list of published surveys" do
+    it "returns a list of finalized surveys" do
       survey = FactoryGirl.create(:survey)
-      another_survey = FactoryGirl.create(:survey, :published => true)
-      Survey.unpublished.should include(survey)
-      Survey.unpublished.should_not include(another_survey)
-    end
-
-    it "returns a list of published surveys" do
-      survey = FactoryGirl.create(:survey)
-      another_survey = FactoryGirl.create(:survey, :published => true)
-      Survey.published.should_not include(survey)
-      Survey.published.should include(another_survey)
+      another_survey = FactoryGirl.create(:survey, :finalized => true)
+      Survey.finalized.should_not include(survey)
+      Survey.finalized.should include(another_survey)
     end
   end
 

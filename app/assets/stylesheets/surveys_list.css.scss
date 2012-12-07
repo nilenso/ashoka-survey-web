@@ -56,12 +56,12 @@ a.create_survey {
   margin-top: 5px;
   font-family: 'Abel', sans-serif;
 
-  &.unpublished {
+  &.draft {
     background-color: $a;
     &:hover { background-color: darken($a, 3%); }
   }
 
-  &.published {
+  &.finalized {
     background-color: $b;
     &:hover { background-color: darken($b, 3%); }
   }

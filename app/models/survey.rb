@@ -1,7 +1,7 @@
 # Collection of questions
 
 class Survey < ActiveRecord::Base
-  attr_accessible :name, :expiry_date, :description, :questions_attributes, :published, :public
+  attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
   validates_presence_of :name
   validate :expiry_date_should_not_be_in_past
   has_many :questions, :dependent => :destroy
@@ -12,14 +12,14 @@ class Survey < ActiveRecord::Base
   has_many :survey_users, :dependent => :destroy
   has_many :participating_organizations, :dependent => :destroy
   validates_uniqueness_of :auth_key, :allow_nil => true
-  scope :published, where(:published => true)
+  scope :finalized, where(:finalized => true)
   scope :not_expired, where('expiry_date > ?', Date.today)
-  scope :unpublished, where(:published => false)
+  scope :drafts, where(:finalized => false)
   default_scope :order => 'created_at DESC'
   before_save :generate_auth_key, :if => :public?
 
-  def publish
-    self.published = true
+  def finalize
+    self.finalized = true
     self.save
   end
 
@@ -37,7 +37,7 @@ class Survey < ActiveRecord::Base
 
   def duplicate
     survey = self.dup
-    survey.published = false
+    survey.finalized = false
     survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
     survey.save(:validate => false)
     survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
