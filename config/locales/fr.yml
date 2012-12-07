@@ -91,7 +91,7 @@ fr:
       confirm_finalize: "fr: The survey can't be edited after this. Are you sure?"
 
     share_with_organizations:
-      share_survey: "In french: Share Survey"
+      share_survey: "In french: Share Survey and continue"
 
     publish_to_users:
       publish_survey: "In French: Publish Survey and continue"

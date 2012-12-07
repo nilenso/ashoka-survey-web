@@ -65,7 +65,7 @@ en:
       copied: "Copied!"
 
     share:
-      share_survey: "Share Survey"
+      share_survey: "Share"
 
     build:
       build_survey: "Build your survey"
@@ -92,7 +92,7 @@ en:
       confirm_finalize: "The survey can't be edited after this. Are you sure?"
 
     share_with_organizations:
-      share_survey: "Share Survey"
+      share_survey: "Share Survey and continue"
 
     publish_to_users:
       publish_survey: "Publish and continue"

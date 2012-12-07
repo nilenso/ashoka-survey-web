@@ -80,7 +80,7 @@ class SurveysController < ApplicationController
     organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
     survey.share_with_organizations(organizations)
     flash[:notice] = t "flash.survey_shared", :survey_name => survey.name
-    redirect_to surveys_path
+    redirect_to survey_responses_path(survey.id)
   end
 
   def duplicate

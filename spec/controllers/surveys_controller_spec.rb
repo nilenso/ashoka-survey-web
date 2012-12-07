@@ -262,9 +262,9 @@ describe SurveysController do
         survey.participating_organizations.map(&:organization_id).should == [12, 45]
       end
 
-      it "redirects back to the surveys page" do
+      it "redirects to the survey's responses page" do
         put :update_share_with_organizations, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2]}
-        response.should redirect_to surveys_path
+        response.should redirect_to survey_responses_path(survey.id)
       end
 
       it "redirects back to the previous page with an error when no organizations are selected" do
