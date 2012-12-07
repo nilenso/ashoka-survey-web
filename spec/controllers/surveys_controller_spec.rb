@@ -185,10 +185,9 @@ describe SurveysController do
     end
 
     context "PUT 'update_publish_to_users'" do
-      it "publishes the survey to chosen users and marks the survey published" do
+      it "publishes the survey to chosen users" do
         put :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
-        survey.reload.should be_finalized
-        survey.user_ids.should == [1, 2]
+        survey.reload.user_ids.should == [1, 2]
         flash[:notice].should_not be_nil
       end
 
