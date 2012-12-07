@@ -201,9 +201,9 @@ describe SurveysController do
         flash[:notice].should_not be_nil
       end
 
-      it "redirects back to the surveys page" do
+      it "redirects to the share with organizations page" do
         get :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
-        response.should redirect_to surveys_path
+        response.should redirect_to survey_share_with_organizations_path
       end
 
       it "redirects back to the previous page with an error when no user ids are selected" do

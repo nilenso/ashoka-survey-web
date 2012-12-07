@@ -2,6 +2,7 @@ fr:
   application_title: "Application de l'enquête"
   confirm: "Etes-vous sûr?"
   login_again: Votre session a expiré. S'il vous plaît vous connecter à nouveau.
+  skip: "fr Skip"
 
   header:
     home: "Page d'accueil"
@@ -85,7 +86,7 @@ fr:
       question_title: "Titre de la question"
       save_survey: "Économiser de l'enquête"
       delete_survey: "Delete de l'enquête"
-      finalize_survey: "Finalize de l'enquête"
+      finalize_survey: "fr Finalize and continue"
       mark_identifier: "Marquer comme identifiant?"
       confirm_finalize: "fr: The survey can't be edited after this. Are you sure?"
 
@@ -93,7 +94,7 @@ fr:
       share_survey: "In french: Share Survey"
 
     publish_to_users:
-      publish_survey: "In French: Publish Survey"
+      publish_survey: "In French: Publish Survey and continue"
 
     duplicate:
       survey_duplicated: Enquête dupliqué avec succès!

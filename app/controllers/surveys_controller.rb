@@ -60,7 +60,7 @@ class SurveysController < ApplicationController
     if users.present?
       survey.publish_to_users(users)
       flash[:notice] = t "flash.survey_finalized", :survey_name => survey.name
-      redirect_to surveys_path
+      redirect_to survey_share_with_organizations_path
     else
       flash[:error] = t "flash.user_not_selected"
       redirect_to(:back)
