@@ -9,6 +9,10 @@ class MultiChoiceQuestion < Question
     options.map { |option| [option.content, choice_ids.count(option.id)] }
   end
 
+  def with_sub_questions_in_order
+    options.map(&:questions).flatten.map(&:with_sub_questions_in_order).flatten.unshift(self)
+  end
+
   private
 
   def choices

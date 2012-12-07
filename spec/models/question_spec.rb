@@ -114,6 +114,16 @@ describe Question do
       question.with_sub_questions_in_order.should == [question, nested_question, second_level_nested_question, second_nested_question]
     end
 
+    it "returns itself and all its sub-questions in order for a MultiChoiceQuestion" do
+      question = MultiChoiceQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+      question.options << Option.create(content: "Option", order_number: 0)
+      nested_question = MultiChoiceQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
+      second_nested_question = MultiChoiceQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
+      nested_question.options << Option.create(content: "Nested Option", order_number: 0)
+      second_level_nested_question = MultiChoiceQuestion.create({content: "Nested Again", survey_id: 18, order_number: 0, parent_id: nested_question.options.first.id})    
+      question.with_sub_questions_in_order.should == [question, nested_question, second_level_nested_question, second_nested_question]
+    end
+
     it "returns itself for all other types of questions" do
       question = SingleLineQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
       question.with_sub_questions_in_order.should == [question]
