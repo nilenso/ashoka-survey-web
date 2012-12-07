@@ -1,12 +1,13 @@
 module Api
   module V1
     class SurveysController < APIApplicationController
+      before_filter :only_published_and_unexpired_surveys, :only => :index
       load_resource :only => :index
       authorize_resource
 
       def index
-        @surveys ||= []
-        render :json => @surveys.select(&:published?)
+        @surveys ||= []        
+        render :json => @surveys
       end
 
       def show
@@ -25,6 +26,12 @@ module Api
         else
           render :json => survey.try(:errors).try(:full_messages), :status => :bad_request
         end
+      end
+
+      private
+
+      def only_published_and_unexpired_surveys
+        @surveys = Survey.published.not_expired
       end
     end
   end

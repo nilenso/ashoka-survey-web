@@ -13,6 +13,7 @@ class Survey < ActiveRecord::Base
   has_many :participating_organizations, :dependent => :destroy
   validates_uniqueness_of :auth_key, :allow_nil => true
   scope :published, where(:published => true)
+  scope :not_expired, where('expiry_date > ?', Date.today)
   scope :unpublished, where(:published => false)
   default_scope :order => 'created_at DESC'
   before_save :generate_auth_key, :if => :public?
@@ -29,7 +30,6 @@ class Survey < ActiveRecord::Base
   def users_for_organization(access_token, organization_id)
     User.find_by_organization(access_token, organization_id).select { |user| self.user_ids.include?(user.id) }
   end
-
 
   def expired?
     expiry_date < Date.today

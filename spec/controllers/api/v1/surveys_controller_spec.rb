@@ -46,6 +46,21 @@ module Api
           returned_json.first['name'].should == 'Published Survey'
         end
 
+        context "for expired surveys" do
+          it "doesn't return any expired surveys by default" do
+            expired_surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :published => true
+            expired_surveys.each { |survey| survey.update_attribute :expiry_date, 5.days.ago }
+            surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :expiry_date => 5.days.from_now, :published => true
+            get :index
+            returned_json = JSON.parse response.body
+            returned_json.length.should == 5
+            returned_json.each do |survey|
+              (Time.now < Time.parse(survey['expiry_date'])).should == true
+            end
+          end
+
+        end
+
         it "responds with details for all the surveys stored" do
           FactoryGirl.create_list(:survey, 15, :organization_id => 12, :published => true)
           get :index
