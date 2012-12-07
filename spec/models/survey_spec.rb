@@ -90,7 +90,7 @@ describe Survey do
       survey.should be_finalized
     end
 
-    it "returns a list of finalized surveys" do
+    it "returns a list of draft surveys" do
       survey = FactoryGirl.create(:survey)
       another_survey = FactoryGirl.create(:survey, :finalized => true)
       Survey.drafts.should include(survey)
