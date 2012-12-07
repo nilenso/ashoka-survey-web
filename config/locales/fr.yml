@@ -23,6 +23,7 @@ fr:
     organizations_not_selected: "French: You haven't selected any organizations to share the survey with"
     response_deleted: "La réponse a été supprimé"
     denied_access: "fr Denied access to %{action} %{subject}"
+    survey_finalized: "fr The survey was finalized"
 
   surveys:
     new:

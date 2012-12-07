@@ -144,6 +144,16 @@ describe SurveysController do
       put :finalize, :survey_id => @survey.id
       @survey.reload.should be_finalized
     end
+
+    it "redirects to the publish to users page" do
+      put :finalize, :survey_id => @survey.id
+      response.should redirect_to survey_publish_to_users_path
+    end
+
+    it "shows a flash message saying the survey was finalized" do
+      put :finalize, :survey_id => @survey.id
+      flash.notice.should_not be_nil
+    end
   end
 
   context "when publishing" do

@@ -43,7 +43,8 @@ class SurveysController < ApplicationController
   def finalize
     survey = Survey.find(params[:survey_id])
     survey.finalize
-    render :nothing => true
+    flash[:notice] = t "flash.survey_finalized", :survey_name => survey.name
+    redirect_to survey_publish_to_users_path
   end
 
   def publish_to_users

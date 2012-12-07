@@ -86,6 +86,7 @@ en:
       save_survey: "Save Survey"
       delete_survey: "Delete Survey"
       finalize_survey: "Finalize Survey"
+      survey_finalized: "The survey was finalized"
       mark_identifier: "Mark as identifier?"
       confirm_finalize: "The survey can't be edited after this. Are you sure?"
 
