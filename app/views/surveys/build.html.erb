@@ -46,6 +46,7 @@
   <div id="actions">
     <input id ="save" type="button" value="<%= t(".save_survey") %>"></input>
     <%= button_to t(".delete_survey"), survey_path(@survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, @survey %>
+    <%= button_to t(".finalize_survey"), survey_finalize_path(@survey.id), :method => :put, :data => { :confirm => t(".confirm_finalize") } if can? :finalize, @survey %>
   </div>
 </div>
 

@@ -85,7 +85,9 @@ en:
       question_title: "Question Title"
       save_survey: "Save Survey"
       delete_survey: "Delete Survey"
+      finalize_survey: "Finalize Survey"
       mark_identifier: "Mark as identifier?"
+      confirm_finalize: "The survey can't be edited after this. Are you sure?"
 
     share_with_organizations:
       share_survey: "Share Survey"

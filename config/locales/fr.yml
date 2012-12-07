@@ -84,7 +84,9 @@ fr:
       question_title: "Titre de la question"
       save_survey: "Économiser de l'enquête"
       delete_survey: "Delete de l'enquête"
+      finalize_survey: "Finalize de l'enquête"
       mark_identifier: "Marquer comme identifiant?"
+      confirm_finalize: "fr: The survey can't be edited after this. Are you sure?"
 
     share_with_organizations:
       share_survey: "In french: Share Survey"

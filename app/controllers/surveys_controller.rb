@@ -40,6 +40,12 @@ class SurveysController < ApplicationController
     @survey = SurveyDecorator.find(params[:id])
   end
 
+  def finalize
+    survey = Survey.find(params[:survey_id])
+    survey.finalize
+    render :nothing => true
+  end
+
   def publish_to_users
     @survey = Survey.find(params[:survey_id])
     users = Organization.users(access_token, current_user_org).reject { |user| user.id == current_user }

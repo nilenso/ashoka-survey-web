@@ -134,6 +134,18 @@ describe SurveysController do
     end
   end
 
+  context "when finalizing" do
+    before(:each) do
+      sign_in_as('cso_admin')
+      @survey = FactoryGirl.create(:survey)
+    end
+
+    it "finalizes the survey" do
+      put :finalize, :survey_id => @survey.id
+      @survey.reload.should be_finalized
+    end
+  end
+
   context "when publishing" do
     let(:survey) { FactoryGirl.create(:survey, :organization_id => 1) }
 

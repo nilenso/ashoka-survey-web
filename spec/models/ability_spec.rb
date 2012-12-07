@@ -41,6 +41,7 @@ describe "Abilities" do
         it { should be_able_to(:destroy, survey) }
         it { should_not be_able_to(:destroy, finalized_survey) }
         it { should be_able_to(:read, survey) }
+        it { should be_able_to(:finalize, survey) }
         it { should be_able_to(:publish_to_users, survey) }
         it { should be_able_to(:update_publish_to_users, survey) }
         it { should be_able_to(:report, survey) }
@@ -69,6 +70,7 @@ describe "Abilities" do
         it { should_not be_able_to(:update_publish_to_users, survey) }
         it { should_not be_able_to(:destroy, survey) }
         it { should_not be_able_to(:read, survey) }
+        it { should_not be_able_to(:finalize, survey) }
         it { should_not be_able_to(:update, survey) }
         it { should_not be_able_to(:share_with_organizations, survey) }
         it { should_not be_able_to(:update_share_with_organizations, survey) }
@@ -106,6 +108,7 @@ describe "Abilities" do
       it { should_not be_able_to(:publish_to_users, Survey.new) }
       it { should_not be_able_to(:update_publish_to_users, Survey.new) }
       it { should_not be_able_to(:edit, Survey.new) }
+      it { should_not be_able_to(:finalize, Survey.new) }
       it { should_not be_able_to(:share_with_organizations, Survey.new) }
       it { should_not be_able_to(:update_share_with_organizations, Survey.new) }
       it { should_not be_able_to(:destroy, Survey.new) }
