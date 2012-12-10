@@ -34,6 +34,10 @@ GEM
       girl_friday
     arel (3.0.2)
     awesome_print (1.1.0)
+    better_errors (0.0.7)
+      coderay
+      erubis
+    binding_of_caller (0.6.8)
     builder (3.0.0)
     cancan (1.6.8)
     capybara (1.1.2)
@@ -299,6 +303,8 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake
+  better_errors
+  binding_of_caller
   cancan
   capybara
   capybara-webkit

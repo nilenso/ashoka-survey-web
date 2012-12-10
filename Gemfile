@@ -37,6 +37,8 @@ end
 
 
 group :test, :development do
+  gem 'better_errors'
+  gem 'binding_of_caller'
   gem 'jasminerice'
   gem 'quiet_assets'
   gem 'simplecov', :require => false
