@@ -1,0 +1,3 @@
+OAUTH_ID: # Application ID of the OAuth provider.
+OAUTH_SECRET: # Secret of the OAuth provider.
+OAUTH_SERVER_URL: # URL where the OAuth Provider instance is hosted.
