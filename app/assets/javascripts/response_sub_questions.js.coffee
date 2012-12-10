@@ -6,7 +6,6 @@
       option_id = parseInt($(this).val())
       $(this).data('option-id', option_id)
 
-  # TODO: Do this for dropdowns too
   $('input[type=radio]').click ->
     sibling_options = $("input[name='#{$(this).attr('name')}']").not(this)
     sibling_options.each (index, option) ->
@@ -30,7 +29,7 @@
 
 
   initialize = ->
-    show_sub_questions_of(option) for option in $('input[type=radio]:checked,option:checked')
+    show_sub_questions_of(option) for option in $('input[type=radio]:checked,input[type=checkbox]:checked,option:checked')
 
   show_sub_questions_of = (option) ->
     for sub_question in sub_questions_for(option)
@@ -63,4 +62,5 @@
       $(this).remove()
       $("[name=\"#{hidden_field_name}\"]").remove()
 
-  initialize()
+  $ ->
+    initialize()
