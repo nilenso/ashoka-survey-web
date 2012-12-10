@@ -14,6 +14,57 @@ Terminology
 Setup
 =====
 
+Database
+--------
+
+- You need to set up a local database. Any of the databases [supported by Rails](http://api.rubyonrails.org/classes/ActiveRecord/Migration.html#label-Database+support) will work, but [PostgreSQL](http://www.postgresql.org/) is recommended.
+- Some tutorials are [here](https://help.ubuntu.com/community/PostgreSQL) and [here](http://wiki.postgresql.org/wiki/Detailed_installation_guides). If you're on a mac, use Heroku's [Postgres.app](http://postgresapp.com/)
+- Make a copy of the `database.yml.sample` provided (in the `config` directory); name it `database.yml`
+- Fill in the details for your database.
+
+For example, the `database.yml` will look something like this if you're using Postgres.app:
+
+```YAML
+development:
+  adapter: postgresql
+  encoding: utf8
+  database: survey_web_dev
+  pool: 5
+  username: 
+  password: 
+  host: localhost
+
+test:
+  adapter: postgresql
+  encoding: utf8
+  database: survey_web_test
+  pool: 5
+  username: 
+  password:
+  host: localhost
+
+production:
+  adapter: postgresql
+  encoding: utf8
+  database: survey_web_prod 
+  pool: 5
+  username:
+  password:
+```
+
+- Navigate to the survey-web directory from a terminal.
+- Type `rails server`
+- If the server starts up without complaining, your database is set up correctly.
+
+Gems
+----
+
+- To install all the libraries required by this application, navigate to the survey-web directory from a terminal.
+- Type `gem install bundler` and then `bundle install`
+
+OAuth Provider
+----------
+
 This app works with an OAuth Provider that you'll need to set up as well.
 You can clone it at http://github.com/c42/user-owner
 
@@ -30,4 +81,7 @@ OAUTH_ID: # Application ID of the OAuth provider.
 OAUTH_SECRET: # Secret of the OAuth provider.
 OAUTH_SERVER_URL: # URL where the OAuth Provider instance is hosted.
 ```
-Restart the survey-web app.
+
+Finally...
+-------
+Start the survey-web app by typing `rails server` from the console.
