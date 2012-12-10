@@ -1,3 +1,4 @@
+-r spec_helper
 --format documentation
 --color
 --drb
