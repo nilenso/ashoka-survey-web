@@ -1,10 +1,23 @@
 @organize_sub_questions = ->
+  # Copy the mutli-choice options' value to the data-option-id field
+  # Couldn't do this in formtastic. If you figure that out, remove this.
+  $ ->
+    $('input[type=checkbox]').each ->
+      option_id = parseInt($(this).val())
+      $(this).data('option-id', option_id)
+
   # TODO: Do this for dropdowns too
   $('input[type=radio]').click ->
     sibling_options = $("input[name='#{$(this).attr('name')}']").not(this)
     sibling_options.each (index, option) ->
       hide_sub_questions_of(option)
     show_sub_questions_of($(this))
+
+  $('input[type=checkbox]').click ->
+    if this.checked
+      show_sub_questions_of($(this))
+    else
+      hide_sub_questions_of($(this))
 
   $('select').change ->
     option = this.options[this.selectedIndex]
