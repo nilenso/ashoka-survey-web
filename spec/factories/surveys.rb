@@ -9,6 +9,7 @@ FactoryGirl.define do
 
     factory :survey_with_questions do
       after(:create) do |survey, evaluator|
+        survey.finalize
         FactoryGirl.create_list(:question_with_answers, 5, :survey => survey)
       end
     end

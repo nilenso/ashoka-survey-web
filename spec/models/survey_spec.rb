@@ -48,7 +48,7 @@ describe Survey do
 
     it "doesn't duplicate the other associations" do
       survey = FactoryGirl.create :survey_with_questions
-      survey.survey_users << SurveyUser.create
+      SurveyUser.create(:survey_id => survey.id, :user_id => 5)
       survey.duplicate.survey_users.should be_empty
     end
 
@@ -107,7 +107,7 @@ describe Survey do
 
   context "users" do
     it "returns a list of user-ids the survey is published to" do
-      survey = FactoryGirl.create(:survey)
+      survey = FactoryGirl.create(:survey, :finalized => true)
       survey_user = FactoryGirl.create(:survey_user, :survey_id => survey.id)
       survey.user_ids.should == [survey_user.user_id]
     end
@@ -118,7 +118,7 @@ describe Survey do
       users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
       access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
 
-      survey = FactoryGirl.create(:survey)
+      survey = FactoryGirl.create(:survey, :finalized => true)
       user = { :id => 1, :name => "Bob"}
       FactoryGirl.create(:survey_user, :survey_id => survey.id, :user_id => user[:id])
       survey.users_for_organization(access_token, 1).map{|user| {:id => user.id, :name => user.name} }.should include user
@@ -126,10 +126,17 @@ describe Survey do
     end
 
     it "publishes survey to the given users" do
-      survey = FactoryGirl.create(:survey)
+      survey = FactoryGirl.create(:survey, :finalized => true)
       users = [1, 2]
       survey.publish_to_users(users)
       survey.user_ids.should == users
+    end
+
+    it "does not allow publishing if it is not finalized" do
+      survey = FactoryGirl.create(:survey)
+      users = [3, 4]
+      survey.publish_to_users(users)
+      survey.user_ids.should == []
     end
   end
 

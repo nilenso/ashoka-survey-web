@@ -118,7 +118,7 @@ describe "Abilities" do
       it {should_not be_able_to :manage, Option.new }
 
       context "for a survey shared with him" do
-        let(:survey) { FactoryGirl.create(:survey, :organization_id => 5) }
+        let(:survey) { FactoryGirl.create(:survey, :finalized => true, :organization_id => 5) }
         let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => base_user_info[:user_id], :organization_id => 1) }
         let(:question) { FactoryGirl.create(:question, :survey => survey) }
         let(:option) { FactoryGirl.create(:option, :question => question) }

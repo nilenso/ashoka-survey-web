@@ -49,6 +49,10 @@ class SurveysController < ApplicationController
 
   def publish_to_users
     @survey = Survey.find(params[:survey_id])
+    unless @survey.finalized?
+      flash[:error] = t "flash.publish_draft_survey"
+      redirect_to root_path
+    end
     users = Organization.users(access_token, current_user_org).reject { |user| user.id == current_user }
     @shared_users = @survey.users_for_organization(access_token, current_user_org)
     @unshared_users = users.reject { |user| @shared_users.map(&:id).include?(user.id) }

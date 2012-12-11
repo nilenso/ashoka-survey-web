@@ -157,7 +157,7 @@ describe SurveysController do
   end
 
   context "when publishing" do
-    let(:survey) { FactoryGirl.create(:survey, :organization_id => 1) }
+    let(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :finalized => true) }
 
     before(:each) do
       sign_in_as('cso_admin')
@@ -173,6 +173,15 @@ describe SurveysController do
     end
 
     context "GET 'publish to users'" do
+      context "when the survey is not finalized" do
+        it "redirects back to root a flash error" do
+          draft_survey = FactoryGirl.create(:survey)
+          get :publish_to_users, :survey_id => draft_survey.id
+          response.should redirect_to root_path
+          flash[:error].should_not be_nil
+        end
+      end
+
       it "assigns shared and unshared users in the current organization" do
         survey.survey_users << FactoryGirl.create(:survey_user, :user_id => 1, :survey_id => survey.id)
         get :publish_to_users, :survey_id => survey.id
