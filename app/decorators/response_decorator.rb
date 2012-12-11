@@ -26,7 +26,8 @@ class ResponseDecorator < Draper::Base
       f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :member_label => Proc.new { |id| Option.find_by_id(id).try(:content)}
 
     when 'PhotoQuestion'
-      f.input :photo, :as => :file, :required => question.mandatory, :label => question.content
+      answer = Answer.find_by_question_id_and_response_id(question.id, id)
+      "#{(h.image_tag answer.photo.url(:medium) if answer.photo.exists?)} #{(f.input :photo, :as => :file, :required => question.mandatory, :label => question.content)}".html_safe
 
     when 'RatingQuestion'
       string = ERB.new "
