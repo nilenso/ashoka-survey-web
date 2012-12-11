@@ -27,6 +27,7 @@ fr:
     survey_finalized: "fr The survey was finalized"
 
   surveys:
+    confirm_finalize: "fr: The survey can't be edited after this. Are you sure?"
     new:
       create_survey: "Créer un nouveau sondage"
       add_single_line_question: "Ajouter une question simple ligne"
@@ -65,6 +66,7 @@ fr:
       no_surveys: "Il n'y a pas encore d'enquêtes."
       crowd_source: "fr Copy crowd source link"
       copied: "Copié!"
+      finalize: "fr Finalize"
 
     share:
       share_survey: "Enquête Partager"
@@ -88,7 +90,6 @@ fr:
       delete_survey: "Delete de l'enquête"
       finalize_survey: "fr Finalize and continue"
       mark_identifier: "Marquer comme identifiant?"
-      confirm_finalize: "fr: The survey can't be edited after this. Are you sure?"
 
     share_with_organizations:
       share_survey: "In french: Share Survey and continue"

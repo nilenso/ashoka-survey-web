@@ -26,6 +26,8 @@ en:
     denied_access: "Denied access to %{action} %{subject}"
 
   surveys:
+    confirm_finalize: "The survey can't be edited after this. Are you sure?"
+
     new:
       create_survey: "Create a new survey"
       add_single_line_question: "Add a single line Question"
@@ -63,6 +65,7 @@ en:
       no_surveys: "There are no surveys yet."
       crowd_source: "Copy crowd source link"
       copied: "Copied!"
+      finalize: "Finalize"
 
     share:
       share_survey: "Share"
@@ -89,7 +92,6 @@ en:
       finalize_survey: "Finalize and continue"
       survey_finalized: "The survey was finalized"
       mark_identifier: "Mark as identifier?"
-      confirm_finalize: "The survey can't be edited after this. Are you sure?"
 
     share_with_organizations:
       share_survey: "Share Survey and continue"
