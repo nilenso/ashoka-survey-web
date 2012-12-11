@@ -36,7 +36,7 @@ module Api
 
       def extra_surveys
         extra_survey_ids = params[:extra_surveys] || ""
-        @surveys.finalized.where('id in (?)', extra_survey_ids.split(',').map(&:to_i))
+        @surveys.finalized.where('surveys.id in (?)', extra_survey_ids.split(',').map(&:to_i))
       end
     end
   end
