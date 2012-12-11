@@ -201,11 +201,6 @@ describe SurveysController do
         flash[:notice].should_not be_nil
       end
 
-      it "finalizes the survey" do
-        put :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
-        survey.reload.should be_finalized
-      end
-
       it "redirects to the share with organizations page" do
         get :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
         response.should redirect_to survey_share_with_organizations_path
