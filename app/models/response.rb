@@ -57,7 +57,7 @@ class Response < ActiveRecord::Base
   end
 
   def filename_for_excel
-    "#{survey.name} - #{Time.now}.xls"
+    "#{survey.name} - #{Time.now}.xlsx"
   end
 
   def select_new_answers(answers_attributes)

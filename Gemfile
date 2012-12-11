@@ -20,6 +20,7 @@ gem "recaptcha", :require => "recaptcha/rails"
 gem 'dalli'
 gem "geocoder"
 gem 'gmaps4rails'
+gem 'axlsx_rails'
 
 # Gems used only for assets and not required
 # in production environments by default.

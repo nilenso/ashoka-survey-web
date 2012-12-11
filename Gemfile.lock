@@ -34,6 +34,13 @@ GEM
       girl_friday
     arel (3.0.2)
     awesome_print (1.1.0)
+    axlsx (1.3.4)
+      htmlentities (~> 4.3.1)
+      nokogiri (>= 1.4.1)
+      rubyzip (>= 0.9.5)
+    axlsx_rails (0.1.3)
+      axlsx
+      rails (~> 3.1)
     better_errors (0.0.7)
       coderay
       erubis
@@ -135,6 +142,7 @@ GEM
     heroku-api (0.2.8)
       excon (~> 0.14.3)
     hike (1.2.1)
+    htmlentities (4.3.1)
     httpauth (0.1)
     i18n (0.6.0)
     i18n-js (2.1.2)
@@ -303,6 +311,7 @@ PLATFORMS
 
 DEPENDENCIES
   airbrake
+  axlsx_rails
   better_errors
   binding_of_caller
   cancan

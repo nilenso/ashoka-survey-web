@@ -1,0 +1,14 @@
+if @responses.present?
+  wb = xlsx_package.workbook
+  bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
+  wb.add_worksheet(name: "Responses") do |sheet|
+    sheet.add_row @responses.first.questions.map(&:content), :style => bold_style
+    @responses.each do |response|
+      answers = response.questions.map do |question|
+        answer = response.answers.find_by_question_id(question.id)
+        answer.content_for_excel(server_url)
+      end
+      sheet.add_row answers
+    end
+  end
+end

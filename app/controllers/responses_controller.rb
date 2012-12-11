@@ -10,9 +10,9 @@ class ResponsesController < ApplicationController
     respond_to do |format|
       format.html { @responses = @responses.paginate(:page => params[:page], :per_page => 10) }
       @complete_responses = @responses.select { |response| response.complete? }
-      format.xls  do
-        headers["Content-Disposition"] = "attachment; filename=\"#{@complete_responses.first.try(:filename_for_excel)}\""
-      end
+      format.xlsx {
+        response.headers["Content-Disposition"] = "attachment; filename=\"#{@complete_responses.first.try(:filename_for_excel)}\""
+      }
     end
   end
 
