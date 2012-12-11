@@ -83,10 +83,8 @@ module Api
           it "ignores the surveys that the user doesn't have access to" do
             survey = FactoryGirl.create :survey, :organization_id => 12, :finalized => true
             off_limits_survey = FactoryGirl.create :survey, :organization_id => 1234, :finalized => true, :name => "OFF!"
-            p off_limits_survey
             get :index
             returned_json = JSON.parse response.body
-            p returned_json
             returned_json.length.should == 1
             returned_json.map { |survey| survey['name'] }.should_not include "OFF!"
           end
