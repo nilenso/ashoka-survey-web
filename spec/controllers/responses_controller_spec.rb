@@ -54,9 +54,9 @@ describe ResponsesController do
     end
 
     context "excel" do
-      it "responds to XLS" do
+      it "responds to XLSX" do
         survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-        get :index, :survey_id => survey.id, :format => :xls
+        get :index, :survey_id => survey.id, :format => :xlsx
         response.should be_ok
       end
 

@@ -105,7 +105,7 @@ describe Response do
     response = FactoryGirl.build(:response, :survey_id => survey.id)
     response.filename_for_excel.should =~ /#{survey.name}/
     response.filename_for_excel.should include Time.now.to_s
-    response.filename_for_excel.should =~ /.*xls$/
+    response.filename_for_excel.should =~ /.*xlsx$/
   end
 
   context "when updating answers" do
