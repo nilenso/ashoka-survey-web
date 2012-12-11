@@ -6,7 +6,7 @@ if @responses.present?
     @responses.each do |response|
       answers = response.questions.map do |question|
         answer = response.answers.find_by_question_id(question.id)
-        answer.content_for_excel(server_url)
+        answer ? answer.content_for_excel(server_url) : ""
       end
       sheet.add_row answers
     end
