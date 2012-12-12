@@ -1,42 +1,34 @@
-<h1 id="heading">
-  <%= t ".build_survey" %></h1>
+<header>
+  <h2><%= t ".build_survey" %></h2>
+</header>
 
 <div id="survey_builder">
   <div id="notifications">
     <p></p>
     <div id="spinner"></div>
   </div>
-  <div id="sidebar">
-    <ul>
-      <li>
-        <a href="#picker_pane">
-          <%= t(".pick_question_type") %></a>
-      </li>
-      <li>
-        <a href="#settings_pane">
-          <%= t(".question_settings") %></a>
-      </li>
-    </ul>
-    <div id="picker_pane" >
-      <%= link_to t(".add_single_line_question"), "#", :id =>
-      "add_single_line_question" %>
-      <%= link_to t(".add_radio_question"), "#", :id =>
-      "add_radio_question" %>
-      <%= link_to t(".add_multiline_question"), "#", :id =>
-      "add_multiline_question" %>
-      <%= link_to t(".add_numeric_question"), "#", :id =>
-      "add_numeric_question" %>
-      <%= link_to t(".add_date_question"), "#", :id =>
-      "add_date_question" %>
-      <%= link_to t(".add_multi_choice_question"), "#", :id =>
-      "add_multi_choice_question" %>
-      <%= link_to t(".add_drop_down_question"), "#", :id =>
-      "add_drop_down_question" %>
-      <%= link_to t(".add_photo_question"), "#", :id =>
-      "add_photo_question" %>
-      <%= link_to t(".add_rating_question"), "#", :id =>"add_rating_question" %></div>
-    <div id="settings_pane"></div>
-  </div>
+
+  <ul id="picker_pane" >
+    <li><%= link_to t(".add_single_line_question"), "#", :id =>
+    "add_single_line_question" %></li>
+    <li><%= link_to t(".add_radio_question"), "#", :id =>
+    "add_radio_question" %></li>
+    <li><%= link_to t(".add_multiline_question"), "#", :id =>
+    "add_multiline_question" %></li>
+    <li><%= link_to t(".add_numeric_question"), "#", :id =>
+    "add_numeric_question" %></li>
+    <li><%= link_to t(".add_date_question"), "#", :id =>
+    "add_date_question" %></li>
+    <li><%= link_to t(".add_multi_choice_question"), "#", :id =>
+    "add_multi_choice_question" %></li>
+    <li><%= link_to t(".add_drop_down_question"), "#", :id =>
+    "add_drop_down_question" %></li>
+    <li><%= link_to t(".add_photo_question"), "#", :id =>
+    "add_photo_question" %></li>
+    <li><%= link_to t(".add_rating_question"), "#", :id =>"add_rating_question" %>
+  </ul>
+
+  <div id="settings_pane"></div>
 
   <div id="dummy_pane">
     <div id="dummy_survey_details"></div>

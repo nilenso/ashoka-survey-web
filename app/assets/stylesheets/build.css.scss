@@ -1,0 +1,37 @@
+div#content{
+  div#survey_builder{
+    margin: 0; padding: 0 220px;
+    position: relative;
+
+    ul#picker_pane{
+      display: block;
+      float: left;
+      width: 160px;
+      padding: 20px;
+      margin: 0 0 0 -220px;
+      list-style: none;
+      text-align: right;
+      background: $secondary-color-light;
+      font-size: 16px;
+      line-height: 24px;
+
+      li{
+        list-style: none;
+        display: block;
+      }
+    }
+
+    div#settings_pane{
+      display: block;
+      float: right;
+      width: 160px;
+      padding: 20px;
+      margin: 0 -220px 0 0;
+      background: $secondary-color-light;
+
+    }
+  }
+
+
+}
+

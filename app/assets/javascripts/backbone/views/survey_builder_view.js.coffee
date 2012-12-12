@@ -15,7 +15,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     $(this.el).ajaxStart(window.notifications_view.show_spinner)
     $(this.el).ajaxStop(window.notifications_view.hide_spinner)
 
-    $( "#sidebar" ).tabs()
+    # $( "#sidebar" ).tabs()
 
     this.survey.fetch({
         success: (data) =>
@@ -45,7 +45,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   handle_dummy_click: ->
     this.hide_all()
-    this.switch_tab()
+    # this.switch_tab()
 
   hide_all: (event) ->
     this.dummy_pane.unfocus_all()
