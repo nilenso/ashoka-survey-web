@@ -131,6 +131,17 @@ describe Response do
       response_json['answers'].size.should == response.answers.size
     end
 
+    it "renders the answers' thumb url as well" do
+      response = (FactoryGirl.create :response).reload
+      photo = Rack::Test::UploadedFile.new('spec/fixtures/images/sample.jpg')
+      photo.content_type = 'image/jpeg'
+      photo_answer = FactoryGirl.create(:answer, :photo => photo, :question => FactoryGirl.create(:question, :type => 'PhotoQuestion'))
+      response.answers << photo_answer
+      response_json = JSON.parse(response.to_json_with_answers_and_choices)
+      response_json['answers'][0].should have_key('thumb_url')
+      response_json['answers'][0]['thumb_url'].should == photo_answer.thumb_url
+    end
+
     it "renders the answers' choices if any" do
       response = (FactoryGirl.create :response).reload
       response.answers << FactoryGirl.create(:answer_with_choices)
