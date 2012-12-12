@@ -5,10 +5,12 @@ div#content{
 
     ul#picker_pane{
       display: block;
-      float: left;
-      width: 160px;
-      padding: 20px;
-      margin: 0 0 0 -220px;
+      position: absolute;
+
+      left: 0;
+      width: 200px;
+      padding: 20px 0;
+      margin: 0;
       list-style: none;
       text-align: right;
       background: $secondary-color-light;
@@ -16,18 +18,51 @@ div#content{
       line-height: 24px;
 
       li{
+        padding: 0;
         list-style: none;
         display: block;
+
+        a{
+          display: block;
+          padding: 0 20px;
+
+          &:hover{background: $secondary-color; border: none;}
+        }
       }
     }
 
     div#settings_pane{
       display: block;
-      float: right;
+      position: absolute;
+      right: 0;
       width: 160px;
       padding: 20px;
-      margin: 0 -220px 0 0;
+      margin: 0;
       background: $secondary-color-light;
+
+      &:before{
+        content: "";
+        display: block;
+        width: 0; height: 0;
+        position: absolute;
+        border: solid 10px $secondary-color-light;
+        border-top-color: transparent;
+        border-left-color: transparent;
+        border-bottom-color: transparent;
+        margin-left: -20px;
+        left: 0;
+      }
+    }
+  }
+
+  div#dummy_pane{
+    div.dummy_question_content{
+      padding: 10px;
+    }
+
+    div.active{
+      background: $gray-xxlight;
+      border: solid 1px $gray-xlight;
 
     }
   }

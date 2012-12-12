@@ -5,6 +5,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   events:
     'new_question': 'new_question'
     'dummy_click': 'handle_dummy_click'
+    'settings_pane_move': 'settings_pane_move'
     'click #save': 'save_all_questions'
 
   initialize:(survey_id) ->
@@ -46,6 +47,8 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   handle_dummy_click: ->
     this.hide_all()
     # this.switch_tab()
+  settings_pane_move: ->
+    this.settings_pane.move()
 
   hide_all: (event) ->
     this.dummy_pane.unfocus_all()
