@@ -142,7 +142,7 @@ describe Survey do
       end
 
       it "sets the published_on to the date on which it is published" do
-        survey = FactoryGirl.create(:survey)
+        survey = FactoryGirl.create(:survey, :finalized => true)
         users = [3, 4]
         survey.publish_to_users(users)
         survey.reload.published_on.should == Date.today
@@ -189,7 +189,7 @@ describe Survey do
     end
 
     it "if it is published to at least one user" do
-      survey = FactoryGirl.create(:survey)
+      survey = FactoryGirl.create(:survey, :finalized => true)
       users = [1, 2]
       survey.publish_to_users(users)
       survey.should be_published
