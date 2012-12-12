@@ -47,7 +47,7 @@
       <div class="cso_admin_operations">
         <% if survey.finalized %>
           <li><%= link_to icon_for('icon-group', t(".share")), survey_share_with_organizations_path(survey.id) if can? :share_with_organizations, survey %></li>
-          <li><%= link_to icon_for('icon-arrow-up', t(".publish")), survey_publish_to_users_path(survey.id), :method => :put if can? :publish_to_users, survey %></li>
+          <li><%= link_to icon_for('icon-arrow-up', t(".publish")), survey_publish_to_users_path(survey.id) if can? :publish_to_users, survey %></li>
         <% else %>
           <li><%= link_to icon_for('icon-edit', t('.edit')), surveys_build_path(survey.id)  if can? :edit, survey %></li>
           <li><%= link_to icon_for('icon-ok', t(".finalize")), survey_finalize_path(survey.id), :method => :put, :data => { :confirm => t("surveys.confirm_finalize") } if can? :finalize, survey %></li>
