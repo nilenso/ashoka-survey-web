@@ -1,4 +1,85 @@
 div#content{
+  ul.surveys{
+    margin: 0; padding: 0;
+    li.survey{
+      display: block;
+      position: relative;
+      @include clearfix;
+      width: 100%;
+      margin: 0;
+      padding: 8px 0;
+      border-bottom: solid 1px $secondary-color-light;
+
+      div{margin: 0; padding: 0;}
+
+      &.header{
+        font-weight: bold;
+        border-bottom: solid 2px $secondary-color-light;
+      }
+
+      .info{
+        @include span-columns(5,11);
+
+        h2, h3, p{padding-left: 12px; margin: 0;}
+      }
+
+      .published-on, .expires-on{
+        @include span-columns(2,11);
+        text-align: center;
+      }
+
+      .responses-complete{
+        @include span-columns(1,11);
+        text-align: center;
+      }
+
+      .responses-incomplete{
+        @include span-columns(1 omega,11);
+        text-align: center;
+      }
+
+      .operations{
+        display: none;
+        position: absolute;
+        right: 6px;
+        bottom: 6px;
+
+        ul{
+          margin: 0; padding: 0;
+          float: left;
+
+          li{
+            display: block; padding: 0; margin: 0 4px 0 0;
+            float: left;
+            list-style: none;
+
+            a{
+              display: block;
+              background: $secondary-color-light;
+              color: $primary-color;
+              text-align: center;
+              line-height: 20px;
+              padding: 0 6px;
+              @include border-radius(2px);
+
+              &:hover{
+                background: $primary-color;
+                color: $secondary-color-light;
+                border: none;
+              }
+
+              &.disabled{display: none;}
+            }
+          }
+        }
+      }
+
+      &:hover .operations{display: block;}
+
+
+    }
+  }  
+
   div.survey{
     display: block;
     border-bottom: solid 1px $gray-xlight;
@@ -7,22 +88,27 @@ div#content{
     padding: 0;
     position: relative;
 
-    div.info{
-      @include span-columns(5,7);
-      padding: 10px 20px;
+
+    div.dates{
+      @include span-columns(2,11);
+    }
+
+    div.counts{
+      @include span-columns(2,11);
     }
 
     div.operations{
-      @include span-columns(1 omega,7);
+      @include span-columns(2 omega,11);
+      display: none;
 
       ul{
-        display: block; margin: 0; padding: 0;
-        position: absolute;
-        bottom: 10px; right: 10px;
-        @include span-columns(1 omega,7);
+        margin: 0; padding: 0;
 
         li{
-          display: block; margin: 0 4px 4px 0; padding: 0;
+          display: block; padding: 0; 
+          width: 46%;
+          margin: 2% 0 0 2%;
+          float: left;
           list-style: none;
 
           a{
@@ -44,5 +130,7 @@ div#content{
         }
       }
     }
+
+    &:hover div.operations{display: block;}
   }
 }
