@@ -35,3 +35,12 @@ header .filters{
     }
   }
 }
+
+div.pagination{
+  display: block;
+  text-align: center;
+  font-size: 14px;
+
+  em{font-style: normal;}
+  em.current{background: $secondary-color-light; font-weight: bold; padding: 0 4px;}
+}

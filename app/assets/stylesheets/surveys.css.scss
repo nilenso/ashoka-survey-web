@@ -21,6 +21,7 @@ div#content{
         @include span-columns(5,11);
 
         h2, h3, p{padding-left: 12px; margin: 0;}
+        h2 em{font-weight: normal;font-size: 14px; color: $gray;}
       }
 
       .published-on, .expires-on{
@@ -82,62 +83,6 @@ div#content{
           color: $primary-color;
         }
       }
-
-
     }
   }  
-
-  div.survey{
-    display: block;
-    border-bottom: solid 1px $gray-xlight;
-    overflow: hidden;
-    margin: 0;
-    padding: 0;
-    position: relative;
-
-
-    div.dates{
-      @include span-columns(2,11);
-    }
-
-    div.counts{
-      @include span-columns(2,11);
-    }
-
-    div.operations{
-      @include span-columns(2 omega,11);
-      display: none;
-
-      ul{
-        margin: 0; padding: 0;
-
-        li{
-          display: block; padding: 0; 
-          width: 46%;
-          margin: 2% 0 0 2%;
-          float: left;
-          list-style: none;
-
-          a{
-            display: block;
-            background: $secondary-color-light;
-            color: $primary-color;
-            @include border-radius(2px);
-            text-align: center;
-            line-height: 20px;
-
-            &:hover{
-              background: $primary-color;
-              color: $secondary-color-light;
-              border: none;
-            }
-
-            &.disabled{display: none;}
-          }
-        }
-      }
-    }
-
-    &:hover div.operations{display: block;}
-  }
 }

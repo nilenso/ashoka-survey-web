@@ -31,8 +31,9 @@
   <% @surveys.each do |survey| %>
     <li class="survey <%= survey.finalized? ? 'finalized' : 'incomplete' %>">
       <div class="info">
-        <h2 class="name"><%= survey.name %></h2>
-        <h3><%= survey.organization_name(@organizations) %></h3>
+        <h2 class="name"><%= survey.name %>
+        <em><%= survey.organization_name(@organizations) %></em>
+        </h2>
         <p class="description"><%= survey.description %></p>
       </div>
 
@@ -44,8 +45,9 @@
         <%= survey.expiry_date.to_formatted_s(:long_ordinal) %>
       </span>
 
-      <span class="responses-complete">40</span>
-      <span class="responses-incomplete">42</span>
+      <span class="responses-complete"><%= survey.complete_responses_count %></span>
+
+      <span class="responses-incomplete"><%= survey.incomplete_responses_count %></span> 
 
       <div class="operations">
         <ul class="response_operations">
