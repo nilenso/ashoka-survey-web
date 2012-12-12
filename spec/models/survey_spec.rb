@@ -217,4 +217,17 @@ describe Survey do
     another_survey = FactoryGirl.create(:survey)
     another_survey.should_not be_expired
   end
+
+  it "returns the number of complete responses" do
+    survey = FactoryGirl.create(:survey, :finalized => true)
+    6.times { FactoryGirl.create(:response, :survey => survey, :status => 'complete') }
+    survey.complete_responses_count.should == 6
+  end
+
+  it "returns the number of incomplete responses" do
+    survey = FactoryGirl.create(:survey, :finalized => true)
+    6.times { FactoryGirl.create(:response, :survey => survey) }
+    survey.incomplete_responses_count.should == 6
+  end
+
 end
