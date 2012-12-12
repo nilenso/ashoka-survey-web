@@ -1,0 +1,26 @@
+$black: #000;
+$gray-xdark: #222;
+$gray-dark: #444;
+$gray: #666;
+$gray-mlight: #999;
+$gray-light: #ccc;
+$gray-xlight: #eee;
+$gray-xxlight: #F7F7F7;
+$white: #fff;
+
+$highlight: #ffe;
+$yellow: #ff0;
+
+$danger: #c00;
+$danger-light: #fcc;
+
+$primary-color: #1F4E61;
+$primary-color-light: #2E6377;
+
+$secondary-color: #BFBCA7;
+$secondary-color-light: #EEEEDF;
+
+html, body{
+  color: $gray-xdark;
+  background: $gray-xxlight;
+}

@@ -1,4 +1,4 @@
-<%= stylesheet_link_tag 'responses_index' %>
+<%#= stylesheet_link_tag 'responses_index' %>
 
 <h1> <%= t '.list_of_responses' %> </h1>
 <%= link_to icon_for('icon-plus', t('.add_response')), survey_responses_path(@survey), :method => :post, :class => 'add_response' unless @survey.expired?  %>

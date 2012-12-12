@@ -1,0 +1,37 @@
+.text{
+  padding: 10px 20px;
+}
+
+header .filters{
+  display: block; margin: 0; padding: 0;
+  float: right;
+  line-height: 48px;
+
+  li{
+    display: inline; margin: 0; padding: 0;
+
+    a{
+      display: block;
+      position: relative;
+      float: left;
+      padding: 0 10px;
+
+      &.selected, &:hover{
+        border: none;
+
+        &:after{
+          content: "";
+          display: block;
+          position: absolute;
+          top: 34px;
+          left: 50%;
+          margin-left: -10px;
+          border: solid 10px $white;
+          border-top-color: transparent;
+          border-left-color: transparent;
+          border-right-color: transparent;
+        }
+      }
+    }
+  }
+}

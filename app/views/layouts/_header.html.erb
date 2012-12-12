@@ -1,14 +1,22 @@
-<div class = "header">
+<div id="banner" role="banner">
   <ul>
-    <li><%= link_to t("header.home"), root_path %></li>
+    <li><%= link_to t("header.home"), root_path, :class => 'home' %></li>
     <% if user_currently_logged_in? %>
+      <% if can? :create, Survey %>
+        <li><%= link_to icon_for('icon-plus', t(".create_survey")), surveys_path, :method => :post, :class => "add" %></li>
+      <% end %>
+
       <li><%= link_to t("header.logout"), logout_path, :class => 'logout' %></li>
-      <li class='username'><%= t("header.logged_in_as", :username => current_username) %></li>
+      <li><%= t("header.logged_in_as", :username => current_username) %></li>
+      <% unless Rails.env.production? %>
+      <li><%= "You are a #{current_user_info.try(:[], :role)}" %></li>
+      <% end %>
     <% else %>
       <li><%= link_to t("header.log_in"), '/auth/user_owner', :class => 'signin' %></li>
     <% end %>
-    <% unless Rails.env.production? %>
-        <a class='logout'><%= "You are a #{current_user_info.try(:[], :role)}" %></a>
-    <% end %>
   </ul>
 </div>
+
+<h1 id="logo">
+  <a href="/"><%= t(:application_title) %></a>
+</h1>

@@ -7,11 +7,19 @@
 <%= csrf_meta_tags %>
 </head>
 <body>
-  <%= render "layouts/header" %>
-  <div class = "container">
-    <%= render "layouts/flash", :flash => flash %> 
-    <%= yield %>
+  <div id="page">
+    <%= render "layouts/header" %>
+
+    <div id="content" role="content">
+      <%= render "layouts/flash", :flash => flash %> 
+      <%= yield %>
+    </div>
+
+    <div id="help">
+      <%= yield :help %>
+    </div>
+
+    <%= render "layouts/footer" %>
   </div>
-  <%= render "layouts/footer" %>
 </body>
 </html>

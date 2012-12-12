@@ -1,0 +1,69 @@
+div#banner{
+  display: block;
+  color: $white;
+  padding-top: 80px;
+  @include span-columns(1);
+
+  ul{
+    margin: 20px 0 0 0; padding: 0;
+    list-style: none;
+
+    li{
+      display: block;
+      position: relative;
+      margin: 0; padding: 10px 0;
+      border-bottom: solid 1px $primary-color-light;
+      text-align: center;
+      color: $secondary-color;
+
+      &:last-child{border-bottom: none;}
+
+      a{
+        display: block;
+        position: relative;
+        margin: 0;
+
+        color: $secondary-color;
+        text-align: center;
+        text-transform: lowercase;
+
+        &:hover{border: none; color: $white;}
+
+        &:after{
+          display: block;
+          position: absolute;
+          width: 80px; height: 48px; line-height: 48px;
+          left: 0; top: 0;
+          text-align: center;
+          font-size: 36px;
+          font-family: "FontAwesome";
+          -webkit-font-smoothing: antialiased;
+        }
+
+        &.home, &.add, &.users,
+        &.organization, &.signin,
+        &.logout, &.register{
+          padding: 40px 0 0 0;
+        }
+
+        &.home:after{ content: "\f015";}
+        &.add:after{ content: "\f067";}
+        &.users:after{ content: "\f007";}
+        &.organization:after{ content: "\f0c0";}
+        &.signin:after{ content: "\f090";}
+        &.logout:after{ content: "\f08b";}
+        &.register:after{ content: "\f040";}
+      }
+    }
+  }
+
+  a{color: $white;}
+}
+
+h1{
+  height: 80px; line-height: 80px;
+  font-weight: 300;
+  @include span-columns(11 omega);
+
+  a{color: $secondary-color-light;}
+}

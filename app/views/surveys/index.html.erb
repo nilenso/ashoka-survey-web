@@ -1,50 +1,45 @@
-
-<%= stylesheet_link_tag 'surveys_list' %>
-
-
-<% if can? :create, Survey %>
-<div class="admin_tasks">
-    <%= link_to icon_for('icon-plus', t(".create_survey")), surveys_path, :method => :post, :class => "create_survey" %>
-  <% if @surveys.present? %>
-    <div class="filters">
-      <%= link_to t(".finalized"), surveys_path(:finalized => true) %> |
-      <%= link_to t(".drafts"), surveys_path(:drafts => true) %> |
-      <%= link_to t(".all"), surveys_path %>
-    </div>
+<%#= stylesheet_link_tag 'surveys_list' %>
+<header>
+  <% if can? :create, Survey %>
+    <% if @surveys.present? %>
+      <ul class="filters">
+        <li><%= link_to t(".all"), surveys_path, :class => "#{'selected' unless params[:published] or params[:unpublished]}"  %></li>
+        <li><%= link_to t(".published"), surveys_path(:published => true), :class => "#{'selected' if params[:published]}" %></li>
+        <li><%= link_to t(".unpublished"), surveys_path(:unpublished => true), :class => "#{'selected' if params[:unpublished]}" %></li>
+      </ul>
+    <% end %>
   <% end %>
-</div>
-<% end %>
 
-<h1><%= t('.surveys') %></h1>
+  <h2><%= t('.surveys') %></h2>
+  </header>
 
 <% if @surveys.blank? %>
   <p class="no_surveys"><%= t('.no_surveys') %></p>
 <% end %>
 
-<div class="surveys_list">
-  <% unless @surveys.blank? or @organizations.blank? %>
-  <% @surveys.each do |survey| %>
-  <div class="survey <%= survey.finalized? ? 'finalized' : 'draft' %>">
+<% unless @surveys.blank? or @organizations.blank? %>
+<% @surveys.each do |survey| %>
+<div class="survey <%= survey.published? ? 'published' : 'unpublished' %>">
+  <div class="info">
     <div class="status">
       <%= pluralize(survey.responses.count, t(".responses")) if survey.responses.count > 0 %>
     </div>
-    <div class="survey_details">
-      <h2 class="name"><%= survey.name %></h2>
-      <span class="organization_name"><%= survey.organization_name(@organizations) %></span>
-      <p class="expiry_date"><%= "Expires on #{survey.expiry_date.to_formatted_s(:long_ordinal)}" %></p>
-      <p class="description">
-        <%= survey.description %>
-      </p>
-    </div>
+    <h2 class="name"><%= survey.name %></h2>
+    <span class="organization_name"><%= survey.organization_name(@organizations) %></span>
+    <p class="expiry_date"><%= "Expires on #{survey.expiry_date.to_formatted_s(:long_ordinal)}" %></p>
+    <p class="description">
+      <%= survey.description %>
+    </p>
+  </div>
 
-    <ul class="operations">
-      <div class="response_operations">
+    <div class="operations">
+      <ul class="response_operations">
           <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled if can?(:create, Response.new(:survey => survey)) && !survey.expired? %></li>
           <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can? :read, survey %></li>
           <li><%= link_to icon_for('icon-paste', t(".crowd_source")), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url } if can?(:read, survey) && survey.public? %></li>
-      </div>
+      </ul>
 
-      <div class="cso_admin_operations">
+      <ul class="cso_admin_operations">
         <% if survey.finalized %>
           <li><%= link_to icon_for('icon-group', t(".share")), survey_share_with_organizations_path(survey.id) if can? :share_with_organizations, survey %></li>
           <li><%= link_to icon_for('icon-arrow-up', t(".publish")), survey_publish_to_users_path(survey.id) if can? :publish_to_users, survey %></li>
@@ -55,12 +50,12 @@
         <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
         <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %></li>
         <li><%= link_to icon_for('icon-bar-chart', t('.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.finalized? %></li>
-      </div>
+      </ul>
     </ul>
   </div>
-  <% end %>
-  <% end %>
 </div>
+<% end %>
+<% end %>
 
 <%= will_paginate @surveys %>
 
@@ -86,3 +81,12 @@
     });
   });
 </script>
+
+<% content_for :help do %>
+Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+<% end %>

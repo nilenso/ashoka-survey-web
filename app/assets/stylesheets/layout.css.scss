@@ -1,0 +1,72 @@
+html{
+  background: $primary-color;
+  margin: 0; padding: 1px;
+}
+
+body{background: transparent;}
+
+#page{
+  display: block;
+  @include container;
+}
+
+div#content{
+  display: block;
+  background: $white;
+  @include span-columns(7);
+  min-height: 400px;
+  @include box-shadow(0 0 10px rgba($black, 0.2));
+
+  div {padding: 10px 20px;}
+  div div{padding: 0;}
+
+  div#flash_messages{margin: 0; padding: 0;}
+  p.flash{
+    display: block;
+    background: $primary-color;
+    margin: 0; padding: 10px 20px;
+    font-size: 16px;
+
+    &.alert, &.error{background: $danger-light; color: $danger;}
+    &.notice{background: $highlight; color: $primary-color;}
+  }
+
+  h3.welcome{
+    background: $primary-color;
+    color: $secondary-color-light;
+    padding: 10px 20px;
+    margin: 0;
+    font-size: 16px; 
+    font-weight: normal;
+  }
+}
+
+div#help{
+  @include span-columns(4 omega);
+  color: $secondary-color-light;
+}
+
+#user_list{
+  ul li a{
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 6px;
+    color: $primary-color;
+    background: $secondary-color-light;
+  }
+}
+
+table{
+  width: 100%;
+  border-top: solid 1px $secondary-color-light;
+
+  tr td{border-bottom: solid 1px $secondary-color-light; padding: 4px 0;}
+  form{margin: 0; padding: 0;}
+}
+
+.footer{
+  display: block; clear: both;
+  padding: 10px 0;
+  color: $secondary-color-light; text-align: right;
+  a{color: white;}
+}

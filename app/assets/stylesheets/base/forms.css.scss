@@ -1,0 +1,258 @@
+form{
+  @include clearfix;
+  padding-bottom: 20px;
+  label{ display: block; font-weight: 600; margin-bottom: 5px;}
+
+  input[type="text"],
+  input[type="password"],
+  input[type="search"],
+  input[type="email"],
+  select,
+  textarea{
+    border: solid 1px $gray-light;
+    resize: none;
+  }
+  
+  textarea{height: 160px;}
+  
+  #content{
+    h2, fieldset{ margin: 10px 20px;}
+    div{margin: 0;}
+  }
+  
+  fieldset{
+    clear: both;
+    margin: 10px 0;
+    padding: 10px 0;
+    border: none;
+    border-bottom: solid 1px $gray-xlight;
+
+    legend{
+      color: $primary-color;
+      margin: 0 20px;
+      font-size: 18px;
+    }
+
+    ol{
+      list-style: none;
+      margin: 0 20px;
+
+      li{
+        display: block;
+        margin: 0 0 10px 0;
+
+        input{width: 300px;}
+      }
+    }
+    
+    div{
+      width: 50%;
+      float: left;
+      position: relative;
+      margin: 0;
+      padding-bottom: 30px;
+      
+      input[type="text"],
+      input[type="password"],
+      input[type="search"],
+      input[type="email"],
+      select{
+        width: 96%;
+      }
+      
+      &.checkbox{
+        width: 100%;
+        input{display: inline;}
+        label{display: inline;}
+      }
+      
+      &.date{
+        width: 25%;
+        
+        input{ width: 92%; }
+      }
+      
+      &.text_area{
+        width: 100%;
+        
+        textarea{ width: 98%; height: 200px;}
+      }
+      
+      span.hint{
+        display: block;
+        position: absolute;
+        bottom: 12px;
+        font-style: italic;
+        font-size: 12px;
+      }
+      
+      a.add{font-size: 12px; font-weight: bold;}
+    }
+    
+    div.user_type{
+      overflow: hidden;
+      padding-bottom: 30px;
+      label{display: inline;}
+    }
+
+    div.tags, div.languages{
+      height: 100px;
+      position: relative;
+      .tags_clear { clear: both; width: 100%; height: 0px; }
+      .not_valid {background: #FBD8DB !important; color: #90111A !important;}
+      input{width: 100px;}
+      div{margin: 0; padding: 0;}
+      div.field_with_errors{
+        width: 80%;
+        
+        div.tagsinput{width: 100% !important;}
+      }
+            
+      li{
+        display: block;
+        list-style: none;
+        float: left;
+        padding: 0 5px;
+        margin: 4px 4px 0 0;
+        background: $gray-xlight;
+        @include border-radius(4px);
+        cursor: pointer;
+
+        &:hover{ background: $gray-dark; color: $white; }
+  	    &.selected{
+  	      color: $gray-light;
+  	      background: none;
+  	      cursor: none;
+  	    }
+      }
+
+      div.categorized-tags, div.language-list{
+        display: block;
+        float: left;
+        width: 40px;
+        position: static;
+        padding: 0;
+        margin: 0;
+        
+        span{
+          display: block;
+          width: 24px;
+          height: 24px;
+          line-height: 28px;
+          padding: 0;
+          margin-left: 6px;
+          background: $gray-dark;
+          text-align: center;
+          color: $white;
+          
+          font-size: 30px;
+          font-weight: bold;
+          @include border-radius(4px);
+          cursor: pointer;
+        }
+        
+        ul{
+          display: none;
+          position: absolute;
+          width: 92%;
+          height: 160px;
+          overflow: auto;
+          top: -160px;
+          left: 1%;
+          z-index: 30;
+          padding: 1%;
+          
+          background: $white;
+          @include border-radius(4px);
+        }
+        
+        &.active ul{display: block;}
+      }     
+    }
+  }
+
+  #sidebar fieldset{
+    div{width: 100%;}
+    div.tags{
+      div.categorized-tags{width: 40px;}
+      div.categorized-tags ul{ top: 80px; display: none;}
+      div.categorized-tags.active ul{display: block; overflow: auto;}
+      div.tagsinput{ width: 80% !important;}
+    } 
+  } 
+  
+  div#errorExplanation, div#error_explanation{
+    padding: 1px;
+    color: $danger;
+    background: $highlight;
+    font-weight: 600;
+    
+    h2{display: none;}
+  }
+  
+  fieldset div.field_with_errors{
+      display: block; margin: 0; padding: 0; width: 100%;
+      
+      input[type="text"],
+      input[type="password"],
+      input[type="search"],
+      input[type="email"],
+      textarea,
+      select,
+      div.tagsinput{
+        border: solid 1px $danger;
+      }
+      
+      label{color: $danger;}
+  }
+
+  p.form-actions{clear: both; @include clearfix; }
+  
+  div.sidebar{
+    h2{padding-top: 8px;}
+    ul{ margin: 0; padding: 0; list-style: none;}
+    input{ width: 90%; }
+  }
+}
+
+div.tags div.tagsinput{overflow-y: auto;}
+
+div.tagsinput {
+  border:1px solid #CCC;
+  background: #FFF; 
+  overflow-y: auto;
+  
+  span.tag{
+    @include border-radius(4px);
+    display: block;
+    float: left;
+    position: relative;
+    margin: 5px 0 0 5px;
+    padding: 2px 0 2px 4px;
+    line-height: 18px;
+    font-weight: 600;
+
+    background: $white;
+    color: $gray-dark;
+    border: solid 1px $gray-light;
+    
+    span{
+      display: inline-block;
+      height: 24px;
+      line-height: 24px;
+      float: left;
+    }
+    
+    a{float: right; padding: 0; margin: 0; }
+  }
+  
+  input {
+    width:80px;
+    margin: 4px 0 0 4px;
+    padding: 4px;
+    border: none;
+  }
+
+  div { display:block; float: left; } 
+}
+
