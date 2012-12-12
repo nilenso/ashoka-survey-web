@@ -39,7 +39,7 @@ div#content{
       }
 
       .operations{
-        display: none;
+        display: block;
         position: absolute;
         right: 6px;
         bottom: 6px;
@@ -55,8 +55,8 @@ div#content{
 
             a{
               display: block;
-              background: $secondary-color-light;
-              color: $primary-color;
+              color: $secondary-color-light;
+              font-weight: bold;
               text-align: center;
               line-height: 20px;
               padding: 0 6px;
@@ -74,7 +74,14 @@ div#content{
         }
       }
 
-      &:hover .operations{display: block;}
+      &:hover .operations{
+        display: block;
+
+        ul li a{
+          background: $secondary-color-light;
+          color: $primary-color;
+        }
+      }
 
 
     }
