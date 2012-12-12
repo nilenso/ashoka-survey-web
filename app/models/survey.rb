@@ -49,6 +49,8 @@ class Survey < ActiveRecord::Base
   end
 
   def publish_to_users(users)
+    self.published_on = Date.today
+    self.save
     users.each { |user_id| self.survey_users.create(:user_id => user_id) } if finalized?
   end
 
