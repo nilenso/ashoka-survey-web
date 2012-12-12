@@ -32,25 +32,24 @@
     </p>
   </div>
 
-    <div class="operations">
-      <ul class="response_operations">
-          <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled if can?(:create, Response.new(:survey => survey)) && !survey.expired? %></li>
-          <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can? :read, survey %></li>
-          <li><%= link_to icon_for('icon-paste', t(".crowd_source")), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url } if can?(:read, survey) && survey.public? %></li>
-      </ul>
+  <div class="operations">
+    <ul class="response_operations">
+        <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled if can?(:create, Response.new(:survey => survey)) && !survey.expired? %></li>
+        <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can? :read, survey %></li>
+        <li><%= link_to icon_for('icon-paste', t(".crowd_source")), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url } if can?(:read, survey) && survey.public? %></li>
+    </ul>
 
-      <ul class="cso_admin_operations">
-        <% if survey.finalized %>
-          <li><%= link_to icon_for('icon-group', t(".share")), survey_share_with_organizations_path(survey.id) if can? :share_with_organizations, survey %></li>
-          <li><%= link_to icon_for('icon-arrow-up', t(".publish")), survey_publish_to_users_path(survey.id) if can? :publish_to_users, survey %></li>
-        <% else %>
-          <li><%= link_to icon_for('icon-edit', t('.edit')), surveys_build_path(survey.id)  if can? :edit, survey %></li>
-          <li><%= link_to icon_for('icon-ok', t(".finalize")), survey_finalize_path(survey.id), :method => :put, :data => { :confirm => t("surveys.confirm_finalize") } if can? :finalize, survey %></li>
-        <% end %>
-        <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
-        <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %></li>
-        <li><%= link_to icon_for('icon-bar-chart', t('.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.finalized? %></li>
-      </ul>
+    <ul class="cso_admin_operations">
+      <% if survey.finalized %>
+        <li><%= link_to icon_for('icon-group', t(".share")), survey_share_with_organizations_path(survey.id) if can? :share_with_organizations, survey %></li>
+        <li><%= link_to icon_for('icon-arrow-up', t(".publish")), survey_publish_to_users_path(survey.id) if can? :publish_to_users, survey %></li>
+      <% else %>
+        <li><%= link_to icon_for('icon-edit', t('.edit')), surveys_build_path(survey.id)  if can? :edit, survey %></li>
+        <li><%= link_to icon_for('icon-ok', t(".finalize")), survey_finalize_path(survey.id), :method => :put, :data => { :confirm => t("surveys.confirm_finalize") } if can? :finalize, survey %></li>
+      <% end %>
+      <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
+      <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %></li>
+      <li><%= link_to icon_for('icon-bar-chart', t('.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.finalized? %></li>
     </ul>
   </div>
 </div>
@@ -81,12 +80,3 @@
     });
   });
 </script>
-
-<% content_for :help do %>
-Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-<% end %>

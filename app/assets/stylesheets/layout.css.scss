@@ -13,7 +13,7 @@ body{background: transparent;}
 div#content{
   display: block;
   background: $white;
-  @include span-columns(7);
+  @include span-columns(11 omega);
   min-height: 400px;
   @include box-shadow(0 0 10px rgba($black, 0.2));
 
