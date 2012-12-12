@@ -3,6 +3,8 @@ module Api
     class ResponsesController < APIApplicationController
       authorize_resource
 
+      before_filter :decode_base64_images, :except => :image_upload
+
       def create
         response = Response.new
         response.user_id = params[:user_id]
@@ -63,6 +65,19 @@ module Api
       def convert_to_datetime!(answers_attributes)
         answers_attributes.each do |key, answer_attributes|
           answer_attributes["updated_at"] = Time.at(answer_attributes["updated_at"].to_i).to_s
+        end
+      end
+
+      def decode_base64_images
+        answers_attributes = params[:response][:answers_attributes] || []
+        answers_attributes.each do |_,answer|
+          if answer.has_key? 'photo'
+            sio = StringIO.new(Base64.decode64(answer['photo']))
+            sio.class.class_eval { attr_accessor :content_type, :original_filename } # Need to do this to pass Paperclip's content_type validation. Found this at http://stackoverflow.com/questions/5054982/rails3-problem-saving-base64-image-with-paperclip  
+            sio.content_type = 'image/jpeg'
+            sio.original_filename = "photo_#{SecureRandom.hex}.jpeg"
+            answer['photo'] = sio
+          end
         end
       end
 

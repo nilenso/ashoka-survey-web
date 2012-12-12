@@ -40,6 +40,30 @@ module Api
           }.to change { Answer.count }.by 1
         end
 
+        context "for photo uploading" do
+          it "accepts an image for a PhotoQuestion in Base64 format" do
+            image = File.read 'spec/fixtures/images/sample.jpg'
+            base64_image = Base64.encode64(image)
+            question = FactoryGirl.create :question, :type => 'PhotoQuestion'
+            resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>  { '0' => {'question_id' => question.id, 'photo' => base64_image }})
+            post :create, :survey_id => survey.id, :response => resp, :user_id => 15, :organization_id => 42
+            answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
+            answer.photo.url.should_not =~ /missing/
+          end
+
+          it "sets a randomly generated filename" do
+            image = File.read 'spec/fixtures/images/sample.jpg'
+            base64_image = Base64.encode64(image)
+            question = FactoryGirl.create :question, :type => 'PhotoQuestion'
+            resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>  { '0' => {'question_id' => question.id, 'photo' => base64_image }})
+            post :create, :survey_id => survey.id, :response => resp, :user_id => 15, :organization_id => 42
+            first_answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
+            post :create, :survey_id => survey.id, :response => resp, :user_id => 15, :organization_id => 42
+            second_answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
+            first_answer.photo.original_filename.should_not == second_answer.photo.original_filename
+          end
+        end
+
         it "should return the newly created response with answers as JSON if it is incomplete" do
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
           post :create, :response => resp, :user_id => 15, :organization_id => 42
@@ -127,6 +151,34 @@ module Api
         it "returns a 410 if the response doesn't exist on the server anymore" do
           put :update, :id => 42, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_i }
           response.code.should == "410"
+        end
+
+        context "for photo uploading" do
+          let(:survey) { FactoryGirl.create(:survey, :organization_id => 42) }
+          it "accepts an image for a PhotoQuestion in Base64 format" do
+            image = File.read 'spec/fixtures/images/sample.jpg'
+            base64_image = Base64.encode64(image)
+            resp = FactoryGirl.create(:response, :survey_id => survey.id)
+            question = FactoryGirl.create :question, :type => 'PhotoQuestion', :survey_id => survey.id
+            resp_attrs = FactoryGirl.attributes_for(:response, :id => resp.id, :survey_id => survey.id, :answers_attributes =>  { '0' => {'question_id' => question.id, 'photo' => base64_image }})
+            put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42
+            answer = Answer.find_by_question_id_and_response_id(question.id, resp.id)
+            answer.photo.url.should_not =~ /missing/
+          end
+
+          it "chooses whether to save the photo based on updated_at" do
+            image = File.read 'spec/fixtures/images/sample.jpg'
+            base64_image = Base64.encode64(image)
+            photo = Rack::Test::UploadedFile.new('spec/fixtures/images/sample.jpg')
+            photo.content_type = 'image/jpeg'
+            question = FactoryGirl.create :question, :type => 'PhotoQuestion'
+            resp = FactoryGirl.create(:response, :survey_id => survey.id)
+            answer = FactoryGirl.create(:answer, :response_id => resp.id, :question_id => question.id, :photo => photo)
+            resp_attrs = FactoryGirl.attributes_for(:response, :id => resp.id, :survey_id => survey.id, :answers_attributes =>  { '0' => {'id' => answer.id, 'question_id' => question.id, 'photo' => base64_image, 'updated_at' => 5.days.ago.to_i }})
+            old_filename = answer.photo.original_filename
+            put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42          
+            answer.reload.photo_file_name.should == old_filename
+          end
         end
       end
 
