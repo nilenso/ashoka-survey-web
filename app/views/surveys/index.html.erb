@@ -3,15 +3,15 @@
   <% if can? :create, Survey %>
     <% if @surveys.present? %>
       <ul class="filters">
-        <li><%= link_to t(".all"), surveys_path, :class => "#{'selected' unless params[:published] or params[:unpublished]}"  %></li>
-        <li><%= link_to t(".published"), surveys_path(:published => true), :class => "#{'selected' if params[:published]}" %></li>
-        <li><%= link_to t(".unpublished"), surveys_path(:unpublished => true), :class => "#{'selected' if params[:unpublished]}" %></li>
+        <li><%= link_to t(".all"), surveys_path, :class => "#{'selected' unless params[:finalized] or params[:drafts]}" %></li>
+        <li><%= link_to t(".finalized"), surveys_path(:finalized => true), :class => "#{'selected' if params[:finalized]}"%></li>
+        <li><%= link_to t(".drafts"), surveys_path(:drafts => true), :class => "#{'selected' if params[:drafts]}"%></li>
       </ul>
     <% end %>
   <% end %>
 
   <h2><%= t('.surveys') %></h2>
-  </header>
+</header>
 
 <% if @surveys.blank? %>
   <p class="no_surveys"><%= t('.no_surveys') %></p>
@@ -19,7 +19,7 @@
 
 <% unless @surveys.blank? or @organizations.blank? %>
 <% @surveys.each do |survey| %>
-<div class="survey <%= survey.published? ? 'published' : 'unpublished' %>">
+<div class="survey <%= survey.finalized? ? 'finalized' : 'draft' %>">
   <div class="info">
     <div class="status">
       <%= pluralize(survey.responses.count, t(".responses")) if survey.responses.count > 0 %>
