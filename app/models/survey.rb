@@ -60,6 +60,10 @@ class Survey < ActiveRecord::Base
     end
   end
 
+  def published?
+    !participating_organizations.empty? || survey_users.empty?
+  end
+
   def participating_organization_ids
     self.participating_organizations.map(&:organization_id)
   end

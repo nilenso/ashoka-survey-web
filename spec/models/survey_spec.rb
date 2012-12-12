@@ -179,6 +179,24 @@ describe Survey do
     end
   end
 
+  context "knows that its published" do
+
+    it "if it is shared with at least one organization" do
+      survey = FactoryGirl.create(:survey)
+      organizations = [1, 2]
+      survey.share_with_organizations(organizations)
+      survey.should be_published
+    end
+
+    it "if it is published to at least one user" do
+      survey = FactoryGirl.create(:survey)
+      users = [1, 2]
+      survey.publish_to_users(users)
+      survey.should be_published
+    end
+
+  end
+
   it "returns a list of first level questions" do
     survey = FactoryGirl.create(:survey)
     question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
