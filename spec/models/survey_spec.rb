@@ -8,6 +8,7 @@ describe Survey do
   it { should respond_to :organization_id }
   it { should respond_to :public }
   it { should respond_to(:auth_key) }
+  it { should respond_to(:published_on) }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:responses).dependent(:destroy) }
   it { should have_many(:survey_users).dependent(:destroy) }
