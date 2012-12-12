@@ -8,6 +8,7 @@ describe Survey do
   it { should respond_to :organization_id }
   it { should respond_to :public }
   it { should respond_to(:auth_key) }
+  it { should respond_to(:published_on) }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:responses).dependent(:destroy) }
   it { should have_many(:survey_users).dependent(:destroy) }
@@ -216,4 +217,17 @@ describe Survey do
     another_survey = FactoryGirl.create(:survey)
     another_survey.should_not be_expired
   end
+
+  it "returns the number of complete responses" do
+    survey = FactoryGirl.create(:survey, :finalized => true)
+    6.times { FactoryGirl.create(:response, :survey => survey, :status => 'complete') }
+    survey.complete_responses_count.should == 6
+  end
+
+  it "returns the number of incomplete responses" do
+    survey = FactoryGirl.create(:survey, :finalized => true)
+    6.times { FactoryGirl.create(:response, :survey => survey) }
+    survey.incomplete_responses_count.should == 6
+  end
+
 end

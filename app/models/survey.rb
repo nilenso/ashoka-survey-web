@@ -74,6 +74,14 @@ class Survey < ActiveRecord::Base
     questions.reject { |question| question.report_data.blank? }
   end
 
+  def complete_responses_count
+    responses.where(:status => 'complete').count
+  end
+
+  def incomplete_responses_count
+    responses.where(:status => 'incomplete').count
+  end
+
   private
 
   def generate_auth_key
