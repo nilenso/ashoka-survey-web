@@ -40,11 +40,18 @@ describe Survey do
     end
   end
 
-  context "orders by newest to oldest" do
-    it "fetches all surveys in descending order of created_at" do
+  context "when ordering" do
+    it "fetches all draft surveys in descending order of created_at" do
       survey = FactoryGirl.create(:survey)
       another_survey = FactoryGirl.create(:survey)
       Survey.all.first(2).should == [another_survey, survey]
+    end
+
+    it "fetches all published surveys in descending order of published_on" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :published_on => (Date.today + 6.days) )
+      another_survey = FactoryGirl.create(:survey, :finalized => true, :published_on => Date.today)
+      draft_survey = FactoryGirl.create(:survey, :finalized => true)
+      Survey.all.should == [survey, another_survey, draft_survey]
     end
   end
 
