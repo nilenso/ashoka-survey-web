@@ -8,7 +8,7 @@ module Api
       def index
         @surveys ||= []
         render :json => @surveys
-      end
+      end      
 
       def show
         survey = Survey.find_by_id(params[:id])
@@ -31,12 +31,19 @@ module Api
       private
 
       def only_finalized_and_unexpired_surveys
-        @surveys = @surveys.finalized.not_expired | extra_surveys
+        survey = Survey.arel_table
+        @surveys = @surveys.where(
+          (
+            survey[:expiry_date].gt(Date.today). # Not expired
+            and(survey[:finalized].eq(true))     # Finalized
+          ).
+          or(survey[:id].in(extra_surveys))
+        )
       end
 
       def extra_surveys
         extra_survey_ids = params[:extra_surveys] || ""
-        @surveys.finalized.where('surveys.id in (?)', extra_survey_ids.split(',').map(&:to_i))
+        extra_survey_ids.split(',').map(&:to_i)
       end
     end
   end
