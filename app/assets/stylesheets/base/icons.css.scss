@@ -6,3 +6,30 @@
   font-style: normal;
 }
 
+a.delete_question{
+  display: block;
+  position: relative;
+  float: right;
+  width: 16px;
+  height: 16px;
+  text-indent: -1000em;
+  overflow: hidden;
+  background: $gray-dark;
+  @include border-radius(8px);
+
+  &:after{
+    color: $white;
+    content: "\f00d";
+    font-family: "FontAwesome";
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 16px;
+    height: 16px;
+    text-indent: 0;
+    text-align: center;
+    line-height: 18px;
+    font-size: 10px;
+  }
+}

@@ -1,6 +1,6 @@
 div#content{
   div#survey_builder{
-    margin: 0; padding: 0 220px;
+    margin: 0; padding: 0 300px 0 220px;
     position: relative;
 
     ul#picker_pane{
@@ -35,7 +35,7 @@ div#content{
       display: block;
       position: absolute;
       right: 0;
-      width: 160px;
+      width: 240px;
       padding: 20px;
       margin: 0;
       background: $secondary-color-light;
@@ -58,15 +58,18 @@ div#content{
   div#dummy_pane{
     div.dummy_question_content{
       padding: 10px;
+      margin-bottom: 4px;
+
+      a.delete_question{display: none;}
+      &:hover{ background: $gray-xxlight;}
+
+      &.active{
+        background: $secondary-color-light;
+        a.delete_question{display: block; background: $secondary-color;}
+      }
     }
 
-    div.active{
-      background: $gray-xxlight;
-      border: solid 1px $gray-xlight;
 
-    }
   }
-
-
 }
 
