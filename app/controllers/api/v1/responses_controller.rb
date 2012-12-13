@@ -49,17 +49,6 @@ module Api
         end
       end
 
-      def image_upload
-        answer = Answer.find_by_id(params[:answer_id])
-        updated_at_to_datetime!(params)
-        answer.select_latest_image(params) if answer
-        if answer && answer.save
-          render :json => { :image_url => answer.thumb_url, :photo_updated_at => answer.photo_updated_at }
-        else
-          render :nothing => true, :status => :bad_request
-        end
-      end
-
       private
 
       def convert_to_datetime!(answers_attributes)

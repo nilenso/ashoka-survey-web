@@ -181,28 +181,6 @@ module Api
           end
         end
       end
-
-      context "POST 'image_upload'" do
-        it "saves the photo for an answer" do
-          resp = FactoryGirl.create :response, :organization_id => organization_id
-          answer = FactoryGirl.create :answer, :response => resp
-          request.env['enctype'] = 'multipart/form-data'
-          photo = Rack::Test::UploadedFile.new('spec/fixtures/images/sample.jpg')
-          photo.content_type = 'image/jpeg'
-          post :image_upload, :answer_id => answer.id, :id => answer.response.id, :media => photo
-          response.should be_ok
-          answer.reload.photo.url.should_not =~ /missing/
-        end
-
-        it "returns a :bad_request if an invalid answer ID is passed" do
-          request.env['enctype'] = 'multipart/form-data'
-          photo = Rack::Test::UploadedFile.new('spec/fixtures/images/sample.jpg')
-          photo.content_type = 'image/jpeg'
-          post :image_upload, :answer_id => 1231235123, :id => FactoryGirl.create(:response, :organization_id => organization_id).id, :media => photo
-          response.should_not be_ok
-          response.status.should == 400
-        end
-      end
     end
   end
 end
