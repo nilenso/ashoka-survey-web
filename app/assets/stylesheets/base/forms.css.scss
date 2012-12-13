@@ -4,10 +4,13 @@ input[type="text"],
 input[type="password"],
 input[type="search"],
 input[type="email"],
+input[type="number"],
 select,
 textarea{
   border: solid 1px $gray-light;
   resize: none;
+  display: block;
+  width: 100%;
 }
 
 textarea{height: 160px;}
