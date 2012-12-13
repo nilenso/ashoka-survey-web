@@ -1,54 +1,6 @@
 body#build div#content{
   @include span-columns(6);
 
-  header{
-    padding: 0;
-    ul{
-      display: block; margin: 0; padding: 0;
-      @include clearfix;
-
-      li{
-        display: block; margin: 0; padding: 0 0 0 24px;
-        float: left;
-        position: relative;
-        list-style: none;
-        font-size: 18px;
-        line-height: 36px;
-        height: 36px;
-
-        &:first-child{padding-left: 12px;}
-
-        &:after, &:before{
-          content: "";
-          height: 0;
-          weight: 0;
-          display: block;
-          position: absolute;
-          top: 0;
-          right: -36px;
-
-          border: solid 18px $secondary-color-light;
-          border-top-color: transparent;
-          border-bottom-color: transparent;
-          border-right-color: transparent;
-        }
-
-        &:before{
-          right: -37px;
-          border-left-color: $secondary-color;
-        }
-
-        &.active{
-          font-weight: bold;
-          background: $secondary-color;
-
-          &:after{border-left-color: $secondary-color;}
-        }
-      }
-    }
-  }
-
-
   div#survey_builder{
     margin: 0; padding: 0 20px;
     position: relative;

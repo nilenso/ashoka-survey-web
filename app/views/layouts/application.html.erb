@@ -10,6 +10,8 @@
   <div id="page">
     <%= render "layouts/header" %>
 
+    <%= yield :status_bar %>
+    
     <div id="content" role="content">
       <%= render "layouts/flash", :flash => flash %> 
       <%= yield %>

@@ -1,14 +1,14 @@
 <%= content_for :body_attributes do %> id="build"<% end %>
 
-<header>
-  <ul class="status-bar">
+<%= content_for :status_bar do %>
+  <ul id="status-bar">
     <li class="active">Edit Survey</li>
     <li>Finalize</li>
     <li>Publish</li>
     <li>Collect</li>
     <li>Analyze</li>
   </ul>
-</header>
+<% end %>
 
 <div id="survey_builder">
   <div id="notifications">
