@@ -1,4 +1,6 @@
-div#content{
+body#build div#content{
+  @include span-columns(6);
+
   header{
     padding: 0;
     ul{
@@ -48,7 +50,7 @@ div#content{
 
 
   div#survey_builder{
-    margin: 0; padding: 100px 500px 0 20px;
+    margin: 0; padding: 100px 20px 0 20px;
     position: relative;
 
     ul#picker_pane{
@@ -89,11 +91,12 @@ div#content{
     div#settings_pane{
       display: block;
       position: absolute;
-      right: 0;
-      width: 440px;
+      right: -90%;
+      width: 80%;
       padding: 20px;
       margin: 0;
       background: $secondary-color-light;
+      @include transition(all 1.0s ease-in-out);
 
       &:before{
         content: "";
