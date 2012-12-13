@@ -1,32 +1,34 @@
-<label><%= t("surveys.build.question_title") %> </label>
-<input type="text" name="content" value="{{content}}"></input>
 <div>
-  <label><%= t("activerecord.attributes.question.mandatory") %> </label>
+  <label><%= t("surveys.build.question_title") %> </label>
+  <input type="text" name="content" value="{{content}}"></input>
+</div>
+
+<div class="checkbox">
   {{#mandatory}}
 		<input type="checkbox" name="mandatory" value="{{mandatory}}" checked ></input>
 	{{/mandatory}}
 	{{^mandatory}}
 		<input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
 	{{/mandatory}}
-  <div class="upload_files">
-    <label><%= t("activerecord.attributes.question.image") %> </label>
-    <input name="image" class="fileupload" type="file" name="files[]">
-    <div class="spinner"></div>
-  </div>
+  <label><%= t("activerecord.attributes.question.mandatory") %> </label>
+</div>
+
+<div class="upload_files">
+  <label><%= t("activerecord.attributes.question.image") %> </label>
+  <input name="image" class="fileupload" type="file" name="files[]">
+  <div class="spinner"></div>
 </div>
 
 {{^parent_id}}
-  <div>
-    <label><%= t "surveys.build.mark_identifier" %></label>
+  <div class="checkbox">
     {{#identifier}}
       <input type="checkbox" name="identifier" value="{{identifier}}" checked ></input>
     {{/identifier}}
     {{^identifier}}
       <input type="checkbox" name="identifier" value="{{identifier}}"></input>
     {{/identifier}}
+    <label><%= t "surveys.build.mark_identifier" %></label>
   </div>
 {{/parent_id}}
 
-<div>
-  <%= button_tag t("add_option"), :class => "add_option" %>
-</div>
+<div class="add_option"><%= button_tag t("add_option"), :class => "add_option" %></div>

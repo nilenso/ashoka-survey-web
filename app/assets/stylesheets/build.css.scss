@@ -54,12 +54,21 @@ div#content{
       }
     }
 
-    form, fieldset{ margin: 0; padding: 0;}
-    form fieldset div{margin-bottom: 4px;}
+    div{margin-bottom: 6px;}
+
+    div.add_option{
+      border-top: solid 1px $secondary-color;
+      padding-top: 10px;
+      margin-top: 10px;
+    }
   }
 
   div#dummy_pane{
-    div.dummy_question_content{
+    div#dummy_survey_details{
+      display: block;
+    }
+
+    div.dummy_question_content, div#dummy_survey_details>div{
       padding: 10px;
       margin-bottom: 4px;
 

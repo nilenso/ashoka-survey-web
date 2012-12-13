@@ -37,11 +37,9 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
 
   move: ->
     yPosition = 0
-    if $("div#dummy_pane div.active").length > 0
+    if $("div#dummy_pane div.active, div#dummy_survey_details div.active").length > 0
       activeElementPosition = $("div#dummy_pane div.active").offset().top
       containerPosition = $('#content').offset().top
 
       topMargin = (activeElementPosition - containerPosition - 80) + 'px';
       $("#settings_pane").css('margin-top', topMargin)
-
-    console.log(yPosition)

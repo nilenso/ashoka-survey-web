@@ -1,3 +1,24 @@
+label{ display: block; font-weight: 600; margin-bottom: 5px;}
+
+input[type="text"],
+input[type="password"],
+input[type="search"],
+input[type="email"],
+select,
+textarea{
+  border: solid 1px $gray-light;
+  resize: none;
+}
+
+textarea{height: 160px;}
+
+div.checkbox, div.radio{
+  input{display: inline;}
+  label{display: inline;}
+}
+
+
+
 form{
   @include clearfix;
   padding-bottom: 20px;
@@ -20,74 +41,53 @@ form{
     div{margin: 0;}
   }
   
-  fieldset{
-    clear: both;
-    margin: 10px 0;
-    padding: 10px 0;
-    border: none;
-    border-bottom: solid 1px $gray-xlight;
+  ol{
+    list-style: none;
+    margin: 0 20px;
 
-    legend{
-      color: $primary-color;
-      margin: 0 20px;
-      font-size: 18px;
+    li{
+      display: block;
+      margin: 0 0 10px 0;
+
+      input{width: 300px;}
     }
-
-    ol{
-      list-style: none;
-      margin: 0 20px;
-
-      li{
-        display: block;
-        margin: 0 0 10px 0;
-
-        input{width: 300px;}
-      }
+  }
+  
+  div{
+    input[type="text"],
+    input[type="password"],
+    input[type="search"],
+    input[type="email"],
+    select{
+      width: 100%;
     }
     
-    div{
-      width: 50%;
-      float: left;
-      position: relative;
-      margin: 0;
-      padding-bottom: 30px;
-      
-      input[type="text"],
-      input[type="password"],
-      input[type="search"],
-      input[type="email"],
-      select{
-        width: 96%;
-      }
-      
-      &.checkbox{
-        width: 100%;
-        input{display: inline;}
-        label{display: inline;}
-      }
-      
-      &.date{
-        width: 25%;
-        
-        input{ width: 92%; }
-      }
-      
-      &.text_area{
-        width: 100%;
-        
-        textarea{ width: 98%; height: 200px;}
-      }
-      
-      span.hint{
-        display: block;
-        position: absolute;
-        bottom: 12px;
-        font-style: italic;
-        font-size: 12px;
-      }
-      
-      a.add{font-size: 12px; font-weight: bold;}
+    &.checkbox{
+      input{display: inline;}
+      label{display: inline;}
     }
+    
+    &.date{
+      width: 30%;
+      
+      input{ width: 92%; }
+    }
+    
+    &.text_area{
+      width: 100%;
+      
+      textarea{ width: 98%; height: 200px;}
+    }
+    
+    span.hint{
+      display: block;
+      position: absolute;
+      bottom: 12px;
+      font-style: italic;
+      font-size: 12px;
+    }
+    
+    a.add{font-size: 12px; font-weight: bold;}
     
     div.user_type{
       overflow: hidden;

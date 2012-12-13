@@ -60,7 +60,7 @@ div#banner{
   a{color: $white;}
 }
 
-h1{
+h1#logo{
   height: 80px; line-height: 80px;
   font-weight: 300;
   @include span-columns(11 omega);
