@@ -74,15 +74,15 @@ fr:
 
     build:
       build_survey: "Construire votre enquête"
-      add_radio_question: "Question Radio"
-      add_single_line_question: "Question de ligne unique"
-      add_multiline_question: "Question multilignes"
-      add_numeric_question: Question Numérique
-      add_date_question: "Date de question"
-      add_multi_choice_question: "Question à choix multiples"
-      add_drop_down_question: "Laissez-vous tomber Question"
-      add_photo_question: "Question Photo"
-      add_rating_question: "Question Rating"
+      add_radio_question: "Radio"
+      add_single_line_question: "de ligne unique"
+      add_multiline_question: "multilignes"
+      add_numeric_question: Numérique
+      add_date_question: "Date de"
+      add_multi_choice_question: "à choix multiples"
+      add_drop_down_question: "Laissez-vous tomber"
+      add_photo_question: "Photo"
+      add_rating_question: "Rating"
       pick_question_type: "Choisissez Type de Question"
       question_settings: "Paramètres"
       option: "Option"
