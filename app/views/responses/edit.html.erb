@@ -1,6 +1,9 @@
-<%= stylesheet_link_tag 'responses' %>
- <%= button_to t(".delete"), survey_response_path(@survey.id, @response.id),:class => "delete-button", :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, @response %>
- <h1><%= t('.edit_response') %> <%= @survey.name %></h1>
+<header>
+  <h1><%= t('.edit_response') %> <%= @survey.name %></h1>
+
+  <%= button_to t(".delete"), survey_response_path(@survey.id, @response.id),:class => "delete-button", :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, @response %>
+
+</header
 <%= semantic_form_for [@survey, @response], :html => { :multipart => true } do |f| %>
   <%= f.semantic_fields_for :answers do |f| %>
     <% question = f.object.question %>
