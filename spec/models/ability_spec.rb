@@ -18,6 +18,7 @@ describe "Abilities" do
       let(:user_info) { base_user_info.merge(:role => 'admin') }
 
       it { should be_able_to(:read, Survey.new) }
+      it { should be_able_to(:questions_count, Survey.new) }
       it { should be_able_to(:read, Question.new) }
       it { should be_able_to(:read, Option.new) }
       it { should be_able_to(:read, Response.new)}
@@ -41,6 +42,7 @@ describe "Abilities" do
         it { should be_able_to(:destroy, survey) }
         it { should_not be_able_to(:destroy, finalized_survey) }
         it { should be_able_to(:read, survey) }
+        it { should be_able_to(:questions_count, survey) }
         it { should be_able_to(:finalize, survey) }
         it { should be_able_to(:publish_to_users, survey) }
         it { should be_able_to(:update_publish_to_users, survey) }
@@ -70,6 +72,7 @@ describe "Abilities" do
         it { should_not be_able_to(:update_publish_to_users, survey) }
         it { should_not be_able_to(:destroy, survey) }
         it { should_not be_able_to(:read, survey) }
+        it { should_not be_able_to(:questions_count, survey) }
         it { should_not be_able_to(:finalize, survey) }
         it { should_not be_able_to(:update, survey) }
         it { should_not be_able_to(:share_with_organizations, survey) }
@@ -91,6 +94,7 @@ describe "Abilities" do
         before { ParticipatingOrganization.create(:organization_id => user_info[:org_id],  :survey_id => survey.id) }
 
         it { should be_able_to(:read, survey) }
+        it { should be_able_to(:questions_count, survey) }
         it { should be_able_to :duplicate, survey }
 
         it "should be able to read responses added by members of his organizations" do
@@ -127,6 +131,7 @@ describe "Abilities" do
         end
 
         it { should be_able_to :read, survey }
+        it { should be_able_to :questions_count, survey }
         it { should be_able_to :create, Response.new(:survey => survey) }
         it { should be_able_to :manage,  response }
         it { should be_able_to :image_upload,  response }
@@ -146,6 +151,7 @@ describe "Abilities" do
         end
 
         it { should_not be_able_to :read, survey }
+        it { should_not be_able_to :questions_count, survey }
         it { should_not be_able_to :image_upload,  response }
         it { should_not be_able_to :create, Response.new(:survey => survey) }
         it { should_not be_able_to :read,  response }

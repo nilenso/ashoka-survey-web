@@ -14,6 +14,7 @@ class Survey < ActiveRecord::Base
   validates_uniqueness_of :auth_key, :allow_nil => true
   scope :finalized, where(:finalized => true)
   scope :not_expired, where('expiry_date > ?', Date.today)
+  scope :with_questions, joins(:questions)
   scope :drafts, where(:finalized => false)
   default_scope :order => 'created_at DESC'
   before_save :generate_auth_key, :if => :public?

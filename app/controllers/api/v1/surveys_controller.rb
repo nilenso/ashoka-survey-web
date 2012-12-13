@@ -1,14 +1,18 @@
 module Api
   module V1
     class SurveysController < APIApplicationController
-      load_resource :only => :index
-      before_filter :only_finalized_and_unexpired_surveys, :only => :index
       authorize_resource
+      before_filter :only_finalized_and_unexpired_surveys, :only => [:index, :questions_count]
 
       def index
-        @surveys ||= []
+        @surveys ||= Survey.accessible_by(current_ability)
         render :json => @surveys
-      end      
+      end
+
+      def questions_count
+        @surveys ||= Survey.accessible_by(current_ability)
+        render :json => { count: @surveys.with_questions.count }
+      end
 
       def show
         survey = Survey.find_by_id(params[:id])
@@ -31,6 +35,7 @@ module Api
       private
 
       def only_finalized_and_unexpired_surveys
+        @surveys = Survey.accessible_by(current_ability)
         survey = Survey.arel_table
         @surveys = @surveys.where(
           (

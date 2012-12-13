@@ -13,12 +13,21 @@ class Ability
       role = user_info[:role]
       if role == 'admin'
         can :read, Survey # TODO: Verify this
+        can :questions_count, Survey
         can :read, Question
         can :read, Option
         can :read, Response # TODO: Verify this
         #can :manage, Response, :session_token => user_info[:session_token]
       elsif role == 'cso_admin'
         can :read, Survey, ['
+          surveys.id in (SELECT "surveys".id FROM "surveys"
+          LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id
+          WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
+        user_info[:org_id], user_info[:org_id]] do |survey|
+          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
+        end
+
+        can :questions_count, Survey, ['
           surveys.id in (SELECT "surveys".id FROM "surveys"
           LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id
           WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
@@ -57,6 +66,7 @@ class Ability
         can :manage, Option, :question => { :survey => {:organization_id => user_info[:org_id] }}
       elsif role == 'field_agent'
         can :read, Survey, :survey_users => { :user_id => user_info[:user_id ] }
+        can :questions_count, Survey, :survey_users => { :user_id => user_info[:user_id ] }
         can :create, Response, :survey => { :survey_users => { :user_id => user_info[:user_id ] } }
         can :complete, Response, :user_id  => user_info[:user_id]
         can :manage, Response, :user_id  => user_info[:user_id]

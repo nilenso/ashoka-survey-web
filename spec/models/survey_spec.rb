@@ -257,4 +257,10 @@ describe Survey do
     survey.incomplete_responses_count.should == 6
   end
 
+  context "for scopes" do
+    it "joins with the :questions table" do
+      FactoryGirl.create_list(:survey_with_questions, 5)
+      Survey.with_questions.count.should == (5 * 5)
+    end
+  end
 end

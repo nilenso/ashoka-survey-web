@@ -103,6 +103,14 @@ module Api
         end
       end
 
+      context "GET 'question_count'" do
+        it "returns the count of questions for surveys" do
+          FactoryGirl.create_list(:survey_with_questions, 5, :organization_id => 12)
+          get :questions_count
+          JSON.parse(response.body)['count'].should == 25
+        end
+      end
+
       context "GET 'show" do
 
         it "returns the survey information as JSON" do

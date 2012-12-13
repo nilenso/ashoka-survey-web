@@ -27,7 +27,9 @@ SurveyWeb::Application.routes.draw do
     scope :module => :v1 do
       resources :questions, :except => [:edit, :new]
       resources :options, :except => [:edit, :new, :show]
-      resources :surveys, :only => [:index, :show, :update]
+      resources :surveys, :only => [:index, :show, :update] do
+        get 'questions_count', :on => :collection
+      end
       match '/login', :to => 'auth#create'
       resources :responses, :only => [:create, :update] do
         member { put "image_upload" }
