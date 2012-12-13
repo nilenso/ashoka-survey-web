@@ -41,5 +41,7 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
       activeElementPosition = $("div#dummy_pane div.active").offset().top
       containerPosition = $('#content').offset().top
 
-      topMargin = (activeElementPosition - containerPosition - 150) + 'px';
-      $("#settings_pane").css('margin-top', topMargin)
+      settingsTopMargin = (activeElementPosition - containerPosition - 50) + 'px';
+      pickerTopMargin = (activeElementPosition - containerPosition - 200) + 'px';
+      $("#settings_pane").css('margin-top', settingsTopMargin)
+      $("#picker_pane").css('margin-top', pickerTopMargin)
