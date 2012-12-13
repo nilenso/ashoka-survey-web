@@ -38,7 +38,7 @@
 
       <span class="published-on">
         <% if survey.published? %>
-          <%= (survey.expiry_date + 30.days).to_formatted_s(:long_ordinal) %>
+          <%= (survey.published_on).to_formatted_s(:long_ordinal) %>
         <% else %>
           <%= t(".not_yet_published") %>
         <% end %>
