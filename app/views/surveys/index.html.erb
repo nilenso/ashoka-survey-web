@@ -37,7 +37,11 @@
       </div>
 
       <span class="published-on">
-        <%= (survey.expiry_date + 30.days).to_formatted_s(:long_ordinal) %>
+        <% if survey.published? %>
+          <%= (survey.expiry_date + 30.days).to_formatted_s(:long_ordinal) %>
+        <% else %>
+          <%= t(".not_yet_published") %>
+        <% end %>
       </span>
 
       <span class="expires-on">
@@ -46,7 +50,7 @@
 
       <span class="responses-complete"><%= survey.complete_responses_count %></span>
 
-      <span class="responses-incomplete"><%= survey.incomplete_responses_count %></span> 
+      <span class="responses-incomplete"><%= survey.incomplete_responses_count %></span>
 
       <div class="operations">
         <ul class="response_operations">
