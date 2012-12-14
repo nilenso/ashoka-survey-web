@@ -149,7 +149,7 @@ module Api
           question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id))
           get :index, :survey_id => survey.id
           response.should be_ok
-          response.body.should include question.to_json(:methods => [:type, :image_url])
+          response.body.should include question.to_json(:methods => [:type, :image_url, :image_in_base64])
         end
 
         it "returns a :bad_request if no survey_id is passed" do
@@ -163,7 +163,7 @@ module Api
           question = FactoryGirl.create(:question, :survey => survey)
           get :show, :id => question.id
           response.should be_ok
-          response.body.should == question.to_json(:methods => [:type, :image_url])
+          response.body.should == question.to_json(:methods => [:type, :image_url, :image_in_base64])
         end
 
         it "returns a :bad_request for an invalid question_id" do
