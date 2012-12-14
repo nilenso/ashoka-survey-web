@@ -3,7 +3,7 @@
 
   <%= button_to t(".delete"), survey_response_path(@survey.id, @response.id),:class => "delete-button", :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, @response %>
 
-</header
+</header>
 <%= semantic_form_for [@survey, @response], :html => { :multipart => true } do |f| %>
   <%= f.semantic_fields_for :answers do |f| %>
     <% question = f.object.question %>
