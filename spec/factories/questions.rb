@@ -19,5 +19,12 @@ FactoryGirl.define do
         question.save
       end
     end
+
+    factory :question_with_image do
+      after(:create) do |question, e|
+        question.image = fixture_file_upload(Rails.root.to_s + '/spec/fixtures/images/sample.jpg', 'image/jpeg')
+        question.save
+      end
+    end
   end
 end

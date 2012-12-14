@@ -17,6 +17,12 @@ class Question < ActiveRecord::Base
     nil
   end
 
+  def image_in_base64
+    if image?
+      Base64.encode64(File.read(image.path(:thumb)))
+    end
+  end
+
   def duplicate(survey_id)
     question = self.dup
     question.survey_id = survey_id
