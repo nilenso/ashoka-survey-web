@@ -57,6 +57,12 @@ class Answer < ActiveRecord::Base
     photo.url(:thumb) if photo?
   end
 
+  def photo_in_base64
+    if photo?
+      Base64.encode64(File.read(photo.path(:thumb)))
+    end
+  end
+
   private
 
   def maximum_photo_size

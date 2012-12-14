@@ -28,7 +28,7 @@ describe Answer do
         answer.save
         answer.errors.to_hash[:content].should_not be_empty
       end
-      
+
       it "adds errors to the photo field for non photo type question" do
         question = FactoryGirl.create(:question, :mandatory => true, :type => "PhotoQuestion")
         answer = FactoryGirl.create(:answer, :question_id => question.id)
@@ -229,16 +229,24 @@ describe Answer do
     text_answer.question_content.should == text_question.content
   end
 
-  it "checks whether the answer is an image" do
-    question = FactoryGirl.create :question, :type => 'PhotoQuestion'
-    answer = FactoryGirl.create :answer_with_image, :question => question
-    answer.should be_image
-  end
+  context "for images" do
+    it "checks whether the answer is an image" do
+      question = FactoryGirl.create :question, :type => 'PhotoQuestion'
+      answer = FactoryGirl.create :answer_with_image, :question => question
+      answer.should be_image
+    end
 
-  it "returns the thumb url if the answer has an image" do
-    question = FactoryGirl.create :question, :type => 'PhotoQuestion'
-    answer = FactoryGirl.create :answer_with_image, :question => question
-    answer.thumb_url.should == answer.photo.url(:thumb)
+    it "returns the thumb url if the answer has an image" do
+      question = FactoryGirl.create :question, :type => 'PhotoQuestion'
+      answer = FactoryGirl.create :answer_with_image, :question => question
+      answer.thumb_url.should == answer.photo.url(:thumb)
+    end
+
+    it "returns a base64-encoded of the image if it exists" do
+      question = FactoryGirl.create :question, :type => 'PhotoQuestion'
+      answer = FactoryGirl.create :answer_with_image, :question => question    
+      answer.photo_in_base64.should == Base64.encode64(File.read(answer.photo.path(:thumb)))
+    end
   end
 
 end
