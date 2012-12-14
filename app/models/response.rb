@@ -80,7 +80,7 @@ class Response < ActiveRecord::Base
   end
 
   def to_json_with_answers_and_choices
-    to_json(:include => {:answers => {:include => :choices, :methods => :thumb_url}})
+    to_json(:include => {:answers => {:include => :choices, :methods => :photo_in_base64}})
   end
 
   private
