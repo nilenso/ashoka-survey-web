@@ -3,7 +3,9 @@
 class Survey < ActiveRecord::Base
   attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
   validates_presence_of :name
+  validates_presence_of :expiry_date
   validate :expiry_date_should_not_be_in_past
+  validate :description_should_be_short
   has_many :questions, :dependent => :destroy
   has_many :responses, :dependent => :destroy
   validate :expiry_date_shoud_be_valid
@@ -100,6 +102,12 @@ class Survey < ActiveRecord::Base
   def expiry_date_should_not_be_in_past
     if !expiry_date.blank? and expiry_date < Date.current
       errors.add(:expiry_date, "can't be in the past")
+    end
+  end
+
+  def description_should_be_short
+    if description && description.length > 250
+      errors.add(:description, "can't be more than 250 characters")
     end
   end
 

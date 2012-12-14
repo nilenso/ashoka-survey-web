@@ -14,12 +14,13 @@ describe Survey do
   it { should have_many(:survey_users).dependent(:destroy) }
   it { should have_many(:participating_organizations).dependent(:destroy) }
   it { should accept_nested_attributes_for :questions }
-  it {should belong_to :organization }
+  it { should belong_to :organization }
   it { should allow_mass_assignment_of(:public) }
 
 
   context "when validating" do
     it { should validate_presence_of :name }
+    it { should validate_presence_of :expiry_date }
 
     it "should not accept an invalid expiry date" do
       survey = FactoryGirl.build(:survey, :expiry_date => nil)
@@ -29,6 +30,12 @@ describe Survey do
     it "validates the expiry date to not be in the past" do
       date = Date.new(1990,10,24)
       survey = FactoryGirl.build(:survey, :expiry_date => date)
+      survey.should_not be_valid
+    end
+
+    it "does not allow the description to be more than 250 characters" do
+      long_description = '*' * 251
+      survey = FactoryGirl.build(:survey, :description => long_description)
       survey.should_not be_valid
     end
   end
