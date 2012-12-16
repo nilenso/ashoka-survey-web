@@ -202,7 +202,7 @@ describe Survey do
   context "knows that its published" do
 
     it "if it is shared with at least one organization" do
-      survey = FactoryGirl.create(:survey)
+      survey = FactoryGirl.create(:survey, :finalized => true)
       organizations = [1, 2]
       survey.share_with_organizations(organizations)
       survey.should be_published
