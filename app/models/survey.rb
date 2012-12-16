@@ -60,8 +60,10 @@ class Survey < ActiveRecord::Base
   end
 
   def share_with_organizations(organizations)
-    organizations.each do |organization_id|
-      self.participating_organizations.create(:organization_id => organization_id)
+    if finalized?
+      organizations.each do |organization_id|
+        self.participating_organizations.create(:organization_id => organization_id)
+      end
     end
   end
 

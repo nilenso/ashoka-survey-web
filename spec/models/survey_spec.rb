@@ -165,8 +165,8 @@ describe Survey do
   end
 
   context "participating organizations" do
-    it "returns the ids of all participating organizations" do
-      survey = FactoryGirl.create(:survey)
+    let(:survey) { FactoryGirl.create(:survey, :finalized => true) }
+    it "returns the ids of all participating organizations" do      
       participating_organization = FactoryGirl.create(:participating_organization, :survey_id => survey.id)
       survey.participating_organization_ids.should == [participating_organization.organization_id]
     end
@@ -186,10 +186,16 @@ describe Survey do
     end
 
     it "shares survey with the given organizations" do
-      survey = FactoryGirl.create(:survey)
       organizations = [1, 2]
       survey.share_with_organizations(organizations)
       survey.participating_organization_ids.should == organizations
+    end
+
+    it "doesn't allow sharing an un-finalized survey" do
+      survey = FactoryGirl.create(:survey)
+      organizations = [1, 2]
+      survey.share_with_organizations(organizations)
+      survey.participating_organization_ids.should == []
     end
   end
 
