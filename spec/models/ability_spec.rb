@@ -90,7 +90,7 @@ describe "Abilities" do
       end
 
       context "for surveys belonging to another organization that have been shared with me" do
-        let(:survey) { FactoryGirl.create(:survey, :organization_id => 50) }
+        let(:survey) { FactoryGirl.create(:survey, :finalized => true, :organization_id => 50) }
         before { ParticipatingOrganization.create(:organization_id => user_info[:org_id],  :survey_id => survey.id) }
 
         it { should be_able_to(:read, survey) }

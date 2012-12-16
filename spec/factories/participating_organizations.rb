@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :participating_organization do
-    survey_id 1
+    survey { FactoryGirl.create :survey, :finalized => true }
     organization_id 1
   end
 end

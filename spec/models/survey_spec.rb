@@ -177,7 +177,6 @@ describe Survey do
       organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Org name"}])
       access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
 
-      survey = FactoryGirl.create(:survey)
       organization = { :id => 2, :name => "Org name"}
       FactoryGirl.create(:participating_organization, :survey_id => survey.id, :organization_id => organization[:id])
       survey.organizations(access_token, 1).map{|org| {:id => org.id, :name => org.name} }.should include organization
