@@ -5,6 +5,7 @@ guard 'spork', :rspec_env => { 'RAILS_ENV' => 'test' } do
   watch(%r{^config/initializers/.+\.rb$})
   watch('Gemfile')
   watch('Gemfile.lock')
+  watch('config/routes.rb')
   watch('spec/spec_helper.rb') { :rspec }
 end
 
@@ -35,4 +36,8 @@ guard 'livereload' do
   watch(%r{config/locales/.+\.yml})
   # Rails Assets Pipeline
   watch(%r{(app|vendor)/assets/\w+/(.+\.(css|js|html)).*})  { |m| "/assets/#{m[2]}" }
+end
+
+guard 'guard' do
+  watch('Guardfile')
 end
