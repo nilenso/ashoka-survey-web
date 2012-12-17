@@ -96,6 +96,8 @@ describe "Abilities" do
         it { should be_able_to(:read, survey) }
         it { should be_able_to(:questions_count, survey) }
         it { should be_able_to :duplicate, survey }
+        it { should be_able_to(:publish_to_users, survey) }
+        it { should be_able_to(:update_publish_to_users, survey) }
 
         it "should be able to read responses added by members of his organizations" do
           response = Response.new(:survey => survey)

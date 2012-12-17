@@ -43,10 +43,24 @@ class Ability
           survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
         end
 
+        can :publish_to_users, Survey, ['
+          surveys.id in (SELECT "surveys".id FROM "surveys"
+          LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id
+          WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
+        user_info[:org_id], user_info[:org_id]] do |survey|
+          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
+        end
+
+        can :update_publish_to_users, Survey, ['
+          surveys.id in (SELECT "surveys".id FROM "surveys"
+          LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id
+          WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
+        user_info[:org_id], user_info[:org_id]] do |survey|
+          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
+        end
+
         can :build, Survey, :organization_id => user_info[:org_id]
         can :create, Survey
-        can :publish_to_users, Survey, :organization_id => user_info[:org_id]
-        can :update_publish_to_users, Survey, :organization_id => user_info[:org_id]
         can :edit, Survey, :organization_id => user_info[:org_id]
         can :update, Survey, :organization_id => user_info[:org_id]
         can :finalize, Survey, :organization_id => user_info[:org_id]
