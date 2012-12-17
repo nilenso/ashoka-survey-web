@@ -1,0 +1,43 @@
+<h1> <%= t ".publish_survey" %> </h1>
+
+<div class="publish-to-users">
+  <h2>Publish to users</h2>
+  <h3> Published to: </h3>
+  <ul>
+    <% @shared_users.each do |user| %>
+      <li><%= user.name %></li>
+    <% end %>
+  </ul>
+  <%= semantic_form_for @survey, :url => survey_update_publish_to_users_path(@survey.id), :method => :put do |f| %>
+    <% if @unshared_users.empty? %>
+        There are no users you can publish to. Sorry.
+    <% else %>
+    <%= f.input :user_ids, :as => :check_boxes, :collection => @unshared_users, :member_label => Proc.new { |user| user.name }, :label => "Choose users to publish to:" %>
+    <%= f.actions do %>
+      <%= f.action :submit, :as => :button, :label => t('.publish_survey') %>
+    <% end %>
+  <% end %>
+  <% end %>
+</div>
+
+<div class="share-with-organizations">
+  <h2>Share with an Organization</h2>
+  <h3> Shared with: </h3>
+  <ul>
+    <% @shared_organizations.each do |org| %>
+      <li><%= org.name %></li>
+    <% end %>
+  </ul>
+  <%= semantic_form_for @survey, :url => survey_update_share_with_organizations_path(@survey.id), :method => :put do |f| %>
+    <% if @survey.organization_id == current_user_org %>
+      <% if @unshared_organizations.empty? %>
+        There are no organizations you can share with. Sorry.
+      <% else %>
+        <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => @unshared_organizations, :member_label => Proc.new { |org| org.name }, :label => "Choose organizations to share with:" %>
+      <%= f.actions do %>
+         <%= f.action :submit, :as => :button , :label => t('.share_survey')%>
+      <% end %>
+      <% end %>
+    <% end %>
+  <% end %>
+</div>

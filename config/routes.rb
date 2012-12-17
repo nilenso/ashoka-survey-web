@@ -5,14 +5,12 @@ SurveyWeb::Application.routes.draw do
     match '/auth/failure', :to => 'sessions#failure'
     match '/logout', :to => 'sessions#destroy', :as => 'logout'
 
-    match '/surveys/build/:id', :to => 'surveys#build', :as => "surveys_build"
-
     resources :surveys, :only => [:new, :create, :destroy, :index] do
       member do
        post "duplicate"
        get  "report"
-     end
-      get 'publish_to_users', 'share_with_organizations'
+      end
+      get 'build', 'publish_to_users', 'share_with_organizations'
       put 'update_publish_to_users', 'update_share_with_organizations', 'finalize'
       match  "public_response" => "responses#create"
       resources :responses, :only => [:new, :create, :index, :edit, :update, :destroy] do

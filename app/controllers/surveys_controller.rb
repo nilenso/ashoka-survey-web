@@ -33,11 +33,11 @@ class SurveysController < ApplicationController
 
     @survey.save
     flash[:notice] = t "flash.survey_created"
-    redirect_to surveys_build_path(:id => @survey.id)
+    redirect_to survey_build_path(:survey_id => @survey.id)
   end
 
   def build
-    @survey = SurveyDecorator.find(params[:id])
+    @survey = SurveyDecorator.find(params[:survey_id])
   end
 
   def finalize
@@ -112,7 +112,7 @@ class SurveysController < ApplicationController
   end
 
   def require_draft_survey
-    survey = Survey.find(params[:id])
+    survey = Survey.find(params[:survey_id])
     if survey.finalized?
       flash[:error] = t "flash.edit_finalized_survey"
       redirect_to root_path

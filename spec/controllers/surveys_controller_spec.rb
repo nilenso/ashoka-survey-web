@@ -95,7 +95,7 @@ describe SurveysController do
       it "redirects to the surveys build path" do
         post :create, :survey => @survey_attributes
         created_survey = Survey.find_all_by_name(@survey_attributes[:name]).last
-        response.should redirect_to(surveys_build_path(:id => created_survey.id))
+        response.should redirect_to(survey_build_path(:survey_id => created_survey.id))
         flash[:notice].should_not be_nil
       end
     end
@@ -124,13 +124,13 @@ describe SurveysController do
     end
 
     it "renders the 'build' template" do
-      get :build, :id => @survey.id
+      get :build, :survey_id => @survey.id
       response.should render_template(:build)
     end
 
     it "redirect_to the root path if survey is already finalized" do
       @survey.finalize
-      get :build, :id => @survey.id
+      get :build, :survey_id => @survey.id
       response.should redirect_to(root_path)
       flash[:error].should_not be_nil
     end
@@ -213,13 +213,13 @@ describe SurveysController do
       end
 
       it "redirects to the share with organizations page" do
-        get :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
+        put :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
         response.should redirect_to survey_share_with_organizations_path
       end
 
       it "redirects back to the previous page with an error when no user ids are selected" do
         request.env["HTTP_REFERER"] = 'http://google.com'
-        get :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => []}
+        put :update_publish_to_users, :survey_id => survey.id, :survey => {:user_ids => []}
         response.should redirect_to 'http://google.com'
         flash[:error].should_not be_nil
       end
