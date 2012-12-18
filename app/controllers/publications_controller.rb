@@ -17,11 +17,9 @@ class PublicationsController < ApplicationController
 
   def update
     survey = Survey.find(params[:survey_id])
-    users = Sanitizer.clean_params(params[:survey][:user_ids])
-    organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
 
-    survey.publish_to_users(users) if users.present?
-    survey.share_with_organizations(organizations) if organizations.present?
+    survey.publish_to_users(@users) if @users.present?
+    survey.share_with_organizations(@organizations) if @organizations.present?
 
     flash[:notice] = t "flash.survey_published", :survey_name => survey.name
     redirect_to surveys_path
@@ -38,9 +36,9 @@ class PublicationsController < ApplicationController
   end
 
   def require_organizations_or_users_to_be_selected
-    users = Sanitizer.clean_params(params[:survey][:user_ids])
-    organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
-    if users.blank? && organizations.blank?
+    @users = Sanitizer.clean_params(params[:survey][:user_ids])
+    @organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
+    if @users.blank? && @organizations.blank?
       flash[:error] = t "flash.users_and_organizations_blank"
       redirect_to(:back)
     end
