@@ -20,4 +20,8 @@ class Organization
   def self.users(client, organization_id)
     User.find_by_organization(client, organization_id)
   end
+
+  def self.field_agents(client, organization_id)
+    users(client, organization_id).select { |user| user.role == 'field_agent' }
+  end
 end

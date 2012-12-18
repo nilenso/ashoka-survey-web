@@ -15,7 +15,7 @@ describe PublicationsController do
     controller.stub(:access_token).and_return(access_token)
 
     access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
-    users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}, {"id" => session[:user_id], "name" => "CSOAdmin"}])
+    users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => "field_agent"}, {"id" => 2, "name" => "John", "role" => "field_agent"}, {"id" => session[:user_id], "name" => "CSOAdmin", "role" => "cso_admin"}])
 
     orgs_response = mock(OAuth2::Response)
     access_token.stub(:get).with('/api/organizations').and_return(orgs_response)

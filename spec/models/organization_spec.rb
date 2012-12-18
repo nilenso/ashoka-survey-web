@@ -10,7 +10,7 @@ describe Organization do
     orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
 
     @access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
-    users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
+    users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => 'field_agent'}, {"id" => 2, "name" => "John", "role" => 'field_agent'}, {"id" => 3, "name" => "Rambo", "role" => 'cso_admin'}])
   end
 
   context "#all" do
@@ -33,8 +33,14 @@ describe Organization do
 
   it "returns all users for the particular organization" do
     users = Organization.users(@access_token, 1)
-    users.map(&:id).should include 1
+    users.map(&:id).should include(1, 2, 3)
     users.map(&:name).should include "Bob"
+  end
+
+  it "returns all field agents for the particular organization" do
+    users = Organization.field_agents(@access_token, 1)
+    users.map(&:id).should_not include 3
+    users.map(&:name).should_not include "Rambo"
   end
 
   it "creates an organization object from json" do

@@ -6,7 +6,7 @@ class PublicationsController < ApplicationController
 
   def edit
     @survey = Survey.find(params[:survey_id])
-    users = Organization.users(access_token, current_user_org).reject { |user| user.id == current_user }
+    users = Organization.field_agents(access_token, current_user_org)
     @shared_users = @survey.users_for_organization(access_token, current_user_org)
     @unshared_users = users.reject { |user| @shared_users.map(&:id).include?(user.id) }
     organizations = Organization.all(access_token, :except => @survey.organization_id)
