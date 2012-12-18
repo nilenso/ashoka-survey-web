@@ -85,3 +85,8 @@ OAUTH_SERVER_URL: # URL where the OAuth Provider instance is hosted.
 Finally...
 -------
 Start the survey-web app by typing `rails server` from the console.
+
+
+Troubleshooting
+=======
+Please check the [Troubleshooting](https://github.com/c42/survey-web/wiki/Troubleshooting) section of the wiki, or create an [issue](https://github.com/c42/survey-web/issues) if you need any help.
