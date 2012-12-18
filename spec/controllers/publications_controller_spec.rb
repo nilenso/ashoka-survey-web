@@ -35,9 +35,9 @@ describe PublicationsController do
     it "assigns survey's users and other users in the current organization" do
       survey.survey_users << FactoryGirl.create(:survey_user, :user_id => 1, :survey_id => survey.id)
       get :edit, :survey_id => survey.id
-      assigns(:shared_users).map{ |user| {:id => user.id, :name => user.name} }
+      assigns(:published_users).map{ |user| {:id => user.id, :name => user.name} }
       .should include({:id=>1, :name=>"Bob"})
-      assigns(:unshared_users).map{ |user| {:id => user.id, :name => user.name} }
+      assigns(:unpublished_users).map{ |user| {:id => user.id, :name => user.name} }
       .should include({:id=>2, :name=>"John"})
     end
 
@@ -48,8 +48,8 @@ describe PublicationsController do
 
     it "doesn't assign the currently logged in user" do
       get :edit, :survey_id => survey.id
-      assigns(:shared_users).map(&:id).should_not include session[:user_id]
-      assigns(:unshared_users).map(&:id).should_not include session[:user_id]
+      assigns(:published_users).map(&:id).should_not include session[:user_id]
+      assigns(:unpublished_users).map(&:id).should_not include session[:user_id]
     end
 
     it "assigns shared and unshared organizations" do

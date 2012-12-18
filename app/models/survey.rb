@@ -31,8 +31,14 @@ class Survey < ActiveRecord::Base
   end
 
   def users_for_organization(access_token, organization_id)
-    User.find_by_organization(access_token, organization_id).select { |user| self.user_ids.include?(user.id) }
+    users = {}
+    field_agents = Organization.field_agents(access_token, organization_id)
+    users[:published], users[:unpublished] = field_agents.partition do |field_agent|
+      user_ids.include?(field_agent.id)
+    end
+    users
   end
+
 
   def expired?
     expiry_date < Date.today

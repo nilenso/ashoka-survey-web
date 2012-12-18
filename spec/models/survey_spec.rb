@@ -127,17 +127,17 @@ describe Survey do
       survey.user_ids.should == [survey_user.user_id]
     end
 
-    it "returns a list of users the survey is published to" do
+    it "returns a list of users the survey is published to and not published to" do
       access_token = mock(OAuth2::AccessToken)
       users_response = mock(OAuth2::Response)
-      users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
       access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
+      users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => "field_agent"}, {"id" => 2, "name" => "John", "role" => "field_agent"}])
 
       survey = FactoryGirl.create(:survey, :finalized => true)
-      user = { :id => 1, :name => "Bob"}
-      FactoryGirl.create(:survey_user, :survey_id => survey.id, :user_id => user[:id])
-      survey.users_for_organization(access_token, 1).map{|user| {:id => user.id, :name => user.name} }.should include user
-      survey.users_for_organization(access_token, 1).map{|user| {:id => user.id, :name => user.name} }.should_not include({:id => 2, :name => "John"})
+      FactoryGirl.create(:survey_user, :survey_id => survey.id, :user_id => 1)
+      field_agents = survey.users_for_organization(access_token, 1)
+      field_agents[:published].first.id.should == 1
+      field_agents[:unpublished].first.id.should == 2
     end
 
     context "while publishing" do
