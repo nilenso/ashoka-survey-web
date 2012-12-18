@@ -27,7 +27,7 @@ describe PublicationsController do
       it "redirects back to root with a flash error" do
         draft_survey = FactoryGirl.create(:survey)
         get :edit, :survey_id => draft_survey.id
-        response.should redirect_to root_path
+        response.should redirect_to surveys_path
         flash[:error].should_not be_empty
       end
     end
