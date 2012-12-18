@@ -6,12 +6,13 @@ SurveyWeb::Application.routes.draw do
     match '/logout', :to => 'sessions#destroy', :as => 'logout'
 
     resources :surveys, :only => [:new, :create, :destroy, :index] do
+      resource :publication, :only => [:update, :edit]
       member do
        post "duplicate"
        get  "report"
       end
-      get 'build', 'publish_to_users', 'share_with_organizations'
-      put 'update_publish_to_users', 'update_share_with_organizations', 'finalize'
+      get 'build'
+      put 'finalize'
       match  "public_response" => "responses#create"
       resources :responses, :only => [:new, :create, :index, :edit, :update, :destroy] do
         member { put "complete" }

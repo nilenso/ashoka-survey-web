@@ -26,6 +26,11 @@ fr:
     response_deleted: "La réponse a été supprimé"
     denied_access: "fr Denied access to %{action} %{subject}"
     survey_finalized: "fr The survey was finalized"
+    users_and_organizations_blank: "fr You have not selected any users or oganizations to publish to"
+
+  publication:
+    edit:
+      publish_survey: "fr Publish Survey"
 
   surveys:
     confirm_finalize: "fr: The survey can't be edited after this. Are you sure?"

@@ -1,5 +1,4 @@
-module Api
-  module V1
+module Api::V1
     class ResponsesController < APIApplicationController
       authorize_resource
 
@@ -79,4 +78,3 @@ module Api
       end
     end
   end
-end

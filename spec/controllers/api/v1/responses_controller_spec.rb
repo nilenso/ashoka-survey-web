@@ -1,7 +1,6 @@
 require 'spec_helper'
 
-module Api
-  module V1
+module Api::V1
     describe ResponsesController do
       let(:organization_id) { 12 }
 
@@ -176,11 +175,10 @@ module Api
             answer = FactoryGirl.create(:answer, :response_id => resp.id, :question_id => question.id, :photo => photo)
             resp_attrs = FactoryGirl.attributes_for(:response, :id => resp.id, :survey_id => survey.id, :answers_attributes =>  { '0' => {'id' => answer.id, 'question_id' => question.id, 'photo' => base64_image, 'updated_at' => 5.days.ago.to_i }})
             old_filename = answer.photo.original_filename
-            put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42          
+            put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42
             answer.reload.photo_file_name.should == old_filename
           end
         end
       end
     end
   end
-end
