@@ -18,14 +18,10 @@ class PublicationsController < ApplicationController
   def update
     survey = Survey.find(params[:survey_id])
     users = Sanitizer.clean_params(params[:survey][:user_ids])
-    if users.present?
-      survey.publish_to_users(users)
-    end
-
     organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
-    if organizations.present?
-      survey.share_with_organizations(organizations)
-    end
+
+    survey.publish_to_users(users) if users.present?
+    survey.share_with_organizations(organizations) if organizations.present?
 
     flash[:notice] = t "flash.survey_published", :survey_name => survey.name
     redirect_to surveys_path
