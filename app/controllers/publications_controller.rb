@@ -6,21 +6,20 @@ class PublicationsController < ApplicationController
 
   def edit
     @survey = Survey.find(params[:survey_id])
+
     field_agents = @survey.users_for_organization(access_token, current_user_org)
     @published_users = field_agents[:published]
     @unpublished_users = field_agents[:unpublished]
-    organizations = Organization.all(access_token, :except => @survey.organization_id)
-    @shared_organizations, @unshared_organizations = organizations.partition do |organization|
-      @survey.participating_organization_ids.include? organization.id
-    end
+
+    partitioned_organizations = @survey.partitioned_organizations(access_token)
+    @shared_organizations = partitioned_organizations[:participating]
+    @unshared_organizations = partitioned_organizations[:not_participating]
   end
 
   def update
     survey = Survey.find(params[:survey_id])
-
     survey.publish_to_users(@users) if @users.present?
     survey.share_with_organizations(@organizations) if @organizations.present?
-
     flash[:notice] = t "flash.survey_published", :survey_name => survey.name
     redirect_to surveys_path
   end

@@ -166,22 +166,9 @@ describe Survey do
 
   context "participating organizations" do
     let(:survey) { FactoryGirl.create(:survey, :finalized => true) }
-    it "returns the ids of all participating organizations" do      
+    it "returns the ids of all participating organizations" do
       participating_organization = FactoryGirl.create(:participating_organization, :survey_id => survey.id)
       survey.participating_organization_ids.should == [participating_organization.organization_id]
-    end
-
-    it "returns a list of organizations the survey is shared with" do
-      access_token = mock(OAuth2::AccessToken)
-      organizations_response = mock(OAuth2::Response)
-      organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Org name"}])
-      access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
-
-      organization = { :id => 2, :name => "Org name"}
-      FactoryGirl.create(:participating_organization, :survey_id => survey.id, :organization_id => organization[:id])
-      survey.organizations(access_token, 1).map{|org| {:id => org.id, :name => org.name} }.should include organization
-      survey.organizations(access_token, 1).map{|org| {:id => org.id, :name => org.name} }
-      .should_not include({:id => 1, :name => "CSOOrganization"})
     end
 
     it "shares survey with the given organizations" do
@@ -195,6 +182,19 @@ describe Survey do
       organizations = [1, 2]
       survey.share_with_organizations(organizations)
       survey.participating_organization_ids.should == []
+    end
+
+    it "returns partitioned organizations" do
+      access_token = mock(OAuth2::AccessToken)
+      organizations_response = mock(OAuth2::Response)
+      organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Org name"}])
+      access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
+
+      organization = { :id => 2, :name => "Org name"}
+      FactoryGirl.create(:participating_organization, :survey_id => survey.id, :organization_id => organization[:id])
+      partitioned_organizations = survey.partitioned_organizations(access_token)
+      partitioned_organizations[:not_participating].first.id.should == 1
+      partitioned_organizations[:participating].first.id.should == 2
     end
   end
 

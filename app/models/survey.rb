@@ -39,6 +39,14 @@ class Survey < ActiveRecord::Base
     users
   end
 
+  def partitioned_organizations(access_token)
+    organizations = Organization.all(access_token, :except => organization_id)
+    partitioned_organizations = {}
+    partitioned_organizations[:participating], partitioned_organizations[:not_participating] = organizations.partition do |organization|
+      participating_organization_ids.include? organization.id
+    end
+    partitioned_organizations
+  end
 
   def expired?
     expiry_date < Date.today
@@ -51,10 +59,6 @@ class Survey < ActiveRecord::Base
     survey.save(:validate => false)
     survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
     survey
-  end
-
-  def organizations(access_token, organization_id)
-    Organization.all(access_token, :except => organization_id).select { |org| self.participating_organization_ids.include?(org.id) }
   end
 
   def publish_to_users(users)
