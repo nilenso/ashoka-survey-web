@@ -1,6 +1,10 @@
 <h1><%= t ".publish_survey" %></h1>
 
 <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :put do |f| %>
+  <div class="expiry_date">
+    <%= f.input :expiry_date, :as => :string, :required => true, :input_html => { :value => @survey.expiry_date, :class => 'date' } %>
+  </div>
+
   <div class="publish-to-users">
     <h2>Publish to users</h2>
     <h3>Published to:</h3>
@@ -40,3 +44,10 @@
     <% end %>
   </div>
 <% end %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+    $('.date').datepicker({ dateFormat: "yy/mm/dd", changeMonth: true, changeYear: true });
+    $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
+  });
+</script>

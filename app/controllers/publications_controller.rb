@@ -18,10 +18,16 @@ class PublicationsController < ApplicationController
 
   def update
     survey = Survey.find(params[:survey_id])
-    survey.publish_to_users(@users) if @users.present?
-    survey.share_with_organizations(@organizations) if @organizations.present?
-    flash[:notice] = t "flash.survey_published", :survey_name => survey.name
-    redirect_to surveys_path
+    survey.update_attribute(:expiry_date, params[:survey][:expiry_date])
+    if survey.save
+      survey.publish_to_users(@users) if @users.present?
+      survey.share_with_organizations(@organizations) if @organizations.present?
+      flash[:notice] = t "flash.survey_published", :survey_name => survey.name
+      redirect_to surveys_path
+    else
+      flash[:error] = survey.errors.full_messages.join(', ')
+      redirect_to(:back)
+    end
   end
 
   private
