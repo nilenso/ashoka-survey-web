@@ -60,11 +60,6 @@ describe PublicationsController do
       assigns(:unshared_organizations).map{ |org| {:id => org.id, :name => org.name} }
       .should include({:id=>3, :name=>"FooOrganization"})
     end
-
-    it "assigns current survey" do
-      get :edit, :survey_id => survey.id
-      assigns(:survey).should == survey
-    end
   end
 
   context "PUT 'update'" do
