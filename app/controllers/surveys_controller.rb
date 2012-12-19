@@ -42,7 +42,7 @@ class SurveysController < ApplicationController
     survey = Survey.find(params[:survey_id])
     survey.finalize
     flash[:notice] = t "flash.survey_finalized", :survey_name => survey.name
-    redirect_to edit_survey_publication_path
+    redirect_to edit_survey_publication_path(survey.id)
   end
 
   def duplicate

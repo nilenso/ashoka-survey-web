@@ -149,7 +149,7 @@ describe SurveysController do
 
     it "redirects to the publish to users page" do
       put :finalize, :survey_id => @survey.id
-      response.should redirect_to edit_survey_publication_path
+      response.should redirect_to edit_survey_publication_path(@survey.id)
     end
 
     it "shows a flash message saying the survey was finalized" do
