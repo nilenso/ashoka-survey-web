@@ -41,10 +41,11 @@
         There are no organizations you can share with. Sorry.
       <% else %>
         <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => @unshared_organizations, :member_label => Proc.new { |org| org.name }, :label => "Choose organizations to share with:" %>
-        <%= f.actions do %>
-          <%= f.action :submit, :as => :button , :label => t('.publish_survey')%>
-        <% end %>
       <% end %>
+    <% end %>
+    
+    <%= f.actions do %>
+      <%= f.action :submit, :as => :button , :label => t('.publish_survey')%>
     <% end %>
   </div>
 <% end %>
