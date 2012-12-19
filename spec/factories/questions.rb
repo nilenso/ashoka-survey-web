@@ -13,9 +13,12 @@ FactoryGirl.define do
     end
 
     factory :question_with_options do
+      ignore do
+        options_count 5
+      end
       after(:create) do |question, evaluator|
         question.type = 'RadioQuestion' if question.type.blank?
-        FactoryGirl.create_list(:option, 5, :question => question)
+        FactoryGirl.create_list(:option, evaluator.options_count, :question => question)
         question.save
       end
     end
