@@ -5,10 +5,10 @@ class Survey < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :expiry_date
   validate :expiry_date_should_not_be_in_past
+  validate :expiry_date_should_be_valid
   validate :description_should_be_short
   has_many :questions, :dependent => :destroy
   has_many :responses, :dependent => :destroy
-  validate :expiry_date_shoud_be_valid
   accepts_nested_attributes_for :questions
   belongs_to :organization
   has_many :survey_users, :dependent => :destroy
@@ -119,7 +119,7 @@ class Survey < ActiveRecord::Base
     end
   end
 
-  def expiry_date_shoud_be_valid
+  def expiry_date_should_be_valid
     errors.add(:expiry_date, "is not valid") if expiry_date.nil?
   end
 
