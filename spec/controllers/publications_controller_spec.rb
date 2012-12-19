@@ -72,6 +72,11 @@ describe PublicationsController do
       survey.reload.expiry_date.should == Date.parse("2012/12/21")
     end
 
+    it "makes the survey public" do
+      put :update, :survey_id => survey.id, :survey => {:expiry_date => "2012/12/21", :public => true}
+      survey.reload.should be_public
+    end
+
     it "redirects to the previous page with an error if the validation fails" do
       put :update, :survey_id => survey.id, :survey => {:expiry_date => "bad_expiry_date", :user_ids => [1, 2]}
       response.should redirect_to "http://google.com"
@@ -102,7 +107,7 @@ describe PublicationsController do
       end
     end
 
-    context "when something is not selected" do
+    context "when users or organizations are not selected" do
       it "redirects back to the edit page with an error when no user ids or organization ids are selected" do
         put :update, :survey_id => survey.id, :survey => {:user_ids => [], :participating_organizations_ids => [], :expiry_date => survey.expiry_date}
         response.should redirect_to 'http://google.com'
@@ -119,6 +124,21 @@ describe PublicationsController do
         put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [], :user_ids => [1, 2], :expiry_date => survey.expiry_date}
         response.should_not redirect_to 'http://google.com'
         flash[:error].should be_nil
+      end
+
+      context "does not require users or organizations to be selected" do
+        it "when the survey is already published" do
+          survey.publish_to_users([1, 2])
+          put :update, :survey_id => survey.id, :survey => {:expiry_date => Date.tomorrow}
+          response.should_not redirect_to 'http://google.com'
+          flash[:error].should be_nil
+        end
+
+        it "when the survey is marked public" do
+          put :update, :survey_id => survey.id, :survey => {:expiry_date => Date.tomorrow, :public => true}
+          response.should_not redirect_to 'http://google.com'
+          flash[:error].should be_nil
+        end
       end
     end
 

@@ -5,6 +5,10 @@
     <%= f.input :expiry_date, :as => :string, :required => true, :input_html => { :value => @survey.expiry_date, :class => 'date' } %>
   </div>
 
+  <div class="crowd_source">
+    <%= f.input :public, :as => :boolean, :label => "Crowd Source", :input_html => { :checked => @survey.public } %>
+  </div>
+
   <div class="publish-to-users">
     <h2>Publish to users</h2>
     <h3>Published to:</h3>
