@@ -69,34 +69,38 @@ describe PublicationsController do
       flash[:notice].should_not be_nil
     end
 
-    it "redirects to the share with organizations page" do
-      put :update, :survey_id => survey.id, :survey => {:user_ids => [1, 2]}
-      response.should redirect_to surveys_path
-    end
-
-    it "redirects back to the edit page with an error when no user ids are selected" do
-      request.env["HTTP_REFERER"] = 'http://google.com'
-      put :update, :survey_id => survey.id, :survey => {:user_ids => []}
-      response.should redirect_to 'http://google.com'
-      flash[:error].should_not be_nil
-    end
-
     it "updates the list of shared organizations" do
       participating_organizations = [12, 45]
       put :update, :survey_id => survey.id, :survey => { :participating_organization_ids => participating_organizations }
       survey.participating_organizations.map(&:organization_id).should == [12, 45]
     end
 
-    it "redirects to the survey's responses page" do
-      put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2]}
-      response.should redirect_to surveys_path
+    context "when something is not selected" do
+      it "redirects back to the edit page with an error when no user ids or organization ids are selected" do
+        request.env["HTTP_REFERER"] = 'http://google.com'
+        put :update, :survey_id => survey.id, :survey => {:user_ids => [], :participating_organizations_ids => []}
+        response.should redirect_to 'http://google.com'
+        flash[:error].should_not be_nil
+      end
+
+      it "does not redirect back to the previous page when only organizations are selected" do
+        request.env["HTTP_REFERER"] = 'http://google.com'
+        put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2], :user_ids => []}
+        response.should_not redirect_to 'http://google.com'
+        flash[:error].should be_nil
+      end
+
+      it "does not redirect back to the previous page when only users are selected" do
+        request.env["HTTP_REFERER"] = 'http://google.com'
+        put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [], :user_ids => [1, 2]}
+        response.should_not redirect_to 'http://google.com'
+        flash[:error].should be_nil
+      end
     end
 
-    it "redirects back to the previous page with an error when no organizations are selected" do
-      request.env["HTTP_REFERER"] = 'http://google.com'
-      put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => []}
-      response.should redirect_to 'http://google.com'
-      flash[:error].should_not be_nil
+    it "redirects to the list of surveys" do
+      put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2], :user_ids => [1, 2]}
+      response.should redirect_to surveys_path
     end
   end
 end
