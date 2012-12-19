@@ -161,6 +161,13 @@ describe Survey do
         survey.publish_to_users(users)
         survey.reload.published_on.should == Date.today
       end
+
+      it "does not set the published_on date if it is already set" do
+        survey = FactoryGirl.create(:survey, :finalized => true, :published_on => Date.yesterday)
+        users = [3, 4]
+        survey.publish_to_users(users)
+        survey.reload.published_on.should == Date.yesterday
+      end
     end
   end
 
@@ -182,6 +189,20 @@ describe Survey do
       organizations = [1, 2]
       survey.share_with_organizations(organizations)
       survey.participating_organization_ids.should == []
+    end
+
+    it "sets the published_on to the date on which it is published" do
+      survey = FactoryGirl.create(:survey, :finalized => true)
+      organizations = [3, 4]
+      survey.share_with_organizations(organizations)
+      survey.reload.published_on.should == Date.today
+    end
+
+    it "does not set the published_on date if it is already set" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :published_on => Date.yesterday)
+      organizations = [3, 4]
+      survey.share_with_organizations(organizations)
+      survey.reload.published_on.should == Date.yesterday
     end
 
     it "returns partitioned organizations" do

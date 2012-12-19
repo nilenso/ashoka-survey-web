@@ -62,19 +62,15 @@ class Survey < ActiveRecord::Base
   end
 
   def publish_to_users(users)
-    if finalized?
-      self.published_on = Date.today
-      self.save
-      users.each { |user_id| self.survey_users.create(:user_id => user_id) }
-    end
+    users.each { |user_id| self.survey_users.create(:user_id => user_id) } if finalized?
+    set_published_on
   end
 
   def share_with_organizations(organizations)
-    if finalized?
-      organizations.each do |organization_id|
-        self.participating_organizations.create(:organization_id => organization_id)
-      end
-    end
+    organizations.each do |organization_id|
+      self.participating_organizations.create(:organization_id => organization_id)
+    end if finalized?
+    set_published_on
   end
 
   def published?
@@ -125,5 +121,12 @@ class Survey < ActiveRecord::Base
 
   def expiry_date_shoud_be_valid
     errors.add(:expiry_date, "is not valid") if expiry_date.nil?
+  end
+
+  def set_published_on
+    if finalized
+      self.published_on ||= Date.today
+      self.save
+    end
   end
 end
