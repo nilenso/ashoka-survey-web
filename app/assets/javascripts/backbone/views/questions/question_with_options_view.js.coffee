@@ -7,7 +7,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
   events:
     'keyup  input[type=text]': 'handle_textbox_keyup'
     'change input[type=checkbox]': 'handle_checkbox_change'
-    'click .add_option': 'add_new_option_model'
+    'click button.add_option': 'add_new_option_model'
 
   initialize: (model, template) ->
     super
