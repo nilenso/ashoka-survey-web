@@ -16,6 +16,7 @@
 /config/database.yml
 /bin
 public/system/
+public/assets/
 .DS_Store
 
 # Ignore application configuration
