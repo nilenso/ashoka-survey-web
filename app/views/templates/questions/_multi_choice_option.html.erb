@@ -1,8 +1,8 @@
 <div>{{errors}}</div>
 <label><%= t("surveys.build.option") %></label>
 <input type="text" value="{{content}}"></input>
-<a class='delete_option' href='#'></a>
 <div>
   <%= render 'templates/question_types_dropdown' %>
   <button class='add_sub_question' href='#'>Add</button>
 </div>
+<%= button_tag t("delete_option"), :class => "delete_option" %>
