@@ -50,15 +50,15 @@
 </div>
 
 <div id="loading_overlay">
-<div class="spinner"></div>
+  <div class="spinner"></div>
 </div>
 
 <script type="text/javascript">
   $(document).ready(function(){
     window.notifications_view = new SurveyBuilder.Views.NotificationsView;
-    window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView(<%= @survey.id %>);
     window.loading_overlay = new SurveyBuilder.Views.LoadingOverlayView
     window.loading_overlay.show_overlay()
+    window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView(<%= @survey.id %>);
     setTimeout(function(){
       $("#flash_messages").empty();
     }, 3000);

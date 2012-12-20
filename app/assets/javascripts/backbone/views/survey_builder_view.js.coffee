@@ -13,8 +13,8 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.survey        = new SurveyBuilder.Models.SurveyModel(survey_id)
     this.settings_pane = new SurveyBuilder.Views.SettingsPaneView(this.survey)
     this.dummy_pane    = new SurveyBuilder.Views.DummyPaneView(this.survey)
-    $(this.el).ajaxStart(window.notifications_view.show_spinner)
-    $(this.el).ajaxStop(window.notifications_view.hide_spinner)
+    $(this.el).ajaxStart(window.loading_overlay.show_overlay)
+    $(this.el).ajaxStop(window.loading_overlay.hide_overlay)
 
     # $( "#sidebar" ).tabs()
 

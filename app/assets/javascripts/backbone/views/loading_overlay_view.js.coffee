@@ -12,7 +12,7 @@ class SurveyBuilder.Views.LoadingOverlayView extends Backbone.View
       trail: 64 # Afterglow percentage
       top: "5px" # Top position relative to parent in px
       left: "25px" # Left position relative to parent in px
-
+      color: '#ddd'
 
     $(this.el).css('display', 'block')
     $(this.el).children(".spinner").spin(opts)
