@@ -86,6 +86,10 @@ class Survey < ActiveRecord::Base
     questions.where(:parent_id => nil)
   end
 
+  def first_level_categories
+    questions.where(:category_id => nil)
+  end
+
   def question_ids_in_order
     first_level_questions.map(&:with_sub_questions_in_order).flatten.map(&:id)
   end

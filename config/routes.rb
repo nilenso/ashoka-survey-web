@@ -25,6 +25,7 @@ SurveyWeb::Application.routes.draw do
   namespace :api, :defaults => { :format => 'json' } do
     scope :module => :v1 do
       resources :questions, :except => [:edit, :new]
+      resources :categories, :except => [:edit, :new]
       resources :options, :except => [:edit, :new, :show]
       resources :surveys, :only => [:index, :show, :update] do
         get 'questions_count', :on => :collection

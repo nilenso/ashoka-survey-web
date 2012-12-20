@@ -16,7 +16,6 @@ class Question < ActiveRecord::Base
     return image.url(:thumb) if image.exists?
     nil
   end
-
   def image_in_base64
     if image?
       Base64.encode64(File.read(image.path(:thumb)))

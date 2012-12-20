@@ -23,6 +23,16 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     question_model.on('destroy', this.delete_question_model, this)
     question_model
 
+  add_new_category_model: ->
+    question_model = new SurveyBuilder.Models.CategoryModel
+    question_model.set('survey_id' : this.survey_id)
+    @set_order_number_for_question(question_model)
+    @question_models.push question_model
+    @set_question_number_for_question(question_model)
+    question_model.on('destroy', this.delete_question_model, this)
+    question_model
+
+
   next_order_number: ->
     if _(@question_models).isEmpty()
       0

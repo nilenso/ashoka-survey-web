@@ -12,6 +12,7 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
     'click #add_drop_down_question': 'add_drop_down_question'
     'click #add_photo_question': 'add_photo_question'
     'click #add_rating_question': 'add_rating_question'
+    'click #add_category': 'add_category'
 
   add_radio_question: ->
     $(this.el).trigger('new_question', { type: 'RadioQuestion' })
@@ -39,3 +40,6 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
 
   add_rating_question: ->
     $(this.el).trigger('new_question', { type: 'RatingQuestion' })
+
+  add_category: ->
+    $(this.el).trigger('new_category')

@@ -15,6 +15,12 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     model.on('destroy', this.delete_question_view, this)
     this.render()
 
+  add_category: (model) ->
+    view = new SurveyBuilder.Views.Dummies.CategoryView(model)
+    @questions.push(view)
+    model.on('destroy', this.delete_question_view, this)
+    this.render()
+
   insert_view_at_index: (view, index) ->
     if index == -1
       @questions.push(view)

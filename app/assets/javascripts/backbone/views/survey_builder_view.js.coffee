@@ -4,6 +4,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   events:
     'new_question': 'new_question'
+    'new_category': 'new_category'
     'dummy_click': 'handle_dummy_click'
     'settings_pane_move': 'settings_pane_move'
     'click #save': 'save_all_questions'
@@ -30,6 +31,12 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     model = this.survey.add_new_question_model(type, parent)
     this.dummy_pane.add_question(type, model, parent)
     this.settings_pane.add_question(type, model)
+    model.save_model()
+
+  new_category: ->
+    model = this.survey.add_new_category_model()
+    this.dummy_pane.add_category(model)
+    #this.settings_pane.add_category(model)
     model.save_model()
 
   preload_questions: (data) =>
