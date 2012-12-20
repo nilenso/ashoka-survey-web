@@ -36,7 +36,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   new_category: ->
     model = this.survey.add_new_category_model()
     this.dummy_pane.add_category(model)
-    #this.settings_pane.add_category(model)
+    this.settings_pane.add_category(model)
     model.save_model()
 
   preload_questions: (data) =>

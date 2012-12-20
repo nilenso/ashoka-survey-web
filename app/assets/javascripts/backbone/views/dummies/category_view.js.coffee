@@ -16,8 +16,8 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     $(this.el).html('<div class="dummy_category_content">' + Mustache.render(this.template, data) + '</div>')
     $(this.el).addClass("dummy_category")
 
-#   $(this.el).children(".dummy_category_content").click (e) =>
-#      @show_actual(e)
+    $(this.el).children(".dummy_category_content").click (e) =>
+      @show_actual(e)
 
     $(this.el).children('.dummy_category_content').children(".delete_category").click (e) => @delete(e)
 
@@ -28,7 +28,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
 
   show_actual: (event) ->
     $(this.el).trigger("dummy_click")
-    #$(this.model.actual_view.el).show()
+    $(this.model.actual_view.el).show()
     $(this.el).children('.dummy_category_content').addClass("active")
     $(this.el).trigger("settings_pane_move")
 
