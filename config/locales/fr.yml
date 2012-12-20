@@ -96,6 +96,7 @@ fr:
       delete_survey: "Delete de l'enquête"
       finalize_survey: "fr Finalize and continue"
       mark_identifier: "Marquer comme identifiant?"
+      saving_your_survey_message: "Sauver votre enquête. S'il vous plaît ne fermez pas cette page"
 
     share_with_organizations:
       share_survey: "In french: Share Survey and continue"
