@@ -33,6 +33,12 @@ describe Survey do
       survey.should_not be_valid
     end
 
+    it "validates that the expiry_date can not updated to an older date" do
+      survey = FactoryGirl.create(:survey, :expiry_date => Date.tomorrow)
+      survey.update_attributes({:expiry_date => Date.today})
+      survey.should_not be_valid
+    end
+
     it "does not allow the description to be more than 250 characters" do
       long_description = '*' * 251
       survey = FactoryGirl.build(:survey, :description => long_description)

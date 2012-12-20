@@ -18,8 +18,8 @@ class PublicationsController < ApplicationController
 
   def update
     survey = Survey.find(params[:survey_id])
-    survey.update_attribute(:expiry_date, params[:survey][:expiry_date])
-    survey.update_attribute(:public, params[:survey][:public])
+    survey.update_attributes({:expiry_date => params[:survey][:expiry_date]})
+    survey.update_attributes({:public => params[:survey][:public]})
     if survey.save
       survey.publish_to_users(@users) if @users.present?
       survey.share_with_organizations(@organizations) if @organizations.present?

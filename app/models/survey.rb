@@ -4,8 +4,9 @@ class Survey < ActiveRecord::Base
   attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
   validates_presence_of :name
   validates_presence_of :expiry_date
-  validate :expiry_date_should_not_be_in_past
   validate :expiry_date_should_be_valid
+  validate :expiry_date_should_not_be_in_past
+  validate :expiry_date_should_not_be_older
   validate :description_should_be_short
   has_many :questions, :dependent => :destroy
   has_many :responses, :dependent => :destroy
@@ -121,6 +122,12 @@ class Survey < ActiveRecord::Base
 
   def expiry_date_should_be_valid
     errors.add(:expiry_date, "is not valid") if expiry_date.nil?
+  end
+
+  def expiry_date_should_not_be_older
+    if expiry_date_changed? && !expiry_date_change.any?(&:nil?)
+      errors.add(:expiry_date, "can not be older than existing value") if expiry_date_change[1]  < expiry_date_change[0]
+    end
   end
 
   def set_published_on
