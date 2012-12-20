@@ -16,6 +16,23 @@ class SurveyBuilder.Views.NotificationsView extends Backbone.View
     $(this.el).children('p').addClass('error')
     setTimeout(this.clear_text, this.CLEAR_TIMEOUT)
 
+  show_spinner: =>
+    opts =
+      lines: 9 # The number of lines to draw
+      length: 0 # The length of each line
+      width: 4 # The line thickness
+      radius: 8 # The radius of the inner circle
+      speed: 1.6 # Rounds per second
+      trail: 41 # Afterglow percentage
+      top: "5px" # Top position relative to parent in px
+      left: "25px" # Left position relative to parent in px
+      zIndex: 99998 # The z-index (defaults to 2000000000)
+
+    $("#spinner").spin(opts)
+
+  hide_spinner: =>
+    $(this.el).find("#spinner").spin(false)
+
   clear_text: =>
     $(this.el).children('p').empty()
     $(this.el).children('p').removeClass()
