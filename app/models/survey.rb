@@ -14,6 +14,7 @@ class Survey < ActiveRecord::Base
   belongs_to :organization
   has_many :survey_users, :dependent => :destroy
   has_many :participating_organizations, :dependent => :destroy
+  has_many :categories, :dependent => :destroy
   validates_uniqueness_of :auth_key, :allow_nil => true
   scope :finalized, where(:finalized => true)
   scope :not_expired, where('expiry_date > ?', Date.today)
@@ -87,7 +88,7 @@ class Survey < ActiveRecord::Base
   end
 
   def first_level_categories
-    questions.where(:category_id => nil)
+    categories.where(:category_id => nil)
   end
 
   def question_ids_in_order

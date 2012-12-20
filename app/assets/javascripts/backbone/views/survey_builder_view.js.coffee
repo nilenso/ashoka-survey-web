@@ -23,7 +23,14 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
         success: (data) =>
           this.dummy_pane.render()
           $.getJSON("/api/questions?survey_id=#{survey_id}", this.preload_questions)
+          $.getJSON("/api/categories?survey_id=#{survey_id}", this.preload_categories)
       })
+
+    $(this.el).bind('ajaxStop.preload', =>
+      window.loading_overlay.hide_overlay()
+      $(this.el).unbind('ajaxStop.preload')
+      this.dummy_pane.sort_questions_by_order_number()
+    )
 
   new_question: (event, data) ->
     type = data.type
@@ -40,15 +47,19 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     model.save_model()
 
   preload_questions: (data) =>
-    $(this.el).bind('ajaxStop.preload', ->
-      window.loading_overlay.hide_overlay()
-      $(this.el).unbind('ajaxStop.preload')
-    )
     _(data).each (question) =>
       model = this.survey.add_new_question_model(question.type)
       model.set('id', question.id)
       this.dummy_pane.add_question(question.type, model)
       this.settings_pane.add_question(question.type, model)
+      model.fetch()
+
+  preload_categories: (data) =>
+    _(data).each (category) =>
+      model = this.survey.add_new_category_model()
+      model.set('id', category.id)
+      this.dummy_pane.add_category(model)
+      this.settings_pane.add_category(model)
       model.fetch()
 
   handle_dummy_click: ->

@@ -11,6 +11,9 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
   save_model: ->
     this.save({}, {error: this.error_callback, success: this.success_callback})
 
+  has_errors: ->
+    false
+
   fetch: ->
     super({error: this.error_callback, success: this.success_callback})
 
@@ -27,6 +30,6 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     category_attrs = {}
     _.each @attributes, (val, key) ->
       category_attrs[key] = val  if val? and not _.isObject(val)
-    { category: _.omit( category_attrs, ['order_number', 'created_at', 'id', 'updated_at']) }
+    { category: _.omit( category_attrs, ['created_at', 'id', 'updated_at']) }
 
 SurveyBuilder.Models.CategoryModel.setup()
