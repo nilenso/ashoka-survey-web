@@ -1,12 +1,10 @@
 class PublicationsController < ApplicationController
-  # load_and_authorize_resource
-
   before_filter :require_finalized_survey
   before_filter :require_organizations_or_users_to_be_selected, :only => [:update]
 
   def edit
     @survey = Survey.find(params[:survey_id])
-
+    authorize! :edit, @survey
     field_agents = @survey.users_for_organization(access_token, current_user_org)
     @published_users = field_agents[:published]
     @unpublished_users = field_agents[:unpublished]
@@ -18,6 +16,7 @@ class PublicationsController < ApplicationController
 
   def update
     survey = Survey.find(params[:survey_id])
+    authorize! :update, survey
     survey.update_attributes({:expiry_date => params[:survey][:expiry_date]})
     survey.update_attributes({:public => params[:survey][:public]})
     if survey.save
