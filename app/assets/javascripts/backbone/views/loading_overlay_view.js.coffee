@@ -15,6 +15,7 @@ class SurveyBuilder.Views.LoadingOverlayView extends Backbone.View
       color: '#ddd'
 
     $(this.el).css('display', 'block')
+    $(this.el).css('top', window.pageYOffset)
     $(this.el).children(".spinner").spin(opts)
 
   hide_overlay: =>
