@@ -1,14 +1,6 @@
 <%= content_for :body_attributes do %> id="build"<% end %>
 
-<%= content_for :status_bar do %>
-  <ul id="status-bar">
-    <li class="active">Edit Survey</li>
-    <li>Finalize</li>
-    <li>Publish</li>
-    <li>Collect</li>
-    <li>Analyze</li>
-  </ul>
-<% end %>
+<%= render "layouts/status_bar", :status => "edit" %>
 
 <div id="survey_builder">
   <div id="notifications">

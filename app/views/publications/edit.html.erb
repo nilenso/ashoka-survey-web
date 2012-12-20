@@ -1,3 +1,4 @@
+<%= render "layouts/status_bar", :status => "publish" %>
 <h1><%= t ".publish_survey" %></h1>
 
 <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :put do |f| %>
@@ -43,7 +44,7 @@
         <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => @unshared_organizations, :member_label => Proc.new { |org| org.name }, :label => "Choose organizations to share with:" %>
       <% end %>
     <% end %>
-    
+
     <%= f.actions do %>
       <%= f.action :submit, :as => :button , :label => t('.publish_survey')%>
     <% end %>

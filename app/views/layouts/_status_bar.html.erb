@@ -1,0 +1,12 @@
+<%= content_for :status_bar do %>
+  <ul id="status-bar">
+    <li id="edit">Edit Survey</li>
+    <li id="publish">Publish</li>
+    <li id="collect">Collect</li>
+    <li id="analyze">Analyze</li>
+  </ul>
+<% end %>
+<script type="text/javascript">
+  var activeStatusId = "#status-bar #" + "<%= status %>";
+  $(activeStatusId).addClass("active");
+</script>
