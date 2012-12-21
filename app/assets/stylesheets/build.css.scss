@@ -80,11 +80,14 @@ body#build div#content{
     }
 
     div.dummy_question_content, div#dummy_survey_details>div{
-      padding: 10px;
+      padding: 4px 10px 10px 30px;
       margin-bottom: 4px;
+
+      span{display: block; float: left; margin-left: -20px; font-weight: bold;}
 
       a.delete_question{display: none;}
       &:hover{ background: $gray-xxlight;}
+      img{display: none;}
 
       &.active{
         background: $secondary-color-light;
