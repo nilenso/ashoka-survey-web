@@ -19,7 +19,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     $(this.el).children(".dummy_question_content").click (e) =>
       @show_actual(e)
 
-    $(this.el).children('.dummy_question_content').children(".delete_category").click (e) => @delete(e)
+    $(this.el).children('.dummy_question_content').children(".delete_question").click (e) => @delete(e)
 
     return this
 
