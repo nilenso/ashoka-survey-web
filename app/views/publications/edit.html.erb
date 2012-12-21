@@ -26,7 +26,10 @@
         </ol>
       </fieldset>
       <% if @unpublished_users.empty? %>
-        There are no users you can publish to. Sorry.
+        <fieldset>
+          <legend>Choose users to publish to:</legend>
+          There are no users you can publish to. Sorry.
+        </fieldset>
       <% else %>
         <ol>
           <%= f.input :user_ids, :as => :check_boxes, :collection => @unpublished_users, :member_label => Proc.new { |user| user.name }, :label => "Choose users to publish to:" %>
@@ -49,7 +52,10 @@
 
       <% if @survey.organization_id == current_user_org %>
         <% if @unshared_organizations.empty? %>
+        <fieldset>
+          <legend>Choose organizations to share with:</legend>
           There are no organizations you can share with. Sorry.
+        </fieldset>
         <% else %>
           <ol>
             <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => @unshared_organizations, :member_label => Proc.new { |org| org.name }, :label => "Choose organizations to share with:" %>
