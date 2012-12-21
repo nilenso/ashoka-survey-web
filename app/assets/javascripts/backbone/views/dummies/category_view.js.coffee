@@ -25,7 +25,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
 
     group = $("<div class='sub_question_group'>")
     _(this.sub_questions).each (sub_question) =>
-      #group.sortable({items: "> div", update: @reorder_questions})
+      group.sortable({items: "> div", update: @reorder_questions})
       group.append(sub_question.render().el)
     
     $(this.el).append(group) unless _(this.sub_questions).isEmpty()
@@ -63,3 +63,16 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     $(this.el).children('.dummy_category_content').removeClass("active")
     _(this.sub_questions).each (sub_question) =>
       sub_question.unfocus()
+
+  reorder_questions: (event, ui) =>
+    last_order_number = _.chain(this.sub_questions)
+      .map((sub_question) -> sub_question.model.get('order_number'))
+      .max().value()
+    _(@sub_questions).each (sub_question) =>
+      index = $(sub_question.el).index()
+      sub_question.model.set({order_number: last_order_number + index + 1})
+      sub_question.model.question_number = this.model.question_number + '.' + (index + 1)
+      sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
+    this.sub_questions = _(this.sub_questions).sortBy (sub_question) ->
+      sub_question.model.get('order_number')
+    @render()
