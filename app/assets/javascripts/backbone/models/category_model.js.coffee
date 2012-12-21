@@ -38,6 +38,30 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
       category_attrs[key] = val  if val? and not _.isObject(val)
     { category: _.omit( category_attrs, ['created_at', 'id', 'updated_at']) }
 
+  add_sub_question: (type) ->
+    question = {
+      type: type,
+      category_id: this.id,
+      survey_id: this.get('survey_id'),
+      order_number: @next_sub_question_order_number(),
+    }
+
+    switch question.type
+      when 'MultiChoiceQuestion'
+        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
+      when 'DropDownQuestion'
+        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
+      when 'RadioQuestion'
+        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
+      else
+        sub_question_model = new SurveyBuilder.Models.QuestionModel(question)
+
+    @sub_question_models.push sub_question_model
+    sub_question_model.on('destroy', this.delete_sub_question, this)
+    @set_question_number_for_sub_question(sub_question_model)
+    sub_question_model.save_model()
+    this.trigger('add:sub_question', sub_question_model)
+
   next_sub_question_order_number: ->
     ++@sub_question_order_counter
 

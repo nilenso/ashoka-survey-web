@@ -11,11 +11,13 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
     this.model.actual_view = this
     this.sub_questions = []
     this.model.on('save:completed', this.renderImageUploader, this)
+    this.model.on('add:sub_question', this.add_sub_question, this)
     this.model.on('change', this.render, this)
     this.model.on('change:preload_sub_questions', this.preload_sub_questions)
 
   render:(template) ->
     $(this.el).html(Mustache.render(this.template, this.model.toJSON().category))
+    $(this.el).children('div').children('.add_sub_question').bind('click', this.add_sub_question_model)
     return this
 
   handle_textbox_keyup: (event) ->
@@ -31,6 +33,10 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
   hide : ->
     $(this.el).hide()
     sub_question.hide() for sub_question in @sub_questions
+
+  add_sub_question_model: (event) =>
+    type = $(event.target).prev().val()
+    this.model.add_sub_question(type)
 
   add_sub_question: (sub_question_model) =>
     sub_question_model.on('destroy', this.delete_sub_question, this)
