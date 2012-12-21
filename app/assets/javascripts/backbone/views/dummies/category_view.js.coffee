@@ -61,3 +61,5 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
 
   unfocus: ->
     $(this.el).children('.dummy_question_content').removeClass("active")
+    _(this.sub_questions).each (sub_question) =>
+      sub_question.unfocus()

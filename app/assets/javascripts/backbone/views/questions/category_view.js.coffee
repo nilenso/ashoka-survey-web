@@ -30,6 +30,7 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
 
   hide : ->
     $(this.el).hide()
+    sub_question.hide() for sub_question in @sub_questions
 
   add_sub_question: (sub_question_model) =>
     sub_question_model.on('destroy', this.delete_sub_question, this)
