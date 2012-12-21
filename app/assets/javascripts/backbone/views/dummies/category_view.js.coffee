@@ -64,10 +64,10 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
   toggle_collapse: ->
     sub_questions = $(this.el).children('div.sub_question_group')
     if(sub_questions.is(":visible"))
-      sub_questions.hide()
+      sub_questions.hide('slow')
       $(this.el).children('.dummy_category_content').children('.collapse_category').html('&#9658;')
     else
-      sub_questions.show()
+      sub_questions.show('slow')
       $(this.el).children('.dummy_category_content').children('.collapse_category').html('&#9660;')
 
   unfocus: ->
