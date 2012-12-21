@@ -74,6 +74,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       sub_question.model.set({order_number: last_order_number + index + 1})
       sub_question.model.question_number = this.model.question_number + '.' + (index + 1)
       sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
+      sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
     this.sub_questions = _(this.sub_questions).sortBy (sub_question) ->
       sub_question.model.get('order_number')
     @render()

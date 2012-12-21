@@ -11,5 +11,6 @@ describe Category do
   it { should validate_presence_of :content }
   it { should allow_mass_assignment_of :content }
   it { should allow_mass_assignment_of :survey_id }
+  it { should allow_mass_assignment_of :category_id }
   it { should allow_mass_assignment_of :order_number }
 end
