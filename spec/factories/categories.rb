@@ -2,6 +2,6 @@
 
 FactoryGirl.define do
   factory :category do
-    category nil
+    content "This is a category"
   end
 end

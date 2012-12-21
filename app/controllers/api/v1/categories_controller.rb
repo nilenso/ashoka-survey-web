@@ -2,7 +2,7 @@
 module Api
   module V1
     class CategoriesController < APIApplicationController
-      #before_filter :dont_cache
+      before_filter :dont_cache
       #authorize_resource
 
       def create
@@ -11,7 +11,7 @@ module Api
           render :json => category.to_json
         else
           render :json => category.errors.full_messages, :status => :bad_request
-         end
+        end
       end
 
       def update
