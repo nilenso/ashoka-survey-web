@@ -11,6 +11,7 @@ describe Survey do
   it { should respond_to(:published_on) }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:responses).dependent(:destroy) }
+  it { should have_many(:categories).dependent(:destroy) }
   it { should have_many(:survey_users).dependent(:destroy) }
   it { should have_many(:participating_organizations).dependent(:destroy) }
   it { should accept_nested_attributes_for :questions }
@@ -34,7 +35,7 @@ describe Survey do
     end
 
     it "validates that the expiry_date can not updated to an older date" do
-      survey = FactoryGirl.create(:survey, :expiry_date => Date.tomorrow)
+      survey = FactoryGirl.create(:survey, :expiry_date => Date.tomorrow.tomorrow)
       survey.update_attributes({:expiry_date => Date.today})
       survey.should_not be_valid
     end

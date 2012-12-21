@@ -28,6 +28,9 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
       when 'RatingQuestion'
         template = $('#dummy_rating_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
+      when undefined
+        if model instanceof SurveyBuilder.Models.CategoryModel
+          return new SurveyBuilder.Views.Dummies.CategoryView(model)
 
   @settings_view_for: (type, model) =>
     switch type
@@ -58,3 +61,6 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
       when 'RatingQuestion'
         template = $('#rating_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionView(model, template)
+      when undefined
+        if model instanceof SurveyBuilder.Models.CategoryModel
+          return new SurveyBuilder.Views.Questions.CategoryView(model)

@@ -4,6 +4,7 @@ describe Question do
   it { should allow_mass_assignment_of(:type) }
   it { should allow_mass_assignment_of(:parent_id) }
   it { should allow_mass_assignment_of(:identifier) }
+  it { should allow_mass_assignment_of(:category_id) }
   it { should belong_to(:parent).class_name(Option) }
 
   context "validation" do

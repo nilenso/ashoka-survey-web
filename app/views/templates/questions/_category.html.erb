@@ -1,0 +1,9 @@
+<div>
+  <label><%= t("surveys.build.category_title") %> </label>
+  <input type="text" name="content" value="{{content}}"></input>
+</div>
+
+<div>
+  <%= render 'templates/question_types_dropdown' %>
+  <button class='add_sub_question' href='#'>Add Sub-Question</button>
+</div>

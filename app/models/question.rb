@@ -3,7 +3,7 @@
 class Question < ActiveRecord::Base
   belongs_to :parent, :class_name => Option
   belongs_to :survey
-  attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number, :parent_id, :identifier
+  attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number, :parent_id, :identifier, :category_id
   validates_presence_of :content
   has_many :answers, :dependent => :destroy
   has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
@@ -16,7 +16,6 @@ class Question < ActiveRecord::Base
     return image.url(:thumb) if image.exists?
     nil
   end
-
   def image_in_base64
     if image?
       Base64.encode64(File.read(image.path(:thumb)))

@@ -79,19 +79,27 @@ body#build div#content{
       display: block;
     }
 
-    div.dummy_question_content, div#dummy_survey_details>div{
+    div.dummy_question_content, div.dummy_category_content, div#dummy_survey_details>div{
       padding: 4px 10px 10px 30px;
       margin-bottom: 4px;
 
       span{display: block; float: left; margin-left: -20px; font-weight: bold;}
 
-      a.delete_question{display: none;}
+      a.delete_question, a.delete_category {display: none;}
       &:hover{ background: $gray-xxlight;}
       img{display: none;}
 
       &.active{
         background: $secondary-color-light;
-        a.delete_question{display: block; background: $secondary-color;}
+        a.delete_question, a.delete_category  {display: block; background: $secondary-color;}
+      }
+
+      div.collapse_category {
+        cursor: pointer;
+        color: $primary-color-light;
+        &:hover {
+          color: $primary-color;
+        }
       }
     }
 
