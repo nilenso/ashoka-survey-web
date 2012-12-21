@@ -61,7 +61,8 @@ form{
 
   fieldset{
     border: solid 1px $secondary-color-light;
-    legend{padding: 0 6px;}
+
+    legend{padding: 0 6px; margin: 6px 0 0 0; font-weight: bold;}
   }
 
   fieldset.actions{

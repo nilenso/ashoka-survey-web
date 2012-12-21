@@ -1,10 +1,24 @@
 #publish_survey{
   div.publish-to-users,
+  div.share-with-organizations,
   div.share-with-organizations{
     display: block;
     border-top: solid 2px $secondary-color-light;
 
     h3{font-size: 18px;}
     h4{font-size: 14px;}
+  }
+
+  div.publish-to-users{
+    ol.published li{
+      padding-left: 24px;
+      list-style-type: circle;
+
+      &:before{
+        content: "\f046";
+        margin-left: -20px;
+        font-family: "FontAwesome"
+      }
+    }
   }
 }
