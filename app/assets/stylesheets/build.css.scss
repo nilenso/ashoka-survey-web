@@ -93,6 +93,14 @@ body#build div#content{
         background: $secondary-color-light;
         a.delete_question, a.delete_category  {display: block; background: $secondary-color;}
       }
+
+      div.collapse_category {
+        cursor: pointer;
+        color: $primary-color-light;
+        &:hover {
+          color: $primary-color;
+        }
+      }
     }
 
 
