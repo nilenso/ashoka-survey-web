@@ -15,13 +15,13 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     this.model.set('content', I18n.t('js.untitled_category')) if _.isEmpty(this.model.get('content'))
     data = this.model.toJSON().category
     data = _(data).extend({ question_number: this.model.question_number })
-    $(this.el).html('<div class="dummy_question_content">' + Mustache.render(this.template, data) + '</div>')
+    $(this.el).html('<div class="dummy_category_content">' + Mustache.render(this.template, data) + '</div>')
     $(this.el).addClass("dummy_category")
 
-    $(this.el).children(".dummy_question_content").click (e) =>
+    $(this.el).children(".dummy_category_content").click (e) =>
       @show_actual(e)
 
-    $(this.el).children('.dummy_question_content').children(".delete_question").click (e) => @delete(e)
+    $(this.el).children('.dummy_category_content').children(".delete_question").click (e) => @delete(e)
 
     group = $("<div class='sub_question_group'>")
     _(this.sub_questions).each (sub_question) =>
@@ -56,10 +56,10 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
   show_actual: (event) ->
     $(this.el).trigger("dummy_click")
     $(this.model.actual_view.el).show()
-    $(this.el).children('.dummy_question_content').addClass("active")
+    $(this.el).children('.dummy_category_content').addClass("active")
     $(this.el).trigger("settings_pane_move")
 
   unfocus: ->
-    $(this.el).children('.dummy_question_content').removeClass("active")
+    $(this.el).children('.dummy_category_content').removeClass("active")
     _(this.sub_questions).each (sub_question) =>
       sub_question.unfocus()
