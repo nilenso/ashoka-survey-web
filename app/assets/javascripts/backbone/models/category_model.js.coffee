@@ -12,18 +12,21 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
 
   save_model: ->
     this.save({}, {error: this.error_callback, success: this.success_callback})
+    sub_question.save_model() for sub_question in this.sub_question_models
 
   has_errors: ->
     false
 
   fetch: ->
-    super({error: this.error_callback, success: this.success_callback})
+    super({error: this.error_callback, success: =>
+      this.success_callback
+      this.preload_sub_questions()
+    })
 
   success_callback: (model, response) =>
     this.errors = []
     this.trigger('change:errors')
     this.trigger('save:completed')
-    @preload_sub_questions()
 
   error_callback: (model, response) =>
     this.errors = JSON.parse(response.responseText)
@@ -42,8 +45,9 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     @sub_question_models = _(@sub_question_models).without(sub_question_model)
 
   preload_sub_questions: ->
+    console.log("PRELOADING!")
     _.each this.get('questions'), (question, counter) =>
-      _(question).extend({ order_number: counter })
+      _(question).extend({category_id: this.get('id'), order_number: counter })
       switch question.type
         when 'MultiChoiceQuestion'
           question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)

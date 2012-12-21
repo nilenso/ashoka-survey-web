@@ -84,7 +84,7 @@ class Survey < ActiveRecord::Base
   end
 
   def first_level_questions
-    questions.where(:parent_id => nil)
+    questions.where(:parent_id => nil, :category_id => nil)
   end
 
   def first_level_categories
