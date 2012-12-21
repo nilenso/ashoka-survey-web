@@ -35,7 +35,7 @@ describe Survey do
     end
 
     it "validates that the expiry_date can not updated to an older date" do
-      survey = FactoryGirl.create(:survey, :expiry_date => Date.tomorrow)
+      survey = FactoryGirl.create(:survey, :expiry_date => Date.tomorrow.tomorrow)
       survey.update_attributes({:expiry_date => Date.today})
       survey.should_not be_valid
     end
