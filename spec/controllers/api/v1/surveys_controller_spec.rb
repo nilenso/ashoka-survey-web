@@ -1,17 +1,15 @@
 require 'spec_helper'
 
 describe Api::V1::SurveysController do
-  let(:organization_id) { 12 }
-  let(:survey) { FactoryGirl.create :survey, :organization_id => organization_id, :finalized => true }
+  let(:survey) { FactoryGirl.create :survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true }
 
   before(:each) do
     sign_in_as('cso_admin')
-    session[:user_info][:org_id] = organization_id
     response = double('response')
     parsed_response = { "email" => "admin@admin.com",
                         "id" => 1,
                         "name" => "cso_admin",
-                        "organization_id" => 12,
+                        "organization_id" => LOGGED_IN_ORG_ID,
                         "role" => "cso_admin"
                         }
 
@@ -29,15 +27,15 @@ describe Api::V1::SurveysController do
     end
 
     it "responds with the details of the survey as JSON" do
-      FactoryGirl.create(:survey, :organization_id => 12, :finalized => true)
+      FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true)
       get :index
       returned_json = JSON.parse(response.body).first
       returned_json.keys.should =~ Survey.attribute_names
     end
 
     it "returns only the finalized surveys" do
-      survey = FactoryGirl.create(:survey, :organization_id => 12)
-      finalized_survey = FactoryGirl.create(:survey, :organization_id => 12, :finalized => true, :name => 'Finalized Survey')
+      survey = FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID)
+      finalized_survey = FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true, :name => 'Finalized Survey')
       get :index
       returned_json = JSON.parse(response.body)
       returned_json.length.should == 1
@@ -45,9 +43,9 @@ describe Api::V1::SurveysController do
     end
 
     it "doesn't return any expired surveys by default" do
-      expired_surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :finalized => true
+      expired_surveys = FactoryGirl.create_list :survey, 5, :organization_id => LOGGED_IN_ORG_ID, :finalized => true
       expired_surveys.each { |survey| survey.update_attribute :expiry_date, 5.days.ago }
-      surveys = FactoryGirl.create_list :survey, 5, :organization_id => 12, :expiry_date => 5.days.from_now, :finalized => true
+      surveys = FactoryGirl.create_list :survey, 5, :organization_id => LOGGED_IN_ORG_ID, :expiry_date => 5.days.from_now, :finalized => true
       get :index
       returned_json = JSON.parse response.body
       returned_json.length.should == 5
@@ -58,9 +56,9 @@ describe Api::V1::SurveysController do
 
     context "when fetching extra expired surveys" do
       it "returns all the surveys specified in params[:extra_surveys]" do
-        FactoryGirl.create_list :survey, 5, :organization_id => 12, :finalized => true
-        first_expired_survey = FactoryGirl.create(:survey, :organization_id => 12, :finalized => true, :name => 'First EXPIRED!')
-        second_expired_survey = FactoryGirl.create(:survey, :organization_id => 12, :finalized => true, :name => 'Second EXPIRED!')
+        FactoryGirl.create_list :survey, 5, :organization_id => LOGGED_IN_ORG_ID, :finalized => true
+        first_expired_survey = FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true, :name => 'First EXPIRED!')
+        second_expired_survey = FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true, :name => 'Second EXPIRED!')
         first_expired_survey.update_attribute :expiry_date, 5.days.ago
         second_expired_survey.update_attribute :expiry_date, 5.days.ago
 
@@ -72,14 +70,14 @@ describe Api::V1::SurveysController do
       end
 
       it "resolves duplicates" do
-        survey = FactoryGirl.create :survey, :organization_id => 12, :finalized => true
+        survey = FactoryGirl.create :survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true
         get :index, :extra_surveys => "#{survey.id}"
         returned_json = JSON.parse response.body
         returned_json.length.should == 1
       end
 
       it "ignores the surveys that the user doesn't have access to" do
-        survey = FactoryGirl.create :survey, :organization_id => 12, :finalized => true
+        survey = FactoryGirl.create :survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true
         off_limits_survey = FactoryGirl.create :survey, :organization_id => 1234, :finalized => true, :name => "OFF!"
         get :index
         returned_json = JSON.parse response.body
@@ -89,7 +87,7 @@ describe Api::V1::SurveysController do
     end
 
     it "responds with details for all the surveys stored" do
-      FactoryGirl.create_list(:survey, 15, :organization_id => 12, :finalized => true)
+      FactoryGirl.create_list(:survey, 15, :organization_id => LOGGED_IN_ORG_ID, :finalized => true)
       get :index
       returned_json = JSON.parse(response.body)
       returned_json.length.should == 15
@@ -103,7 +101,7 @@ describe Api::V1::SurveysController do
 
   context "GET 'question_count'" do
     it "returns the count of questions for surveys" do
-      FactoryGirl.create_list(:survey_with_questions, 5, :organization_id => 12)
+      FactoryGirl.create_list(:survey_with_questions, 5, :organization_id => LOGGED_IN_ORG_ID)
       get :questions_count
       JSON.parse(response.body)['count'].should == 25
     end

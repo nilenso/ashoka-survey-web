@@ -14,6 +14,7 @@ require "paperclip/matchers"
 Capybara.javascript_driver = :webkit
 
 Spork.prefork do
+  LOGGED_IN_ORG_ID = 1
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 
   RSpec.configure do |config|
@@ -54,5 +55,6 @@ end
 
 def sign_in_as(role)
   session[:user_id] = 123
-  session[:user_info] = { :role => role }
+  session[:user_info] = { :role => role, :org_id => LOGGED_IN_ORG_ID }
+  session[:access_token] = "123"
 end

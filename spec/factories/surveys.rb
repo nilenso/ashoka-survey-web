@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :survey do
     sequence(:name) { |n| "name_#{n}" }
-    expiry_date Date.tomorrow
+    expiry_date Date.today + 100.days
     description "MyText"
     finalized :false
 

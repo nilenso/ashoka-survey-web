@@ -10,7 +10,7 @@ describe SurveysController do
       access_token = mock(OAuth2::AccessToken)
       controller.stub(:access_token).and_return(access_token)
       access_token.stub(:get).and_return(response)
-      response.stub(:parsed).and_return([{"id" => 123, "name" => "foo"}, {"id" => 12, "name" => "bar"}])
+      response.stub(:parsed).and_return([{"id" => 123, "name" => "foo"}, {"id" => LOGGED_IN_ORG_ID, "name" => "bar"}])
     end
 
     it "assigns the surveys instance variable" do
@@ -33,14 +33,11 @@ describe SurveysController do
     end
 
     context "when filtering" do
-      let(:organization_id) { 12 }
-
       before(:each) do
         Survey.delete_all
         sign_in_as('cso_admin')
-        session[:user_info][:org_id] = organization_id
-        @draft_survey = FactoryGirl.create(:survey, :finalized => false, :organization_id => organization_id)
-        @finalized_survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => organization_id)
+        @draft_survey = FactoryGirl.create(:survey, :finalized => false, :organization_id => LOGGED_IN_ORG_ID)
+        @finalized_survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => LOGGED_IN_ORG_ID)
       end
 
 
@@ -68,7 +65,8 @@ describe SurveysController do
   end
 
   context "DELETE 'destroy'" do
-    let!(:survey) { FactoryGirl.create(:survey) }
+    let!(:survey) { FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID) }
+
     before(:each) do
       sign_in_as('cso_admin')
     end

@@ -3,13 +3,10 @@ require 'spec_helper'
 describe PublicationsController do
   render_views
 
-  let(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :finalized => true) }
+  let(:survey) { FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true) }
 
   before(:each) do
     sign_in_as('cso_admin')
-    session[:user_info][:org_id] = 1
-
-    session[:access_token] = "123"
     users_response = mock(OAuth2::Response)
     access_token = mock(OAuth2::AccessToken)
     controller.stub(:access_token).and_return(access_token)
@@ -68,12 +65,14 @@ describe PublicationsController do
     end
 
     it "updates the expiry date of the survey" do
-      put :update, :survey_id => survey.id, :survey => {:expiry_date => "2012/12/21", :user_ids => [1, 2]}
-      survey.reload.expiry_date.should == Date.parse("2012/12/21")
+      new_expiry_date = survey.expiry_date + 1.day
+      put :update, :survey_id => survey.id, :survey => {:expiry_date => new_expiry_date, :user_ids => [1, 2]}
+      response.should redirect_to surveys_path
+      survey.reload.expiry_date.should == new_expiry_date
     end
 
     it "makes the survey public" do
-      put :update, :survey_id => survey.id, :survey => {:expiry_date => "2012/12/21", :public => true}
+      put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => true}
       survey.reload.should be_public
     end
 
@@ -129,13 +128,13 @@ describe PublicationsController do
       context "does not require users or organizations to be selected" do
         it "when the survey is already published" do
           survey.publish_to_users([1, 2])
-          put :update, :survey_id => survey.id, :survey => {:expiry_date => Date.tomorrow}
+          put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date}
           response.should_not redirect_to 'http://google.com'
           flash[:error].should be_nil
         end
 
         it "when the survey is marked public" do
-          put :update, :survey_id => survey.id, :survey => {:expiry_date => Date.tomorrow, :public => true}
+          put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => true}
           response.should_not redirect_to 'http://google.com'
           flash[:error].should be_nil
         end
