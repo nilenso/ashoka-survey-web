@@ -59,10 +59,18 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
 
       @sub_question_models.push question_model
       question_model.on('destroy', this.delete_sub_question, this)
-      #@set_question_number_for_sub_question(question_model)
+      @set_question_number_for_sub_question(question_model)
       question_model.fetch()
 
     this.trigger('change:preload_sub_questions', @sub_question_models)
     @sub_question_order_counter = this.get('questions').length
+
+  set_question_number_for_sub_question: (sub_question_model) ->
+    parent_question_number = this.question_number
+    index = _(@sub_question_models).indexOf(sub_question_model) + 1
+    sub_question_model.question_number = "#{parent_question_number}.#{index}"
+
+  set_question_number_for_sub_questions: (sub_question_model) ->
+    @set_question_number_for_sub_question(sub_question) for sub_question in @sub_question_models
 
 SurveyBuilder.Models.CategoryModel.setup()
