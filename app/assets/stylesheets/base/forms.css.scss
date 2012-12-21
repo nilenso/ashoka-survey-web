@@ -58,6 +58,21 @@ form{
       &.boolean input, &.choice input{width: auto; margin-right: 4px;}
     }
   }
+
+  fieldset{
+    border: solid 1px $secondary-color-light;
+    legend{padding: 0 6px;}
+  }
+
+  fieldset.actions{
+    display: block;
+    margin: 6px 0 10px 0; padding: 6px 0 0 0;
+    border: none;
+    border-top: solid 2px $secondary-color-light;
+    @include clearfix;
+
+    button{float: right;}
+  }
   
   div{
     input[type="text"],
