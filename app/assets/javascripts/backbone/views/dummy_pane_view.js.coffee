@@ -52,6 +52,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       index = $(question.el).index()
       question.model.set({order_number: last_order_number + index + 1})
       question.model.question_number = index + 1
+      question.model.set_question_number_for_sub_questions() if question instanceof SurveyBuilder.Views.Dummies.CategoryView
       question.reorder_questions() if question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
     @sort_questions_by_order_number()
 
