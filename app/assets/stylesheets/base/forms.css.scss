@@ -75,7 +75,7 @@ form{
 
     button{float: right;}
   }
-  
+
   div{
     input[type="text"],
     input[type="password"],
@@ -279,3 +279,7 @@ div.tagsinput {
   div { display:block; float: left; } 
 }
 
+div.ui-datepicker-title{
+  select.ui-datepicker-month,
+  select.ui-datepicker-year{display: inline;}
+}

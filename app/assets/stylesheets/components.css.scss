@@ -49,7 +49,7 @@ ul#status-bar{
   @include span-columns(6);
   display: block; margin: 0 0 2px 0; padding: 0;
   @include clearfix;
-  background: $secondary-color-light;
+  // background: $secondary-color-light;
 
   li{
     display: block; margin: 0; padding: 0 0 0 24px;
