@@ -23,6 +23,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       @show_actual(e)
 
     $(this.el).children('.dummy_category_content').children(".delete_category").click (e) => @delete(e)
+    $(this.el).children(".dummy_category_content").children('.collapse_category').click (e) => @toggle_collapse()
 
     group = $("<div class='sub_question_group'>")
     _(this.sub_questions).each (sub_question) =>
@@ -59,6 +60,15 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     $(this.model.actual_view.el).show()
     $(this.el).children('.dummy_category_content').addClass("active")
     $(this.el).trigger("settings_pane_move")
+
+  toggle_collapse: ->
+    sub_questions = $(this.el).children('div.sub_question_group')
+    if(sub_questions.is(":visible"))
+      sub_questions.hide()
+      $(this.el).children('.dummy_category_content').children('.collapse_category').html('&#9658;')
+    else
+      sub_questions.show()
+      $(this.el).children('.dummy_category_content').children('.collapse_category').html('&#9660;')
 
   unfocus: ->
     $(this.el).children('.dummy_category_content').removeClass("active")
