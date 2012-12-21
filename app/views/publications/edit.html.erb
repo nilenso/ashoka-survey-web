@@ -1,55 +1,59 @@
+<%= content_for :body_attributes do %> id="build"<% end %>
+
 <%= render "layouts/status_bar", :status => "publish" %>
-<h1><%= t ".publish_survey" %></h1>
 
-<%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :put do |f| %>
-  <div class="expiry_date">
-    <%= f.input :expiry_date, :as => :string, :required => true, :input_html => { :value => @survey.expiry_date, :class => 'date' } %>
-  </div>
+<header>
+    <h2><%= t ".publish_survey" %></h2>
+</header>
 
-  <div class="crowd_source">
-    <%= f.input :public, :as => :boolean, :label => "Crowd Source", :input_html => { :checked => @survey.public } %>
-  </div>
+<div id="publish_survey">
+  <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :put do |f| %>
+    <ol>
+      <%= f.input :expiry_date, :as => :string, :required => true, :input_html => { :value => @survey.expiry_date, :class => 'date' } %>
+      <%= f.input :public, :as => :boolean, :label => "Crowd Source", :input_html => { :checked => @survey.public } %>
+    </ol>
 
-  <div class="publish-to-users">
-    <h2>Publish to users</h2>
-    <h3>Published to:</h3>
-    <ul>
-      <% @published_users.each do |user| %>
-        <li>
-          <%= user.name %>
-        </li>
-      <% end %>
-    </ul>
-    <% if @unpublished_users.empty? %>
-      There are no users you can publish to. Sorry.
-    <% else %>
-      <%= f.input :user_ids, :as => :check_boxes, :collection => @unpublished_users, :member_label => Proc.new { |user| user.name }, :label => "Choose users to publish to:" %>
-    <% end %>
-  </div>
-
-  <div class="share-with-organizations">
-    <h2>Share with an Organization</h2>
-    <h3>Shared with:</h3>
-    <ul>
-      <% @shared_organizations.each do |org| %>
-        <li>
-          <%= org.name %>
-        </li>
-      <% end %>
-    </ul>
-    <% if @survey.organization_id == current_user_org %>
-      <% if @unshared_organizations.empty? %>
-        There are no organizations you can share with. Sorry.
+    <div class="publish-to-users">
+      <h3>Publish to users</h3>
+      <h4>Published to:</h4>
+      <ol>
+        <% @published_users.each do |user| %>
+          <li>
+            <%= user.name %>
+          </li>
+        <% end %>
+      <% if @unpublished_users.empty? %>
+        There are no users you can publish to. Sorry.
       <% else %>
-        <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => @unshared_organizations, :member_label => Proc.new { |org| org.name }, :label => "Choose organizations to share with:" %>
+        <%= f.input :user_ids, :as => :check_boxes, :collection => @unpublished_users, :member_label => Proc.new { |user| user.name }, :label => "Choose users to publish to:" %>
       <% end %>
-    <% end %>
+      </ol>
+    </div>
 
-    <%= f.actions do %>
-      <%= f.action :submit, :as => :button , :label => t('.publish_survey')%>
-    <% end %>
-  </div>
-<% end %>
+    <div class="share-with-organizations">
+      <h3>Share with an Organization</h3>
+      <h4>Shared with:</h4>
+      <ul>
+        <% @shared_organizations.each do |org| %>
+          <li>
+            <%= org.name %>
+          </li>
+        <% end %>
+      </ul>
+      <% if @survey.organization_id == current_user_org %>
+        <% if @unshared_organizations.empty? %>
+          There are no organizations you can share with. Sorry.
+        <% else %>
+          <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => @unshared_organizations, :member_label => Proc.new { |org| org.name }, :label => "Choose organizations to share with:" %>
+        <% end %>
+      <% end %>
+
+      <%= f.actions do %>
+        <%= f.action :submit, :as => :button , :label => t('.publish_survey')%>
+      <% end %>
+    </div>
+  <% end %>
+</div>
 
 <script type="text/javascript">
   $(document).ready(function(){

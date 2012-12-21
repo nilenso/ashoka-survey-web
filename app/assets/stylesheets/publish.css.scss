@@ -1,0 +1,10 @@
+#publish_survey{
+  div.publish-to-users,
+  div.share-with-organizations{
+    display: block;
+    border-top: solid 2px $secondary-color-light;
+
+    h3{font-size: 18px;}
+    h4{font-size: 14px;}
+  }
+}
