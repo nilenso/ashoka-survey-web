@@ -10,9 +10,8 @@ module Api
         if category.save
           render :json => category.to_json
         else
-          p category.errors
           render :json => category.errors.full_messages, :status => :bad_request
-        end
+         end
       end
 
       def update
