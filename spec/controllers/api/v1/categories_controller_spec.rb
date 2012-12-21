@@ -18,9 +18,39 @@ describe Api::V1::CategoriesController do
       created_category.keys.should =~ Category.attribute_names
     end
 
-    it "if save fails, it returns the error message as JSON" do
+    it "returns the error message as JSON if save fails" do
       category = FactoryGirl.attributes_for :category, :content => nil
       post :create, :category => category
+      response.should_not be_ok
+      JSON.parse(response.body).should include "Content can't be blank"
+    end
+  end
+
+  context "PUT 'update'" do
+    it "updates the specified category" do
+      category = FactoryGirl.create :category, :order_number => 0, :content => "XYZ"
+      put :update, :id => category.id, :category => { :content => "FOO", :order_number => 42 }
+      response.should be_ok
+      category.reload.content.should == "FOO"
+      category.order_number.should == 42
+    end
+
+    it "returns the updated category as JSON" do
+      category = FactoryGirl.create :category, :order_number => 0, :content => "XYZ"
+      put :update, :id => category.id, :category => { :content => "FOO", :order_number => 42 }
+      updated_category = JSON.parse(response.body)
+      updated_category['content'].should == "FOO"
+      updated_category.keys.should =~ Category.attribute_names
+    end
+
+    it "returns an error response if an invalid category id is supplied" do
+      put :update, :id => 1234
+      response.should_not be_ok
+    end
+
+    it "returns the error message as JSON if save fails" do
+      category = FactoryGirl.create :category
+      put :update, :id => category.id, :category => { :content => nil }
       response.should_not be_ok
       JSON.parse(response.body).should include "Content can't be blank"
     end

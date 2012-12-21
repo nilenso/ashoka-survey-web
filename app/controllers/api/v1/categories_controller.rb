@@ -15,11 +15,11 @@ module Api
       end
 
       def update
-        category = Category.find(params[:id])
-        if category.update_attributes(params[:category])
+        category = Category.find_by_id(params[:id])
+        if category && category.update_attributes(params[:category])
           render :json => category.to_json
         else
-          render :json => category.errors.full_messages, :status => :bad_request
+          render :json => category ? category.errors.full_messages : :nothing, :status => :bad_request
         end
       end
 
