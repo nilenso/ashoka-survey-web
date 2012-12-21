@@ -30,6 +30,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
       window.loading_overlay.hide_overlay()
       $(this.el).unbind('ajaxStop.preload')
       this.dummy_pane.sort_questions_by_order_number()
+      this.dummy_pane.set_question_numbers()
     )
 
   new_question: (event, data) ->

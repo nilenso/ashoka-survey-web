@@ -14,7 +14,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
   render: ->
     this.model.set('content', I18n.t('js.untitled_category')) if _.isEmpty(this.model.get('content'))
     data = this.model.toJSON().category
-    #data = _(data).extend({ question_number: this.model.question_number })
+    data = _(data).extend({ question_number: this.model.question_number })
     $(this.el).html('<div class="dummy_question_content">' + Mustache.render(this.template, data) + '</div>')
     $(this.el).addClass("dummy_category")
 
