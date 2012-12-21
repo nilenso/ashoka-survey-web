@@ -70,7 +70,4 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     index = _(@sub_question_models).indexOf(sub_question_model) + 1
     sub_question_model.question_number = "#{parent_question_number}.#{index}"
 
-  set_question_number_for_sub_questions: (sub_question_model) ->
-    @set_question_number_for_sub_question(sub_question) for sub_question in @sub_question_models
-
 SurveyBuilder.Models.CategoryModel.setup()
