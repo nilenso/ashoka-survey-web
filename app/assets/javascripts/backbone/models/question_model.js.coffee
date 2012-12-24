@@ -35,6 +35,7 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   error_callback: (model, response) =>
     this.errors = JSON.parse(response.responseText)
     this.trigger('change:errors')
+    this.trigger('set:errors')
 
   imageUploadUrl: ->
     "/api/questions/"+this.id+'/image_upload'

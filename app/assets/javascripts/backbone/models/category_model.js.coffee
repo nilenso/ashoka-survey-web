@@ -31,6 +31,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
   error_callback: (model, response) =>
     this.errors = JSON.parse(response.responseText)
     this.trigger('change:errors')
+    this.trigger('set:errors')
 
   toJSON: ->
     category_attrs = {}

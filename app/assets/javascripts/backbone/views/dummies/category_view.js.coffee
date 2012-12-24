@@ -39,6 +39,10 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     this.model.destroy()
 
   add_sub_question: (sub_question_model) =>
+    sub_question_model.on('set:errors', ->
+      this.uncollapse()
+      this.model.trigger('set:errors')
+    , this)
     sub_question_model.on('destroy', this.delete_sub_question, this)
     type = sub_question_model.get('type')
     question = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, sub_question_model)
