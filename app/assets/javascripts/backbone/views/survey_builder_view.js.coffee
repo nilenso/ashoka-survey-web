@@ -42,7 +42,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     model.save_model()
 
   new_category: ->
-    model = this.survey.add_new_category_model()
+    model = this.survey.add_new_question_model()
     this.dummy_pane.add_category(model)
     this.settings_pane.add_category(model)
     model.save_model()
@@ -57,7 +57,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   preload_categories: (data) =>
     _(data).each (category) =>
-      model = this.survey.add_new_category_model()
+      model = this.survey.add_new_question_model()
       model.set('id', category.id)
       this.dummy_pane.add_category(model)
       this.settings_pane.add_category(model)
