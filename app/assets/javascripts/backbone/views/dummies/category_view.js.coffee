@@ -47,6 +47,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     type = sub_question_model.get('type')
     question = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, sub_question_model)
     this.sub_questions.push question
+    @uncollapse()
     this.render()
 
   preload_sub_questions: (sub_question_models) =>
