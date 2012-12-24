@@ -34,7 +34,7 @@ module Api
       def index
         question = Question.find_by_id(params[:question_id])
         if question.respond_to?(:options)
-          render :json => question.options
+          render :json => question.options.as_json(:include => :categories)
         else
           render :nothing => true, :status => :bad_request
         end

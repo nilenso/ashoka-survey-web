@@ -8,6 +8,7 @@ describe Option do
   it { should validate_presence_of(:content) }
   it { should validate_presence_of(:question_id) }
   it { should have_many(:questions).dependent(:destroy) }
+  it { should have_many(:categories).dependent(:destroy) }
 
   context "validation" do
     it "Ensures that the order number for an option is unique within a question" do

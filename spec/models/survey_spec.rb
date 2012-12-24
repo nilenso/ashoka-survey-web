@@ -253,6 +253,17 @@ describe Survey do
     survey.first_level_questions.should_not include nested_question
   end
 
+  it "returns a list of first level categories" do
+    survey = FactoryGirl.create(:survey)
+    category = FactoryGirl.create :category
+    survey.categories << category
+    question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
+    question.options << Option.create(content: "Option", order_number: 2)
+    nested_category = Category.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
+    survey.first_level_categories.should include category
+    survey.first_level_categories.should_not include nested_category
+  end
+
   context "reports" do
     it "finds all questions which have report data" do
       survey = FactoryGirl.create(:survey)

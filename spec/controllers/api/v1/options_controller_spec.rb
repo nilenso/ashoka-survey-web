@@ -99,7 +99,7 @@ module Api
           option = FactoryGirl.create(:option, :question => question)
           get :index, :question_id => question.id
           response.should be_ok
-          JSON.parse(response.body).should include(JSON.parse(option.to_json))
+          JSON.parse(response.body).should include(JSON.parse(option.to_json(:include => :categories)))
         end
 
         it "returns a :bad_request for an invalid question ID" do

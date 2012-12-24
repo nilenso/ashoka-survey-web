@@ -45,6 +45,8 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
         sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
       when 'RadioQuestion'
         sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
+      when undefined
+        sub_question_model = new SurveyBuilder.Models.CategoryModel(question)
       else
         sub_question_model = new SurveyBuilder.Models.QuestionModel(question)
 
@@ -63,7 +65,8 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     @sub_question_models = _(@sub_question_models).without(sub_question_model)
 
   preload_sub_questions: ->
-    _.each this.get('questions'), (question, counter) =>
+    elements = _((this.get('questions')).concat(this.get('categories'))).sortBy('order_number')
+    _.each elements, (question, counter) =>
       parent_question = this.get('question')
       _(question).extend({parent_question: parent_question, order_number: counter})
       switch question.type
@@ -73,6 +76,8 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
           question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
         when 'RadioQuestion'
           question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
+        when undefined
+          question_model = new SurveyBuilder.Models.CategoryModel(question)
         else
           question_model = new SurveyBuilder.Models.QuestionModel(question)
 

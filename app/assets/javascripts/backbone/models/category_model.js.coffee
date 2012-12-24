@@ -71,7 +71,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     @sub_question_models = _(@sub_question_models).without(sub_question_model)
 
   preload_sub_questions: ->
-    elements = _(this.get('questions')).extend(this.get('categories'))
+    elements = _((this.get('questions')).concat(this.get('categories'))).sortBy('order_number')
     _.each elements, (question, counter) =>
       _(question).extend({category_id: this.get('id'), order_number: counter })
       switch question.type
