@@ -46,17 +46,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
       order_number: @next_sub_question_order_number(),
     }
 
-    switch question.type
-      when 'MultiChoiceQuestion'
-        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
-      when 'DropDownQuestion'
-        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
-      when 'RadioQuestion'
-        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
-      when undefined
-        sub_question_model = new SurveyBuilder.Models.CategoryModel(question)
-      else
-        sub_question_model = new SurveyBuilder.Models.QuestionModel(question)
+    sub_question_model = SurveyBuilder.Views.QuestionFactory.model_for(question.type, question)
 
     @sub_question_models.push sub_question_model
     sub_question_model.on('destroy', this.delete_sub_question, this)
@@ -74,17 +64,8 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     elements = _((this.get('questions')).concat(this.get('categories'))).sortBy('order_number')
     _.each elements, (question, counter) =>
       _(question).extend({category_id: this.get('id'), order_number: counter })
-      switch question.type
-        when 'MultiChoiceQuestion'
-          question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
-        when 'DropDownQuestion'
-          question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
-        when 'RadioQuestion'
-          question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
-        when undefined
-          question_model = new SurveyBuilder.Models.CategoryModel(question)
-        else
-          question_model = new SurveyBuilder.Models.QuestionModel(question)
+      
+      question_model = SurveyBuilder.Views.QuestionFactory.model_for(question.type, question)
 
       @sub_question_models.push question_model
       question_model.on('destroy', this.delete_sub_question, this)

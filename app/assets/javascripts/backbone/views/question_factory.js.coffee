@@ -64,3 +64,16 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
       when undefined
         if model instanceof SurveyBuilder.Models.CategoryModel
           return new SurveyBuilder.Views.Questions.CategoryView(model)
+
+  @model_for: (type, model) =>
+    switch type
+      when 'MultiChoiceQuestion'
+        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
+      when 'DropDownQuestion'
+        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
+      when 'RadioQuestion'
+        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
+      when undefined
+        sub_question_model = new SurveyBuilder.Models.CategoryModel(model)
+      else
+        sub_question_model = new SurveyBuilder.Models.QuestionModel(model)
