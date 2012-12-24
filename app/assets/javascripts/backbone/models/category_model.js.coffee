@@ -53,6 +53,8 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
         sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
       when 'RadioQuestion'
         sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(question)
+      when undefined
+        sub_question_model = new SurveyBuilder.Models.CategoryModel(question)
       else
         sub_question_model = new SurveyBuilder.Models.QuestionModel(question)
 
