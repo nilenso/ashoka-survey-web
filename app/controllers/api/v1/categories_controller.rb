@@ -24,10 +24,11 @@ module Api
       end
 
       def destroy
-        begin
+        category = Category.find_by_id(params[:id])
+        if category
           Category.destroy(params[:id])
           render :nothing => true
-        rescue ActiveRecord::RecordNotFound
+        else
           render :nothing => true, :status => :bad_request
         end
       end
