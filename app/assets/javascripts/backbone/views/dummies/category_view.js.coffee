@@ -31,6 +31,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       group.append(sub_question.render().el)
     
     $(this.el).append(group) unless _(this.sub_questions).isEmpty()
+    @collapse(false) if @collapsed
 
     return this
 
@@ -61,14 +62,21 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     $(this.el).children('.dummy_category_content').addClass("active")
     $(this.el).trigger("settings_pane_move")
 
+  collapse: (animate=true) ->
+    @collapsed = true
+    $(this.el).children('div.sub_question_group').hide(animate ? 'slow' : '')
+    $(this.el).children('.dummy_category_content').children('.collapse_category').html('&#9658;')
+
+  uncollapse: ->
+    @collapsed = false
+    $(this.el).children('div.sub_question_group').show('slow')
+    $(this.el).children('.dummy_category_content').children('.collapse_category').html('&#9660;')
+
   toggle_collapse: ->
-    sub_questions = $(this.el).children('div.sub_question_group')
-    if(sub_questions.is(":visible"))
-      sub_questions.hide('slow')
-      $(this.el).children('.dummy_category_content').children('.collapse_category').html('&#9658;')
+    if @collapsed
+      @uncollapse()
     else
-      sub_questions.show('slow')
-      $(this.el).children('.dummy_category_content').children('.collapse_category').html('&#9660;')
+      @collapse()
 
   unfocus: ->
     $(this.el).children('.dummy_category_content').removeClass("active")
