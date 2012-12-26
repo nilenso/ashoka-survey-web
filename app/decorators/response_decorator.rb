@@ -56,6 +56,16 @@ class ResponseDecorator < Draper::Base
     end
   end
 
+  def category_name_for(category)
+    @categories ||= []
+    return "" unless category
+    unless @categories.include?(category.id)
+      @categories << category.id
+      parent_categories = category_name_for(category.category)
+      parent_categories.html_safe + "<div class='category' data-nesting-level='#{category.nesting_level}'>#{category.content}</div>".html_safe
+    end
+  end
+
   private
 
   def numeric_question_hint(min_value, max_value)
