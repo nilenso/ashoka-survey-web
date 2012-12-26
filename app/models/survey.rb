@@ -92,7 +92,7 @@ class Survey < ActiveRecord::Base
   end
 
   def first_level_elements
-    first_level_questions + first_level_categories
+    (first_level_questions + first_level_categories).sort_by(&:order_number)
   end
 
   def question_ids_in_order
