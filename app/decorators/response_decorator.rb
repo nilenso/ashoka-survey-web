@@ -47,12 +47,13 @@ class ResponseDecorator < Draper::Base
   end
 
   def self.question_number(question)
-    if question.parent
-      sibling_questions = question.parent.questions
-      "#{question_number(question.parent_question)}.#{sibling_questions.index(question) + 1}"
+    parent_element = question.parent || question.category
+    if parent_element
+      sibling_elements = (parent_element.questions + parent_element.categories)
+      "#{question_number(parent_element)}.#{sibling_elements.index(question) + 1}"
     else
-      sibling_questions = question.survey.first_level_questions
-      (sibling_questions.index(question) + 1).to_s
+      sibling_elements = question.survey.first_level_elements
+      (sibling_elements.index(question) + 1).to_s
     end
   end
 
@@ -62,7 +63,7 @@ class ResponseDecorator < Draper::Base
     unless @categories.include?(category.id)
       @categories << category.id
       parent_categories = category_name_for(category.category)
-      parent_categories.html_safe + "<div class='category' data-nesting-level='#{category.nesting_level}'>#{category.content}</div>".html_safe
+      parent_categories.html_safe + "<span>#{ResponseDecorator.question_number(category)})</span><div class='category' data-nesting-level='#{category.nesting_level}'>#{category.content}</div>".html_safe
     end
   end
 
