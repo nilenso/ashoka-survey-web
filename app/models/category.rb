@@ -24,6 +24,6 @@ class Category < ActiveRecord::Base
   end
 
   def sub_question?
-    parent || category.try(:parent)
+    parent || category.try(:sub_question?)
   end
 end

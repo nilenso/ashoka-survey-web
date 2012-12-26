@@ -37,10 +37,13 @@ describe Category do
     option = Option.create(content: "Option", order_number: 0)
     nested_category = FactoryGirl.create :category
     second_level_category = FactoryGirl.create :category
+    third_level_category = FactoryGirl.create :category
     question.options << option
     option.categories << nested_category
     nested_category.categories << second_level_category
+    second_level_category.categories << third_level_category
     second_level_category.sub_question?.should be_true
+    third_level_category.sub_question?.should be_true
     FactoryGirl.create(:category).sub_question?.should be_false
   end
 end
