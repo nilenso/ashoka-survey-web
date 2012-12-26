@@ -31,9 +31,14 @@ describe Option do
 
   it "fetches all it's sub-questions and sub-categories" do
     option = FactoryGirl.create(:option)
-    option.questions << FactoryGirl.create_list(:question, 5)
-    option.categories << FactoryGirl.create_list(:category, 5)
-    option.elements.should == (option.questions + option.categories)
+    question = FactoryGirl.create :question, :order_number => 0
+    category = FactoryGirl.create :category, :order_number => 1
+    another_question = FactoryGirl.create :question, :order_number => 2
+    option.questions << question
+    option.categories << category
+    option.questions << another_question
+
+    option.elements.should == [question, category, another_question]
   end
 
   context "when fetching all the sub_questions of an option" do

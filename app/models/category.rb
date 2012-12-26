@@ -10,7 +10,7 @@ class Category < ActiveRecord::Base
   delegate :question, :to => :parent, :prefix => true, :allow_nil => true
 
   def elements
-    questions + categories
+    (questions + categories).sort_by(&:order_number)
   end
 
   def with_sub_questions_in_order

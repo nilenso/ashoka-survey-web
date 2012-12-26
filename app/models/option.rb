@@ -15,7 +15,7 @@ class Option < ActiveRecord::Base
   end
 
   def elements
-    questions + categories
+    (questions + categories).sort_by(&:order_number)
   end
 
   def as_json(opts={})
