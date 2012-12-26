@@ -146,7 +146,8 @@ describe Question do
       nested_question.parent_question.should == question
   end
 
-  it "returns its level of nesting" do
+  context "when returning it's level of nesting" do
+    it "takes into account nesting under an option" do
       question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
       question.options << Option.create(content: "Option", order_number: 0)
       nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
@@ -155,6 +156,19 @@ describe Question do
       question.nesting_level.should == 1
       nested_question.nesting_level.should == 2
       second_nested_question.nesting_level.should == 3
+    end
+
+    it "takes into account nesting under a category" do
+      question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+      option = Option.create(content: "Option", order_number: 0)
+      nested_question = FactoryGirl.create :question
+      question.options << option
+      category = FactoryGirl.create :category
+      option.categories << category
+      category.questions << nested_question
+      question.nesting_level.should == 1
+      nested_question.nesting_level.should == 3
+    end
   end
 
   context "reports" do
