@@ -7,11 +7,19 @@ class Category < ActiveRecord::Base
   validates_presence_of :content
   belongs_to :survey
 
+  delegate :question, :to => :parent, :prefix => true, :allow_nil => true
+
   def elements
     questions + categories
   end
 
   def with_sub_questions_in_order
     elements.map(&:with_sub_questions_in_order).flatten
+  end
+
+  def nesting_level
+    return parent_question.nesting_level + 1 if parent
+    return category.nesting_level + 1 if category
+    return 1
   end
 end

@@ -22,4 +22,13 @@ describe Category do
     category.categories << FactoryGirl.create_list(:category, 5)
     category.elements.should == (category.questions + category.categories)
   end
+
+  it "returns it's parent question" do
+    question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+    option = Option.create(content: "Option", order_number: 0)
+    nested_category = FactoryGirl.create :category
+    question.options << option
+    option.categories << nested_category
+    nested_category.parent_question.should == question
+  end
 end
