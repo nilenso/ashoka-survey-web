@@ -26,3 +26,4 @@ environments:
   my_testing_environment:
     migrate: true
     migration_command: rake db:migrate
+    precompile_assets: true
