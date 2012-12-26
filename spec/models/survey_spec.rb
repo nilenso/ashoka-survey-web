@@ -276,7 +276,7 @@ describe Survey do
       question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
       question.options << Option.create(content: "Option", order_number: 2)
       nested_category = Category.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
-      survey.first_level_elements.should == (survey.first_level_questions + survey.first_level_categories)
+      survey.first_level_elements.should =~ (survey.first_level_questions + survey.first_level_categories)
     end
   end
 
