@@ -6,6 +6,7 @@ describe Question do
   it { should allow_mass_assignment_of(:identifier) }
   it { should allow_mass_assignment_of(:category_id) }
   it { should belong_to(:parent).class_name(Option) }
+  it { should belong_to(:category) }
 
   context "validation" do
     it "allows multiple rows to have nil for order_number" do

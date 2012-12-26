@@ -2,6 +2,7 @@
 
 class Question < ActiveRecord::Base
   belongs_to :parent, :class_name => Option
+  belongs_to :category
   belongs_to :survey
   attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number, :parent_id, :identifier, :category_id
   validates_presence_of :content
