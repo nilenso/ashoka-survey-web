@@ -31,4 +31,16 @@ describe Category do
     option.categories << nested_category
     nested_category.parent_question.should == question
   end
+
+  it "knows if it (or one of it's parent categories) is a sub-question" do
+    question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+    option = Option.create(content: "Option", order_number: 0)
+    nested_category = FactoryGirl.create :category
+    second_level_category = FactoryGirl.create :category
+    question.options << option
+    option.categories << nested_category
+    nested_category.categories << second_level_category
+    second_level_category.sub_question?.should be_true
+    FactoryGirl.create(:category).sub_question?.should be_false
+  end
 end

@@ -22,4 +22,8 @@ class Category < ActiveRecord::Base
     return category.nesting_level + 1 if category
     return 1
   end
+
+  def sub_question?
+    parent || category.try(:parent)
+  end
 end
