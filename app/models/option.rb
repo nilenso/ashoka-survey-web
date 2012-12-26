@@ -14,6 +14,10 @@ class Option < ActiveRecord::Base
     option
   end
 
+  def elements
+    questions + categories
+  end
+
   def as_json(opts={})
     super(opts).merge({:questions => questions.map { |question| question.json(:methods => :type) }})
   end

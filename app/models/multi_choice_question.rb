@@ -10,7 +10,7 @@ class MultiChoiceQuestion < Question
   end
 
   def with_sub_questions_in_order
-    options.map(&:questions).flatten.map(&:with_sub_questions_in_order).flatten.unshift(self)
+    options.map(&:elements).flatten.map(&:with_sub_questions_in_order).flatten.unshift(self)
   end
 
   private

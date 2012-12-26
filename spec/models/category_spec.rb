@@ -15,4 +15,11 @@ describe Category do
   it { should allow_mass_assignment_of :category_id }
   it { should allow_mass_assignment_of :parent_id }
   it { should allow_mass_assignment_of :order_number }
+
+  it "fetches all it's sub-questions and sub-categories" do
+    category = FactoryGirl.create :category
+    category.questions << FactoryGirl.create_list(:question, 5)
+    category.categories << FactoryGirl.create_list(:category, 5)
+    category.elements.should == (category.questions + category.categories)
+  end
 end

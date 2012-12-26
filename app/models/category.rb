@@ -6,4 +6,12 @@ class Category < ActiveRecord::Base
   has_many :categories, :dependent => :destroy
   validates_presence_of :content
   belongs_to :survey
+
+  def elements
+    questions + categories
+  end
+
+  def with_sub_questions_in_order
+    elements.map(&:with_sub_questions_in_order).flatten
+  end
 end

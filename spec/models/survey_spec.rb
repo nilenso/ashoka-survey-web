@@ -244,24 +244,40 @@ describe Survey do
 
   end
 
-  it "returns a list of first level questions" do
-    survey = FactoryGirl.create(:survey)
-    question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
-    question.options << Option.create(content: "Option", order_number: 2)
-    nested_question = RadioQuestion.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
-    survey.first_level_questions.should include question
-    survey.first_level_questions.should_not include nested_question
-  end
+  context "when finding children at the first level" do
 
-  it "returns a list of first level categories" do
-    survey = FactoryGirl.create(:survey)
-    category = FactoryGirl.create :category
-    survey.categories << category
-    question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
-    question.options << Option.create(content: "Option", order_number: 2)
-    nested_category = Category.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
-    survey.first_level_categories.should include category
-    survey.first_level_categories.should_not include nested_category
+    it "returns a list of first level questions" do
+      survey = FactoryGirl.create(:survey)
+      question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
+      question.options << Option.create(content: "Option", order_number: 2)
+      nested_question = RadioQuestion.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
+      survey.first_level_questions.should include question
+      survey.first_level_questions.should_not include nested_question
+    end
+
+    it "returns a list of first level categories" do
+      survey = FactoryGirl.create(:survey)
+      category = FactoryGirl.create :category
+      survey.categories << category
+      question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
+      question.options << Option.create(content: "Option", order_number: 2)
+      nested_category = Category.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
+      survey.first_level_categories.should include category
+      survey.first_level_categories.should_not include nested_category
+    end
+
+    it "returns a list of first level elements" do
+      survey = FactoryGirl.create(:survey)
+      question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
+      question.options << Option.create(content: "Option", order_number: 2)
+      nested_question = RadioQuestion.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
+      category = FactoryGirl.create :category
+      survey.categories << category
+      question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
+      question.options << Option.create(content: "Option", order_number: 2)
+      nested_category = Category.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
+      survey.first_level_elements.should == (survey.first_level_questions + survey.first_level_categories)
+    end
   end
 
   context "reports" do
