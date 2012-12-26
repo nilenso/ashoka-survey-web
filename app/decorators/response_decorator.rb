@@ -73,7 +73,7 @@ class ResponseDecorator < Draper::Base
              data-id='<%= category.id %>'
              data-category-id='<%= category.category_id %>'>
           <h2>
-            <%= ResponseDecorator.question_number(category) %>
+            <%= ResponseDecorator.question_number(category) %>)
             <%= category.content %>
           </h2>
         </div>
