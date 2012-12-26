@@ -2,6 +2,8 @@
   # Copy the mutli-choice options' value to the data-option-id field
   # Couldn't do this in formtastic. If you figure that out, remove this.
   $ ->
+    set_nesting_level()
+
     $('input[type=checkbox]').each ->
       option_id = parseInt($(this).val())
       $(this).data('option-id', option_id)
@@ -34,7 +36,6 @@
   show_sub_questions_of = (option) ->
     for sub_question in sub_questions_for(option)
       $(sub_question).removeClass('hidden')
-      $(sub_question).css('margin-left', $(sub_question).data('nesting-level')*15)
 
   hide_sub_questions_of = (option) ->
     sub_questions_for(option).each (index) ->
@@ -76,6 +77,12 @@
       hidden_field_name = $(this).find('input[type=hidden]').attr('name').replace('[question_id]', '[id]')
       $(this).remove()
       $("[name=\"#{hidden_field_name}\"]").remove()
+
+  set_nesting_level = () ->
+    $('.category,.question').each ->
+      sub_question = $(this)
+      nesting_level = $(sub_question).data('nesting-level') - 1
+      sub_question.css('margin-left', nesting_level * 15)
 
   $ ->
     initialize()
