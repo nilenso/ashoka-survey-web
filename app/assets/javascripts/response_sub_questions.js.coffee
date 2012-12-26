@@ -59,11 +59,17 @@
       sub_question = $(this)
       sub_questions.push(sub_questions_for_category(sub_question)) if (sub_question.hasClass('category'))
 
-    sub_questions
+    $(_(sub_questions).flatten())
 
   sub_questions_for_category = (category) ->
-    category_id = $(category).data('category-id')
-    $(".sub_question[data-category-id=#{category_id}]")
+    category_id = $(category).data('id')
+    sub_questions = $(".sub_question[data-category-id=#{category_id}]")
+
+    sub_questions.each ->
+      sub_question = $(this)      
+      sub_questions.push(sub_questions_for_category(sub_question)) if (sub_question.hasClass('category'))
+
+    _(sub_questions).flatten()
 
   remove_hidden_sub_questions = () ->
     $('.hidden.sub_question').each ->
