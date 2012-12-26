@@ -52,9 +52,18 @@
     $(sub_question).find('.star').raty('cancel')
 
   sub_questions_for = (option) ->
-    $('.sub_question').filter ->
+    option_id = $(option).data('option-id')
+    sub_questions = $(".sub_question[data-parent-id=#{option_id}]") 
+
+    sub_questions.each ->
       sub_question = $(this)
-      $(option).data('option-id') == sub_question.data('parent-id')
+      sub_questions.push(sub_questions_for_category(sub_question)) if (sub_question.hasClass('category'))
+
+    sub_questions
+
+  sub_questions_for_category = (category) ->
+    category_id = $(category).data('category-id')
+    $(".sub_question[data-category-id=#{category_id}]")
 
   remove_hidden_sub_questions = () ->
     $('.hidden.sub_question').each ->

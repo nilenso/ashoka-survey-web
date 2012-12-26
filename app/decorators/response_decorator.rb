@@ -64,13 +64,20 @@ class ResponseDecorator < Draper::Base
     return "" unless category
     unless @categories.include?(category.id)
       @categories << category.id
-      parent_categories = category_name_for(category.category)
-
-      parent_categories.html_safe +
-      "<div class='category' data-nesting-level='#{category.nesting_level}' data-parent-id='#{category.parent_id}'>
-        <h2>#{ResponseDecorator.question_number(category)})
-        #{category.content}</h2>
-      </div>".html_safe
+      
+      string = ERB.new "
+        <%= category_name_for(category.category) %>
+        <div class='category <%= 'hidden sub_question' if category.sub_question? %>'
+             data-nesting-level='<%= category.nesting_level %>'
+             data-parent-id='<%= category.parent_id %>' 
+             data-category-id='<%= category.id %>'>
+          <h2>
+            <%= ResponseDecorator.question_number(category) %>
+            <%= category.content %>
+          </h2>
+        </div>
+      "
+      string.result(binding).html_safe
     end
   end
 
