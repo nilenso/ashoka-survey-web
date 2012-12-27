@@ -20,6 +20,7 @@ describe "Abilities" do
       it { should be_able_to(:read, Survey.new) }
       it { should be_able_to(:questions_count, Survey.new) }
       it { should be_able_to(:read, Question.new) }
+      it { should be_able_to(:read, Category.new) }
       it { should be_able_to(:read, Option.new) }
       it { should be_able_to(:read, Response.new)}
     end
@@ -32,6 +33,7 @@ describe "Abilities" do
       context "for surveys belonging to the same organization" do
         let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 5) }
         let(:question) { FactoryGirl.create(:question, :survey => survey) }
+        let(:category) { FactoryGirl.create(:category, :survey => survey) }
         let(:option) { FactoryGirl.create(:option, :question => question) }
         let(:finalized_survey) { survey = FactoryGirl.create(:survey, :organization_id => 5, :finalized => true) }
 
@@ -51,6 +53,8 @@ describe "Abilities" do
 
         it { should be_able_to(:manage, question) }
 
+        it { should be_able_to(:manage, category) }
+
         it { should be_able_to(:manage, option) }
 
         it { should be_able_to :manage, Response.new(:survey => survey) }
@@ -64,6 +68,7 @@ describe "Abilities" do
       context "for surveys belonging to another organization" do
         let(:survey) { FactoryGirl.create(:survey, :organization_id => 6) }
         let(:question) { FactoryGirl.create(:question, :survey => survey) }
+        let(:category) { FactoryGirl.create(:category, :survey => survey) }
         let(:option) { FactoryGirl.create(:option, :question => question) }
 
         it { should_not be_able_to(:edit, survey) }
@@ -79,6 +84,8 @@ describe "Abilities" do
         it { should_not be_able_to(:update_share_with_organizations, survey) }
 
         it { should_not be_able_to(:manage, question) }
+
+        it { should_not be_able_to(:manage, category) }
 
         it { should_not be_able_to(:manage, option) }
 
@@ -127,6 +134,7 @@ describe "Abilities" do
         let(:survey) { FactoryGirl.create(:survey, :finalized => true, :organization_id => 5) }
         let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => base_user_info[:user_id], :organization_id => 1) }
         let(:question) { FactoryGirl.create(:question, :survey => survey) }
+        let(:category) { FactoryGirl.create(:category, :survey => survey) }
         let(:option) { FactoryGirl.create(:option, :question => question) }
         before(:each) do
           SurveyUser.create(:survey_id => survey.id, :user_id => user_info[:user_id])
@@ -138,14 +146,16 @@ describe "Abilities" do
         it { should be_able_to :manage,  response }
         it { should be_able_to :image_upload,  response }
         it { should be_able_to :complete,  response }
-        it { should be_able_to :manage, question }
-        it { should be_able_to :manage, option }
+        it { should be_able_to :read, question }
+        it { should be_able_to :read, category }
+        it { should be_able_to :read, option }
       end
 
       context "for a survey not shared with him" do
         let(:survey) { survey = FactoryGirl.create(:survey, :organization_id => 7) }
         let(:response) { FactoryGirl.create(:response, :survey_id => survey.id, :user_id => 23423423, :organization_id => 1) }
         let(:question) { FactoryGirl.create(:question, :survey => survey) }
+        let(:category) { FactoryGirl.create(:category, :survey => survey) }
         let(:option) { FactoryGirl.create(:option, :question => question) }
         before(:each) do
           survey = FactoryGirl.create(:survey, :organization_id => 6)
@@ -159,8 +169,9 @@ describe "Abilities" do
         it { should_not be_able_to :read,  response }
         it { should_not be_able_to :complete,  response }
         it { should_not be_able_to :destroy,  response }
-        it { should_not be_able_to :manage, question }
-        it { should_not be_able_to :manage, option }
+        it { should_not be_able_to :read, question }
+        it { should_not be_able_to :read, category }
+        it { should_not be_able_to :read, option }
       end
     end
   end

@@ -15,6 +15,7 @@ class Ability
         can :read, Survey # TODO: Verify this
         can :questions_count, Survey
         can :read, Question
+        can :read, Category
         can :read, Option
         can :read, Response # TODO: Verify this
         #can :manage, Response, :session_token => user_info[:session_token]
@@ -77,6 +78,7 @@ class Ability
         can :image_upload, Response, :organization_id => user_info[:org_id]
 
         can :manage, Question, :survey => { :organization_id => user_info[:org_id] }
+        can :manage, Category, :survey => { :organization_id => user_info[:org_id] }
         can :manage, Option, :question => { :survey => {:organization_id => user_info[:org_id] }}
       elsif role == 'field_agent'
         can :read, Survey, :survey_users => { :user_id => user_info[:user_id ] }
@@ -85,8 +87,9 @@ class Ability
         can :complete, Response, :user_id  => user_info[:user_id]
         can :manage, Response, :user_id  => user_info[:user_id]
         can :image_upload, Response, :user_id => user_info[:user_id]
-        can :manage, Question, :survey => { :organization_id => user_info[:org_id] }
-        can :manage, Option, :question => { :survey => {:organization_id => user_info[:org_id] }}
+        can :read, Question, :survey => { :organization_id => user_info[:org_id] }
+        can :read, Category, :survey => { :organization_id => user_info[:org_id] }
+        can :read, Option, :question => { :survey => {:organization_id => user_info[:org_id] }}
       end
     end
   end
