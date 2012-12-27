@@ -99,6 +99,12 @@ describe Survey do
       new_survey = survey.duplicate
       new_survey.questions.count.should == 2
     end
+
+    it "changes the survey's organization_id if necessary" do
+      survey = FactoryGirl.create :survey_with_questions, :organization_id => 1
+      new_survey = survey.duplicate(:organization_id => 42)
+      new_survey.organization_id.should == 42
+    end
   end
 
   context "finalize" do

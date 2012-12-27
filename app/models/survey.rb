@@ -54,10 +54,11 @@ class Survey < ActiveRecord::Base
     expiry_date < Date.today
   end
 
-  def duplicate
+  def duplicate(options = {})
     survey = self.dup
     survey.finalized = false
     survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
+    survey.organization_id = options[:organization_id] if options[:organization_id]
     survey.save(:validate => false)
     survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
     survey

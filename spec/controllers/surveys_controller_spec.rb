@@ -177,6 +177,16 @@ describe SurveysController do
       response.should redirect_to request.env['HTTP_REFERER']
       flash[:notice].should_not be_nil
     end
+
+    context "when the user duplicating the survey doesn't belong to the same organization as the user who created it" do
+      it "creates a survey with the current org id" do
+        session[:user_info][:org_id] = 123
+        survey = FactoryGirl.create :survey, :organization_id => 42
+        post :duplicate, :id => survey.id
+        new_survey = Survey.order('created_at').all.last
+        new_survey.organization_id.should == 42
+      end
+    end
   end
 
   context "GET 'report'" do
