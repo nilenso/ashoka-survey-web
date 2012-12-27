@@ -74,7 +74,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
       question_model.fetch()
 
     this.trigger('change:preload_sub_questions', @sub_question_models)
-    @sub_question_order_counter = this.get('questions').length
+    @sub_question_order_counter = elements.length
 
   set_question_number_for_sub_question: (sub_question_model) ->
     parent_question_number = this.question_number
