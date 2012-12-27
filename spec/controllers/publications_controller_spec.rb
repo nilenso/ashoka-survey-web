@@ -72,7 +72,7 @@ describe PublicationsController do
     end
 
     it "makes the survey public" do
-      put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => true}
+      put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => '1'}
       survey.reload.should be_public
     end
 
@@ -134,7 +134,7 @@ describe PublicationsController do
         end
 
         it "when the survey is marked public" do
-          put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => true}
+          put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => '1'}
           response.should_not redirect_to 'http://google.com'
           flash[:error].should be_nil
         end
