@@ -3,7 +3,7 @@ module Api
   module V1
     class CategoriesController < APIApplicationController
       before_filter :dont_cache
-      #authorize_resource
+      authorize_resource
 
       def create
         category = Category.new(params[:category])

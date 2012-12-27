@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe Api::V1::CategoriesController do
+  before(:each) do
+    sign_in_as('cso_admin')
+  end
   context "POST 'create'" do
     it "creates a new category in the database" do
       category = FactoryGirl.attributes_for :category
