@@ -10,7 +10,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     'click button.add_option': 'add_new_option_model'
     'click button.add_options_in_bulk': 'add_options_in_bulk'
 
-  initialize: (model, template) ->
+  initialize: (model, template) =>
     super
     this.options = []
     this.model.on('add:options', this.add_new_option, this)
@@ -18,7 +18,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     this.model.on('reset:options', this.preload_options, this)
     this.model.on('change', this.render, this)
 
-  preload_options: (collection) ->
+  preload_options: (collection) =>
     collection.each( (model) =>
       this.add_new_option(model)
     )
@@ -26,7 +26,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
   add_new_option_model: (content) =>
     this.model.create_new_option(content)
 
-  add_new_option: (option_model) ->
+  add_new_option: (option_model) =>
     switch this.model.get('type')
       when 'RadioQuestion'
         template = $('#radio_option_template').html()
@@ -39,17 +39,17 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     this.options.push option
     $(this.el).append($(option.render().el))
 
-  render: ->
+  render: =>
     super
     $(this.el).append($(option.render().el)) for option in @options
     return this
 
-  delete_option_view: (model) ->
-    option = _(@options).find((option) -> option.model == model)
+  delete_option_view: (model) =>
+    option = _(@options).find((option) => option.model == model)
     @options = _(@options).without(option)
     option.remove()
 
-  hide : ->
+  hide : =>
     super
     _(this.options).each (option) =>
         _(option.sub_questions).each (sub_question) =>
@@ -59,5 +59,5 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     csv = $(this.el).children('textarea.add_options_in_bulk').val()
     return if csv == ""
     parsed_csv = $.csv.toArray(csv)
-    @add_new_option_model(content) for content in parsed_csv
+    _.defer(@add_new_option_model, content) for content in parsed_csv
     

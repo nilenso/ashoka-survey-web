@@ -44,7 +44,7 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     super
     this.get('options').fetch
       success: (model, response) ->
-        model.preload_sub_questions()
+        _.defer(model.preload_sub_questions)
     this.seeded = true
 
   success_callback: (model, response) =>

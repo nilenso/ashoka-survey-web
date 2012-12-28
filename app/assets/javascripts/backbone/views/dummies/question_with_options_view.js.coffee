@@ -39,10 +39,11 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
   preload_options: (collection) ->
     collection.each( (model) =>
-      this.add_new_option(model)
+      this.add_new_option(model, { do_not_render: true })
     )
+    @render()
 
-  add_new_option: (model) ->
+  add_new_option: (model, options={}) ->
     switch this.model.get('type')
       when 'RadioQuestion'
         template = $('#dummy_radio_option_template').html()
@@ -56,7 +57,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     view.on('render_preloaded_sub_questions', this.render, this)
     view.on('render_added_sub_question', this.render, this)
     view.on('destroy:sub_question', this.reorder_questions, this)
-    this.render()
+    this.render() unless options.do_not_render
 
   delete_option_view: (model) ->
     option = _(@options).find((option) -> option.model == model )
