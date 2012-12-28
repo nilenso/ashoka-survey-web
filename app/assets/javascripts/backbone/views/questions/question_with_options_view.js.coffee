@@ -8,6 +8,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     'keyup  input[type=text]': 'handle_textbox_keyup'
     'change input[type=checkbox]': 'handle_checkbox_change'
     'click button.add_option': 'add_new_option_model'
+    'click button.add_options_in_bulk': 'add_options_in_bulk'
 
   initialize: (model, template) ->
     super
@@ -22,8 +23,8 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
       this.add_new_option(model)
     )
 
-  add_new_option_model: ->
-    this.model.create_new_option()
+  add_new_option_model: (content) =>
+    this.model.create_new_option(content)
 
   add_new_option: (option_model) ->
     switch this.model.get('type')
@@ -53,3 +54,10 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     _(this.options).each (option) =>
         _(option.sub_questions).each (sub_question) =>
           sub_question.hide()
+
+  add_options_in_bulk: =>
+    csv = $(this.el).children('textarea.add_options_in_bulk').val()
+    return if csv == ""
+    parsed_csv = $.csv.toArray(csv)
+    @add_new_option_model(content) for content in parsed_csv
+    

@@ -18,6 +18,7 @@
 //= require underscore
 //= require backbone
 //= require jquery.ui.widget
+//= require jquery_csv
 //= require jquery.iframe-transport
 //= require jquery.fileupload
 //= require jquery.raty

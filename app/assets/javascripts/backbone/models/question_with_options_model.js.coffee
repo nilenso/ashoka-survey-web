@@ -51,8 +51,9 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     this.seed()
     super
 
-  create_new_option: ->
-    this.get('options').create({content: "Another Option", order_number: this.get_order_counter() })
+  create_new_option: (content) ->
+    content = "Another Option" unless _(content).isString()
+    this.get('options').create({content: content, order_number: this.get_order_counter() })
 
   has_drop_down_options: ->
     this.get('type') == "DropDownQuestion" && this.get('options').first()
