@@ -3,13 +3,13 @@ SurveyBuilder.Views.Dummies ||= {}
 
 class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
 
-  initialize: (@model, @template) ->
+  initialize: (@model, @template) =>
     this.sub_questions = []
     this.model.on('change:errors', this.render, this)
     this.model.on('add:sub_question', this.add_sub_question)
     this.model.on('change:preload_sub_questions', this.preload_sub_questions)
 
-  render: ->
+  render: =>
     data = _.extend(this.model.toJSON(), {errors: this.model.errors})
     $(this.el).html(Mustache.render(@template, data))
     return this
@@ -28,7 +28,7 @@ class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
     )
     this.trigger('render_preloaded_sub_questions')
 
-  delete_sub_question: (sub_question_model) ->
+  delete_sub_question: (sub_question_model) =>
     view = sub_question_model.dummy_view
     @sub_questions = _(@sub_questions).without(view)
     view.remove()

@@ -3,14 +3,14 @@ SurveyBuilder.Views.Dummies ||= {}
 # Represents a dummy question on the DOM
 class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
 
-  initialize: (model, template) ->
+  initialize: (model, template) =>
     this.model = model
     this.template = template
     this.model.dummy_view = this
     this.model.on('change', this.render, this)
     this.model.on('change:errors', this.render, this)
 
-  render: ->
+  render: =>
     this.model.set('content', I18n.t('js.untitled_question')) if _.isEmpty(this.model.get('content'))
     data = _.extend(this.model.toJSON().question, {errors: this.model.errors, image_url: this.model.get('image_url')})
     data = _(data).extend({question_number: this.model.question_number})
@@ -29,15 +29,15 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
 
     return this
 
-  delete: ->
+  delete: =>
     this.model.destroy()
 
-  show_actual: (event) ->
+  show_actual: (event) =>
     $(this.el).trigger("dummy_click")
     $(this.model.actual_view.el).show()
     $(this.el).children('.dummy_question_content').addClass("active")
     $(this.el).trigger("settings_pane_move")
 
 
-  unfocus: ->
+  unfocus: =>
     $(this.el).children('.dummy_question_content').removeClass("active")

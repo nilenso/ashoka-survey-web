@@ -4,7 +4,7 @@ SurveyBuilder.Views.Dummies ||= {}
 # Represents a dummy radio question on the DOM
 class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.Views.Dummies.QuestionView
 
-  initialize: (model, template) ->
+  initialize: (model, template) =>
     super
     this.options = []
     this.model.get('options').on('change', this.render, this)
@@ -12,7 +12,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     this.model.on('add:options', this.add_new_option, this)
     this.model.on('reset:options', this.preload_options, this)
 
-  render: ->
+  render: =>
     super
     $(this.el).children(".dummy_question_content").click (e) =>
       @show_actual(e)
@@ -37,13 +37,13 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
     return this
 
-  preload_options: (collection) ->
+  preload_options: (collection) =>
     collection.each( (model) =>
       this.add_new_option(model, { do_not_render: true })
     )
     @render()
 
-  add_new_option: (model, options={}) ->
+  add_new_option: (model, options={}) =>
     switch this.model.get('type')
       when 'RadioQuestion'
         template = $('#dummy_radio_option_template').html()
@@ -59,22 +59,22 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     view.on('destroy:sub_question', this.reorder_questions, this)
     this.render() unless options.do_not_render
 
-  delete_option_view: (model) ->
-    option = _(@options).find((option) -> option.model == model )
+  delete_option_view: (model) =>
+    option = _(@options).find((option) => option.model == model )
     @options = _(@options).without(option)
     this.render()
 
-  unfocus: ->
+  unfocus: =>
     super
     _(this.options).each (option) =>
       _(option.sub_questions).each (sub_question) =>
         sub_question.unfocus()
 
   reorder_questions: (event, ui) =>
-    _(@options).each (option) ->
+    _(@options).each (option) =>
       unless _(option.sub_questions).isEmpty()
         last_order_number = _.chain(option.sub_questions)
-          .map((sub_question) -> sub_question.model.get('order_number'))
+          .map((sub_question) => sub_question.model.get('order_number'))
           .max().value()
         _(option.sub_questions).each (sub_question) =>
             index = $(sub_question.el).index()
@@ -82,6 +82,6 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
             sub_question.model.question_number = option.model.get('question').question_number + '.' + (index)
             sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
             sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
-        option.sub_questions = _(option.sub_questions).sortBy (sub_question) ->
+        option.sub_questions = _(option.sub_questions).sortBy (sub_question) =>
           sub_question.model.get('order_number')
     @render()

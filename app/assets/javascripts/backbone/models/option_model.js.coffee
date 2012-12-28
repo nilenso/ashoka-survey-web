@@ -5,16 +5,16 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     content: 'untitled'
   }
 
-  initialize: ->
+  initialize: =>
     @sub_question_order_counter = 0
     @sub_question_models = []
 
-  has_errors: ->
+  has_errors: =>
     !_.isEmpty(this.errors)
 
-  save_model: ->
+  save_model: =>
     this.save({}, {error: this.error_callback, success: this.success_callback})
-    _.each @sub_question_models, (question) ->
+    _.each @sub_question_models, (question) =>
       question.save_model()
 
   success_callback: (model, response) =>
@@ -25,10 +25,10 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     this.errors = JSON.parse(response.responseText)
     this.trigger('change:errors')
 
-  next_sub_question_order_number: ->
+  next_sub_question_order_number: =>
     ++@sub_question_order_counter
 
-  add_sub_question: (type) ->
+  add_sub_question: (type) =>
 
     question = {
       type: type,
@@ -46,16 +46,17 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     sub_question_model.save_model()
     this.trigger('add:sub_question', sub_question_model)
 
-  set_question_number_for_sub_question: (sub_question_model) ->
+  set_question_number_for_sub_question: (sub_question_model) =>
     parent_question_number = this.get('question').question_number
     sub_question_model.question_number = "#{parent_question_number}.#{@sub_question_models.length}"
 
-  delete_sub_question: (sub_question_model) ->
+  delete_sub_question: (sub_question_model) =>
     @sub_question_models = _(@sub_question_models).without(sub_question_model)
 
-  preload_sub_questions: ->
+  preload_sub_questions: =>
     elements = _((this.get('questions')).concat(this.get('categories'))).sortBy('order_number')
     _.each elements, (question, counter) =>
+      console.log("HELLO")
       parent_question = this.get('question')
       _(question).extend({parent_question: parent_question, order_number: counter})
 
@@ -75,12 +76,12 @@ SurveyBuilder.Models.OptionModel.setup()
 class SurveyBuilder.Collections.OptionCollection extends Backbone.Collection
   model: SurveyBuilder.Models.OptionModel
 
-  url: ->
+  url: =>
     '/api/options?question_id=' + this.question.id
 
-  has_errors: ->
-    this.any((option) -> option.has_errors())
+  has_errors: =>
+    this.any((option) => option.has_errors())
  
-  preload_sub_questions: ->
-    _.each this.models, (option_model) ->
+  preload_sub_questions: =>
+    _.each this.models, (option_model) =>
       option_model.preload_sub_questions()

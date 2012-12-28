@@ -9,7 +9,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'settings_pane_move': 'settings_pane_move'
     'click #save': 'save_all_questions'
 
-  initialize:(survey_id) ->
+  initialize:(survey_id) =>
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
     this.survey        = new SurveyBuilder.Models.SurveyModel(survey_id)
     this.settings_pane = new SurveyBuilder.Views.SettingsPaneView(this.survey)
@@ -33,7 +33,8 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
       this.dummy_pane.reorder_questions()
     )
 
-  new_question: (event, data) ->
+
+  new_question: (event, data) =>
     type = data.type
     parent = data.parent
     model = this.survey.add_new_question_model(type, parent)
@@ -41,7 +42,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.settings_pane.add_question(type, model)
     model.save_model()
 
-  new_category: ->
+  new_category: =>
     model = this.survey.add_new_question_model()
     this.dummy_pane.add_category(model)
     this.settings_pane.add_category(model)
@@ -63,20 +64,20 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
       this.settings_pane.add_category(model)
       model.fetch()
 
-  handle_dummy_click: ->
+  handle_dummy_click: =>
     this.hide_all()
     # this.switch_tab()
-  settings_pane_move: ->
+  settings_pane_move: =>
     this.settings_pane.move()
 
-  hide_all: (event) ->
+  hide_all: (event) =>
     this.dummy_pane.unfocus_all()
     this.settings_pane.hide_all()
 
-  switch_tab: ->
+  switch_tab: =>
     $("#sidebar").tabs('select', 1)
 
-  save_all_questions: ->
+  save_all_questions: =>
     $(this.el).bind('ajaxStart.save', window.loading_overlay.show_overlay)
     $(this.el).bind('ajaxStop.save', this.handle_save_finished)
     $(this.el).find("#save input").prop('disabled', true)
@@ -91,7 +92,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     @display_save_status()
     window.loading_overlay.hide_overlay()
 
-  display_save_status: ->
+  display_save_status: =>
     if this.survey.has_errors()
       window.notifications_view.set_error(I18n.t('js.save_unsuccessful'),)
     else

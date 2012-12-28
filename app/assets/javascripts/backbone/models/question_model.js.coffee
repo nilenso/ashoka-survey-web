@@ -8,18 +8,18 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     identifier: false
 
 
-  initialize: ->
+  initialize: =>
     this.set('content', I18n.t('js.untitled_question'))
-  has_errors: ->
+  has_errors: =>
     !_.isEmpty(this.errors)
 
-  save_model: ->
+  save_model: =>
     this.save({}, {error: this.error_callback, success: this.success_callback})
 
-  fetch: ->
+  fetch: =>
     super({error: this.error_callback, success: this.success_callback})
 
-  remove_image_attributes: ->
+  remove_image_attributes: =>
     this.unset('image', {silent: true})
     this.unset('image_content_type', {silent: true})
     this.unset('image_file_name', {silent: true})
@@ -37,12 +37,12 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     this.trigger('change:errors')
     this.trigger('set:errors')
 
-  imageUploadUrl: ->
+  imageUploadUrl: =>
     "/api/questions/"+this.id+'/image_upload'
 
-  toJSON: ->
+  toJSON: =>
     question_attrs = {}
-    _.each @attributes, (val, key) ->
+    _.each @attributes, (val, key) =>
       question_attrs[key] = val  if val? and not _.isObject(val)
     { question: _.omit( question_attrs, ['created_at', 'updated_at', 'id', 'temp_order_number', 'image_url', 'image_in_base64']) }
 
