@@ -7,7 +7,6 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
   initialize: (model, template) =>
     super
     this.options = []
-    this.model.get('options').on('change', this.render, this)
     this.model.get('options').on('destroy', this.delete_option_view, this)
     this.model.on('add:options', this.add_new_option, this)
     this.model.on('reset:options', this.preload_options, this)
@@ -57,7 +56,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     view.on('render_preloaded_sub_questions', this.render, this)
     view.on('render_added_sub_question', this.render, this)
     view.on('destroy:sub_question', this.reorder_questions, this)
-    this.render() unless options.do_not_render
+    $(this.el).children('.dummy_question_content').append(view.render().el)
 
   delete_option_view: (model) =>
     option = _(@options).find((option) => option.model == model )
