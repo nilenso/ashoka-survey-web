@@ -53,7 +53,11 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   delete_sub_question: (sub_question_model) =>
     @sub_question_models = _(@sub_question_models).without(sub_question_model)
 
+  has_sub_questions: =>
+    this.get('questions').length > 0 || this.get('categories').length > 0
+
   preload_sub_questions: =>
+    return unless @has_sub_questions()
     elements = _((this.get('questions')).concat(this.get('categories'))).sortBy('order_number')
     _.each elements, (question, counter) =>
       console.log("HELLO")
