@@ -79,11 +79,15 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     $("#sidebar").tabs('select', 1)
 
   save_all_questions: =>
-    $(this.el).bind('ajaxStart.save', window.loading_overlay.show_overlay)
-    $(this.el).bind('ajaxStop.save', this.handle_save_finished)
     $(this.el).find("#save input").prop('disabled', true)
-    this.survey.save()
-    this.survey.save_all_questions()
+    window.loading_overlay.show_overlay()
+
+    # Delay so that the UI doesn't hang.
+    _.delay(=>
+      $(this.el).bind('ajaxStop.save', this.handle_save_finished)
+      this.survey.save()
+      this.survey.save_all_questions()
+    , 10)
 
   handle_save_finished: =>
     $(this.el).unbind('ajaxStart.save')
