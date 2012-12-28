@@ -19,18 +19,19 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
     # $( "#sidebar" ).tabs()
 
-    this.survey.fetch({
+    _.defer(=>
+      this.survey.fetch({
         success: (data) =>
           this.dummy_pane.render()
           $.getJSON("/api/questions?survey_id=#{survey_id}", this.preload_questions)
           $.getJSON("/api/categories?survey_id=#{survey_id}", this.preload_categories)
       })
 
-    $(this.el).bind('ajaxStop.preload', =>
-      window.loading_overlay.hide_overlay()
-      $(this.el).unbind('ajaxStop.preload')
-      this.dummy_pane.sort_questions_by_order_number()
-      this.dummy_pane.reorder_questions()
+      $(this.el).bind('ajaxStop.preload', =>
+        window.loading_overlay.hide_overlay()
+        $(this.el).unbind('ajaxStop.preload')
+        this.dummy_pane.sort_questions_by_order_number()
+        this.dummy_pane.reorder_questions())
     )
 
 
