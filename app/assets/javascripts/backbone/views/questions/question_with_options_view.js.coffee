@@ -59,5 +59,9 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     csv = $(this.el).children('textarea.add_options_in_bulk').val()
     return if csv == ""
     parsed_csv = $.csv.toArray(csv)
-    @add_new_option_model(content) for content in parsed_csv
+    window.loading_overlay.show_overlay("Adding your options. Please wait.")    
+    _.delay(=>
+      @add_new_option_model(content) for content in parsed_csv
+      window.loading_overlay.hide_overlay()
+    , 10)
     
