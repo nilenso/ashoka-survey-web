@@ -2,7 +2,7 @@
 class SurveyBuilder.Views.LoadingOverlayView extends Backbone.View
   el: "#loading_overlay"
 
-  show_overlay: =>
+  show_overlay: (text) =>
     opts =
       lines: 17 # The number of lines to draw
       length: 9 # The length of each line
@@ -18,5 +18,10 @@ class SurveyBuilder.Views.LoadingOverlayView extends Backbone.View
     $(this.el).css('top', window.pageYOffset)
     $(this.el).children(".spinner").spin(opts)
 
+    if text
+      @old_text = $(this.el).children("p.text").text()
+      $(this.el).children("p.text").text(text)
+
   hide_overlay: =>
     $(this.el).hide()
+    $(this.el).children("p.text").text(@old_text) if @old_text
