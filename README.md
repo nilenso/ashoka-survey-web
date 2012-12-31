@@ -90,3 +90,9 @@ Start the survey-web app by typing `rails server` from the console.
 Troubleshooting
 =======
 Please check the [Troubleshooting](https://github.com/c42/survey-web/wiki/Troubleshooting) section of the wiki, or create an [issue](https://github.com/c42/survey-web/issues) if you need any help.
+
+Contributing
+=======
+- We use [Pivotal Tracker](https://www.pivotaltracker.com/projects/602833) to manage our projects.
+You can have a look at the bugs and features that you could work on.
+- If you need any help, mail us at `survey@c42.in`.
