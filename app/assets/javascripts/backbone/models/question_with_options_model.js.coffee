@@ -61,4 +61,8 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
   get_first_option_value: =>
     this.get('options').first().get('content')
 
+  destroy_options: =>
+    collection = this.get('options')
+    model.destroy() while model = collection.pop()
+
 SurveyBuilder.Models.QuestionWithOptionsModel.setup()
