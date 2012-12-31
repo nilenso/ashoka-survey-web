@@ -18,7 +18,6 @@ describe SurveyUser do
 
     it "adds a validation error if it fails" do
       survey_user = SurveyUser.create(:survey_id => draft_survey.id, :user_id => 5)
-      survey_user.errors.full_messages.should include "Survey is not finalized"
       survey_user.should_not be_valid
     end
 
