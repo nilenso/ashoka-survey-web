@@ -51,13 +51,15 @@
     </script>
   </head>
   <body>
-    <%= render "layouts/status_bar", :status => "analyze" %>
-    <% @survey.questions_with_report_data.each do |question| %>
-      <div id="chart_div_<%= question.id %>"></div>
-    <% end %>
-    <div id="location_map">
-      <p><%= t('.location') %></p>
-      <%= gmaps4rails(@markers) %>
+    <div class="reports">
+      <%= render "layouts/status_bar", :status => "analyze" %>
+      <% @survey.questions_with_report_data.each do |question| %>
+        <div id="chart_div_<%= question.id %>"></div>
+      <% end %>
+      <div id="location_map">
+        <p><%= t('.location') %></p>
+        <%= gmaps4rails(@markers) %>
+      </div>
     </div>
   </body>
 </html>
