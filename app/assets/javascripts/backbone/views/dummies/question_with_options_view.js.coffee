@@ -58,7 +58,6 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
   delete_option_view: (model) =>
     option = _(@options).find((option) => option.model == model )
     @options = _(@options).without(option)
-    this.render()
 
   unfocus: =>
     super
