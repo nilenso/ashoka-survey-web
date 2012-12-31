@@ -3,9 +3,12 @@ require 'spec_helper'
 describe NumericQuestion do
   it { should respond_to :max_value }
   it { should respond_to :min_value }
+  it { should validate_numericality_of :max_value }
+  it { should validate_numericality_of :min_value }
 
   it "is a question with type = 'NumericQuestion'" do
-    NumericQuestion.create(:content => "hello",:order_number => 11)
+    x = NumericQuestion.create(:content => "hello",:order_number => 11)
+    p x.errors
     question = Question.find_by_content("hello")
     question.should be_a NumericQuestion
     question.type.should == "NumericQuestion"
