@@ -7,7 +7,7 @@ class ParticipatingOrganization < ActiveRecord::Base
 
   def survey_must_be_finalized
     unless survey.try(:finalized?)
-      errors.add(:survey, "must be finalized.")
+      errors.add(:survey, I18n.t('participating_organizations.validations.require_finalized'))
     end
   end
 end

@@ -120,23 +120,23 @@ class Survey < ActiveRecord::Base
 
   def expiry_date_should_not_be_in_past
     if !expiry_date.blank? and expiry_date < Date.current
-      errors.add(:expiry_date, "can't be in the past")
+      errors.add(:expiry_date, I18n.t('surveys.validations.cant_be_in_past'))
     end
   end
 
   def description_should_be_short
     if description && description.length > 250
-      errors.add(:description, "can't be more than 250 characters")
+      errors.add(:description, I18n.t('surveys.validations.too_long'))
     end
   end
 
   def expiry_date_should_be_valid
-    errors.add(:expiry_date, "is not valid") if expiry_date.nil?
+    errors.add(:expiry_date, I18n.t('surveys.validations.invalid')) if expiry_date.nil?
   end
 
   def expiry_date_should_not_be_older
     if expiry_date_changed? && !expiry_date_change.any?(&:nil?)
-      errors.add(:expiry_date, "can not be older than existing value") if expiry_date_change[1]  < expiry_date_change[0]
+      errors.add(:expiry_date, I18n.t('surveys.validations.older_than_existing')) if expiry_date_change[1]  < expiry_date_change[0]
     end
   end
 

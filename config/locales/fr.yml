@@ -36,6 +36,12 @@ fr:
 
   surveys:
     confirm_finalize: "fr: The survey can't be edited after this. Are you sure?"
+    validations:
+      cant_be_in_past: "fr Can't be in the past"
+      too_long: "fr Can't be more than 250 characters"
+      invalid: "fr is not valid"
+      older_than_existing: "fr can not be older than existing value"
+
     new:
       create_survey: "Créer un nouveau sondage"
       add_single_line_question: "Ajouter une question simple ligne"
@@ -145,6 +151,14 @@ fr:
   questions:
     validations:
       min_value_higher: ne peut pas être supérieure à la valeur maximale
+
+  participating_organizations:
+    validations:
+      require_finalized: fr Must be finalized
+
+  survey_users:
+    validations:
+      require_finalized: fr Must be finalized
 
   activerecord:
     attributes:

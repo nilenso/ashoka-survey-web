@@ -5,6 +5,6 @@ class SurveyUser < ActiveRecord::Base
   validate :survey_finalized
 
   def survey_finalized
-    errors.add(:survey, "is not finalized") unless survey.finalized?
+    errors.add(:survey, I18n.t('survey_users.validations.require_finalized')) unless survey.finalized?
   end
 end
