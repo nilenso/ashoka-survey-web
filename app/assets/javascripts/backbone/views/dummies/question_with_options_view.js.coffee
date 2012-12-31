@@ -13,15 +13,13 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
   render: =>
     super
+    $(this.el).children(".dummy_question_content:not(:has(div.children_content))").append('<div class="children_content"></div>')
     $(this.el).children(".dummy_question_content").click (e) =>
       @show_actual(e)
 
     $(this.el).children('.dummy_question_content').children(".delete_question").click (e) => @delete(e)
 
-    _.each(this.options, (option) =>
-        $(this.el).children('.dummy_question_content').append(option.render().el)
-      )
-
+    $(this.el).children(".sub_question_group").html('')
     _(this.options).each (option) =>
       group = $("<div class='sub_question_group'>")
       group.sortable({items: "> div", update: @reorder_questions})
@@ -38,9 +36,8 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
   preload_options: (collection) =>
     collection.each( (model) =>
-      this.add_new_option(model, { do_not_render: true })
+      this.add_new_option(model)
     )
-    @render()
 
   add_new_option: (model, options={}) =>
     switch this.model.get('type')
@@ -56,7 +53,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     view.on('render_preloaded_sub_questions', this.render, this)
     view.on('render_added_sub_question', this.render, this)
     view.on('destroy:sub_question', this.reorder_questions, this)
-    $(this.el).children('.dummy_question_content').append(view.render().el)
+    $(this.el).children('.dummy_question_content').children('.children_content').append(view.render().el)
 
   delete_option_view: (model) =>
     option = _(@options).find((option) => option.model == model )
