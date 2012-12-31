@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :set_locale, :session_token
-  helper_method :current_user_info
+  helper_method :current_user_info, :register_path, :new_user_path
 
   def default_url_options(options={})
     return { :locale => I18n.locale } unless I18n.locale == I18n.default_locale
@@ -74,6 +74,14 @@ class ApplicationController < ActionController::Base
     if session[:access_token]
       @access_token ||= OAuth2::AccessToken.new(oauth_client, session[:access_token])
     end
+  end
+
+  def register_path
+    "#{ENV['OAUTH_SERVER_URL']}/register"
+  end
+
+  def new_user_path
+    "#{ENV['OAUTH_SERVER_URL']}/organizations/#{current_user_org}/users/new"
   end
 
   private

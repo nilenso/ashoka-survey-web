@@ -9,6 +9,8 @@ en:
     log_in: "Log In"
     logout: "Log Out"
     logged_in_as: "Hello, %{username}!"
+    register: "Register"
+    create_user: "Create User"
 
   flash:
     survey_created: "Survey created successfully"
