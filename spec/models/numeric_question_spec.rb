@@ -61,5 +61,9 @@ describe NumericQuestion do
       numeric_question.answers << FactoryGirl.create( :answer_with_complete_response, :content=>100)
       numeric_question.max_value_for_report.should == 100
     end
+
+    it "returns 0 if there are no answers" do
+      numeric_question.max_value_for_report.should == 0
+    end
   end
 end

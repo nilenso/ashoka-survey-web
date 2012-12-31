@@ -17,7 +17,7 @@ class NumericQuestion < Question
   end
 
   def max_value_for_report
-    max_value || max_value_in_answers
+    max_value || max_value_in_answers || 0
   end
 
   private
