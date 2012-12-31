@@ -9,6 +9,8 @@ fr:
     log_in: "Connexion"
     logout: "Déconnexion"
     logged_in_as: "Bonjour, %{username}!"
+    register: "fr Register"
+    create_user: "fr Create User"
 
   flash:
     survey_created: "Enquête créé avec succès"

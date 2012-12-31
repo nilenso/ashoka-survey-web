@@ -104,8 +104,6 @@ describe ApplicationController do
     end
   end
 
-
-
   it "knows if the current user is a cso admin" do
     sign_in_as('cso_admin')
     controller.signed_in_as_cso_admin?.should be_true
@@ -142,6 +140,19 @@ describe ApplicationController do
       post :create
       response.should redirect_to('/')
       flash[:error].should_not be_nil
+    end
+  end
+
+  context "paths for user_owner tasks" do
+    it "returns the path to register an organization" do
+      controller.register_path.should match /#{ENV['OAUTH_SERVER_URL']}\/register/
+    end
+
+    it "returns the path to create a user" do
+      sign_in_as('cso_admin')
+      controller.new_user_path.should match /#{ENV['OAUTH_SERVER_URL']}/
+      controller.new_user_path.should match /#{controller.current_user_org}/
+      controller.new_user_path.should match /new/
     end
   end
 end
