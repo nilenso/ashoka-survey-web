@@ -87,7 +87,6 @@ body#build div#content{
 
       a.delete_question, a.delete_category {display: none;}
       &:hover{ background: $gray-xxlight;}
-      img{display: none;}
 
       &.active{
         background: $secondary-color-light;
