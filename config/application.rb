@@ -65,5 +65,12 @@ module SurveyWeb
 
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
+
+    # Add support for I18n Fallbacks
+    I18n.backend.class.send(:include, I18n::Backend::Fallbacks)
+    config.i18n.fallbacks = true
+
+    # Set I18n fallbacks
+    I18n.fallbacks.map('fr' => 'en')
   end
 end
