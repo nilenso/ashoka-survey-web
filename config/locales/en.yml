@@ -100,6 +100,8 @@ en:
       mark_identifier: "Mark as identifier?"
       saving_your_survey_message: "Saving your survey. Please don't close this page."
       loading_survey: "Loading your survey. Please wait."
+      add_options_in_bulk_help_text: "Enter a comma separated list of options"
+      add_options_in_bulk_label: "Add Options in Bulk"
 
     share_with_organizations:
       share_survey: "Share Survey and continue"
