@@ -8,10 +8,11 @@
 	{{^mandatory}}
 		<input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
 	{{/mandatory}}
-  <div class="upload_files">
-    <label><%= t("activerecord.attributes.question.image") %> </label>
-    <input name="image" class="fileupload" type="file" name="files[]">
-  </div>
+</div>
+
+<div class="upload_files">
+  <label><%= t("activerecord.attributes.question.image") %> </label>
+  <input name="image" class="fileupload" type="file" name="files[]">
 </div>
 
 {{^parent_id}}
