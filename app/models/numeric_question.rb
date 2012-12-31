@@ -23,7 +23,7 @@ class NumericQuestion < Question
   private
 
   def max_value_in_answers
-    answers.map(&:content).compact.max
+    answers.map(&:content).compact.select { |answer| answer.is_a? Integer }.max
   end
 
   def min_value_less_than_max_value
