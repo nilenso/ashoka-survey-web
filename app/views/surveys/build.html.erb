@@ -52,7 +52,7 @@
   $(document).ready(function(){
     window.notifications_view = new SurveyBuilder.Views.NotificationsView;
     window.loading_overlay = new SurveyBuilder.Views.LoadingOverlayView
-    window.loading_overlay.show_overlay()
+    window.loading_overlay.show_overlay("<%= t('.loading_survey') %>");
     window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView(<%= @survey.id %>);
     setTimeout(function(){
       $("#flash_messages").empty();

@@ -99,6 +99,7 @@ en:
       survey_finalized: "The survey was finalized"
       mark_identifier: "Mark as identifier?"
       saving_your_survey_message: "Saving your survey. Please don't close this page."
+      loading_survey: "Loading your survey. Please wait."
 
     share_with_organizations:
       share_survey: "Share Survey and continue"
