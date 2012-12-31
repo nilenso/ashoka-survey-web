@@ -26,7 +26,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
     $(this.el).children(".dummy_question_content").click (e) =>
       @show_actual(e)
 
-    $(this.el).children('.dummy_question_content').children(".delete_question").click (e) => @delete(e)
+    $(this.el).children('.dummy_question_content').children(".top_level_content").children(".delete_question").click (e) => @delete(e)
 
     return this
 
