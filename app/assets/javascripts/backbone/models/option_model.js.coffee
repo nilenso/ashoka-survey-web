@@ -60,7 +60,6 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     return unless @has_sub_questions()
     elements = _((this.get('questions')).concat(this.get('categories'))).sortBy('order_number')
     _.each elements, (question, counter) =>
-      console.log("HELLO")
       parent_question = this.get('question')
       _(question).extend({parent_question: parent_question, order_number: counter})
 
