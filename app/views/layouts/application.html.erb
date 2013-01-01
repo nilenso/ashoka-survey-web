@@ -15,6 +15,9 @@
     <div id="content" role="content">
       <%= render "layouts/flash", :flash => flash %> 
       <%= yield %>
+      <% unless Rails.env.production? %>
+        <div id='footnotes_holder'></div>
+      <% end %>
     </div>
 
     <%= render "layouts/footer" %>
