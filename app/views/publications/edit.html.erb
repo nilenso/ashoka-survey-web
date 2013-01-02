@@ -15,16 +15,19 @@
 
     <div class="publish-to-users">
       <h3>Publish to users</h3>
-      <fieldset>
-        <legend>Published to:</legend>
-        <ol class="published">
-          <% @published_users.each do |user| %>
-            <li>
-              <%= user.name %>
-            </li>
-          <% end %>
-        </ol>
-      </fieldset>
+      <% if @published_users.present? %>
+        <fieldset>
+          <legend>Published to:</legend>
+          <ol class="published">
+            <% @published_users.each do |user| %>
+              <li>
+                <%= user.name %>
+              </li>
+            <% end %>
+          </ol>
+        </fieldset>
+      <% end %>
+      
       <% if @unpublished_users.empty? %>
         <fieldset>
           <legend>Choose users to publish to:</legend>
@@ -39,16 +42,18 @@
 
     <div class="share-with-organizations">
       <h3>Share with an Organization</h3>
-      <fieldset>
-        <legend>Shared with:</legend>
-        <ol class="published">
-          <% @shared_organizations.each do |org| %>
-            <li>
-              <%= org.name %>
-            </li>
-          <% end %>
-        </ol>
-      </fieldset>
+      <% if @shared_organizations.present? %>
+        <fieldset>
+          <legend>Shared with:</legend>
+          <ol class="published">
+            <% @shared_organizations.each do |org| %>
+              <li>
+                <%= org.name %>
+              </li>
+            <% end %>
+          </ol>
+        </fieldset>
+      <% end %>
 
       <% if @survey.organization_id == current_user_org %>
         <% if @unshared_organizations.empty? %>
