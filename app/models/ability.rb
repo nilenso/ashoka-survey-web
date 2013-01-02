@@ -49,21 +49,11 @@ class Ability
           survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
         end
 
-        can :publish_to_users, Survey, own_and_shared_surveys(user_info) do |survey|
-          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
-        end
-
-        can :update_publish_to_users, Survey, own_and_shared_surveys(user_info) do |survey|
-          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
-        end
-
         can :build, Survey, :organization_id => user_info[:org_id]
         can :create, Survey
         can :edit, Survey, :organization_id => user_info[:org_id]
         can :update, Survey, :organization_id => user_info[:org_id]
         can :finalize, Survey, :organization_id => user_info[:org_id]
-        can :share_with_organizations, Survey, :organization_id => user_info[:org_id]
-        can :update_share_with_organizations, Survey, :organization_id => user_info[:org_id]
         can :destroy, Survey, :organization_id => user_info[:org_id], :finalized => false
         can :report, Survey, :organization_id => user_info[:org_id]
 

@@ -38,16 +38,12 @@ describe "Abilities" do
         let(:finalized_survey) { survey = FactoryGirl.create(:survey, :organization_id => 5, :finalized => true) }
 
         it { should be_able_to(:edit, survey) }
-        it { should be_able_to(:share_with_organizations, survey) }
-        it { should be_able_to(:update_share_with_organizations, survey) }
         it { should be_able_to(:build, survey) }
         it { should be_able_to(:destroy, survey) }
         it { should_not be_able_to(:destroy, finalized_survey) }
         it { should be_able_to(:read, survey) }
         it { should be_able_to(:questions_count, survey) }
         it { should be_able_to(:finalize, survey) }
-        it { should be_able_to(:publish_to_users, survey) }
-        it { should be_able_to(:update_publish_to_users, survey) }
         it { should be_able_to(:report, survey) }
         it { should be_able_to(:update, survey) }
 
@@ -107,8 +103,6 @@ describe "Abilities" do
         it { should be_able_to(:read, survey) }
         it { should be_able_to(:questions_count, survey) }
         it { should be_able_to :duplicate, survey }
-        it { should be_able_to(:publish_to_users, survey) }
-        it { should be_able_to(:update_publish_to_users, survey) }
 
         it { should be_able_to(:edit_publication, survey) }
         it { should be_able_to(:update_publication, survey) }
