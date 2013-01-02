@@ -7,8 +7,7 @@ describe NumericQuestion do
   it { should validate_numericality_of :min_value }
 
   it "is a question with type = 'NumericQuestion'" do
-    x = NumericQuestion.create(:content => "hello",:order_number => 11)
-    p x.errors
+    NumericQuestion.create(:content => "hello",:order_number => 11)
     question = Question.find_by_content("hello")
     question.should be_a NumericQuestion
     question.type.should == "NumericQuestion"
