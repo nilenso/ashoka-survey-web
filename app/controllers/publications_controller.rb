@@ -42,9 +42,9 @@ class PublicationsController < ApplicationController
 
   def require_organizations_or_users_to_be_selected
     survey = Survey.find(params[:survey_id])
-    return true if survey.published? || (params[:survey][:public] == '1')
     @users = Sanitizer.clean_params(params[:survey][:user_ids])
     @organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
+    return true if survey.published? || (params[:survey][:public] == '1')
     if @users.blank? && @organizations.blank?
       flash[:error] = t "flash.users_and_organizations_blank"
       redirect_to(:back)
