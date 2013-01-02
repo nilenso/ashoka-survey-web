@@ -13,6 +13,6 @@ class RadioQuestion < Question
   private
 
   def no_answers?
-    answers.select { |answer| answer.response.complete? }.blank?
+    answers.joins(:response).where(:responses => { :status => 'complete' }).count == 0
   end
 end
