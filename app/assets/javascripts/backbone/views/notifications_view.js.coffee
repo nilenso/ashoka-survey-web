@@ -7,13 +7,13 @@ class SurveyBuilder.Views.NotificationsView extends Backbone.View
   set_notice: (message) =>
     @clear_text()
     $(this.el).children('p').html(message)
-    $(this.el).children('p').addClass('notice')
+    $(this.el).children('p').addClass('flash notice')
     setTimeout(this.clear_text, this.CLEAR_TIMEOUT)
 
   set_error: (message) =>
     @clear_text()
     $(this.el).children('p').html(message)
-    $(this.el).children('p').addClass('error')
+    $(this.el).children('p').addClass('flash error')
     setTimeout(this.clear_text, this.CLEAR_TIMEOUT)
 
   show_spinner: =>
