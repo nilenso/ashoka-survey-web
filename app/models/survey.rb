@@ -77,7 +77,7 @@ class Survey < ActiveRecord::Base
   end
 
   def published?
-    !participating_organizations.empty? || !survey_users.empty?
+    !participating_organizations.empty? || !survey_users.empty? || public?
   end
 
   def participating_organization_ids

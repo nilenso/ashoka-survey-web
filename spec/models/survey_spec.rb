@@ -248,6 +248,12 @@ describe Survey do
       survey.should be_published
     end
 
+    it "if it is public" do
+      survey = FactoryGirl.create(:survey, :finalized => true)
+      survey.publicize()
+      survey.should be_published
+    end
+
   end
 
   context "when finding children at the first level" do
