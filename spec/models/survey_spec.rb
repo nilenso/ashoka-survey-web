@@ -343,4 +343,18 @@ describe Survey do
       Survey.with_questions.count.should == (5 * 5)
     end
   end
+
+  context "publicize" do
+    it "makes the survey public" do
+      survey = FactoryGirl.create(:survey, :finalized => true)
+      survey.publicize()
+      survey.reload.should be_public
+    end
+
+    it "updates the publisged on date forthe survey" do
+      survey = FactoryGirl.create(:survey, :finalized => true)
+      survey.publicize()
+      survey.reload.published_on.should_not be_nil
+    end
+  end
 end

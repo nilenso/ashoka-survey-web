@@ -76,6 +76,11 @@ describe PublicationsController do
       survey.reload.should be_public
     end
 
+    it "updates the published_on for a survey if it is crowd sourced" do
+      put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => '1'}
+      survey.reload.published_on.should_not be_nil
+    end
+
     it "redirects to the previous page with an error if the validation fails" do
       put :update, :survey_id => survey.id, :survey => {:expiry_date => "bad_expiry_date", :user_ids => [1, 2]}
       response.should redirect_to "http://google.com"

@@ -112,6 +112,11 @@ class Survey < ActiveRecord::Base
     responses.where(:status => 'incomplete').count
   end
 
+  def publicize
+    self.public = true
+    set_published_on
+  end
+
   private
 
   def generate_auth_key
