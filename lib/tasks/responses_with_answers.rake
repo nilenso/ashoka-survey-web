@@ -47,10 +47,15 @@ namespace :db do
     number.to_i.times do |i|
       questions = survey.questions
 
-      r = FactoryGirl.create :response, :survey_id => survey.id
+      r = Response.new 
+      r.survey = survey
+      r.organization_id = survey.organization_id
+      r.user_id = rand(1..10)
+      r.save
 
       for question in questions
-        answer = FactoryGirl.create :answer, :response_id => r.id
+        answer = Answer.new
+        answer.response_id = r.id
         answer.question_id = question.id
         answer.content = answer_for(question, answer)
         p answer.errors unless answer.save
