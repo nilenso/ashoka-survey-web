@@ -18,3 +18,4 @@ class SurveyBuilder.Views.Dummies.SurveyDetailsView extends Backbone.View
     $(this.el).trigger("dummy_click")
     $(this.model.actual_view.el).show()
     $(this.el).addClass("active")
+    $(this.el).trigger("settings_pane_move")
