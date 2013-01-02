@@ -30,6 +30,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   add_survey_details: (survey_model) =>
     template = $("#dummy_survey_details_template").html()
     @dummy_survey_details = new SurveyBuilder.Views.Dummies.SurveyDetailsView({ model: survey_model, template: template})
+    @dummy_survey_details.show_actual()
 
   render: =>
     ($(this.el).find("#dummy_survey_details").append(@dummy_survey_details.render().el))
