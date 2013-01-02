@@ -145,5 +145,23 @@ describe PublicationsController do
       put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2], :user_ids => [1, 2], :expiry_date => survey.expiry_date}
       response.should redirect_to surveys_path
     end
+
+  end
+
+  context "when access is unauthorized" do
+
+    it "does not allow editing" do
+      sign_in_as('field_agent')
+      put :edit, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2], :user_ids => [1, 2], :expiry_date => survey.expiry_date}
+      response.should_not be_ok
+      response.should redirect_to root_path
+    end
+
+    it "does not allow updating" do
+      sign_in_as('field_agent')
+      put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2], :user_ids => [1, 2], :expiry_date => survey.expiry_date}
+      response.should_not be_ok
+      response.should redirect_to root_path
+    end
   end
 end

@@ -4,7 +4,7 @@ class PublicationsController < ApplicationController
 
   def edit
     @survey = Survey.find(params[:survey_id])
-    authorize! :edit, @survey
+    authorize! :edit_publication, @survey
     field_agents = @survey.users_for_organization(access_token, current_user_org)
     @published_users = field_agents[:published]
     @unpublished_users = field_agents[:unpublished]
@@ -16,7 +16,7 @@ class PublicationsController < ApplicationController
 
   def update
     survey = Survey.find(params[:survey_id])
-    authorize! :update, survey
+    authorize! :update_publication, survey
     survey.update_attributes({:expiry_date => params[:survey][:expiry_date]})
     survey.update_attributes({:public => params[:survey][:public]})
     if survey.save

@@ -1,6 +1,15 @@
 class Ability
   include CanCan::Ability
 
+  def own_and_shared_surveys(user_info)
+    [
+      'surveys.id in (SELECT "surveys".id FROM "surveys"
+      LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id
+      WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
+      user_info[:org_id], user_info[:org_id]
+    ]
+  end
+
   def initialize(user_info)
 
 
@@ -20,43 +29,31 @@ class Ability
         can :read, Response # TODO: Verify this
         #can :manage, Response, :session_token => user_info[:session_token]
       elsif role == 'cso_admin'
-        can :read, Survey, ['
-          surveys.id in (SELECT "surveys".id FROM "surveys"
-          LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id
-          WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
-        user_info[:org_id], user_info[:org_id]] do |survey|
+        can :read, Survey, own_and_shared_surveys(user_info) do |survey|
           survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
         end
 
-        can :questions_count, Survey, ['
-          surveys.id in (SELECT "surveys".id FROM "surveys"
-          LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id
-          WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
-        user_info[:org_id], user_info[:org_id]] do |survey|
+        can :questions_count, Survey, own_and_shared_surveys(user_info) do |survey|
           survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
         end
 
-        can :duplicate, Survey, ['
-          surveys.id in (SELECT "surveys".id FROM "surveys"
-          LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id
-          WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
-        user_info[:org_id], user_info[:org_id]] do |survey|
+        can :duplicate, Survey, own_and_shared_surveys(user_info) do |survey|
           survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
         end
 
-        can :publish_to_users, Survey, ['
-          surveys.id in (SELECT "surveys".id FROM "surveys"
-          LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id
-          WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
-        user_info[:org_id], user_info[:org_id]] do |survey|
+        can :edit_publication, Survey, own_and_shared_surveys(user_info) do |survey|
           survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
         end
 
-        can :update_publish_to_users, Survey, ['
-          surveys.id in (SELECT "surveys".id FROM "surveys"
-          LEFT OUTER JOIN participating_organizations ON participating_organizations.survey_id = surveys.id
-          WHERE (surveys.organization_id = ? OR participating_organizations.organization_id = ?))',
-        user_info[:org_id], user_info[:org_id]] do |survey|
+        can :update_publication, Survey, own_and_shared_surveys(user_info) do |survey|
+          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
+        end
+
+        can :publish_to_users, Survey, own_and_shared_surveys(user_info) do |survey|
+          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
+        end
+
+        can :update_publish_to_users, Survey, own_and_shared_surveys(user_info) do |survey|
           survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
         end
 
