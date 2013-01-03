@@ -8,6 +8,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'dummy_click': 'handle_dummy_click'
     'settings_pane_move': 'settings_pane_move'
     'click #save': 'save_all_questions'
+    'click #finalize': 'finalize'
 
   initialize:(survey_id) =>
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
@@ -78,6 +79,13 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   switch_tab: =>
     $("#sidebar").tabs('select', 1)
+
+  finalize: =>
+    if confirm(I18n.t('surveys.confirm_finalize'))
+      $(this.el).bind "ajaxStop.finalize", =>
+        $(this.el).unbind "ajaxStop.finalize"
+        $("#finalize_hidden").click()
+      @save_all_questions()
 
   save_all_questions: =>
     $(this.el).find("#save input").prop('disabled', true)
