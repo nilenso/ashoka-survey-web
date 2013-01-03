@@ -62,7 +62,8 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     window.loading_overlay.show_overlay("Adding your options. Please wait.")    
     _.delay(=>
       @model.destroy_options()
-      @add_new_option_model(content) for content in parsed_csv
+      for content in parsed_csv
+        @add_new_option_model(content) if content && content.trim().length > 0
       window.loading_overlay.hide_overlay()
     , 10)
     
