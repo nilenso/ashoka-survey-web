@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.6'
-gem 'thin'
+gem 'unicorn'
 gem 'pg'
 gem 'formtastic'
 gem 'will_paginate'
