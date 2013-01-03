@@ -69,7 +69,7 @@ describe ResponsesController do
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 1)
       get :index, :survey_id => survey.id
-      assigns(:user_names).should == [{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}]
+      assigns(:user_names).should == {1 => "Bob", 2 => "John"}
     end
 
     context "excel" do

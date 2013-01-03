@@ -134,6 +134,7 @@ fr:
       download_excel: "Télécharger Excel"
       incomplete: Incomplet
       complete: "Compléter"
+      added_by: "fr Added By"
 
     edit:
       delete: "Delete-fr"

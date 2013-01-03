@@ -130,7 +130,12 @@ en:
       response_created: "Response successfully created!"
 
     index:
-      list_of_responses: "List of Responses"
+      add_response: Add response
+      download_excel: Download Excel
+      incomplete: Incomplete
+      complete: Complete
+      list_of_responses: List of Responses
+      added_by: Added by
 
     edit:
       delete: "Delete"

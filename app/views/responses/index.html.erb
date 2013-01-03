@@ -13,6 +13,7 @@
           <th><%= answer.question_content %> </th>
         <% end %>
         <th><%= t("activerecord.attributes.response.location") %></th>
+        <th><%= t(".added_by") %></th>
         <th>&nbsp;</th>
         <th class="actions">&nbsp;</th>
       </thead>
@@ -30,6 +31,9 @@
           <% end %>
           <td>
             <%= response.location %>
+          </td>
+          <td>
+            <%= @user_names[response.user_id] %>
           </td>
           <td>
           <% if response.status == 'complete' %>
