@@ -34,7 +34,7 @@ describe User do
 
   it "gets user ids and names for ids passed in" do
     user_ids = [1, 2]
-    User.names_for_ids(@access_token, user_ids).should == [{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}]
+    User.names_for_ids(@access_token, user_ids).should == { 1 => "Bob", 2 => "John"}
   end
 
 end

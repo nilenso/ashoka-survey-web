@@ -20,7 +20,11 @@ class User
   end
 
   def self.names_for_ids(client, user_ids)
-    client.get("/api/users/names_for_ids", :params => {:user_ids => user_ids.to_json}).parsed
+    users = client.get("/api/users/names_for_ids", :params => {:user_ids => user_ids.to_json}).parsed
+    users.inject({}) do |hash, user|
+      hash[user['id']] = user['name']
+      hash
+    end
   end
 
 end
