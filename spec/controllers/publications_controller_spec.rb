@@ -72,8 +72,13 @@ describe PublicationsController do
     end
 
     it "makes the survey public" do
-      put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => '1'}
+      put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => "1"}
       survey.reload.should be_public
+    end
+
+    it "doesn't make the survey public if not chosen by the user" do
+      put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => "0"}
+      survey.reload.should_not be_public
     end
 
     it "updates the published_on for a survey if it is crowd sourced" do
