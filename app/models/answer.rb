@@ -59,7 +59,7 @@ class Answer < ActiveRecord::Base
 
   def photo_in_base64
     if photo?
-      Base64.encode64(File.read(photo.path(:thumb)))
+      Base64.encode64(open(photo.url(:thumb)).read)
     end
   end
 
