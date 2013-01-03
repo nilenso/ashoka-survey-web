@@ -8,11 +8,14 @@ class ResponsesController < ApplicationController
 
   def index
     respond_to do |format|
-      format.html { @responses = @responses.paginate(:page => params[:page], :per_page => 10) }
+      format.html do
+        @user_names = User.names_for_ids(access_token, @responses.map(&:user_id).uniq)
+        @responses = @responses.paginate(:page => params[:page], :per_page => 10)
+      end
       @complete_responses = @responses.select { |response| response.complete? }
-      format.xlsx {
+      format.xlsx do
         response.headers["Content-Disposition"] = "attachment; filename=\"#{@complete_responses.first.try(:filename_for_excel)}\""
-      }
+      end
     end
   end
 

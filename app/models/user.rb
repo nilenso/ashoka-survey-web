@@ -18,4 +18,9 @@ class User
   def self.json_to_user(user_json)
     User.new(user_json['id'], user_json['name'], user_json['role'])
   end
+
+  def self.names_for_ids(client, user_ids)
+    client.get("/api/users/names_for_ids", :params => {:user_ids => user_ids.to_json}).parsed
+  end
+
 end

@@ -44,6 +44,17 @@ describe ResponsesController do
   end
 
   context "GET 'index'" do
+    before(:each) do
+      session[:access_token] = "123"
+      response = mock(OAuth2::Response)
+      access_token = mock(OAuth2::AccessToken)
+      names_response = mock(OAuth2::Response)
+      controller.stub(:access_token).and_return(access_token)
+
+      access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
+      names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
+    end
+
     it "renders the list of responses for a survey if a cso admin is signed in" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       res = FactoryGirl.create(:response, :survey => survey,
@@ -51,6 +62,14 @@ describe ResponsesController do
       get :index, :survey_id => survey.id
       response.should be_ok
       assigns(:responses).should == Response.find_all_by_survey_id(survey.id)
+    end
+
+    it "gets the user names for all the user_ids of the responses " do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res = FactoryGirl.create(:response, :survey => survey,
+                               :organization_id => 1, :user_id => 1)
+      get :index, :survey_id => survey.id
+      assigns(:user_names).should == [{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}]
     end
 
     context "excel" do
