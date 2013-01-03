@@ -28,9 +28,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
         group.append(sub_question.render().el)
       $(this.el).append(group) unless _(option.sub_questions).isEmpty()
 
-    if this.model.has_drop_down_options()
-      option_value = this.model.get_first_option_value()
-      $(this.el).find('option').text(option_value)
+    @render_dropdown()
 
     return this
 
@@ -38,6 +36,11 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     collection.each( (model) =>
       this.add_new_option(model)
     )
+
+  render_dropdown: () =>
+    if this.model.has_drop_down_options()
+      option_value = this.model.get_first_option_value()
+      $(this.el).find('option').text(option_value)
 
   add_new_option: (model, options={}) =>
     switch this.model.get('type')
@@ -54,6 +57,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     view.on('render_added_sub_question', this.render, this)
     view.on('destroy:sub_question', this.reorder_questions, this)
     $(this.el).children('.dummy_question_content').children('.children_content').append(view.render().el)
+    @render_dropdown()
 
   delete_option_view: (model) =>
     option = _(@options).find((option) => option.model == model )
