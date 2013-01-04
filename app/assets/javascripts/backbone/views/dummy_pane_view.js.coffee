@@ -7,7 +7,14 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @questions = []
     @survey_model = survey_model
     @add_survey_details(survey_model)
-    ($(this.el).find("#dummy_questions")).sortable({update : this.reorder_questions})
+    ($(this.el).find("#dummy_questions")).sortable({
+      stop : ((event, ui) =>
+        window.loading_overlay.show_overlay("Reordering Questions")
+        _.delay(=>
+          this.reorder_questions(event,ui)
+        , 10)
+      )
+    })
 
   add_question: (type, model, parent) =>
     view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model)
@@ -56,6 +63,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       question.reorder_questions() if question instanceof SurveyBuilder.Views.Dummies.CategoryView
       question.reorder_questions() if question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
     @sort_questions_by_order_number()
+    window.loading_overlay.hide_overlay()
 
   sort_questions_by_order_number: =>
     @questions = _(@questions).sortBy (question) =>
