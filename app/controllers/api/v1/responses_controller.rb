@@ -8,10 +8,9 @@ module Api::V1
       response = Response.new
       response.user_id = params[:user_id]
       response.organization_id = params[:organization_id]
-      answers_attributes = params[:response].delete(:answers_attributes)
-      response.update_attributes(params[:response]) # Response isn't created before the answers, so we need to create the answers after this.
+      response.update_attributes(params[:response].except(:answers_attributes)) # Response isn't created before the answers, so we need to create the answers after this.
       response.validating if params[:response][:status] == "complete"
-      response.update_attributes({:answers_attributes => answers_attributes}) if response.save
+      response.update_attributes({:answers_attributes => params[:response][:answers_attributes]}) if response.save
 
       if response.incomplete? && response.valid?
         render :json => response.to_json_with_answers_and_choices
@@ -28,10 +27,9 @@ module Api::V1
     def update
       response = Response.find_by_id(params[:id])
       return render :nothing => true, :status => :gone if response.nil?
-      answers_attributes = params[:response].delete(:answers_attributes)
-      response.merge_status(params[:response])
+      response.merge_status(params[:response].except(:answers_attributes))
       response.validating if response.complete?
-      answers_to_update = response.select_new_answers(answers_attributes)
+      answers_to_update = response.select_new_answers(params[:response][:answers_attributes])
       response.update_attributes({ :answers_attributes => answers_to_update }) if response.save
       if response.incomplete? && response.valid?
         render :json => response.to_json_with_answers_and_choices
