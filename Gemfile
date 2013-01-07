@@ -53,8 +53,6 @@ group :test, :development do
   gem "shoulda-matchers"
   gem 'growl'
   gem 'forgery'
-  gem 'capybara'
-  gem 'capybara-webkit'
   gem 'guard-livereload'
   gem 'database_cleaner'
   gem "rails_best_practices"

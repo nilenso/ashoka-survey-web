@@ -47,16 +47,6 @@ GEM
     binding_of_caller (0.6.8)
     builder (3.0.0)
     cancan (1.6.8)
-    capybara (1.1.2)
-      mime-types (>= 1.16)
-      nokogiri (>= 1.3.3)
-      rack (>= 1.0.0)
-      rack-test (>= 0.5.4)
-      selenium-webdriver (~> 2.0)
-      xpath (~> 0.1.4)
-    capybara-webkit (0.12.1)
-      capybara (>= 1.0.0, < 1.2)
-      json
     childprocess (0.3.5)
       ffi (~> 1.0, >= 1.0.6)
     chunky_png (1.2.6)
@@ -163,8 +153,6 @@ GEM
     kgio (2.7.4)
     launchy (2.1.0)
       addressable (~> 2.2.6)
-    libwebsocket (0.1.5)
-      addressable
     listen (0.4.7)
       rb-fchange (~> 0.0.5)
       rb-fsevent (~> 0.9.1)
@@ -277,11 +265,6 @@ GEM
       railties (~> 3.2.0)
       sass (>= 3.1.10)
       tilt (~> 1.3)
-    selenium-webdriver (2.25.0)
-      childprocess (>= 0.2.5)
-      libwebsocket (~> 0.1.3)
-      multi_json (~> 1.0)
-      rubyzip
     sexp_processor (4.0.1)
     shoulda-matchers (1.2.0)
       activesupport (>= 3.0.0)
@@ -312,8 +295,6 @@ GEM
       rack
       raindrops (~> 0.7)
     will_paginate (3.0.3)
-    xpath (0.1.4)
-      nokogiri (~> 1.3)
 
 PLATFORMS
   ruby
@@ -324,8 +305,6 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   cancan
-  capybara
-  capybara-webkit
   coffee-rails (~> 3.2.1)
   commands
   compass-normalize (~> 1.1.2)

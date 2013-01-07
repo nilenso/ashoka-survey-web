@@ -7,11 +7,7 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'rubygems'
 require 'spork'
-require 'capybara/rails'
-require 'capybara/rspec'
 require "paperclip/matchers"
-
-Capybara.javascript_driver = :webkit
 
 Spork.prefork do
   LOGGED_IN_ORG_ID = 1
@@ -40,7 +36,7 @@ Spork.prefork do
     })
 
     config.before(:each) do
-      DatabaseCleaner.strategy = Capybara.current_driver == :webkit ? :truncation : :transaction
+      DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.start
     end
 
