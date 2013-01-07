@@ -26,4 +26,9 @@ describe ImageUploader do
       @uploader.medium.should be_no_larger_than(300, 300)
     end
   end
+
+  it "knows the filename of the image" do
+    @uploader.filename.should == "sample.jpg"
+    ImageUploader.new(@question, :image).filename.should_not be
+  end
 end
