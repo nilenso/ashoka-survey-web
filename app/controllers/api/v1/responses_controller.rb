@@ -2,7 +2,7 @@ module Api::V1
     class ResponsesController < APIApplicationController
       authorize_resource
 
-      before_filter :decode_base64_images, :except => :image_upload
+      before_filter :decode_base64_images
 
       def create
         response = Response.new
