@@ -2,15 +2,13 @@ module Api::V1
   class ResponsesController < APIApplicationController
     authorize_resource
 
-    before_filter :decode_base64_images
+    before_filter :decode_base64_images, :convert_to_datetime
 
     def create
       response = Response.new
       response.user_id = params[:user_id]
       response.organization_id = params[:organization_id]
       answers_attributes = params[:response].delete(:answers_attributes)
-      convert_to_datetime!(answers_attributes) unless answers_attributes.blank?
-      updated_at_to_datetime!(params[:response]) unless params[:response].nil?
       response.update_attributes(params[:response]) # Response isn't created before the answers, so we need to create the answers after this.
       response.validating if params[:response][:status] == "complete"
       response.update_attributes({:answers_attributes => answers_attributes}) if response.save
@@ -31,8 +29,6 @@ module Api::V1
       response = Response.find_by_id(params[:id])
       return render :nothing => true, :status => :gone if response.nil?
       answers_attributes = params[:response].delete(:answers_attributes)
-      convert_to_datetime!(answers_attributes) unless answers_attributes.blank?
-      updated_at_to_datetime!(params[:response]) unless params[:response].nil?
       response.merge_status(params[:response])
       response.validating if response.complete?
       answers_to_update = response.select_new_answers(answers_attributes)
@@ -50,12 +46,6 @@ module Api::V1
 
     private
 
-    def convert_to_datetime!(answers_attributes)
-      answers_attributes.each do |key, answer_attributes|
-        answer_attributes["updated_at"] = Time.at(answer_attributes["updated_at"].to_i).to_s
-      end
-    end
-
     def decode_base64_images
       answers_attributes = params[:response][:answers_attributes] || []
       answers_attributes.each do |_,answer|
@@ -69,14 +59,12 @@ module Api::V1
       end
     end
 
-    def updated_at_to_datetime!(response_attr)
-      response_attr['updated_at'] = Time.at(response_attr['updated_at'].to_i).to_s
-    end
-
-    def convert_datetime(params)
-      convert_to_datetime!(params[:answers_attributes]) unless answers_attributes.blank?
-      updated_at_to_datetime!(params[:response]) unless params[:response].nil?
-
+    def convert_to_datetime
+      answers_attributes = params[:response][:answers_attributes]
+      answers_attributes.each do |key, answer_attributes|
+        answer_attributes["updated_at"] = Time.at(answer_attributes["updated_at"].to_i).to_s
+      end unless answers_attributes.blank?
+      params[:response][:updated_at] = Time.at(params[:response][:updated_at].to_i).to_s unless params[:response].nil?
     end
   end
 end
