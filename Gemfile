@@ -23,6 +23,7 @@ gem 'gmaps4rails'
 gem 'axlsx_rails'
 gem 'carrierwave'
 gem 'rmagick'
+gem "fog"
 
 # Gems used only for assets and not required
 # in production environments by default.
