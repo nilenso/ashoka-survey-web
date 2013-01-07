@@ -175,13 +175,11 @@ describe Answer do
 
     context "description" do
       subject { FactoryGirl.create(:answer, :question => FactoryGirl.create(:question))}
-      it { should have_attached_file(:photo) }
-      it { should validate_attachment_content_type(:photo).
-           allowing('image/png').
-           rejecting('image/gif') }
+      it { should respond_to(:photo) }
       it "should have a maximum file size as in question's max length" do
         question = FactoryGirl.create(:question, :max_length => 2, :type => "PhotoQuestion")
-        answer = FactoryGirl.build(:answer, :question => question, :photo_file_size => 3.megabytes)
+        answer = FactoryGirl.build(:answer_with_image, :question => question)
+        answer.photo.stub(:size).and_return(3.megabytes)
         answer.should_not be_valid
       end
     end
@@ -245,7 +243,7 @@ describe Answer do
     it "returns a base64-encoded of the image if it exists" do
       question = FactoryGirl.create :question, :type => 'PhotoQuestion'
       answer = FactoryGirl.create :answer_with_image, :question => question    
-      answer.photo_in_base64.should == Base64.encode64(File.read(answer.photo.path(:thumb)))
+      answer.photo_in_base64.should == Base64.encode64(answer.photo.thumb.file.read)
     end
   end
 
