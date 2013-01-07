@@ -68,7 +68,7 @@ class Answer < ActiveRecord::Base
 
   def maximum_photo_size
     if question.type == "PhotoQuestion"
-      if question.max_length && question.max_length.megabytes < photo_file_size
+      if question.max_length && photo_file_size && question.max_length.megabytes < photo_file_size
         errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
       elsif photo_file_size && 5.megabytes < photo_file_size
         errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
