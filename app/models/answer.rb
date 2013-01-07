@@ -59,8 +59,7 @@ class Answer < ActiveRecord::Base
 
   def photo_in_base64
     if photo?
-      return Base64.encode64(open(photo.url(:thumb)).read) if Paperclip::Attachment.default_options[:storage] == :s3
-      return Base64.encode64(File.read(photo.path(:thumb)))
+      Base64.encode64(File.read(photo.path(:thumb)))
     end
   end
 

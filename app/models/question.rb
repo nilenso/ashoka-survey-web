@@ -19,8 +19,7 @@ class Question < ActiveRecord::Base
   end
   def image_in_base64
     if image?
-      return Base64.encode64(open(image.url(:thumb)).read) if Paperclip::Attachment.default_options[:storage] == :s3
-      return Base64.encode64(File.read(image.path(:thumb)))
+      Base64.encode64(File.read(image.path(:thumb)))
     end
   end
 
