@@ -199,7 +199,7 @@ describe Question do
 
   it "returns its image as a base64-encoded string" do
     question = FactoryGirl.create :question_with_image
-    question.image_in_base64.should == Base64.encode64(File.read(question.image.path(:thumb)))
+    question.image_in_base64.should == Base64.encode64(File.read(question.image.thumb.path))
   end
 
   include_examples 'a question'

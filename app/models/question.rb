@@ -7,19 +7,19 @@ class Question < ActiveRecord::Base
   attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number, :parent_id, :identifier, :category_id
   validates_presence_of :content
   has_many :answers, :dependent => :destroy
-  has_attached_file :image, :styles => { :medium => "300x300>", :thumb => "100x100>" }
+  mount_uploader :image, ImageUploader
   validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id, :category_id], :allow_nil => true
 
   default_scope :order => 'order_number'
   delegate :question, :to => :parent, :prefix => true
 
   def image_url
-    return image.url(:thumb) if image.exists?
-    nil
+    return image.thumb.url if image.file
   end
+
   def image_in_base64
-    if image?
-      Base64.encode64(File.read(image.path(:thumb)))
+    if image.thumb.file.try(:exists?)
+      Base64.encode64(image.thumb.file.read)
     end
   end
 

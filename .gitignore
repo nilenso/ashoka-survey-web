@@ -24,3 +24,4 @@ public/assets/
 coverage/
 .rvmrc
 db/database.yml
+public/uploads
