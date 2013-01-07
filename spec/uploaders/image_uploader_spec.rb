@@ -28,7 +28,6 @@ describe ImageUploader do
   end
 
   it "knows the filename of the image" do
-    @uploader.filename.should == "sample.jpg"
-    ImageUploader.new(@question, :image).filename.should_not be
+    @uploader.filename.should == File.basename(@uploader.path)
   end
 end

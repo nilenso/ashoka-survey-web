@@ -210,7 +210,7 @@ describe Answer do
       it "returns the `image_url` for a PhotoQuestion" do
         question = FactoryGirl.create :question, :type => 'PhotoQuestion'
         answer = FactoryGirl.create :answer_with_image, :question => question
-        answer.content_for_excel('http://localhost:3000').should =~ /.*localhost.*3000.*sample\.jpg\w*/
+        answer.content_for_excel('http://localhost:3000').should =~ /.*localhost.*3000.*\w*/
       end
 
       it "returns the value of the `content` column for all other types" do

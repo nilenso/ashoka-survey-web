@@ -59,7 +59,7 @@ module Api::V1
             first_answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
             post :create, :survey_id => survey.id, :response => resp, :user_id => 15, :organization_id => 42
             second_answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
-            first_answer.photo.filename.should_not == second_answer.photo.filename
+            File.basename(first_answer.photo.path).should_not == File.basename(second_answer.photo.path)
           end
         end
 
