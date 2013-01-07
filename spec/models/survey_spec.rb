@@ -86,6 +86,12 @@ describe Survey do
       new_survey.name.should =~ /\(copy\)/i
     end
 
+    it "sets the published_on to nil" do
+      survey = FactoryGirl.create :survey_with_questions, :published_on => Date.tomorrow
+      new_survey = survey.duplicate
+      new_survey.published_on.should == nil
+    end
+
     it "saves the survey so it has an ID" do
       survey = FactoryGirl.create :survey_with_questions
       expect { survey.duplicate }.to change { Survey.count }.by 1

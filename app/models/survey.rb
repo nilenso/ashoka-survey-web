@@ -59,6 +59,7 @@ class Survey < ActiveRecord::Base
     survey.finalized = false
     survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
     survey.organization_id = options[:organization_id] if options[:organization_id]
+    survey.published_on = nil
     survey.save(:validate => false)
     survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
     survey
