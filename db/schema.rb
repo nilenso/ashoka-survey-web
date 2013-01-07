@@ -11,15 +11,16 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130107112231) do
+ActiveRecord::Schema.define(:version => 20130107171153) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
     t.integer  "question_id"
-    t.datetime "created_at",  :null => false
-    t.datetime "updated_at",  :null => false
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
     t.integer  "response_id"
     t.string   "photo"
+    t.string   "photo_secure_token"
   end
 
   add_index "answers", ["question_id"], :name => "index_answers_on_question_id"
@@ -66,18 +67,19 @@ ActiveRecord::Schema.define(:version => 20130107112231) do
   create_table "questions", :force => true do |t|
     t.text     "content"
     t.integer  "survey_id"
-    t.datetime "created_at",                      :null => false
-    t.datetime "updated_at",                      :null => false
-    t.boolean  "mandatory",    :default => false
+    t.datetime "created_at",                            :null => false
+    t.datetime "updated_at",                            :null => false
+    t.boolean  "mandatory",          :default => false
     t.integer  "max_length"
     t.string   "type"
     t.integer  "max_value"
     t.integer  "min_value"
     t.integer  "order_number"
     t.integer  "parent_id"
-    t.boolean  "identifier",   :default => false
+    t.boolean  "identifier",         :default => false
     t.integer  "category_id"
     t.string   "image"
+    t.string   "photo_secure_token"
   end
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"
