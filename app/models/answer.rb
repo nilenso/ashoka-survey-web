@@ -13,8 +13,9 @@ class Answer < ActiveRecord::Base
   has_many :choices, :dependent => :destroy
   validate :date_should_be_valid
   attr_accessible :photo
-  has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>"}
-  validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
+  #has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>"}
+  #validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
+  mount_uploader :photo, ImageUploader
   validate :maximum_photo_size
   validates_numericality_of :content, :if => Proc.new {|answer| (answer.content.present?) && (answer.question.type == 'NumericQuestion') }
   after_save :touch_multi_choice_answer
@@ -59,7 +60,7 @@ class Answer < ActiveRecord::Base
 
   def photo_in_base64
     if photo?
-      Base64.encode64(File.read(photo.path(:thumb)))
+      Base64.encode64(photo.thumb.file.read)
     end
   end
 
@@ -67,9 +68,9 @@ class Answer < ActiveRecord::Base
 
   def maximum_photo_size
     if question.type == "PhotoQuestion"
-      if question.max_length && photo_file_size && question.max_length.megabytes < photo_file_size
+      if question.max_length && photo && question.max_length.megabytes < photo.size
         errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
-      elsif photo_file_size && 5.megabytes < photo_file_size
+      elsif photo && 5.megabytes < photo.size
         errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
       end
     end
