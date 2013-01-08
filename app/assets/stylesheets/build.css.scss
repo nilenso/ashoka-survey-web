@@ -178,6 +178,9 @@ body#build div#content{
   .form-actions{
     border-top: solid 2px $secondary-color-light; padding-top: 10px;
     input[type="submit"], input[type="button"]{float: right;}
+    input.hidden {
+      display: none;
+    }
   }
 }
 
