@@ -9,12 +9,15 @@ require 'rubygems'
 require 'spork'
 require "paperclip/matchers"
 
-CarrierWave.configure do |config|
-  config.storage = :file
-  config.enable_processing = false
-end
-
 Spork.prefork do
+
+  Fog.mock!
+
+  CarrierWave.configure do |config|
+    config.storage = :file
+    config.enable_processing = false
+  end
+  
   LOGGED_IN_ORG_ID = 1
   Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
 

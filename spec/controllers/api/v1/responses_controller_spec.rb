@@ -40,7 +40,9 @@ module Api::V1
         end
 
         context "for photo uploading" do
-          it "accepts an image for a PhotoQuestion in Base64 format" do
+          before(:each) { ImageUploader.storage = :file }
+
+          it "accepts an image for a PhotoQuestion in Base64 format" do            
             image = File.read 'spec/fixtures/images/sample.jpg'
             base64_image = Base64.encode64(image)
             question = FactoryGirl.create :question, :type => 'PhotoQuestion'

@@ -5,9 +5,11 @@ describe ImageUploader do
 
   before do
     ImageUploader.enable_processing = true
+    ImageUploader.storage = :file
     @question = FactoryGirl.create :question
     @uploader = ImageUploader.new(@question, :image)
-    @uploader.store!(fixture_file_upload('/images/sample.jpg', 'image/jpeg'))
+    file =  File.open "#{Rails.root}/spec/fixtures/images/sample.jpg"
+    @uploader.store!(file)
   end
 
   after do

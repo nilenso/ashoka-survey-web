@@ -132,6 +132,7 @@ describe Response do
     end
 
     it "renders the answers' image as base64 as well" do
+      ImageUploader.storage = :file
       response = (FactoryGirl.create :response).reload
       photo = Rack::Test::UploadedFile.new('spec/fixtures/images/sample.jpg')
       photo.content_type = 'image/jpeg'
