@@ -1,11 +1,9 @@
-<div>{{errors}}</div>
-<label><%= t("surveys.build.option") %></label>
-<input type="text" value="{{content}}"></input>
-<div>
+<div class="actions">
   <%= render 'templates/question_types_dropdown' %>
-  <button class='add_sub_question' href='#'>Add</button>
+  <a class='add_sub_question button' href='#'>Add</a>
+  <br/>
+  <a class='add_sub_category button' href='#'>Add Category</a>
+  <a class='delete_option button' href='#'>Delete Option</a>
 </div>
-<div>
-  <button class='add_sub_category' href='#'>Add Category</button>
-</div>
-<div class="delete_option"><%= button_tag t("delete_option"), :class => "delete_option" %></div>
+<div>{{errors}}</div>
+<input type="text" value="{{content}}" class="option"></input>

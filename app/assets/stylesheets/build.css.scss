@@ -70,6 +70,27 @@ body#build div#content{
 
     div{margin-bottom: 6px;}
 
+    div.option{
+      clear: both;
+      overflow: hidden;
+      margin-bottom: 12px;
+      border: solid 1px $secondary-color;
+
+      div, label, input{width: 45%; float: left; margin: 1%;}
+
+      div.actions{
+        float: right; width: 50%;
+        padding: 1%;
+        margin: 0;
+        text-align: left;
+        background: $white;
+
+        select{width: 70%; margin-bottom: 12px; float: left;}
+        a.add_sub_question{width: auto;}
+        a{ margin: 0 4px 4px 0;}
+      }
+    }
+
     div.add_option{
       border-top: solid 1px $secondary-color;
       padding-top: 10px;
