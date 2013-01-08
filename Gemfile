@@ -22,7 +22,7 @@ gem "geocoder"
 gem 'gmaps4rails'
 gem 'axlsx_rails'
 gem 'carrierwave'
-gem 'rmagick'
+gem 'rmagick', '2.12.2'
 gem "fog"
 gem "carrierwave_backgrounder"
 gem 'delayed_job_active_record'
