@@ -49,10 +49,9 @@ ul#status-bar{
   @include span-columns(6);
   display: block; margin: 0 0 2px 0; padding: 0;
   @include clearfix;
-  // background: $secondary-color-light;
 
   li{
-    display: block; margin: 0; padding: 0 0 0 24px;
+    display: block; margin: 0 2px 0 0; padding: 0 0 0 24px;
     float: left;
     position: relative;
     list-style: none;
@@ -60,8 +59,6 @@ ul#status-bar{
     line-height: 36px;
     height: 36px;
     background: $secondary-color-light;
-
-    &:first-child{padding-left: 12px;}
 
     &:after, &:before{
       content: "";
@@ -80,8 +77,9 @@ ul#status-bar{
     }
 
     &:before{
-      right: -37px;
-      border-left-color: $secondary-color;
+      left: 0;
+      z-index: 5;
+      border-left-color: $primary-color;
     }
 
     &.active{
@@ -92,3 +90,5 @@ ul#status-bar{
     }
   }
 }
+
+div#flash-messages{padding: 0 20px; font-weight: bold;}

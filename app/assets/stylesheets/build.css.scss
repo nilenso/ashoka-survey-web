@@ -10,7 +10,7 @@ body#build div#content{
       position: absolute;
 
       position: absolute;
-      right: -94%;
+      right: -92%;
       width: 88%;
       @include transition(all 1.0s ease-in-out);
 
@@ -86,6 +86,29 @@ body#build div#content{
       display: block;
     }
 
+    div.dummy_question{
+      border: solid 1px $secondary-color-light;
+
+      .sub_question_group{
+        margin: 0;
+
+        .sub_question_group_message{
+          margin: 0 0 0 20px;
+          padding: 10px;
+          background: $secondary-color-light;
+          border-bottom: solid 1px $white;
+        }
+      }
+
+      div.dummy_question, .sub_question_group_message{
+        margin: 0 0 0 20px;
+        border-right: 0;
+        border-bottom: 0;
+
+        div.dummy_question_content{margin: 0;}
+      }
+    }
+
     div.dummy_question_content, div.dummy_category_content, div#dummy_survey_details>div{
       padding: 4px 10px 10px 30px;
       margin-bottom: 4px;
@@ -97,6 +120,7 @@ body#build div#content{
 
       &.active{
         background: $secondary-color-light;
+        border-bottom: solid 1px $white;
         a.delete_question, a.delete_category  {display: block; background: $secondary-color;}
       }
 
