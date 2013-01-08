@@ -108,6 +108,6 @@ Setup `delayed_job` to Upload Photos to Amazon S3
 - [Setup](https://github.com/jnicklas/carrierwave#using-amazon-s3) `Carrierwave` with your Amazon S3 credentials.
 - Start `delayed_job` workers using `script/delayed_job`. Look [here](https://github.com/collectiveidea/delayed_job#running-jobs) for documentation.
 - If you're deploying to EngineYard, use a Chef recipe.
-- The official EngineYard recipe installs delayed_job only to solo & utility servers.
+- The [official](https://github.com/engineyard/eycloud-recipe-delayed_job) EngineYard recipe installs delayed_job only to solo & utility servers.
 - To use it on `app_master` servers, use this [fork](https://github.com/timothyandrew/eycloud-recipe-delayed_job).
 
