@@ -14,8 +14,9 @@ class Question < ActiveRecord::Base
   default_scope :order => 'order_number'
   delegate :question, :to => :parent, :prefix => true
 
-  def image_url
-    return image.thumb.url if image.file
+  def image_url(format=nil)
+    return "/#{image.cache_dir}/#{image_tmp}" if image_tmp
+    return image.url(format) if image.file.try(:exists?)
   end
 
   def image_in_base64
