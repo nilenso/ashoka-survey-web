@@ -20,12 +20,13 @@ div#content{
   div {padding: 10px 20px;}
   div div{padding: 0;}
 
-  div#flash_messages{margin: 0; padding: 0;}
   p.flash{
     display: block;
     background: $primary-color;
     margin: 0; padding: 10px 20px;
     font-size: 16px;
+    font-weight: bold;
+    color: $white;
 
     &.alert, &.error{background: $danger-light; color: $danger;}
     &.notice{background: $highlight; color: $primary-color;}
