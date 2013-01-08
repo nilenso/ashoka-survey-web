@@ -215,7 +215,7 @@ describe Question do
     context "when getting the URL" do
       it "returns the relative URL to the cached (local) image if the S3 version hasn't uploaded" do
         question = FactoryGirl.create :question
-        question.image.stub(:cache_dir).and_return("spec/fixtures/images")
+        question.image.stub(:cache_url).and_return("spec/fixtures/images")
         question.image_tmp = 'sample.jpg'
         question.image_url.should == '/spec/fixtures/images/sample.jpg'
       end

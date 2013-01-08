@@ -15,7 +15,7 @@ class Question < ActiveRecord::Base
   delegate :question, :to => :parent, :prefix => true
 
   def image_url(format=nil)
-    return "/#{image.cache_dir}/#{image_tmp}" if image_tmp
+    return "/#{image.cache_url}/#{image_tmp}" if image_tmp
     return image.url(format) if image.file.try(:exists?)
   end
 
