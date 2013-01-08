@@ -15,12 +15,12 @@ class Question < ActiveRecord::Base
   delegate :question, :to => :parent, :prefix => true
 
   def image_url(format=nil)
-    return "/#{image.cache_url}/#{image_tmp}" if image_tmp
+    return "/#{image.cache_dir}/#{image_tmp}" if image_tmp
     return image.url(format) if image.file.try(:exists?)
   end
 
   def image_in_base64
-    file =  File.read("#{image.cache_dir}/#{image_tmp}") if image_tmp
+    file =  File.read("#{image.root}/#{image.cache_dir}/#{image_tmp}") if image_tmp
     file = image.thumb.file.read if image.thumb.file.try(:exists?)
     return Base64.encode64(file) if file
   end
