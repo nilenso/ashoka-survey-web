@@ -24,6 +24,9 @@ gem 'axlsx_rails'
 gem 'carrierwave'
 gem 'rmagick'
 gem "fog"
+gem "carrierwave_backgrounder"
+gem 'delayed_job_active_record'
+gem 'daemons'
 
 # Gems used only for assets and not required
 # in production environments by default.
