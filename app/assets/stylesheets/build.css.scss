@@ -100,6 +100,25 @@ body#build div#content{
         line-height: 21px;
       }
 
+      .identifier_icon{
+        display: block;
+        position: absolute;
+        top: 0; right: 36px;
+        width: 36px; height: 36px;
+        text-indent: -1000em;
+
+        &:before{
+          display: block;
+          position: absolute;
+          top: 0; right: 0;
+          font-family: "FontAwesome";
+          content: "\f02e";
+          font-size: 24px;
+          text-indent: 0;
+          color: $danger;
+        }
+      }
+
       .sub_question_group{
         margin: 2px 0 0 0;
 
