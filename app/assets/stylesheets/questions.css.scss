@@ -19,8 +19,9 @@ div#content{
       position: relative;
 
       span{display: block; float: left; margin-left: -20px; font-weight: bold;}
-      span.hint{
+      span.hint, span.counter-warning{
         display: block;
+        position: relative;
         float: none;
         margin: 0;
       }
