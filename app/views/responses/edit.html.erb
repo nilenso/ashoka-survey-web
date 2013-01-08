@@ -19,10 +19,10 @@
   <div class="form-actions">
   <% if @response.survey_public? %>
       <%= recaptcha_tags :display => { :theme => :clean } %>
-      <%= f.submit :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'complete_button' } %>
+      <%= f.submit t('.save_response'), :button_html => { :id => 'complete_button' } %>
     <% else %>
-      <%= f.submit :submit, :as => :button, :label => t('.save_as_draft') unless @response.complete? %>
-      <%= f.submit :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' }  %>
+      <%= f.submit t('.save_as_draft') unless @response.complete? %>
+      <%= f.submit t('.mark_as_complete'), :button_html => { :id => 'complete_button' }  %>
     <% end %>
   <% end %>
   </div>
