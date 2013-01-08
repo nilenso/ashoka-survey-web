@@ -29,6 +29,8 @@ fr:
     denied_access: "fr Denied access to %{action} %{subject}"
     survey_finalized: "fr The survey was finalized"
     users_and_organizations_blank: "fr You have not selected any users or oganizations to publish to"
+    survey_published: "fr Survey Published!"
+
 
   publication:
     edit:

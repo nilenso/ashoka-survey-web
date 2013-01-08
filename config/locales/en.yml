@@ -28,6 +28,7 @@ en:
     response_deleted: "The response was deleted"
     denied_access: "Denied access to %{action} %{subject}"
     users_and_organizations_blank: "You have not selected any users or oganizations to publish to"
+    survey_published: "Survey Published!"
 
   publication:
     edit:
