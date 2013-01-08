@@ -16,7 +16,7 @@ class Question < ActiveRecord::Base
 
   def image_url(format=nil)
     return "/#{image.cache_dir}/#{image_tmp}" if image_tmp
-    return image.url(format) if image.file.try(:exists?)
+    return image.url(format) if image.file
   end
 
   def image_in_base64

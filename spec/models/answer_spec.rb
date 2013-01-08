@@ -234,16 +234,52 @@ describe Answer do
       answer.should be_image
     end
 
-    it "returns the thumb url if the answer has an image" do
-      question = FactoryGirl.create :question, :type => 'PhotoQuestion'
-      answer = FactoryGirl.create :answer_with_image, :question => question
-      answer.thumb_url.should == answer.photo.url(:thumb)
+    context "when encoding in base64" do
+      it "returns the cached image if the remote image is still uploading" do
+        question = FactoryGirl.create :question
+        answer = FactoryGirl.create :answer, :question => question
+        answer.photo.stub(:root).and_return(Rails.root)
+        answer.photo.stub(:cache_dir).and_return("spec/fixtures/images")
+        answer.photo_tmp = 'sample.jpg'
+        answer.photo_in_base64.should == Base64.encode64(File.read('spec/fixtures/images/sample.jpg'))
+      end
+
+      it "returns the remote image if it's done uploading" do
+        question = FactoryGirl.create :question
+        answer = FactoryGirl.create :answer_with_image, :question => question
+        answer.photo_in_base64.should == Base64.encode64(File.read(answer.photo.thumb.path))
+      end
     end
 
-    it "returns a base64-encoded of the image if it exists" do
-      question = FactoryGirl.create :question, :type => 'PhotoQuestion'
-      answer = FactoryGirl.create :answer_with_image, :question => question    
-      answer.photo_in_base64.should == Base64.encode64(answer.photo.thumb.file.read)
+    context "when getting the URL" do
+      it "returns the relative URL to the cached (local) image if the S3 version hasn't uploaded" do
+        question = FactoryGirl.create :question
+        answer = FactoryGirl.create :answer, :question => question
+        answer.photo.stub(:root).and_return(Rails.root)
+        answer.photo.stub(:cache_dir).and_return("spec/fixtures/images")
+        answer.photo_tmp = 'sample.jpg'
+        answer.photo_url.should == '/spec/fixtures/images/sample.jpg'
+      end
+
+      it "returns the URL to the S3 version if it's uploaded" do
+        question = FactoryGirl.create :question
+        answer = FactoryGirl.create :answer_with_image, :question => question
+        answer.photo_tmp = nil
+        answer.photo_url.should == answer.photo.url
+      end
+
+      it "takes a format (medium or thumb) which it returns only for the S3 version" do
+        question = FactoryGirl.create :question
+        answer = FactoryGirl.create :answer_with_image, :question => question
+        answer.photo_tmp = nil
+        answer.photo_url(:thumb).should == answer.photo.thumb.url
+      end
+
+      it "returns nil if the question doesn't have an image" do
+        question = FactoryGirl.create :question
+        answer = FactoryGirl.create :answer, :question => question
+        answer.photo_url.should be_nil
+      end
     end
   end
 

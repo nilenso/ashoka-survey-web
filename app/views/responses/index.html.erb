@@ -22,8 +22,8 @@
         <tr class="survey_row <%= response.status %>">
           <% response.answers_for_identifier_questions.each do |answer| %>
             <td>
-            <% if answer.photo.try(:file) %>
-              <%= image_tag answer.thumb_url %>
+            <% if answer.photo_url %>
+              <%= image_tag answer.photo_url, :class => 'thumb' %>
             <% else %>  
               <%= answer.content %> 
             <% end %>

@@ -16,6 +16,7 @@ class Answer < ActiveRecord::Base
   #has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>"}
   #validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
   mount_uploader :photo, ImageUploader
+  store_in_background :photo
   validate :maximum_photo_size
   validates_numericality_of :content, :if => Proc.new {|answer| (answer.content.present?) && (answer.question.type == 'NumericQuestion') }
   after_save :touch_multi_choice_answer
@@ -54,14 +55,15 @@ class Answer < ActiveRecord::Base
     question.type == "PhotoQuestion"
   end
 
-  def thumb_url
-    photo.url(:thumb) if photo?
+  def photo_url(format=nil)
+    return "/#{photo.cache_dir}/#{photo_tmp}" if photo_tmp
+    return photo.url(format) if photo.file
   end
 
   def photo_in_base64
-    if photo.thumb.file.try(:exists?)
-      Base64.encode64(photo.thumb.file.read)
-    end
+    file = File.read("#{photo.root}/#{photo.cache_dir}/#{photo_tmp}") if photo_tmp
+    file = photo.thumb.file.read if photo.thumb.file.try(:exists?)
+    return Base64.encode64(file) if file
   end
 
   private

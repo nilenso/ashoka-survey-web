@@ -51,18 +51,6 @@ module Api::V1
             answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
             answer.photo.url.should_not =~ /missing/
           end
-
-          it "sets a randomly generated filename" do
-            image = File.read 'spec/fixtures/images/sample.jpg'
-            base64_image = Base64.encode64(image)
-            question = FactoryGirl.create :question, :type => 'PhotoQuestion'
-            resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>  { '0' => {'question_id' => question.id, 'photo' => base64_image }})
-            post :create, :survey_id => survey.id, :response => resp, :user_id => 15, :organization_id => 42
-            first_answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
-            post :create, :survey_id => survey.id, :response => resp, :user_id => 15, :organization_id => 42
-            second_answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
-            File.basename(first_answer.photo.path).should_not == File.basename(second_answer.photo.path)
-          end
         end
 
         it "should return the newly created response with answers as JSON if it is incomplete" do
