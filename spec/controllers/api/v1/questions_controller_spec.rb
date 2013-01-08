@@ -126,7 +126,7 @@ module Api
           @file = fixture_file_upload('/images/sample.jpg', 'text/xml')
           post :image_upload, :id => question.id, :image => @file
           response.should be_ok
-          JSON.parse(response.body).should == { 'image_url' => question.reload.image.url(:thumb) }
+          JSON.parse(response.body).should == { 'image_url' => question.reload.image_url(:thumb) }
         end
       end
 

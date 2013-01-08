@@ -40,7 +40,9 @@ module Api::V1
         end
 
         context "for photo uploading" do
-          it "accepts an image for a PhotoQuestion in Base64 format" do
+          before(:each) { ImageUploader.storage = :file }
+
+          it "accepts an image for a PhotoQuestion in Base64 format" do            
             image = File.read 'spec/fixtures/images/sample.jpg'
             base64_image = Base64.encode64(image)
             question = FactoryGirl.create :question, :type => 'PhotoQuestion'
@@ -59,7 +61,7 @@ module Api::V1
             first_answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
             post :create, :survey_id => survey.id, :response => resp, :user_id => 15, :organization_id => 42
             second_answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
-            first_answer.photo.original_filename.should_not == second_answer.photo.original_filename
+            File.basename(first_answer.photo.path).should_not == File.basename(second_answer.photo.path)
           end
         end
 
@@ -174,9 +176,9 @@ module Api::V1
             resp = FactoryGirl.create(:response, :survey_id => survey.id)
             answer = FactoryGirl.create(:answer, :response_id => resp.id, :question_id => question.id, :photo => photo)
             resp_attrs = FactoryGirl.attributes_for(:response, :id => resp.id, :survey_id => survey.id, :answers_attributes =>  { '0' => {'id' => answer.id, 'question_id' => question.id, 'photo' => base64_image, 'updated_at' => 5.days.ago.to_i }})
-            old_filename = answer.photo.original_filename
+            old_filename = answer.photo.filename
             put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42
-            answer.reload.photo_file_name.should == old_filename
+            answer.reload.photo.filename.should == old_filename
           end
         end
       end

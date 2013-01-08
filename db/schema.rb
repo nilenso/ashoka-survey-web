@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20121224061456) do
+ActiveRecord::Schema.define(:version => 20130108035225) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -19,10 +19,9 @@ ActiveRecord::Schema.define(:version => 20121224061456) do
     t.datetime "created_at",         :null => false
     t.datetime "updated_at",         :null => false
     t.integer  "response_id"
-    t.string   "photo_file_name"
-    t.string   "photo_content_type"
-    t.integer  "photo_file_size"
-    t.datetime "photo_updated_at"
+    t.string   "photo"
+    t.string   "photo_secure_token"
+    t.string   "photo_tmp"
   end
 
   add_index "answers", ["question_id"], :name => "index_answers_on_question_id"
@@ -49,6 +48,22 @@ ActiveRecord::Schema.define(:version => 20121224061456) do
 
   add_index "choices", ["answer_id"], :name => "index_choices_on_answer_id"
 
+  create_table "delayed_jobs", :force => true do |t|
+    t.integer  "priority",   :default => 0
+    t.integer  "attempts",   :default => 0
+    t.text     "handler"
+    t.text     "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string   "locked_by"
+    t.string   "queue"
+    t.datetime "created_at",                :null => false
+    t.datetime "updated_at",                :null => false
+  end
+
+  add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
+
   create_table "options", :force => true do |t|
     t.string   "content"
     t.integer  "question_id"
@@ -73,10 +88,6 @@ ActiveRecord::Schema.define(:version => 20121224061456) do
     t.datetime "updated_at",                            :null => false
     t.boolean  "mandatory",          :default => false
     t.integer  "max_length"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-    t.datetime "image_updated_at"
     t.string   "type"
     t.integer  "max_value"
     t.integer  "min_value"
@@ -84,6 +95,9 @@ ActiveRecord::Schema.define(:version => 20121224061456) do
     t.integer  "parent_id"
     t.boolean  "identifier",         :default => false
     t.integer  "category_id"
+    t.string   "image"
+    t.string   "photo_secure_token"
+    t.string   "image_tmp"
   end
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"

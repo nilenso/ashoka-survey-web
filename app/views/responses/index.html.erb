@@ -22,7 +22,7 @@
         <tr class="survey_row <%= response.status %>">
           <% response.answers_for_identifier_questions.each do |answer| %>
             <td>
-            <% if answer.photo.try(:exists?) %>
+            <% if answer.photo.try(:file) %>
               <%= image_tag answer.thumb_url %>
             <% else %>  
               <%= answer.content %> 
