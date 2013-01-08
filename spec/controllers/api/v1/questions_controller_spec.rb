@@ -128,6 +128,16 @@ module Api
           response.should be_ok
           JSON.parse(response.body).should == { 'image_url' => question.reload.image_url(:thumb) }
         end
+
+        it "returns the errors if the image upload was unsuccessful" do
+          question = FactoryGirl.create(:question, :survey => survey)
+          @file = fixture_file_upload('/images/sample.jpg', 'text/xml')
+          Question.stub(:find).and_return(question)
+          question.stub(:save).and_return(false)
+          question.stub(:errors).and_return("error message")
+          post :image_upload, :id => question.id, :image => nil
+          JSON.parse(response.body)['errors'].should =~ /error/
+        end
       end
 
       context "GET 'index'" do

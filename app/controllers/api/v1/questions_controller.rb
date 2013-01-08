@@ -34,9 +34,12 @@ module Api
 
       def image_upload
         question = Question.find(params[:id])
-        question.image = File.open(params[:image].path)
-        question.save
-        render :json => { :image_url => question.image_url(:thumb) }
+        question.update_attributes({ :image => params[:image] })
+        if question.save
+          render :json => { :image_url => question.image_url }
+        else
+          render :json => { :errors => question.errors }
+        end
       end
 
       def index
