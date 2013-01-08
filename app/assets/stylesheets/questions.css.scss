@@ -19,6 +19,11 @@ div#content{
       position: relative;
 
       span{display: block; float: left; margin-left: -20px; font-weight: bold;}
+      span.hint{
+        display: block;
+        float: none;
+        margin: 0;
+      }
 
       .inline_errors{
         display: block;
