@@ -39,7 +39,7 @@ class ResponseDecorator < Draper::Base
             data-number-of-stars='<%= question.max_length %>'
             data-score='<%= Answer.find_by_question_id_and_response_id(question.id, id).content %>'>
         </div>
-        <%= f.semantic_errors :content if (f.semantic_errors :content) %>
+        <%= f.error :content if (f.error :content) %>
       </div>"
 
       string.result(binding).html_safe

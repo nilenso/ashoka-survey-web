@@ -26,6 +26,10 @@ div#content{
         margin: 0;
       }
 
+      div.star{
+        img{display: inline; margin: 0;}
+      }
+
       .inline_errors{
         display: block;
         background: $white;
