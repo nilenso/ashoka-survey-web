@@ -8,6 +8,7 @@ class Question < ActiveRecord::Base
   validates_presence_of :content
   has_many :answers, :dependent => :destroy
   mount_uploader :image, ImageUploader
+  store_in_background :image
   validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id, :category_id], :allow_nil => true
 
   default_scope :order => 'order_number'
