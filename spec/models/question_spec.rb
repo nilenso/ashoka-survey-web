@@ -197,9 +197,20 @@ describe Question do
     end
   end
 
-  it "returns its image as a base64-encoded string" do
-    question = FactoryGirl.create :question_with_image
-    question.image_in_base64.should == Base64.encode64(File.read(question.image.thumb.path))
+  context "images" do
+    context "when encoding in base64" do
+      it "returns the cached image if the remote image is still uploading" do
+        question = FactoryGirl.create :question
+        question.image.stub(:cache_dir).and_return("spec/fixtures/images")
+        question.image_tmp = 'sample.jpg'
+        question.image_in_base64.should == Base64.encode64(File.read('spec/fixtures/images/sample.jpg'))
+      end
+
+      it "returns the remote image if it's done uploading" do
+        question = FactoryGirl.create :question_with_image
+        question.image_in_base64.should == Base64.encode64(File.read(question.image.thumb.path))
+      end
+    end
   end
 
   include_examples 'a question'

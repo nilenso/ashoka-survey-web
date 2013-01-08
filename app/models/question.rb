@@ -18,9 +18,9 @@ class Question < ActiveRecord::Base
   end
 
   def image_in_base64
-    if image.thumb.file.try(:exists?)
-      Base64.encode64(image.thumb.file.read)
-    end
+    file =  File.read("#{image.cache_dir}/#{image_tmp}") if image_tmp
+    file = image.thumb.file.read if image.thumb.file.try(:exists?)
+    return Base64.encode64(file) if file
   end
 
   def duplicate(survey_id)
