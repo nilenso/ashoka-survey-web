@@ -23,7 +23,7 @@
           <% response.answers_for_identifier_questions.each do |answer| %>
             <td>
             <% if answer.photo_url %>
-              <%= image_tag answer.photo_url, :class => 'thumb' %>
+              <%= image_tag answer.photo_url(:thumb), :class => 'thumb' %>
             <% else %>  
               <%= answer.content %> 
             <% end %>
