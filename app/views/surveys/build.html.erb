@@ -36,10 +36,10 @@
     <div id="dummy_survey_details"></div>
     <div id="dummy_questions"></div>
   </div>
-  <div id="actions">
+  <div id="actions" class="form-actions">
     <input id ="save" type="button" value="<%= t(".save_survey") %>"></input>
-    <%= button_to t(".delete_survey"), survey_path(@survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, @survey %>
-    <%= button_tag t(".finalize_survey"), :id => 'finalize' if can? :finalize, @survey %>
+    <%= link_to t(".delete_survey"), survey_path(@survey.id), :method => :delete, :class=>"button", :data => { :confirm => t(:confirm) } if can? :destroy, @survey %>
+    <%= link_to t(".finalize_survey"), "", :id => 'finalize', :class => "button" if can? :finalize, @survey %>
     <%= button_to '', survey_finalize_path(@survey.id), :method => :put, :hidden => true, :id => 'finalize_hidden' if can? :finalize, @survey %>
   </div>
 </div>

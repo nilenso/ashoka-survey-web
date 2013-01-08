@@ -10,26 +10,27 @@ body#build div#content{
       position: absolute;
 
       position: absolute;
-      right: -90%;
-      width: 80%;
+      right: -94%;
+      width: 88%;
       @include transition(all 1.0s ease-in-out);
 
-      padding: 20px;
+      padding: 1%;
       margin: 0;
       list-style: none;
       font-size: 16px;
       line-height: 24px;
 
       li{
-        width: 30%;
+        width: 18%;
         padding: 0;
-        margin: 1.5%;
+        margin: 1%;
         list-style: none;
         display: block;
         float: left;
         text-align: center;
 
         a{
+          font-size: 13px;
           display: block;
           padding: 0;
           background: $secondary-color;
@@ -44,9 +45,9 @@ body#build div#content{
     div#settings_pane{
       display: block;
       position: absolute;
-      right: -90%;
-      width: 80%;
-      padding: 20px;
+      right: -92%;
+      width: 86%;
+      padding: 2%;
       margin: 0;
       background: $secondary-color-light;
       @include transition(all 1.0s ease-in-out);
@@ -75,6 +76,12 @@ body#build div#content{
   }
 
   div#dummy_pane{
+    img{display: block;}
+
+    label{
+      abbr{border: none; color: $danger;}
+    }
+
     div#dummy_survey_details{
       display: block;
     }
@@ -103,6 +110,11 @@ body#build div#content{
     }
 
 
+  }
+
+  .form-actions{
+    border-top: solid 2px $secondary-color-light; padding-top: 10px;
+    input[type="submit"], input[type="button"]{float: right;}
   }
 }
 

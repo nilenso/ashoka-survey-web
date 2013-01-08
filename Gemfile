@@ -30,7 +30,7 @@ group :assets do
   gem 'coffee-rails', '~> 3.2.1'
   gem 'susy'
   gem 'compass-normalize', '~> 1.1.2'
-  gem 'formalize-rails', '~> 0.1.3'
+  # gem 'formalize-rails', '~> 0.1.3'
   gem 'uglifier', '>= 1.0.3'
 end
 

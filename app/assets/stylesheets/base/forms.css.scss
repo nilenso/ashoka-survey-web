@@ -229,7 +229,7 @@ form{
       label{color: $danger;}
   }
 
-  p.form-actions{clear: both; @include clearfix; }
+  .form-actions{clear: both; border-top: solid 1px $secondary-color-light; @include clearfix; }
   
   div.sidebar{
     h2{padding-top: 8px;}
