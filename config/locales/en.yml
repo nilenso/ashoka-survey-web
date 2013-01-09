@@ -201,6 +201,7 @@ en:
   js:
     untitled_survey: Untitled Survey
     untitled_question: Untitled Question
+    untitled_category: Untitled Category
     save_successful: Your survey was saved!
     save_unsuccessful: We had trouble saving your survey.
     first_option: First Option

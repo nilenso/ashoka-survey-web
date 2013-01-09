@@ -199,6 +199,7 @@ fr:
   js:
     untitled_survey: fr Untitled Survey
     untitled_question: fr Untitled Question
+    untitled_category: fr Untitled Category
     save_successful: fr Your survey was saved!
     save_unsuccessful: fr We had trouble saving your survey.
     first_option: fr First Option
