@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
   before_filter :set_locale, :session_token
-  helper_method :current_user_info, :register_path, :new_user_path
+  helper_method :current_user_info, :register_path, :new_user_path, :current_ability
 
   def default_url_options(options={})
     return { :locale => I18n.locale } unless I18n.locale == I18n.default_locale

@@ -36,6 +36,10 @@ class SurveyDecorator < Draper::Base
     end
   end
 
+  def has_responses?
+    survey.responses.accessible_by(h.current_ability).count != 0
+  end
+
   private
 
   def template_tag(content, id)
