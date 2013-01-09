@@ -54,6 +54,13 @@ shared_examples "a question" do
         question.image_url(:thumb).should == question.image.thumb.url
       end
 
+      it "returns the URL to the :medium version" do
+        #We need an explicit method so we can use it in to_json
+        question = FactoryGirl.create :question_with_image
+        question.image_tmp = nil
+        question.medium_image_url.should == question.image_url(:medium)
+      end
+
       it "returns nil if the question doesn't have an image" do
         question = FactoryGirl.create :question
         question.image_url.should be_nil
