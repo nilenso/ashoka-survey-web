@@ -27,3 +27,7 @@ environments:
     migrate: true
     migration_command: rake db:migrate
     precompile_assets: true
+  small_production:
+    migrate: true
+    migration_command: rake db:migrate
+    precompile_assets: true
