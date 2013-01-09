@@ -19,10 +19,6 @@ class Question < ActiveRecord::Base
     return image.url(format) if image.file
   end
 
-  def medium_image_url
-    image_url(:medium)
-  end
-
   def image_in_base64
     file =  File.read("#{image.root}/#{image.cache_dir}/#{image_tmp}") if image_tmp
     file = image.thumb.file.read if image.thumb.file.try(:exists?)
