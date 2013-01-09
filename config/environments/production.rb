@@ -55,8 +55,6 @@ SurveyWeb::Application.configure do
   # config.action_controller.asset_host = "http://assets.example.com"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
-  config.assets.precompile += %w( survey_builder.css surveys_list.css backbone_survey_builder.css responses.css responses_index.css i18n.js)
-
   # Disable delivery errors, bad email addresses will be ignored
   # config.action_mailer.raise_delivery_errors = false
 
