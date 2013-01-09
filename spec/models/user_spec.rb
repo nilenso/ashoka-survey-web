@@ -32,10 +32,16 @@ describe User do
     user.name.should eq "John"
   end
 
-  it "gets user ids and names for ids passed in" do
-    user_ids = [1, 2]
-    User.names_for_ids(@access_token, user_ids).should == { 1 => "Bob", 2 => "John"}
+  context "when getting user ids and names for ids passed in" do
+    it "returns the user ids if logged in" do
+      user_ids = [1, 2]
+      User.names_for_ids(@access_token, user_ids).should == { 1 => "Bob", 2 => "John"}
+    end
+
+    it "returns an empty hash if not logged in" do
+      user_ids = [1, 2]
+      User.names_for_ids(nil, user_ids).should == {}
+    end
   end
 
 end
-

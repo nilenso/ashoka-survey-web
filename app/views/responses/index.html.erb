@@ -33,7 +33,7 @@
             <%= response.location %>
           </td>
           <td>
-            <%= @user_names[response.user_id] %>
+            <%= @user_names[response.user_id] if response.user_id %>
           </td>
           <td>
           <% if response.status == 'complete' %>
