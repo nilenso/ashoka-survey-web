@@ -1,5 +1,1 @@
-if environment == "staging"
-  run "/data/surveyweb/current/script/delayed_job restart"
-else
-  run "RAILS_ENV=production /data/surveyweb/current/script/delayed_job restart"
-end
+run "RAILS_ENV=#{environment} #{current_path}/script/delayed_job restart"
