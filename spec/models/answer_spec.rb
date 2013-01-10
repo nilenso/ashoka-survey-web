@@ -158,6 +158,11 @@ describe Answer do
         answer.choices.map(&:option_id).should =~ [options.first.id]
       end
 
+      it "doesn't error out if no IDs are passed in" do
+        answer = FactoryGirl.create(:answer)
+        expect { answer.option_ids = nil }.to_not raise_error
+      end
+
       it "doesn't change the answer content" do
         choices = [FactoryGirl.create(:option).id]
         question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion')
