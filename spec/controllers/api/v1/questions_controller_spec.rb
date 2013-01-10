@@ -162,6 +162,21 @@ module Api
           response.body.should include question.to_json(:methods => [:type, :image_url, :image_in_base64])
         end
 
+        it "returns the image in base64 if the referrer is nil or mobile" do
+          question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id))
+          request.env["HTTP_REFERER"] = nil
+          get :index, :survey_id => survey.id
+          response.body.should include question.to_json(:methods => [:type, :image_url, :image_in_base64])
+        end
+
+        it "does not return the image in base64 if the referrer is a url" do
+          question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id))
+          request.env["HTTP_REFERER"] = 'http://google.com'
+          get :index, :survey_id => survey.id
+          response.body.should include question.to_json(:methods => [:type, :image_url])
+          response.body.should_not include question.to_json(:methods => [:image_in_base64])
+        end
+
         it "returns a :bad_request if no survey_id is passed" do
           get :index
           response.should_not be_ok
