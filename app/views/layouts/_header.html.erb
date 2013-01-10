@@ -24,4 +24,6 @@
   <a href="/"><%= t(:application_title) %></a>
 </h1>
 
-<h3 id="welcome"><%= t("header.logged_in_as", :username => current_username) %></h3>
+<% if user_currently_logged_in? %>
+  <h3 id="welcome"><%= t("header.logged_in_as", :username => current_username) %></h3>
+<% end %>
