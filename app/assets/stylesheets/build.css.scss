@@ -97,6 +97,112 @@ body#build div#content{
       margin-top: 10px;
     }
   }
+
+  div#dummy_pane{
+    img{display: block;}
+
+    label{
+      abbr{border: none; color: $danger;}
+    }
+
+    div#dummy_survey_details{
+      display: block;
+    }
+
+    div.dummy_question, .dummy_category{
+      border: solid 1px $secondary-color-light;
+      position: relative;
+
+      .inline_errors{
+        display: block;
+        background: $white;
+        color: $danger;
+        padding: 0 6px;
+        line-height: 21px;
+      }
+
+      .identifier_icon{
+        display: block;
+        position: absolute;
+        top: 0; right: 36px;
+        width: 36px; height: 36px;
+        text-indent: -1000em;
+
+        &:before{
+          display: block;
+          position: absolute;
+          top: 0; right: 0;
+          font-family: "FontAwesome";
+          content: "\f02e";
+          font-size: 24px;
+          line-height: 22px;
+          text-indent: 0;
+          color: $danger;
+        }
+      }
+
+      .sub_question_group{
+        margin: 2px 0 0 0;
+
+        .sub_question_group_message{
+          margin: 0 0 0 20px;
+          padding: 10px;
+          background: $secondary-color-light;
+        }
+      }
+
+      div.collapse_category{
+        display: block; float: left;
+        margin: -8px 0 10px -28px;
+        color: $gray-xdark;
+      }
+
+      div.dummy_question, .sub_question_group_message, .dummy_category{
+        margin: 0 0 0 20px;
+        border-right: 0;
+        border-bottom: 0;
+
+        .dummy_question_content{margin: 0;}
+      }
+
+      .dummy_category_content{margin: 0; padding-top: 8px;}
+      .sub_question_group_message{margin-bottom: 2px;}
+    }
+
+
+    div.dummy_question_content, div.dummy_category_content, div#dummy_survey_details>div{
+      padding: 4px 10px 10px 30px;
+      margin-bottom: 4px;
+
+      span{display: block; float: left; margin-left: -20px; font-weight: bold;}
+
+      a.delete_question, a.delete_category {display: none;}
+      &:hover{ background: $gray-xxlight;}
+
+      &.active{
+        background: $secondary-color-light;
+        a.delete_question, a.delete_category  {display: block; background: $secondary-color;}
+      }
+
+      div.collapse_category {
+        cursor: pointer;
+        color: $primary-color-light;
+        &:hover {
+          color: $primary-color;
+        }
+      }
+    }
+
+
+  }
+
+  .form-actions{
+    border-top: solid 2px $secondary-color-light; padding-top: 10px;
+    input[type="submit"], input[type="button"]{float: right;}
+    input.hidden {
+      display: none;
+    }
+  }
 }
 
 #spinner{

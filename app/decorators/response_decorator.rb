@@ -17,13 +17,13 @@ class ResponseDecorator < Draper::Base
 
     when 'NumericQuestion'
       has_range = question.max_value && question.min_value
-      f.input :content, :label => question.content, :required => question.mandatory, :hint => numeric_question_hint(question.min_value, question.max_value)
+      f.input :content, :label => question.content, :as => :number, :required => question.mandatory, :hint => numeric_question_hint(question.min_value, question.max_value)
 
     when 'DateQuestion'
       f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => 'date' }
 
     when 'MultiChoiceQuestion'
-      f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :label_method => Proc.new { |id| Option.find_by_id(id).try(:content)}
+      f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :member_label => Proc.new { |id| Option.find_by_id(id).try(:content)}
 
     when 'PhotoQuestion'
       answer = Answer.find_by_question_id_and_response_id(question.id, id)
