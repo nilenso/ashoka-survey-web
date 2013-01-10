@@ -55,7 +55,6 @@ GEM
     childprocess (0.3.5)
       ffi (~> 1.0, >= 1.0.6)
     chunky_png (1.2.6)
-    cocaine (0.2.1)
     code_analyzer (0.2.0)
       sexp_processor
     coderay (1.0.7)
@@ -202,12 +201,6 @@ GEM
     omniauth-oauth2 (1.0.2)
       oauth2 (~> 0.6.0)
       omniauth (~> 1.0)
-    paperclip (3.1.4)
-      activemodel (>= 3.0.0)
-      activerecord (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      cocaine (>= 0.0.2)
-      mime-types
     pg (0.14.0)
     polyglot (0.3.3)
     progressbar (0.11.0)
@@ -361,7 +354,6 @@ DEPENDENCIES
   jasminerice
   jquery-rails
   omniauth-oauth2
-  paperclip (~> 3.0)
   pg
   pry-rails
   quiet_assets

@@ -9,7 +9,6 @@ gem 'rails-i18n'
 gem 'heroku'
 gem 'omniauth-oauth2'
 gem 'figaro'
-gem "paperclip", "~> 3.0"
 gem "rails-backbone"
 gem 'pry-rails'
 gem 'cancan'
