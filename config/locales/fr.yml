@@ -122,6 +122,7 @@ fr:
       duplication_error: Une erreur s'est produite dupliquer l'enquête. Désolé!
 
     report:
+      download_excel: Download Excel
       location: frLocation Map
 
   responses:

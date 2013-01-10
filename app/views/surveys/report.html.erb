@@ -1,3 +1,6 @@
+<header>
+  <%= link_to icon_for('icon-table', t('.download_excel')), survey_responses_path(@survey,format: :xlsx), :class => 'download_excel'%>
+</header>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
