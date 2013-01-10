@@ -1,6 +1,3 @@
-<header>
-  <%= link_to icon_for('icon-table', t('.download_excel')), survey_responses_path(@survey,format: :xlsx), :class => 'download_excel'%>
-</header>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
 <script type="text/javascript">
   google.load("visualization", "1", {packages:["corechart"]});
@@ -50,6 +47,10 @@
     <% end %>
   }
 </script>
+<header>
+  <%= link_to icon_for('icon-table', t('.download_excel')), survey_responses_path(@survey,format: :xlsx), :class => 'download_excel'%>
+  <h2><%= t '.reports' %></h2>
+</header>
 <div class="reports">
   <%= render "layouts/status_bar", :status => "analyze" %>
   <% @survey.questions_with_report_data.each do |question| %>

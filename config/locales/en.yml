@@ -124,6 +124,7 @@ en:
     report:
       location: Location Map
       download_excel: Download Excel
+      reports: Reports
 
   responses:
     new:
