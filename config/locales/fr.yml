@@ -142,6 +142,9 @@ fr:
       delete: "Delete-fr"
       edit_response: "Edit response-fr for"
       error_saving_response: "La réponse économie erreur"
+      save_as_draft: "fr Save as Draft"
+      mark_as_complete: "fr Mark as Complete"
+      save_response: "fr Save Response"
 
   answers:
     validations:

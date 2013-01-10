@@ -141,9 +141,10 @@ en:
     edit:
       delete: "Delete"
       edit_response: "Edit response for"
+      error_saving_response: "Error saving response"
       save_as_draft: "Save as Draft"
       mark_as_complete: "Mark as Complete"
-      error_saving_response: "Error saving response"
+      save_response: "Save Response"
 
   answers:
     validations:
