@@ -369,4 +369,17 @@ describe Survey do
       survey.reload.published_on.should_not be_nil
     end
   end
+
+  it "returns the identifier questions" do
+    survey = FactoryGirl.create(:survey)
+    identifier_question = FactoryGirl.create :question, :identifier => true, :survey => survey
+    normal_question = FactoryGirl.create :question, :identifier => false, :survey => survey
+    survey.identifier_questions.should include identifier_question
+    survey.identifier_questions.should_not include normal_question
+  end
+  it "gives you first five questions if there are no identfier questions " do
+    survey = FactoryGirl.create(:survey)
+    question = FactoryGirl.create :question, :identifier => false, :survey => survey
+    survey.identifier_questions.should include question
+  end
 end

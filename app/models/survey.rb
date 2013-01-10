@@ -118,6 +118,11 @@ class Survey < ActiveRecord::Base
     set_published_on
   end
 
+  def identifier_questions
+    identifier_questions = questions.where(:identifier => :true)
+    identifier_questions.blank? ? first_level_questions.limit(5).to_a : identifier_questions
+  end
+
   private
 
   def generate_auth_key

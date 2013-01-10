@@ -9,8 +9,8 @@
   <% unless @responses.blank? %>
     <table class="surveys_table">
       <thead>
-        <% @responses.first.answers_for_identifier_questions.each do |answer| %>
-          <th><%= answer.question_content %> </th>
+        <% @survey.identifier_questions.each do |question| %>
+          <th><%= question.content %> </th>
         <% end %>
         <th><%= t("activerecord.attributes.response.location") %></th>
         <th><%= t(".added_by") %></th>
