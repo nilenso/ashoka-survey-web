@@ -16,7 +16,6 @@ class ResponseDecorator < Draper::Base
       f.input :content, :label => question.content, :as => :text, :required => question.mandatory, :input_html => { :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length }, :rows => 4 }
 
     when 'NumericQuestion'
-      has_range = question.max_value && question.min_value
       f.input :content, :label => question.content, :as => :number, :required => question.mandatory, :hint => numeric_question_hint(question.min_value, question.max_value)
 
     when 'DateQuestion'
@@ -39,7 +38,7 @@ class ResponseDecorator < Draper::Base
             data-number-of-stars='<%= question.max_length %>'
             data-score='<%= Answer.find_by_question_id_and_response_id(question.id, id).content %>'>
         </div>
-        <%= f.error :content if (f.error :content) %>
+        <%= f.semantic_errors :content if (f.semantic_errors :content) %>
       </div>"
 
       string.result(binding).html_safe
