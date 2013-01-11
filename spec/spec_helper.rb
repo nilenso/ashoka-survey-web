@@ -7,7 +7,6 @@ require 'rspec/rails'
 require 'rspec/autorun'
 require 'rubygems'
 require 'spork'
-require "paperclip/matchers"
 
 
 Fog.mock!

@@ -1,5 +1,4 @@
 require 'spec_helper'
-require "paperclip/matchers"
 
 describe Answer do
   it { should respond_to(:content) }
