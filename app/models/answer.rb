@@ -60,6 +60,7 @@ class Answer < ActiveRecord::Base
   def photo_url(format=nil)
     return "/#{photo.cache_dir}/#{photo_tmp}" if photo_tmp
     return photo.url(format) if photo.file
+    return ""
   end
 
   def photo_in_base64

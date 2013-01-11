@@ -279,10 +279,10 @@ describe Answer do
         answer.photo_url(:thumb).should == answer.photo.thumb.url
       end
 
-      it "returns nil if the question doesn't have an image" do
+      it "returns empty if the question doesn't have an image" do
         question = FactoryGirl.create :question
         answer = FactoryGirl.create :answer, :question => question
-        answer.photo_url.should be_nil
+        answer.photo_url.should be_empty
       end
     end
   end
