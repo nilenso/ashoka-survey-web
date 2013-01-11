@@ -37,7 +37,7 @@
       </div>
 
       <span class="published-on">
-        <% if survey.published? %>
+        <% if survey.published? && survey.published_on %>
           <%= (survey.published_on).to_formatted_s(:long_ordinal) %>
         <% else %>
           <%= t(".not_yet_published") %>
