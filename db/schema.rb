@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130108035225) do
+ActiveRecord::Schema.define(:version => 20130111100519) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -84,16 +84,16 @@ ActiveRecord::Schema.define(:version => 20130108035225) do
   create_table "questions", :force => true do |t|
     t.text     "content"
     t.integer  "survey_id"
-    t.datetime "created_at",                            :null => false
-    t.datetime "updated_at",                            :null => false
-    t.boolean  "mandatory",          :default => false
-    t.integer  "max_length"
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
+    t.boolean  "mandatory",                       :default => false
+    t.integer  "max_length",         :limit => 8
     t.string   "type"
-    t.integer  "max_value"
+    t.integer  "max_value",          :limit => 8
     t.integer  "min_value"
     t.integer  "order_number"
     t.integer  "parent_id"
-    t.boolean  "identifier",         :default => false
+    t.boolean  "identifier",                      :default => false
     t.integer  "category_id"
     t.string   "image"
     t.string   "photo_secure_token"
