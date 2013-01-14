@@ -74,4 +74,28 @@ describe Category do
       duplicated_category.questions[0].survey_id.should == 18
     end
   end
+
+  context "has any questions" do
+    it "returns true if the category has sub questions" do
+      category = FactoryGirl.create :category, :order_number => 0
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
+      category.has_questions?.should be_true
+    end
+
+    it "returns true if the sub-category has sub questions" do
+      category = FactoryGirl.create :category, :order_number => 0
+      sub_category = FactoryGirl.create :category, :order_number => 1
+      category.categories << sub_category 
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: sub_category.id})
+      category.has_questions?.should be_true
+    end
+
+    it "returns true if the sub-category has sub questions" do
+      category = FactoryGirl.create :category, :order_number => 0
+      sub_category = FactoryGirl.create :category, :order_number => 1
+      category.categories << sub_category 
+      category.has_questions?.should be_false
+      sub_category.has_questions?.should be_false
+    end
+  end
 end

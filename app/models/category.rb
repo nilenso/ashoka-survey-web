@@ -35,4 +35,8 @@ class Category < ActiveRecord::Base
     category.save(:validate => false)
     category
   end
+
+  def has_questions?
+      questions.count > 0 || categories.any? { |x| x.has_questions? }
+  end
 end
