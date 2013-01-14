@@ -68,6 +68,11 @@ describe Survey do
       survey.duplicate.questions.should_not be_empty
     end
 
+    it "duplicates the nested categories as well" do
+      survey = FactoryGirl.create :survey_with_categories
+      survey.duplicate.categories.should_not be_empty
+    end
+
     it "doesn't duplicate the other associations" do
       survey = FactoryGirl.create :survey_with_questions
       SurveyUser.create(:survey_id => survey.id, :user_id => 5)

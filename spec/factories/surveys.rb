@@ -13,5 +13,12 @@ FactoryGirl.define do
         FactoryGirl.create_list(:question_with_answers, 5, :survey => survey)
       end
     end
+
+    factory :survey_with_categories do
+      after(:create) do |survey, evaluator|
+        survey.finalize
+        FactoryGirl.create_list(:category, 5, :survey => survey)
+      end
+    end
   end
 end

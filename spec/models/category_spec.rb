@@ -49,4 +49,29 @@ describe Category do
     third_level_category.sub_question?.should be_true
     FactoryGirl.create(:category).sub_question?.should be_false
   end
+
+  context "Duplicate" do
+    it "duplicates category with sub questions" do
+      category = FactoryGirl.create :category, :order_number => 0
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
+      duplicated_category = category.duplicate(0)
+      duplicated_category.id.should_not == category.id
+      duplicated_category.content.should == category.content
+      duplicated_category.questions.size.should == category.questions.size
+    end
+
+    it "duplicates the nested sub categories as well" do
+      category = FactoryGirl.create :category, :order_number => 0
+      nested_category = FactoryGirl.create(:category, :category_id => category.id)
+      duplicated_category = category.duplicate(0)
+      duplicated_category.categories.size.should == category.categories.size
+    end
+
+    it "sets the sub-questions' survey ID to the new survey's ID which is passed in" do
+      category = FactoryGirl.create :category, :order_number => 0
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
+      duplicated_category = category.duplicate(18)
+      duplicated_category.questions[0].survey_id.should == 18
+    end
+  end
 end

@@ -26,4 +26,13 @@ class Category < ActiveRecord::Base
   def sub_question?
     parent || category.try(:sub_question?)
   end
+
+  def duplicate(survey_id)
+    category = self.dup
+    category.survey_id = survey_id
+    category.questions << questions.map { |question| question.duplicate(survey_id) } if self.respond_to? :questions
+    category.categories << categories.map { |category| category.duplicate(survey_id) } if self.respond_to? :categories
+    category.save(:validate => false)
+    category
+  end
 end

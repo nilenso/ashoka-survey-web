@@ -10,6 +10,7 @@ class Option < ActiveRecord::Base
   def duplicate(survey_id)
     option = self.dup
     option.questions << questions.map { |question| question.duplicate(survey_id) }
+    option.categories << categories.map { |category| category.duplicate(survey_id) }
     option.save(:validate => false)
     option
   end

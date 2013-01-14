@@ -81,7 +81,14 @@ describe Option do
       duplicated_option = option.duplicate(0)
       duplicated_option.id.should_not == option.id
       duplicated_option.content.should == option.content
-      duplicated_option.questions.size == option.questions.size
+      duplicated_option.questions.size.should == option.questions.size
+    end
+
+    it "dupicates sub categories as well" do
+      option = FactoryGirl.create(:option)
+      option.categories << FactoryGirl.create(:category)
+      duplicated_option = option.duplicate(0)
+      duplicated_option.categories.size.should == option.categories.size
     end
 
     it "sets the sub-question's survey ID to the survey ID of the new survey which is passed in" do
@@ -89,6 +96,13 @@ describe Option do
       option.questions << FactoryGirl.create(:question)
       duplicated_option = option.duplicate(15)
       duplicated_option.questions[0].survey_id.should == 15
+    end
+
+    it "sets the sub-category's survey ID to the survey ID of the new survey which is passed in" do
+      option = FactoryGirl.create(:option)
+      option.categories << FactoryGirl.create(:category)
+      duplicated_option = option.duplicate(15)
+      duplicated_option.categories[0].survey_id.should == 15
     end
   end
 end
