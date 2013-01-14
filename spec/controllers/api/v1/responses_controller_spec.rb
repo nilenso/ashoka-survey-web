@@ -71,7 +71,7 @@ module Api::V1
           question = FactoryGirl.create(:question, :type => 'SingleLineQuestion', :mandatory => true)
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :status => 'complete', :answers_attributes =>  { '0' => {'content' => "", 'question_id' => question.id} })
           expect {
-            post :create, :response => resp
+              post :create, :response => resp, :user_id => 15, :organization_id => 42
           }.to change {Response.count}.by 0
           response.should_not be_ok
           response.status.should == 400
