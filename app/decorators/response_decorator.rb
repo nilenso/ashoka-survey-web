@@ -31,7 +31,7 @@ class ResponseDecorator < Draper::Base
     when 'RatingQuestion'
       string = ERB.new "
       <div class='rating'>
-        <%= f.label question.content %>
+        <%= f.label label_for(question) %>
         <%= '<abbr>*</abbr>' if question.mandatory %>
         <%= f.input :content, :as => :hidden %>
         <div class='star'
@@ -46,10 +46,10 @@ class ResponseDecorator < Draper::Base
   end
 
   def label_for(question)
-    question_number(question) + ")  " + question.content
+    ResponseDecorator.question_number(question) + ")  " + question.content
   end
 
-  def question_number(question)
+  def self.question_number(question)
     if question.parent
       sibling_elements = (question.parent.questions + question.parent.categories_with_questions).sort_by(&:order_number)
       "#{question_number(question.parent_question)}.#{sibling_elements.index(question) + 1}"
