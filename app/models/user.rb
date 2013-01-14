@@ -8,11 +8,9 @@ class User
   end
 
   def self.find_by_organization(client, organization_id)
-    users = []
-    client.get("/api/organizations/#{organization_id}/users").parsed.each { |user_json|
-       users.push (self.json_to_user(user_json))
+    client.get("/api/organizations/#{organization_id}/users").parsed.inject([]) { |users, user_json|
+       users.push(json_to_user(user_json))
     }
-    users
   end
 
   def self.json_to_user(user_json)
