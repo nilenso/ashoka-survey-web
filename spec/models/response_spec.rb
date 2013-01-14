@@ -74,6 +74,15 @@ describe Response do
      response.incomplete
      response.reload.should be_incomplete
     end
+
+    it "only updates the status field and nothing else" do
+      response = FactoryGirl.create(:response, :organization_id => 1, :user_id => 1)
+      response.organization_id = 5
+      response.incomplete
+      response.complete
+      response.validating
+      response.reload.organization_id.should_not == 5
+    end
   end
 
   context "#set" do
