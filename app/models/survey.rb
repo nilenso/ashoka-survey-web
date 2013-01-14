@@ -67,13 +67,13 @@ class Survey < ActiveRecord::Base
   end
 
   def publish_to_users(users)
-    users.each { |user_id| self.survey_users.create(:user_id => user_id) } if finalized?
+    users.each { |user_id| survey_users.create(:user_id => user_id) } if finalized?
     set_published_on
   end
 
   def share_with_organizations(organizations)
     organizations.each do |organization_id|
-      self.participating_organizations.create(:organization_id => organization_id)
+      participating_organizations.create(:organization_id => organization_id)
     end if finalized?
     set_published_on
   end

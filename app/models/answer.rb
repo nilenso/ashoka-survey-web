@@ -32,11 +32,10 @@ class Answer < ActiveRecord::Base
   end
 
   def option_ids=(ids)
-    if ids
-      ids.delete_if(&:blank?)
-      choices.destroy_all
-      ids.each { |option_id| choices << Choice.new(:option_id => option_id) }
-    end
+    return unless ids
+    ids.delete_if(&:blank?)
+    choices.destroy_all
+    choices << ids.collect { |option_id| Choice.new(:option_id => option_id) }
   end
 
   def content
