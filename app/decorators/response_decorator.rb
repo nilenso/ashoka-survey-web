@@ -4,29 +4,29 @@ class ResponseDecorator < Draper::Base
   def input_tag_for(question, f)
     case question.type
     when 'RadioQuestion'
-      f.input :content, :label => question.content, :as => :radio, :collection => question.options.map { |o| [o.content, o.content, {:data => { :option_id => o.id } }] }, :required => question.mandatory
+      f.input :content, :label => label_for(question), :as => :radio, :collection => question.options.map { |o| [o.content, o.content, {:data => { :option_id => o.id } }] }, :required => question.mandatory
 
     when 'DropDownQuestion'
-      f.input :content, :as => :select, :label => question.content, :required => question.mandatory, :collection => question.options.map { |o| [o.content, o.content, {'data-option-id' => o.id }] }
+      f.input :content, :as => :select, :label => label_for(question), :required => question.mandatory, :collection => question.options.map { |o| [o.content, o.content, {'data-option-id' => o.id }] }
 
     when 'SingleLineQuestion'
-      f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length } }
+      f.input :content, :label => label_for(question), :as => :string, :required => question.mandatory, :input_html => { :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length } }
 
     when 'MultilineQuestion'
-      f.input :content, :label => question.content, :as => :text, :required => question.mandatory, :input_html => { :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length }, :rows => 4 }
+      f.input :content, :label => label_for(question), :as => :text, :required => question.mandatory, :input_html => { :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length }, :rows => 4 }
 
     when 'NumericQuestion'
-      f.input :content, :label => question.content, :as => :number, :required => question.mandatory, :hint => numeric_question_hint(question.min_value, question.max_value)
+      f.input :content, :label => label_for(question), :as => :number, :required => question.mandatory, :hint => numeric_question_hint(question.min_value, question.max_value)
 
     when 'DateQuestion'
-      f.input :content, :label => question.content, :as => :string, :required => question.mandatory, :input_html => { :class => 'date' }
+      f.input :content, :label => label_for(question), :as => :string, :required => question.mandatory, :input_html => { :class => 'date' }
 
     when 'MultiChoiceQuestion'
-      f.input :option_ids, :as => :check_boxes, :label => question.content, :required => question.mandatory, :collection => question.options.map(&:id), :member_label => Proc.new { |id| Option.find_by_id(id).try(:content)}
+      f.input :option_ids, :as => :check_boxes, :label => label_for(question), :required => question.mandatory, :collection => question.options.map(&:id), :member_label => Proc.new { |id| Option.find_by_id(id).try(:content)}
 
     when 'PhotoQuestion'
       answer = Answer.find_by_question_id_and_response_id(question.id, id)
-      "#{(h.image_tag answer.photo_url(:medium), :class => 'medium' if answer.photo_url.present?)} #{(f.input :photo, :as => :file, :required => question.mandatory, :label => question.content)}".html_safe
+      "#{(h.image_tag answer.photo_url(:medium), :class => 'medium' if answer.photo_url.present?)} #{(f.input :photo, :as => :file, :required => question.mandatory, :label => label_for(question))}".html_safe
 
     when 'RatingQuestion'
       string = ERB.new "
@@ -45,7 +45,11 @@ class ResponseDecorator < Draper::Base
     end
   end
 
-  def self.question_number(question)
+  def label_for(question)
+    question_number(question) + ")  " + question.content
+  end
+
+  def question_number(question)
     if question.parent
       sibling_elements = (question.parent.questions + question.parent.categories_with_questions).sort_by(&:order_number)
       "#{question_number(question.parent_question)}.#{sibling_elements.index(question) + 1}"
@@ -58,6 +62,7 @@ class ResponseDecorator < Draper::Base
     end
   end
 
+
   def category_name_for(category)
     @categories ||= []
     return "" unless category
@@ -68,7 +73,7 @@ class ResponseDecorator < Draper::Base
         <%= category_name_for(category.category) %>
         <div class='category <%= 'hidden sub_question' if category.sub_question? %>'
              data-nesting-level='<%= category.nesting_level %>'
-             data-parent-id='<%= category.parent_id %>' 
+             data-parent-id='<%= category.parent_id %>'
              data-id='<%= category.id %>'
              data-category-id='<%= category.category_id %>'>
           <h2>
