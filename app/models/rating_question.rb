@@ -7,7 +7,6 @@ class RatingQuestion < Question
   DEFAULT_MAX_LENGTH = 5
 
   def report_data
-    answers_content = answers.map(&:content)
     answers_content.uniq.inject([]) do |data, content|
       data.push [content.to_i, answers_content.count(content)]
     end
@@ -19,5 +18,10 @@ class RatingQuestion < Question
 
   def max_value_for_report
     max_length || DEFAULT_MAX_LENGTH
+  end
+
+  private
+  def answers_content
+    answers.map(&:content)
   end
 end
