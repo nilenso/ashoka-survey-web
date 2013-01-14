@@ -97,5 +97,13 @@ describe Category do
       category.has_questions?.should be_false
       sub_category.has_questions?.should be_false
     end
+
+    it "returns categories with questions" do
+      category = FactoryGirl.create :category, :order_number => 0
+      sub_category = FactoryGirl.create :category, :order_number => 1
+      category.categories << sub_category 
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: sub_category.id})
+      category.categories_with_questions.should include(sub_category)
+    end
   end
 end

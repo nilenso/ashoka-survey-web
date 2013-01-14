@@ -26,4 +26,8 @@ class Option < ActiveRecord::Base
   def report_data
     Answer.joins(:response).where("answers.question_id = ? AND responses.status = 'complete' AND answers.content = ?", question_id, content).count
   end
+
+  def categories_with_questions
+    categories.select { |x| x.has_questions? }
+  end
 end

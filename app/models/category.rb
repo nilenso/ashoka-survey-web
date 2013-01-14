@@ -39,4 +39,8 @@ class Category < ActiveRecord::Base
   def has_questions?
       questions.count > 0 || categories.any? { |x| x.has_questions? }
   end
+
+  def categories_with_questions
+    categories.select { |x| x.has_questions? }
+  end
 end

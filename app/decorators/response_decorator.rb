@@ -47,10 +47,10 @@ class ResponseDecorator < Draper::Base
 
   def self.question_number(question)
     if question.parent
-      sibling_elements = (question.parent.questions + question.parent.categories).sort_by(&:order_number)
+      sibling_elements = (question.parent.questions + question.parent.categories_with_questions).sort_by(&:order_number)
       "#{question_number(question.parent_question)}.#{sibling_elements.index(question) + 1}"
     elsif question.category
-      sibling_elements = (question.category.questions + question.category.categories).sort_by(&:order_number)
+      sibling_elements = (question.category.questions + question.category.categories_with_questions).sort_by(&:order_number)
       "#{question_number(question.category)}.#{sibling_elements.index(question) + 1}"
     else
       sibling_elements = question.survey.first_level_elements

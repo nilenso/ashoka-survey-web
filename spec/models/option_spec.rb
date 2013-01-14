@@ -105,4 +105,14 @@ describe Option do
       duplicated_option.categories[0].survey_id.should == 15
     end
   end
+
+  it "returns categories with questions" do
+    category = FactoryGirl.create :category, :order_number => 0
+    another_category = FactoryGirl.create :category, :order_number => 1
+    option = FactoryGirl.create(:option)
+    option.categories << category
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
+      option.categories_with_questions.should include(category)
+      option.categories_with_questions.should_not include(another_category)
+  end
 end
