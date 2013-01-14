@@ -30,21 +30,24 @@ describe Response do
     response.answers_for_identifier_questions.should == identifier_question.answers
   end
 
-  it "gives you first five answers if there are no identfier questions " do
+  it "gives you first five answers to first level questions if there are no identfier questions " do
     response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
-    question = FactoryGirl.create :question, :identifier => false
+    question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
+    question.options << Option.create(content: "Option", order_number: 1)
+    nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
     response.answers << FactoryGirl.create(:answer, :question_id => question.id, :response_id => response.id)
+    response.answers << FactoryGirl.create(:answer, :question_id => nested_question.id, :response_id => response.id)
     response.answers_for_identifier_questions.should == question.answers
   end
 
-  it "merges the response status based on updated_at" do 
+  it "merges the response status based on updated_at" do
     response = FactoryGirl.create :response, :organization_id => 1, :user_id => 1, :status => 'complete'
     response.merge_status({ :status => 'incomplete', :updated_at => 5.days.ago.to_s })
     response.should be_complete
     response.merge_status({ :status => 'incomplete', :updated_at => 5.days.from_now.to_s })
     response.should be_incomplete
   end
-  
+
   it "doesn't require a user_id and organization_id if it's survey is public" do
     survey = FactoryGirl.create :survey, :public => true
     response = Response.new(:survey => survey)
@@ -102,7 +105,7 @@ describe Response do
     response = FactoryGirl.build(:response, :survey_id => survey.id)
     response.questions.should == survey.questions
   end
-  
+
   it "gets the public status of its survey" do
     survey = FactoryGirl.create(:survey, :public => true)
     response = FactoryGirl.build(:response, :survey_id => survey.id)

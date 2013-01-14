@@ -22,7 +22,7 @@ class Response < ActiveRecord::Base
 
   def answers_for_identifier_questions
     identifier_answers = answers.find_all { |answer| answer.identifier? }
-    identifier_answers.blank? ? five_answers : identifier_answers
+    identifier_answers.blank? ? five_first_level_answers : identifier_answers
   end
 
   def complete
@@ -85,7 +85,7 @@ class Response < ActiveRecord::Base
 
   private
 
-  def five_answers
-    answers.limit(5).to_a
+  def five_first_level_answers
+    answers.find_all{ |answer| answer.question.first_level? }[0..5]
   end
 end
