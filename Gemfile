@@ -26,6 +26,7 @@ gem "fog"
 gem "carrierwave_backgrounder"
 gem 'delayed_job_active_record'
 gem 'daemons'
+gem 'rack-mini-profiler'
 gem 'paperclip'
 
 # Gems used only for assets and not required
