@@ -7,15 +7,13 @@ body#build div#content{
 
     ul#picker_pane{
       display: block;
-      position: absolute;
-
-      position: absolute;
-      right: -92%;
-      width: 88%;
+      position: fixed;
+      left: 60%;
+      right: 40px;
+      top: 40px;
       @include transition(all 1.0s ease-in-out);
 
       padding: 1%;
-      margin: 0;
       list-style: none;
       font-size: 16px;
       line-height: 24px;
@@ -44,26 +42,28 @@ body#build div#content{
 
     div#settings_pane{
       display: block;
-      position: absolute;
-      right: -92%;
-      width: 86%;
-      padding: 2%;
+      position: fixed;
+      left: 59%;
+      right: 40px;
+      top: 140px;
+      bottom: 40px;
+      padding: 20px;
       margin: 0;
       background: $secondary-color-light;
       @include transition(all 1.0s ease-in-out);
 
-      &:before{
-        content: "";
-        display: block;
-        width: 0; height: 0;
-        position: absolute;
-        border: solid 10px $secondary-color-light;
-        border-top-color: transparent;
-        border-left-color: transparent;
-        border-bottom-color: transparent;
-        margin-left: -20px;
-        left: 0;
-      }
+      // &:before{
+      //   content: "";
+      //   display: block;
+      //   width: 0; height: 0;
+      //   position: absolute;
+      //   border: solid 10px $secondary-color-light;
+      //   border-top-color: transparent;
+      //   border-left-color: transparent;
+      //   border-bottom-color: transparent;
+      //   margin-left: -20px;
+      //   left: 0;
+      // }
 
       textarea#survey_description{height: 90px;}
       textarea{height: 30px;}
@@ -188,6 +188,24 @@ body#build div#content{
       &.active{
         background: $secondary-color-light;
         a.delete_question, a.delete_category  {display: block; background: $secondary-color;}
+
+        &:after{
+          content: "";
+          display: block;
+          position: fixed;
+          left: 59%;
+          top: auto;
+          margin-top: -60px;
+          margin-left: -20px;
+          width: 0; height: 0;
+
+          position: fixed;
+          border: solid 10px $secondary-color-light;
+          border-top-color: transparent;
+          border-left-color: transparent;
+          border-bottom-color: transparent;
+        }
+
       }
 
       div.collapse_category {

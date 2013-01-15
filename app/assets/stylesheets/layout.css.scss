@@ -8,6 +8,7 @@ body{background: transparent;}
 #page{
   display: block;
   @include container;
+  // margin-left: 40px;
 }
 
 div#content{
@@ -68,6 +69,6 @@ table{
 .footer{
   display: block; clear: both;
   padding: 10px 0;
-  color: $secondary-color-light; text-align: right;
+  color: $secondary-color-light; text-align: center;
   a{color: white;}
 }
