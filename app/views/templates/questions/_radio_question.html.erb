@@ -13,12 +13,6 @@
   <label><%= t("activerecord.attributes.question.mandatory") %> </label>
 </div>
 
-<div class="upload_files">
-  <label><%= t("activerecord.attributes.question.image") %> </label>
-  <input name="image" class="fileupload" type="file" name="files[]" accept="image/png, image/jpg">
-  <div class="spinner"></div>
-</div>
-
 {{^parent_id}}
   <div class="checkbox">
     {{#identifier}}
@@ -31,6 +25,16 @@
   </div>
 {{/parent_id}}
 
-<div class="add_option"><%= button_tag t("add_option"), :class => "add_option" %></div>
-<textarea class="add_options_in_bulk" placeholder="<%= t('surveys.build.add_options_in_bulk_help_text') %>"></textarea>
-<div class="add_options_in_bulk"><%= button_tag t("surveys.build.add_options_in_bulk_label"), :class => "add_options_in_bulk" %></div>
+{{#id}}
+  <div class="upload_files">
+    <label><%= t("activerecord.attributes.question.image") %> </label>
+    <input name="image" class="fileupload" type="file" name="files[]" accept="image/png, image/jpg">
+    <div class="spinner"></div>
+  </div>
+  <div class="add_option"><%= button_tag t("add_option"), :class => "add_option" %></div>
+  <textarea class="add_options_in_bulk" placeholder="<%= t('surveys.build.add_options_in_bulk_help_text') %>"></textarea>
+  <div class="add_options_in_bulk"><%= button_tag t("surveys.build.add_options_in_bulk_label"), :class => "add_options_in_bulk" %></div>
+{{/id}}
+{{^id}}
+  <%= render 'templates/loading' %>
+{{/id}}

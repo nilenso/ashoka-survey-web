@@ -13,11 +13,6 @@
 	<label><%= t("activerecord.attributes.question.max_size") %> </label>
 	<input type="number" name="max_length" value="{{max_length}}"></input>
 </div>
-<div class="upload_files">
-    <label><%= t("activerecord.attributes.question.image") %> </label>
-    <input name="image" class="fileupload" type="file" name="files[]" accept="image/png, image/jpg">
-    <div class="spinner"></div>
- </div>
 
 {{^parent_id}}
   <div>
@@ -30,3 +25,9 @@
     {{/identifier}}
   </div>
 {{/parent_id}}
+
+<div class="upload_files">
+  <label><%= t("activerecord.attributes.question.image") %> </label>
+  <input name="image" class="fileupload" type="file" name="files[]" accept="image/png, image/jpg">
+  <div class="spinner"></div>
+ </div>

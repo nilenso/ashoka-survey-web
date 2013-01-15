@@ -11,11 +11,6 @@
 	{{/mandatory}}
   <label for="mandatory"><%= t("activerecord.attributes.question.mandatory") %></label>
 </div>
-<div class="upload_files">
-    <label><%= t("activerecord.attributes.question.image") %> </label>
-    <input name="image" class="fileupload" type="file" name="files[]" accept="image/png, image/jpg">
-    <div class="spinner"></div>
-</div>
 
 {{^parent_id}}
   <div class="checkbox">
@@ -28,3 +23,9 @@
     <label><%= t "surveys.build.mark_identifier" %></label>
   </div>
 {{/parent_id}}
+
+<div class="upload_files">
+    <label><%= t("activerecord.attributes.question.image") %> </label>
+    <input name="image" class="fileupload" type="file" name="files[]" accept="image/png, image/jpg">
+    <div class="spinner"></div>
+</div>
