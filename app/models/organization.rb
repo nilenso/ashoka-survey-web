@@ -1,16 +1,15 @@
 class Organization
   attr_reader :id, :name
 
-	def initialize(id, name)
+  def initialize(id, name)
     @id = id
     @name = name
   end
 
   def self.all(access_token, options={})
-    if access_token
-      organizations = access_token.get('/api/organizations').parsed.map { |org_json| self.json_to_organization(org_json) }
-      organizations.reject { |org| org.id == options[:except] }
-    end
+    return unless access_token
+    organizations = access_token.get('/api/organizations').parsed.map { |org_json| json_to_organization(org_json) }
+    organizations.reject { |org| org.id == options[:except] }
   end
 
   def self.json_to_organization(org_json)

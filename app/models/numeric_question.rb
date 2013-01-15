@@ -6,7 +6,6 @@ class NumericQuestion < Question
   validate :min_value_less_than_max_value
 
   def report_data
-    answers_content = answers.map(&:content)
     answers_content.uniq.inject([]) do |data, content|
       data.push [content.to_i, answers_content.count(content)]
     end
@@ -22,8 +21,12 @@ class NumericQuestion < Question
 
   private
 
+  def answers_content
+    answers.map(&:content)
+  end
+
   def max_value_in_answers
-    answers.map(&:content).compact.select { |answer| answer.is_a? Integer }.max
+   answers_content.compact.select { |answer| answer.is_a? Integer }.max
   end
 
   def min_value_less_than_max_value
