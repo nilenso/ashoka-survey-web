@@ -5,6 +5,8 @@ class SurveyBuilder.Views.Questions.SurveyDetailsView extends Backbone.View
 
   events:
     'keyup  input[type=text]': 'handle_textbox_keyup'
+    'keyup  textarea': 'handle_textbox_keyup'
+    'change textarea': 'handle_textbox_keyup'
     'change input[type=text]': 'handle_textbox_keyup'
     'change input[type=checkbox]': 'handle_checkbox_change'
 
