@@ -48,6 +48,8 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
 
   set_question_number_for_sub_question: (sub_question_model) =>
     parent_question_number = this.get('question').question_number
+    multichoice_parent = this.get('question').get('type') == "MultiChoiceQuestion"
+    parent_question_number +=  '' + String.fromCharCode(65 + this.get('order_number')) if multichoice_parent
     sub_question_model.question_number = "#{parent_question_number}.#{@sub_question_models.length}"
 
   delete_sub_question: (sub_question_model) =>
