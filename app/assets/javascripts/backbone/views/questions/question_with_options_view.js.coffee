@@ -63,7 +63,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     _.delay(=>
       @model.destroy_options()
       for content in parsed_csv
-        @add_new_option_model(content) if content && content.trim().length > 0
+        @add_new_option_model(content.trim()) if content && content.trim().length > 0
       window.loading_overlay.hide_overlay()
     , 10)
     
