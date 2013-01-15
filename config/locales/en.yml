@@ -154,6 +154,7 @@ en:
       max_length: You have exceeded the maximum length for this question.
       exceeded_lower_limit: Your answer is lesser than the minimum value.
       exceeded_higher_limit: Your answer is greater than the maximum value.
+      exceeds_maximum_size: Your photo is bigger than the maximum size.
       invalid_date: The date you gave is not valid
 
   questions:

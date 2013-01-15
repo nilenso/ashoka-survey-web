@@ -152,8 +152,9 @@ fr:
     validations:
       mandatory_question: Cette question est obligatoire.
       max_length: Vous avez dépassé la durée maximale pour cette question.
-      exceeded_lower_limit: Your answer is lesser than the minimum value.
-      exceeded_higher_limit: Your answer is lesser than the maximum value.
+      exceeded_lower_limit: fr Your answer is lesser than the minimum value.
+      exceeded_higher_limit: fr Your answer is lesser than the maximum value.
+      exceeds_maximum_size: fr Your photo is bigger than the maximum size.
       invalid_date: La date que vous avez donné n'est pas valide
 
   questions:
