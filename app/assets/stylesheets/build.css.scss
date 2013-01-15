@@ -100,6 +100,10 @@ body#build div#content{
   }
 
   div#dummy_pane{
+    div.star{
+      img{display: inline; margin: 0;}
+    }
+
     img{display: block;}
 
     label{
