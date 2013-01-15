@@ -37,7 +37,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     category_attrs = {}
     _.each @attributes, (val, key) =>
       category_attrs[key] = val  if val? and not _.isObject(val)
-    { category: _.omit( category_attrs, ['created_at', 'id', 'updated_at']) }
+    { category: _.omit( category_attrs, ['created_at', 'updated_at']) }
 
   add_sub_question: (type) =>
     question = {
