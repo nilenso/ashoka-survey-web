@@ -2,6 +2,7 @@ div#content{
   form.response{margin: 20px;}
 
   div#dummy_pane, form.response{
+    img{display: block;}
 
     label{
       abbr{border: none; color: $danger;}
