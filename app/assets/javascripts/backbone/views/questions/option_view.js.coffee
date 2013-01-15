@@ -5,6 +5,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
   initialize: (@model, @template) =>
     this.sub_questions = []
     this.model.on('change:errors', this.render, this)
+    this.model.on('change:id', this.render, this)
     this.model.on('add:sub_question', this.add_sub_question, this)
     this.model.on('change:preload_sub_questions', this.preload_sub_questions)
     this.model.on('destroy', this.remove, this)

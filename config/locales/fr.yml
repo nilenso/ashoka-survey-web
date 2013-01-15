@@ -218,3 +218,7 @@ fr:
       verification_failed: "La réponse de vérification Parole est incorrecte, s'il vous plaît essayer à nouveau."
       recaptcha_unavailable: "Le service CAPTCHA n'est pas disponible."
 
+  templates:
+    loading:
+      loading: "Chargement..."
+

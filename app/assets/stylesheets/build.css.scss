@@ -86,6 +86,7 @@ body#build div#content{
         text-align: left;
         background: $white;
 
+        div.loading { font-size: 16px; height: 30px; }
         select{width: 70%; margin-bottom: 12px; float: left;}
         a.add_sub_question{width: auto;}
         a{ margin: 0 4px 4px 0;}

@@ -217,3 +217,7 @@ en:
     errors:
       verification_failed: "Word verification response is incorrect, please try again."
       recaptcha_unavailable: "The CAPTCHA service is unavailable."
+
+  templates:
+    loading:
+      loading: "Loading..."
