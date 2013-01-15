@@ -129,7 +129,7 @@ describe Question do
       nested_question = MultiChoiceQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
       second_nested_question = MultiChoiceQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
       nested_question.options << Option.create(content: "Nested Option", order_number: 0)
-      second_level_nested_question = MultiChoiceQuestion.create({content: "Nested Again", survey_id: 18, order_number: 0, parent_id: nested_question.options.first.id})    
+      second_level_nested_question = MultiChoiceQuestion.create({content: "Nested Again", survey_id: 18, order_number: 0, parent_id: nested_question.options.first.id})
       question.with_sub_questions_in_order.should == [question, nested_question, second_level_nested_question, second_nested_question]
     end
 
@@ -195,6 +195,17 @@ describe Question do
       duplicated_question = question.duplicate(18)
       duplicated_question.options[0].questions[0].survey_id.should == 18
     end
+  end
+
+  it "returns the index of the parent's option amongst its siblings" do
+      question = MultiChoiceQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+      parent_option = Option.create(content: "Option", order_number: 0)
+      question.options << parent_option
+      question.options << Option.create(content: "Option", order_number: 1)
+      question.options << Option.create(content: "Option", order_number: 2)
+      sub_question = SingleLineQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+      parent_option.questions << sub_question
+      sub_question.index_of_parent_option.should == 0
   end
 
   include_examples 'a question'

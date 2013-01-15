@@ -60,4 +60,10 @@ class Question < ActiveRecord::Base
     return category.nesting_level + 1 if category
     return 1
   end
+
+  def index_of_parent_option
+    parent_options = parent_question.options
+    parent_options.index(parent)
+  end
+
 end
