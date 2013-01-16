@@ -24,8 +24,8 @@
             <td>
             <% if answer.photo_url.present? %>
               <%= image_tag answer.photo_url(:thumb), :class => 'thumb' %>
-            <% else %>  
-              <%= answer.content %> 
+            <% else %>
+              <%= answer.content %>
             <% end %>
             </td>
           <% end %>
@@ -44,6 +44,7 @@
           </td>
 
           <td class="actions">
+            <%= link_to icon_for('icon-edit', 'Show'), survey_response_path(:id => response.id), :class => 'show_response' if can? :show, response %>
             <%= link_to icon_for('icon-edit', 'Edit'), edit_survey_response_path(:id => response.id), :class => 'edit_response' if can? :edit, response %>
             <%= link_to icon_for('icon-remove', 'Delete'), survey_response_path(:id => response.id), :method => :delete, :class => 'delete_response', :data => { :confirm => t(:confirm) } if can? :destroy, response %>
           </td>
