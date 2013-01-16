@@ -1,230 +1,244 @@
-body#build div#content{
-  @include span-columns(6);
+body#build{
+  div#banner{width: 100px;}
+  div#page{margin: 0 0 0 80px;}
 
-  div#survey_builder{
-    margin: 0; padding: 0 20px;
-    position: relative;
+  div#content{
+    width: 500px;
+    float: left;
 
-    ul#picker_pane{
-      display: block;
-      position: fixed;
-      left: 60%;
-      right: 40px;
-      top: 40px;
-      @include transition(all 1.0s ease-in-out);
-
-      padding: 1%;
-      list-style: none;
-      font-size: 16px;
-      line-height: 24px;
-
-      li{
-        width: 18%;
-        padding: 0;
-        margin: 1%;
-        list-style: none;
-        display: block;
-        float: left;
-        text-align: center;
-
-        a{
-          font-size: 13px;
-          display: block;
-          padding: 0;
-          background: $secondary-color;
-          color: $primary-color;
-          @include border-radius(10px);
-
-          &:hover{background: $secondary-color-light; border: none;}
-        }
-      }
-    }
-
-    div#settings_pane{
-      display: block;
-      position: fixed;
-      left: 59%;
-      right: 40px;
-      top: 140px;
-      bottom: 40px;
-      padding: 20px;
-      margin: 0;
-      background: $secondary-color-light;
-      @include transition(all 1.0s ease-in-out);
-
-      // &:before{
-      //   content: "";
-      //   display: block;
-      //   width: 0; height: 0;
-      //   position: absolute;
-      //   border: solid 10px $secondary-color-light;
-      //   border-top-color: transparent;
-      //   border-left-color: transparent;
-      //   border-bottom-color: transparent;
-      //   margin-left: -20px;
-      //   left: 0;
-      // }
-
-      textarea#survey_description{height: 90px;}
-      textarea{height: 30px;}
-    }
-
-    div{margin-bottom: 6px;}
-
-    div.option{
-      clear: both;
-      overflow: hidden;
-      margin-bottom: 12px;
-      border: solid 1px $secondary-color;
-
-      div, label, input{width: 45%; float: left; margin: 1%;}
-
-      div.actions{
-        float: right; width: 50%;
-        padding: 1%;
-        margin: 0;
-        text-align: left;
-        background: $white;
-
-        div.loading { font-size: 16px; height: 30px; }
-        select{width: 70%; margin-bottom: 12px; float: left;}
-        a.add_sub_question{width: auto;}
-        a{ margin: 0 4px 4px 0;}
-      }
-    }
-
-    div.add_option{
-      border-top: solid 1px $secondary-color;
-      padding-top: 10px;
-      margin-top: 10px;
-    }
-  }
-
-  div#dummy_pane{
-    div.star{
-      img{display: inline; margin: 0;}
-    }
-
-    img{display: block;}
-
-    label{
-      abbr{border: none; color: $danger;}
-    }
-
-    div#dummy_survey_details{
-      display: block;
-    }
-
-    div.dummy_question, .dummy_category{
-      border: solid 1px $secondary-color-light;
+    div#survey_builder{
+      margin: 0; padding: 0 20px;
       position: relative;
 
-      .inline_errors{
+      ul#picker_pane{
         display: block;
-        background: $white;
-        color: $danger;
-        padding: 0 6px;
-        line-height: 21px;
+        position: fixed;
+        left: 740px;
+        right: 40px;
+        top: 20px;
+        @include transition(all 1.0s ease-in-out);
+
+        padding: 1%;
+        list-style: none;
+        font-size: 16px;
+        line-height: 24px;
+
+        li{
+          width: 18%;
+          padding: 0;
+          margin: 1%;
+          list-style: none;
+          display: block;
+          float: left;
+          text-align: center;
+
+          a{
+            font-size: 13px;
+            display: block;
+            padding: 0;
+            background: $secondary-color;
+            color: $primary-color;
+            @include border-radius(10px);
+
+            &:hover{background: $secondary-color-light; border: none;}
+          }
+        }
       }
 
-      .identifier_icon{
+      div#settings_pane{
         display: block;
-        position: absolute;
-        top: 0; right: 36px;
-        width: 36px; height: 36px;
-        text-indent: -1000em;
+        position: fixed;
+        overflow: auto;
+        left: 740px;
+        right: 20px;
+        top: 132px;
+        bottom: 20px;
+        padding: 20px;
+        margin: 0;
+        background: $secondary-color-light;
+        border-bottom: solid 4px $secondary-color-light;
+        @include transition(all 1.0s ease-in-out);
 
-        &:before{
+        // &:before{
+        //   content: "";
+        //   display: block;
+        //   width: 0; height: 0;
+        //   position: absolute;
+        //   border: solid 10px $secondary-color-light;
+        //   border-top-color: transparent;
+        //   border-left-color: transparent;
+        //   border-bottom-color: transparent;
+        //   margin-left: -20px;
+        //   left: 0;
+        // }
+
+        textarea#survey_description{height: 90px;}
+        textarea{height: 30px;}
+      }
+
+      div{margin-bottom: 6px;}
+
+      div.option{
+        clear: both;
+        overflow: hidden;
+        margin-bottom: 12px;
+        border: solid 1px $secondary-color;
+
+        div, label, input{width: 45%; float: left; margin: 1%;}
+
+        div.actions{
+          float: right; width: 50%;
+          padding: 1%;
+          margin: 0;
+          text-align: left;
+          background: $white;
+
+          div.loading { font-size: 16px; height: 30px; }
+          select{width: 70%; margin-bottom: 12px; float: left;}
+          a.add_sub_question{width: auto;}
+          a{ margin: 0 4px 4px 0;}
+        }
+      }
+
+      div.add_option{
+        border-top: solid 1px $secondary-color;
+        padding-top: 10px;
+        margin-top: 10px;
+      }
+    }
+
+    div#dummy_pane{
+      div.star{
+        img{display: inline; margin: 0;}
+      }
+
+      img{display: block;}
+
+      label{
+        abbr{border: none; color: $danger;}
+      }
+
+      div#dummy_survey_details{
+        display: block;
+      }
+
+      div.dummy_question, .dummy_category{
+        border: solid 1px $secondary-color-light;
+        position: relative;
+
+        .inline_errors{
+          display: block;
+          background: $white;
+          color: $danger;
+          padding: 0 6px;
+          line-height: 21px;
+        }
+
+        .identifier_icon{
           display: block;
           position: absolute;
-          top: 0; right: 0;
-          font-family: "FontAwesome";
-          content: "\f02e";
-          font-size: 24px;
-          line-height: 22px;
-          text-indent: 0;
-          color: $danger;
+          top: 0; right: 36px;
+          width: 36px; height: 36px;
+          text-indent: -1000em;
+
+          &:before{
+            display: block;
+            position: absolute;
+            top: 0; right: 0;
+            font-family: "FontAwesome";
+            content: "\f02e";
+            font-size: 24px;
+            line-height: 22px;
+            text-indent: 0;
+            color: $danger;
+          }
         }
-      }
 
-      .sub_question_group{
-        margin: 2px 0 0 0;
+        .sub_question_group{
+          margin: 2px 0 0 0;
 
-        .sub_question_group_message{
+          .sub_question_group_message{
+            margin: 0 0 0 20px;
+            padding: 10px;
+            background: $secondary-color-light;
+          }
+        }
+
+        div.collapse_category{
+          display: block; float: left;
+          margin: -8px 0 10px -28px;
+          color: $gray-xdark;
+        }
+
+        div.dummy_question, .sub_question_group_message, .dummy_category{
           margin: 0 0 0 20px;
-          padding: 10px;
+          border-right: 0;
+          border-bottom: 0;
+
+          .dummy_question_content{margin: 0;}
+        }
+
+        .dummy_category_content{margin: 0; padding-top: 8px;}
+        .sub_question_group_message{margin-bottom: 2px;}
+      }
+
+
+      div#dummy_survey_details>div{border: solid 1px $secondary-color-light;}
+      div.dummy_question_content, div.dummy_category_content, div#dummy_survey_details>div{
+        padding: 4px 10px 10px 30px;
+        margin-bottom: 4px;
+        position: relative;
+
+        span{display: block; float: left; margin-left: -20px; font-weight: bold;}
+
+        a.delete_question, a.delete_category {display: none;}
+        &:hover{ background: $gray-xxlight;}
+
+        &.active{
           background: $secondary-color-light;
+          a.delete_question, a.delete_category  {display: block; background: $secondary-color;}
+
+          &:after, &:before{
+            content: "";
+            display: block;
+            position: absolute;
+            right: -40px;
+            top: 20px;
+            width: 0; height: 0;
+
+            border: solid 10px $secondary-color-light;
+            border-top-color: transparent;
+            border-left-color: transparent;
+            border-bottom-color: transparent;
+          }
+
+          &:before{
+            border: none;
+            border-left: solid 4px $secondary-color-light;
+            height: 240px;
+            right: -44px;
+          }
+
+        }
+
+        div.collapse_category {
+          cursor: pointer;
+          color: $primary-color-light;
+          &:hover {
+            color: $primary-color;
+          }
         }
       }
 
-      div.collapse_category{
-        display: block; float: left;
-        margin: -8px 0 10px -28px;
-        color: $gray-xdark;
-      }
 
-      div.dummy_question, .sub_question_group_message, .dummy_category{
-        margin: 0 0 0 20px;
-        border-right: 0;
-        border-bottom: 0;
-
-        .dummy_question_content{margin: 0;}
-      }
-
-      .dummy_category_content{margin: 0; padding-top: 8px;}
-      .sub_question_group_message{margin-bottom: 2px;}
     }
 
-
-    div.dummy_question_content, div.dummy_category_content, div#dummy_survey_details>div{
-      padding: 4px 10px 10px 30px;
-      margin-bottom: 4px;
-
-      span{display: block; float: left; margin-left: -20px; font-weight: bold;}
-
-      a.delete_question, a.delete_category {display: none;}
-      &:hover{ background: $gray-xxlight;}
-
-      &.active{
-        background: $secondary-color-light;
-        a.delete_question, a.delete_category  {display: block; background: $secondary-color;}
-
-        &:after{
-          content: "";
-          display: block;
-          position: fixed;
-          left: 59%;
-          top: auto;
-          margin-top: -60px;
-          margin-left: -20px;
-          width: 0; height: 0;
-
-          position: fixed;
-          border: solid 10px $secondary-color-light;
-          border-top-color: transparent;
-          border-left-color: transparent;
-          border-bottom-color: transparent;
-        }
-
+    .form-actions{
+      border-top: solid 2px $secondary-color-light; padding-top: 10px;
+      input[type="submit"], input[type="button"]{float: right;}
+      input.hidden {
+        display: none;
       }
-
-      div.collapse_category {
-        cursor: pointer;
-        color: $primary-color-light;
-        &:hover {
-          color: $primary-color;
-        }
-      }
-    }
-
-
-  }
-
-  .form-actions{
-    border-top: solid 2px $secondary-color-light; padding-top: 10px;
-    input[type="submit"], input[type="button"]{float: right;}
-    input.hidden {
-      display: none;
     }
   }
 }

@@ -5,10 +5,9 @@ html{
 
 body{background: transparent;}
 
-#page{
+div#page{
   display: block;
   @include container;
-  // margin-left: 40px;
 }
 
 div#content{
