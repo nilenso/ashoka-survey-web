@@ -100,6 +100,7 @@ en:
       pick_question_type: "Pick Question"
       question_settings: "Settings"
       option: "Option"
+      category: "Category"
       question_title: "Question Title"
       save_survey: "Save Survey"
       delete_survey: "Delete Survey"

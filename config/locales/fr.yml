@@ -101,6 +101,7 @@ fr:
       pick_question_type: "Choisissez Type de Question"
       question_settings: "Paramètres"
       option: "Option"
+      category: "fr Category"
       question_title: "Titre de la question"
       save_survey: "Économiser de l'enquête"
       delete_survey: "Delete de l'enquête"
