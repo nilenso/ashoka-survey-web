@@ -7,7 +7,7 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
     @add_survey_details(survey_model)
 
   add_question: (type, model) =>
-    view = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, model)    
+    view = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, model)
     @questions.push(view)
     model.on('destroy', this.delete_question_view, this)
     $(this.el).append($(view.render().el))
