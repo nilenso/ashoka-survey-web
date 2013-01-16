@@ -143,6 +143,7 @@ fr:
 
     edit:
       delete: "Delete-fr"
+      edit: "Edit-fr"
       edit_response: "Edit response-fr for"
       error_saving_response: "La réponse économie erreur"
       save_as_draft: "fr Save as Draft"

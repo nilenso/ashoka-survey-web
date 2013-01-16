@@ -1,32 +1,32 @@
 class ResponseDecorator < Draper::Base
   decorates :response
 
-  def input_tag_for(question, f)
+  def input_tag_for(question, f, disabled)
     case question.type
     when 'RadioQuestion'
-      f.input :content, :label => label_for(question), :as => :radio, :collection => question.options.map { |o| [o.content, o.content, {:data => { :option_id => o.id } }] }, :required => question.mandatory
+      f.input :content, :label => label_for(question), :as => :radio, :collection => question.options.map { |o| [o.content, o.content, {:data => { :option_id => o.id } }] }, :required => question.mandatory, :input_html => { :disabled => disabled }
 
     when 'DropDownQuestion'
-      f.input :content, :as => :select, :label => label_for(question), :required => question.mandatory, :collection => question.options.map { |o| [o.content, o.content, {'data-option-id' => o.id }] }
+      f.input :content, :as => :select, :label => label_for(question), :required => question.mandatory, :collection => question.options.map { |o| [o.content, o.content, {'data-option-id' => o.id }] }, :input_html => { :disabled => disabled }
 
     when 'SingleLineQuestion'
-      f.input :content, :label => label_for(question), :as => :string, :required => question.mandatory, :input_html => { :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length } }
+      f.input :content, :label => label_for(question), :as => :string, :required => question.mandatory, :input_html => { :disabled => disabled, :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length } }
 
     when 'MultilineQuestion'
-      f.input :content, :label => label_for(question), :as => :text, :required => question.mandatory, :input_html => { :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length }, :rows => 4 }
+      f.input :content, :label => label_for(question), :as => :text, :required => question.mandatory, :input_html => { :disabled => disabled, :class => question.max_length ? "max_length" : nil, :data => { :max_length => question.max_length }, :rows => 4 }
 
     when 'NumericQuestion'
-      f.input :content, :label => label_for(question), :as => :number, :required => question.mandatory, :hint => numeric_question_hint(question.min_value, question.max_value)
+      f.input :content, :label => label_for(question), :as => :number, :required => question.mandatory, :hint => numeric_question_hint(question.min_value, question.max_value), :input_html => { :disabled => disabled }
 
     when 'DateQuestion'
-      f.input :content, :label => label_for(question), :as => :string, :required => question.mandatory, :input_html => { :class => 'date' }
+      f.input :content, :label => label_for(question), :as => :string, :required => question.mandatory, :input_html => { :disabled => disabled, :class => 'date' }
 
     when 'MultiChoiceQuestion'
-      f.input :option_ids, :as => :check_boxes, :label => label_for(question), :required => question.mandatory, :collection => question.options.map(&:id), :member_label => Proc.new { |id| Option.find_by_id(id).try(:content)}
+      f.input :option_ids, :as => :check_boxes, :label => label_for(question), :required => question.mandatory, :collection => question.options.map(&:id), :member_label => Proc.new { |id| Option.find_by_id(id).try(:content)}, :disabled => disabled ? question.options.map(&:id) : []
 
     when 'PhotoQuestion'
       answer = Answer.find_by_question_id_and_response_id(question.id, id)
-      "#{(h.image_tag answer.photo_url(:medium), :class => 'medium' if answer.photo_url.present?)} #{(f.input :photo, :as => :file, :required => question.mandatory, :label => label_for(question))}".html_safe
+      "#{(h.image_tag answer.photo_url(:medium), :class => 'medium' if answer.photo_url.present?)} #{(f.input :photo, :as => :file, :required => question.mandatory, :label => label_for(question), :input_html => { :disabled => disabled })}".html_safe
 
     when 'RatingQuestion'
       string = ERB.new "
