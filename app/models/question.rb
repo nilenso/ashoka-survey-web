@@ -48,7 +48,7 @@ class Question < ActiveRecord::Base
   end
 
   def first_level?
-    self.parent == nil
+    self.parent == nil && self.category == nil
   end
 
   def report_data

@@ -96,10 +96,13 @@ describe Question do
 
   it "knows if it is a first level question" do
     question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
+    category = FactoryGirl.create(:category)
     question.options << Option.create(content: "Option", order_number: 2)
     sub_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
+    question_under_category = FactoryGirl.create(:question, :category => category)
     question.first_level?.should be_true
     sub_question.first_level?.should be_false
+    question_under_category.first_level?.should be_false
   end
 
   context "when returning all its subquestions in order" do
