@@ -1,6 +1,7 @@
 <%= render "layouts/status_bar", :status => "collect" %>
 
 <header>
+  <%= button_to t(".edit"), edit_survey_response_path(@survey.id, @response.id),:class => "edit-button", :method => :get if @disabled && (can? :edit, @response) %>
   <%= button_to t(".delete"), survey_response_path(@survey.id, @response.id),:class => "delete-button", :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, @response %>
   <h2><%= t('.edit_response') %> <%= @survey.name %></h2>
 </header>
@@ -10,18 +11,20 @@
     <%= @response.category_name_for(question.category) %>
     <div class="question <%= "hidden sub_question" if question.parent || question.category.try(:sub_question?)  %>" data-parent-id="<%= question.parent_id %>" data-category-id="<%= question.category_id %>" data-nesting-level="<%= question.nesting_level %>">
       <%= image_tag question.image_url(:medium), :class => "medium" if question.image_url %>
-      <%= @response.input_tag_for(question, f) %>
+      <%= @response.input_tag_for(question, f, @disabled) %>
       <%= f.input :question_id, :as => :hidden %>
     </div>
   <% end %>
 
-  <%= f.actions do %>
-  <% if @response.survey_public? %>
-      <%= recaptcha_tags :display => { :theme => :clean } %>
-      <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'complete_button' } %>
-    <% else %>
-      <%= f.action :submit, :as => :button, :label => t('.save_as_draft') unless @response.complete? %>
-      <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' }  %>
+  <% unless @disabled %>
+    <%= f.actions do %>
+    <% if @response.survey_public? %>
+        <%= recaptcha_tags :display => { :theme => :clean } %>
+        <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'complete_button' } %>
+      <% else %>
+        <%= f.action :submit, :as => :button, :label => t('.save_as_draft') unless @response.complete? %>
+        <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' }  %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
@@ -41,6 +44,7 @@
       $(this).raty({
         number: $(this).data('number-of-stars') || 5,
         score: $(this).data('score'),
+        <%= 'readOnly: true,' if @disabled %>
         click: function() {
           $(this).prev().children('input').val($(this).raty('score'))
         }

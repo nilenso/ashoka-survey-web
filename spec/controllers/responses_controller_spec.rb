@@ -92,22 +92,52 @@ describe ResponsesController do
   end
 
   context "GET 'edit'" do
-    it "renders the edit page" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey,
+    before(:each) do
+      @survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      @res = FactoryGirl.create(:response, :survey => @survey,
                                :organization_id => 1, :user_id => 2)
-      get :edit, :id => res.id, :survey_id => survey.id
+    end
+
+    it "renders the edit page" do
+      get :edit, :id => @res.id, :survey_id => @survey.id
       response.should be_ok
       response.should render_template('edit')
     end
 
     it "assigns a survey and response" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey,
+      get :edit, :id => @res.id, :survey_id => @survey.id
+      assigns(:response).should == Response.find(@res.id)
+      assigns(:survey).should == @survey
+    end
+
+    it "assigns disabled as false" do
+      get :edit, :id => @res.id, :survey_id => @survey.id
+      assigns(:disabled).should be_false
+    end
+  end
+
+  context "GET 'show'" do
+    before(:each) do
+      @survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      @res = FactoryGirl.create(:response, :survey => @survey,
                                :organization_id => 1, :user_id => 2)
-      get :edit, :id => res.id, :survey_id => survey.id
-      assigns(:response).should == Response.find(res.id)
-      assigns(:survey).should == survey
+    end
+
+    it "renders the edit page" do
+      get :show, :id => @res.id, :survey_id => @survey.id
+      response.should be_ok
+      response.should render_template('edit')
+    end
+
+    it "assigns a survey and response" do
+      get :show, :id => @res.id, :survey_id => @survey.id
+      assigns(:response).should == Response.find(@res.id)
+      assigns(:survey).should == @survey
+    end
+
+    it "assigns disabled as true" do
+      get :show, :id => @res.id, :survey_id => @survey.id
+      assigns(:disabled).should be_true
     end
   end
 

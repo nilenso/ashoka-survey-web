@@ -14,7 +14,7 @@ SurveyWeb::Application.routes.draw do
       get 'build'
       put 'finalize'
       match  "public_response" => "responses#create"
-      resources :responses, :only => [:new, :create, :index, :edit, :update, :destroy] do
+      resources :responses, :only => [:new, :create, :index, :edit, :show, :update, :destroy] do
         member { put "complete" }
       end
     end

@@ -33,6 +33,15 @@ class ResponsesController < ApplicationController
     @survey = Survey.find(params[:survey_id])
     @response = ResponseDecorator.find(params[:id])
     sort_questions_by_order_number(@response)
+    @disabled = false
+  end
+
+  def show
+    @survey = Survey.find(params[:survey_id])
+    @response = ResponseDecorator.find(params[:id])
+    sort_questions_by_order_number(@response)
+    @disabled = true
+    render :edit
   end
 
   def update
