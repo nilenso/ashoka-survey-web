@@ -21,7 +21,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
     $(this.el).find('.star').raty({
       readOnly: true,
       number: this.model.get('max_length') || 5
-    });
+    })
 
     $(this.el).children(".dummy_question_content").click (e) =>
       @show_actual(e)
