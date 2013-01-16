@@ -2,7 +2,7 @@
 class SurveyBuilder.Views.NotificationsView extends Backbone.View
   el: "#notifications"
 
-  CLEAR_TIMEOUT: 5000 
+  CLEAR_TIMEOUT: 5000
 
   set_notice: (message) =>
     @clear_text()

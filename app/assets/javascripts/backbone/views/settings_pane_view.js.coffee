@@ -2,9 +2,6 @@
 class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
   el: "#settings_pane"
 
-  events:
-    'settings_pane_move': 'move'
-
   initialize: (survey_model) =>
     @questions = []
     @add_survey_details(survey_model)
@@ -42,13 +39,3 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
   hide_all: =>
     question.hide() for question in @questions
 
-  move: =>
-    yPosition = 0
-    if $("div#dummy_pane div.active, div#dummy_survey_details div.active").length > 0
-      activeElementPosition = $("div#dummy_pane div.active").offset().top
-      containerPosition = $('#content').offset().top
-
-      settingsTopMargin = (activeElementPosition - containerPosition - 10) + 'px';
-      pickerTopMargin = (activeElementPosition - containerPosition - 90) + 'px';
-      # $("#settings_pane").css('margin-top', settingsTopMargin)
-      # $("#picker_pane").css('margin-top', pickerTopMargin)
