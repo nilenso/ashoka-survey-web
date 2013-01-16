@@ -138,7 +138,7 @@ en:
       download_excel: Download Excel
       incomplete: Incomplete
       complete: Complete
-      list_of_responses: List of Responses
+      list_of_responses: "List of Responses for %{survey_name}"
       added_by: Added by
 
     edit:

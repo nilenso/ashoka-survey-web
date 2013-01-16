@@ -3,7 +3,7 @@
 <header>
   <%= link_to icon_for('icon-plus', t('.add_response')), survey_responses_path(@survey), :method => :post, :class => 'add_response' if can?(:create, Response.new(:survey => @survey)) && !@survey.expired?  %>
   <%= link_to icon_for('icon-table', t('.download_excel')), survey_responses_path(format: :xlsx), :class => 'download_excel' unless @complete_responses.blank? %>
-  <h2><%= t '.list_of_responses' %></h2>
+  <h2><%= t('.list_of_responses', :survey_name => @survey.name) %></h2>
 </header>
 <div>
   <% unless @responses.blank? %>
