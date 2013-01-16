@@ -29,6 +29,16 @@
   <% end %>
 <% end %>
 
+<% if @disabled && JSON.parse(@marker).any? %>
+  <div id="location_map">
+    <p><%= t('.location') %></p>
+    <%= gmaps4rails(@marker) %>
+  </div>
+<% else %>
+  <div id="location_map">
+    <p><%= t('.location_unavailable') %></p>
+  </div>
+<% end %>
 
 <script type="text/javascript">
   $(document).ready(function(){

@@ -41,6 +41,7 @@ class ResponsesController < ApplicationController
     @response = ResponseDecorator.find(params[:id])
     sort_questions_by_order_number(@response)
     @disabled = true
+    @marker = @response.to_gmaps4rails
     render :edit
   end
 
