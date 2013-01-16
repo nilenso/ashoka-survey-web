@@ -8,7 +8,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @survey_model = survey_model
     @add_survey_details(survey_model)
     ($(this.el).find("#dummy_questions")).sortable({
-      stop : ((event, ui) =>
+      update : ((event, ui) =>
         window.loading_overlay.show_overlay("Reordering Questions")
         _.delay(=>
           this.reorder_questions(event,ui)
