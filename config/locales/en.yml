@@ -149,6 +149,8 @@ en:
       save_as_draft: "Save as Draft"
       mark_as_complete: "Mark as Complete"
       save_response: "Save Response"
+      location: "Location"
+      location_unavailable: "Location Unavailable"
 
   answers:
     validations:

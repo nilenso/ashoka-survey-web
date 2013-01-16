@@ -149,6 +149,8 @@ fr:
       save_as_draft: "fr Save as Draft"
       mark_as_complete: "fr Mark as Complete"
       save_response: "fr Save Response"
+      location: "fr Location"
+      location_unavailable: "fr Location Unavailable"
 
   answers:
     validations:

@@ -1,14 +1,12 @@
-div.reports{
-  div#location_map{
-    display: block; width: 100%;
+div#location_map{
+  display: block;
 
-    div.map_container{
-      width: 100%; height: 400px; margin: 0; padding: 0;
-      @include box-shadow(0 0 10px rgba($black,0.2));
+  div.map_container{
+    width: 100%; height: 400px; margin: 0; padding: 0;
+    @include box-shadow(0 0 10px rgba($black,0.2));
 
-      .gmaps4rails_map{
-        width: 100%; height: 400px;
-      }
+    .gmaps4rails_map{
+      width: 100%; height: 400px;
     }
   }
 }
