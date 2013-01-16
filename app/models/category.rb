@@ -37,10 +37,15 @@ class Category < ActiveRecord::Base
   end
 
   def has_questions?
-      questions.count > 0 || categories.any? { |x| x.has_questions? }
+    questions.count > 0 || categories.any? { |x| x.has_questions? }
   end
 
   def categories_with_questions
     categories.select { |x| x.has_questions? }
+  end
+
+  def index_of_parent_option
+    parent_options = parent_question.options
+    parent_options.index(parent)
   end
 end

@@ -85,7 +85,7 @@ describe Category do
     it "returns true if the sub-category has sub questions" do
       category = FactoryGirl.create :category, :order_number => 0
       sub_category = FactoryGirl.create :category, :order_number => 1
-      category.categories << sub_category 
+      category.categories << sub_category
       nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: sub_category.id})
       category.has_questions?.should be_true
     end
@@ -93,7 +93,7 @@ describe Category do
     it "returns true if the sub-category has sub questions" do
       category = FactoryGirl.create :category, :order_number => 0
       sub_category = FactoryGirl.create :category, :order_number => 1
-      category.categories << sub_category 
+      category.categories << sub_category
       category.has_questions?.should be_false
       sub_category.has_questions?.should be_false
     end
@@ -101,9 +101,20 @@ describe Category do
     it "returns categories with questions" do
       category = FactoryGirl.create :category, :order_number => 0
       sub_category = FactoryGirl.create :category, :order_number => 1
-      category.categories << sub_category 
+      category.categories << sub_category
       nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: sub_category.id})
       category.categories_with_questions.should include(sub_category)
     end
+  end
+
+  it "returns the index of the parent's option amongst its siblings" do
+    question = MultiChoiceQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+    parent_option = Option.create(content: "Option", order_number: 0)
+    question.options << parent_option
+    question.options << Option.create(content: "Option", order_number: 1)
+    question.options << Option.create(content: "Option", order_number: 2)
+    sub_category = FactoryGirl.create :category, :order_number => 0
+    parent_option.categories << sub_category
+    sub_category.index_of_parent_option.should == 0
   end
 end
