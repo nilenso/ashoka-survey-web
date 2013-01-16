@@ -12,6 +12,7 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     this.model.actual_view = this
     this.model.on('save:completed', this.renderImageUploader, this)
     this.model.on('change', this.render, this)
+    this.model.on('change:id', this.render, this)
 
   render:(template) =>
     $(this.el).html(Mustache.render(this.template, this.model.toJSON().question))

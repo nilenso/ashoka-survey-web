@@ -13,6 +13,7 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
     this.model.on('save:completed', this.renderImageUploader, this)
     this.model.on('add:sub_question', this.add_sub_question, this)
     this.model.on('change', this.render, this)
+    this.model.on('change:id', this.render, this)
     this.model.on('change:preload_sub_questions', this.preload_sub_questions)
 
   render:(template) =>
