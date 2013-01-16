@@ -65,7 +65,6 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     $(this.el).trigger("dummy_click")
     $(this.model.actual_view.el).show()
     $(this.el).children('.dummy_category_content').addClass("active")
-    $(this.el).trigger("settings_pane_move")
 
   collapse: (animate=true) =>
     @collapsed = true

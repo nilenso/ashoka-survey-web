@@ -6,7 +6,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'new_question': 'new_question'
     'new_category': 'new_category'
     'dummy_click': 'handle_dummy_click'
-    'settings_pane_move': 'settings_pane_move'
     'click #save': 'save_all_questions'
     'click #finalize': 'finalize'
 
@@ -30,7 +29,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
       $(this.el).bind('ajaxStop.preload', =>
         window.loading_overlay.hide_overlay()
-        this.settings_pane.move()
         $(this.el).unbind('ajaxStop.preload')
         this.dummy_pane.sort_questions_by_order_number()
         this.dummy_pane.reorder_questions())
@@ -70,8 +68,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   handle_dummy_click: =>
     this.hide_all()
     # this.switch_tab()
-  settings_pane_move: =>
-    this.settings_pane.move()
 
   hide_all: (event) =>
     this.dummy_pane.unfocus_all()
