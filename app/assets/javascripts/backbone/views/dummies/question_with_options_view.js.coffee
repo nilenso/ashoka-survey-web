@@ -91,7 +91,9 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
             option_number = option.model.get('question').question_number
             multichoice_parent = option.model.get('question').get('type') == "MultiChoiceQuestion"
-            option_number += String.fromCharCode(65 + option.model.get('order_number')) if multichoice_parent
+            first_order_number = option.model.get('question').first_order_number()
+            option_order_number = option.model.get('order_number') - first_order_number
+            option_number += String.fromCharCode(65 + option_order_number) if multichoice_parent
             sub_question.model.question_number = option_number + '.' + (index)
 
             sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView

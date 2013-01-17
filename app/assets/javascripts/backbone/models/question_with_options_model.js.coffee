@@ -37,6 +37,16 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     this.get('options').each (option) =>
       option.save_model()
 
+  first_order_number: =>
+    this.get('options').first().get('order_number')
+
+  get_order_counter: =>
+    if this.get('options').isEmpty()
+      0
+    else
+      prev_order_counter = this.get('options').last().get('order_number')
+      prev_order_counter + 1
+
   fetch: =>
     super
     this.get('options').fetch
