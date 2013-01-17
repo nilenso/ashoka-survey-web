@@ -1,11 +1,10 @@
 SurveyWeb::Application.configure do
   # Settings specified here will take precedence over those in config/application.rb
 
-  config.action_dispatch.rack_cache = {
-      :metastore    => Dalli::Client.new,
-      :entitystore  => 'file:tmp/cache/rack/body',
-      :allow_reload => false
-  }
+  memcached_config = YAML.load_file(Rails.root.join('config/memcached.yml'))[Rails.env]
+  memcached_hosts = memcached_config['defaults']['servers']
+
+  config.cache_store = :dalli_store, *memcached_hosts
 
   # Add HTTP headers to cache static assets for an hour
   config.static_cache_control = "public, max-age=2592000"
