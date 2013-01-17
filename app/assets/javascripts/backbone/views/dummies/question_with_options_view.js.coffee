@@ -87,6 +87,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
         _(option.sub_questions).each (sub_question) =>
             index = $(sub_question.el).index()
             sub_question.model.set({order_number: last_order_number + index + 1})
+            option.model.sub_question_order_counter = last_order_number + index + 1
 
             option_number = option.model.get('question').question_number
             multichoice_parent = option.model.get('question').get('type') == "MultiChoiceQuestion"
