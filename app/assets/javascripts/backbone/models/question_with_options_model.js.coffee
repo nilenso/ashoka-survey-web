@@ -17,28 +17,24 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     }
   ]
 
+  initialize: =>
+    @order_counter = 0
+
   has_errors: =>
     !_.isEmpty(this.errors) || this.get('options').has_errors()
 
   #Can't have a blank radio question. Initialize with 3 radio options
   seed: =>
     unless this.seeded
-      this.get('options').create({content: I18n.t('js.first_option'), order_number: this.get_order_counter() })
-      this.get('options').create({content: I18n.t('js.second_option'), order_number: this.get_order_counter() })
-      this.get('options').create({content: I18n.t('js.third_option'), order_number: this.get_order_counter() })
+      this.create_new_option('First Option')
+      this.create_new_option('Second Option')
+      this.create_new_option('Third Option')
       this.seeded = true
 
   save_model: =>
     super
     this.get('options').each (option) =>
       option.save_model()
-
-  get_order_counter: =>
-    if this.get('options').isEmpty()
-      0
-    else
-      prev_order_counter = this.get('options').last().get('order_number')
-      prev_order_counter + 1
 
   fetch: =>
     super
@@ -53,7 +49,7 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
 
   create_new_option: (content) =>
     content = "Another Option" unless _(content).isString()
-    this.get('options').create({content: content, order_number: this.get_order_counter() })
+    this.get('options').create({content: content, order_number: @order_counter++ })
 
   has_drop_down_options: =>
     this.get('type') == "DropDownQuestion" && this.get('options').first()
