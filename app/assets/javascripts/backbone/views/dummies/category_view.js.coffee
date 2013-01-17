@@ -27,9 +27,17 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
 
     group = $("<div class='sub_question_group'>")
     _(this.sub_questions).each (sub_question) =>
-      group.sortable({items: "> div", update: @reorder_questions})
+      group.sortable({
+        items: "> div",
+        update: ((event, ui) =>
+          window.loading_overlay.show_overlay("Reordering Questions")
+          _.delay(=>
+            this.reorder_questions(event,ui)
+          , 10)
+        )
+      })
       group.append(sub_question.render().el)
-    
+
     $(this.el).append(group) unless _(this.sub_questions).isEmpty()
     @collapse(false) if @collapsed
 
@@ -100,3 +108,4 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     this.sub_questions = _(this.sub_questions).sortBy (sub_question) =>
       sub_question.model.get('order_number')
     @render()
+    window.loading_overlay.hide_overlay() if event
