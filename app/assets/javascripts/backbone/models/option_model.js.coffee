@@ -9,6 +9,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     @sub_question_order_counter = 0
     @sub_question_models = []
     this.on('change', @make_dirty, this)
+    @make_dirty()
 
   has_errors: =>
     !_.isEmpty(this.errors)
@@ -108,7 +109,7 @@ class SurveyBuilder.Collections.OptionCollection extends Backbone.Collection
 
   has_errors: =>
     this.any((option) => option.has_errors())
- 
+
   preload_sub_questions: =>
     _.each this.models, (option_model) =>
       option_model.preload_sub_questions()

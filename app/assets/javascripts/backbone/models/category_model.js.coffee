@@ -10,6 +10,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     @sub_question_order_counter = 0
     @sub_question_models = []
     this.on('change', @make_dirty, this)
+    @make_dirty()
 
   make_dirty: =>
     @dirty = true
@@ -77,7 +78,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     elements = _((this.get('questions')).concat(this.get('categories'))).sortBy('order_number')
     _.each elements, (question, counter) =>
       _(question).extend({category_id: this.get('id'), order_number: counter })
-      
+
       question_model = SurveyBuilder.Views.QuestionFactory.model_for(question.type, question)
 
       @sub_question_models.push question_model
