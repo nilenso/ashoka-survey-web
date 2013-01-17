@@ -63,6 +63,6 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
 
   destroy_options: =>
     collection = this.get('options')
-    model.destroy() while model = collection.pop()
+    model.destroy({ wait: true}) while model = collection.pop()
 
 SurveyBuilder.Models.QuestionWithOptionsModel.setup()
