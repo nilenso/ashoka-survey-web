@@ -22,7 +22,15 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     $(this.el).children(".sub_question_group").html('')
     _(this.options).each (option) =>
       group = $("<div class='sub_question_group'>")
-      group.sortable({items: "> div", update: @reorder_questions})
+      group.sortable({
+        items: "> div",
+        update: ((event, ui) =>
+          window.loading_overlay.show_overlay("Reordering Questions")
+          _.delay(=>
+            this.reorder_questions(event,ui)
+          , 10)
+        )
+      })
       group.append("<p class='sub_question_group_message'> #{I18n.t('js.questions_for')} #{option.model.get('content')}</p>")
       _(option.sub_questions).each (sub_question) =>
         group.append(sub_question.render().el)
@@ -90,3 +98,5 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
         option.sub_questions = _(option.sub_questions).sortBy (sub_question) =>
           sub_question.model.get('order_number')
     @render()
+    window.loading_overlay.hide_overlay() if event
+
