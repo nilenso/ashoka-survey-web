@@ -9,9 +9,20 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     this.set('content', I18n.t('js.untitled_category'))
     @sub_question_order_counter = 0
     @sub_question_models = []
+    this.on('change', @make_dirty, this)
+
+  make_dirty: =>
+    @dirty = true
+
+  make_clean: =>
+    @dirty = false
+
+  is_dirty: =>
+    @dirty
 
   save_model: =>
-    this.save({}, {error: this.error_callback, success: this.success_callback})
+    if @is_dirty()
+      this.save({}, {error: this.error_callback, success: this.success_callback})
     sub_question.save_model() for sub_question in this.sub_question_models
 
   has_errors: =>
@@ -24,6 +35,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     })
 
   success_callback: (model, response) =>
+    @make_clean()
     this.errors = []
     this.trigger('change:errors')
     this.trigger('save:completed')
