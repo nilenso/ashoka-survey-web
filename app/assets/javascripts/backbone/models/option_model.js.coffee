@@ -93,7 +93,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
       @set_question_number_for_sub_question(question_model)
       question_model.fetch()
 
-    this.trigger('change:preload_sub_questions', @sub_question_models)    
+    this.trigger('change:preload_sub_questions', @sub_question_models)
     @sub_question_order_counter = _(elements).last().order_number
 
 SurveyBuilder.Models.OptionModel.setup()

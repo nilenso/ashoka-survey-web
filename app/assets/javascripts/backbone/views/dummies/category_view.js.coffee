@@ -11,6 +11,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     this.model.on('change:errors', this.render, this)
     this.model.on('change:preload_sub_questions', this.preload_sub_questions)
     this.model.on('add:sub_question', this.add_sub_question)
+    this.on('destroy:sub_question', this.reorder_questions, this)
 
   render: =>
     this.model.set('content', I18n.t('js.untitled_category')) if _.isEmpty(this.model.get('content'))
