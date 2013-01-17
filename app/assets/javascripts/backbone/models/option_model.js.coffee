@@ -8,16 +8,28 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   initialize: =>
     @sub_question_order_counter = 0
     @sub_question_models = []
+    this.on('change', @make_dirty, this)
 
   has_errors: =>
     !_.isEmpty(this.errors)
 
+  make_dirty: =>
+    @dirty = true
+
+  make_clean: =>
+    @dirty = false
+
+  is_dirty: =>
+    @dirty
+
   save_model: =>
-    this.save({}, {error: this.error_callback, success: this.success_callback})
+    if @is_dirty()
+      this.save({}, {error: this.error_callback, success: this.success_callback})
     _.each @sub_question_models, (question) =>
       question.save_model()
 
   success_callback: (model, response) =>
+    @make_clean()
     this.errors = []
     this.trigger('change:errors')
 
