@@ -35,7 +35,9 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
     question = _(@questions).find((question) => question.model == model )
     @questions = _(@questions).without(question)
     question.remove()
+    $(this.el).trigger("show_survey_details")
 
   hide_all: =>
     question.hide() for question in @questions
+
 
