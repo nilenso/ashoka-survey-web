@@ -55,7 +55,13 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @reorder_questions_after_deletion()
 
   reorder_questions: (event, ui) =>
-    @reorder_questions_after_deletion()
+    last_order_number = @survey_model.next_order_number()
+    _(@questions).each (question) =>
+      index = $(question.el).index()
+      question.model.set({order_number: last_order_number + index + 1}, {silent: true})
+      question.model.question_number = index + 1
+      question.reorder_questions() if question instanceof SurveyBuilder.Views.Dummies.CategoryView
+      question.reorder_questions() if question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
     @sort_questions_by_order_number()
     window.loading_overlay.hide_overlay()
 
@@ -70,8 +76,6 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
         index = $(question.el).index()
         question.model.set({order_number: last_order_number + index + 1}, {silent: true})
         question.model.question_number = index + 1
-        question.reorder_questions() if question instanceof SurveyBuilder.Views.Dummies.CategoryView
-        question.reorder_questions() if question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
     @render()
 
   show_survey_details: =>
