@@ -101,7 +101,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       .max().value()
     _(@sub_questions).each (sub_question) =>
       index = $(sub_question.el).index()
-      sub_question.model.set({order_number: last_order_number + index + 1})
+      sub_question.model.set({order_number: last_order_number + index + 1}, {silent: true})
       @model.sub_question_order_counter = last_order_number + index + 1
       sub_question.model.question_number = this.model.question_number + '.' + (index + 1)
       sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
