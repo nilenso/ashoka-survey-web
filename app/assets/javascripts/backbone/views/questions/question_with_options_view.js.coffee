@@ -58,7 +58,12 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
   add_options_in_bulk: =>
     csv = $(this.el).children('textarea.add_options_in_bulk').val()
     return if csv == ""
-    parsed_csv = $.csv.toArray(csv)
+    try
+      parsed_csv = $.csv.toArray(csv)
+    catch error
+      alert I18n.t("js.require_csv_format")
+      return
+
     window.loading_overlay.show_overlay("Adding your options. Please wait.")    
     _.delay(=>
       @model.destroy_options()
