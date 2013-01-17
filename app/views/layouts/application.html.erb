@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html>
-<head>
-<title><%= t(:application_title) %></title>
-<%= stylesheet_link_tag    "application", :media => "all" %>
-<%= javascript_include_tag "application" %>
-<%= csrf_meta_tags %>
-</head>
-<body<%= yield :body_attributes %>>
-  <div id="page">
-    <%= render "layouts/header" %>
+  <head>
+    <%= airbrake_javascript_notifier %>
+    <title><%= t(:application_title) %></title>
+    <%= stylesheet_link_tag    "application", :media => "all" %>
+    <%= javascript_include_tag "application" %>
+    <%= csrf_meta_tags %>
+  </head>
+  <body<%= yield :body_attributes %>>
+    <div id="page">
+      <%= render "layouts/header" %>
 
-    <%= yield :status_bar %>
-    
-    <div id="content" role="content">
-      <%= render "layouts/flash", :flash => flash %> 
-      <%= yield %>
-      <% unless Rails.env.production? %>
-        <div id='footnotes_holder'></div>
-      <% end %>
+      <%= yield :status_bar %>
+
+      <div id="content" role="content">
+        <%= render "layouts/flash", :flash => flash %>
+        <%= yield %>
+        <% unless Rails.env.production? %>
+          <div id='footnotes_holder'></div>
+        <% end %>
+      </div>
+
+      <%= render "layouts/footer" %>
     </div>
-
-    <%= render "layouts/footer" %>
-  </div>
-</body>
+  </body>
 </html>

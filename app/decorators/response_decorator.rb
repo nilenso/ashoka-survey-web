@@ -41,7 +41,7 @@ class ResponseDecorator < Draper::Base
         <%= f.semantic_errors :content if (f.semantic_errors :content) %>
       </div>"
 
-      string.result(binding).html_safe
+      string.result(binding).force_encoding('utf-8').html_safe
     end
   end
 
@@ -85,7 +85,7 @@ class ResponseDecorator < Draper::Base
           </h2>
         </div>
       "
-      string.result(binding).html_safe
+      string.result(binding).force_encoding('utf-8').html_safe
     end
   end
 
