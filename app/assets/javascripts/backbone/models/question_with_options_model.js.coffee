@@ -18,6 +18,7 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
   ]
 
   initialize: =>
+    super
     @order_counter = 0
 
   has_errors: =>

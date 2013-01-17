@@ -7,10 +7,10 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     mandatory: false
     identifier: false
 
-
   initialize: =>
     this.set('content', I18n.t('js.untitled_question'))
     this.on('change', @make_dirty, this)
+    @make_dirty()
 
   has_errors: =>
     !_.isEmpty(this.errors)
