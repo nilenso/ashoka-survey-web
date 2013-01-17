@@ -10,11 +10,23 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
 
   initialize: =>
     this.set('content', I18n.t('js.untitled_question'))
+    this.on('change', @make_dirty, this)
+
   has_errors: =>
     !_.isEmpty(this.errors)
 
+  make_dirty: =>
+    @dirty = true
+
+  make_clean: =>
+    @dirty = false
+
+  is_dirty: =>
+    @dirty
+
   save_model: =>
-    this.save({}, {error: this.error_callback, success: this.success_callback})
+    if @is_dirty()
+      this.save({}, {error: this.error_callback, success: this.success_callback})
 
   fetch: =>
     super({error: this.error_callback, success: this.success_callback})
@@ -27,6 +39,7 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     this.unset('image_updated_at', {silent: true})
 
   success_callback: (model, response) =>
+    @make_clean()
     @remove_image_attributes()
     this.errors = []
     this.trigger('change:errors')
