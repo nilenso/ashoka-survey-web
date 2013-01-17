@@ -84,7 +84,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     if confirm(I18n.t('surveys.confirm_finalize'))
       $(this.el).bind "ajaxStop.finalize", =>
         $(this.el).unbind "ajaxStop.finalize"
-        $("#finalize_hidden").click()
+        $("#finalize_hidden").click() unless this.survey.has_errors()
       @save_all_questions()
 
   save_all_questions: =>
