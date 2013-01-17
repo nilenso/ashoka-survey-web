@@ -10,7 +10,6 @@ class SurveyBuilder.Views.Questions.SurveyDetailsView extends Backbone.View
     'change input[type=text]': 'handle_textbox_keyup'
     'change input[type=checkbox]': 'handle_checkbox_change'
 
-
   initialize: =>
     this.model.actual_view = this
     @template = this.options.template

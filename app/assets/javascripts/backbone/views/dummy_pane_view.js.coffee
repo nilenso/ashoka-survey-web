@@ -37,7 +37,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   add_survey_details: (survey_model) =>
     template = $("#dummy_survey_details_template").html()
     @dummy_survey_details = new SurveyBuilder.Views.Dummies.SurveyDetailsView({ model: survey_model, template: template})
-    @dummy_survey_details.show_actual()
+    @show_survey_details()
 
   render: =>
     ($(this.el).find("#dummy_survey_details").append(@dummy_survey_details.render().el))
@@ -69,4 +69,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @questions = _(@questions).sortBy (question) =>
       question.model.get('order_number')
     @render()
+
+  show_survey_details: =>
+    @dummy_survey_details.show_actual()
 

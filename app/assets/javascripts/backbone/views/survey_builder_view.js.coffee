@@ -8,6 +8,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'dummy_click': 'handle_dummy_click'
     'click #save': 'save_all_questions'
     'click #finalize': 'finalize'
+    'show_survey_details': 'show_survey_details'
 
   initialize:(survey_id) =>
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
@@ -72,6 +73,9 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   hide_all: (event) =>
     this.dummy_pane.unfocus_all()
     this.settings_pane.hide_all()
+
+  show_survey_details: =>
+    this.dummy_pane.show_survey_details()
 
   switch_tab: =>
     $("#sidebar").tabs('select', 1)
