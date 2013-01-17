@@ -216,6 +216,7 @@ en:
     second_option: Second Option
     third_option: Third Option
     questions_for: Questions for
+    require_csv_format: "Please enter a comma-separated list of options.\nThe provided format is invalid."
 
   recaptcha:
     errors:

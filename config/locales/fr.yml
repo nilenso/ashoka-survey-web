@@ -216,6 +216,7 @@ fr:
     second_option: fr econd Option
     third_option: fr Third Option
     questions_for: fr Questions for
+    require_csv_format: "S'il vous plaît entrer une liste séparée par des virgules des options.\nLe format fourni n'est pas valide."
 
   recaptcha:
     errors:
