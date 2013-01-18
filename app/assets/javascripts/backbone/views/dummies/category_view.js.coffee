@@ -97,17 +97,33 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       sub_question.unfocus()
 
   reorder_questions: (event, ui) =>
-    last_order_number = _.chain(this.sub_questions)
-      .map((sub_question) => sub_question.model.get('order_number'))
-      .max().value()
+    last_order_number = @last_sub_question_order_number()
+
     _(@sub_questions).each (sub_question) =>
       index = $(sub_question.el).index()
       sub_question.model.set({order_number: last_order_number + index + 1}, {silent: true})
       @model.sub_question_order_counter = last_order_number + index + 1
-      sub_question.model.question_number = this.model.question_number + '.' + (index + 1)
-      sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
-      sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
+
     this.sub_questions = _(this.sub_questions).sortBy (sub_question) =>
       sub_question.model.get('order_number')
+
+    @reorder_question_number()
+    @hide_overlay(event)
+
+  
+  hide_overlay: (event) =>
+      window.loading_overlay.hide_overlay() if event
+  
+  last_sub_question_order_number: =>
+    _.chain(this.sub_questions)
+      .map((sub_question) => sub_question.model.get('order_number'))
+      .max().value()
+  
+  reorder_question_number: =>
+    _(@sub_questions).each (sub_question) =>
+      index = $(sub_question.el).index()
+      sub_question.model.question_number = this.model.question_number + '.' + (index + 1)
+
+      sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
+      sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
     @render()
-    window.loading_overlay.hide_overlay() if event

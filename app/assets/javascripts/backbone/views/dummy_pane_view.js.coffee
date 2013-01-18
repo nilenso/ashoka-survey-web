@@ -53,17 +53,15 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     question.remove()
     @questions = _(@questions).without(question)
     @reorder_questions_after_deletion()
+    @render()
 
   reorder_questions: (event, ui) =>
-    last_order_number = @survey_model.next_order_number()
-    _(@questions).each (question) =>
-      index = $(question.el).index()
-      question.model.set({order_number: last_order_number + index + 1}, {silent: true})
-      question.model.question_number = index + 1
-      question.reorder_questions() if question instanceof SurveyBuilder.Views.Dummies.CategoryView
-      question.reorder_questions() if question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
+    @reorder_questions_after_deletion()
     @sort_questions_by_order_number()
-    window.loading_overlay.hide_overlay()
+    @hide_overlay(event)
+
+  hide_overlay: (event) =>
+      window.loading_overlay.hide_overlay() if event
 
   sort_questions_by_order_number: =>
     @questions = _(@questions).sortBy (question) =>
@@ -76,7 +74,9 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
         index = $(question.el).index()
         question.model.set({order_number: last_order_number + index + 1}, {silent: true})
         question.model.question_number = index + 1
-    @render()
+
+        question.reorder_question_number() if question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
+        question.reorder_question_number() if question instanceof SurveyBuilder.Views.Dummies.CategoryView
 
   show_survey_details: =>
     @dummy_survey_details.show_actual()
