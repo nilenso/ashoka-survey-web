@@ -9,7 +9,12 @@
     <% end %>
   <% end %>
 
-  <h2><%= t('.welcome') %></h2>
+  <% if user_currently_logged_in? %>
+    <h2><%= t('.surveys') %></h2>
+  <% else %>
+    <h2><%= t('.welcome') %></h2>
+  <% end %>
+
 </header>
 
 <% if @surveys.blank? %>
