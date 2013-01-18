@@ -109,6 +109,16 @@ describe ResponsesController do
       assigns(:response).should == Response.find(res.id)
       assigns(:survey).should == survey
     end
+
+    it "assigns public_response if the page is accessed externally using the public link" do
+      session[:user_id] = nil
+      survey = FactoryGirl.create(:survey, :finalized => true, :public => true)
+      res = FactoryGirl.create(:response, :survey => survey, :session_token => "123")
+      session[:session_token] = "123"
+      get :edit, :id => res.id, :survey_id => survey.id, :auth_key => survey.auth_key
+      response.should be_ok
+      assigns(:public_response).should == true
+    end
   end
 
   context "PUT 'update'" do

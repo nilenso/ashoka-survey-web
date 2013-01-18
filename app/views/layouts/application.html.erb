@@ -11,7 +11,7 @@
     <div id="page">
       <%= render "layouts/header" %>
 
-      <%= yield :status_bar %>
+      <%= yield :status_bar unless @public_response %>
 
       <div id="content" role="content">
         <%= render "layouts/flash", :flash => flash %>

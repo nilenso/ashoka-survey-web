@@ -33,6 +33,7 @@ class ResponsesController < ApplicationController
     @survey = Survey.find(params[:survey_id])
     @response = ResponseDecorator.find(params[:id])
     sort_questions_by_order_number(@response)
+    @public_response = public_response?
   end
 
   def update
@@ -87,9 +88,14 @@ class ResponsesController < ApplicationController
 
   def authorize_public_response
     survey = Survey.find(params[:survey_id])
-    if survey.public? && !user_currently_logged_in?
+    if public_response?
       raise CanCan::AccessDenied.new("Not authorized!", :create, Response) unless params[:auth_key] == survey.auth_key
     end
+  end
+
+  def public_response?
+    survey = Survey.find(params[:survey_id])
+    survey.public? && !user_currently_logged_in?
   end
 
   def survey_not_expired
