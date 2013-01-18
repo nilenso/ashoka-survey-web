@@ -15,7 +15,9 @@
       <% end %>
     <% else %>
       <li><%= link_to t("header.log_in"), '/auth/user_owner', :class => 'signin' %></li>
-      <li><%= link_to t("header.register"), register_path, :class => 'register' %></li>
+      <% if Feature.active?(:register_link) %>
+        <li><%= link_to t("header.register"), register_path, :class => 'register hidden' %></li>
+      <% end %>
     <% end %>
   </ul>
 </div>

@@ -28,6 +28,7 @@ gem 'delayed_job_active_record'
 gem 'daemons'
 gem 'rack-mini-profiler'
 gem 'paperclip'
+gem 'feature'
 
 # Gems used only for assets and not required
 # in production environments by default.
