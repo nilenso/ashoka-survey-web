@@ -81,23 +81,45 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
   reorder_questions: (event, ui) =>
     _(@options).each (option) =>
       unless _(option.sub_questions).isEmpty()
-        last_order_number = _.chain(option.sub_questions)
-          .map((sub_question) => sub_question.model.get('order_number'))
-          .max().value()
+        last_order_number =  @last_sub_question_order_number(option)
+
         _(option.sub_questions).each (sub_question) =>
             index = $(sub_question.el).index()
             sub_question.model.set({order_number: last_order_number + index + 1}, {silent: true})
             option.model.sub_question_order_counter = last_order_number + index + 1
 
-            option_number = option.model.get('question').question_number
-            multichoice_parent = option.model.get('question').get('type') == "MultiChoiceQuestion"
-            option_number += String.fromCharCode(65 + option.model.get('order_number')) if multichoice_parent
-            sub_question.model.question_number = option_number + '.' + (index)
-
-            sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
-            sub_question.reorder_questions() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
         option.sub_questions = _(option.sub_questions).sortBy (sub_question) =>
           sub_question.model.get('order_number')
-    @render()
-    window.loading_overlay.hide_overlay() if event
 
+    @reorder_question_number()
+    @hide_overlay(event)
+
+  
+  hide_overlay: (event) =>
+      window.loading_overlay.hide_overlay() if event
+
+  last_sub_question_order_number: (option) =>
+    _.chain(option.sub_questions)
+      .map((sub_question) => sub_question.model.get('order_number'))
+      .max().value()
+
+
+  reorder_question_number: =>
+    _(@options).each (option) =>
+        _(option.sub_questions).each (sub_question) =>
+            index = $(sub_question.el).index()
+            option_number = option.model.get('question').question_number
+            option_number += String.fromCharCode(65 + @multichoice_order_number(option)) if @multichoice_parent(option)
+            sub_question.model.question_number = option_number + '.' + (index)
+
+            sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
+            sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
+    @render()
+  
+  multichoice_parent: (option) =>
+    option.model.get('question').get('type') == "MultiChoiceQuestion"
+
+  multichoice_order_number: (option) =>
+    first_order_number = option.model.get('question').first_order_number()
+    option.model.get('order_number') - first_order_number
+ 
