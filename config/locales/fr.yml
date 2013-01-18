@@ -60,6 +60,7 @@ fr:
 
     index:
       surveys: "Enquêtes"
+      welcome: "fr Welcome"
       responses: "Réponse"
       show: "Montrer"
       finalized: "fr Finalized"

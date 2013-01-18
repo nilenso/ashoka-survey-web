@@ -58,6 +58,7 @@ en:
 
     index:
       surveys: "Surveys"
+      welcome: "Welcome"
       responses: "Response"
       show: "Show"
       finalized: "Finalized"
