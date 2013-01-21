@@ -80,6 +80,7 @@ class Response < ActiveRecord::Base
   end
 
   def update_answers(all_answer_params)
+    return true unless all_answer_params
     transaction do
       answers.select(&:has_been_answered?).each(&:clear_content)
       validating
