@@ -172,6 +172,12 @@ describe Response do
       response = FactoryGirl.create :response
       response.update_answers(nil).should be_true
     end
+
+    it "returns true for a successful save" do
+      response = FactoryGirl.create :response
+      answer = FactoryGirl.create :answer, :content => "ABCD", :response_id => response.id
+      response.reload.update_answers({ '0' => {:content => 'XYZ', :id => answer.id}}).should be_true
+    end
   end
 
   context "#to_json_with_answers_and_choices" do
