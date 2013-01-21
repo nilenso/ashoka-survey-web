@@ -82,14 +82,17 @@ class Response < ActiveRecord::Base
   def update_answers(all_answer_params)
     return true unless all_answer_params
     transaction do
-      valid = true
       answers.select(&:has_been_answered?).each(&:clear_content)
       validating
-      all_answer_params.each do |_,single_answer_params|
+      valid = all_answer_params.all? do |_,single_answer_params|
         answer = answers.detect { |answer| answer.id == single_answer_params[:id].to_i }
-        valid  = answer.update_attributes(single_answer_params)
+        answer.update_attributes(single_answer_params)
       end
-      raise ActiveRecord::Rollback unless valid
+      if valid
+        true
+      else
+        raise ActiveRecord::Rollback
+      end
     end
   end
 
