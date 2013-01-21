@@ -10,7 +10,7 @@ class ResponsesController < ApplicationController
     respond_to do |format|
       @user_names = User.names_for_ids(access_token, @responses.map(&:user_id).uniq)
       format.html do
-        @responses = @responses.paginate(:page => params[:page], :per_page => 10)
+        @responses = @responses.paginate(:page => params[:page], :per_page => 10).order('created_at DESC, status')
       end
       @complete_responses = @responses.select { |response| response.complete? }
       format.xlsx do

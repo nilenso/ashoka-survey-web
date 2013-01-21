@@ -64,6 +64,18 @@ describe ResponsesController do
       assigns(:responses).should == Response.find_all_by_survey_id(survey.id)
     end
 
+    it "sorts the responses by created_at, status" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res_1 = FactoryGirl.create(:response, :survey => survey, :status => "complete",
+          :organization_id => 1, :user_id => 1, :created_at => Time.now)
+      res_2 = FactoryGirl.create(:response, :survey => survey, :status => "incomplete",
+          :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
+      res_3 = FactoryGirl.create(:response, :survey => survey, :status => "complete",
+          :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
+      get :index, :survey_id => survey.id
+      assigns(:responses).should == [res_1, res_3, res_2]
+    end
+
     it "gets the user names for all the user_ids of the responses " do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       res = FactoryGirl.create(:response, :survey => survey,
