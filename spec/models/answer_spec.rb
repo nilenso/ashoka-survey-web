@@ -251,6 +251,13 @@ describe Answer do
         answer = FactoryGirl.create :answer_with_choices, :question => question, :content => "xyz"
         answer.content_for_excel.should == "xyz"
       end
+
+    end
+
+    it "clears the content of the answer" do
+      answer = FactoryGirl.create(:answer)
+      answer.clear_content
+      answer.reload.content.should be_blank 
     end
   end
 
