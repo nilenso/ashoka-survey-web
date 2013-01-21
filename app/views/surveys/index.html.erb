@@ -9,11 +9,9 @@
     <% end %>
   <% end %>
 
-  <% if user_currently_logged_in? %>
-    <h2><%= t('.surveys') %></h2>
-  <% else %>
-    <h2><%= t('.welcome') %></h2>
-  <% end %>
+  <h2>
+    <%= user_currently_logged_in? ?  t('.surveys') : t('.welcome') %>
+  </h2>
 
 </header>
 
