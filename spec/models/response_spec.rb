@@ -167,6 +167,11 @@ describe Response do
       response.reload.update_answers({ '0' => {:content => 'XYZ', :id => answer.id}})
       response.should be_validating
     end
+
+    it "returns true if no params are passed in" do
+      response = FactoryGirl.create :response
+      response.update_answers(nil).should be_true
+    end
   end
 
   context "#to_json_with_answers_and_choices" do
