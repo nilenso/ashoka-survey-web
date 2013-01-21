@@ -15,7 +15,12 @@
 
 </header>
 
-<% if @surveys.blank? %>
+<% unless user_currently_logged_in? %>
+  <p class="description"><%= t('.description_part_1') %></p>
+  <p class="description"><%= t('.description_part_2') %></p>
+<% end %>
+
+<% if user_currently_logged_in? && @surveys.blank? %>
   <p class="no-surveys"><%= t('.no_surveys') %></p>
 <% end %>
 
