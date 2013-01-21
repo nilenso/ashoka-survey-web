@@ -69,6 +69,19 @@ class Answer < ActiveRecord::Base
     return Base64.encode64(file) if file
   end
 
+
+  def has_not_been_answered?
+    if question.is_a?(MultiChoiceQuestion)
+      choices.empty?
+    else
+      content.blank?
+    end
+  end
+
+  def has_been_answered?
+    !has_not_been_answered?
+  end
+
   private
 
   def maximum_photo_size
@@ -118,14 +131,6 @@ class Answer < ActiveRecord::Base
           errors.add(:content, I18n.t("answers.validations.invalid_date"))
         end
       end
-    end
-  end
-
-  def has_not_been_answered?
-    if question.is_a?(MultiChoiceQuestion)
-      choices.empty?
-    else
-      content.blank?
     end
   end
 
