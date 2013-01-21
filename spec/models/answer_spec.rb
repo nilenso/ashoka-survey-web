@@ -195,6 +195,35 @@ describe Answer do
       answer_2 = FactoryGirl.build(:answer, :question_id => question.id, :response_id => response.id)
       answer_2.should_not be_valid
     end
+
+    context "when checking if the answer is blank" do
+      it "checks for an empty answer to a multi-choice question" do
+        question = FactoryGirl.create :question, :type => "MultiChoiceQuestion"
+        answer = FactoryGirl.create(:answer, :content => '', :question_id => question.id)
+        answer.should have_not_been_answered
+      end
+
+      it "checks for an empty answer to all other question types" do
+        question = FactoryGirl.create :question, :type => "SingleLineQuestion"
+        answer = FactoryGirl.create(:answer, :content => nil, :question_id => question.id)
+        answer.should have_not_been_answered
+      end
+    end
+
+    context "when checking if the answer is not blank" do
+      it "checks for an answer to a multi-choice question" do
+        question = FactoryGirl.create :question, :type => "MultiChoiceQuestion"
+        answer = FactoryGirl.create(:answer, :content => '', :question_id => question.id)
+        answer.choices << FactoryGirl.create(:choice)
+        answer.should have_been_answered
+      end
+
+      it "checks for an answer to all other question types" do
+        question = FactoryGirl.create :question, :type => "SingleLineQuestion"
+        answer = FactoryGirl.create(:answer, :content => "FooBar", :question_id => question.id)
+        answer.should have_been_answered
+      end
+    end
   end
 
   context "logic" do
