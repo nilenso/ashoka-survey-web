@@ -79,6 +79,18 @@ class Response < ActiveRecord::Base
     end
   end
 
+  def update_answers(all_answer_params)
+    transaction do
+      answers.select(&:has_been_answered?).each(&:clear_content)
+      validating
+      all_answer_params.each do |_,single_answer_params|
+        answer = answers.find_by_id(single_answer_params[:id])
+        valid  = answer.update_attributes(single_answer_params)
+        raise ActiveRecord::Rollback unless valid
+      end
+    end
+  end
+
   def to_json_with_answers_and_choices
     to_json(:include => {:answers => {:include => :choices, :methods => :photo_in_base64}})
   end

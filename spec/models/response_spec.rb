@@ -65,17 +65,17 @@ describe Response do
     end
 
     it "returns whether a response is complete or not" do
-     survey = FactoryGirl.create(:survey)
-     response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
-     response.validating
-     response.reload.should be_validating
+      survey = FactoryGirl.create(:survey)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
+      response.validating
+      response.reload.should be_validating
     end
 
     it "returns whether a response is incomplete or not" do
-     survey = FactoryGirl.create(:survey)
-     response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
-     response.incomplete
-     response.reload.should be_incomplete
+      survey = FactoryGirl.create(:survey)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
+      response.incomplete
+      response.reload.should be_incomplete
     end
 
     it "only updates the status field and nothing else" do
@@ -132,6 +132,40 @@ describe Response do
                              '1' => {"question_id" => question_2.id, "updated_at" => Time.now.to_s, "id" => answer_2.id, "content" => "older"}}
       selected_answers = response.select_new_answers(answers_attributes)
       selected_answers.keys.should == ['0']
+    end
+  end
+
+  context "#update_answers" do
+    it "takes answer params and updates the specific answers" do
+      response = FactoryGirl.create :response
+      answer = FactoryGirl.create :answer, :content => "ABCD", :response_id => response.id
+      response.reload.update_answers({ '0' => {:content => 'XYZ', :id => answer.id}})
+      answer.reload.content.should == 'XYZ'
+    end
+
+    it "clears the old answers" do
+      response = FactoryGirl.create :response
+      answer_1 = FactoryGirl.create :answer, :content => "ABCD", :response_id => response.id
+      answer_2 = FactoryGirl.create :answer, :content => "DEF", :response_id => response.id
+      response.reload.update_answers({ '0' => {:content => 'XYZ', :id => answer_1.id}})
+      answer_2.reload.content.should be_blank
+    end
+
+    it "rolls back all DB changes if there's a single validation error" do
+      response = FactoryGirl.create :response
+      mandatory_question = FactoryGirl.create :question, :mandatory => true
+      answer_1 = FactoryGirl.create :answer, :content => "ABCD", :response_id => response.id, :question_id => mandatory_question.id
+      answer_2 = FactoryGirl.create :answer, :content => "DEF", :response_id => response.id
+      response.reload.update_answers({ '0' => {:content => '', :id => answer_1.id}})
+      answer_1.reload.content.should == "ABCD"
+      answer_2.reload.content.should == "DEF"
+    end
+
+    it "sets the response status to `validating`" do
+      response = FactoryGirl.create :response
+      answer = FactoryGirl.create :answer, :content => "ABCD", :response_id => response.id
+      response.reload.update_answers({ '0' => {:content => 'XYZ', :id => answer.id}})
+      response.should be_validating
     end
   end
 
