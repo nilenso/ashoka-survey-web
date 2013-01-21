@@ -5,15 +5,19 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     this.set('id', survey_id)
 
   add_new_question_model:(type) =>
+    # TODO: Why should a view create models?
     question_model = SurveyBuilder.Views.QuestionFactory.model_for(type, { type: type })
+    # this should go into the constructor
     question_model.set('survey_id' : this.survey_id)
-    @set_order_number_for_question(question_model)
     @question_models.push question_model
+    @set_order_number_for_question(question_model)
     @set_question_number_for_question(question_model)
+    # why use 'this.'? use @ everywhere
     question_model.on('destroy', this.delete_question_model, this)
     question_model
 
   next_order_number: =>
+    # reduce cyclomatic complexity
     if _(@question_models).isEmpty()
       0
     else

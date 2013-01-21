@@ -1,8 +1,11 @@
+#TODO: remove this comment line
 # Interfaces between the views and the rails model for a multiline question
 class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   urlRoot: '/api/questions'
 
   defaults:
+    # TODO: i18n this
+    # TODO: why set default when it's done in the initializer?
     content: 'Untitled question'
     mandatory: false
     identifier: false
@@ -41,6 +44,7 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   success_callback: (model, response) =>
     @make_clean()
     @remove_image_attributes()
+    # TODO: use @
     this.errors = []
     this.trigger('change:errors')
     this.trigger('save:completed')
@@ -50,6 +54,7 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     this.trigger('change:errors')
     this.trigger('set:errors')
 
+  # TODO: why camelCase?
   imageUploadUrl: =>
     "/api/questions/"+this.id+'/image_upload'
 
@@ -57,6 +62,7 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     question_attrs = {}
     _.each @attributes, (val, key) =>
       question_attrs[key] = val  if val? and not _.isObject(val)
+    # TODO: _(question_attrs).omit
     { question: _.omit( question_attrs, ['created_at', 'updated_at', 'image_url', 'image_in_base64', 'photo_secure_token', 'image_tmp']) }
 
 SurveyBuilder.Models.QuestionModel.setup()
