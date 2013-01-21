@@ -73,7 +73,9 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
 
   @model_for: (type, model) =>
     switch type
+      # Refactor for three cases only
       when 'MultiChoiceQuestion'
+        #TODO: Why is this a subquestion model?
         sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
       when 'DropDownQuestion'
         sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
@@ -81,6 +83,7 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
         sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
       when 'MultiRecordQuestion'
         sub_question_model = new SurveyBuilder.Models.MultiRecordQuestionModel(model)
+      #TODO: undefined?
       when undefined
         sub_question_model = new SurveyBuilder.Models.CategoryModel(model)
       else
