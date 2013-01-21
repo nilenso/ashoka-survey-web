@@ -57,6 +57,10 @@ class Answer < ActiveRecord::Base
     question.type == "PhotoQuestion"
   end
 
+  def clear_content
+    update_attribute :content, nil
+  end
+
   def photo_url(format=nil)
     return "/#{photo.cache_dir}/#{photo_tmp}" if photo_tmp
     return photo.url(format) if photo.file
