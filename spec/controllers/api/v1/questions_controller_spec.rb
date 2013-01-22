@@ -196,6 +196,28 @@ module Api
           response.should_not be_ok
         end
       end
+
+      context "POST 'duplicate'" do
+        it "creates new question" do
+          question = FactoryGirl.create(:question, :survey => survey)
+          expect {
+            post :duplicate, :id => question.id
+          }.to change { Question.count }.by 1
+        end
+
+        it "creates a question with the same attributes as the existing one" do
+          question =question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id, :content => "foobar"))
+          post :duplicate, :id => question.id
+          Question.first.content.should == "foobar"
+          Question.first.type.should == "RadioQuestion"
+          Question.first.survey_id.should == survey.id
+        end
+
+        it "returns a :bad_request for an invalid question_id" do
+          post :duplicate, :id => 456787
+          response.should_not be_ok
+        end
+      end
     end
   end
 end

@@ -63,6 +63,16 @@ module Api
         end
       end
 
+      def duplicate
+        question = Question.find_by_id(params[:id])
+        if question
+          question.duplicate(question.survey_id)
+          render :nothing => true
+        else
+          render :nothing => true, :status => :bad_request
+        end
+      end
+
       private
       def dont_cache
         expires_now
