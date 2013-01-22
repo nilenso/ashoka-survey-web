@@ -191,6 +191,31 @@ module Api
           response.body.should == question.to_json(:methods => [:type, :image_url, :image_in_base64])
         end
 
+        it "includes the questions of a multirecord question in the response" do
+          mr_question = MultiRecordQuestion.create(:content => "Multi")
+          mr_question.questions << FactoryGirl.create(:question, :survey => survey, :content => "SubQuestion")
+          get :show, :id => mr_question.id
+          response.should be_ok
+          questions = (JSON.parse response.body)['questions']
+          questions[0]['content'].should == "SubQuestion"
+        end
+
+        it "includes all the questions of a multirecord question in the response" do
+          mr_question = MultiRecordQuestion.create(:content => "Multi")
+          5.times do
+            mr_question.questions << FactoryGirl.create(:question, :survey => survey, :content => "SubQuestion")
+          end
+          get :show, :id => mr_question.id
+          questions = (JSON.parse response.body)['questions']
+          questions.length.should == mr_question.questions.count
+        end
+
+        it "does not include 'questions' for non multirecord questions" do
+          question = FactoryGirl.create(:question)
+          get :show, :id => question.id
+          (JSON.parse response.body).should_not have_key 'questions'
+        end
+
         it "returns a :bad_request for an invalid question_id" do
           get :show, :id => 456787
           response.should_not be_ok

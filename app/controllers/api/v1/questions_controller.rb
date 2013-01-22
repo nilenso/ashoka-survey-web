@@ -44,7 +44,7 @@ module Api
       def index
         survey = Survey.find_by_id(params[:survey_id])
         methods = [:type, :image_url]
-        methods.push << :image_in_base64 if request.referrer.nil?
+        methods << :image_in_base64 if request.referrer.nil?
         if survey
           render :json => survey.first_level_questions.to_json(:methods => methods)
         else
@@ -55,7 +55,7 @@ module Api
       def show
         question = Question.find_by_id(params[:id])
         methods = [:type, :image_url]
-        methods.push << :image_in_base64 if request.referrer.nil?
+        methods << :image_in_base64 if request.referrer.nil?
         if question
           render :json => question.to_json(:methods => methods)
         else
