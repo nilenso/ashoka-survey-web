@@ -16,13 +16,10 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     question_model
 
   next_order_number: =>
-    # reduce cyclomatic complexity
-    if _(@question_models).isEmpty()
-      0
-    else
-      _.max(@question_models, (question_model) =>
-        question_model.get "order_number"
-      ).get('order_number') + 1
+    return 0 if _(@question_models).isEmpty()
+    _.max(@question_models, (question_model) =>
+      question_model.get "order_number"
+    ).get('order_number') + 1
 
   set_order_number_for_question: (question_model) =>
     question_model.set('order_number' : @next_order_number())
