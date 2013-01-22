@@ -126,6 +126,16 @@ describe ResponsesController do
       get :edit, :id => @res.id, :survey_id => @survey.id
       assigns(:disabled).should be_false
     end
+
+    it "assigns public_response if the page is accessed externally using the public link" do
+      session[:user_id] = nil
+      survey = FactoryGirl.create(:survey, :finalized => true, :public => true)
+      res = FactoryGirl.create(:response, :survey => survey, :session_token => "123")
+      session[:session_token] = "123"
+      get :edit, :id => res.id, :survey_id => survey.id, :auth_key => survey.auth_key
+      response.should be_ok
+      assigns(:public_response).should == true
+    end
   end
 
   context "GET 'show'" do
@@ -150,16 +160,6 @@ describe ResponsesController do
     it "assigns disabled as true" do
       get :show, :id => @res.id, :survey_id => @survey.id
       assigns(:disabled).should be_true
-    end
-
-    it "assigns public_response if the page is accessed externally using the public link" do
-      session[:user_id] = nil
-      survey = FactoryGirl.create(:survey, :finalized => true, :public => true)
-      res = FactoryGirl.create(:response, :survey => survey, :session_token => "123")
-      session[:session_token] = "123"
-      get :edit, :id => res.id, :survey_id => survey.id, :auth_key => survey.auth_key
-      response.should be_ok
-      assigns(:public_response).should == true
     end
   end
 

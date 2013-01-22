@@ -34,6 +34,7 @@ class ResponsesController < ApplicationController
     @response = ResponseDecorator.find(params[:id])
     sort_questions_by_order_number(@response)
     @disabled = false
+    @public_response = public_response?
   end
 
   def show
@@ -42,7 +43,6 @@ class ResponsesController < ApplicationController
     sort_questions_by_order_number(@response)
     @disabled = true
     @marker = @response.to_gmaps4rails
-    @public_response = public_response?
     render :edit
   end
 
