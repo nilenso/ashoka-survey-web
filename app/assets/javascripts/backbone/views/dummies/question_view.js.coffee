@@ -27,17 +27,20 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
       @show_actual(e)
 
     $(this.el).children('.dummy_question_content').children(".top_level_content").children(".delete_question").click (e) => @delete(e)
+    $(this.el).children('.dummy_question_content').children(".top_level_content").children(".copy_question").click (e) => @duplicate(e)
 
     return this
 
   delete: =>
     this.model.destroy()
 
+  duplicate: =>
+    this.model.duplicate()
+
   show_actual: (event) =>
     $(this.el).trigger("dummy_click")
     this.model.actual_view.show()
     $(this.el).children('.dummy_question_content').addClass("active")
-
 
   unfocus: =>
     $(this.el).children('.dummy_question_content').removeClass("active")
