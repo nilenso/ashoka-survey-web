@@ -71,8 +71,8 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
         if model instanceof SurveyBuilder.Models.CategoryModel
           return new SurveyBuilder.Views.Questions.CategoryView(model)
 
-  @model_for: (type, model) =>
-    switch type
+  @model_for: (model) =>
+    switch model.type
       # Refactor for three cases only
       when 'MultiChoiceQuestion'
         #TODO: Why is this a subquestion model?

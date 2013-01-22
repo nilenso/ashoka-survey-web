@@ -51,7 +51,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
       parent_question: this.get('question')
     }
 
-    sub_question_model = SurveyBuilder.Views.QuestionFactory.model_for(question.type, question)
+    sub_question_model = SurveyBuilder.Views.QuestionFactory.model_for(question)
 
     @sub_question_models.push sub_question_model
     sub_question_model.on('destroy', this.delete_sub_question, this)
@@ -86,7 +86,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
       parent_question = this.get('question')
       _(question).extend({parent_question: parent_question})
 
-      question_model = SurveyBuilder.Views.QuestionFactory.model_for(question.type, question)
+      question_model = SurveyBuilder.Views.QuestionFactory.model_for(question)
 
       @sub_question_models.push question_model
       question_model.on('destroy', this.delete_sub_question, this)
