@@ -90,10 +90,10 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
 
   @model_for: (model) =>
     if (@is_with_options(model.type))
-      question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
+      new SurveyBuilder.Models.QuestionWithOptionsModel(model)
     else if  model.type == @Types.CATEGORY
-      question_model = new SurveyBuilder.Models.CategoryModel(model)
+      new SurveyBuilder.Models.CategoryModel(model)
     else if  model.type == @Types.MULTI_RECORD
-      question_model = new SurveyBuilder.Models.MultiRecordQuestionModel(model)
+      new SurveyBuilder.Models.MultiRecordQuestionModel(model)
     else
-      question_model = new SurveyBuilder.Models.QuestionModel(model)
+      new SurveyBuilder.Models.QuestionModel(model)
