@@ -1,19 +1,18 @@
 class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
   initialize:(@survey_id) =>
     @question_models = []
-    this.urlRoot = "/api/surveys"
-    this.set('id', survey_id)
+    @urlRoot = "/api/surveys"
+    @set('id', survey_id)
 
   add_new_question_model:(type) =>
     # TODO: Why should a view create models?
     question_model = SurveyBuilder.Views.QuestionFactory.model_for(type, { type: type })
     # this should go into the constructor
-    question_model.set('survey_id' : this.survey_id)
+    question_model.set('survey_id' : @survey_id)
     @set_order_number_for_question(question_model)
     @question_models.push question_model
     @set_question_number_for_question(question_model)
-    # why use 'this.'? use @ everywhere
-    question_model.on('destroy', this.delete_question_model, this)
+    question_model.on('destroy', @delete_question_model, this)
     question_model
 
   next_order_number: =>
@@ -26,22 +25,22 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
       ).get('order_number') + 1
 
   set_order_number_for_question: (question_model) =>
-    question_model.set('order_number' : this.next_order_number())
+    question_model.set('order_number' : @next_order_number())
 
   set_question_number_for_question: (question_model) =>
     question_model.question_number = @question_models.length
 
   save: =>
-    super({}, {error: this.error_callback, success: this.success_callback})
+    super({}, {error: @error_callback, success: @success_callback})
 
   success_callback: (model, response) =>
-    this.errors = []
-    this.trigger('change:errors')
-    this.trigger('save:completed')
+    @errors = []
+    @trigger('change:errors')
+    @trigger('save:completed')
 
   error_callback: (model, response) =>
-    this.errors = JSON.parse(response.responseText)
-    this.trigger('change:errors')
+    @errors = JSON.parse(response.responseText)
+    @trigger('change:errors')
 
   save_all_questions: =>
     for question_model in @question_models
