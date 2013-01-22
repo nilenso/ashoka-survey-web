@@ -15,9 +15,9 @@ describe MultiRecordQuestion do
   context "as_json" do
     it "includes it's questions in the json" do
       mrq = MultiRecordQuestion.create(:content => "foo")
-      foo = FactoryGirl.create(:question)
-      mrq.questions << foo
-      mrq.as_json[:questions].should == [foo.as_json(:methods => :type)]
+      sub_question = FactoryGirl.create(:question)
+      mrq.questions << sub_question
+      mrq.as_json[:questions].should == [sub_question.as_json(:methods => :type)]
     end
   end
 end
