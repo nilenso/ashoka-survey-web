@@ -33,6 +33,13 @@ class Question < ActiveRecord::Base
     question
   end
 
+  def copy_without_order
+    duplicate_question = self.duplicate(survey_id)
+    duplicate_question.order_number = nil
+    duplicate_question.save()
+    duplicate_question
+  end
+
   def with_sub_questions_in_order
     [self]
   end

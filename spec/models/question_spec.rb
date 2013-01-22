@@ -211,5 +211,32 @@ describe Question do
       sub_question.index_of_parent_option.should == 0
   end
 
+  context "Copy" do
+    it "duplicates question with sub questions" do
+      question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+      question.options << Option.create(content: "Option", order_number: 0)
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
+      duplicated_question = question.copy_without_order()
+      duplicated_question.id.should_not == question.id
+      duplicated_question.content.should == question.content
+      duplicated_question.options.first.questions.size.should == question.options.first.questions.size
+    end
+
+    it "sets the sub-questions' survey ID to the same survey_id as of the original question" do
+      question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
+      question.options << Option.create(content: "Option", order_number: 0)
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
+      duplicated_question = question.copy_without_order()
+      duplicated_question.options[0].questions[0].survey_id.should == question.survey_id
+    end
+
+    it "assigns the correct order_number to the duplicated question" do
+      question = FactoryGirl.create(:question)
+      duplicated_question = question.copy_without_order()
+      duplicated_question.should be_valid
+      duplicated_question.order_number.should be_nil
+    end
+  end
+
   include_examples 'a question'
 end
