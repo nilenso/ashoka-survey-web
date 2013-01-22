@@ -227,6 +227,18 @@ describe ResponsesController do
         { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
       res.reload.should_not be_complete
     end
+
+    it "doesn't mark an already complete response as incomplete when save if unsuccessful" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
+      res = FactoryGirl.create(:response, :survey => survey,
+                               :organization_id => 1, :user_id => 2, :status => 'complete')
+      answer = FactoryGirl.create(:answer, :question => question)
+      res.answers << answer
+      put :complete, :id => res.id, :survey_id => survey.id, :response =>
+        { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+      res.reload.should be_complete
+    end
   end
 
   context "DELETE 'destroy'" do

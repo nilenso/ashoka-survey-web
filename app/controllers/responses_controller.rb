@@ -50,11 +50,12 @@ class ResponsesController < ApplicationController
   def complete
     @response = ResponseDecorator.find(params[:id])
     verify_recaptcha(:model => @response, :attribute => :captcha) if @response.survey_public?
+    response_complete = @response.complete?
     if @response.errors.empty? && @response.update_answers(params.try(:[],:response).try(:[], :answers_attributes))
       @response.complete
       redirect_to survey_responses_path(@response.survey_id), :notice => "Successfully updated"
     else
-      @response.incomplete
+      @response.incomplete if !response_complete
       sort_questions_by_order_number(@response)
       @response.attributes = params[:response]
       flash.delete(:recaptcha_error)
