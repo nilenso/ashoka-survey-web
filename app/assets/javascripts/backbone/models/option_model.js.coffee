@@ -9,6 +9,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     @sub_question_order_counter = 0
     @sub_question_models = []
     this.on('change', @make_dirty, this)
+    @make_dirty()
 
   has_errors: =>
     !_.isEmpty(this.errors)
@@ -59,26 +60,24 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     this.trigger('add:sub_question', sub_question_model)
 
   set_question_number_for_sub_question: (sub_question_model) =>
-    parent_question_number = this.get('question').question_number
-    multichoice_parent = this.get('question').get('type') == "MultiChoiceQuestion"
-    parent_question_number +=  '' + String.fromCharCode(65 + this.get('order_number')) if multichoice_parent
+    parent_question = this.get('question')
+    multichoice_parent = parent_question.get('type') == "MultiChoiceQuestion"
+    option_order_number = this.get('order_number') - parent_question.first_order_number()
+    parent_question_number = parent_question.question_number
+    parent_question_number +=  '' + String.fromCharCode(65 + option_order_number) if multichoice_parent
     sub_question_model.question_number = "#{parent_question_number}.#{@sub_question_models.length}"
 
   delete_sub_question: (sub_question_model) =>
     @sub_question_models = _(@sub_question_models).without(sub_question_model)
-    @reset_sub_questions_models_order_number()
+    @reorder_sub_questions_models()
 
   has_sub_questions: =>
     this.get('questions').length > 0 || this.get('categories').length > 0
 
-  reset_sub_questions_models_order_number: =>
-    @reset_order_number_counter()
+  reorder_sub_questions_models: =>
     _.each @sub_question_models, (question) =>
       question.set('order_number', @next_sub_question_order_number())
     @save_model()
-
-  reset_order_number_counter: =>
-    @sub_question_order_counter = 0
 
   preload_sub_questions: =>
     return unless @has_sub_questions()
@@ -108,7 +107,7 @@ class SurveyBuilder.Collections.OptionCollection extends Backbone.Collection
 
   has_errors: =>
     this.any((option) => option.has_errors())
- 
+
   preload_sub_questions: =>
     _.each this.models, (option_model) =>
       option_model.preload_sub_questions()

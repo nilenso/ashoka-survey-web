@@ -64,6 +64,18 @@ describe ResponsesController do
       assigns(:responses).should == Response.find_all_by_survey_id(survey.id)
     end
 
+    it "sorts the responses by created_at, status" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res_1 = FactoryGirl.create(:response, :survey => survey, :status => "complete",
+          :organization_id => 1, :user_id => 1, :created_at => Time.now)
+      res_2 = FactoryGirl.create(:response, :survey => survey, :status => "incomplete",
+          :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
+      res_3 = FactoryGirl.create(:response, :survey => survey, :status => "complete",
+          :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
+      get :index, :survey_id => survey.id
+      assigns(:responses).should == [res_1, res_3, res_2]
+    end
+
     it "gets the user names for all the user_ids of the responses " do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       res = FactoryGirl.create(:response, :survey => survey,
@@ -138,6 +150,16 @@ describe ResponsesController do
     it "assigns disabled as true" do
       get :show, :id => @res.id, :survey_id => @survey.id
       assigns(:disabled).should be_true
+    end
+
+    it "assigns public_response if the page is accessed externally using the public link" do
+      session[:user_id] = nil
+      survey = FactoryGirl.create(:survey, :finalized => true, :public => true)
+      res = FactoryGirl.create(:response, :survey => survey, :session_token => "123")
+      session[:session_token] = "123"
+      get :edit, :id => res.id, :survey_id => survey.id, :auth_key => survey.auth_key
+      response.should be_ok
+      assigns(:public_response).should == true
     end
   end
 
@@ -234,6 +256,18 @@ describe ResponsesController do
       put :complete, :id => res.id, :survey_id => survey.id, :response =>
         { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
       res.reload.should_not be_complete
+    end
+
+    it "doesn't mark an already complete response as incomplete when save if unsuccessful" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
+      res = FactoryGirl.create(:response, :survey => survey,
+                               :organization_id => 1, :user_id => 2, :status => 'complete')
+      answer = FactoryGirl.create(:answer, :question => question)
+      res.answers << answer
+      put :complete, :id => res.id, :survey_id => survey.id, :response =>
+        { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+      res.reload.should be_complete
     end
   end
 

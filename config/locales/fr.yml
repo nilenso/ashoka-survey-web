@@ -60,6 +60,7 @@ fr:
 
     index:
       surveys: "Enquêtes"
+      welcome: "fr Welcome"
       responses: "Réponse"
       show: "Montrer"
       finalized: "fr Finalized"
@@ -83,6 +84,13 @@ fr:
       crowd_source: "fr Copy crowd source link"
       copied: "Copié!"
       finalize: "fr Finalize"
+      description_part_1:
+        "fr - Data plays a significant part in designing social impact programs.
+        Social Surveys, Data collection drives and Demand aggregation are fundamental to operations of many citizen sector organizations.
+        Ashoka's technology framework and tools enable organizations use 'Data As Infrastructure' (DAI)."
+      description_part_2:
+        "fr - Organizations can get quality and variety of data through crowd sourcing, through organized surveys, marketing research.
+        Through 'DAI', we aim to help organizations in strategic decision making, and to achieve the right Insights, Interventions & Impact."
 
     share:
       share_survey: "Enquête Partager"

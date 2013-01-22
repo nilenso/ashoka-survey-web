@@ -40,7 +40,7 @@ div#banner{
           -webkit-font-smoothing: antialiased;
         }
 
-        &.home, &.add, &.users,
+        &.home, &.add, &.users, &.create,
         &.organization, &.signin,
         &.logout, &.register{
           padding: 40px 0 0 0;
@@ -48,6 +48,7 @@ div#banner{
 
         &.home:after{ content: "\f015";}
         &.add:after{ content: "\f067";}
+        &.create:after{ content: "\f007";}
         &.users:after{ content: "\f007";}
         &.organization:after{ content: "\f0c0";}
         &.signin:after{ content: "\f090";}
@@ -69,7 +70,7 @@ h1#logo{
     height: 80px;
     line-height: 80px;
     color: $secondary-color-light;
-    padding-left: 100px;
+    padding-left: 80px;
     background: transparent image-url('logo.png') no-repeat left center;
   }
 }

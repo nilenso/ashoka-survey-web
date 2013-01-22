@@ -10,7 +10,7 @@ class ResponsesController < ApplicationController
     respond_to do |format|
       @user_names = User.names_for_ids(access_token, @responses.map(&:user_id).uniq)
       format.html do
-        @responses = @responses.paginate(:page => params[:page], :per_page => 10)
+        @responses = @responses.paginate(:page => params[:page], :per_page => 10).order('created_at DESC, status')
       end
       @complete_responses = @responses.select { |response| response.complete? }
       format.xlsx do
@@ -42,6 +42,7 @@ class ResponsesController < ApplicationController
     sort_questions_by_order_number(@response)
     @disabled = true
     @marker = @response.to_gmaps4rails
+    @public_response = public_response?
     render :edit
   end
 
@@ -59,11 +60,12 @@ class ResponsesController < ApplicationController
   def complete
     @response = ResponseDecorator.find(params[:id])
     verify_recaptcha(:model => @response, :attribute => :captcha) if @response.survey_public?
+    response_complete = @response.complete?
     if @response.errors.empty? && @response.update_answers(params.try(:[],:response).try(:[], :answers_attributes))
       @response.complete
       redirect_to survey_responses_path(@response.survey_id), :notice => "Successfully updated"
     else
-      @response.incomplete
+      response_complete ? @response.complete : @response.incomplete
       sort_questions_by_order_number(@response)
       @response.attributes = params[:response]
       flash.delete(:recaptcha_error)
@@ -96,9 +98,14 @@ class ResponsesController < ApplicationController
 
   def authorize_public_response
     survey = Survey.find(params[:survey_id])
-    if survey.public? && !user_currently_logged_in?
+    if public_response?
       raise CanCan::AccessDenied.new("Not authorized!", :create, Response) unless params[:auth_key] == survey.auth_key
     end
+  end
+
+  def public_response?
+    survey = Survey.find(params[:survey_id])
+    survey.public? && !user_currently_logged_in?
   end
 
   def survey_not_expired
