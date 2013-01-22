@@ -28,6 +28,9 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
       when 'RatingQuestion'
         template = $('#dummy_rating_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
+      when 'MultiRecordQuestion'
+        template = $('#rating_question_template').html()
+        return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
       when undefined
         if model instanceof SurveyBuilder.Models.CategoryModel
           return new SurveyBuilder.Views.Dummies.CategoryView(model)
@@ -61,6 +64,9 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
       when 'RatingQuestion'
         template = $('#rating_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionView(model, template)
+      when 'MultiRecordQuestion'
+        template = $('#rating_question_template').html()
+        return new SurveyBuilder.Views.Questions.QuestionView(model, template)
       when undefined
         if model instanceof SurveyBuilder.Models.CategoryModel
           return new SurveyBuilder.Views.Questions.CategoryView(model)
@@ -73,6 +79,8 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
         sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
       when 'RadioQuestion'
         sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
+      when 'MultiRecordQuestion'
+        sub_question_model = new SurveyBuilder.Models.MultiRecordQuestionModel(model)
       when undefined
         sub_question_model = new SurveyBuilder.Models.CategoryModel(model)
       else
