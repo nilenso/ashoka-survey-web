@@ -206,7 +206,7 @@ module Api
         end
 
         it "creates a question with the same attributes as the existing one" do
-          question =question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id, :content => "foobar"))
+          question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id, :content => "foobar"))
           post :duplicate, :id => question.id
           Question.first.content.should == "foobar"
           Question.first.type.should == "RadioQuestion"
@@ -216,6 +216,15 @@ module Api
         it "returns a :bad_request for an invalid question_id" do
           post :duplicate, :id => 456787
           response.should_not be_ok
+        end
+        it "returns the question created when duplication is succesful" do
+          expected_keys = Question.attribute_names
+          question = FactoryGirl.create(:question, :survey_id => survey.id, :content => "foobar")
+          post :duplicate, :id => question.id
+          response.should be_ok
+          returned_json = JSON.parse(response.body)
+          returned_json.keys.should =~ expected_keys
+          returned_json['content'].should == question[:content]
         end
       end
     end

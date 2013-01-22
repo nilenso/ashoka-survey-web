@@ -66,8 +66,8 @@ module Api
       def duplicate
         question = Question.find_by_id(params[:id])
         if question
-          question.duplicate(question.survey_id)
-          render :nothing => true
+          duplicate_question = question.duplicate(question.survey_id)
+          render :json => duplicate_question.to_json(:methods => :type)
         else
           render :nothing => true, :status => :bad_request
         end
