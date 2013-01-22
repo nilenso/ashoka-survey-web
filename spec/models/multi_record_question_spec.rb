@@ -9,4 +9,6 @@ describe MultiRecordQuestion do
   end
 
   it_behaves_like "a question"
+
+  it { should have_many :questions }
 end
