@@ -55,7 +55,7 @@ class ResponsesController < ApplicationController
       @response.complete
       redirect_to survey_responses_path(@response.survey_id), :notice => "Successfully updated"
     else
-      @response.incomplete if !response_complete
+      response_complete ? @response.complete : @response.incomplete
       sort_questions_by_order_number(@response)
       @response.attributes = params[:response]
       flash.delete(:recaptcha_error)
