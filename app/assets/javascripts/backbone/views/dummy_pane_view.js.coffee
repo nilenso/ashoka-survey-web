@@ -67,7 +67,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @hide_overlay(event)
 
   hide_overlay: (event) =>
-      window.loading_overlay.hide_overlay() if event
+    window.loading_overlay.hide_overlay() if event
 
   sort_question_views_by_order_number: =>
     @questions = _(@questions).sortBy (question) =>

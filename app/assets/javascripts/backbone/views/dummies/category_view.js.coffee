@@ -111,9 +111,8 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     @reset_sub_question_numbers()
     @hide_overlay(event)
 
-
   hide_overlay: (event) =>
-      window.loading_overlay.hide_overlay() if event
+    window.loading_overlay.hide_overlay() if event
 
   last_sub_question_order_number: =>
     _.chain(@sub_questions)
