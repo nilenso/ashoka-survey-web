@@ -3,88 +3,88 @@ SurveyBuilder.Views.Dummies ||= {}
 # Represents a dummy category on the DOM
 class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
   initialize: (model) =>
-    this.model = model
-    this.sub_questions = []
-    this.template = $('#dummy_category_template').html()
-    this.model.dummy_view = this
-    this.can_have_sub_questions = true
-    this.model.on('change', this.render, this)
-    this.model.on('change:errors', this.render, this)
-    this.model.on('change:preload_sub_questions', this.preload_sub_questions)
-    this.model.on('add:sub_question', this.add_sub_question)
-    this.on('destroy:sub_question', this.reorder_questions, this)
+    @model = model
+    @sub_questions = []
+    @template = $('#dummy_category_template').html()
+    @model.dummy_view = this
+    @can_have_sub_questions = true
+    @model.on('change', @render, this)
+    @model.on('change:errors', @render, this)
+    @model.on('change:preload_sub_questions', @preload_sub_questions)
+    @model.on('add:sub_question', @add_sub_question)
+    @on('destroy:sub_question', @reorder_questions, this)
 
   render: =>
-    this.model.set('content', I18n.t('js.untitled_category')) if _.isEmpty(this.model.get('content'))
-    data = this.model.toJSON().category
-    data = _(data).extend({ question_number: this.model.question_number })
-    $(this.el).html('<div class="dummy_category_content">' + Mustache.render(this.template, data) + '</div>')
-    $(this.el).addClass("dummy_category")
+    @model.set('content', I18n.t('js.untitled_category')) if _.isEmpty(@model.get('content'))
+    data = @model.toJSON().category
+    data = _(data).extend({ question_number: @model.question_number })
+    $(@el).html('<div class="dummy_category_content">' + Mustache.render(@template, data) + '</div>')
+    $(@el).addClass("dummy_category")
 
-    $(this.el).children(".dummy_category_content").click (e) =>
+    $(@el).children(".dummy_category_content").click (e) =>
       @show_actual(e)
 
-    $(this.el).children('.dummy_category_content').children(".delete_category").click (e) => @delete(e)
-    $(this.el).children(".dummy_category_content").children('.collapse_category').click (e) => @toggle_collapse()
+    $(@el).children('.dummy_category_content').children(".delete_category").click (e) => @delete(e)
+    $(@el).children(".dummy_category_content").children('.collapse_category').click (e) => @toggle_collapse()
 
     group = $("<div class='sub_question_group'>")
-    _(this.sub_questions).each (sub_question) =>
+    _(@sub_questions).each (sub_question) =>
       group.sortable({
         items: "> div",
         update: ((event, ui) =>
           window.loading_overlay.show_overlay("Reordering Questions")
           _.delay(=>
-            this.reorder_questions(event,ui)
+            @reorder_questions(event,ui)
           , 10)
         )
       })
       group.append(sub_question.render().el)
 
-    $(this.el).append(group) unless _(this.sub_questions).isEmpty()
+    $(@el).append(group) unless _(@sub_questions).isEmpty()
     @collapse(false) if @collapsed
 
     return this
 
   delete: =>
-    this.model.destroy()
+    @model.destroy()
 
   add_sub_question: (sub_question_model) =>
     sub_question_model.on('set:errors', =>
-      this.uncollapse()
-      this.model.trigger('set:errors')
+      @uncollapse()
+      @model.trigger('set:errors')
     , this)
-    sub_question_model.on('destroy', this.delete_sub_question, this)
+    sub_question_model.on('destroy', @delete_sub_question, this)
     type = sub_question_model.get('type')
     question = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, sub_question_model)
-    this.sub_questions.push question
+    @sub_questions.push question
     @uncollapse()
-    this.render()
+    @render()
 
   preload_sub_questions: (sub_question_models) =>
     _.each(sub_question_models, (sub_question_model) =>
-      this.add_sub_question(sub_question_model)
+      @add_sub_question(sub_question_model)
     )
 
   delete_sub_question: (sub_question_model) =>
     view = sub_question_model.dummy_view
     @sub_questions = _(@sub_questions).without(view)
     view.remove()
-    this.trigger('destroy:sub_question')
+    @trigger('destroy:sub_question')
 
   show_actual: (event) =>
-    $(this.el).trigger("dummy_click")
-    $(this.model.actual_view.el).show()
-    $(this.el).children('.dummy_category_content').addClass("active")
+    $(@el).trigger("dummy_click")
+    $(@model.actual_view.el).show()
+    $(@el).children('.dummy_category_content').addClass("active")
 
   collapse: (animate=true) =>
     @collapsed = true
-    $(this.el).children('div.sub_question_group').hide(animate ? 'slow' : '')
-    $(this.el).children('.dummy_category_content').children('.collapse_category').html('&#9658;')
+    $(@el).children('div.sub_question_group').hide(animate ? 'slow' : '')
+    $(@el).children('.dummy_category_content').children('.collapse_category').html('&#9658;')
 
   uncollapse: =>
     @collapsed = false
-    $(this.el).children('div.sub_question_group').show('slow')
-    $(this.el).children('.dummy_category_content').children('.collapse_category').html('&#9660;')
+    $(@el).children('div.sub_question_group').show('slow')
+    $(@el).children('.dummy_category_content').children('.collapse_category').html('&#9660;')
 
   toggle_collapse: =>
     if @collapsed
@@ -93,8 +93,8 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       @collapse()
 
   unfocus: =>
-    $(this.el).children('.dummy_category_content').removeClass("active")
-    _(this.sub_questions).each (sub_question) =>
+    $(@el).children('.dummy_category_content').removeClass("active")
+    _(@sub_questions).each (sub_question) =>
       sub_question.unfocus()
 
   reorder_questions: (event, ui) =>
@@ -105,7 +105,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       sub_question.model.set({order_number: last_order_number + index + 1}, {silent: true})
       @model.sub_question_order_counter = last_order_number + index + 1
 
-    this.sub_questions = _(this.sub_questions).sortBy (sub_question) =>
+    @sub_questions = _(@sub_questions).sortBy (sub_question) =>
       sub_question.model.get('order_number')
 
     @reset_question_number()
@@ -116,20 +116,20 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       window.loading_overlay.hide_overlay() if event
 
   last_sub_question_order_number: =>
-    _.chain(this.sub_questions)
+    _.chain(@sub_questions)
       .map((sub_question) => sub_question.model.get('order_number'))
       .max().value()
 
   reset_question_number: =>
     _(@sub_questions).each (sub_question) =>
       index = $(sub_question.el).index()
-      sub_question.model.question_number = this.model.question_number + '.' + (index + 1)
+      sub_question.model.question_number = @model.question_number + '.' + (index + 1)
 
       sub_question.reset_question_number() if sub_question.can_have_sub_questions
     @render()
 
   set_order_number: (last_order_number) =>
-    index = $(this.el).index()
+    index = $(@el).index()
     @model.set({order_number: last_order_number + index + 1}, {silent: true})
     @set_question_number(index + 1)
 
