@@ -4,14 +4,11 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   urlRoot: '/api/questions'
 
   defaults:
-    # TODO: i18n this
-    # TODO: why set default when it's done in the initializer?
-    content: 'Untitled question'
+    content: I18n.t('js.untitled_question')
     mandatory: false
     identifier: false
 
   initialize: =>
-    this.set('content', I18n.t('js.untitled_question'))
     this.on('change', @make_dirty, this)
     @make_dirty()
 
