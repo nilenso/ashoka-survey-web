@@ -24,10 +24,9 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     @dirty
 
   save_model: =>
-    if @is_dirty()
-      this.save({}, {error: this.error_callback, success: this.success_callback})
-    _.each @sub_question_models, (question) =>
-      question.save_model()
+    this.save({}, {error: this.error_callback, success: this.success_callback}) if @is_dirty()
+    for sub_question_model in @sub_question_models
+      sub_question_model.save_model()
 
   success_callback: (model, response) =>
     @make_clean()
@@ -75,8 +74,8 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     this.get('questions').length > 0 || this.get('categories').length > 0
 
   reorder_sub_questions_models: =>
-    _.each @sub_question_models, (question) =>
-      question.set('order_number', @next_sub_question_order_number())
+    for sub_question_model in @sub_question_models
+      sub_question_model.set('order_number', @next_sub_question_order_number())
     @save_model()
 
   preload_sub_questions: =>
