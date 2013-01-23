@@ -26,11 +26,11 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
 
   #Can't have a blank radio question. Initialize with 3 radio options
   seed: =>
-    unless @seeded
-      @create_new_option('First Option')
-      @create_new_option('Second Option')
-      @create_new_option('Third Option')
-      @seeded = true
+    return if @seeded
+    @create_new_option('First Option')
+    @create_new_option('Second Option')
+    @create_new_option('Third Option')
+    @seeded = true
 
   save_model: =>
     super
