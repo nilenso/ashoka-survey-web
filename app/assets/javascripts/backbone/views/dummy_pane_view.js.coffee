@@ -2,6 +2,8 @@
 # Collection of dummy questions
 class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   el: "#dummy_pane"
+  DETAILS: "#dummy_survey_details"
+  QUESTIONS_CONTAINER: "#dummy_questions"
 
   initialize: (survey_model) =>
     @questions = []
@@ -10,7 +12,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @init_sortable()
 
   init_sortable: =>
-    ($(@el).find("#dummy_questions")).sortable({
+    ($(@el).find(@QUESTIONS_CONTAINER)).sortable({
       update : ((event, ui) =>
         window.loading_overlay.show_overlay(I18n.t('js.reordering_questions'))
         _.delay(=>
@@ -23,13 +25,13 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model)
     @questions.push(view)
     model.on('destroy', @delete_question_view, this)
-    $(@el).children("#dummy_questions").append(view.render().el)
+    $(@el).children(@QUESTIONS_CONTAINER).append(view.render().el)
 
   add_category: (model) =>
     view = new SurveyBuilder.Views.Dummies.CategoryView(model)
     @questions.push(view)
     model.on('destroy', @delete_question_view, this)
-    $(@el).children("#dummy_questions").append(view.render().el)
+    $(@el).children(@QUESTIONS_CONTAINER).append(view.render().el)
 
   insert_view_at_index: (view, index) =>
     if index == -1
@@ -43,8 +45,8 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @show_survey_details()
 
   render: =>
-    ($(@el).find("#dummy_survey_details").append(@dummy_survey_details.render().el))
-    ($(@el).find("#dummy_questions").append(question.render().el)) for question in @questions
+    ($(@el).find(@DETAILS).append(@dummy_survey_details.render().el))
+    ($(@el).find(@QUESTIONS_CONTAINER).append(question.render().el)) for question in @questions
     return this
 
   unfocus_all: =>
