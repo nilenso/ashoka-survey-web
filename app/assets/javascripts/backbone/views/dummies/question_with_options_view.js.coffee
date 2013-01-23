@@ -80,30 +80,20 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
         sub_question.unfocus()
 
   reorder_questions: (event, ui) =>
-    _(@options).each (option) =>
-      unless _(option.sub_questions).isEmpty()
-        last_order_number =  @last_sub_question_order_number(option)
-
-        _(option.sub_questions).each (sub_question) =>
-            index = $(sub_question.el).index()
-            sub_question.model.set({order_number: last_order_number + index + 1}, {silent: true})
-            option.model.sub_question_order_counter = last_order_number + index + 1
-
-        option.sub_questions = _(option.sub_questions).sortBy (sub_question) =>
-          sub_question.model.get('order_number')
+    for option_view in @options
+      break if option_view.has_no_sub_questions()
+      option_view.set_sub_question_order_numbers()
+      @sort_sub_question_views_by_order_number(option_view)
 
     @reset_question_number()
     @hide_overlay(event)
 
+  sort_sub_question_views_by_order_number: (option_view) =>
+    option_view.sub_questions = _(option_view.sub_questions).sortBy (sub_question) =>
+      sub_question.model.get('order_number')
 
   hide_overlay: (event) =>
       window.loading_overlay.hide_overlay() if event
-
-  last_sub_question_order_number: (option) =>
-    _.chain(option.sub_questions)
-      .map((sub_question) => sub_question.model.get('order_number'))
-      .max().value()
-
 
   reset_question_number: =>
     for option in @options

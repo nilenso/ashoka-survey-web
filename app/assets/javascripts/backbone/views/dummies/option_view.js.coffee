@@ -35,3 +35,18 @@ class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
     @sub_questions = _(@sub_questions).without(view)
     view.remove()
     this.trigger('destroy:sub_question')
+
+  last_sub_question_order_number: =>
+    _.chain(@sub_questions)
+      .map((sub_question) => sub_question.model.get('order_number'))
+      .max().value()
+
+  set_sub_question_order_numbers: =>
+    last_order_number = @last_sub_question_order_number()
+    for sub_question in @sub_questions
+      index = $(sub_question.el).index()
+      sub_question.model.set({order_number: last_order_number + index + 1}, {silent: true})
+      @model.sub_question_order_counter = last_order_number + index + 1
+
+  has_no_sub_questions: =>
+    @sub_questions.length == 0
