@@ -1,7 +1,8 @@
+##= require ./question_view
 SurveyBuilder.Views.Dummies ||= {}
 
 # Represents a dummy category on the DOM
-class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
+class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummies.QuestionView
   initialize: (model) =>
     @model = model
     @sub_questions = []
@@ -44,9 +45,6 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     @collapse(false) if @collapsed
 
     return this
-
-  delete: =>
-    @model.destroy()
 
   add_sub_question: (sub_question_model) =>
     sub_question_model.on('set:errors', =>
@@ -126,11 +124,3 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
 
       sub_question.reset_sub_question_numbers() if sub_question.can_have_sub_questions
     @render()
-
-  set_order_number: (last_order_number) =>
-    index = $(@el).index()
-    @model.set({order_number: last_order_number + index + 1}, {silent: true})
-
-  reset_question_number: =>
-    index = $(@el).index()
-    @model.question_number = index + 1
