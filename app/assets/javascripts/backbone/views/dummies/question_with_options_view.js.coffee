@@ -93,7 +93,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       sub_question.model.get('order_number')
 
   hide_overlay: (event) =>
-      window.loading_overlay.hide_overlay() if event
+    window.loading_overlay.hide_overlay() if event
 
   reset_sub_question_numbers: =>
     for option in @options
