@@ -77,7 +77,8 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     last_order_number = @survey_model.next_order_number()
     for question_view in @questions
       question_view.set_order_number(last_order_number)
-      question_view.reset_question_number() if question_view.can_have_sub_questions
+      question_view.reset_question_number()
+      question_view.reset_sub_question_numbers() if question_view.can_have_sub_questions
 
   show_survey_details: =>
     @dummy_survey_details.show_actual()

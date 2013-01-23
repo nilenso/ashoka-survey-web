@@ -44,8 +44,7 @@ class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
   set_sub_question_order_numbers: =>
     last_order_number = @last_sub_question_order_number()
     for sub_question in @sub_questions
-      index = $(sub_question.el).index()
-      sub_question.model.set({order_number: last_order_number + index + 1}, {silent: true})
+      sub_question.set_order_number(last_order_number)
       @model.sub_question_order_counter = last_order_number + index + 1
 
   has_no_sub_questions: =>

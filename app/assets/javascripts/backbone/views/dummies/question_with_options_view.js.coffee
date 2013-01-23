@@ -85,7 +85,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       option_view.set_sub_question_order_numbers()
       @sort_sub_question_views_by_order_number(option_view)
 
-    @reset_question_number()
+    @reset_sub_question_numbers()
     @hide_overlay(event)
 
   sort_sub_question_views_by_order_number: (option_view) =>
@@ -95,14 +95,14 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
   hide_overlay: (event) =>
       window.loading_overlay.hide_overlay() if event
 
-  reset_question_number: =>
+  reset_sub_question_numbers: =>
     for option in @options
       for sub_question in option.sub_questions
         index = $(sub_question.el).index()
         parent_question_number = option.model.get('question').question_number
         sub_question.model.question_number = '' + parent_question_number + @parent_option_character(option) + '.' + index
 
-        sub_question.reset_question_number() if sub_question.can_have_sub_questions
+        sub_question.reset_sub_question_numbers() if sub_question.can_have_sub_questions
     @render()
 
   parent_is_multichoice: (option) =>
