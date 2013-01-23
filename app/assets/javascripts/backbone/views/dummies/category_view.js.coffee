@@ -107,7 +107,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     this.sub_questions = _(this.sub_questions).sortBy (sub_question) =>
       sub_question.model.get('order_number')
 
-    @reorder_question_number()
+    @reset_question_number()
     @hide_overlay(event)
 
 
@@ -119,13 +119,13 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       .map((sub_question) => sub_question.model.get('order_number'))
       .max().value()
 
-  reorder_question_number: =>
+  reset_question_number: =>
     _(@sub_questions).each (sub_question) =>
       index = $(sub_question.el).index()
       sub_question.model.question_number = this.model.question_number + '.' + (index + 1)
 
-      sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
-      sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
+      sub_question.reset_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
+      sub_question.reset_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
     @render()
 
   set_order_number: (last_order_number) =>
