@@ -7,6 +7,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
     this.model = model
     this.template = template
     this.model.dummy_view = this
+    this.can_have_sub_questions = false
     this.model.on('change', this.render, this)
     this.model.on('change:errors', this.render, this)
 

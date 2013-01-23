@@ -7,6 +7,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     this.sub_questions = []
     this.template = $('#dummy_category_template').html()
     this.model.dummy_view = this
+    this.can_have_sub_questions = true
     this.model.on('change', this.render, this)
     this.model.on('change:errors', this.render, this)
     this.model.on('change:preload_sub_questions', this.preload_sub_questions)
@@ -124,8 +125,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       index = $(sub_question.el).index()
       sub_question.model.question_number = this.model.question_number + '.' + (index + 1)
 
-      sub_question.reset_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
-      sub_question.reset_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
+      sub_question.reset_question_number() if sub_question.can_have_sub_questions
     @render()
 
   set_order_number: (last_order_number) =>

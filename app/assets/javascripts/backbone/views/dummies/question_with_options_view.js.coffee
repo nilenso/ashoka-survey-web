@@ -7,6 +7,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
   initialize: (model, template) =>
     super
     this.options = []
+    this.can_have_sub_questions = true
     this.model.get('options').on('destroy', this.delete_option_view, this)
     this.model.on('add:options', this.add_new_option, this)
     this.model.on('reset:options', this.preload_options, this)
@@ -111,8 +112,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
         parent_question_number = option.model.get('question').question_number
         sub_question.model.question_number = '' + parent_question_number + @parent_option_character(option) + '.' + index
 
-        sub_question.reset_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
-        sub_question.reset_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
+        sub_question.reset_question_number() if sub_question.can_have_sub_questions
     @render()
 
   parent_is_multichoice: (option) =>
