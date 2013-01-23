@@ -1,5 +1,4 @@
 class SurveyBuilder.Views.QuestionFactory extends Backbone.View
-<<<<<<< HEAD
   @Types = {
     SINGLE_LINE : 'SingleLineQuestion',
     MULTILINE : 'MultilineQuestion',
@@ -89,7 +88,6 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
         if model instanceof SurveyBuilder.Models.CategoryModel
           return new SurveyBuilder.Views.Questions.CategoryView(model)
 
-<<<<<<< HEAD
   @model_for: (model) =>
     if (@is_with_options(model.type))
       new SurveyBuilder.Models.QuestionWithOptionsModel(model)
