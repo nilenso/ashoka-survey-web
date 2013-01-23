@@ -62,8 +62,7 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     this.trigger('change:errors')
     this.trigger('set:errors')
 
-  # TODO: why camelCase?
-  imageUploadUrl: =>
+  image_upload_url: =>
     "/api/questions/"+this.id+'/image_upload'
 
   toJSON: =>

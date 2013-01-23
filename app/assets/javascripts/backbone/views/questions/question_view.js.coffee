@@ -39,7 +39,7 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
   renderImageUploader: =>
     $(this.el).children(".upload_files").children(".fileupload").fileupload
       dataType: "json"
-      url: @model.imageUploadUrl()
+      url: @model.image_upload_url()
       done: (e, data) =>
         this.model.set('image_url', data.result.image_url)
         @renderImageUploader()
