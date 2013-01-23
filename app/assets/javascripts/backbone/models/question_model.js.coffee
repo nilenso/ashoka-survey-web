@@ -1,4 +1,3 @@
-#TODO: remove this comment line
 # Interfaces between the views and the rails model for a multiline question
 class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   urlRoot: '/api/questions'
