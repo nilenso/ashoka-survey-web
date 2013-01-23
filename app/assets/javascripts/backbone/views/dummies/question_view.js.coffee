@@ -49,6 +49,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
   set_order_number: (last_order_number) =>
     index = $(@el).index()
     @model.set({order_number: last_order_number + index + 1}, {silent: true})
+    index
 
   reset_question_number: =>
     index = $(@el).index()
