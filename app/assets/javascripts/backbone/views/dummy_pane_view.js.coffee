@@ -74,12 +74,12 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   reorder_questions_after_deletion: =>
     last_order_number = @survey_model.next_order_number()
     _(@questions).each (question) =>
-        index = $(question.el).index()
-        question.model.set({order_number: last_order_number + index + 1}, {silent: true})
-        question.model.question_number = index + 1
+      index = $(question.el).index()
+      question.model.set({order_number: last_order_number + index + 1}, {silent: true})
+      question.model.question_number = index + 1
 
-        question.reorder_question_number() if question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
-        question.reorder_question_number() if question instanceof SurveyBuilder.Views.Dummies.CategoryView
+      question.reorder_question_number() if question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
+      question.reorder_question_number() if question instanceof SurveyBuilder.Views.Dummies.CategoryView
 
   show_survey_details: =>
     @dummy_survey_details.show_actual()
