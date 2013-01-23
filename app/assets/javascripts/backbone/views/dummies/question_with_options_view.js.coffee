@@ -94,7 +94,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     @reorder_question_number()
     @hide_overlay(event)
 
-  
+
   hide_overlay: (event) =>
       window.loading_overlay.hide_overlay() if event
 
@@ -105,23 +105,24 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
 
 
   reorder_question_number: =>
-    _(@options).each (option) =>
-        _(option.sub_questions).each (sub_question) =>
-            index = $(sub_question.el).index()
-            option_number = option.model.get('question').question_number
-            option_number += String.fromCharCode(65 + @multichoice_order_number(option)) if @multichoice_parent(option)
-            sub_question.model.question_number = option_number + '.' + (index)
+    for option in @options
+      for sub_question in option.sub_questions
+        index = $(sub_question.el).index()
+        parent_question_number = option.model.get('question').question_number
+        sub_question.model.question_number = '' + parent_question_number + @parent_option_character(option) + '.' + index
 
-            sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
-            sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
+        sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
+        sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
     @render()
-  
-  multichoice_parent: (option) =>
+
+  parent_is_multichoice: (option) =>
     option.model.get('question').get('type') == "MultiChoiceQuestion"
 
-  multichoice_order_number: (option) =>
+  parent_option_character: (option) =>
+    return '' unless @parent_is_multichoice(option)
     first_order_number = option.model.get('question').first_order_number()
-    option.model.get('order_number') - first_order_number
- 
+    parent_option_number = option.model.get('order_number') - first_order_number
+    String.fromCharCode(65 + parent_option_number)
+
 
 
