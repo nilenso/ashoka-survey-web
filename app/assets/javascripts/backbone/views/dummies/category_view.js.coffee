@@ -110,15 +110,15 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
     @reorder_question_number()
     @hide_overlay(event)
 
-  
+
   hide_overlay: (event) =>
       window.loading_overlay.hide_overlay() if event
-  
+
   last_sub_question_order_number: =>
     _.chain(this.sub_questions)
       .map((sub_question) => sub_question.model.get('order_number'))
       .max().value()
-  
+
   reorder_question_number: =>
     _(@sub_questions).each (sub_question) =>
       index = $(sub_question.el).index()
@@ -127,3 +127,11 @@ class SurveyBuilder.Views.Dummies.CategoryView extends Backbone.View
       sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
       sub_question.reorder_question_number() if sub_question instanceof SurveyBuilder.Views.Dummies.CategoryView
     @render()
+
+  set_order_number: (last_order_number) =>
+    index = $(this.el).index()
+    @model.set({order_number: last_order_number + index + 1}, {silent: true})
+    @set_question_number(index + 1)
+
+  set_question_number: (question_number) =>
+    @model.question_number = question_number
