@@ -29,6 +29,9 @@ en:
     denied_access: "Denied access to %{action} %{subject}"
     users_and_organizations_blank: "You have not selected any users or oganizations to publish to"
     survey_published: "Survey Published!"
+    question_duplication_failed : "question_duplication_failed"
+    question_duplicated: "Question Duplicated successfully!"
+    question_duplication_failed : "Question duplication failed"
 
   publication:
     edit:

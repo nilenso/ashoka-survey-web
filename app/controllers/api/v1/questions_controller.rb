@@ -65,12 +65,12 @@ module Api
 
       def duplicate
         question = Question.find_by_id(params[:id])
-        if question
-          duplicate_question = question.copy_without_order()
-          render :json => duplicate_question.to_json(:methods => :type)
+        if question && question.copy_with_order
+          flash[:notice] = t("flash.question_duplicated")
         else
-          render :nothing => true, :status => :bad_request
+          flash[:error] = t("flash.question_duplication_failed")
         end
+        redirect_to :back
       end
 
       private

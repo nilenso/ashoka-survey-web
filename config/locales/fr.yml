@@ -30,7 +30,8 @@ fr:
     survey_finalized: "fr The survey was finalized"
     users_and_organizations_blank: "fr You have not selected any users or oganizations to publish to"
     survey_published: "fr Survey Published!"
-
+    question_duplicated: "fr Question Duplicated successfully!"
+    question_duplication_failed : "fr Question duplication failed"
 
   publication:
     edit:

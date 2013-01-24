@@ -223,26 +223,32 @@ module Api
       end
 
       context "POST 'duplicate'" do
-        it "creates new question" do
-          question = FactoryGirl.create(:question, :survey => survey)
-          expect {
+        before(:each) do
+          request.env["HTTP_REFERER"] = 'http://google.com'
+        end
+
+        context "when succesful" do
+          it "creates new question" do
+            question = FactoryGirl.create(:question, :survey => survey)
+            expect {
+              post :duplicate, :id => question.id
+            }.to change { Question.count }.by 1
+          end
+
+          it "redirects back with a success message" do
+            question = FactoryGirl.create(:question, :survey => survey)
             post :duplicate, :id => question.id
-          }.to change { Question.count }.by 1
+            response.should redirect_to(:back)
+            flash[:notice].should_not be_nil
+          end
         end
 
-        it "returns a :bad_request for an invalid question_id" do
-          post :duplicate, :id => 456787
-          response.should_not be_ok
-        end
-
-        it "returns the question created when duplication is succesful" do
-          expected_keys = Question.attribute_names
-          question = FactoryGirl.create(:question, :survey_id => survey.id, :content => "foobar")
-          post :duplicate, :id => question.id
-          response.should be_ok
-          returned_json = JSON.parse(response.body)
-          returned_json.keys.should =~ expected_keys
-          returned_json['content'].should == question.content
+        context "when unsuccessful" do
+          it "redirects back with a error message" do
+            post :duplicate, :id => 456787
+            response.should redirect_to(:back)
+            flash[:error].should_not be_nil
+          end
         end
       end
     end
