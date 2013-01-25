@@ -32,6 +32,8 @@ fr:
     survey_published: "fr Survey Published!"
     question_duplicated: "fr Question Duplicated successfully!"
     question_duplication_failed : "fr Question duplication failed"
+    category_duplicated: "fr Category Duplicated successfully!"
+    category_duplication_failed : "fr Category duplication failed"
 
   publication:
     edit:

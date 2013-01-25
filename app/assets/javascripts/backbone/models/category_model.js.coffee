@@ -13,6 +13,9 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     this.on('change', @make_dirty, this)
     @make_dirty()
 
+  duplicate_url: =>
+    '/api/categories/'+ @id + '/duplicate'
+
   make_dirty: =>
     @dirty = true
 

@@ -51,6 +51,16 @@ module Api
         end
       end
 
+      def duplicate
+        category = Category.find_by_id(params[:id])
+        if category && category.copy_with_order
+          flash[:notice] = t("flash.category_duplicated")
+        else
+          flash[:error] = t("flash.category_duplication_failed")
+        end
+        redirect_to :back
+      end
+
       private
       def dont_cache
         expires_now

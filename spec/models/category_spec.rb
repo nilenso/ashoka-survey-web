@@ -117,4 +117,30 @@ describe Category do
     parent_option.categories << sub_category
     sub_category.index_of_parent_option.should == 0
   end
+
+  context "Copy" do
+    it "assigns the correct order_number to the duplicated category" do
+      category = FactoryGirl.create(:category)
+      category.copy_with_order()
+      Category.find_by_order_number(category.order_number + 1).should_not be_nil
+    end
+
+    it "duplicates category with sub questions" do
+      category = FactoryGirl.create(:category)
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
+      category.copy_with_order()
+      duplicated_category = Category.find_by_order_number(category.order_number + 1)
+      duplicated_category.id.should_not == category.id
+      duplicated_category.content.should == category.content
+      duplicated_category.questions.size.should == category.questions.size
+    end
+
+    it "sets the sub-questions' survey ID to the same survey_id as of the original question" do
+      category = FactoryGirl.create(:category)
+      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
+      category.copy_with_order()
+      duplicated_category = Category.find_by_order_number(category.order_number + 1)
+      duplicated_category.questions[0].survey_id.should == category.survey_id
+    end
+  end
 end

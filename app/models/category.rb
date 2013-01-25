@@ -36,6 +36,13 @@ class Category < ActiveRecord::Base
     category
   end
 
+  def copy_with_order
+    duplicated_category = duplicate(survey_id)
+    duplicated_category.order_number += 1
+    return false unless duplicated_category.save
+    true
+  end
+
   def has_questions?
     questions.count > 0 || categories.any? { |x| x.has_questions? }
   end

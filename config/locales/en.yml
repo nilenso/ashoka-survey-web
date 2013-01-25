@@ -32,6 +32,8 @@ en:
     question_duplication_failed : "question_duplication_failed"
     question_duplicated: "Question Duplicated successfully!"
     question_duplication_failed : "Question duplication failed"
+    category_duplicated: "Category Duplicated successfully!"
+    category_duplication_failed : "Category duplication failed"
 
   publication:
     edit:

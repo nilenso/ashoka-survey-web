@@ -113,4 +113,34 @@ describe Api::V1::CategoriesController do
       response.should_not be_ok
     end
   end
+
+  context "POST 'duplicate'" do
+    before(:each) do
+      request.env["HTTP_REFERER"] = 'http://google.com'
+    end
+
+    context "when succesful" do
+      it "creates new category" do
+        category = FactoryGirl.create(:category)
+        expect {
+          post :duplicate, :id => category.id
+        }.to change { Category.count }.by 1
+      end
+
+      it "redirects back with a success message" do
+        category = FactoryGirl.create(:category)
+        post :duplicate, :id => category.id
+        response.should redirect_to(:back)
+        flash[:notice].should_not be_nil
+      end
+    end
+
+    context "when unsuccessful" do
+      it "redirects back with a error message" do
+        post :duplicate, :id => 456787
+        response.should redirect_to(:back)
+        flash[:error].should_not be_nil
+      end
+    end
+  end
 end
