@@ -2,6 +2,7 @@
 class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
   urlRoot: '/api/categories'
 
+  ORDER_NUMBER_STEP: 2
   defaults:
     content: 'Untitled Category'
 
@@ -69,7 +70,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     this.trigger('add:sub_question', sub_question_model)
 
   next_sub_question_order_number: =>
-    ++@sub_question_order_counter
+    @sub_question_order_counter += @ORDER_NUMBER_STEP
 
   delete_sub_question: (sub_question_model) =>
     @sub_question_models = _(@sub_question_models).without(sub_question_model)

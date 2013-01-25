@@ -2,6 +2,7 @@ SurveyBuilder.Views.Dummies ||= {}
 
 # Represents a dummy question on the DOM
 class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
+  ORDER_NUMBER_STEP: 2
 
   initialize: (model, template) =>
     @model = model
@@ -16,6 +17,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
     @model.set('content', I18n.t('js.untitled_question')) if _.isEmpty(@model.get('content'))
     data = _.extend(@model.toJSON().question, {errors: @model.errors, image_url: @model.get('image_url')})
     data = _(data).extend({question_number: @model.question_number})
+    data = _(data).extend({duplicate_url: @model.duplicate_url()})
     $(@el).children('.dummy_question_content').children(".top_level_content").html(Mustache.render(@template, data))
     $(@el).addClass("dummy_question")
     $(@el).find('abbr').show() if @model.get('mandatory')
@@ -28,15 +30,11 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
       @show_actual(e)
 
     $(@el).children('.dummy_question_content').children(".top_level_content").children(".delete_question").click (e) => @delete(e)
-    $(@el).children('.dummy_question_content').children(".top_level_content").children(".copy_question").click (e) => @duplicate(e)
 
     return this
 
   delete: =>
     @model.destroy()
-
-  duplicate: =>
-    @model.duplicate()
 
   show_actual: (event) =>
     $(@el).trigger("dummy_click")
@@ -48,7 +46,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
 
   set_order_number: (last_order_number) =>
     index = $(@el).index()
-    @model.set({order_number: last_order_number + index + 1}, {silent: true})
+    @model.set({order_number: last_order_number + (index * @ORDER_NUMBER_STEP)})
     index
 
   reset_question_number: =>

@@ -1,4 +1,6 @@
 class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
+  ORDER_NUMBER_STEP: 2
+
   initialize:(@survey_id) =>
     @question_models = []
     @urlRoot = "/api/surveys"
@@ -17,7 +19,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     return 0 if _(@question_models).isEmpty()
     _.max(@question_models, (question_model) =>
       question_model.get "order_number"
-    ).get('order_number') + 1
+    ).get('order_number') + @ORDER_NUMBER_STEP
 
   set_order_number_for_question: (question_model) =>
     question_model.set('order_number' : @next_order_number())

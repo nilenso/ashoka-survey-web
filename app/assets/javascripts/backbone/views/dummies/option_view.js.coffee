@@ -2,6 +2,7 @@
 SurveyBuilder.Views.Dummies ||= {}
 
 class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
+  ORDER_NUMBER_STEP: 2
 
   initialize: (@model, @template) =>
     this.sub_questions = []
@@ -45,7 +46,7 @@ class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
     last_order_number = @last_sub_question_order_number()
     for sub_question in @sub_questions
       index = sub_question.set_order_number(last_order_number)
-      @model.sub_question_order_counter = last_order_number + index + 1
+      @model.sub_question_order_counter = last_order_number + (index * @ORDER_NUMBER_STEP)
 
   has_no_sub_questions: =>
     @sub_questions.length == 0

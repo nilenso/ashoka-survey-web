@@ -4,6 +4,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   defaults: {
     content: 'untitled'
   }
+  ORDER_NUMBER_STEP: 2
 
   initialize: =>
     @sub_question_order_counter = 0
@@ -38,7 +39,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     this.trigger('change:errors')
 
   next_sub_question_order_number: =>
-    ++@sub_question_order_counter
+    @sub_question_order_counter += @ORDER_NUMBER_STEP
 
   add_sub_question: (type) =>
 

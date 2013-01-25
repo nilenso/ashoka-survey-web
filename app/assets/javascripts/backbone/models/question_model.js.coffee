@@ -30,17 +30,6 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   fetch: =>
     super({error: @error_callback, success: @success_callback})
 
-  duplicate: =>
-    $.post(
-      "#{@url()}/duplicate"
-    ).success(=>
-      alert "success"
-    ).error(=>
-      alert "error"
-    ).complete(=>
-      alert "complete"
-    )
-
   remove_image_attributes: =>
     @unset('image', {silent: true})
     @unset('image_content_type', {silent: true})
@@ -62,6 +51,9 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
 
   image_upload_url: =>
     "/api/questions/"+@id+'/image_upload'
+
+  duplicate_url: =>
+    "/api/questions/"+@id+'/duplicate'
 
   toJSON: =>
     question_attrs = {}

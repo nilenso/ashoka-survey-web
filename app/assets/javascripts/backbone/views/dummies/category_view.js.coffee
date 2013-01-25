@@ -3,6 +3,8 @@ SurveyBuilder.Views.Dummies ||= {}
 
 # Represents a dummy category on the DOM
 class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummies.QuestionView
+  ORDER_NUMBER_STEP: 2
+
   initialize: (model) =>
     @model = model
     @sub_questions = []
@@ -100,8 +102,8 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
 
     _(@sub_questions).each (sub_question) =>
       index = $(sub_question.el).index()
-      sub_question.model.set({order_number: last_order_number + index + 1}, {silent: true})
-      @model.sub_question_order_counter = last_order_number + index + 1
+      sub_question.model.set({order_number: last_order_number + (index * @ORDER_NUMBER_STEP)}, {silent: true})
+      @model.sub_question_order_counter = last_order_number + (index * @ORDER_NUMBER_STEP)
 
     @sub_questions = _(@sub_questions).sortBy (sub_question) =>
       sub_question.model.get('order_number')
