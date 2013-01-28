@@ -153,6 +153,7 @@ en:
       complete: Complete
       list_of_responses: "List of Responses for %{survey_name}"
       added_by: Added by
+      last_updated_at: Last Updated At
 
     edit:
       delete: "Delete"

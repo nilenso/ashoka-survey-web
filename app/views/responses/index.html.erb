@@ -13,6 +13,7 @@
           <th><%= question.content %> </th>
         <% end %>
         <th><%= t("activerecord.attributes.response.location") %></th>
+        <th><%= t(".last_updated_at") %></th>
         <th><%= t(".added_by") %></th>
         <th>&nbsp;</th>
         <th class="actions">&nbsp;</th>
@@ -31,6 +32,9 @@
           <% end %>
           <td>
             <%= response.location %>
+          </td>
+          <td>
+            <%= I18n.localize(response.last_update, :format => :long) %>
           </td>
           <td>
             <%= @user_names[response.user_id] if response.user_id %>
