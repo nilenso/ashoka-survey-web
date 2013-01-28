@@ -13,6 +13,9 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
 
   init_sortable: =>
     ($(@el).find(@QUESTIONS_CONTAINER)).sortable({
+      start: ((event, ui) =>
+          ui.item.startPos = ui.item.index()
+      ),
       update : ((event, ui) =>
         window.loading_overlay.show_overlay(I18n.t('js.reordering_questions'))
         _.delay(=>
@@ -62,12 +65,25 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
 
   reorder_questions: (event, ui) =>
     @set_order_numbers()
-    @sort_question_views_by_order_number()
+    @reorder_questions_views_by_index(ui)
     @render()
     @hide_overlay(event)
 
   hide_overlay: (event) =>
     window.loading_overlay.hide_overlay() if event
+
+  reorder_questions_views_by_index: (ui) =>
+    return unless ui
+    start = ui.item.startPos
+    end = ui.item.index()
+    if start > end
+        rotate = @questions.slice(end, start)
+        rotated_questions = [@questions[start]].concat(rotate)
+        @questions = _.union(@questions.slice(0, end), rotated_questions, @questions.slice(start+1))
+    else
+        rotate = @questions.slice(start+1, end+1)
+        rotated_questions = rotate.concat(@questions[start])
+        @questions = _.union(@questions.slice(0, start), rotated_questions, @questions.slice(end+1))
 
   sort_question_views_by_order_number: =>
     @questions = _(@questions).sortBy (question) =>
