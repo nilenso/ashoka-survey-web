@@ -54,6 +54,22 @@ describe Response do
     response.should be_valid
   end
 
+  context "when finding the time of the last update" do
+    it "looks through the `updated_at` for all its answers" do
+      response = FactoryGirl.create :response, :updated_at => 2.days.from_now
+      answer = FactoryGirl.create(:answer)
+      response.answers << answer
+      answer.update_attribute :updated_at, 5.days.from_now
+      response.last_update.to_i.should ==  5.days.from_now.to_i
+    end
+
+    it "looks at the response's `updated_at` as well" do
+      response = FactoryGirl.create :response, :updated_at => 2.days.from_now      
+      response.answers << FactoryGirl.create(:answer)
+      response.last_update.to_i.should ==  2.days.from_now.to_i      
+    end
+  end
+
   context "when marking a response incomplete" do
     it "marks the response incomplete" do
       survey = FactoryGirl.create(:survey)

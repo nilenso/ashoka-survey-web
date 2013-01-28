@@ -20,6 +20,11 @@ class Response < ActiveRecord::Base
     location
   end
 
+  def last_update
+    [answers.maximum('answers.updated_at'),
+      self.updated_at].max
+  end
+
   def answers_for_identifier_questions
     identifier_answers = answers.find_all { |answer| answer.identifier? }
     identifier_answers.blank? ? five_first_level_answers : identifier_answers
