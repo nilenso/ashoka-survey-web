@@ -2,13 +2,16 @@ if @responses.present?
   wb = xlsx_package.workbook
   bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
   wb.add_worksheet(name: "Responses") do |sheet|
-    sheet.add_row @responses.first.questions.map(&:content) << "Added By", :style => bold_style
+    headers = @responses.first.questions.map(&:content)
+    headers << "Added By" << "Last updated at"
+    sheet.add_row headers, :style => bold_style
     @responses.each do |response|
       answers = response.questions.map do |question|
         answer = response.answers.find_by_question_id(question.id)
         answer ? answer.content_for_excel(server_url) : ""
       end
       answers << @user_names[response.user_id]
+      answers << response.last_update
       sheet.add_row answers
     end
   end
