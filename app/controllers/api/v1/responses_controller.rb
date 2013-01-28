@@ -31,7 +31,7 @@ module Api::V1
       response.merge_status(params[:response].except(:answers_attributes))
       response.validating if response.complete?
       answers_to_update = response.select_new_answers(params[:response][:answers_attributes])
-      response.update_attributes({ :answers_attributes => answers_to_update }) if response.save
+      response.update_attributes({ :answers_attributes => answers_to_update })
       if response.incomplete? && response.valid?
         render :json => response.to_json_with_answers_and_choices
       elsif response.validating? && response.valid?
