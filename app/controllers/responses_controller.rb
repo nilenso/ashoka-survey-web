@@ -9,6 +9,7 @@ class ResponsesController < ApplicationController
   def index
     respond_to do |format|
       @user_names = User.names_for_ids(access_token, @responses.map(&:user_id).uniq)
+      @organization_names = Organization.all(access_token)
       format.html do
         @responses = @responses.paginate(:page => params[:page], :per_page => 10).order('created_at DESC, status')
       end
