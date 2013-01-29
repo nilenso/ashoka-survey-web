@@ -232,4 +232,7 @@ fr:
   templates:
     loading:
       loading: "Chargement..."
-
+      
+  date:
+    formats:
+      default: "%d %b, %Y"
