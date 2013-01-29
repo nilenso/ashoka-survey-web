@@ -54,6 +54,7 @@ class Ability
         can :edit, Survey, :organization_id => user_info[:org_id]
         can :update, Survey, :organization_id => user_info[:org_id]
         can :finalize, Survey, :organization_id => user_info[:org_id]
+        can :archive, Survey, :organization_id => user_info[:org_id]
         can :destroy, Survey, :organization_id => user_info[:org_id], :finalized => false
         can :report, Survey, :organization_id => user_info[:org_id]
 

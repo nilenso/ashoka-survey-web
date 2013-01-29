@@ -13,6 +13,7 @@ SurveyWeb::Application.routes.draw do
       end
       get 'build'
       put 'finalize'
+      put 'archive'
       match  "public_response" => "responses#create"
       resources :responses, :only => [:new, :create, :index, :edit, :show, :update, :destroy] do
         member { put "complete" }

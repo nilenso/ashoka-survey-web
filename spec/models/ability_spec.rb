@@ -38,6 +38,7 @@ describe "Abilities" do
         let(:finalized_survey) { survey = FactoryGirl.create(:survey, :organization_id => 5, :finalized => true) }
 
         it { should be_able_to(:edit, survey) }
+        it { should be_able_to(:archive, survey) }
         it { should be_able_to(:build, survey) }
         it { should be_able_to(:destroy, survey) }
         it { should_not be_able_to(:destroy, finalized_survey) }
@@ -72,6 +73,7 @@ describe "Abilities" do
         let(:option) { FactoryGirl.create(:option, :question => question) }
 
         it { should_not be_able_to(:edit, survey) }
+        it { should_not be_able_to(:archive, survey) }
         it { should_not be_able_to(:build, survey) }
         it { should_not be_able_to(:publish_to_users, survey) }
         it { should_not be_able_to(:update_publish_to_users, survey) }
@@ -101,6 +103,7 @@ describe "Abilities" do
         before { ParticipatingOrganization.create(:organization_id => user_info[:org_id],  :survey_id => survey.id) }
 
         it { should be_able_to(:read, survey) }
+        it { should_not be_able_to(:archive, survey) }
         it { should be_able_to(:questions_count, survey) }
         it { should be_able_to :duplicate, survey }
 
@@ -119,6 +122,7 @@ describe "Abilities" do
       let(:user_info) { base_user_info.merge(:role => 'field_agent') }
 
       it { should_not be_able_to(:create, Survey.new) }
+      it { should_not be_able_to(:archive, Survey.new) }
       it { should_not be_able_to(:publish_to_users, Survey.new) }
       it { should_not be_able_to(:update_publish_to_users, Survey.new) }
       it { should_not be_able_to(:edit, Survey.new) }
@@ -142,6 +146,7 @@ describe "Abilities" do
         end
 
         it { should be_able_to :read, survey }
+        it { should_not be_able_to(:archive, survey) }
         it { should be_able_to :questions_count, survey }
         it { should be_able_to :create, Response.new(:survey => survey) }
         it { should be_able_to :manage,  response }
@@ -164,6 +169,7 @@ describe "Abilities" do
         end
 
         it { should_not be_able_to :read, survey }
+        it { should_not be_able_to(:archive, survey) }
         it { should_not be_able_to :questions_count, survey }
         it { should_not be_able_to :image_upload,  response }
         it { should_not be_able_to :create, Response.new(:survey => survey) }

@@ -156,6 +156,29 @@ describe SurveysController do
     end
   end
 
+  context "when archiving" do
+    before(:each) do
+      sign_in_as('cso_admin')
+      session[:user_info][:org_id] = 123
+      @survey = FactoryGirl.create(:survey, :organization_id => 123)
+    end
+
+    it "archives the survey" do
+      put :archive, :survey_id => @survey.id
+      @survey.reload.should be_archived
+    end
+
+    it "redirects to the root page" do
+      put :archive, :survey_id => @survey.id
+      response.should redirect_to root_path
+    end
+
+    it "shows a flash message saying the survey was archived" do
+      put :archive, :survey_id => @survey.id
+      flash.notice.should_not be_nil
+    end
+  end
+
   context "POST 'duplicate'" do
     before(:each) do
       sign_in_as('cso_admin')

@@ -45,6 +45,13 @@ class SurveysController < ApplicationController
     redirect_to edit_survey_publication_path(survey.id)
   end
 
+  def archive
+    survey = Survey.find(params[:survey_id])
+    survey.archive
+    flash[:notice] = t "flash.survey_archived", :survey_name => survey.name
+    redirect_to root_path
+  end
+
   def duplicate
     survey = Survey.find(params[:id])
     if survey.duplicate(:organization_id => current_user_org).save(:validate => false)
