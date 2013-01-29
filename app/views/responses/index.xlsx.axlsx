@@ -3,7 +3,7 @@ if @responses.present?
   bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
   wb.add_worksheet(name: "Responses") do |sheet|
     headers = @responses.first.questions.map { |question| "#{ResponseDecorator.question_number(question)}) #{question.content}" }
-    headers << "Added By" << "Last updated at" << "Address"
+    headers << "Added By" << "Last updated at" << "Address" << "IP Address"
     sheet.add_row headers, :style => bold_style
     @responses.each do |response|
       answers = response.questions.map do |question|
@@ -13,6 +13,7 @@ if @responses.present?
       answers << @user_names[response.user_id]
       answers << response.last_update
       answers << response.location
+      answers << response.ip_address
       sheet.add_row answers
     end
   end
