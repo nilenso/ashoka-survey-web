@@ -5,6 +5,7 @@ describe Survey do
   it { should respond_to :expiry_date }
   it { should respond_to :description }
   it { should respond_to :finalized }
+  it { should respond_to :archived }
   it { should respond_to :organization_id }
   it { should respond_to :public }
   it { should respond_to(:auth_key) }
@@ -142,6 +143,12 @@ describe Survey do
       Survey.finalized.should_not include(survey)
       Survey.finalized.should include(another_survey)
     end
+  end
+
+  it "can be archived" do
+    survey = FactoryGirl.create :survey
+    survey.archive
+    survey.reload.should be_archived
   end
 
   context "users" do
