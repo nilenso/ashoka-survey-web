@@ -132,6 +132,7 @@ describe Response do
     survey = FactoryGirl.create(:survey)
     response = FactoryGirl.build(:response, :survey_id => survey.id)
     response.filename_for_excel.should =~ /#{survey.name}/
+    response.filename_for_excel.should =~ /#{survey.id}/
     response.filename_for_excel.should include Time.now.to_s
     response.filename_for_excel.should =~ /.*xlsx$/
   end
