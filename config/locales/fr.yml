@@ -34,6 +34,7 @@ fr:
     question_duplication_failed : "fr Question duplication failed"
     category_duplicated: "fr Category Duplicated successfully!"
     category_duplication_failed : "fr Category duplication failed"
+    no_finalized_surveys: "Impossible d'effectuer une opération sur une enquête archivés"
 
   publication:
     edit:

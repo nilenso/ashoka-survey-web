@@ -177,6 +177,12 @@ describe SurveysController do
       put :archive, :survey_id => @survey.id
       flash.notice.should_not be_nil
     end
+
+    it "shows a flash error when trying to archive an archived survey" do
+      put :archive, :survey_id => @survey.id
+      put :archive, :survey_id => @survey.id
+      flash[:error].should_not be_nil
+    end
   end
 
   context "POST 'duplicate'" do
