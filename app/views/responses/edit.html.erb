@@ -20,7 +20,7 @@
       <%= recaptcha_tags :display => { :theme => :clean } %>
       <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'complete_button' } %>
     <% else %>
-      <%= f.action :submit, :as => :button, :label => t('.save_as_draft') unless @response.complete? %>
+      <%= f.action :submit, :as => :button, :label => t('.save_as_draft'), :button_html => { :id => 'save_as_draft_button' } unless @response.complete? %>
       <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' }  %>
     <% end %>
   <% end %>
@@ -46,10 +46,16 @@
         }
       });
     });
-    $('#complete_button').click(function(){
+    $('#complete_button').click(function(){      
       var action = $('form.response').attr('action')
       $('form.response').attr('action', action + '/complete')
     })
+
+    $("form").submit(function(){
+      $("#complete_button").attr('disabled', true);
+      $("#save_as_draft_button").attr('disabled', true);
+    });
+
     organize_sub_questions()
     $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
   });
