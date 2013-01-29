@@ -69,6 +69,7 @@ fr:
       responses: "Réponse"
       show: "Montrer"
       finalized: "fr Finalized"
+      archived: "Archivés"
       archive: "Archive"
       drafts: "fr Drafts"
       all: "Tous"

@@ -38,6 +38,7 @@ describe SurveysController do
         sign_in_as('cso_admin')
         @draft_survey = FactoryGirl.create(:survey, :finalized => false, :organization_id => LOGGED_IN_ORG_ID)
         @finalized_survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => LOGGED_IN_ORG_ID)
+        @archived_survey = FactoryGirl.create(:survey, :archived => true, :organization_id => LOGGED_IN_ORG_ID)
       end
 
 
@@ -53,6 +54,12 @@ describe SurveysController do
         response.should be_ok
         assigns(:surveys).should include @draft_survey
         assigns(:surveys).should_not include @finalized_survey
+      end
+
+      it "shows all draft surveys if filter is archived" do
+        get :index, :archived => true
+        response.should be_ok
+        assigns(:surveys).should == [@archived_survey]
       end
 
       it "shows all surveys if filter is not specified" do

@@ -10,6 +10,7 @@ class SurveysController < ApplicationController
     @surveys ||= []
     @surveys = @surveys.finalized  if params[:finalized].present?
     @surveys = @surveys.drafts if params[:drafts].present?
+    @surveys = @surveys.archived if params[:archived].present?
     @surveys = @surveys.paginate(:page => params[:page], :per_page => 5)
     @surveys = SurveyDecorator.decorate(@surveys)
     @organizations = Organization.all(access_token)

@@ -2,9 +2,10 @@
   <% if can? :create, Survey %>
     <% if @surveys.present? %>
       <ul class="filters">
-        <li><%= link_to t(".all"), surveys_path, :class => "#{'selected' unless params[:finalized] or params[:drafts]}" %></li>
+        <li><%= link_to t(".all"), surveys_path, :class => "#{'selected' unless params[:finalized] or params[:drafts] or params[:archived]}" %></li>
         <li><%= link_to t(".finalized"), surveys_path(:finalized => true), :class => "#{'selected' if params[:finalized]}"%></li>
         <li><%= link_to t(".drafts"), surveys_path(:drafts => true), :class => "#{'selected' if params[:drafts]}"%></li>
+        <li><%= link_to t(".archived"), surveys_path(:archived => true), :class => "#{'selected' if params[:archived]}"%></li>
       </ul>
     <% end %>
   <% end %>

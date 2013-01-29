@@ -69,6 +69,7 @@ en:
       responses: "Response"
       show: "Show"
       finalized: "Finalized"
+      archived: "Archived"
       drafts: "Drafts"
       all: "All"
       create_survey: "Create survey"
