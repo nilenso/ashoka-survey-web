@@ -46,14 +46,14 @@
 
       <span class="published-on">
         <% if survey.published? && survey.published_on %>
-          <%= (survey.published_on).to_formatted_s(:long_ordinal) %>
+          <%= I18n.localize(survey.published_on) %>
         <% else %>
           <%= t(".not_yet_published") %>
         <% end %>
       </span>
 
       <span class="expires-on">
-        <%= survey.expiry_date.to_formatted_s(:long_ordinal) %>
+        <%= I18n.localize(survey.expiry_date) %>
       </span>
 
       <span class="responses-complete"><%= survey.complete_responses_count %></span>

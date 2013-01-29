@@ -34,7 +34,7 @@
             <%= response.location %>
           </td>
           <td>
-            <%= I18n.localize(response.last_update, :format => :long) %>
+            <%= I18n.localize(response.last_update) %>
           </td>
           <td>
             <%= @user_names[response.user_id] if response.user_id %>

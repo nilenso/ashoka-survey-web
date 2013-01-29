@@ -241,3 +241,7 @@ en:
   templates:
     loading:
       loading: "Loading..."
+
+  date:
+    formats:
+      default: "%d %b, %Y"
