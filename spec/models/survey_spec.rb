@@ -377,6 +377,13 @@ describe Survey do
       FactoryGirl.create_list(:survey_with_questions, 5)
       Survey.with_questions.count.should == (5 * 5)
     end
+
+    it "returns a list of archived surveys" do
+      archived_survey = FactoryGirl.create :survey, :archived => true
+      another_archived_survey = FactoryGirl.create :survey, :archived => true
+      survey = FactoryGirl.create :survey
+      Survey.archived.should =~ [archived_survey, another_archived_survey]
+    end
   end
 
   context "publicize" do

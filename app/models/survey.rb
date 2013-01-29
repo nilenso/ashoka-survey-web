@@ -20,6 +20,7 @@ class Survey < ActiveRecord::Base
   scope :not_expired, where('expiry_date > ?', Date.today)
   scope :with_questions, joins(:questions)
   scope :drafts, where(:finalized => false)
+  scope :archived, where(:archived => true)
   default_scope :order => 'published_on DESC NULLS LAST, created_at DESC'
   before_save :generate_auth_key, :if => :public?
 
