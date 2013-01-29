@@ -63,7 +63,7 @@ class Question < ActiveRecord::Base
   end
 
   def nesting_level
-    return parent_question.nesting_level + 1 if parent_question
+    return parent_question.nesting_level + 1 if parent && parent_question
     return category.nesting_level + 1 if category
     return 1
   end
