@@ -86,7 +86,7 @@ class ResponsesController < ApplicationController
 
   def sort_questions_by_order_number(response)
     question_ids_in_order = response.survey.question_ids_in_order
-    response.answers.sort_by! { |answer| question_ids_in_order.index(answer.question.id) }
+    response.answers.sort_by! { |answer| question_ids_in_order.index(answer.question.id) || 0 }
   end
 
   def survey_finalized
