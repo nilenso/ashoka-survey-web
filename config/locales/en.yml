@@ -35,6 +35,7 @@ en:
     category_duplicated: "Category Duplicated successfully!"
     category_duplication_failed : "Category duplication failed"
     no_finalized_surveys: "Can't perform operation on an archived survey"
+    survey_archived: "%{survey_name} has been archived."
 
   publication:
     edit:
@@ -74,6 +75,7 @@ en:
       delete: "Delete"
       publish: "Publish"
       unpublish: "Unpublish"
+      archive: "Archive"
       share: "Share"
       add_response: "Add Response"
       edit: "Edit"

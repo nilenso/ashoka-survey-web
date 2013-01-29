@@ -35,6 +35,7 @@ fr:
     category_duplicated: "fr Category Duplicated successfully!"
     category_duplication_failed : "fr Category duplication failed"
     no_finalized_surveys: "Impossible d'effectuer une opération sur une enquête archivés"
+    survey_archived: "%{survey_name} a été archivé."
 
   publication:
     edit:
@@ -68,6 +69,7 @@ fr:
       responses: "Réponse"
       show: "Montrer"
       finalized: "fr Finalized"
+      archive: "Archive"
       drafts: "fr Drafts"
       all: "Tous"
       create: "Créer sondage"
