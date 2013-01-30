@@ -10,6 +10,13 @@ module Api
         render :nothing => true
       end
 
+      def update
+        filename =  "#{Rails.root}/log/#{params[:id]}.log"
+        file = File.open(filename, "a")
+        file.puts params[:content]
+        render :nothing => true
+      end
+
     end
   end
 end
