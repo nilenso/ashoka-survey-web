@@ -17,6 +17,7 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
     type in [@Types.RADIO, @Types.MULTI_CHOICE, @Types.DROP_DOWN]
 
   @dummy_view_for: (type, model) =>
+    type = null unless type
     switch type
       when @Types.SINGLE_LINE
         template = $('#dummy_single_line_question_template').html()
@@ -55,6 +56,7 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
         return new SurveyBuilder.Views.Dummies.CategoryView(model)
 
   @settings_view_for: (type, model) =>
+    type = null unless type
     switch type
       when @Types.SINGLE_LINE
         template = $('#single_line_question_template').html()
@@ -93,6 +95,7 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
         return new SurveyBuilder.Views.Questions.CategoryView(model)
 
   @model_for: (model) =>
+    model.type = null unless model.type
     if (@is_with_options(model.type))
       new SurveyBuilder.Models.QuestionWithOptionsModel(model)
     else if  model.type == @Types.CATEGORY
