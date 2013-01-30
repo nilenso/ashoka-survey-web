@@ -191,7 +191,7 @@ body#build{
 
         span{display: block; float: left; margin-left: -20px; font-weight: bold;}
 
-        a.delete_question, a.delete_category, a.copy_question {display: none;}
+        a.delete_question, a.delete_category, a.copy_question, a.copy_question_hidden {display: none;}
         &:hover{ background: $gray-xxlight;}
 
         &.active{

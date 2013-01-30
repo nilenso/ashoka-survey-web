@@ -98,7 +98,7 @@ div#content{
     div.dummy_question_content, div.dummy_category_content, div#dummy_survey_details>div{
       margin-bottom: 4px;
 
-      a.delete_question, a.delete_category, a.copy_question {display: none;}
+      a.delete_question, a.delete_category, a.copy_question, a.copy_question_hidden {display: none;}
       &:hover{ background: $gray-xxlight;}
 
       &.active{
