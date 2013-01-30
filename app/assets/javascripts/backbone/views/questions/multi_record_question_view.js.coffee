@@ -55,7 +55,6 @@ class SurveyBuilder.Views.Questions.MultiRecordQuestionView extends SurveyBuilde
     $(question.render().el).hide()
 
   preload_sub_questions: (collection) =>
-    console.log "PRELOADING"
     _.each(collection, (question) =>
       this.add_sub_question(question)
     )
