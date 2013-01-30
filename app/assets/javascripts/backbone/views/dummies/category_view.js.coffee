@@ -5,10 +5,8 @@ SurveyBuilder.Views.Dummies ||= {}
 class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummies.QuestionView
   ORDER_NUMBER_STEP: 2
 
-  initialize: (model) =>
-    @model = model
+  initialize: (@model, @template) =>
     @sub_questions = []
-    @template = $('#dummy_category_template').html()
     @model.dummy_view = this
     @can_have_sub_questions = true
     @model.on('change', @render, this)

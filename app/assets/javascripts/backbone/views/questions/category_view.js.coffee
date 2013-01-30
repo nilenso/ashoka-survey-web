@@ -6,8 +6,7 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
   events:
     'keyup  input[type=text]': 'handle_textbox_keyup'
 
-  initialize: (@model) =>
-    this.template = $('#category_template').html()
+  initialize: (@model, @template) =>
     this.model.actual_view = this
     this.sub_questions = []
     this.model.on('save:completed', this.renderImageUploader, this)
