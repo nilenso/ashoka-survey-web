@@ -9,8 +9,8 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
     DROP_DOWN : 'DropDownQuestion',
     PHOTO : 'PhotoQuestion'
     RATING : 'RatingQuestion',
-    MULTI_RECORD : 'MultiRecordQuestion',
-    CATEGORY : undefined
+    MULTI_RECORD : 'MultiRecordCategory',
+    CATEGORY : null
   }
 
   @is_with_options: (type) =>
@@ -51,6 +51,8 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
       when @Types.CATEGORY
         if model instanceof SurveyBuilder.Models.CategoryModel
           return new SurveyBuilder.Views.Dummies.CategoryView(model)
+      when @Types.MULTI_RECORD
+        return new SurveyBuilder.Views.Dummies.CategoryView(model)
 
   @settings_view_for: (type, model) =>
     switch type
@@ -87,6 +89,8 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
       when @Types.CATEGORY
         if model instanceof SurveyBuilder.Models.CategoryModel
           return new SurveyBuilder.Views.Questions.CategoryView(model)
+      when @Types.MULTI_RECORD
+        return new SurveyBuilder.Views.Questions.CategoryView(model)
 
   @model_for: (model) =>
     if (@is_with_options(model.type))
@@ -94,6 +98,6 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
     else if  model.type == @Types.CATEGORY
       new SurveyBuilder.Models.CategoryModel(model)
     else if  model.type == @Types.MULTI_RECORD
-      new SurveyBuilder.Models.MultiRecordQuestionModel(model)
+      new SurveyBuilder.Models.CategoryModel(model)
     else
       new SurveyBuilder.Models.QuestionModel(model)

@@ -30,8 +30,8 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     model.on('destroy', @delete_question_view, this)
     $(@el).children(@QUESTIONS_CONTAINER).append(view.render().el)
 
-  add_category: (model) =>
-    view = new SurveyBuilder.Views.Dummies.CategoryView(model)
+  add_category: (type, model) =>
+    view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model)
     @questions.push(view)
     model.on('destroy', @delete_question_view, this)
     $(@el).children(@QUESTIONS_CONTAINER).append(view.render().el)
