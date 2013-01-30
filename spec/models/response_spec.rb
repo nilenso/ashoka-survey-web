@@ -68,6 +68,11 @@ describe Response do
       response.answers << FactoryGirl.create(:answer)
       response.last_update.to_i.should ==  2.days.from_now.to_i      
     end
+
+    it "doesn't complain if the response has no answers" do
+      response = FactoryGirl.create :response
+      expect { response.last_update }.not_to raise_error
+    end
   end
 
   context "when marking a response incomplete" do

@@ -22,7 +22,7 @@ class Response < ActiveRecord::Base
 
   def last_update
     [answers.maximum('answers.updated_at'),
-      self.updated_at].max
+      self.updated_at].compact.max
   end
 
   def answers_for_identifier_questions
