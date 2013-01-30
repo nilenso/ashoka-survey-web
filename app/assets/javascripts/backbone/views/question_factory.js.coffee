@@ -83,7 +83,7 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
         return new SurveyBuilder.Views.Questions.QuestionView(model, template)
       when 'MultiRecordQuestion'
         template = $('#multi_record_question_template').html()
-        return new SurveyBuilder.Views.Questions.QuestionView(model, template)
+        return new SurveyBuilder.Views.Questions.MultiRecordQuestionView(model)
       when @Types.CATEGORY
         if model instanceof SurveyBuilder.Models.CategoryModel
           return new SurveyBuilder.Views.Questions.CategoryView(model)
