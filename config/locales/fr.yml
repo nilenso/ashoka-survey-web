@@ -118,6 +118,7 @@ fr:
       option: "Option"
       category: "fr Category"
       question_title: "Titre de la question"
+      multi_record_title: "Titre enregistrement multi"
       save_survey: "Économiser de l'enquête"
       delete_survey: "Delete de l'enquête"
       finalize_survey: "fr Finalize and continue"

@@ -50,7 +50,7 @@ class SurveyDecorator < Draper::Base
     ['RadioQuestion', 'SingleLineQuestion', 'MultilineQuestion',
      'NumericQuestion', 'DateQuestion', 'MultiChoiceQuestion',
      'DropDownQuestion', 'PhotoQuestion', 'RatingQuestion', 'SurveyDetails',
-     'MultiChoiceOption', 'RadioOption', 'DropDownOption', 'Category', 'MultiRecordQuestion'
+     'MultiChoiceOption', 'RadioOption', 'DropDownOption', 'Category', 'MultiRecordCategory'
      ]
   end
 end
