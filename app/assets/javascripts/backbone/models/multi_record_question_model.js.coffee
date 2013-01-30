@@ -5,6 +5,8 @@ class SurveyBuilder.Models.MultiRecordQuestionModel extends SurveyBuilder.Models
   initialize: =>
     super
     @order_counter = 0
+    @sub_question_order_counter = 0
+    @sub_question_models = []
 
   has_errors: =>
     !_.isEmpty(this.errors) || this.get('questions').has_errors()
@@ -24,12 +26,8 @@ class SurveyBuilder.Models.MultiRecordQuestionModel extends SurveyBuilder.Models
       prev_order_counter = this.get('questions').last().get('order_number')
       prev_order_counter + 1
 
-  fetch: =>
-    super
-    this.seeded = true
-
   success_callback: (model, response) =>
-    console.log this.get('questions')
+    @preload_sub_questions()
     super
 
   create_new_question: (content) =>
@@ -42,5 +40,28 @@ class SurveyBuilder.Models.MultiRecordQuestionModel extends SurveyBuilder.Models
   destroy_options: =>
     collection = this.get('questions')
     model.destroy() while model = collection.pop()
+
+  has_sub_questions: =>
+    this.get('questions').length > 0 || this.get('categories').length > 0
+
+  preload_sub_questions: =>
+    return unless @has_sub_questions()
+    # TODO: Make this work for categories as well.  
+    #elements = _((this.get('questions')).concat(this.get('categories'))).sortBy('order_number')
+    elements = _(this.get('questions')).sortBy("order_number")
+    _.each elements, (question, counter) =>
+      parent_question = this.get('question')
+      _(question).extend({parent_question: parent_question})
+
+      question_model = SurveyBuilder.Views.QuestionFactory.model_for(question)
+
+      @sub_question_models.push question_model
+      question_model.on('destroy', this.delete_sub_question, this)
+      #TODO
+      #@set_question_number_for_sub_question(question_model)
+      question_model.fetch()
+
+    this.trigger('change:preload_sub_questions', @sub_question_models)
+    @sub_question_order_counter = _(elements).last().order_number  
 
 SurveyBuilder.Models.MultiRecordQuestionModel.setup()

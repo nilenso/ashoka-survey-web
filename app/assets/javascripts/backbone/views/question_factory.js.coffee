@@ -47,7 +47,7 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
         return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
       when 'MultiRecordQuestion'
         template = $('#dummy_multi_record_question_template').html()
-        return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
+        return new SurveyBuilder.Views.Dummies.MultiRecordQuestionView(model)
       when @Types.CATEGORY
         if model instanceof SurveyBuilder.Models.CategoryModel
           return new SurveyBuilder.Views.Dummies.CategoryView(model)
