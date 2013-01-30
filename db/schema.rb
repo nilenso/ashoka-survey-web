@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130129114747) do
+ActiveRecord::Schema.define(:version => 20130130072318) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(:version => 20130129114747) do
     t.integer  "survey_id"
     t.integer  "order_number"
     t.integer  "parent_id"
+    t.string   "type"
   end
 
   add_index "categories", ["category_id"], :name => "index_categories_on_category_id"
@@ -84,21 +85,20 @@ ActiveRecord::Schema.define(:version => 20130129114747) do
   create_table "questions", :force => true do |t|
     t.text     "content"
     t.integer  "survey_id"
-    t.datetime "created_at",                                               :null => false
-    t.datetime "updated_at",                                               :null => false
-    t.boolean  "mandatory",                             :default => false
-    t.integer  "max_length",               :limit => 8
+    t.datetime "created_at",                                         :null => false
+    t.datetime "updated_at",                                         :null => false
+    t.boolean  "mandatory",                       :default => false
+    t.integer  "max_length",         :limit => 8
     t.string   "type"
-    t.integer  "max_value",                :limit => 8
+    t.integer  "max_value",          :limit => 8
     t.integer  "min_value"
     t.integer  "order_number"
     t.integer  "parent_id"
-    t.boolean  "identifier",                            :default => false
+    t.boolean  "identifier",                      :default => false
     t.integer  "category_id"
     t.string   "image"
     t.string   "photo_secure_token"
     t.string   "image_tmp"
-    t.integer  "multi_record_question_id"
   end
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"
