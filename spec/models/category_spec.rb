@@ -15,6 +15,7 @@ describe Category do
   it { should allow_mass_assignment_of :survey_id }
   it { should allow_mass_assignment_of :category_id }
   it { should allow_mass_assignment_of :parent_id }
+  it { should allow_mass_assignment_of :mandatory }
   it { should allow_mass_assignment_of :order_number }
 
   it "fetches all it's sub-questions and sub-categories in order" do

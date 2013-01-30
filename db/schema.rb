@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130130072318) do
+ActiveRecord::Schema.define(:version => 20130130120532) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -30,12 +30,13 @@ ActiveRecord::Schema.define(:version => 20130130072318) do
   create_table "categories", :force => true do |t|
     t.integer  "category_id"
     t.text     "content"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.integer  "survey_id"
     t.integer  "order_number"
     t.integer  "parent_id"
     t.string   "type"
+    t.boolean  "mandatory",    :default => false
   end
 
   add_index "categories", ["category_id"], :name => "index_categories_on_category_id"
