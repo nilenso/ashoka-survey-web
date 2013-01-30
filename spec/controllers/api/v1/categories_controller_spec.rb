@@ -108,6 +108,14 @@ describe Api::V1::CategoriesController do
       response.body.should == category.to_json(:include => [{ :questions => { :methods => :type }}, :categories])
     end
 
+    it "returns the type of each sub-category" do
+      category = FactoryGirl.create(:category)
+      category.categories << FactoryGirl.create(:category)
+      get :show, :id => category.id
+      response.should be_ok
+      JSON.parse(response.body)['categories'][0].should have_key('type')
+    end
+
     it "returns a 'bad_request' if the ID is invalid" do
       get :show, :id => 12355
       response.should_not be_ok
