@@ -5,6 +5,7 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
 
   events:
     'keyup  input[type=text]': 'handle_textbox_keyup'
+    'change input[type=checkbox]': 'handle_checkbox_change'
 
   initialize: (@model, @template) =>
     this.model.actual_view = this
@@ -26,6 +27,13 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
     input = $(event.target)
     propertyHash = {}
     propertyHash[input.attr('name')] = input.val()
+    this.update_model(propertyHash)
+
+  handle_checkbox_change: (event) =>
+    this.model.off('change', this.render)
+    input = $(event.target)
+    propertyHash = {}
+    propertyHash[input.attr('name')] = input.is(':checked')
     this.update_model(propertyHash)
 
   update_model: (propertyHash) =>

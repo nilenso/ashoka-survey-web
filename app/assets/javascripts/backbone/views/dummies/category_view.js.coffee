@@ -28,6 +28,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
 
     $(@el).children('.dummy_category_content').children(".delete_category").click (e) => @delete(e)
     $(@el).children(".dummy_category_content").children('.collapse_category').click (e) => @toggle_collapse()
+    $(@el).find('abbr').show() if @model.get('mandatory')
 
     group = $("<div class='sub_question_group'>")
     _(@sub_questions).each (sub_question) =>
