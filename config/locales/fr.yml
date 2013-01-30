@@ -113,6 +113,7 @@ fr:
       add_drop_down_question: "Laissez-vous tomber"
       add_photo_question: "Photo"
       add_rating_question: "Rating"
+      add_multi_record_category: "Enregistrement Multi"
       pick_question_type: "Choisissez Type de Question"
       question_settings: "Paramètres"
       option: "Option"
