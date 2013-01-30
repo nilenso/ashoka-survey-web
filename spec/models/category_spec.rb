@@ -51,6 +51,12 @@ describe Category do
     FactoryGirl.create(:category).sub_question?.should be_false
   end
 
+
+  it "includes the type when converting to JSON" do
+    category = FactoryGirl.create :category
+    category.as_json.keys.should include :type
+  end
+
   context "Duplicate" do
     it "duplicates category with sub questions" do
       category = FactoryGirl.create :category, :order_number => 0

@@ -17,6 +17,10 @@ class Category < ActiveRecord::Base
     elements.map(&:with_sub_questions_in_order).flatten
   end
 
+  def as_json(opts={})
+    super(opts.merge({ :methods => :type }))
+  end
+
   def nesting_level
     return parent_question.nesting_level + 1 if parent
     return category.nesting_level + 1 if category
