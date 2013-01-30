@@ -9,6 +9,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'click #save': 'save_all_questions'
     'click #finalize': 'finalize'
     'show_survey_details': 'show_survey_details'
+    'save_all_questions': 'save_all_questions'
 
   initialize:(survey_id) =>
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView

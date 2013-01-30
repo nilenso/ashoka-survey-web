@@ -5,6 +5,9 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   DETAILS: "#dummy_survey_details"
   QUESTIONS_CONTAINER: "#dummy_questions"
 
+  events:
+    'copy_question.save_all_changes': 'save_all_changes'
+
   initialize: (survey_model) =>
     @questions = []
     @survey_model = survey_model
@@ -98,4 +101,10 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
 
   show_survey_details: =>
     @dummy_survey_details.show_actual()
+
+  save_all_changes: (event, question_view) =>
+    $(this.el).bind "ajaxStop.copy_question", =>
+      $(this.el).unbind "ajaxStop.copy_question"
+      question_view.copy_question() unless @survey_model.has_errors()
+    $(@el).trigger('save_all_questions')
 

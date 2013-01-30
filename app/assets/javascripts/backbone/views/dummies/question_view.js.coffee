@@ -30,6 +30,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
       @show_actual(e)
 
     $(@el).children('.dummy_question_content').children(".top_level_content").children(".delete_question").click (e) => @delete(e)
+    $(@el).children('.dummy_question_content').children(".top_level_content").children(".copy_question").click (e) => @save_all_changes(e)
 
     return this
 
@@ -52,3 +53,11 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
   reset_question_number: =>
     index = $(@el).index()
     @model.question_number = index + 1
+
+  save_all_changes: =>
+    $(@el).trigger("copy_question.save_all_changes", this)
+
+  copy_question: =>
+    $(@el).children('.dummy_question_content').children(".top_level_content").children(".copy_question_hidden").click()
+
+
