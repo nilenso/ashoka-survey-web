@@ -105,7 +105,7 @@ describe Api::V1::CategoriesController do
       category.questions << FactoryGirl.create(:question)
       get :show, :id => category.id
       response.should be_ok
-      response.body.should == category.to_json(:include => [{ :questions => { :methods => :type }}, :categories])
+      response.body.should == category.to_json(:include => [{ :questions => { :methods => :type }}, { :categories => { :methods => :type }}])
     end
 
     it "returns the type of each sub-category" do
