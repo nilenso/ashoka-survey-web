@@ -8,13 +8,10 @@ class SurveyBuilder.Models.MultiRecordQuestionModel extends SurveyBuilder.Models
     @sub_question_order_counter = 0
     @sub_question_models = []
 
-  has_errors: =>
-    !_.isEmpty(this.errors) || this.get('questions').has_errors()
-
   save_model: =>
     super
-    this.get('questions').each (option) =>
-      option.save_model()
+    _(@sub_question_models).each (sub_question) =>
+      sub_question.save_model()
 
   first_order_number: =>
     this.get('questions').first().get('order_number')
@@ -26,9 +23,10 @@ class SurveyBuilder.Models.MultiRecordQuestionModel extends SurveyBuilder.Models
       prev_order_counter = this.get('questions').last().get('order_number')
       prev_order_counter + 1
 
-  success_callback: (model, response) =>
-    @preload_sub_questions()
-    super
+  fetch: =>
+    super({success: =>
+        @preload_sub_questions()
+    })
 
   create_new_question: (content) =>
     content = "Another question" unless _(content).isString()
