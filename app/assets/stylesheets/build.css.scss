@@ -198,26 +198,26 @@ body#build{
           background: $secondary-color-light;
           a.delete_question, a.delete_category  {display: block; background: $secondary-color;}
 
-          &:after, &:before{
+          &:after{
             content: "";
             display: block;
             position: absolute;
-            right: -40px;
+            right: -1px;
             top: 20px;
             width: 0; height: 0;
 
-            border: solid 10px $secondary-color-light;
+            border: solid 10px $white;
             border-top-color: transparent;
             border-left-color: transparent;
             border-bottom-color: transparent;
           }
 
-          &:before{
-            border: none;
-            border-left: solid 4px $secondary-color-light;
-            height: 240px;
-            right: -44px;
-          }
+          // &:before{
+          //   border: none;
+          //   border-left: solid 4px $secondary-color-light;
+          //   height: 240px;
+          //   right: -44px;
+          // }
 
         }
 
