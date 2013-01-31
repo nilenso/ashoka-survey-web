@@ -8,6 +8,7 @@ class Response < ActiveRecord::Base
   validates_presence_of :survey_id
   validates_presence_of :organization_id, :user_id, :unless => :survey_public?
   validates_associated :answers
+  delegate :to_json_with_answers_and_choices, :render_json, :to => :response_serializer
   delegate :questions, :to => :survey
   delegate :public?, :to => :survey, :prefix => true, :allow_nil => true
   reverse_geocoded_by :latitude, :longitude, :address => :location
@@ -101,34 +102,13 @@ class Response < ActiveRecord::Base
     end
   end
 
-  def to_json_with_answers_and_choices
-    to_json(:include => {:answers => {:include => :choices, :methods => :photo_in_base64}})
-  end
-
-  def render_json(update = nil)
-    if response_validating?
-      complete
-      to_json_with_answers_and_choices
-    elsif response_incomplete?
-      to_json_with_answers_and_choices
-    else
-      response_json = to_json_with_answers_and_choices
-      destroy unless update
-      response_json
-    end
+  def response_serializer
+    ResponseSerializer.new(self)
   end
 
   private
 
   def five_first_level_answers
     answers.find_all{ |answer| answer.question.first_level? }[0..5]
-  end
-
-  def response_validating?
-    valid? && validating?
-  end
-
-  def response_incomplete?
-    incomplete? && valid?
   end
 end
