@@ -53,9 +53,16 @@ describe Category do
   end
 
 
-  it "includes the type when converting to JSON" do
-    category = FactoryGirl.create :category
-    category.as_json.keys.should include :type
+  context "when converting to JSON" do
+    it "includes the type" do
+      category = FactoryGirl.create :category
+      category.as_json.keys.should include :type
+    end
+
+    it "includes the `has_multi_record_ancestor` field" do
+      category = FactoryGirl.create :category
+      category.as_json.should have_key :has_multi_record_ancestor
+    end
   end
 
   context "Duplicate" do

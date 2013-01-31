@@ -18,7 +18,7 @@ describe Api::V1::CategoriesController do
       post :create, :category => category
       created_category = JSON.parse(response.body)
       Category.find_by_id(created_category['id']).should be
-      created_category.keys.should =~ Category.attribute_names
+      created_category.keys.should include(*Category.attribute_names)
     end
 
     it "returns the error message as JSON if save fails" do
@@ -43,7 +43,7 @@ describe Api::V1::CategoriesController do
       put :update, :id => category.id, :category => { :content => "FOO", :order_number => 42 }
       updated_category = JSON.parse(response.body)
       updated_category['content'].should == "FOO"
-      updated_category.keys.should =~ Category.attribute_names
+      updated_category.keys.should include(*Category.attribute_names)
     end
 
     it "returns an error response if an invalid category id is supplied" do

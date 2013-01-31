@@ -64,6 +64,11 @@ describe Option do
       option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
       option.as_json.should == option.as_json
     end
+
+    it "includes the `has_multi_record_ancestor` method" do
+      option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
+      option.as_json.should have_key(:has_multi_record_ancestor)
+    end
   end
 
   context "reports" do

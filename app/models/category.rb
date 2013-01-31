@@ -18,7 +18,7 @@ class Category < ActiveRecord::Base
   end
 
   def as_json(opts={})
-    super(opts.merge({ :methods => :type }))
+    super(opts.merge({ :methods => [:type, :has_multi_record_ancestor] }))
   end
 
   def nesting_level

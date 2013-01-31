@@ -20,7 +20,7 @@ class Option < ActiveRecord::Base
   end
 
   def as_json(opts={})
-    super(opts).merge({:questions => questions.map { |question| question.json(:methods => :type) }})
+    super(opts.merge({:methods => :has_multi_record_ancestor })).merge({:questions => questions.map { |question| question.json(:methods => :type) }})
   end
 
   def report_data
