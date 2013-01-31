@@ -20,6 +20,8 @@ SurveyWeb::Application.routes.draw do
       end
     end
 
+    resources :records, :only => [:create, :destroy]
+
     root :to => 'surveys#index'
   end
 
