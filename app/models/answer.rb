@@ -5,11 +5,12 @@ class Answer < ActiveRecord::Base
 
   belongs_to :question
   belongs_to :response
-  attr_accessible :content, :question_id, :option_ids, :updated_at
+  belongs_to :record
+  attr_accessible :content, :question_id, :option_ids, :updated_at, :response_id
   validate :mandatory_questions_should_be_answered, :if => :response_validating?
   validate :content_should_not_exceed_max_length
   validate :content_should_be_in_range
-  validates_uniqueness_of :question_id, :scope => [:response_id]
+  validates_uniqueness_of :question_id, :scope => [:response_id, :record_id]
   has_many :choices, :dependent => :destroy
   validate :date_should_be_valid
   attr_accessible :photo
