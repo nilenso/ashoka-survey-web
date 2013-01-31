@@ -16,6 +16,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     $(this.el).addClass('option')
     $(this.el).children('div').children('.add_sub_question').bind('click', this.add_sub_question_model)
     $(this.el).children('div').children('.add_sub_category').bind('click', this.add_sub_category_model)
+    $(this.el).children('div').children('.add_sub_multi_record').bind('click', this.add_sub_category_model)
     $(this.el).children('div').children('.delete_option').bind('click', this.delete)
     $(this.el).children('input').bind('keyup', this.update_model)
     return this
@@ -33,7 +34,8 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     this.model.add_sub_question(type)
 
   add_sub_category_model: (event) =>
-    this.model.add_sub_question()
+    type = $(event.target).data('type')
+    this.model.add_sub_question(type)
 
   add_sub_question: (sub_question_model) =>
     sub_question_model.on('destroy', this.delete_sub_question, this)
