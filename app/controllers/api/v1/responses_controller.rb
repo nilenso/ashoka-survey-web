@@ -10,7 +10,7 @@ module Api::V1
       response.organization_id = params[:organization_id]
       response.update_attributes(params[:response].except(:answers_attributes)) # Response isn't created before the answers, so we need to create the answers after this.
       response.validating if params[:response][:status] == "complete"
-      response.update_attributes({:answers_attributes => params[:response][:answers_attributes]}) if response.save
+      response.update_attributes({:answers_attributes => params[:response][:answers_attributes]})
 
       if response.invalid?
         render :json => response.render_json, :status => :bad_request
