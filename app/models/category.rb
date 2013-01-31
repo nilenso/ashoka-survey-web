@@ -59,4 +59,8 @@ class Category < ActiveRecord::Base
     parent_options = parent_question.options
     parent_options.index(parent)
   end
+
+  def has_multi_record_ancestor?
+    category.try(:is_a?, MultiRecordCategory) || category.try(:has_multi_record_ancestor?) || parent.try(:has_multi_record_ancestor?)
+  end
 end

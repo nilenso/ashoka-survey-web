@@ -115,4 +115,28 @@ describe Option do
       option.categories_with_questions.should include(category)
       option.categories_with_questions.should_not include(another_category)
   end
+
+  context "#has_multi_record_ancestor" do
+    it "returns true if its parent question belongs to a MultiRecordCategory" do
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      parent_question = FactoryGirl.create(:question_with_options, :category => mr_category)
+      option = FactoryGirl.create(:option, :question => parent_question)
+      option.should have_multi_record_ancestor
+    end
+
+    it "returns false if its parent question belongs to a regular category" do
+      category = Category.create(:content => "cat")
+      parent_question = FactoryGirl.create(:question_with_options, :category => category)
+      option = FactoryGirl.create(:option, :question => parent_question)
+      option.should_not have_multi_record_ancestor
+    end
+
+    it "returns true if there is a multi-record category higher up in the chain" do
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      category = FactoryGirl.create(:category, :category => mr_category)
+      question = FactoryGirl.create(:question_with_options, :category => category)
+      option = FactoryGirl.create(:option, :question => question)
+      option.should have_multi_record_ancestor
+    end
+  end
 end

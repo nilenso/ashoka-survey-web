@@ -30,4 +30,8 @@ class Option < ActiveRecord::Base
   def categories_with_questions
     categories.select { |x| x.has_questions? }
   end
+
+  def has_multi_record_ancestor?
+    question.try(:has_multi_record_ancestor?)
+  end
 end

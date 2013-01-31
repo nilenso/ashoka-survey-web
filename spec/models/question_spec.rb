@@ -239,5 +239,57 @@ describe Question do
     end
   end
 
+  context "#has_multi_record_ancestor?" do
+    it "returns true if its parent option has a multi record ancestor" do
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      parent_question = FactoryGirl.create(:question_with_options, :category => mr_category)
+      option = FactoryGirl.create(:option, :question => parent_question)
+      question = FactoryGirl.create(:question, :parent => option)
+      question.should have_multi_record_ancestor
+    end
+
+    it "returns false if its parent option doesn't have a multi record ancestor" do
+      category = Category.create(:content => "Cat")
+      parent_question = FactoryGirl.create(:question_with_options, :category => category)
+      option = FactoryGirl.create(:option, :question => parent_question)
+      question = FactoryGirl.create(:question, :parent => option)
+      question.should_not have_multi_record_ancestor
+    end
+
+    it "returns true if its parent category has a multi record ancestor" do
+      ancestor_category = MultiRecordCategory.create(:content => "Anc")
+      category = FactoryGirl.create(:category, :category => ancestor_category)
+      question = FactoryGirl.create(:question, :category => category)
+      question.should have_multi_record_ancestor
+    end
+
+    it "returns false if its parent category doesn't have a multi record ancestor" do
+      ancestor_category = Category.create(:content => "Anc")
+      category = FactoryGirl.create(:category, :category => ancestor_category)
+      question = FactoryGirl.create(:question, :category => category)
+      question.should_not have_multi_record_ancestor
+    end
+
+    it "returns true if there is a multi-record category higher up in the chain" do
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      category = FactoryGirl.create(:category, :category => mr_category)
+      question = FactoryGirl.create(:question_with_options, :category => category)
+      option = FactoryGirl.create(:option, :question => question)
+      option.should have_multi_record_ancestor
+    end
+
+    it "returns true if its parent category is a multi-record category" do
+      category = MultiRecordCategory.create(:content => "MR")
+      question = FactoryGirl.create(:question, :category => category)
+      question.should have_multi_record_ancestor
+    end
+
+    it "returns false if its parent category is not a multi-record category" do
+      category = Category.create(:content => "Cat")
+      question = FactoryGirl.create(:question, :category => category)
+      question.should_not have_multi_record_ancestor
+    end
+  end
+
   include_examples 'a question'
 end
