@@ -105,9 +105,30 @@ class Response < ActiveRecord::Base
     to_json(:include => {:answers => {:include => :choices, :methods => :photo_in_base64}})
   end
 
+  def render_json(update = nil)
+    if response_validating?
+      complete
+      to_json_with_answers_and_choices
+    elsif response_incomplete?
+      to_json_with_answers_and_choices
+    else
+      response_json = to_json_with_answers_and_choices
+      destroy unless update
+      response_json
+    end
+  end
+
   private
 
   def five_first_level_answers
     answers.find_all{ |answer| answer.question.first_level? }[0..5]
+  end
+
+  def response_validating?
+    valid? && validating?
+  end
+
+  def response_incomplete?
+    incomplete? && valid?
   end
 end
