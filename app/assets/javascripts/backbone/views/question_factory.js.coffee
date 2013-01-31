@@ -55,7 +55,7 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
           return new SurveyBuilder.Views.Dummies.CategoryView(model, template)
       when @Types.MULTI_RECORD
         template = $('#dummy_multi_record_category_template').html()
-        return new SurveyBuilder.Views.Dummies.CategoryView(model, template)
+        return new SurveyBuilder.Views.Dummies.MultiRecordCategoryView(model, template)
 
   @settings_view_for: (type, model) =>
     type = null unless type
@@ -96,7 +96,7 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
           return new SurveyBuilder.Views.Questions.CategoryView(model, template)
       when @Types.MULTI_RECORD
         template = $('#multi_record_category_template').html()
-        return new SurveyBuilder.Views.Questions.CategoryView(model, template)
+        return new SurveyBuilder.Views.Questions.MultiRecordCategoryView(model, template)
 
   @model_for: (model) =>
     model.type = null unless model.type
