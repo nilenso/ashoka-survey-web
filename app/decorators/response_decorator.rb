@@ -82,6 +82,7 @@ class ResponseDecorator < Draper::Base
           <h2>
             <%= ResponseDecorator.question_number(category) %>)
             <%= category.content %>
+            <%= category.decorate.create_record_link(model.id) %>
           </h2>
         </div>
       "

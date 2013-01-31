@@ -171,6 +171,7 @@ en:
       save_response: "Save Response"
       location: "Location"
       location_unavailable: "Location Unavailable"
+      create_record: "Create Another Record"
 
   answers:
     validations:

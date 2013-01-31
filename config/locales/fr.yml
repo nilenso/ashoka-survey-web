@@ -170,6 +170,7 @@ fr:
       location: "fr Location"
       location_unavailable: "fr Location Unavailable"
 
+      create_record: "Créer un autre dossier"
   answers:
     validations:
       mandatory_question: Cette question est obligatoire.
