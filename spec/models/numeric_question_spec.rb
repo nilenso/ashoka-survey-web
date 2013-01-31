@@ -25,13 +25,24 @@ describe NumericQuestion do
 
   it_behaves_like "a question"
 
-  it "generates report data" do
-    numeric_question = NumericQuestion.new(:content => "foo", :min_value => 0, :max_value => 10)
-    5.times { numeric_question.answers << FactoryGirl.create(:answer_with_complete_response, :content=>'2') }
-    3.times { numeric_question.answers << FactoryGirl.create(:answer_with_complete_response, :content=>'5') }
-    9.times { numeric_question.answers << FactoryGirl.create(:answer_with_complete_response, :content=>'9') }
-    numeric_question.save
-    numeric_question.report_data.should == [[2, 5],[5, 3], [9, 9]]
+  context "report_data" do
+    it "generates report data" do
+      numeric_question = NumericQuestion.new(:content => "foo", :min_value => 0, :max_value => 10)
+      5.times { numeric_question.answers << FactoryGirl.create(:answer_with_complete_response, :content=>'2') }
+      3.times { numeric_question.answers << FactoryGirl.create(:answer_with_complete_response, :content=>'5') }
+      9.times { numeric_question.answers << FactoryGirl.create(:answer_with_complete_response, :content=>'9') }
+      numeric_question.save
+      numeric_question.report_data.should =~ [[2, 5],[5, 3], [9, 9]]
+    end
+
+    it "doesn't include answers of incomplete responses in the report data" do
+      numeric_question = NumericQuestion.new(:content => "foo", :min_value => 0, :max_value => 10)
+      incomplete_response = FactoryGirl.create(:response, :status => "incomplete")
+      5.times { numeric_question.answers << FactoryGirl.create(:answer_with_complete_response, :content=>'2') }
+      5.times { numeric_question.answers << FactoryGirl.create(:answer, :content=>'2', :response => incomplete_response) }
+      numeric_question.save
+      numeric_question.report_data.should == [[2, 5]]
+    end
   end
 
   context "while returning min and max values for reporting" do

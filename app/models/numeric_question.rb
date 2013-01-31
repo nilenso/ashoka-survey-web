@@ -22,7 +22,7 @@ class NumericQuestion < Question
   private
 
   def answers_content
-    answers.map(&:content)
+    answers.complete.map(&:content)
   end
 
   def max_value_in_answers
