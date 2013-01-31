@@ -113,6 +113,25 @@ module Api
           response.should be_bad_request
           response.body.should be_blank
         end
+
+        it "returns all the categories under the option" do
+          question = FactoryGirl.create(:question, :type => 'RadioQuestion', :survey => survey)
+          option = FactoryGirl.create(:option, :question => question)
+          option.categories << FactoryGirl.create(:category, :content => "Foo")
+          get :index, :question_id => question.id
+          response.should be_ok
+          JSON.parse(response.body)[0].should have_key('categories')
+          JSON.parse(response.body)[0]['categories'].should_not be_empty
+        end
+
+        it "returns the type for each category" do
+          question = FactoryGirl.create(:question, :type => 'RadioQuestion', :survey => survey)
+          option = FactoryGirl.create(:option, :question => question)
+          option.categories << FactoryGirl.create(:category)
+          get :index, :question_id => question.id
+          response.should be_ok
+          JSON.parse(response.body)[0]['categories'][0].should have_key('type')
+        end
       end
     end
   end
