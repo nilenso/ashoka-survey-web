@@ -16,7 +16,6 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
     @on('destroy:sub_question', @reorder_questions, this)
 
   render: =>
-    @model.set('content', I18n.t('js.untitled_category')) if _.isEmpty(@model.get('content'))
     data = @model.toJSON().category
     data = _(data).extend({ question_number: @model.question_number })
     data = _(data).extend({duplicate_url: @model.duplicate_url()})

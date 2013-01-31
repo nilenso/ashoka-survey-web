@@ -3,8 +3,6 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
   urlRoot: '/api/categories'
 
   ORDER_NUMBER_STEP: 2
-  defaults:
-    content: 'Untitled Category'
 
   initialize: =>
     this.set('content', I18n.t('js.untitled_category'))
