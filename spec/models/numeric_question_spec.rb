@@ -69,6 +69,7 @@ describe NumericQuestion do
       numeric_question.answers << FactoryGirl.create( :answer_with_complete_response, :content=>5)
       numeric_question.answers << FactoryGirl.create( :answer_with_complete_response, :content=>10)
       numeric_question.answers << FactoryGirl.create( :answer_with_complete_response, :content=>100)
+      numeric_question.save
       numeric_question.max_value_for_report.should == 100
     end
 
