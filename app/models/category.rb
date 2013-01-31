@@ -13,6 +13,11 @@ class Category < ActiveRecord::Base
     (questions + categories).sort_by(&:order_number)
   end
 
+  def self.new_category_by_type(type, params)
+    klass = (type == 'MultiRecordCategory') ? MultiRecordCategory : Category
+    klass.new(params)
+  end
+
   def with_sub_questions_in_order
     elements.map(&:with_sub_questions_in_order).flatten
   end

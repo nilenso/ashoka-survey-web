@@ -52,6 +52,23 @@ describe Category do
     FactoryGirl.create(:category).sub_question?.should be_false
   end
 
+  context "when creating categories of the given type" do
+    it "creates a regular category" do
+      category = Category.new_category_by_type('', { :content => "cat" })
+      category.should be_a Category
+    end
+
+    it "creates a MultiRecordCategory" do
+      category = Category.new_category_by_type('MultiRecordCategory', { :content => "cat" })
+      category.should be_a MultiRecordCategory
+    end
+
+    it "creates a new category with the given params" do
+      category = Category.new_category_by_type('MultiRecordCategory', { :content => "cat" })
+      category.content.should == 'cat'
+    end
+  end
+
 
   context "when converting to JSON" do
     it "includes the type" do
