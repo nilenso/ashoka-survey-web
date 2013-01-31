@@ -6,7 +6,7 @@ module Api
       authorize_resource
 
       def create
-        category = Category.new(params[:category])
+        category = Category.new_category_by_type(params[:category][:type], params[:category])
         if category.save
           render :json => category.to_json
         else

@@ -13,6 +13,15 @@ describe Api::V1::CategoriesController do
       response.should be_ok
     end
 
+    it "creates a new category based on the type" do
+      survey = FactoryGirl.create :survey
+      category = FactoryGirl.attributes_for(:category, :survey_id => survey.id)
+      category['type'] = 'MultiRecordCategory'
+      expect do
+        post :create, :survey_id => survey.id, :category => category
+      end.to change { MultiRecordCategory.count }.by(1)
+    end
+
     it "returns the created category as JSON, including the new ID" do
       category = FactoryGirl.attributes_for :category
       post :create, :category => category
