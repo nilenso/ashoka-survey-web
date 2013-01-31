@@ -76,4 +76,10 @@ class Question < ActiveRecord::Base
   def has_multi_record_ancestor?
     category.try(:is_a?, MultiRecordCategory) || category.try(:has_multi_record_ancestor?) || parent.try(:has_multi_record_ancestor?)
   end
+
+  protected
+
+  def has_multi_record_ancestor
+    has_multi_record_ancestor?
+  end
 end

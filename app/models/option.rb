@@ -34,4 +34,10 @@ class Option < ActiveRecord::Base
   def has_multi_record_ancestor?
     question.try(:has_multi_record_ancestor?)
   end
+
+  protected
+
+  def has_multi_record_ancestor
+    has_multi_record_ancestor?
+  end
 end
