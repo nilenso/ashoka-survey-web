@@ -105,6 +105,6 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
     else if  model.type == @Types.CATEGORY
       new SurveyBuilder.Models.CategoryModel(model)
     else if  model.type == @Types.MULTI_RECORD
-      new SurveyBuilder.Models.CategoryModel(model)
+      new SurveyBuilder.Models.MultiRecordCategoryModel(model)
     else
       new SurveyBuilder.Models.QuestionModel(model)
