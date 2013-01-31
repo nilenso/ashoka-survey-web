@@ -32,7 +32,7 @@ class Response < ActiveRecord::Base
   end
 
   def complete
-    update_column(:status, 'complete')
+    update_column(:status, 'complete') if response_validating?
   end
 
   def incomplete
@@ -106,9 +106,17 @@ class Response < ActiveRecord::Base
     ResponseSerializer.new(self)
   end
 
+  def destroy_if_invalid
+    destroy if invalid?
+  end
+
   private
 
   def five_first_level_answers
     answers.find_all{ |answer| answer.question.first_level? }[0..5]
+  end
+
+  def response_validating?
+    valid? && validating?
   end
 end

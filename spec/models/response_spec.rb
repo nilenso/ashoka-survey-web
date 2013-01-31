@@ -78,9 +78,14 @@ describe Response do
   context "when marking a response incomplete" do
     it "marks the response incomplete" do
       survey = FactoryGirl.create(:survey)
-      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1, :status => 'validating')
       response.incomplete
       response.reload.should_not be_complete
+    end
+
+    it "marks response complete if it's validating" do
+      survey = FactoryGirl.create(:survey)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1, :status => 'validating')
       response.complete
       response.reload.should be_complete
     end
@@ -229,5 +234,11 @@ describe Response do
       response_json['answers'][0].should have_key('choices')
       response_json['answers'][0]['choices'].size.should == response.answers[0].choices.size
     end
+  end
+
+  it "destroys response if it's invalid" do
+    response = Response.new
+    response.destroy_if_invalid
+    response.should be_frozen
   end
 end
