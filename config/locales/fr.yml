@@ -237,6 +237,7 @@ fr:
     require_csv_format: "S'il vous plaît entrer une liste séparée par des virgules des options.\nLe format fourni n'est pas valide."
     reordering_questions: fr Reordering Questions
 
+    untitled_multi_record_category: "Untitled multi-enregistrement"
   recaptcha:
     errors:
       verification_failed: "La réponse de vérification Parole est incorrecte, s'il vous plaît essayer à nouveau."
