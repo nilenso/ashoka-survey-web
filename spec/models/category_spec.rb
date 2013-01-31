@@ -3,6 +3,7 @@ require 'spec_helper'
 describe Category do
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:categories).dependent(:destroy) }
+  it { should have_many(:records).dependent(:destroy) }
   it { should belong_to(:parent).class_name(Option) }
   it { should belong_to :category }
   it { should belong_to :survey }

@@ -4,6 +4,7 @@ class Category < ActiveRecord::Base
   attr_accessible :content, :survey_id, :order_number, :category_id, :parent_id, :type, :mandatory
   has_many :questions, :dependent => :destroy
   has_many :categories, :dependent => :destroy
+  has_many :records, :dependent => :destroy
   validates_presence_of :content
   belongs_to :survey
 
