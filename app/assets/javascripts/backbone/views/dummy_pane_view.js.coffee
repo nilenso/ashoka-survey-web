@@ -91,6 +91,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   sort_question_views_by_order_number: =>
     @questions = _(@questions).sortBy (question) =>
       question.model.get('order_number')
+    @render()
 
   set_order_numbers: =>
     last_order_number = @survey_model.next_order_number()
