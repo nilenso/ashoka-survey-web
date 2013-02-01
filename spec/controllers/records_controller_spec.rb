@@ -22,5 +22,11 @@ describe RecordsController do
       get 'create', :record => { :response_id => response.id, :category_id => category.id }
       response.should redirect_to('http://example.com')
     end
+
+    it "creates blank answers for the new record" do
+      5.times { category.questions << FactoryGirl.create(:question) }
+      get 'create', :record => { :response_id => response.id, :category_id => category.id }
+      Record.last.answers.count.should == 5
+    end
   end
 end
