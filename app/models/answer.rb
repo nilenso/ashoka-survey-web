@@ -27,6 +27,7 @@ class Answer < ActiveRecord::Base
   delegate :validating?, :to => :response, :prefix => true
   delegate :identifier?, :to => :question
   delegate :first_level?, :to => :question
+  delegate :order_number, :to => :question, :prefix => true
 
   def option_ids
     self.choices.collect(&:option_id)
