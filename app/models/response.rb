@@ -61,6 +61,10 @@ class Response < ActiveRecord::Base
     self.session_token = session_token
   end
 
+  def sorted_answers
+    survey.first_level_elements.map { |element| element.sorted_answers_for_response(id) }.flatten
+  end
+
   def filename_for_excel
     "#{survey.name} (##{survey.id}) - #{Time.now}.xlsx"
   end

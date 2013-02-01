@@ -230,4 +230,41 @@ describe Response do
       response_json['answers'][0]['choices'].size.should == response.answers[0].choices.size
     end
   end
+
+  context "when fetching sorted answers" do
+    let(:survey) {FactoryGirl.create(:survey)}
+    let(:response) { FactoryGirl.create :response, :survey => survey }
+
+    it "returns a sorted list of answers for all its first level questions" do
+      question = FactoryGirl.create(:question, :survey => survey, :order_number => 2)
+      another_question = FactoryGirl.create(:question , :survey => survey, :order_number => 1)
+      answer = FactoryGirl.create(:answer, :response => response, :question => question)
+      another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)
+      response.sorted_answers.should == [another_answer, answer]
+    end
+
+    it "returns a sorted list of answers for all sub-questions of a category" do
+      category = FactoryGirl.create(:category, :survey => survey)
+      question = FactoryGirl.create(:question, :survey => survey, :order_number => 2, :category => category)
+      another_question = FactoryGirl.create(:question , :survey => survey, :order_number => 1, :category => category)
+      answer = FactoryGirl.create(:answer, :response => response, :question => question)
+      another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)
+      response.sorted_answers.should == [another_answer, answer]
+    end
+
+    it "returns a sorted list of answers for all sub-questions of an option" do
+      radio_question = RadioQuestion.create(:content => "X")
+      radio_answer = FactoryGirl.create(:answer, :response => response, :question => radio_question)
+      survey.questions << radio_question
+
+      option = FactoryGirl.create(:option, :question => radio_question)
+      question = FactoryGirl.create(:question, :survey => survey, :order_number => 2, :parent => option)
+      another_question = FactoryGirl.create(:question , :survey => survey, :order_number => 1, :parent => option)
+
+      answer = FactoryGirl.create(:answer, :response => response, :question => question)
+      another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)
+
+      response.sorted_answers.should == [radio_answer, another_answer, answer]
+    end
+  end
 end
