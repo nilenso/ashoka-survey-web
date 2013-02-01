@@ -1,5 +1,6 @@
 class Record < ActiveRecord::Base
   belongs_to :category
+  belongs_to :response
   has_many :answers, :dependent => :destroy
   attr_accessible :category_id, :response_id
 
@@ -7,6 +8,10 @@ class Record < ActiveRecord::Base
   validates_presence_of :category_id
 
   after_create :create_answers_for_category_questions
+
+  def sorted_answers
+    answers.sort_by { |answer| answer.question_order_number }
+  end
 
   def create_answers_for_category_questions
     if category
