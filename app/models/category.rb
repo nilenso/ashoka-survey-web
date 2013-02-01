@@ -37,6 +37,10 @@ class Category < ActiveRecord::Base
     parent || category.try(:sub_question?)
   end
 
+  def sorted_answers_for_response(response_id)
+    elements.map { |element| element.sorted_answers_for_response(response_id) }.flatten
+  end
+
   def duplicate(survey_id)
     category = self.dup
     category.survey_id = survey_id
