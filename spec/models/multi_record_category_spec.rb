@@ -24,5 +24,14 @@ describe MultiRecordCategory do
       5.times { mr_category.records << Record.create(:response_id => response.id) }
       mr_category.sorted_answers_for_response(response.id).size.should == 5
     end
+
+    it "includes records belonging only to the specified response" do
+      another_response = FactoryGirl.create :response
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      question = FactoryGirl.create :question, :category => mr_category
+      5.times { mr_category.records << Record.create(:response_id => response.id) }
+      5.times { mr_category.records << Record.create(:response_id => another_response.id) }
+      mr_category.sorted_answers_for_response(response.id).size.should == 5      
+    end
   end
 end
