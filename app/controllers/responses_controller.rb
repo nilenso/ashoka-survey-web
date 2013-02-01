@@ -33,7 +33,6 @@ class ResponsesController < ApplicationController
   def edit
     @survey = Survey.find(params[:survey_id])
     @response = ResponseDecorator.find(params[:id])
-    sort_questions_by_order_number(@response)
     @disabled = false
     @public_response = public_response?
   end
@@ -41,7 +40,6 @@ class ResponsesController < ApplicationController
   def show
     @survey = Survey.find(params[:survey_id])
     @response = ResponseDecorator.find(params[:id])
-    sort_questions_by_order_number(@response)
     @disabled = true
     @marker = @response.to_gmaps4rails
     render :edit
@@ -53,7 +51,6 @@ class ResponsesController < ApplicationController
       redirect_to survey_responses_path, :notice => "Successfully updated"
     else
       flash[:error] = "Error"
-      sort_questions_by_order_number(@response)
       render :edit
     end
   end
@@ -67,7 +64,6 @@ class ResponsesController < ApplicationController
       redirect_to survey_responses_path(@response.survey_id), :notice => "Successfully updated"
     else
       response_complete ? @response.complete : @response.incomplete
-      sort_questions_by_order_number(@response)
       @response.attributes = params[:response]
       flash.delete(:recaptcha_error)
       flash[:error] = @response.errors.messages[:captcha] || t("responses.edit.error_saving_response")
@@ -83,11 +79,6 @@ class ResponsesController < ApplicationController
   end
 
   private
-
-  def sort_questions_by_order_number(response)
-    question_ids_in_order = response.survey.question_ids_in_order
-    response.answers.sort_by! { |answer| question_ids_in_order.index(answer.question.id) || 0 }
-  end
 
   def survey_finalized
     survey = Survey.find(params[:survey_id])
