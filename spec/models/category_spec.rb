@@ -250,4 +250,23 @@ describe Category do
       category.sorted_answers_for_response(response.id).should == [category_question_1_answer, category_question_2_answer, category_question_2_sub_question_answer]
     end
   end
+
+  context "when creating empty answers for a new response" do
+    let(:response) { FactoryGirl.create :response }
+
+    it "creates empty answers for each of it's sub-questions" do
+      category = FactoryGirl.create(:category)
+      5.times { category.questions << FactoryGirl.create(:question) }
+      category.create_blank_answers(:response_id => response.id)
+      response.reload.answers.count.should == 5
+    end
+
+    it "creates empty answers for each of it's sub-categories' sub-questions" do
+      category = FactoryGirl.create(:category)
+      sub_category = FactoryGirl.create(:category, :category => category)
+      5.times { sub_category.questions << FactoryGirl.create(:question) }
+      category.create_blank_answers(:response_id => response.id)
+      response.reload.answers.size.should == 5
+    end
+  end
 end

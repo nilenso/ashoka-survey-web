@@ -323,5 +323,22 @@ describe Question do
     end
   end
 
+  context "when creating empty answers for a new response" do
+    let(:response) { FactoryGirl.create :response }
+
+    it "creates an empty answer to itself" do
+      question = FactoryGirl.create(:question)
+      question.create_blank_answers(:response_id => response.id)
+      response.reload.answers.should_not be_empty
+    end
+
+    it "creates an empty answer belonging to a record (if specified)" do
+      record = FactoryGirl.create(:record)
+      question = FactoryGirl.create(:question)
+      question.create_blank_answers(:response_id => response.id, :record_id => record.id)
+      record.reload.answers.should_not be_empty
+    end
+  end
+
   include_examples 'a question'
 end

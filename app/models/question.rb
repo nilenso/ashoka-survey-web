@@ -8,7 +8,7 @@ class Question < ActiveRecord::Base
   validates_presence_of :content
   has_many :answers, :dependent => :destroy
   mount_uploader :image, ImageUploader
-  store_in_background :image
+  store_in_background  :image
   validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id, :category_id], :allow_nil => true
 
   default_scope :order => 'order_number'
@@ -23,6 +23,11 @@ class Question < ActiveRecord::Base
     file =  File.read("#{image.root}/#{image.cache_dir}/#{image_tmp}") if image_tmp
     file = image.thumb.file.read if image.thumb.file.try(:exists?)
     return Base64.encode64(file) if file
+  end
+
+  def create_blank_answers(params={})
+    # Mandatory?
+    Answer.create(:question_id => id, :response_id => params[:response_id], :record_id => params[:record_id])
   end
 
   def duplicate(survey_id)

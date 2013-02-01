@@ -4,7 +4,12 @@ class MultiRecordCategory < Category
   def sorted_answers_for_response(response_id, record_id=nil)
     records.where(:response_id => response_id).map { |record| super(response_id, record.id) }.flatten
   end
-  
+
+  def create_blank_answers(params={})
+    record = Record.create(:category_id => id, :response_id => params[:response_id])
+    super(params.merge(:record_id => record.id))
+  end
+
   protected
 
   def dont_allow_nested_multi_record

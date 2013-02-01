@@ -14,6 +14,10 @@ class Category < ActiveRecord::Base
     (questions + categories).sort_by(&:order_number)
   end
 
+  def create_blank_answers(params={})
+    elements.each { |element| element.create_blank_answers(params) }
+  end
+
   def self.new_category_by_type(type, params)
     klass = (type == 'MultiRecordCategory') ? MultiRecordCategory : Category
     klass.new(params)

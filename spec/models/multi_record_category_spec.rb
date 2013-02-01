@@ -50,4 +50,24 @@ describe MultiRecordCategory do
       mr_category.sorted_answers_for_response(response.id).size.should == 5      
     end
   end
+
+  context "when creating empty answers for a new response" do
+    let(:response) { FactoryGirl.create :response }
+
+    it "creates a new empty record" do
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      expect {
+        mr_category.create_blank_answers(:response_id => response.id)
+      }.to change { Record.count }.by 1
+    end
+
+    it "creates empty answers for the new record" do
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      question = FactoryGirl.create :question
+      mr_category.questions << question
+
+      mr_category.create_blank_answers(:response_id => response.id)
+      question.reload.answers.should_not be_empty
+    end
+  end
 end
