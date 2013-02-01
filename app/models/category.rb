@@ -69,6 +69,10 @@ class Category < ActiveRecord::Base
     category.try(:is_a?, MultiRecordCategory) || category.try(:has_multi_record_ancestor?) || parent.try(:has_multi_record_ancestor?)
   end
 
+  def to_json_with_sub_elements
+    to_json(:include => [{ :questions => { :methods => :type }}, { :categories => { :methods => :type }}])
+  end
+
   protected
 
   def has_multi_record_ancestor
