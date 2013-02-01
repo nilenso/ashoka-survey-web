@@ -54,6 +54,10 @@ class Question < ActiveRecord::Base
     question_class.new(question_params)
   end
 
+  def sorted_answers_for_response(response_id)
+    [answers.find_by_response_id(response_id)].compact
+  end
+
   def first_level?
     self.parent == nil && self.category == nil
   end
