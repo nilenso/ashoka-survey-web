@@ -18,7 +18,7 @@
 
   <% unless @disabled %>
     <%= f.actions do %>
-    <% if @response.survey_public? %>
+      <% if @response.survey_public? %>
         <%= recaptcha_tags :display => { :theme => :clean } %>
         <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'complete_button' } %>
       <% else %>
@@ -64,6 +64,12 @@
       var action = $('form.response').attr('action')
       $('form.response').attr('action', action + '/complete')
     })
+
+    $("form").submit(function(){
+      $("#complete_button").attr('disabled', true);
+      $("#save_as_draft_button").attr('disabled', true);
+    });
+
     organize_sub_questions()
     $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
   });

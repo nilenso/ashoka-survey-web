@@ -21,7 +21,7 @@ class SurveyDecorator < Draper::Base
 
   def report_data_for(question)
     header = [question.content, 'Answer / Count']
-    question.report_data.unshift(header).to_json.html_safe
+    h.escape_javascript(question.report_data.unshift(header).to_json.html_safe)
   end
 
   def class_for_disabled

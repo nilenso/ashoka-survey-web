@@ -14,6 +14,7 @@ module Api::V1
 
       if response.invalid?
         render :json => response.render_json, :status => :bad_request
+        Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
       else
         render :json => response.render_json
       end
@@ -29,6 +30,7 @@ module Api::V1
 
       if response.invalid?
         render :json => response.render_json(true), :status => :bad_request
+        Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
       else
         render :json => response.render_json
       end

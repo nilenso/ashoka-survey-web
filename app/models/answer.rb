@@ -26,6 +26,7 @@ class Answer < ActiveRecord::Base
   delegate :validating?, :to => :response, :prefix => true
   delegate :identifier?, :to => :question
   delegate :first_level?, :to => :question
+  scope :complete, joins(:response).where("responses.status = 'complete'")
 
   def option_ids
     self.choices.collect(&:option_id)

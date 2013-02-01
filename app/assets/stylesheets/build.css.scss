@@ -2,6 +2,8 @@ body#build{
   div#banner{width: 100px;}
   div#page{margin: 0 0 0 80px;}
 
+  h3#welcome{position: fixed; top: 10px; right: 20px; text-align: right; margin: 0; line-height: 20px;}
+
   div#content{
     width: 500px;
     float: left;
@@ -198,26 +200,26 @@ body#build{
           background: $secondary-color-light;
           a.delete_question, a.delete_category, a.copy_question {display: block; }
 
-          &:after, &:before{
+          &:after{
             content: "";
             display: block;
             position: absolute;
-            right: -40px;
+            right: -1px;
             top: 20px;
             width: 0; height: 0;
 
-            border: solid 10px $secondary-color-light;
+            border: solid 10px $white;
             border-top-color: transparent;
             border-left-color: transparent;
             border-bottom-color: transparent;
           }
 
-          &:before{
-            border: none;
-            border-left: solid 4px $secondary-color-light;
-            height: 240px;
-            right: -44px;
-          }
+          // &:before{
+          //   border: none;
+          //   border-left: solid 4px $secondary-color-light;
+          //   height: 240px;
+          //   right: -44px;
+          // }
 
         }
 
