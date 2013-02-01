@@ -9,10 +9,6 @@ class Record < ActiveRecord::Base
 
   after_create :create_answers_for_category_questions
 
-  def sorted_answers
-    answers.sort_by { |answer| answer.question_order_number }
-  end
-
   def create_answers_for_category_questions
     if category
       category.questions.each do |question|

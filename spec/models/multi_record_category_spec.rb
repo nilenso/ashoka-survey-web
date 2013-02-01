@@ -21,7 +21,12 @@ describe MultiRecordCategory do
     it "returns answers for each of its records" do
       mr_category = MultiRecordCategory.create(:content => "MR")
       question = FactoryGirl.create :question, :category => mr_category
-      5.times { mr_category.records << Record.create(:response_id => response.id) }
+      5.times do
+        record = Record.create(:response_id => response.id)
+        mr_category.records << record
+        record.answers << FactoryGirl.create(:answer, :question => question, :response => response)
+      end
+
       mr_category.sorted_answers_for_response(response.id).size.should == 5
     end
 
@@ -29,8 +34,19 @@ describe MultiRecordCategory do
       another_response = FactoryGirl.create :response
       mr_category = MultiRecordCategory.create(:content => "MR")
       question = FactoryGirl.create :question, :category => mr_category
-      5.times { mr_category.records << Record.create(:response_id => response.id) }
-      5.times { mr_category.records << Record.create(:response_id => another_response.id) }
+
+      5.times do
+        record = Record.create(:response_id => response.id)
+        mr_category.records << record
+        record.answers << FactoryGirl.create(:answer, :question => question, :response => response)
+      end
+
+      5.times do
+        record = Record.create(:response_id => another_response.id)
+        mr_category.records << record
+        record.answers << FactoryGirl.create(:answer, :question => question, :response => another_response)
+      end
+
       mr_category.sorted_answers_for_response(response.id).size.should == 5      
     end
   end

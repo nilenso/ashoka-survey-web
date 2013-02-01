@@ -5,8 +5,8 @@ class DropDownQuestion < Question
     options.map(&:elements).flatten.map(&:with_sub_questions_in_order).flatten.unshift(self)
   end
 
-  def sorted_answers_for_response(response_id)
-    (super << options.map(&:elements).flatten.map { |element| element.sorted_answers_for_response(response_id) }).flatten
+  def sorted_answers_for_response(response_id, record_id=nil)
+    options.map(&:elements).flatten.map { |element| element.sorted_answers_for_response(response_id, record_id) }.unshift(super).flatten
   end
 
   def report_data

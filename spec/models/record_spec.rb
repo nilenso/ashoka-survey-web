@@ -18,21 +18,4 @@ describe Record do
       record.answers.map(&:question_id).should =~ category.questions.map(&:id)
     end
   end
-
-  context "when fetching answers" do
-    let(:response) { FactoryGirl.create :response }
-
-    it "returns a list of all the answers sorted by their question's order number" do
-      mr_category = MultiRecordCategory.create(:content => "foo")
-      record = FactoryGirl.create(:record, :category => mr_category, :response => response)
-
-      sub_question_2 = FactoryGirl.create(:question, :category => mr_category, :order_number => 2)
-      sub_question_1 = FactoryGirl.create(:question, :category => mr_category, :order_number => 1)
-
-      answer_2 = FactoryGirl.create(:answer, :question => sub_question_2, :record => record)
-      answer_1 = FactoryGirl.create(:answer, :question => sub_question_1, :record => record)
-
-      record.sorted_answers.should == [answer_1, answer_2]
-    end
-  end
 end

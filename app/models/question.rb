@@ -54,8 +54,8 @@ class Question < ActiveRecord::Base
     question_class.new(question_params)
   end
 
-  def sorted_answers_for_response(response_id)
-    [answers.find_by_response_id(response_id)].compact
+  def sorted_answers_for_response(response_id, record_id=nil)
+    [answers.find_by_response_id_and_record_id(response_id, record_id)].compact.flatten
   end
 
   def first_level?

@@ -293,6 +293,8 @@ describe Question do
 
   context "when fetching sorted answers for a response" do
     let(:question) { FactoryGirl.create :question }
+    let(:response) { FactoryGirl.create :response }
+
     it "returns its answer for the specified response" do
       response_1 = FactoryGirl.create :response
       response_2 = FactoryGirl.create :response
@@ -300,6 +302,20 @@ describe Question do
       question.answers << FactoryGirl.create(:answer, :content => "First", :response => response_1)
       question.answers << answer
       question.sorted_answers_for_response(response_2.id).should == [answer]
+    end
+
+    it "returns its answer for the specified record" do
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      question = FactoryGirl.create :question, :category => mr_category
+
+      record_1 = FactoryGirl.create :record, :category => mr_category, :response => response
+      record_2 = FactoryGirl.create :record, :category => mr_category, :response => response
+
+      answer_1 = Answer.create(:response_id => response.id, :record_id => record_1.id, :question_id => question.id)
+      answer_2 = Answer.create(:response_id => response.id, :record_id => record_2.id, :question_id => question.id)
+
+      question.sorted_answers_for_response(response.id, record_1).should == [answer_1.reload]
+      question.sorted_answers_for_response(response.id, record_2).should == [answer_2.reload]
     end
 
     it "returns an empty array if an invalid response_id is passed in" do
