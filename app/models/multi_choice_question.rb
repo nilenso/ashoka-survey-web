@@ -13,6 +13,10 @@ class MultiChoiceQuestion < Question
     options.map(&:elements).flatten.map(&:with_sub_questions_in_order).flatten.unshift(self)
   end
 
+  def sorted_answers_for_response(response_id)
+    (super << options.map(&:elements).flatten.map { |element| element.sorted_answers_for_response(response_id) }).flatten
+  end
+
   private
 
   def choices
