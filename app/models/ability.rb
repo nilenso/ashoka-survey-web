@@ -16,7 +16,7 @@ class Ability
     end
   end
 
-  def cso_admin_actions_on_shared_surveys
+  def cso_admin_actions_on_shared_surveys(user_info)
     can_perform_on_shared_surveys(:read, user_info)
     can_perform_on_shared_surveys(:questions_count, user_info)
     can_perform_on_shared_surveys(:duplicate, user_info)
@@ -24,7 +24,7 @@ class Ability
     can_perform_on_shared_surveys(:update_publication, user_info)
   end
 
-  def cso_admin_actions_on_own_surveys
+  def cso_admin_actions_on_own_surveys(user_info)
     can :build, Survey, :organization_id => user_info[:org_id]
     can :create, Survey
     can :edit, Survey, :organization_id => user_info[:org_id]
@@ -35,7 +35,7 @@ class Ability
     can :report, Survey, :organization_id => user_info[:org_id]
   end
 
-  def cso_admin_actions_on_responses
+  def cso_admin_actions_on_responses(user_info)
     can :manage, Response, :survey => { :organization_id => user_info[:org_id] }
     can :read, Response, :survey => { :organization_id => user_info[:org_id] }
     can :read, Response, :organization_id => user_info[:org_id]
@@ -44,7 +44,7 @@ class Ability
     can :image_upload, Response, :organization_id => user_info[:org_id]
   end
 
-  def admin_actions
+  def admin_actions(user_info)
     can :read, Survey # TODO: Verify this
     can :questions_count, Survey
     can :read, Question
@@ -53,7 +53,7 @@ class Ability
     can :read, Response # TODO: Verify this
   end
 
-  def field_agent_actions
+  def field_agent_actions(user_info)
     can :read, Survey, :survey_users => { :user_id => user_info[:user_id ] }
     can :questions_count, Survey, :survey_users => { :user_id => user_info[:user_id ] }
     can :create, Response, :survey => { :survey_users => { :user_id => user_info[:user_id ] } }
@@ -73,17 +73,17 @@ class Ability
     else
       role = user_info[:role]
       if role == 'admin'
-        admin_actions
+        admin_actions(user_info)
       elsif role == 'cso_admin'
-        cso_admin_actions_on_shared_surveys
-        cso_admin_actions_on_own_surveys
-        cso_admin_actions_on_responses
+        cso_admin_actions_on_shared_surveys(user_info)
+        cso_admin_actions_on_own_surveys(user_info)
+        cso_admin_actions_on_responses(user_info)
 
         can :manage, Question, :survey => { :organization_id => user_info[:org_id] }
         can :manage, Category, :survey => { :organization_id => user_info[:org_id] }
         can :manage, Option, :question => { :survey => {:organization_id => user_info[:org_id] }}
       elsif role == 'field_agent'
-        field_agent_actions
+        field_agent_actions(user_info)
       end
     end
   end
