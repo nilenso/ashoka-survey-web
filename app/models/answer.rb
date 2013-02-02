@@ -7,11 +7,13 @@ class Answer < ActiveRecord::Base
   belongs_to :response
   attr_accessible :content, :question_id, :option_ids, :updated_at
   validate :mandatory_questions_should_be_answered, :if => :response_validating?
+  with_options :if => :has_been_answered? do |condition|
+    condition.validate :date_should_be_valid
+    condition.validate :content_should_be_in_range
+  end
   validate :content_should_not_exceed_max_length
-  validate :content_should_be_in_range
   validates_uniqueness_of :question_id, :scope => [:response_id]
   has_many :choices, :dependent => :destroy
-  validate :date_should_be_valid
   attr_accessible :photo
   #has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>"}
   #validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
@@ -119,22 +121,18 @@ class Answer < ActiveRecord::Base
   end
 
   def content_should_be_in_range
-    unless has_not_been_answered?
-      min_value, max_value = question.min_value, question.max_value
-      if min_value && content.to_i < min_value
-        errors.add(:content, I18n.t("answers.validations.exceeded_lower_limit"))
-      elsif max_value && content.to_i > max_value
-        errors.add(:content, I18n.t("answers.validations.exceeded_higher_limit"))
-      end
+    min_value, max_value = question.min_value, question.max_value
+    if min_value && content.to_i < min_value
+      errors.add(:content, I18n.t("answers.validations.exceeded_lower_limit"))
+    elsif max_value && content.to_i > max_value
+      errors.add(:content, I18n.t("answers.validations.exceeded_higher_limit"))
     end
   end
 
   def date_should_be_valid
-    unless has_not_been_answered?
-      if question.type == "DateQuestion"
-        unless content =~ /\A\d{4}\/(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[1-2]\d|3[01])\Z/
-          errors.add(:content, I18n.t("answers.validations.invalid_date"))
-        end
+    if question.type == "DateQuestion"
+      unless content =~ /\A\d{4}\/(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[1-2]\d|3[01])\Z/
+        errors.add(:content, I18n.t("answers.validations.invalid_date"))
       end
     end
   end
