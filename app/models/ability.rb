@@ -10,6 +10,12 @@ class Ability
     ]
   end
 
+  def can_perform_on_own_and_shared_surveys(action, user_info)
+    can action, Survey, own_and_shared_surveys(user_info) do |survey|
+      survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
+    end
+  end
+
   def initialize(user_info)
 
 
@@ -29,25 +35,11 @@ class Ability
         can :read, Response # TODO: Verify this
         #can :manage, Response, :session_token => user_info[:session_token]
       elsif role == 'cso_admin'
-        can :read, Survey, own_and_shared_surveys(user_info) do |survey|
-          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
-        end
-
-        can :questions_count, Survey, own_and_shared_surveys(user_info) do |survey|
-          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
-        end
-
-        can :duplicate, Survey, own_and_shared_surveys(user_info) do |survey|
-          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
-        end
-
-        can :edit_publication, Survey, own_and_shared_surveys(user_info) do |survey|
-          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
-        end
-
-        can :update_publication, Survey, own_and_shared_surveys(user_info) do |survey|
-          survey.organization_id == user_info[:org_id] || survey.participating_organizations.find_by_organization_id(user_info[:org_id])
-        end
+        can_perform_on_own_and_shared_surveys(:read, user_info)
+        can_perform_on_own_and_shared_surveys(:questions_count, user_info)
+        can_perform_on_own_and_shared_surveys(:duplicate, user_info)
+        can_perform_on_own_and_shared_surveys(:edit_publication, user_info)
+        can_perform_on_own_and_shared_surveys(:update_publication, user_info)
 
         can :build, Survey, :organization_id => user_info[:org_id]
         can :create, Survey
