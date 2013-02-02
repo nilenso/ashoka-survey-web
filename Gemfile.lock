@@ -81,6 +81,8 @@ GEM
     daemons (1.1.9)
     dalli (2.3.0)
     database_cleaner (0.8.0)
+    date_validator (0.6.3)
+      activemodel (~> 3.0)
     delayed_job (3.0.4)
       activesupport (~> 3.0)
     delayed_job_active_record (0.3.3)
@@ -343,6 +345,7 @@ DEPENDENCIES
   daemons
   dalli
   database_cleaner
+  date_validator
   delayed_job_active_record
   draper
   factory_girl_rails
