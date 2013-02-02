@@ -15,17 +15,16 @@ class Answer < ActiveRecord::Base
   validates_uniqueness_of :question_id, :scope => [:response_id]
   has_many :choices, :dependent => :destroy
   attr_accessible :photo
-  #has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>"}
-  #validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
   mount_uploader :photo, ImageUploader
   store_in_background :photo
   validate :maximum_photo_size
-  validates_numericality_of :content, :if => Proc.new {|answer| (answer.content.present?) && (answer.question.type == 'NumericQuestion') }
+  validates_numericality_of :content, :if => :numeric_question?
   after_save :touch_multi_choice_answer
 
   default_scope includes('question').order('questions.order_number')
   delegate :content, :to => :question, :prefix => true
   delegate :validating?, :to => :response, :prefix => true
+  delegate :type, :to => :question, :prefix => true
   delegate :identifier?, :to => :question
   delegate :first_level?, :to => :question
   scope :complete, joins(:response).where("responses.status = 'complete'")
@@ -42,7 +41,7 @@ class Answer < ActiveRecord::Base
   end
 
   def content
-    if question.type == "MultiChoiceQuestion"
+    if question_type == "MultiChoiceQuestion"
       choices.map(&:content).join(", ")
     else
       self[:content]
@@ -51,13 +50,13 @@ class Answer < ActiveRecord::Base
 
   def content_for_excel(server_url='')
     # TODO: Refactor these `if`s when implementing STI for the Answer model
-    return choices.map(&:content).join(", ") if question.type == 'MultiChoiceQuestion'
-    return (server_url + photo_url) if question.type == 'PhotoQuestion'
+    return choices.map(&:content).join(", ") if question_type == 'MultiChoiceQuestion'
+    return (server_url + photo_url) if question_type == 'PhotoQuestion'
     return content
   end
 
   def image?
-    question.type == "PhotoQuestion"
+    question_type == "PhotoQuestion"
   end
 
   def clear_content
@@ -92,7 +91,7 @@ class Answer < ActiveRecord::Base
   private
 
   def maximum_photo_size
-    if question.type == "PhotoQuestion"
+    if question_type == "PhotoQuestion"
       if question.max_length && photo && question.max_length.megabytes < photo.size
         errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
       elsif photo && 5.megabytes < photo.size
@@ -113,9 +112,9 @@ class Answer < ActiveRecord::Base
   end
 
   def content_should_not_exceed_max_length
-    if question.type != "PhotoQuestion" && question.max_length && content && content.length > question.max_length
+    if question_type != "PhotoQuestion" && question.max_length && content && content.length > question.max_length
       errors.add(:content, I18n.t("answers.validations.max_length"))
-    elsif question.type == "RatingQuestion" && question.max_length && content && content.to_i > question.max_length
+    elsif question_type == "RatingQuestion" && question.max_length && content && content.to_i > question.max_length
       errors.add(:content, I18n.t("answers.validations.max_length"))
     end
   end
@@ -130,15 +129,19 @@ class Answer < ActiveRecord::Base
   end
 
   def date_should_be_valid
-    if question.type == "DateQuestion"
+    if question_type == "DateQuestion"
       unless content =~ /\A\d{4}\/(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[1-2]\d|3[01])\Z/
         errors.add(:content, I18n.t("answers.validations.invalid_date"))
       end
     end
   end
 
+  def numeric_question?
+    content.present? && question_type == "NumericQuestion"
+  end
+
   # Editing choices doesn't change the `updated_at` for the answer by default.
   def touch_multi_choice_answer
-    touch if question.type == "MultiChoiceQuestion"
+    touch if question_type == "MultiChoiceQuestion"
   end
 end
