@@ -11,7 +11,7 @@ class Answer < ActiveRecord::Base
     condition.validate :date_should_be_valid
     condition.validate :content_should_be_in_range
   end
-  validate :content_should_not_exceed_max_length
+  validate :content_should_not_exceed_max_length, :unless => :content_blank?
   validates_uniqueness_of :question_id, :scope => [:response_id]
   has_many :choices, :dependent => :destroy
   attr_accessible :photo
@@ -80,7 +80,7 @@ class Answer < ActiveRecord::Base
     if question.is_a?(MultiChoiceQuestion)
       choices.empty?
     else
-      content.blank?
+      content_blank?
     end
   end
 
@@ -100,6 +100,9 @@ class Answer < ActiveRecord::Base
     end
   end
 
+  def content_blank?
+    content.blank?
+  end
 
   def mandatory_questions_should_be_answered
     if question.mandatory && has_not_been_answered?
@@ -111,10 +114,20 @@ class Answer < ActiveRecord::Base
     end
   end
 
+  def question_not_photo_or_numeric_type
+    question_type != "PhotoQuestion" && question_type != "NumericQuestion"
+  end
+
+  def content_max_legnth_validation
+    if question_type == "RatingQuestion"
+      content.to_i > question.max_length
+    else
+      content.length > question.max_length
+    end
+  end
+
   def content_should_not_exceed_max_length
-    if question_type != "PhotoQuestion" && question.max_length && content && content.length > question.max_length
-      errors.add(:content, I18n.t("answers.validations.max_length"))
-    elsif question_type == "RatingQuestion" && question.max_length && content && content.to_i > question.max_length
+    if question_not_photo_or_numeric_type && content_max_legnth_validation
       errors.add(:content, I18n.t("answers.validations.max_length"))
     end
   end
