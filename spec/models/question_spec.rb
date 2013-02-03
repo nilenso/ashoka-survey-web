@@ -44,11 +44,6 @@ describe Question do
     end
   end
 
-  it "returns infinity if max_length is not defined" do
-    question = FactoryGirl.create(:question, :max_length => nil)
-    question.max_length.should == Float::INFINITY
-  end
-
   context "orders by order number" do
     it "fetches all question in ascending order of order_number for a particular survey" do
       survey = FactoryGirl.create(:survey)

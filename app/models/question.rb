@@ -19,9 +19,6 @@ class Question < ActiveRecord::Base
     return image.url(format) if image.file
   end
 
-  def max_length
-    self[:max_length] || Float::INFINITY
-  end
 
   def image_in_base64
     file =  File.read("#{image.root}/#{image.cache_dir}/#{image_tmp}") if image_tmp
