@@ -8,10 +8,9 @@ class MultiRecordCategoryDecorator < CategoryDecorator
   end
 
   def category_name(answer, cache)
+    # TODO: Refactor
     # Don't show the multi-record title once per record. Only once total.
-    if cache.select { |id, record_id| model.id == id }.present?
-      model.category.decorate.category_name(answer, cache) if model.category
-    else
+    if cache.select { |id, record_id| model.id == id }.empty?
       super
     end
   end

@@ -68,7 +68,11 @@
 
   sub_questions_for_category = (category, record_id) ->
     category_id = $(category).data('id')
-    sub_questions = $(".sub_question[data-category-id=#{category_id}][data-record-id=#{record_id}]")
+    if record_id
+      sub_questions = $(".sub_question[data-category-id=#{category_id}][data-record-id=#{record_id}]")
+    else
+      sub_questions = $(".sub_question[data-category-id=#{category_id}]")
+
 
     sub_questions.each ->
       sub_question = $(this)      
