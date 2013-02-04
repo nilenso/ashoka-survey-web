@@ -18,6 +18,7 @@ class CategoryDecorator < Draper::Base
              data-nesting-level='<%= model.nesting_level %>'
              data-parent-id='<%= model.parent_id %>'
              data-id='<%= model.id %>'
+             data-record-id='<%= answer.record_id %>'
              data-category-id='<%= model.category_id %>'>
           <h2>
             <%= ResponseDecorator.question_number(category) %>)
