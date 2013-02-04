@@ -61,6 +61,10 @@ class Response < ActiveRecord::Base
     self.session_token = session_token
   end
 
+  def create_blank_answers
+    survey.first_level_elements.each { |element| element.create_blank_answers(:response_id => id) }
+  end
+
   def sorted_answers
     survey.first_level_elements.map { |element| element.sorted_answers_for_response(id) }.flatten
   end

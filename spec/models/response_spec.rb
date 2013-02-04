@@ -267,4 +267,37 @@ describe Response do
       response.sorted_answers.should == [radio_answer, another_answer, answer]
     end
   end
+
+  context 'when creating blank answers' do
+    it "creates blank answers for each of its survey's questions" do
+      survey = FactoryGirl.create :survey
+      question = FactoryGirl.create :question, :survey => survey
+
+      response = FactoryGirl.create :response, :survey => survey
+      response.create_blank_answers
+
+      question.answers.should_not be_nil
+    end
+
+    it "creates blank answers for each of its survey's categories" do
+      survey = FactoryGirl.create :survey
+      category = FactoryGirl.create :category, :survey => survey
+      question = FactoryGirl.create :question, :survey => survey, :category => category
+
+      response = FactoryGirl.create :response, :survey => survey
+      response.create_blank_answers
+
+      question.answers.should_not be_nil
+    end
+
+    it "creates blank answers with the correct response_id" do
+      survey = FactoryGirl.create :survey
+      question = FactoryGirl.create :question, :survey => survey
+
+      response = FactoryGirl.create :response, :survey => survey
+      response.create_blank_answers
+
+      question.answers[0].response_id.should == response.id
+    end
+  end
 end
