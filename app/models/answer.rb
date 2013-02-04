@@ -94,17 +94,20 @@ class Answer < ActiveRecord::Base
   private
 
   def maximum_photo_size
-    if question_type == "PhotoQuestion"
-      if question.max_length && photo && question.max_length.megabytes < photo.size
-        errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
-      elsif photo && 5.megabytes < photo.size
-        errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
-      end
+    return unless question_type == "PhotoQuestion"
+    if max_length_and_content_present? && question.max_length.megabytes < photo.size
+      errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
+    elsif photo && 5.megabytes < photo.size
+      errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
     end
   end
 
   def max_length_and_content_present?
-    content.present? && question.max_length
+    content_present? && question.max_length
+  end
+
+  def content_present?
+    content || photo
   end
 
   def mandatory_questions_should_be_answered
