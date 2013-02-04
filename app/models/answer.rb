@@ -18,7 +18,7 @@ class Answer < ActiveRecord::Base
   attr_accessible :photo
   mount_uploader :photo, ImageUploader
   store_in_background :photo
-  validate :maximum_photo_size
+  validate :maximum_photo_size, :if => :content_present?
   validates_numericality_of :content, :if => :numeric_question?
   after_save :touch_multi_choice_answer
 
@@ -95,9 +95,9 @@ class Answer < ActiveRecord::Base
 
   def maximum_photo_size
     return unless question_type == "PhotoQuestion"
-    if max_length_and_content_present? && question.max_length.megabytes < photo.size
+    if question.max_length && question.max_length.megabytes < photo.size
       errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
-    elsif photo && 5.megabytes < photo.size
+    elsif 5.megabytes < photo.size
       errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
     end
   end
@@ -133,7 +133,8 @@ class Answer < ActiveRecord::Base
   end
 
   def content_should_not_exceed_max_length
-    if !photo_or_numeric_type_question && content_max_legnth_validation
+    return if photo_or_numeric_type_question
+    if content_max_legnth_validation
       errors.add(:content, I18n.t("answers.validations.max_length"))
     end
   end
