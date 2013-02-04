@@ -11,7 +11,7 @@
     <%= @response.category_name_for(question.category) %>
     <div class="question <%= "hidden sub_question" if question.parent || question.category.try(:sub_question?)  %>" data-parent-id="<%= question.parent_id %>" data-category-id="<%= question.category_id %>" data-nesting-level="<%= question.nesting_level %>">
       <%= image_tag question.image_url(:medium), :class => "medium" if question.image_url %>
-      <%= @response.input_tag_for(question, f, @disabled) %>
+      <%= question.decorate.input_tag(f, :disabled => @disabled) %>
       <%= f.input :question_id, :as => :hidden %>
     </div>
   <% end %>
