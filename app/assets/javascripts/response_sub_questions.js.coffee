@@ -53,8 +53,12 @@
     $(sub_question).find('.star').raty('cancel')
 
   sub_questions_for = (option) ->
+    record_id = $(option).closest('.question').data('recordId')
     option_id = $(option).data('option-id')
-    sub_questions = $(".sub_question[data-parent-id=#{option_id}]") 
+    if record_id
+      sub_questions = $(".sub_question[data-parent-id=#{option_id}][data-record-id=#{record_id}]")
+    else
+      sub_questions = $(".sub_question[data-parent-id=#{option_id}]")
 
     sub_questions.each ->
       sub_question = $(this)
