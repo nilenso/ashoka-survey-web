@@ -46,5 +46,11 @@ img.medium {
 }
 
 div.record {
-  border: 1px solid black;
+  border: 1px solid $secondary-color-light;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  .question {
+    margin-bottom: 5px;
+  }
 }

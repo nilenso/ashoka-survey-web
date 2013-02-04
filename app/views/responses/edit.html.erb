@@ -71,8 +71,8 @@
       $("#save_as_draft_button").attr('disabled', true);
     });
 
-    organize_sub_questions()
     prepare_multi_record(<%= @response.records.map(&:id) %>)
+    organize_sub_questions()
     $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
   });
 </script>

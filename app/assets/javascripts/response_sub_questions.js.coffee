@@ -92,7 +92,11 @@
     $('.category,.question').each ->
       sub_question = $(this)
       nesting_level = $(sub_question).data('nesting-level') - 1
-      sub_question.css('margin-left', nesting_level * 15)
+      record = $(sub_question).closest('.record')
+      if record
+        record.css('margin-left', nesting_level * 15)
+      else
+        sub_question.css('margin-left', nesting_level * 15)
 
   $ ->
     initialize()
