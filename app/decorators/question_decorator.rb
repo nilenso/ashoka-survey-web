@@ -2,7 +2,7 @@ class QuestionDecorator < Draper::Base
   decorates :question
 
   def input_tag(f, opts={})
-    f.input :content, opts.merge(:label => label, :required => model.mandatory)
+    f.input (opts[:field] || :content), opts.merge(:label => label, :required => model.mandatory)
   end
 
   def label

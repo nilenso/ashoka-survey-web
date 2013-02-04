@@ -5,11 +5,11 @@ class PhotoQuestionDecorator < QuestionDecorator
     answer = f.object
     photo_url = opts[:disabled] ? answer.photo_url : answer.photo_url(:medium)
 
-    "#{(h.image_tag photo_url, :class => 'medium' if answer.photo_url.present?)}
-     #{(f.input :photo,
-                :as => :file,
-                :required => model.mandatory,
-                :label => label,
-                :input_html => { :disabled => opts[:disabled] })}".html_safe
+    image_thumb = answer.photo_url.present? ? (h.image_tag photo_url, :class => 'medium') : ''
+    photo_field = super(f,  :field => :photo,
+                             :as => :file,
+                             :input_html => { :disabled => opts[:disabled] })
+
+    (image_thumb + photo_field).html_safe
   end
 end
