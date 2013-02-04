@@ -41,6 +41,26 @@ describe ResponsesController do
       response.should redirect_to surveys_path
       flash[:error].should_not be_nil
     end
+
+    it "creates blank answers for each of its survey's questions" do
+      question = FactoryGirl.create :question, :survey => survey
+      post :create, :survey_id => survey.id
+      question.answers.should_not be_blank
+    end
+
+    it "creates blank answers for each of its survey's questions nested under a category" do
+      category = FactoryGirl.create :category, :survey => survey
+      question = FactoryGirl.create :question, :survey => survey, :category => category
+      post :create, :survey_id => survey.id
+      question.answers.should_not be_blank
+    end
+
+    it "creates blank answers for each of its survey's questions nested under a question with options" do
+      question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey => survey).id)
+      sub_question = FactoryGirl.create :question, :survey => survey, :parent => question.options[0]
+      post :create, :survey_id => survey.id
+      sub_question.answers.should_not be_blank
+    end
   end
 
   context "GET 'index'" do
