@@ -72,6 +72,7 @@
     });
 
     organize_sub_questions()
+    prepare_multi_record(<%= @response.records.map(&:id) %>)
     $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
   });
 </script>

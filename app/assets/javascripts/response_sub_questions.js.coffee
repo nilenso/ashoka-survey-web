@@ -36,12 +36,14 @@
   show_sub_questions_of = (option) ->
     for sub_question in sub_questions_for(option)
       $(sub_question).removeClass('hidden')
+      $(sub_question).closest(".record").removeClass("hidden")
 
   hide_sub_questions_of = (option) ->
     sub_questions_for(option).each (index) ->
       sub_question = $(this)
       clear_content_of sub_question
       sub_question.addClass('hidden')
+      $(sub_question).closest(".record").addClass("hidden")
       hide_sub_questions_of(option) for option in sub_question.find('input[type=radio],option')
 
   clear_content_of = (sub_question) ->
