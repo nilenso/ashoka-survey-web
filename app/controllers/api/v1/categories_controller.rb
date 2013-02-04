@@ -45,7 +45,7 @@ module Api
       def show
         category = Category.find_by_id(params[:id])
         if category
-          render :json => category.to_json(:include => [{ :questions => { :methods => :type }}, { :categories => { :methods => :type }}])
+          render :json => category.to_json_with_sub_elements
         else
           render :nothing => true, :status => :bad_request
         end

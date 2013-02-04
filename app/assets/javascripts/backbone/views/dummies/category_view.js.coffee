@@ -26,6 +26,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
       @show_actual(e)
 
     $(@el).children('.dummy_category_content').children(".delete_category").click (e) => @delete(e)
+    $(@el).children('.dummy_category_content').children(".copy_question").click (e) => @save_all_changes(e)
     $(@el).children(".dummy_category_content").children('.collapse_category').click (e) => @toggle_collapse()
     $(@el).find('abbr').show() if @model.get('mandatory')
 
@@ -125,3 +126,9 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
 
       sub_question.reset_sub_question_numbers() if sub_question.can_have_sub_questions
     @render()
+
+  save_all_changes: =>
+    $(@el).trigger("copy_question.save_all_changes", this)
+
+  copy_question: =>
+    $(@el).children('.dummy_category_content').children(".copy_question_hidden").click();

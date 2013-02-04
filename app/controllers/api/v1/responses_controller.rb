@@ -10,17 +10,13 @@ module Api::V1
       response.organization_id = params[:organization_id]
       response.update_attributes(params[:response].except(:answers_attributes)) # Response isn't created before the answers, so we need to create the answers after this.
       response.validating if params[:response][:status] == "complete"
-      response.update_attributes({:answers_attributes => params[:response][:answers_attributes]}) if response.save
+      response.update_attributes({:answers_attributes => params[:response][:answers_attributes]}) if response.valid?
 
-      if response.incomplete? && response.valid?
-        render :json => response.to_json_with_answers_and_choices
-      elsif response.validating? && response.valid?
-        response.complete
-        render :json => response.to_json_with_answers_and_choices
+      if response.invalid?
+        render :json => response.render_json, :status => :bad_request
+        Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
       else
-        response_json = response.to_json_with_answers_and_choices
-        response.destroy
-        render :json => response_json, :status => :bad_request
+        render :json => response.render_json
       end
     end
 
@@ -30,15 +26,13 @@ module Api::V1
       response.merge_status(params[:response].except(:answers_attributes))
       response.validating if response.complete?
       answers_to_update = response.select_new_answers(params[:response][:answers_attributes])
-      response.update_attributes({ :answers_attributes => answers_to_update }) if response.save
-      if response.incomplete? && response.valid?
-        render :json => response.to_json_with_answers_and_choices
-      elsif response.validating? && response.valid?
-        response.complete
-        render :json => response.to_json_with_answers_and_choices
+      response.update_attributes({ :answers_attributes => answers_to_update })
+
+      if response.invalid?
+        render :json => response.render_json(true), :status => :bad_request
+        Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
       else
-        response_json = response.to_json_with_answers_and_choices
-        render :json => response_json, :status => :bad_request
+        render :json => response.render_json
       end
     end
 

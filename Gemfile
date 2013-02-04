@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.11'
+gem 'date_validator'
 gem 'unicorn'
 gem 'pg'
 gem 'formtastic'

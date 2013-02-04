@@ -33,6 +33,7 @@ SurveyWeb::Application.routes.draw do
       resources :categories, :except => [:edit, :new] do
         member { post "duplicate" }
       end
+      resources :audits, :only => [:create, :update]
       resources :options, :except => [:edit, :new, :show]
       resources :surveys, :only => [:index, :show, :update] do
         get 'questions_count', :on => :collection

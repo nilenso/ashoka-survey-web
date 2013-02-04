@@ -249,7 +249,7 @@ describe ResponsesController do
   end
 
   context "PUT 'complete'" do
-    let(:resp) { FactoryGirl.create(:response, :survey_id => survey.id, :organization_id => 1, :user_id => 1) }
+    let(:resp) { FactoryGirl.create(:response, :survey_id => survey.id, :organization_id => 1, :user_id => 1, :status => 'validating') }
 
     it "marks the response complete" do
       put :complete, :id => resp.id, :survey_id => resp.survey_id

@@ -81,6 +81,19 @@ describe Category do
       category = FactoryGirl.create :category
       category.as_json.should have_key :has_multi_record_ancestor
     end
+
+    context "#to_json_with_sub_elements" do
+      it "includes it's sub elements" do
+        category = FactoryGirl.create(:category)
+        category.questions << FactoryGirl.create(:question)
+        category.categories << FactoryGirl.create(:category)
+        category_parsed = JSON.parse(category.to_json_with_sub_elements)
+        category_parsed.should have_key('questions')
+        category_parsed['questions'].size.should == category.questions.size
+        category_parsed.should have_key('categories')
+        category_parsed['categories'].size.should == category.categories.size
+      end
+    end
   end
 
   context "Duplicate" do

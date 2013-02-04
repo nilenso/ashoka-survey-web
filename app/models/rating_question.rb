@@ -22,6 +22,6 @@ class RatingQuestion < Question
 
   private
   def answers_content
-    answers.map(&:content)
+    answers.complete.map(&:content)
   end
 end
