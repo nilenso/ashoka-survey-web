@@ -4,4 +4,4 @@
 
   wrap_with_div = (record_id) ->
     hidden = 'hidden' if $(".question[data-record-id=#{record_id}]").first().hasClass('hidden')
-    $(".question[data-record-id=#{record_id}]").wrapAll("<div class='record #{hidden}' data-record-id=#{record_id} />")
+    $("div[data-record-id=#{record_id}]").wrapAll("<div class='record #{hidden}' data-record-id=#{record_id} />")
