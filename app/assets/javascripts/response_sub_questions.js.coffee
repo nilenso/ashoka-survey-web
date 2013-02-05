@@ -102,8 +102,8 @@
   update_visible_records = () ->
     $('div.record').each ->
       record = $(this)
-      # If none of the record's children are hidden, show the record
-      if record.children('div.hidden').length == 0
+      # If a single child of the record is visible, show the record
+      if record.children('div:not(.hidden)').length > 0
         record.removeClass("hidden")
       else
         record.addClass('hidden')
