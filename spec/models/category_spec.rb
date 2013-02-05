@@ -29,6 +29,21 @@ describe Category do
     category.elements.should == [question, category, another_question]
   end
 
+  it "fetches all it's sub-questions and sub-categories with sub_questions" do
+    category = FactoryGirl.create(:category)
+    question = FactoryGirl.create :question, :order_number => 0
+    one_category = FactoryGirl.create :category, :order_number => 1
+    another_category = FactoryGirl.create :category, :order_number => 2
+    another_question = FactoryGirl.create :question, :order_number => 2
+    category.questions << question
+    category.categories << one_category
+    another_category.questions << FactoryGirl.create(:question)
+    category.questions << another_question
+    category.categories << another_category
+
+    category.elements_with_questions.should == [question, another_question, another_category]
+  end
+
   it "returns it's parent question" do
     question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
     option = Option.create(content: "Option", order_number: 0)

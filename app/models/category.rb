@@ -82,6 +82,10 @@ class Category < ActiveRecord::Base
     to_json(:include => [{ :questions => { :methods => :type }}, { :categories => { :methods => :type }}])
   end
 
+  def elements_with_questions
+    (questions + categories_with_questions).sort_by(&:order_number)
+  end
+
   protected
 
   def has_multi_record_ancestor

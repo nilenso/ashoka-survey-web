@@ -35,6 +35,10 @@ class Option < ActiveRecord::Base
     question.try(:has_multi_record_ancestor?)
   end
 
+  def elements_with_questions
+    (questions + categories_with_questions).sort_by(&:order_number)
+  end
+
   protected
 
   def has_multi_record_ancestor
