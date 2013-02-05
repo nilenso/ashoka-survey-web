@@ -6,8 +6,10 @@
   <h2><%= t('.edit_response') %> <%= @survey.name %></h2>
 </header>
 <% cache = [] %>
+<% @response.sort_answers %>
+
 <%= semantic_form_for [@survey, @response], :html => { :multipart => true } do |f| %>
-  <%= f.semantic_fields_for :answers, @response.sorted_answers do |f| %>
+  <%= f.semantic_fields_for :answers do |f| %>
     <% question = f.object.question %>
     <%= question.category.decorate.category_name(f.object.record_id, f.object.response_id, cache)  if question.category %>
     <div class="question <%= "hidden sub_question" if question.parent || question.category.try(:sub_question?)  %>" data-parent-id="<%= question.parent_id %>" data-category-id="<%= question.category_id %>" data-nesting-level="<%= question.nesting_level %>" data-record-id="<%= f.object.record_id %>">
