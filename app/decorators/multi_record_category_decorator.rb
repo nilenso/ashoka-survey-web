@@ -4,7 +4,7 @@ class MultiRecordCategoryDecorator < CategoryDecorator
   def create_record_link(response_id)
     h.link_to I18n.t('responses.edit.create_record'),
               h.records_path(:record => { :category_id => model.id, :response_id => response_id  }),
-              :method => :post
+              :method => :post, :class => "create_record"
   end
 
   def category_name(record_id, response_id, cache)
