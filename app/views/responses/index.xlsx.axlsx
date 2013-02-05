@@ -8,8 +8,8 @@ if @responses.present?
     sheet.add_row headers, :style => bold_style
     @responses.each do |response|
       answers = questions.map do |question|
-        answer = response.answers.find_by_question_id(question.id)
-        answer ? answer.content_for_excel(server_url) : ""
+        answers = question.answers.find_all_by_response_id(response.id)
+        answers ? answers.map { |answer| answer.content_for_excel(server_url) }.join(', ') : ""
       end
       answers << @user_names[response.user_id]
       answers << @organization_names.find { |org| org.id == response.organization_id }.try(:name)
