@@ -338,6 +338,12 @@ describe Question do
       question.create_blank_answers(:response_id => response.id, :record_id => record.id)
       record.reload.answers.should_not be_empty
     end
+
+    it "creates the empty answer without running validations" do
+      question = FactoryGirl.create(:question, :max_length => 5)
+      expect { question.create_blank_answers(:response_id => response.id) }.not_to raise_error
+      response.reload.answers.should_not be_empty
+    end
   end
 
   include_examples 'a question'

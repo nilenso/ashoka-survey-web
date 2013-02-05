@@ -27,8 +27,8 @@ class Question < ActiveRecord::Base
   end
 
   def create_blank_answers(params={})
-    # Mandatory?
-    Answer.create(:question_id => id, :response_id => params[:response_id], :record_id => params[:record_id])
+    answer = Answer.new(:question_id => id, :response_id => params[:response_id], :record_id => params[:record_id])
+    answer.save(:validate => false)
   end
 
   def duplicate(survey_id)
