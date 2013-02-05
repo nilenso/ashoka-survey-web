@@ -36,15 +36,17 @@
   show_sub_questions_of = (option) ->
     for sub_question in sub_questions_for(option)
       $(sub_question).removeClass('hidden')
-      update_visible_records()
+
+    update_visible_records()
 
   hide_sub_questions_of = (option) ->
     sub_questions_for(option).each (index) ->
       sub_question = $(this)
       clear_content_of sub_question
       sub_question.addClass('hidden')
-      update_visible_records()
       hide_sub_questions_of(option) for option in sub_question.find('input[type=radio],option')
+
+    update_visible_records()
 
   clear_content_of = (sub_question) ->
     $(sub_question).find('input[type!=hidden]').val('')
@@ -101,7 +103,7 @@
     $('div.record').each ->
       record = $(this)
       # If none of the record's children are hidden, show the record
-      if record.children('div.hidden)').length == 0
+      if record.children('div.hidden').length == 0
         record.removeClass("hidden")
       else
         record.addClass('hidden')
