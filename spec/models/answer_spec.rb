@@ -59,6 +59,13 @@ describe Answer do
         answer.content = 'foobarbaz'
         answer.should_not be_valid
       end
+
+      it "does not run this validation if the answer has no content" do
+        question = FactoryGirl.create(:question, :max_length => 7)
+        expect do
+          FactoryGirl.create(:answer, :content => nil, :question_id => question.id)
+        end.not_to raise_error
+      end
     end
 
     context "ordering" do

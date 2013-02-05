@@ -107,7 +107,7 @@ class Answer < ActiveRecord::Base
   end
 
   def content_present?
-    content || photo
+    content.present? || photo.present?
   end
 
   def mandatory_questions_should_be_answered
