@@ -69,5 +69,15 @@ describe MultiRecordCategory do
       mr_category.create_blank_answers(:response_id => response.id)
       question.reload.answers.should_not be_empty
     end
+
+    it "doesn't create a record if a record_id is passed in" do
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      question = FactoryGirl.create :question, :category => mr_category
+      record = FactoryGirl.create :record, :response => response, :category => mr_category
+
+      expect do
+        mr_category.create_blank_answers(:record_id => record.id, :response_id => response.id)
+      end.not_to change { Record.count }
+    end
   end
 end

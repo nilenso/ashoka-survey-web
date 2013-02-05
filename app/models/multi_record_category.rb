@@ -6,7 +6,7 @@ class MultiRecordCategory < Category
   end
 
   def create_blank_answers(params={})
-    record = Record.create(:category_id => id, :response_id => params[:response_id])
+    record = Record.find_or_create_by_id(:id => params[:record_id], :category_id => id, :response_id => params[:response_id])
     super(params.merge(:record_id => record.id))
   end
 
