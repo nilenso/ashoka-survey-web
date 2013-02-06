@@ -32,20 +32,7 @@ class CategoryDecorator < Draper::Base
     end
   end
 
-
-  def question_number
-    if category
-      "#{parent_category_decorator.question_number}.#{sibling_elements.index(model) + 1}"
-    else
-      (sibling_elements.index(model) + 1).to_s
-    end
-  end
-
   private
-
-  def parent_category_decorator
-    CategoryDecorator.find(category)
-  end
 
   def category
     model.category
