@@ -23,7 +23,7 @@ class MultiRecordCategoryDecorator < CategoryDecorator
              data-id='<%= model.id %>'
              data-category-id='<%= model.category_id %>'>
           <h2>
-            <%= ResponseDecorator.question_number(category) %>)
+            <%= question_number %>)
             <%= model.content %>
             <%= model.decorate.create_record_link(response_id) %>
           </h2>
