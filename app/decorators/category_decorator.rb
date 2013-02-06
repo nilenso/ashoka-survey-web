@@ -1,5 +1,6 @@
 class CategoryDecorator < Draper::Base
   decorates :category
+  include ElementNumberable
 
   def create_record_link(response_id)
   end
@@ -21,7 +22,7 @@ class CategoryDecorator < Draper::Base
              data-record-id='<%= record_id %>'
              data-category-id='<%= model.category_id %>'>
           <h2>
-            <%= ResponseDecorator.question_number(category) %>)
+            <%= question_number %>)
             <%= model.content %>
             <%= model.decorate.create_record_link(response_id) %>
           </h2>
@@ -29,5 +30,24 @@ class CategoryDecorator < Draper::Base
       "
       string.result(binding).force_encoding('utf-8').html_safe
     end
+  end
+
+
+  def question_number
+    if category
+      "#{parent_category_decorator.question_number}.#{sibling_elements.index(model) + 1}"
+    else
+      (sibling_elements.index(model) + 1).to_s
+    end
+  end
+
+  private
+
+  def parent_category_decorator
+    CategoryDecorator.find(category)
+  end
+
+  def category
+    model.category
   end
 end
