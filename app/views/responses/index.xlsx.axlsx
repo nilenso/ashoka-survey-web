@@ -1,6 +1,7 @@
 if @complete_responses.present?
   wb = xlsx_package.workbook
   bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
+  border = wb.styles.add_style border: { style: :thin, color: '000000' }
   questions = @survey.first_level_elements.map(&:with_sub_questions_in_order).flatten
   wb.add_worksheet(name: "Responses") do |sheet|
     headers = questions.map { |question| "#{QuestionDecorator.find(question).question_number}) #{question.content}" }
@@ -18,7 +19,7 @@ if @complete_responses.present?
       answers << response.last_update
       answers << response.location
       answers << response.ip_address
-      sheet.add_row answers
+      sheet.add_row answers, style: border
     end
   end
 end
