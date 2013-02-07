@@ -6,7 +6,7 @@ if @responses.present?
     headers = questions.map { |question| "#{QuestionDecorator.find(question).question_number}) #{question.content}" }
     headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address"
     sheet.add_row headers, :style => bold_style
-    @responses.each do |response|
+    @complete_responses.each do |response|
       answers = questions.map do |question|
         answers = question.answers.find_all_by_response_id(response.id)
         answers ? answers.map { |answer| answer.content_for_excel(server_url) }.join(', ') : ""
