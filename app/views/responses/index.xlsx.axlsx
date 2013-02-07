@@ -4,13 +4,15 @@ if @responses.present?
   questions = @survey.first_level_elements.map(&:with_sub_questions_in_order).flatten
   wb.add_worksheet(name: "Responses") do |sheet|
     headers = questions.map { |question| "#{QuestionDecorator.find(question).question_number}) #{question.content}" }
+    headers.unshift("Response No.")
     headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address"
     sheet.add_row headers, :style => bold_style
-    @complete_responses.each do |response|
+    @complete_responses.each_with_index do |response, i|
       answers = questions.map do |question|
         answers = question.answers.find_all_by_response_id(response.id)
         answers ? answers.map { |answer| answer.content_for_excel(server_url) }.join(', ') : ""
       end
+      answers.unshift(i+1)
       answers << @user_names[response.user_id]
       answers << @organization_names.find { |org| org.id == response.organization_id }.try(:name)
       answers << response.last_update
