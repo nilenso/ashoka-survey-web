@@ -3,7 +3,7 @@ if @responses.present?
   bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
   questions = @survey.first_level_elements.map(&:with_sub_questions_in_order).flatten
   wb.add_worksheet(name: "Responses") do |sheet|
-    headers = questions.map { |question| "#{ResponseDecorator.question_number(question)}) #{question.content}" }
+    headers = questions.map { |question| "#{QuestionDecorator.find(question).question_number}) #{question.content}" }
     headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address"
     sheet.add_row headers, :style => bold_style
     @responses.each do |response|
