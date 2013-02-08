@@ -16,6 +16,8 @@ describe User do
 
     @access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1,2].to_json}).and_return(names_response)
     names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
+
+    @access_token.stub(:get).with('/api/users/validate_users', :params => {:user_ids => [1,2].to_json}).and_return("true")
   end
 
   it "returns the list of users of an organizations" do
@@ -44,4 +46,15 @@ describe User do
     end
   end
 
+  context "checks whether all the user exists or not" do
+    it "returns true if the user exists" do
+      user_ids = [1, 2]
+      User.exists?(@access_token, user_ids).should be_true
+    end
+
+    it "returns an empty hash if not logged in" do
+      user_ids = [1, 2]
+      User.names_for_ids(nil, user_ids).should == {}
+    end
+  end
 end

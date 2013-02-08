@@ -26,4 +26,8 @@ class User
     end
   end
 
+  def self.exists?(client, user_ids)
+    user_exists = client.get("/api/users/validate_users", :params => {:user_ids => user_ids.to_json})
+    user_exists == "true"
+  end
 end
