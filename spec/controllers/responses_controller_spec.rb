@@ -196,6 +196,7 @@ describe ResponsesController do
   end
 
   context "PUT 'update'" do
+    before(:each) { request.env["HTTP_REFERER"] = 'http://example.com' }
     it "doesn't run validations on answers that are empty" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       question_1 = FactoryGirl.create(:question, :survey => survey, :max_length => 15)
@@ -212,7 +213,6 @@ describe ResponsesController do
                                    "1" => { :content => "hello", :id => answer_1.id} } }
 
         answer_1.reload.content.should == "hello"
-      response.should redirect_to survey_responses_path
       flash[:notice].should_not be_nil
     end
 
@@ -228,8 +228,15 @@ describe ResponsesController do
         { :answers_attributes => { "0" => { :content => "yeah123", :id => answer.id} } }
 
       Answer.find(answer.id).content.should == "yeah123"
-      response.should redirect_to survey_responses_path
       flash[:notice].should_not be_nil
+    end
+
+    it "renders the edit page if the response is saved successfully" do
+      request.env["HTTP_REFERER"] = 'http://example.com'
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res = FactoryGirl.create(:response, :survey => survey)
+      put :update, :id => res.id, :survey_id => survey.id
+      response.should redirect_to :back
     end
 
     it "renders edit page in case of any validations error" do
