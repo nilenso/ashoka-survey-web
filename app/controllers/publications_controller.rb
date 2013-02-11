@@ -1,6 +1,5 @@
 class PublicationsController < ApplicationController
   before_filter :require_finalized_survey
-  before_filter :require_organizations_or_users_to_be_selected, :only => [:update]
 
   def edit
     @survey = Survey.find(params[:survey_id])
@@ -17,15 +16,12 @@ class PublicationsController < ApplicationController
   def update
     survey = Survey.find(params[:survey_id])
     authorize! :update_publication, survey
-    survey.update_attributes({:expiry_date => params[:survey][:expiry_date]})
-    survey.publicize() if params[:survey][:public] == "1"
-    if survey.save
-      survey.publish_to_users(@users) if @users.present?
-      survey.share_with_organizations(@organizations) if @organizations.present?
+    publisher = Publisher.new(survey, access_token, params[:survey])
+    if publisher.publish
       flash[:notice] = t "flash.survey_published", :survey_name => survey.name
       redirect_to surveys_path
     else
-      flash[:error] = survey.errors.full_messages.join(', ')
+      flash[:error] = publisher.errors.full_messages.join(', ')
       redirect_to(:back)
     end
   end
@@ -37,17 +33,6 @@ class PublicationsController < ApplicationController
     unless survey.finalized?
       redirect_to surveys_path
       flash[:error] = t "flash.publish_draft_survey"
-    end
-  end
-
-  def require_organizations_or_users_to_be_selected
-    survey = Survey.find(params[:survey_id])
-    @users = Sanitizer.clean_params(params[:survey][:user_ids])
-    @organizations = Sanitizer.clean_params(params[:survey][:participating_organization_ids])
-    return true if survey.published? || (params[:survey][:public] == '1')
-    if @users.blank? && @organizations.blank?
-      flash[:error] = t "flash.users_and_organizations_blank"
-      redirect_to(:back)
     end
   end
 end

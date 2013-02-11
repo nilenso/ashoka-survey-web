@@ -11,6 +11,8 @@ describe Organization do
 
     @access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
     users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => 'field_agent'}, {"id" => 2, "name" => "John", "role" => 'field_agent'}, {"id" => 3, "name" => "Rambo", "role" => 'cso_admin'}])
+
+    @access_token.stub(:get).with('/api/organizations/validate_orgs', :params => { :org_ids => [1, 2].to_json}).and_return('true')
   end
 
   context "#all" do
@@ -41,6 +43,11 @@ describe Organization do
     users = Organization.field_agents(@access_token, 1)
     users.map(&:id).should_not include 3
     users.map(&:name).should_not include "Rambo"
+  end
+
+  it "returns true if the organizations exists" do
+    org_ids = [1, 2]
+    Organization.exists?(@access_token, org_ids).should be_true
   end
 
   it "creates an organization object from json" do

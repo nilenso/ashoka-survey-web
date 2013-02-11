@@ -60,25 +60,9 @@ describe PublicationsController do
   end
 
   context "PUT 'update'" do
-    before(:each) do
-      request.env["HTTP_REFERER"] = 'http://google.com'
-    end
-
-    it "updates the expiry date of the survey" do
-      new_expiry_date = survey.expiry_date + 1.day
-      put :update, :survey_id => survey.id, :survey => {:expiry_date => new_expiry_date, :user_ids => [1, 2]}
-      response.should redirect_to surveys_path
-      survey.reload.expiry_date.should == new_expiry_date
-    end
-
     it "makes the survey public" do
       put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => "1"}
       survey.reload.should be_public
-    end
-
-    it "doesn't make the survey public if not chosen by the user" do
-      put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => "0"}
-      survey.reload.should_not be_public
     end
 
     it "updates the published_on for a survey if it is crowd sourced" do
@@ -86,72 +70,88 @@ describe PublicationsController do
       survey.reload.published_on.should_not be_nil
     end
 
-    it "redirects to the previous page with an error if the validation fails" do
-      put :update, :survey_id => survey.id, :survey => {:expiry_date => "bad_expiry_date", :user_ids => [1, 2]}
-      response.should redirect_to "http://google.com"
+    it "when the survey is marked public" do
+      put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => '1'}
+      response.should_not redirect_to 'http://google.com'
+      flash[:error].should be_nil
     end
 
-    it "publishes the survey to chosen users" do
-      put :update, :survey_id => survey.id, :survey => {:user_ids => [1, 2], :expiry_date => survey.expiry_date}
-      survey.reload.user_ids.should == [1, 2]
-      flash[:notice].should_not be_nil
-    end
-
-    it "updates the list of shared organizations" do
-      participating_organizations = [12, 45]
-      put :update, :survey_id => survey.id, :survey => { :participating_organization_ids => participating_organizations, :expiry_date => survey.expiry_date}
-      survey.participating_organizations.map(&:organization_id).should == [12, 45]
-    end
-
-    context " if the expiry date is invalid" do
-      it "doesn't publish the survey to chosen users" do
-        put :update, :survey_id => survey.id, :survey => {:user_ids => [1, 2], :expiry_date => Date.yesterday}
-        survey.reload.user_ids.should_not == [1, 2]
+    context "private surveys" do
+      before(:each) do
+        request.env["HTTP_REFERER"] = 'http://google.com'
+        User.should_receive(:exists?).and_return(true)
+        Organization.should_receive(:exists?).and_return(true)
       end
 
-      it "doesn't update the list of shared organizations" do
+      it "updates the expiry date of the survey" do
+        new_expiry_date = survey.expiry_date  + 2.day
+        put :update, :survey_id => survey.id, :survey => {:expiry_date => new_expiry_date, :user_ids => [1, 2]}
+        survey.reload.expiry_date.should == new_expiry_date
+      end
+
+      it "doesn't make the survey public if not chosen by the user" do
+        put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => "0"}
+        survey.reload.should_not be_public
+      end
+
+      it "redirects to the previous page with an error if the validation fails" do
+        expect do
+          put :update, :survey_id => survey.id, :survey => {:expiry_date => "bad_expiry_date", :user_ids => [1, 2]}
+        end.to raise_error
+      end
+
+      it "publishes the survey to chosen users" do
+        put :update, :survey_id => survey.id, :survey => {:user_ids => [1, 2], :expiry_date => survey.expiry_date}
+        survey.reload.user_ids.should == [1, 2]
+        flash[:notice].should_not be_nil
+      end
+
+      it "updates the list of shared organizations" do
         participating_organizations = [12, 45]
-        put :update, :survey_id => survey.id, :survey => { :participating_organization_ids => participating_organizations, :expiry_date => Date.yesterday}
-        survey.participating_organizations.map(&:organization_id).should_not == [12, 45]
-      end
-    end
-
-    context "when users or organizations are not selected" do
-      it "redirects back to the edit page with an error when no user ids or organization ids are selected" do
-        put :update, :survey_id => survey.id, :survey => {:user_ids => [], :participating_organizations_ids => [], :expiry_date => survey.expiry_date}
-        response.should redirect_to 'http://google.com'
-        flash[:error].should_not be_nil
+        put :update, :survey_id => survey.id, :survey => { :participating_organization_ids => participating_organizations, :expiry_date => survey.expiry_date}
+        survey.participating_organizations.map(&:organization_id).should == [12, 45]
       end
 
-      it "does not redirect back to the previous page when only organizations are selected" do
-        put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2], :user_ids => [], :expiry_date => survey.expiry_date}
-        response.should_not redirect_to 'http://google.com'
-        flash[:error].should be_nil
+      context " if the expiry date is invalid" do
+        it "doesn't publish the survey to chosen users" do
+          put :update, :survey_id => survey.id, :survey => {:user_ids => [1, 2], :expiry_date => Date.yesterday}
+          survey.reload.user_ids.should_not == [1, 2]
+        end
+
+        it "doesn't update the list of shared organizations" do
+          participating_organizations = [12, 45]
+          put :update, :survey_id => survey.id, :survey => { :participating_organization_ids => participating_organizations, :expiry_date => Date.yesterday}
+          survey.participating_organizations.map(&:organization_id).should_not == [12, 45]
+        end
       end
 
-      it "does not redirect back to the previous page when only users are selected" do
-        put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [], :user_ids => [1, 2], :expiry_date => survey.expiry_date}
-        response.should_not redirect_to 'http://google.com'
-        flash[:error].should be_nil
-      end
-
-      context "does not require users or organizations to be selected" do
-        it "when the survey is already published" do
-          survey.publish_to_users([1, 2])
-          put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date}
+      context "when users or organizations are not selected" do
+        it "does not redirect back to the previous page when only organizations are selected" do
+          put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2], :user_ids => [], :expiry_date => survey.expiry_date}
           response.should_not redirect_to 'http://google.com'
           flash[:error].should be_nil
         end
 
-        it "when the survey is marked public" do
-          put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => '1'}
+        it "does not redirect back to the previous page when only users are selected" do
+          put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [], :user_ids => [1, 2], :expiry_date => survey.expiry_date}
           response.should_not redirect_to 'http://google.com'
           flash[:error].should be_nil
+        end
+
+        context "does not require users or organizations to be selected" do
+          it "when the survey is already published" do
+            survey.publish_to_users([1, 2])
+            put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date}
+            response.should_not redirect_to 'http://google.com'
+            flash[:error].should be_nil
+          end
         end
       end
     end
 
     it "redirects to the list of surveys" do
+      User.should_receive(:exists?).and_return(true)
+      Organization.should_receive(:exists?).and_return(true)
       put :update, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2], :user_ids => [1, 2], :expiry_date => survey.expiry_date}
       response.should redirect_to surveys_path
     end

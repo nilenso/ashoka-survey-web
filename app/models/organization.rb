@@ -23,4 +23,9 @@ class Organization
   def self.field_agents(client, organization_id)
     users(client, organization_id).select { |user| user.role == 'field_agent' }
   end
+
+  def self.exists?(client, org_ids)
+    org_exists = client.get("/api/organizations/validate_orgs", :params => {:org_ids => org_ids.to_json})
+    org_exists == "true"
+  end
 end

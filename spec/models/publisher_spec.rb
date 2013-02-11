@@ -1,20 +1,60 @@
 require 'spec_helper'
 
 describe Publisher do
-  it "checks whether the users_ids are valid" do
-    survey = FactoryGirl.create(:survey)
-    client = stub
-    publisher = Publisher.new(survey, [1,2], client)
-    User.should_receive(:exists?).with(client, [1,2]).and_return(false)
-    publisher.should_not be_valid
+  before(:each) do 
+    @params = { :expiry_date => Date.tomorrow.to_s,
+                :user_ids => [1,2],
+                :participating_organization_ids => [2,3]}
+  end
+
+  context "validations" do
+    it "checks whether the users_ids are valid" do
+      survey = FactoryGirl.create(:survey, :public => false)
+      client = stub
+      publisher = Publisher.new(survey, client, @params)
+      User.should_receive(:exists?).with(client, [1,2]).and_return(false)
+      Organization.should_receive(:exists?).and_return(true)
+      publisher.should_not be_valid
+    end
+
+    it "checks whether the org_ids are valid" do
+      survey = FactoryGirl.create(:survey, :public => false)
+      client = stub
+      publisher = Publisher.new(survey, client, @params)
+      User.should_receive(:exists?).and_return(true)
+      Organization.should_receive(:exists?).with(client, [2, 3]).and_return(false)
+      publisher.should_not be_valid
+    end
+
+    it "doesn't run the validation if survey is public" do
+      survey = FactoryGirl.create(:survey, :public => true)
+      client = stub
+      publisher = Publisher.new(survey, client, @params)
+      User.should_not_receive(:exists?).with(client, [1,2])
+      publisher.should be_valid
+    end
+
+    it "doesn't run the validation if survey public @params is true" do
+      survey = FactoryGirl.create(:survey)
+      client = stub
+      @params[:public] = '1'
+      publisher = Publisher.new(survey, client, @params)
+      User.should_not_receive(:exists?).with(client, [1,2])
+      publisher.should be_valid
+    end
   end
 
   it "publishes to all of ther users" do
     survey = FactoryGirl.create(:survey, :finalized => true)
     client = stub
     users = [1,2]
-    publisher = Publisher.new(survey, users, client)
+    orgs = [2, 3]
+    @params[:public] = '1'
+    publisher = Publisher.new(survey, client, @params)
+    publisher.should_receive(:valid?).and_return(true)
     publisher.publish
     SurveyUser.all.map(&:user_id).should include(1,2)
+    ParticipatingOrganization.all.map(&:organization_id).should include(2,3)
+    survey.should be_public
   end
 end
