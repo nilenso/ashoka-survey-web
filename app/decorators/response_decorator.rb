@@ -26,7 +26,7 @@ class ResponseDecorator < Draper::Base
 
     when 'PhotoQuestion'
       answer = Answer.find_by_question_id_and_response_id(question.id, id)
-      "#{(h.image_tag answer.photo_url(:medium), :class => 'medium' if answer.photo_url.present?)} #{(f.input :photo, :as => :file, :required => question.mandatory, :label => label_for(question))}".html_safe
+      "#{(h.image_tag answer.photo_url(:format => :medium), :class => 'medium' if answer.photo_url.present?)} #{(f.input :photo, :as => :file, :required => question.mandatory, :label => label_for(question))}".html_safe
 
     when 'RatingQuestion'
       string = ERB.new "
