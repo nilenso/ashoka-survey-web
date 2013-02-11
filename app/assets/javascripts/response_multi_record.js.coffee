@@ -8,6 +8,7 @@
         confirm(I18n.t('js.new_record_unsaved_warning'))
 
     $('*').change(mark_dirty)
+    $('.star > img').click(mark_dirty)
 
   wrap_with_div = (record_id) ->
     hidden = 'hidden' if $(".question[data-record-id=#{record_id}]").first().hasClass('hidden')
