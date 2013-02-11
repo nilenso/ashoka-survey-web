@@ -24,9 +24,9 @@
           <% response.answers_for_identifier_questions.each do |answer| %>
             <td>
             <% if answer.photo_url.present? %>
-              <%= image_tag answer.photo_url(:thumb), :class => 'thumb' %>
-            <% else %>
-              <%= answer.content %>
+              <%= image_tag answer.photo_url(:format => :thumb), :class => 'thumb' %>
+            <% else %>  
+              <%= answer.content %> 
             <% end %>
             </td>
           <% end %>

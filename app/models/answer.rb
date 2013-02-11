@@ -53,8 +53,8 @@ class Answer < ActiveRecord::Base
 
   def content_for_excel(server_url='')
     # TODO: Refactor these `if`s when implementing STI for the Answer model
-    return choices.map(&:content).join(", ") if question_type == 'MultiChoiceQuestion'
-    return (server_url + photo_url) if question_type == 'PhotoQuestion'
+    return choices.map(&:content).join(", ") if question.type == 'MultiChoiceQuestion'
+    return photo_url(:server_url => server_url) if question.type == 'PhotoQuestion'
     return content
   end
 
@@ -66,9 +66,9 @@ class Answer < ActiveRecord::Base
     update_attribute :content, nil
   end
 
-  def photo_url(format=nil)
-    return "/#{photo.cache_dir}/#{photo_tmp}" if photo_tmp
-    return photo.url(format) if photo.file
+  def photo_url(opts={})
+    return opts[:server_url].to_s + "/#{photo.cache_dir}/#{photo_tmp}" if photo_tmp
+    return photo.url(opts[:format]) if photo.file
     return ""
   end
 

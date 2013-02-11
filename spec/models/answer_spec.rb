@@ -321,7 +321,7 @@ describe Answer do
         question = FactoryGirl.create :question
         answer = FactoryGirl.create :answer_with_image, :question => question
         answer.photo_tmp = nil
-        answer.photo_url(:thumb).should == answer.photo.thumb.url
+        answer.photo_url(:format => :thumb).should == answer.photo.thumb.url
       end
 
       it "returns empty if the question doesn't have an image" do
