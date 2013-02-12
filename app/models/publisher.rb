@@ -38,6 +38,6 @@ class Publisher
   end
 
   def organizations_should_exist
-    errors.add(:users, "Organizations are not valid") unless Organization.exists?(client, organizations)
+    errors.add(:organizations, "Organizations are not valid") unless Organization.exists?(client, organizations)
   end
 end

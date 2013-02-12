@@ -4,6 +4,7 @@ describe Organization do
   before(:each) do
     orgs_response = mock(OAuth2::Response)
     users_response = mock(OAuth2::Response)
+    org_exists = mock(OAuth2::Response)
     @access_token = mock(OAuth2::AccessToken)
 
     @access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
@@ -12,7 +13,8 @@ describe Organization do
     @access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
     users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => 'field_agent'}, {"id" => 2, "name" => "John", "role" => 'field_agent'}, {"id" => 3, "name" => "Rambo", "role" => 'cso_admin'}])
 
-    @access_token.stub(:get).with('/api/organizations/validate_orgs', :params => { :org_ids => [1, 2].to_json}).and_return('true')
+    @access_token.stub(:get).with('/api/organizations/validate_orgs', :params => { :org_ids => [1, 2].to_json}).and_return(org_exists)
+    org_exists.stub(:parsed).and_return(true)
   end
 
   context "#all" do

@@ -5,6 +5,7 @@ describe User do
     orgs_response = mock(OAuth2::Response)
     users_response = mock(OAuth2::Response)
     names_response = mock(OAuth2::Response)
+    user_exists = mock(OAuth2::Response)
 
     @access_token = mock(OAuth2::AccessToken)
 
@@ -17,7 +18,8 @@ describe User do
     @access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1,2].to_json}).and_return(names_response)
     names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
 
-    @access_token.stub(:get).with('/api/users/validate_users', :params => {:user_ids => [1,2].to_json}).and_return("true")
+    @access_token.stub(:get).with('/api/users/validate_users', :params => {:user_ids => [1,2].to_json}).and_return(user_exists)
+    user_exists.stub(:parsed).and_return(true)
   end
 
   it "returns the list of users of an organizations" do
