@@ -13,7 +13,7 @@ class ResponsesController < ApplicationController
       format.html do
         @responses = @responses.paginate(:page => params[:page], :per_page => 10).order('created_at DESC, status')
       end
-      @complete_responses = @responses.select { |response| response.complete? }
+      @complete_responses = @responses.where(:status => 'complete').order('updated_at')
       format.xlsx do
         response.headers["Content-Disposition"] = "attachment; filename=\"#{@complete_responses.first.try(:filename_for_excel)}\""
       end
