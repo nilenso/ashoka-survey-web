@@ -92,6 +92,26 @@ module Api::V1
           resp.user_id.should == 15
           resp.organization_id.should == 42
         end
+
+        context "if the response exists" do
+          before(:each) do
+            FactoryGirl.create(:response, :survey => survey, :mobile_id => "foo123")
+          end
+
+          it "doesn't create a new response" do
+            resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>{})
+            expect {
+              post :create, :response => resp, :user_id => 15, :organization_id => 42, :mobile_id => "foo123"
+            }.to change { Response.count }.by 0
+          end
+
+          it "returns the response as json" do
+            resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :status => 'complete', :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
+            post :create, :response => resp, :user_id => 15, :organization_id => 42, :mobile_id => "foo123"
+            response.should be_ok
+            JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
+          end
+        end
       end
 
       context "PUT 'update'" do
