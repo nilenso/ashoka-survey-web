@@ -116,6 +116,14 @@ describe ResponsesController do
       assigns(:organization_names)[1].name.should == "Bar"
     end
 
+    it "orders the complete responses by their `updated_at` time" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      responses = FactoryGirl.create_list(:response, 5, :survey => survey,
+                                          :organization_id => 1, :user_id => 1, :status => 'complete')
+      get :index, :survey_id => survey.id
+      assigns(:complete_responses).should == responses
+    end
+
     context "excel" do
       it "responds to XLSX" do
         survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
