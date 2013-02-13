@@ -135,6 +135,7 @@ fr:
       location: fr Location Map
       reports: fr Reports
 
+      total: "(Total: %{count})"
   responses:
     new:
       response_for_survey: "Donner une réponse pour %{survey_name}"
