@@ -42,7 +42,7 @@
           hAxis: {'title': 'Answer', minValue: <%= question.min_value_for_report %> , maxValue: <%= question.max_value_for_report %>},
         }
       <% end %>
-      params['title'] = '<%= question.content %>' ;
+      params['title'] = "<%= question.decorate.content_with_answer_count %>";
       chart.draw(data, params);
     <% end %>
   }

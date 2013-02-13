@@ -146,6 +146,7 @@ en:
       download_excel: Download Excel
       reports: Reports
 
+      total: "(Total: %{count})"
   responses:
     new:
       response_for_survey: "Give a response for %{survey_name}"
