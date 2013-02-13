@@ -306,10 +306,4 @@ describe Response do
       question.answers[0].response_id.should == response.id
     end
   end
-
-  it "destroys response if it's invalid" do
-    response = Response.new
-    response.destroy_if_invalid
-    response.should be_frozen
-  end
 end

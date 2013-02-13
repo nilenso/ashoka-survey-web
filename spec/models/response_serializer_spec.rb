@@ -35,18 +35,11 @@ describe ResponseSerializer do
 
   context "#render_json" do
     context "response is invalid" do
-      it "deletes the response and returns the json with answers" do
-        response = Response.new
-        response_serializer = ResponseSerializer.new(response)
-        response_serializer.render_json.should == response_serializer.to_json_with_answers_and_choices
-        response.should be_frozen
-      end
-
-      it "returns the json with answers and doesn't delete the response if true flag is passed" do
+      it "returns the json with answers and doesn't delete the response" do
         (FactoryGirl.create :response_with_answers).reload
         response = Response.new
         response_serializer = ResponseSerializer.new(response)
-        response_serializer.render_json(true).should == response_serializer.to_json_with_answers_and_choices
+        response_serializer.render_json.should == response_serializer.to_json_with_answers_and_choices
         response.should_not be_frozen
       end
     end
@@ -61,7 +54,7 @@ describe ResponseSerializer do
       it "returns the json if response is incomplete" do
         response = FactoryGirl.create(:response, :status => "incomplete")
         response_serializer = ResponseSerializer.new(response)
-        response_serializer.render_json(true).should == response_serializer.to_json_with_answers_and_choices
+        response_serializer.render_json.should == response_serializer.to_json_with_answers_and_choices
         response.should be_incomplete
       end
     end

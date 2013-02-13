@@ -115,10 +115,6 @@ class Response < ActiveRecord::Base
     ResponseSerializer.new(self)
   end
 
-  def destroy_if_invalid
-    destroy if invalid?
-  end
-
   private
 
   def five_first_level_answers
