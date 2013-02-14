@@ -41,7 +41,7 @@ module Api::V1
     private
 
     def destroy_response(response)
-      Response.find(response).destroy
+      Response.find(response).destroy if response.persisted?
     end
 
     def decode_base64_images
