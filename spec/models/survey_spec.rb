@@ -179,6 +179,15 @@ describe Survey do
         survey.user_ids.should == users
       end
 
+      it "unpublishes survey to the given users" do
+        survey = FactoryGirl.create(:survey, :finalized => true)
+        survey.survey_users.create(:user_id => 1)
+        survey.survey_users.create(:user_id => 2)
+        users = [1, 2]
+        survey.unpublish_users(users)
+        SurveyUser.all.should be_empty
+      end
+
       it "does not allow publishing if it is not finalized" do
         survey = FactoryGirl.create(:survey)
         users = [3, 4]

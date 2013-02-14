@@ -77,6 +77,12 @@ class Survey < ActiveRecord::Base
     set_published_on
   end
 
+  def unpublish_users(users)
+    if finalized?
+      users.each { |user_id|  survey_users.find_by_user_id(user_id).destroy } 
+    end
+  end
+
   def share_with_organizations(organizations)
     organizations.each do |organization_id|
       participating_organizations.create(:organization_id => organization_id)

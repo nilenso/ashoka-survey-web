@@ -23,6 +23,11 @@ class Publisher
     survey.update_attributes(:expiry_date => expiry_date)
   end
 
+  def unpublish_users
+    return unless valid?
+    survey.unpublish_users(users)
+  end
+
   private
 
   def expiry_date

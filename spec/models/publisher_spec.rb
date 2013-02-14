@@ -57,4 +57,15 @@ describe Publisher do
     ParticipatingOrganization.all.map(&:organization_id).should include(2,3)
     survey.should be_public
   end
+
+  it "unpublishes to all of ther users" do
+    survey = FactoryGirl.create(:survey, :finalized => true)
+    survey.survey_users.create(:user_id => 1)
+    survey.survey_users.create(:user_id => 2)
+    client = stub
+    publisher = Publisher.new(survey, client, { :user_ids => [1, 2]})
+    publisher.should_receive(:valid?).and_return(true)
+    publisher.unpublish_users
+    SurveyUser.all.map(&:user_id).should_not include(1,2)
+  end
 end
