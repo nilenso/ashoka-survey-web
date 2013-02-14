@@ -14,7 +14,7 @@ module Api::V1
 
       if response.invalid?
         render :json => response.render_json, :status => :bad_request
-        response.destroy
+        destroy_response(response)
         Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
       else
         render :json => response.render_json
@@ -39,6 +39,10 @@ module Api::V1
     end
 
     private
+
+    def destroy_response(response)
+      Response.find(response).destroy
+    end
 
     def decode_base64_images
       answers_attributes = params[:response][:answers_attributes] || []
