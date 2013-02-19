@@ -9,17 +9,18 @@ if @complete_responses.present?
     headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address"
     sheet.add_row headers, :style => bold_style
     @complete_responses.each_with_index do |response, i|
-      answers = questions.map do |question|
-        answers = question.answers.find_all_by_response_id(response.id)
-        answers ? answers.map { |answer| answer.content_for_excel(server_url) }.join(', ') : ""
+      response_answers = Answer.where(:response_id => response.id).all
+      answers_for_excel = questions.map do |question|
+        question_answers = response_answers.find_all { |a| a.question_id == question.id }
+        question_answers ? question_answers.map { |answer| answer.content_for_excel(server_url) }.join(', ') : ""
       end
-      answers.unshift(i+1)
-      answers << @user_names[response.user_id]
-      answers << @organization_names.find { |org| org.id == response.organization_id }.try(:name)
-      answers << response.last_update
-      answers << response.location
-      answers << response.ip_address
-      sheet.add_row answers, style: border
+      answers_for_excel.unshift(i+1)
+      answers_for_excel << @user_names[response.user_id]
+      answers_for_excel << @organization_names.find { |org| org.id == response.organization_id }.try(:name)
+      answers_for_excel << response.last_update
+      answers_for_excel << response.location
+      answers_for_excel << response.ip_address
+      sheet.add_row answers_for_excel, style: border
     end
   end
 end
