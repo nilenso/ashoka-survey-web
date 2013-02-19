@@ -7,16 +7,17 @@ if @responses.present?
     headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address"
     sheet.add_row headers, :style => bold_style
     @responses.each do |response|
-      answers = questions.map do |question|
-        answer = response.answers.find_by_question_id(question.id)
+      answers = Answer.where(:response_id => response.id).all
+      answers_for_excel = questions.map do |question|
+        answer = answers.find { |a| a.question_id == question.id }
         answer ? answer.content_for_excel(server_url) : ""
       end
-      answers << @user_names[response.user_id]
-      answers << @organization_names.find { |org| org.id == response.organization_id }.try(:name)
-      answers << response.last_update
-      answers << response.location
-      answers << response.ip_address
-      sheet.add_row answers
+      answers_for_excel << @user_names[response.user_id]
+      answers_for_excel << @organization_names.find { |org| org.id == response.organization_id }.try(:name)
+      answers_for_excel << response.last_update
+      answers_for_excel << response.location
+      answers_for_excel << response.ip_address
+      sheet.add_row answers_for_excel
     end
   end
 end
