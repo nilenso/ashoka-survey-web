@@ -9,7 +9,7 @@ if @complete_responses.present?
     headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address"
     sheet.add_row headers, :style => bold_style
     @complete_responses.each_with_index do |response, i|
-      response_answers = Answer.where(:response_id => response.id).all
+      response_answers = Answer.where(:response_id => response.id).includes(:choices).all
       answers_for_excel = questions.map do |question|
         question_answers = response_answers.find_all { |a| a.question_id == question.id }
         question_answers ? question_answers.map { |answer| answer.content_for_excel(server_url) }.join(', ') : ""
