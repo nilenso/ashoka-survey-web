@@ -10,7 +10,6 @@ describe Response do
   it { should respond_to(:longitude) }
   it { should respond_to(:ip_address) }
   it { should respond_to(:location) }
-  it { should respond_to(:mobile_id) }
   it { should validate_presence_of(:survey_id)}
   it { should validate_presence_of(:organization_id)}
   it { should validate_presence_of(:user_id)}

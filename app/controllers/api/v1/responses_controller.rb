@@ -3,7 +3,6 @@ module Api::V1
     authorize_resource
 
     before_filter :decode_base64_images, :convert_to_datetime
-    before_filter :require_response_to_not_exist, :only => :create
 
     def create
       response = Response.new
@@ -66,13 +65,6 @@ module Api::V1
         answer_attributes["updated_at"] = Time.at(answer_attributes["updated_at"].to_i).to_s
       end unless answers_attributes.blank?
       params[:response][:updated_at] = Time.at(params[:response][:updated_at].to_i).to_s unless params[:response].nil?
-    end
-
-    def require_response_to_not_exist
-      response = Response.find_by_mobile_id(params[:mobile_id])
-      if response
-        render :json => response.to_json_with_answers_and_choices
-      end
     end
   end
 end
