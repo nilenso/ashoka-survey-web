@@ -28,6 +28,7 @@ class PublicationsController < ApplicationController
 
   def unpublish
     @survey = Survey.find(params[:survey_id])
+    authorize! :edit_publication, @survey
     if @survey.published?
       field_agents = @survey.users_for_organization(access_token, current_user_org)
       @published_users = field_agents[:published]

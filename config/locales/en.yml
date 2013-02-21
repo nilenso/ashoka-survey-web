@@ -41,6 +41,8 @@ en:
   publication:
     edit:
       publish_survey: "Publish Survey"
+    unpublish:
+      unpublish_survey: "Unpublish Survey"
 
   surveys:
     confirm_finalize: "The survey can't be edited after this. Are you sure?"
