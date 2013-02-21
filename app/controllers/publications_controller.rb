@@ -26,6 +26,18 @@ class PublicationsController < ApplicationController
     end
   end
 
+  def unpublish
+    @survey = Survey.find(params[:survey_id])
+    if @survey.published?
+      field_agents = @survey.users_for_organization(access_token, current_user_org)
+      @published_users = field_agents[:published]
+      @unpublished_users = field_agents[:unpublished]
+    else
+      redirect_to surveys_path
+      flash[:error] = t "flash.unpublish_draft_survey"
+    end
+  end
+
   private
 
   def require_finalized_survey

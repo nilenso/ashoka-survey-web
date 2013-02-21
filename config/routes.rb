@@ -6,7 +6,9 @@ SurveyWeb::Application.routes.draw do
     match '/logout', :to => 'sessions#destroy', :as => 'logout'
 
     resources :surveys, :only => [:new, :create, :destroy, :index] do
-      resource :publication, :only => [:update, :edit]
+      resource :publication, :only => [:update, :edit, :destroy] do
+        get 'unpublish'
+      end
       member do
        post "duplicate"
        get  "report"

@@ -59,6 +59,44 @@ describe PublicationsController do
     end
   end
 
+  context "GET 'unpublish'" do
+    context "when the survey is not finalized" do
+      it "redirects back to root with a flash error" do
+        draft_survey = FactoryGirl.create(:survey)
+        get :unpublish, :survey_id => draft_survey.id
+        response.should redirect_to surveys_path
+        flash[:error].should_not be_empty
+      end
+    end
+
+    it "assigns survey's users and other users in the current organization" do
+      survey.survey_users << FactoryGirl.create(:survey_user, :user_id => 1, :survey_id => survey.id)
+      get :unpublish, :survey_id => survey.id
+      assigns(:published_users).map{ |user| {:id => user.id, :name => user.name} }
+      .should include({:id=>1, :name=>"Bob"})
+      assigns(:unpublished_users).map{ |user| {:id => user.id, :name => user.name} }
+      .should include({:id=>2, :name=>"John"})
+    end
+
+    it "assigns current survey" do
+      get :unpublish, :survey_id => survey.id
+      assigns(:survey).should == survey
+    end
+
+    it "redirects if survey is not published" do
+      get :unpublish, :survey_id => survey.id
+      response.should redirect_to surveys_path
+      flash[:error].should_not be_empty
+    end
+
+    it "doesn't assign the currently logged in user" do
+      survey.survey_users << FactoryGirl.create(:survey_user, :user_id => 1, :survey_id => survey.id)
+      get :unpublish, :survey_id => survey.id
+      assigns(:published_users).map(&:id).should_not include session[:user_id]
+      assigns(:unpublished_users).map(&:id).should_not include session[:user_id]
+    end
+  end
+
   context "PUT 'update'" do
     it "makes the survey public" do
       put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => "1"}

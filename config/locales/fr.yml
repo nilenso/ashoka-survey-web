@@ -21,6 +21,7 @@ fr:
     not_authorized: "Vous n'êtes pas autorisé à le faire"
     edit_finalized_survey: "Vous ne pouvez pas éditer un sondage publié"
     publish_draft_survey: "fr You can't publish a draft survey"
+    unpublish_draft_survey: "fr You can't unpublish a non published survey"
     sharing_draft_survey: "In french: You can't share an unpublished survey"
     survey_shared: "In french: %{survey_name} has been shared"
     user_not_selected: "In francais: You haven't selected any user to publish the survey to"
