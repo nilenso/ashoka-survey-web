@@ -7,7 +7,7 @@ if @responses.present?
     headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address"
     sheet.add_row headers, :style => bold_style
     @responses.each do |response|
-      answers = Answer.where(:response_id => response.id).includes(:choices).all
+      answers = Answer.where(:response_id => response.id).includes(:choices => :option ).all
       answers_for_excel = questions.map do |question|
         answer = answers.find { |a| a.question_id == question.id }
         answer ? answer.content_for_excel(server_url) : ""
