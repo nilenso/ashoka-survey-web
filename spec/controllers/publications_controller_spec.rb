@@ -194,6 +194,20 @@ describe PublicationsController do
       response.should redirect_to surveys_path
     end
 
+    context "DELETE 'destroy'" do
+      let!(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :finalized => true) }
+
+      it "deletes a response" do
+        survey.publish_to_users([1, 2])
+        expect { delete :destroy, :survey_id => survey.id, :survey => { :user_ids => [1,2]} }.to change { SurveyUser.count }.by(-2)
+        flash[:notice].should_not be_nil
+      end
+
+      it "redirects to the survey index page" do
+        delete :destroy, :survey_id => survey.id, :survey => {}
+        response.should redirect_to surveys_path
+      end
+    end
   end
 
   context "when access is unauthorized" do

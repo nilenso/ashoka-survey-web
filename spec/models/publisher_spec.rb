@@ -64,7 +64,6 @@ describe Publisher do
     survey.survey_users.create(:user_id => 2)
     client = stub
     publisher = Publisher.new(survey, client, { :user_ids => [1, 2]})
-    publisher.should_receive(:valid?).and_return(true)
     publisher.unpublish_users
     SurveyUser.all.map(&:user_id).should_not include(1,2)
   end

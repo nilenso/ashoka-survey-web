@@ -322,7 +322,7 @@ describe ResponsesController do
     let!(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :finalized => true) }
     let!(:res) { FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 2) }
 
-    it "deletes a survey" do
+    it "deletes a response" do
       expect { delete :destroy, :id => res.id, :survey_id => survey.id }.to change { Response.count }.by(-1)
       flash[:notice].should_not be_nil
     end

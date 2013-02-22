@@ -8,7 +8,7 @@
 </header>
 
 <div id="publish_survey">
-  <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :put do |f| %>
+  <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :delete do |f| %>
 
     <div class="publish-to-users">
       <h3>Publish to users</h3>

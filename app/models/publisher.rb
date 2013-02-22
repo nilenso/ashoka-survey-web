@@ -24,7 +24,6 @@ class Publisher
   end
 
   def unpublish_users
-    return unless valid?
     survey.unpublish_users(users)
   end
 
