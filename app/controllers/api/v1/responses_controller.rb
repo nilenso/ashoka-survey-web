@@ -69,9 +69,11 @@ module Api::V1
     end
 
     def require_response_to_not_exist
-      response = Response.find_by_mobile_id(params[:mobile_id])
-      if response
-        render :json => response.to_json_with_answers_and_choices
+      if params[:mobile_id]
+        response = Response.find_by_mobile_id(params[:mobile_id])
+        if response
+          render :json => response.to_json_with_answers_and_choices
+        end
       end
     end
   end
