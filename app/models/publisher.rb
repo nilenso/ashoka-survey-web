@@ -7,6 +7,7 @@ class Publisher
   attr_reader :users, :survey, :client, :expiry_date, :organizations
 
   def initialize(survey, client, params)
+    params ||= {}
     @survey = survey
     @organizations = Sanitizer.clean_params(params[:participating_organization_ids])
     @users = Sanitizer.clean_params(params[:user_ids])

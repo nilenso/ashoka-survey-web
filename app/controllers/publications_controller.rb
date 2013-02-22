@@ -41,6 +41,7 @@ class PublicationsController < ApplicationController
 
   def destroy
     survey = Survey.find(params[:survey_id])
+    authorize! :update_publication, survey
     publisher = Publisher.new(survey, access_token, params[:survey])
     publisher.unpublish_users
     redirect_to surveys_path

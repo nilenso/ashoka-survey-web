@@ -74,7 +74,7 @@
           <% unless survey.archived? %>
             <% if survey.finalized %>
               <li><%= link_to icon_for('icon-arrow-up', t(".publish")), edit_survey_publication_path(survey.id) if can? :edit_publication, survey %></li>
-              <li><%= link_to icon_for('icon-arrow-up', t(".unpublish")), unpublish_survey_publication_path(survey.id) if can?(:edit_publication, survey) && survey.published? %></li>
+              <li><%= link_to icon_for('icon-arrow-up', t(".unpublish")), unpublish_survey_publication_path(survey.id) if can?(:edit_publication, survey) && survey.survey_users.any? %></li>
               <li><%= link_to icon_for('icon-icon', t(".archive")), survey_archive_path(survey.id), :method => :put if can? :archive, survey %></li>
             <% else %>
               <li><%= link_to icon_for('icon-edit', t('.edit')), survey_build_path(survey.id)  if can? :edit, survey %></li>
