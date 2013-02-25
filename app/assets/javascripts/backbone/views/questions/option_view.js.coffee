@@ -38,6 +38,11 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     this.model.add_sub_question(type)
 
   add_sub_question: (sub_question_model) =>
+    window.loading_overlay.show_overlay()
+    $(this.el).bind('ajaxStop.new_question', =>
+      window.loading_overlay.hide_overlay()
+      $(this.el).unbind('ajaxStop.new_question')
+      )
     sub_question_model.on('destroy', this.delete_sub_question, this)
     type = sub_question_model.get('type')
     question = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, sub_question_model)
