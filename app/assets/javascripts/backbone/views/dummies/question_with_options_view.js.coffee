@@ -51,7 +51,11 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       $(this.el).find('option').text(option_value)
 
   add_new_option: (model, options={}) =>
-    switch this.model.get('type')
+    window.loading_overlay.show_overlay()
+    $(this.el).bind('ajaxStop.new_question', =>
+      window.loading_overlay.hide_overlay()
+      $(this.el).unbind('ajaxStop.new_question')
+      )
       when 'RadioQuestion'
         template = $('#dummy_radio_option_template').html()
       when 'MultiChoiceQuestion'

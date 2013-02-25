@@ -37,6 +37,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
 
   new_question: (event, data) =>
+    @loading_overlay()
     type = data.type
     parent = data.parent
     model = this.survey.add_new_question_model(type, parent)
@@ -44,7 +45,8 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.settings_pane.add_question(type, model)
     model.save_model()
 
-  new_category: =>
+  new_category: (event, type) =>
+    @loading_overlay()
     model = this.survey.add_new_question_model()
     this.dummy_pane.add_category(model)
     this.settings_pane.add_category(model)
@@ -65,6 +67,13 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
       this.dummy_pane.add_category(model)
       this.settings_pane.add_category(model)
       model.fetch()
+
+  loading_overlay: =>
+    window.loading_overlay.show_overlay()
+    $(this.el).bind('ajaxStop.new_question', =>
+      window.loading_overlay.hide_overlay()
+      $(this.el).unbind('ajaxStop.new_question')
+      )
 
   handle_dummy_click: =>
     this.hide_all()
