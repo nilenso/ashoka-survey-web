@@ -18,17 +18,27 @@ class Publisher
 
   def publish
     return unless valid?
-    survey.publish_to_users(users)
+    publish_to_users
+    survey.publish
     survey.share_with_organizations(organizations)
     survey.publicize if public?
     survey.update_attributes(:expiry_date => expiry_date)
   end
 
   def unpublish_users
-    survey.unpublish_users(users)
+    if survey.finalized?
+      users.each { |user_id|  survey.survey_users.find_by_user_id(user_id).destroy } 
+    end
   end
 
   private
+
+  def publish_to_users
+    if survey.finalized?
+      users.each { |user_id| survey.survey_users.create(:user_id => user_id) }
+    end
+  end
+
 
   def expiry_date
     Date.parse(@expiry_date)

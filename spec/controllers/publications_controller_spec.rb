@@ -178,7 +178,7 @@ describe PublicationsController do
 
         context "does not require users or organizations to be selected" do
           it "when the survey is already published" do
-            survey.publish_to_users([1, 2])
+            survey.publish
             put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date}
             response.should_not redirect_to 'http://google.com'
             flash[:error].should be_nil
@@ -198,7 +198,9 @@ describe PublicationsController do
       let!(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :finalized => true) }
 
       it "deletes a response" do
-        survey.publish_to_users([1, 2])
+        publisher = Publisher.new(survey, stub, { :user_ids => [1,2], :expiry_date => Date.current.to_s })
+        publisher.should_receive(:valid?).and_return(true)
+        publisher.publish
         expect { delete :destroy, :survey_id => survey.id, :survey => { :user_ids => [1,2]} }.to change { SurveyUser.count }.by(-2)
         flash[:notice].should_not be_nil
       end

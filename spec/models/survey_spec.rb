@@ -171,45 +171,6 @@ describe Survey do
       field_agents[:published].first.id.should == 1
       field_agents[:unpublished].first.id.should == 2
     end
-
-    context "while publishing" do
-      it "publishes survey to the given users" do
-        survey = FactoryGirl.create(:survey, :finalized => true)
-        users = [1, 2]
-        survey.publish_to_users(users)
-        survey.user_ids.should == users
-      end
-
-      it "unpublishes survey to the given users" do
-        survey = FactoryGirl.create(:survey, :finalized => true)
-        survey.survey_users.create(:user_id => 1)
-        survey.survey_users.create(:user_id => 2)
-        users = [1, 2]
-        survey.unpublish_users(users)
-        SurveyUser.all.should be_empty
-      end
-
-      it "does not allow publishing if it is not finalized" do
-        survey = FactoryGirl.create(:survey)
-        users = [3, 4]
-        survey.publish_to_users(users)
-        survey.user_ids.should == []
-      end
-
-      it "sets the published_on to the date on which it is published" do
-        survey = FactoryGirl.create(:survey, :finalized => true)
-        users = [3, 4]
-        survey.publish_to_users(users)
-        survey.reload.published_on.should == Date.today
-      end
-
-      it "does not set the published_on date if it is already set" do
-        survey = FactoryGirl.create(:survey, :finalized => true, :published_on => Date.yesterday)
-        users = [3, 4]
-        survey.publish_to_users(users)
-        survey.reload.published_on.should == Date.yesterday
-      end
-    end
   end
 
   context "participating organizations" do
@@ -269,16 +230,9 @@ describe Survey do
       survey.should be_published
     end
 
-    it "if it is published to at least one user" do
-      survey = FactoryGirl.create(:survey, :finalized => true)
-      users = [1, 2]
-      survey.publish_to_users(users)
-      survey.should be_published
-    end
-
     it "if it is public" do
       survey = FactoryGirl.create(:survey, :finalized => true)
-      survey.publicize()
+      survey.publicize
       survey.should be_published
     end
 
@@ -421,5 +375,11 @@ describe Survey do
     survey = FactoryGirl.create(:survey)
     question = FactoryGirl.create :question, :identifier => false, :survey => survey
     survey.identifier_questions.should include question
+  end
+
+  it "publishes the survey if finalized" do
+    survey = FactoryGirl.create(:survey, :finalized => true)
+    survey.publish
+    survey.published_on.should_not be_nil
   end
 end
