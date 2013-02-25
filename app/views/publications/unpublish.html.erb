@@ -11,10 +11,10 @@
   <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :delete do |f| %>
 
     <div class="publish-to-users">
-      <h3>Publish to users</h3>
       <% if @unpublished_users.present? %>
+      <h3>Survey users</h3>
         <fieldset>
-          <legend>Unpublished to:</legend>
+          <legend>Unpublished users:</legend>
           <ol class="published">
             <% @unpublished_users.each do |user| %>
               <li>
@@ -32,7 +32,7 @@
         </fieldset>
       <% else %>
         <ol>
-          <%= f.input :user_ids, :as => :check_boxes, :collection => @published_users, :member_label => Proc.new { |user| user.name }, :label => "Choose users to publish to:" %>
+          <%= f.input :user_ids, :as => :check_boxes, :collection => @published_users, :member_label => Proc.new { |user| user.name }, :label => "Choose users to unpublish to:" %>
         </ol>
       <% end %>
     </div>
