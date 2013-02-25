@@ -41,6 +41,9 @@ fr:
   publication:
     edit:
       publish_survey: "fr Publish Survey"
+    unpublish:
+      unpublish_survey: "fr Unpublish Survey"
+      survey_users: "fr Survey users"
 
   surveys:
     confirm_finalize: "fr: The survey can't be edited after this. Are you sure?"
