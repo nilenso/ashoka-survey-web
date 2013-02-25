@@ -50,11 +50,7 @@ SurveyWeb::Application.configure do
   # config.cache_store = :mem_cache_store
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server
-  config.action_controller.asset_host = Proc.new { |source|
-    unless source =~ /\b(.eot|.ttf|.woff)\b/i
-      "//d1rlufo4k6hpl3.cloudfront.net"
-    end
-  }
+  config.action_controller.asset_host = "//d1rlufo4k6hpl3.cloudfront.net"
 
   # Precompile additional assets (application.js, application.css, and all non-JS/CSS are already added)
   # Disable delivery errors, bad email addresses will be ignored
@@ -76,6 +72,4 @@ SurveyWeb::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.log_level = :debug
-
-  config.font_assets.origin = 'http://ec2-54-235-202-20.compute-1.amazonaws.com/'
 end
