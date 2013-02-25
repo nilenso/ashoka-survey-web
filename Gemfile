@@ -30,7 +30,6 @@ gem 'rack-mini-profiler'
 gem 'paperclip'
 gem 'feature'
 gem 'font_assets'
-gem 'rack-cors', :require => 'rack/cors'
 
 # Gems used only for assets and not required
 # in production environments by default.
