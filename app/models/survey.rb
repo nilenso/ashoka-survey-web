@@ -29,7 +29,7 @@ class Survey < ActiveRecord::Base
 
   def archive
     self.archived = true
-    self.name = "#{name} (Archived)"
+    self.name = "#{name} #{I18n.t('activerecord.attributes.survey.archive')}"
     save
   end
 

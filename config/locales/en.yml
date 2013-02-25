@@ -207,6 +207,7 @@ en:
         expiry_date: "Expires on"
         description: "Description"
         copied: "(Copy)"
+        archive: "(Archive)"
         crowd_source: 'Crowd source'
 
       question:
