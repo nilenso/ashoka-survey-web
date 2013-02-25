@@ -29,6 +29,7 @@ class Survey < ActiveRecord::Base
 
   def archive
     self.archived = true
+    self.name = "#{name} (Archived)"
     save
   end
 

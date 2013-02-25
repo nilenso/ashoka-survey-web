@@ -149,6 +149,7 @@ describe Survey do
     survey = FactoryGirl.create :survey
     survey.archive
     survey.reload.should be_archived
+    survey.name.should =~ /\(Archived\)/
   end
 
   context "users" do
