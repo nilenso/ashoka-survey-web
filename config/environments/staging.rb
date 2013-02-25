@@ -72,4 +72,6 @@ SurveyWeb::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   config.log_level = :debug
+
+  config.font_assets.origin = 'http://ec2-54-235-202-20.compute-1.amazonaws.com/'
 end
