@@ -6,9 +6,8 @@ class NumericQuestion < Question
   validate :min_value_less_than_max_value
 
   def report_data
-    answers_content.uniq.inject([]) do |data, content|
-      data.push [content.to_i, answers_content.count(content)]
-    end
+    answers_grouped_by_content = Answer.unscoped.where(:question_id => id).complete.count(:group => 'answers.content')
+    answers_grouped_by_content.map { |content,count| [content.to_f, count] }
   end
 
   def min_value_for_report

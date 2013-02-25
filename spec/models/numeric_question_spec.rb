@@ -43,6 +43,12 @@ describe NumericQuestion do
       numeric_question.save
       numeric_question.report_data.should == [[2, 5]]
     end
+
+    it "preserves floating point numbers" do
+      numeric_question = NumericQuestion.create(:content => "foo", :min_value => 0, :max_value => 10)
+      numeric_question.answers << FactoryGirl.create(:answer_with_complete_response, :content=>'2.5')
+      numeric_question.report_data.should == [[2.5, 1]]
+    end
   end
 
   context "while returning min and max values for reporting" do
