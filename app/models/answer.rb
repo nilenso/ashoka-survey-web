@@ -15,6 +15,8 @@ class Answer < ActiveRecord::Base
   validate :content_should_not_exceed_max_length, :if => :max_length_and_content_present?
   validates_uniqueness_of :question_id, :scope => [:response_id, :record_id]
   has_many :choices, :dependent => :destroy
+  has_many :photos, :dependent => :destroy
+
   attr_accessible :photo
   mount_uploader :photo, ImageUploader
   store_in_background :photo

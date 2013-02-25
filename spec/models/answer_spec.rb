@@ -6,6 +6,7 @@ describe Answer do
   it { should belong_to(:record) }
   it { should belong_to(:response) }
   it { should have_many(:choices).dependent(:destroy) }
+  it { should have_many(:photos).dependent(:destroy) }
   it { should allow_mass_assignment_of(:updated_at) }
   it { should allow_mass_assignment_of(:response_id) }
 
