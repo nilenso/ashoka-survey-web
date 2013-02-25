@@ -16,7 +16,7 @@
   }
 
   function drawChart() {
-    <% @survey.questions_with_report_data.each do |question| %>
+    <% @survey.questions.each do |question| %>
       data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
       <% if question.respond_to? :options %>
         chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
@@ -35,7 +35,7 @@
           vAxis: {'title': 'Count'},
           hAxis: {'title': 'Answer'},
         }
-      <% else %>
+      <% elsif question.type == 'NumericQuestion' %>
         chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
         params = {
           vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %> },
@@ -54,7 +54,7 @@
 </header>
 <div class="reports">
   <%= render "layouts/status_bar", :status => "analyze" %>
-  <% @survey.questions_with_report_data.each do |question| %>
+  <% @survey.questions.each do |question| %>
     <div id="chart_div_<%= question.id %>"></div>
   <% end %>
   <div id="location_map">
