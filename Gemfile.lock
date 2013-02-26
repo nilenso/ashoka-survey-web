@@ -187,6 +187,7 @@ GEM
       net-ssh (>= 1.99.1)
     net-ssh (2.6.2)
     netrc (0.7.5)
+    newrelic_rpm (3.5.7.59)
     nokogiri (1.5.5)
     oauth2 (0.6.1)
       faraday (~> 0.7)
@@ -358,6 +359,7 @@ DEPENDENCIES
   i18n-js
   jasminerice
   jquery-rails
+  newrelic_rpm
   omniauth-oauth2
   paperclip
   pg
