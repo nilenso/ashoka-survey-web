@@ -7,12 +7,10 @@ class SurveysController < ApplicationController
   before_filter :no_archived_surveys
 
   def index
-    @surveys ||= []
-    @surveys = @surveys.finalized  if params[:finalized].present?
-    @surveys = @surveys.drafts if params[:drafts].present?
-    @surveys = @surveys.archived if params[:archived].present?
-    @surveys = @surveys.paginate(:page => params[:page], :per_page => 5)
-    @surveys = SurveyDecorator.decorate(@surveys)
+    @surveys ||= Survey.none
+    filtered_surveys = SurveyFilter.new(@surveys, params[:filter]).filter
+    paginated_surveys = filtered_surveys.paginate(:page => params[:page], :per_page => 5)
+    @surveys = SurveyDecorator.decorate(paginated_surveys)
     @organizations = Organization.all(access_token)
   end
 

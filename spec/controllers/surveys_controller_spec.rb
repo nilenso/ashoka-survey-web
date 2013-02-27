@@ -41,31 +41,22 @@ describe SurveysController do
         @archived_survey = FactoryGirl.create(:survey, :archived => true, :organization_id => LOGGED_IN_ORG_ID)
       end
 
-
-      it "shows all finalized surveys if filter is finalized" do
-        get :index, :finalized => true
-        response.should be_ok
-        assigns(:surveys).should include @finalized_survey
-        assigns(:surveys).should_not include @draft_survey
-      end
-
       it "shows all draft surveys if filter is draft" do
-        get :index, :drafts => true
+        get :index, :filter => "drafts"
         response.should be_ok
         assigns(:surveys).should include @draft_survey
         assigns(:surveys).should_not include @finalized_survey
       end
 
       it "shows all draft surveys if filter is archived" do
-        get :index, :archived => true
+        get :index, :filter => "archived"
         response.should be_ok
         assigns(:surveys).should == [@archived_survey]
       end
 
-      it "shows all surveys if filter is not specified" do
+      it "shows active surveys if filter is not specified" do
         get :index
         response.should be_ok
-        assigns(:surveys).should include @draft_survey
         assigns(:surveys).should include @finalized_survey
       end
     end

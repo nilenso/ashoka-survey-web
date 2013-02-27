@@ -77,6 +77,8 @@ en:
       archived: "Archived"
       drafts: "Drafts"
       all: "All"
+      active: "Active"
+      expired: "Expired"
       create_survey: "Create survey"
       delete: "Delete"
       publish: "Publish"

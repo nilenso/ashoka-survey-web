@@ -143,6 +143,28 @@ describe Survey do
       Survey.finalized.should_not include(survey)
       Survey.finalized.should include(another_survey)
     end
+
+    it "returns a list of active surveys" do
+      survey = FactoryGirl.create(:survey)
+      another_survey = FactoryGirl.create(:survey, :finalized => true)
+      other_survey = FactoryGirl.create(:survey, :archived => true)
+      Survey.active.should_not include(survey)
+      Survey.active.should_not include(other_survey)
+      Survey.active.should include(another_survey)
+    end
+
+    it "returns a list of expired surveys" do
+      survey = FactoryGirl.create(:survey)
+      another_survey = FactoryGirl.create(:survey, :finalized => true)
+      another_survey.update_column(:expiry_date, 5.days.ago)
+      Survey.expired.should_not include(survey)
+      Survey.expired.should include(another_survey)
+    end
+
+    it "returns a empty activerecord relation" do
+      Survey.none.should be_empty
+      Survey.none.should be_a ActiveRecord::Relation
+    end
   end
 
   it "can be archived" do

@@ -77,6 +77,8 @@ fr:
       archive: "Archive"
       drafts: "fr Drafts"
       all: "Tous"
+      active: "Active"
+      expired: "Expired"
       create: "Créer sondage"
       delete: "Effacer"
       publish: "Publier"
