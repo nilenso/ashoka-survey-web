@@ -77,6 +77,8 @@ class Answer < ActiveRecord::Base
   def has_not_been_answered?
     if question.is_a?(MultiChoiceQuestion)
       choices.empty?
+    elsif question.is_a?(PhotoQuestion)
+      photo_url.blank?
     else
       content.blank?
     end

@@ -30,7 +30,7 @@ describe Answer do
 
       it "adds errors to the photo field for non photo type question" do
         question = FactoryGirl.create(:question, :mandatory => true, :type => "PhotoQuestion")
-        answer = FactoryGirl.create(:answer, :question_id => question.id)
+        answer = FactoryGirl.build(:answer, :question_id => question.id)
         question.answers << answer
 
         answer.content = ''
@@ -203,6 +203,12 @@ describe Answer do
         answer.should have_not_been_answered
       end
 
+      it "checks for an empty answer to a photo question" do
+        question = FactoryGirl.create :question, :type => "PhotoQuestion"
+        answer = FactoryGirl.create(:answer, :content => '', :question_id => question.id, :photo => nil)
+        answer.should have_not_been_answered
+      end
+
       it "checks for an empty answer to all other question types" do
         question = FactoryGirl.create :question, :type => "SingleLineQuestion"
         answer = FactoryGirl.create(:answer, :content => nil, :question_id => question.id)
@@ -215,6 +221,13 @@ describe Answer do
         question = FactoryGirl.create :question, :type => "MultiChoiceQuestion"
         answer = FactoryGirl.create(:answer, :content => '', :question_id => question.id)
         answer.choices << FactoryGirl.create(:choice)
+        answer.should have_been_answered
+      end
+
+      it "checks for an answer to a photo question" do
+        photo = fixture_file_upload('/images/sample.jpg', 'text/jpeg')
+        question = FactoryGirl.create :question, :type => "PhotoQuestion"
+        answer = FactoryGirl.create(:answer, :content => '', :question_id => question.id, :photo => photo)
         answer.should have_been_answered
       end
 
