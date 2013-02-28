@@ -66,7 +66,7 @@ class Ability
   end
 
   def initialize(user_info)
-    if user_info[:user_id].blank? # guest user (not logged in)
+    if user_info[:user_id].blank? || use_info[:org_type] != "CSO" # guest user (not logged in)
       can :read, Survey do |survey|
         nil
       end
