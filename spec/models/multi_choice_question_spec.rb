@@ -23,7 +23,7 @@ describe MultiChoiceQuestion do
   end
 
   context "when fetching sorted answers for a response" do
-    let(:response) { FactoryGirl.create :response }
+    let(:response) { FactoryGirl.create :response, :state => 'clean' }
     let(:answer) { FactoryGirl.create(:answer, :response_id => response.id) }
     let(:question) { MultiChoiceQuestion.create(:content => "hello", :order_number => 12345) }
 

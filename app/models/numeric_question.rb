@@ -6,7 +6,7 @@ class NumericQuestion < Question
   validate :min_value_less_than_max_value
 
   def report_data
-    answers_grouped_by_content = Answer.unscoped.where(:question_id => id).complete.count(:group => 'answers.content')
+    answers_grouped_by_content = super.count(:group => 'answers.content')
     answers_grouped_by_content.map { |content,count| [content.to_f, count] }
   end
 

@@ -69,7 +69,9 @@ class Question < ActiveRecord::Base
   end
 
   def report_data
-    []
+    Answer.unscoped.joins(:response).where("answers.question_id = ? 
+                                 AND responses.status = 'complete'
+                                 AND responses.state = 'clean'", id)
   end
 
   def nesting_level

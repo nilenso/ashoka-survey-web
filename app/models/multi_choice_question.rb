@@ -10,6 +10,6 @@ class MultiChoiceQuestion < QuestionWithOptions
   private
 
   def choices
-    Choice.joins(:answer => :response).where(:responses => {:status => 'complete'}, :option_id => options.map(&:id))
+    Choice.joins(:answer => :response).where(:responses => {:status => 'complete', :state => 'clean'}, :option_id => options.map(&:id))
   end
 end

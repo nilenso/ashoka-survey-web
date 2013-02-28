@@ -23,8 +23,8 @@ class Option < ActiveRecord::Base
     super(opts.merge({:methods => :has_multi_record_ancestor })).merge({:questions => questions.map { |question| question.json(:methods => :type) }})
   end
 
-  def report_data
-    Answer.joins(:response).where("answers.question_id = ? AND responses.status = 'complete' AND answers.content = ?", question_id, content).count
+  def report_data(answers)
+    answers.where(:content => content).count
   end
 
   def categories_with_questions
