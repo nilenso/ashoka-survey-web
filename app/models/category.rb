@@ -11,7 +11,7 @@ class Category < ActiveRecord::Base
   delegate :question, :to => :parent, :prefix => true, :allow_nil => true
 
   def elements
-    (questions + categories).sort_by(&:order_number)
+    (questions + categories.includes([:questions, :categories])).sort_by(&:order_number)
   end
 
   def create_blank_answers(params={})
