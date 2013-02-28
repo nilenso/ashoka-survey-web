@@ -30,16 +30,17 @@ Spork.prefork do
 
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:user_owner] = OmniAuth::AuthHash.new({
-                                                                      :provider => 'user_owner',
-                                                                      :uid => '12345',
-                                                                      :info => {
-                                                                        :name => 'tim',
-                                                                        :email => 'smit@smit.smit',
-                                                                        :role => 'user',
-                                                                        :org_id => '1098',
-                                                                        :organizations => [{:id => 123, :name => 'nid'}]
-                                                                      },
-                                                                      :credentials => { :token => "thisisatoken" }
+      :provider => 'user_owner',
+      :uid => '12345',
+      :info => {
+        :name => 'tim',
+        :email => 'smit@smit.smit',
+        :role => 'user',
+        :org_id => '1098',
+        :org_type => 'CSO',
+        :organizations => [{:id => 123, :name => 'nid'}]
+      },
+      :credentials => { :token => "thisisatoken" }
     })
 
     config.before(:each) do

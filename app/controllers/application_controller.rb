@@ -56,6 +56,10 @@ class ApplicationController < ActionController::Base
     session[:user_info][:org_id] if user_currently_logged_in?
   end
 
+  def current_user_org_type
+    session[:user_info][:org_type] if user_currently_logged_in?
+  end
+
   def current_username
     current_user_info[:name]
   end

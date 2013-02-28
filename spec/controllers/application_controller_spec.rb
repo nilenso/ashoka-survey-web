@@ -90,6 +90,13 @@ describe ApplicationController do
     controller.current_user_org.should == 23
   end
 
+  it "returns current user organization type" do
+    controller.current_user_org_type.should be_nil
+    session[:user_id] = 12
+    session[:user_info] = {:org_type => "CSO"}
+    controller.current_user_org_type.should == "CSO"
+  end
+
   context "#current_user_info" do
     it "returns current user info along with the user_id and the session_token" do
       session[:user_id] = 12
