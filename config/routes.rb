@@ -41,7 +41,7 @@ SurveyWeb::Application.routes.draw do
         get 'questions_count', :on => :collection
       end
       match '/login', :to => 'auth#create'
-      resources :responses, :only => [:create, :update] do
+      resources :responses, :only => [:create, :update, :index] do
         member { put "image_upload" }
       end
       post 'questions/:id/image_upload' => 'questions#image_upload'

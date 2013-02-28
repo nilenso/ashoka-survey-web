@@ -190,5 +190,33 @@ module Api::V1
           end
         end
       end
+
+      context "GET 'index'" do
+        it "returns a list of responses" do
+          survey = FactoryGirl.create :survey
+          resp = FactoryGirl.create :response, :survey => survey, :status => 'complete'
+          get :index, :survey_id => survey.id
+          response.should be_ok
+          json = JSON.parse(response.body)[0]
+          json['id'].should == resp.id
+          json['status'].should == 'complete'
+        end
+
+        it "returns responses accessible by the current user" do
+          sign_in_as('field_agent')
+          survey = FactoryGirl.create :survey, :organization_id => 12
+          resp = FactoryGirl.create :response, :survey => survey, :status => 'complete', :user_id => 123
+          another_resp = FactoryGirl.create :response, :survey => survey, :user_id => 125
+          get :index, :survey_id => survey.id
+          response.should be_ok
+          json = JSON.parse(response.body)
+          json.length.should == 1
+          json[0]['id'].should == resp.id
+        end
+
+        it "returns an error if the survey_id is invalid" do
+          expect { get :index, :survey_id => 123 }.to raise_exception
+        end
+      end
     end
   end

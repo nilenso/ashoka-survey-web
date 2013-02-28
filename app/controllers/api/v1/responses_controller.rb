@@ -1,9 +1,16 @@
 module Api::V1
   class ResponsesController < APIApplicationController
+    load_resource :survey, :only => :index
+    load_resource :through => :survey, :only => :index
     authorize_resource
 
-    before_filter :decode_base64_images, :convert_to_datetime
+    before_filter :decode_base64_images, :convert_to_datetime, :except => :index
     before_filter :require_response_to_not_exist, :only => :create
+
+    def index
+      # TODO: Paginate
+      render :json => @responses
+    end
 
     def create
       response = Response.new
