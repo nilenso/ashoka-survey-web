@@ -1,10 +1,10 @@
 module Api::V1
   class ResponsesController < APIApplicationController
-    load_resource :survey, :only => :index
-    load_resource :through => :survey, :only => :index
+    load_resource :survey, :only => [:index, :show]
+    load_resource :through => :survey, :only => [:index, :show]
     authorize_resource
 
-    before_filter :decode_base64_images, :convert_to_datetime, :except => :index
+    before_filter :decode_base64_images, :convert_to_datetime, :only => [:create, :update]
     before_filter :require_response_to_not_exist, :only => :create
 
     def index
@@ -44,6 +44,11 @@ module Api::V1
       else
         render :json => response.render_json
       end
+    end
+
+    def show
+      response = Response.find_by_id(params[:id])
+      render :json => response.as_json(:include => :answers)
     end
 
     private
