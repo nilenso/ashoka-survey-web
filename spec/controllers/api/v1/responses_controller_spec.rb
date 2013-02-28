@@ -193,7 +193,7 @@ module Api::V1
 
       context "GET 'index'" do
         it "returns a list of responses" do
-          survey = FactoryGirl.create :survey
+          survey = FactoryGirl.create :survey, :organization_id => 12
           resp = FactoryGirl.create :response, :survey => survey, :status => 'complete'
           get :index, :survey_id => survey.id
           response.should be_ok
