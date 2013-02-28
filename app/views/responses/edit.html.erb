@@ -43,6 +43,19 @@
   </div>
 <% end %>
 
+<% if @disabled %>
+  <%= semantic_form_for [@survey, @response] do |f| %>
+    <div class="question ">
+      <%= f.input :state, :as => :select, :collection => ["clean", "dirty"] %>
+      <%= f.input :comment %>
+    </div>
+
+    <%= f.actions do %>
+        <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'save_as_draft_button' } %>
+    <% end %>
+  <% end %>
+<% end %>
+
 <script type="text/javascript">
   $(document).ready(function(){
     $('.date').datepicker({ dateFormat: "yy/mm/dd", changeMonth: true, changeYear: true });
