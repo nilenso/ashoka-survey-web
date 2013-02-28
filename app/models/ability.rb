@@ -1,5 +1,6 @@
 class Ability
   include CanCan::Ability
+  attr_reader :user_info
 
   def own_and_shared_surveys(user_info)
     [
@@ -66,7 +67,9 @@ class Ability
   end
 
   def initialize(user_info)
-    if user_info[:user_id].blank? || use_info[:org_type] != "CSO" # guest user (not logged in)
+    @user_info = user_info
+
+    if user_info[:user_id].blank? || org_type_is_not_CSO # guest user (not logged in)
       can :read, Survey do |survey|
         nil
       end
@@ -86,5 +89,11 @@ class Ability
         field_agent_actions(user_info)
       end
     end
+  end
+
+  private
+
+  def org_type_is_not_CSO
+    user_info[:org_type] != "CSO" && user_info[:org_type].present?
   end
 end
