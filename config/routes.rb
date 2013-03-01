@@ -32,6 +32,7 @@ SurveyWeb::Application.routes.draw do
       resources :questions, :except => [:edit, :new] do
         member { post "duplicate" }
       end
+      resources :records, :only => :create
       resources :categories, :except => [:edit, :new] do
         member { post "duplicate" }
       end
