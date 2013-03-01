@@ -8,7 +8,6 @@ module Api::V1
     before_filter :require_response_to_not_exist, :only => :create
 
     def index
-      # TODO: Paginate
       render :json => @responses
     end
 
