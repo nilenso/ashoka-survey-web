@@ -4,6 +4,5 @@ class Record < ActiveRecord::Base
   has_many :answers, :dependent => :destroy
   attr_accessible :category_id, :response_id
 
-  validates_presence_of :response_id
   validates_presence_of :category_id
 end
