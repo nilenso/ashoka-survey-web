@@ -56,6 +56,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       window.loading_overlay.hide_overlay()
       $(this.el).unbind('ajaxStop.new_question')
       )
+    switch this.model.get('type')
       when 'RadioQuestion'
         template = $('#dummy_radio_option_template').html()
       when 'MultiChoiceQuestion'
