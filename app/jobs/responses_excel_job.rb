@@ -32,4 +32,8 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
     f = File.open(Rails.root.join('public', filename), 'w')
     package.serialize(f)
   end
+
+  def error(job, exception)
+    Airbrake.notify(exception)
+  end
 end
