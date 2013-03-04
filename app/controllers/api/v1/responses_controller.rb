@@ -18,7 +18,7 @@ module Api::V1
       response.update_attributes(params[:response].except(:answers_attributes)) # Response isn't created before the answers, so we need to create the answers after this.
       response.validating if params[:response][:status] == "complete"
       response.update_attributes({:answers_attributes => params[:response][:answers_attributes]}) if response.valid?
-
+      response.update_records
       if response.invalid?
         render :json => response.render_json, :status => :bad_request
         destroy_response(response)
@@ -35,6 +35,7 @@ module Api::V1
       response.validating if response.complete?
       answers_to_update = response.select_new_answers(params[:response][:answers_attributes])
       response.update_attributes({ :answers_attributes => answers_to_update })
+      response.update_records
 
       if response.invalid?
         response.incomplete

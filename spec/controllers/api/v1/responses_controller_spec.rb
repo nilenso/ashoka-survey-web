@@ -112,6 +112,15 @@ module Api::V1
             JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
           end
         end
+
+        it "updates the response_id for its answers' records" do
+          record = FactoryGirl.create :record, :response_id => nil
+          question = FactoryGirl.create :question, :survey => survey
+          answers_attrs = { '0' => { :content => 'AnswerFoo', :question_id => question.id, :record_id => record.id } }
+          resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes => answers_attrs)
+          post :create, :response => resp, :user_id => 15, :organization_id => 42, :mobile_id => "foo123"
+          record.reload.response_id.should_not be_nil
+        end
       end
 
       context "PUT 'update'" do
@@ -188,6 +197,19 @@ module Api::V1
             put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42
             answer.reload.photo.filename.should == old_filename
           end
+        end
+
+        it "updates the response_id for its answers' records" do
+          survey = FactoryGirl.create(:survey, :organization_id => 42)
+          record = FactoryGirl.create :record, :response_id => nil
+          question = FactoryGirl.create :question, :survey => survey
+          resp = FactoryGirl.create(:response, :survey => survey)
+
+          answers_attrs = { '0' => { :content => 'AnswerFoo', :question_id => question.id, :record_id => record.id } }
+          resp_attrs = FactoryGirl.attributes_for(:response, :id => resp.id, :answers_attributes => answers_attrs)
+
+          put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42
+          record.reload.response_id.should_not be_nil
         end
       end
 

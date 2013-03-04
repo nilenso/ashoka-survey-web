@@ -306,5 +306,27 @@ describe Response do
 
       question.answers[0].response_id.should == response.id
     end
+
+    context "for its answers' records" do
+      context "if the response_id is not set" do
+        it "sets it to its own id" do
+          response = FactoryGirl.create(:response)
+          record = FactoryGirl.create(:record, :response_id => nil)
+          response.answers << FactoryGirl.create(:answer, :record => record)
+          response.update_records
+          record.reload.response.should == response
+        end
+      end
+
+      context "if the response_id is set" do
+        it "doesn't change the response_id" do
+          response = FactoryGirl.create :response
+          record = FactoryGirl.create(:record, :response_id => 123)
+          response.answers << FactoryGirl.create(:answer, :record => record)
+          response.update_records
+          record.reload.response_id.should == 123
+        end
+      end
+    end
   end
 end

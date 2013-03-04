@@ -111,6 +111,13 @@ class Response < ActiveRecord::Base
     end
   end
 
+  def update_records
+    records = answers.includes(:record).map(&:record).compact.uniq
+    records.each do |record|
+      record.update_attributes(:response_id => self.id) unless record.response_id
+    end
+  end
+
   def response_serializer
     ResponseSerializer.new(self)
   end
