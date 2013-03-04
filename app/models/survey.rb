@@ -119,6 +119,10 @@ class Survey < ActiveRecord::Base
     questions.reject { |question| question.report_data.blank? }
   end
 
+  def questions_for_reports
+    questions.select { |question| question.answers.any? }
+  end
+
   def complete_responses_count
     responses.where(:status => 'complete').count
   end

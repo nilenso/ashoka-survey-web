@@ -386,6 +386,16 @@ describe Survey do
     end
   end
 
+  it "returns questions with at least one answer" do
+    survey = FactoryGirl.create(:survey)
+    question = FactoryGirl.create(:question, :survey => survey)
+    question.answers << FactoryGirl.create(:answer)
+    another_question = FactoryGirl.create(:question, :survey => survey)
+    survey.questions << question
+    survey.questions << another_question
+    survey.questions_for_reports.should == [question]
+  end
+
   it "returns the identifier questions" do
     survey = FactoryGirl.create(:survey)
     identifier_question = FactoryGirl.create :question, :identifier => true, :survey => survey
