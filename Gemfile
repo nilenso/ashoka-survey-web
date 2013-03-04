@@ -20,7 +20,7 @@ gem "recaptcha", :require => "recaptcha/rails"
 gem 'dalli'
 gem "geocoder"
 gem 'gmaps4rails'
-gem 'axlsx_rails'
+gem 'axlsx'
 gem 'carrierwave'
 gem 'rmagick', '2.12.2'
 gem "fog"

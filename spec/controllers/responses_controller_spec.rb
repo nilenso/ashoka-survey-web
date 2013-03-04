@@ -123,23 +123,47 @@ describe ResponsesController do
       get :index, :survey_id => survey.id
       assigns(:complete_responses).should == responses
     end
+  end
 
-    context "excel" do
-      it "responds to XLSX" do
-        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
-        get :index, :survey_id => survey.id, :format => :xlsx
-        response.should be_ok
-      end
+  context "GET 'generate_excel'" do
+    before(:each) do
+      session[:access_token] = "123"
+      response = mock(OAuth2::Response)
+      access_token = mock(OAuth2::AccessToken)
+      names_response = mock(OAuth2::Response)
+      organizations_response = mock(OAuth2::Response)
+      controller.stub(:access_token).and_return(access_token)
 
-      it "assigns only the completed responses" do
-        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-        response = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
-        incomplete_response = FactoryGirl.create(:response, :status => 'incomplete', :survey => survey)
-        validating_response = FactoryGirl.create(:response, :status => 'validating', :survey => survey)
-        get :index, :survey_id => survey.id, :format => :xls
-        assigns(:complete_responses).should == [response]
-      end
+      access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
+      access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
+      names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
+      organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "Foo"}, {"id" => 2, "name" => "Bar"}])
+    end
+
+    it "assigns only the completed responses" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+      incomplete_response = FactoryGirl.create(:response, :status => 'incomplete', :survey => survey)
+      validating_response = FactoryGirl.create(:response, :status => 'validating', :survey => survey)
+      get :generate_excel, :survey_id => survey.id
+      response.should be_ok
+      assigns(:complete_responses).should == [resp]
+    end
+
+    it "creates a delayed job to generate the excel" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      response = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+      expect {
+        get :generate_excel, :survey_id => survey.id
+      }.to change { Delayed::Job.count }.by 1
+    end
+
+    it "renders the path of the excel file generated as json" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+      get :generate_excel, :survey_id => survey.id
+      response.should be_ok
+      JSON.parse(response.body)['excel_path'].should =~ /#{survey.name}.*\.xlsx/
     end
   end
 

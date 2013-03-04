@@ -18,7 +18,10 @@ SurveyWeb::Application.routes.draw do
       put 'archive'
       match  "public_response" => "responses#create"
       resources :responses, :only => [:new, :create, :index, :edit, :show, :update, :destroy] do
-        member { put "complete" }
+        collection { get "generate_excel" }
+        member do
+          put "complete"
+        end
       end
     end
 

@@ -71,10 +71,6 @@ class Response < ActiveRecord::Base
     survey.first_level_elements.map { |element| element.sorted_answers_for_response(id) }.flatten
   end
 
-  def filename_for_excel
-    "#{survey.name} (##{survey.id}) - #{Time.now}.xlsx"
-  end
-
   def select_new_answers(answers_attributes)
     answers_attributes.reject do |_, answer_attributes|
       existing_answer = answers.find_by_id(answer_attributes['id'])

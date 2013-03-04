@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
     return { :locale => nil }
   end
 
+  def server_url
+    request.protocol + request.host_with_port
+  end
+
   rescue_from OAuth2::Error do |exception|
     if exception.response.status == 401
       session[:user_id] = nil

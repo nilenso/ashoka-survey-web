@@ -1,4 +1,4 @@
-class ResponsesExcelJob < Struct.new(:survey, :responses, :organization_names, :user_names, :server_url)
+class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names, :user_names, :server_url, :filename)
   def perform
     package = Axlsx::Package.new do |p|
       wb = p.workbook
@@ -10,6 +10,7 @@ class ResponsesExcelJob < Struct.new(:survey, :responses, :organization_names, :
         headers.unshift("Response No.")
         headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address"
         sheet.add_row headers, :style => bold_style
+        responses = Response.where('responses.id in (?)', response_ids)
         responses.each_with_index do |response, i|
           response_answers =  Answer.where(:response_id => response[:id])
           .order('answers.record_id')
@@ -28,7 +29,7 @@ class ResponsesExcelJob < Struct.new(:survey, :responses, :organization_names, :
         end
       end
     end
-    f = File.open(Rails.root.join('public', "test.xlsx"), 'w')
+    f = File.open(Rails.root.join('public', filename), 'w')
     package.serialize(f)
   end
 end

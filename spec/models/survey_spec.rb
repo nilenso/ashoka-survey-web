@@ -63,6 +63,14 @@ describe Survey do
     end
   end
 
+  it "provides the filename for the excel file" do
+    survey = FactoryGirl.create(:survey)
+    survey.filename_for_excel.should =~ /#{survey.name}/
+    survey.filename_for_excel.should =~ /#{survey.id}/
+    survey.filename_for_excel.should include Time.now.to_s
+    survey.filename_for_excel.should =~ /.*xlsx$/
+  end
+
   context "when duplicating" do
     it "duplicates the nested questions as well" do
       survey = FactoryGirl.create :survey_with_questions

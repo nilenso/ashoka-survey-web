@@ -13,11 +13,17 @@ class ResponsesController < ApplicationController
       format.html do
         @responses = @responses.paginate(:page => params[:page], :per_page => 10).order('created_at DESC, status')
       end
-      @complete_responses = @responses.where(:status => 'complete').order('updated_at')
-      format.xlsx do
-        response.headers["Content-Disposition"] = "attachment; filename=\"#{@complete_responses.first.try(:filename_for_excel)}\""
-      end
     end
+  end
+
+  def generate_excel
+    user_names = User.names_for_ids(access_token, @responses.map(&:user_id).uniq)
+    organization_names = Organization.all(access_token)
+    filename = @survey.filename_for_excel
+    @complete_responses = @responses.where(:status => 'complete').order('updated_at')
+    response_ids = @complete_responses.to_a.map(&:id)
+    Delayed::Job.enqueue ResponsesExcelJob.new(@survey, response_ids, organization_names, user_names, server_url, filename)
+    render :json => { :excel_path => filename }
   end
 
   def create

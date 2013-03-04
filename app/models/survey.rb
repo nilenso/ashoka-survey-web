@@ -141,6 +141,10 @@ class Survey < ActiveRecord::Base
     identifier_questions.blank? ? first_level_questions.limit(5).to_a : identifier_questions
   end
 
+  def filename_for_excel
+    "#{name} (##{id}) - #{Time.now}.xlsx"
+  end
+
   private
 
   def generate_auth_key
