@@ -169,6 +169,8 @@ en:
       added_by: Added by
       last_updated_at: Last Updated At
 
+      excel_dialog_title: "Generating Excel…"
+      excel_downloading_message: "Your excel file is getting generated.\nThis mght take a few minutes. Please wait."
     edit:
       delete: "Delete"
       edit: "Edit"

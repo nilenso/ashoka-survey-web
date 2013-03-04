@@ -47,6 +47,10 @@
           <% end %>
           </td>
 
+          <div id="dialog" title="<%= t('.excel_dialog_title') %>">
+            <p><%= t('.excel_downloading_message') %></p>
+          </div>
+
           <td class="actions">
             <%= link_to icon_for('icon-edit', 'Show'), survey_response_path(:id => response.id), :class => 'show_response' if can? :show, response %>
             <%= link_to icon_for('icon-edit', 'Edit'), edit_survey_response_path(:id => response.id), :class => 'edit_response' if can? :edit, response %>

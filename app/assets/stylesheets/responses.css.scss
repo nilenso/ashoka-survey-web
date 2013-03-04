@@ -33,6 +33,11 @@ table{
 
 }
 
+#dialog, .no-close .ui-dialog-titlebar-close {
+  display:none;
+}
+
+
 div.hidden {
   display: none;
 }

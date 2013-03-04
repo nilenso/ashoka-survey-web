@@ -166,6 +166,8 @@ fr:
       added_by: "fr Added By"
       last_updated_at: Dernière mise à jour A
 
+      excel_dialog_title: "Production Excel…"
+      excel_downloading_message: "Votre fichier Excel est généré se. Cette mght prendre quelques minutes. S'il vous plaît attendre."
     edit:
       delete: "Delete-fr"
       edit: "Edit-fr"
