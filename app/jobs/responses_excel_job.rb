@@ -46,5 +46,5 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
   def delete_excel
     File.delete Rails.root.join('public', filename)
   end
-  handle_asynchronously :delete_excel, :run_at => Proc.new { 30.minutes.from_now }
+  handle_asynchronously :delete_excel, :run_at => Proc.new { 30.minutes.from_now }, :queue => 'delete_excel'
 end
