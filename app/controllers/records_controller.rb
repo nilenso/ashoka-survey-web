@@ -9,4 +9,11 @@ class RecordsController < ApplicationController
       redirect_to :back
     end
   end
+
+  def destroy
+    record = Record.find(params[:id])
+    record.destroy
+    flash[:notice] = "Record Deleted"
+    redirect_to :back
+  end
 end

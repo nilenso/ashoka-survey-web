@@ -29,4 +29,19 @@ describe RecordsController do
       Record.last.answers.count.should == 5
     end
   end
+
+  context "DELETE 'destroy'" do
+    before(:each) { request.env["HTTP_REFERER"] = "http://example.com" }
+    let!(:record) { FactoryGirl.create(:record) }
+
+    it "deletes a record" do
+      expect { delete :destroy, :id => record.id}.to change { Record.count }.by(-1)
+      flash[:notice].should_not be_nil
+    end
+
+    it "redirects to the survey index page" do
+      delete :destroy, :id => record.id
+      response.should redirect_to "http://example.com"
+    end
+  end
 end
