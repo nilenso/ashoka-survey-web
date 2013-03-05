@@ -33,7 +33,18 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
     package.serialize(f)
   end
 
+  def after(job)
+    delete_excel if FileTest.exists?(Rails.root.join('public', filename))
+  end
+
   def error(job, exception)
     Airbrake.notify(exception)
   end
+
+  private
+
+  def delete_excel
+    File.delete Rails.root.join('public', filename)
+  end
+  handle_asynchronously :delete_excel, :run_at => Proc.new { 30.minutes.from_now }
 end
