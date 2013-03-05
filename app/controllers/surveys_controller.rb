@@ -9,7 +9,7 @@ class SurveysController < ApplicationController
   def index
     @surveys ||= Survey.none
     filtered_surveys = SurveyFilter.new(@surveys, params[:filter]).filter
-    paginated_surveys = filtered_surveys.paginate(:page => params[:page], :per_page => 5)
+    paginated_surveys = filtered_surveys.paginate(:page => params[:page], :per_page => 10)
     @surveys = SurveyDecorator.decorate(paginated_surveys)
     @organizations = Organization.all(access_token)
   end
