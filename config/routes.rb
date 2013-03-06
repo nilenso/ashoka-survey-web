@@ -43,6 +43,7 @@ SurveyWeb::Application.routes.draw do
       resources :options, :except => [:edit, :new, :show]
       resources :surveys, :only => [:index, :show, :update] do
         get 'questions_count', :on => :collection
+        get 'identifier_questions', :on => :member
       end
       match '/login', :to => 'auth#create'
       resources :responses, :only => [:create, :update, :index, :show] do

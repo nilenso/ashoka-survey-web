@@ -106,6 +106,31 @@ describe Api::V1::SurveysController do
       JSON.parse(response.body)['count'].should == 25
     end
   end
+  
+  context "GET 'identifier_questions'" do
+    it "responds with JSON" do
+      get :identifier_questions, :id => survey.id
+      response.should be_ok
+      lambda { JSON.parse(response.body) }.should_not raise_error
+    end
+
+    it "responds with the details of the survey as JSON" do
+      survey = FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID)
+      question = FactoryGirl.create(:question, :identifier => true)
+      survey.questions << question
+
+      get :identifier_questions, :id => survey.id
+      response.should be_ok
+      excluded_keys = ['created_at', 'updated_at', 'image']
+      returned_json = JSON.parse(response.body)
+      returned_json[0].except(*excluded_keys).should == question.as_json.except(*excluded_keys)
+    end
+
+    it "returns a :bad_request if an invalid survey ID is passed" do
+      get :identifier_questions, :id => 40
+      response.should_not be_ok
+    end
+  end
 
   context "GET 'show" do
 

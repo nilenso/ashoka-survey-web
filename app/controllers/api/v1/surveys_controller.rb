@@ -1,7 +1,7 @@
 module Api
   module V1
     class SurveysController < APIApplicationController
-      authorize_resource
+      authorize_resource :except => :identifier_questions
       before_filter :only_finalized_and_unexpired_surveys, :only => [:index, :questions_count]
 
       def index
@@ -13,9 +13,20 @@ module Api
         @surveys ||= Survey.accessible_by(current_ability)
         render :json => { count: @surveys.with_questions.count }
       end
+      
+      def identifier_questions
+        survey = Survey.find_by_id(params[:id])
+        authorize! :read, survey
+        if survey
+          render :json => survey.identifier_questions
+        else
+          render :nothing, :status => :bad_request
+        end 
+      end
 
       def show
         survey = Survey.find_by_id(params[:id])
+        authorize! :read, survey
         if survey
           render :json => survey.to_json
         else
