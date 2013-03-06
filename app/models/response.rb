@@ -18,6 +18,16 @@ class Response < ActiveRecord::Base
   before_validation :geocode
   acts_as_gmappable :lat => :latitude, :lng => :longitude, :check_process => false, :process_geocoding => false
 
+  MAX_PAGE_SIZE = 50
+
+  def self.page_size(params_page_size=nil)
+    if params_page_size.blank?
+      MAX_PAGE_SIZE
+    else
+      [params_page_size.to_i, MAX_PAGE_SIZE].min
+    end
+  end
+
   def gmaps4rails_infowindow
     location
   end

@@ -320,4 +320,20 @@ describe Response do
       end
     end
   end
+
+  context 'when calculating the page size' do
+    before(:each) { stub_const('Response::MAX_PAGE_SIZE', 50) }
+
+    it "allows the passed in value if it is below MAX_PAGE_SIZE" do
+      Response.page_size(10).should == 10
+    end
+
+    it "doesn't allow the passed in value if it is above MAX_PAGE_SIZE" do
+      Response.page_size(51).should == 50
+    end
+
+    it "returns the MAX_PAGE_SIZE if nothing is passed in" do
+      Response.page_size.should == 50
+    end
+  end
 end
