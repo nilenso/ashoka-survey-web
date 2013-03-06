@@ -268,5 +268,23 @@ module Api::V1
           response.should_not be_ok
         end
       end
+      
+      context "GET 'count'" do
+        let(:survey) { FactoryGirl.create :survey, :organization_id => 12 }
+
+        it "returns number of responses available to the current user" do
+          5.times { FactoryGirl.create(:response, :survey => survey, :organization_id => 12) }
+          get :count, :survey_id => survey.id
+          response.should be_ok
+          JSON.parse(response.body)['count'].should == 5
+        end
+
+        it "returns bad request if the response is not accessible to the current user" do
+          survey = FactoryGirl.create(:survey, :organization_id => 100)
+          resp = FactoryGirl.create(:response, :survey => survey)
+          get :show, :id => resp.id, :survey_id => survey.id
+          response.should_not be_ok
+        end
+      end
     end
   end

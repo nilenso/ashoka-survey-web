@@ -1,7 +1,7 @@
 module Api::V1
   class ResponsesController < APIApplicationController
-    load_resource :survey, :only => [:index, :show]
-    load_resource :through => :survey, :only => [:index, :show]
+    load_resource :survey, :only => [:index, :show, :count]
+    load_resource :through => :survey, :only => [:index, :show, :count]
     authorize_resource
 
     before_filter :decode_base64_images, :convert_to_datetime, :only => [:create, :update]
@@ -9,6 +9,10 @@ module Api::V1
 
     def index
       render :json => @responses
+    end
+
+    def count
+      render :json => { count: @responses.count }
     end
 
     def create
