@@ -248,6 +248,13 @@ module Api::V1
         it "returns an error if the survey_id is invalid" do
           expect { get :index, :survey_id => 123 }.to raise_exception
         end
+
+        it "returns the identifier answers" do
+          survey = FactoryGirl.create :survey, :organization_id => 12
+          FactoryGirl.create :response, :survey => survey, :status => 'complete'
+          get :index, :survey_id => survey.id
+          JSON.parse(response.body)[0].should have_key 'answers_for_identifier_questions'
+        end
       end
 
       context "GET 'show'" do
