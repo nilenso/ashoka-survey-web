@@ -9,4 +9,13 @@ class Api::V1::RecordsController < ApplicationController
       render :json => record.errors, :status => :bad_request
     end
   end
+
+  def update
+    record = Record.find_by_id(params[:id])
+    if record.nil?
+      render :nothing => true, :status => :gone
+    else
+      render :json => record
+    end
+  end
 end

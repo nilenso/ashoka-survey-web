@@ -22,4 +22,18 @@ describe Api::V1::RecordsController do
       response.should_not be_ok
     end
   end
+
+  context "PUT 'update'" do
+    it "returns a 410 if the record doesn't exist on the server anymore" do
+      put :update, :id => 42
+      response.code.should == "410"
+    end
+
+    it "returns the record if the record exists on the server" do
+      record = FactoryGirl.create(:record)
+      put :update, :id => record.id
+      response.should be_ok
+      JSON.parse(response.body).except('created_at', 'updated_at').should == record.as_json.except('created_at', 'updated_at')
+    end
+  end
 end
