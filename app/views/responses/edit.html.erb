@@ -86,7 +86,7 @@
       $("#save_as_draft_button").attr('disabled', true);
     });
 
-    prepare_multi_record(<%= @response.records.map(&:id) %>, <%= @disabled %>)
+    prepare_multi_record(<%= @response.records.map { |r| [r.id, r.category_id] } %>, <%= @disabled %>)
     organize_sub_questions()
     $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
   });
