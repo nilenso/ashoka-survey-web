@@ -46,8 +46,18 @@ module Api
 
           response.should be_ok
           returned_json = JSON.parse(response.body)
-          returned_json.keys.should =~ expected_keys
+          expected_keys.each { |key| returned_json.keys.should include key }
           returned_json['content'].should == question[:content]
+        end
+
+        it "returns the `has_multi_record_ancestor` method in the JSON output" do
+          expected_keys = Question.attribute_names
+          question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion', :survey_id => survey.id)
+          post :create, :survey_id => survey.id, :question => question
+
+          response.should be_ok
+          returned_json = JSON.parse(response.body)
+          returned_json.keys.should include 'has_multi_record_ancestor'
         end
 
         context "when save is unsuccessful" do
@@ -188,7 +198,7 @@ module Api
           question = FactoryGirl.create(:question, :survey => survey)
           get :show, :id => question.id
           response.should be_ok
-          response.body.should == question.to_json(:methods => [:type, :image_url, :image_in_base64])
+          response.body.should == question.to_json(:methods => [:type, :image_url, :has_multi_record_ancestor, :image_in_base64])
         end
 
         it "returns a :bad_request for an invalid question_id" do

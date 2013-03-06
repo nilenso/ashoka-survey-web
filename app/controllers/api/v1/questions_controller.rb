@@ -7,7 +7,7 @@ module Api
       def create
         question = Question.new_question_by_type(params[:question][:type], params[:question])
         if question.save
-          render :json => question.to_json(:methods => :type)
+          render :json => question.to_json(:methods => [:type, :has_multi_record_ancestor])
         else
           render :json => question.errors.full_messages, :status => :bad_request
         end
@@ -54,7 +54,7 @@ module Api
 
       def show
         question = Question.find_by_id(params[:id])
-        methods = [:type, :image_url]
+        methods = [:type, :image_url, :has_multi_record_ancestor]
         methods << :image_in_base64 if request.referrer.nil?
         if question
           render :json => question.to_json(:methods => methods)
