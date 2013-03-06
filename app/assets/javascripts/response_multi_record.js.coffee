@@ -12,9 +12,16 @@
 
   wrap_with_div = (record_id) ->
     hidden = 'hidden' if $(".question[data-record-id=#{record_id}]").first().hasClass('hidden')
-    elem = $("<div class='record #{hidden}' data-record-id=#{record_id} />")
-    elem.append("<a href= '/records/#{record_id}' data-confirm='Are you sure?' class='delete_record' data-method='delete' rel='nofollow'> Delete Record </a>")
-    $("div[data-record-id=#{record_id}]").wrapAll(elem)
+    record = $("<div class='record #{hidden}' data-record-id=#{record_id} />")
+    $("div[data-record-id=#{record_id}]").wrapAll(record)
+    delete_record_link = """
+                          <a href= '/records/#{record_id}'
+                             data-confirm='Are you sure?' class='delete_record'
+                             data-method='delete' rel='nofollow'>
+                             Delete Record
+                          </a>
+                         """
+    $("div.record[data-record-id=#{record_id}]").prepend(delete_record_link)
 
   mark_dirty = () ->
     window.dirty_response = true
