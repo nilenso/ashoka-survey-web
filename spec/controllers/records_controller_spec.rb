@@ -39,7 +39,7 @@ describe RecordsController do
       flash[:notice].should_not be_nil
     end
 
-    it "redirects to the survey index page" do
+    it "redirects to the previous page" do
       delete :destroy, :id => record.id
       response.should redirect_to "http://example.com"
     end
