@@ -54,7 +54,7 @@ module Api::V1
 
     def show
       response = Response.find_by_id(params[:id])
-      render :json => response.as_json(:include => :answers)
+      render :json => response.as_json(:include => { :answers =>  { :include => :question }})
     end
 
     private
