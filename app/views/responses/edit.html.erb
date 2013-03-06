@@ -11,7 +11,7 @@
 <%= semantic_form_for [@survey, @response], :html => { :multipart => true } do |f| %>
   <%= f.semantic_fields_for :answers do |f| %>
     <% question = f.object.question %>
-    <%= question.category.decorate.category_name(f.object.record_id, f.object.response_id, cache)  if question.category %>
+    <%= question.category.decorate.category_name(f.object.record_id, f.object.response_id, cache, @disabled)  if question.category %>
     <div class="question <%= "hidden sub_question" if question.parent || question.category.try(:sub_question?)  %>" data-parent-id="<%= question.parent_id %>" data-category-id="<%= question.category_id %>" data-nesting-level="<%= question.nesting_level %>" data-record-id="<%= f.object.record_id %>">
       <%= image_tag question.image_url(:medium), :class => "medium" if question.image_url %>
       <%= question.decorate.input_tag(f, :disabled => @disabled) %>
@@ -86,7 +86,7 @@
       $("#save_as_draft_button").attr('disabled', true);
     });
 
-    prepare_multi_record(<%= @response.records.map(&:id) %>)
+    prepare_multi_record(<%= @response.records.map(&:id) %>, <%= @disabled %>)
     organize_sub_questions()
     $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
   });

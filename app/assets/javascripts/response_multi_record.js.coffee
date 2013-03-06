@@ -1,4 +1,4 @@
-@prepare_multi_record = (record_ids) ->
+@prepare_multi_record = (record_ids, @show_mode) ->
   $ ->
     window.dirty_response = false
     wrap_with_div(record_id) for record_id in record_ids
@@ -21,7 +21,7 @@
                              Delete Record
                           </a>
                          """
-    $("div.record[data-record-id=#{record_id}]").prepend(delete_record_link)
+    $("div.record[data-record-id=#{record_id}]").prepend(delete_record_link) unless @show_mode
 
   mark_dirty = () ->
     window.dirty_response = true

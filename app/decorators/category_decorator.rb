@@ -6,14 +6,14 @@ class CategoryDecorator < Draper::Base
   end
 
 
-  def category_name(record_id, response_id, cache)
+  def category_name(record_id, response_id, cache, disabled)
     # TODO: REFACTOR
     # Display a category once only, unless its inside a multi-record (show it once per record then).
     unless cache.include?([model.id, record_id])
       cache << [model.id, record_id]
 
       string = ERB.new "
-        <%= model.category.decorate.category_name(record_id, response_id, cache) if model.category %>
+        <%= model.category.decorate.category_name(record_id, response_id, cache, disabled) if model.category %>
 
         <div class='category <%= 'hidden sub_question' if model.sub_question? %>'
              data-nesting-level='<%= model.nesting_level %>'
@@ -24,7 +24,7 @@ class CategoryDecorator < Draper::Base
           <h2>
             <%= question_number %>)
             <%= model.content %>
-            <%= model.decorate.create_record_link(response_id) %>
+            <%= model.decorate.create_record_link(response_id) unless disabled  %>
           </h2>
         </div>
       "
