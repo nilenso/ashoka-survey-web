@@ -236,6 +236,15 @@ module Api::V1
           json[0]['id'].should == resp.id
         end
 
+        it "paginates the response" do
+          survey = FactoryGirl.create :survey, :organization_id => 12
+          5.times { FactoryGirl.create :response, :survey => survey, :status => 'complete' }
+          get :index, :survey_id => survey.id, :page_size => 2
+          response.should be_ok
+          json = JSON.parse(response.body)
+          json.length.should == 2
+        end
+
         it "returns an error if the survey_id is invalid" do
           expect { get :index, :survey_id => 123 }.to raise_exception
         end

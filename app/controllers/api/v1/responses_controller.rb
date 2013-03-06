@@ -8,7 +8,7 @@ module Api::V1
     before_filter :require_response_to_not_exist, :only => :create
 
     def index
-      render :json => @responses
+      render :json => @responses.paginate(:page => params[:page], :per_page => Response.page_size(params[:page_size]))
     end
 
     def count
