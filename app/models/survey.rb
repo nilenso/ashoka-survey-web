@@ -115,12 +115,8 @@ class Survey < ActiveRecord::Base
     first_level_elements.map(&:with_sub_questions_in_order).flatten.map(&:id)
   end
 
-  def questions_with_report_data
-    questions.reject { |question| question.report_data.blank? }
-  end
-
   def questions_for_reports
-    questions.select { |question| question.answers.any? }
+    questions.select { |i| i.answers.complete.any? }
   end
 
   def complete_responses_count

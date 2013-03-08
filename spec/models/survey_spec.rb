@@ -315,17 +315,6 @@ describe Survey do
     end
   end
 
-  context "reports" do
-    it "finds all questions which have report data" do
-      survey = FactoryGirl.create(:survey)
-      question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey_id => survey.id).id)
-      another_question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey_id => survey.id).id)
-      5.times { question.answers << FactoryGirl.create(:answer_with_complete_response, :content => question.options.first.content) }
-      3.times { question.answers << FactoryGirl.create(:answer_with_complete_response, :content => question.options.last.content) }
-      survey.questions_with_report_data.should == [question]
-    end
-  end
-
   context "authorization key for public surveys" do
     it "contains a urlsafe random string" do
       survey = FactoryGirl.create :survey, :public => true
@@ -394,10 +383,11 @@ describe Survey do
     end
   end
 
-  it "returns questions with at least one answer" do
+  it "returns questions with at least one answer of a complete response" do
     survey = FactoryGirl.create(:survey)
     question = FactoryGirl.create(:question, :survey => survey)
-    question.answers << FactoryGirl.create(:answer)
+    resp = FactoryGirl.create(:response, :status => 'complete')
+    question.answers << FactoryGirl.create(:answer, :response => resp)
     another_question = FactoryGirl.create(:question, :survey => survey)
     survey.questions << question
     survey.questions << another_question
