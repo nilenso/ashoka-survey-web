@@ -52,9 +52,12 @@
   }
 </script>
 <header>
-  <%= link_to icon_for('icon-table', t('.download_excel')), survey_responses_path(@survey,format: :xlsx), :class => 'download_excel'%>
+  <%= link_to icon_for('icon-table', t('.download_excel')), 'javascript:void(0);', :class => 'download_excel'%>
   <h2><%= t '.reports' %></h2>
 </header>
+<div id="dialog" title="<%= t('responses.excel.excel_dialog_title') %>">
+  <p><%= t('responses.excel.excel_downloading_message') %></p>
+</div>
 <div class="reports">
   <%= render "layouts/status_bar", :status => "analyze" %>
   <% @survey.questions_for_reports.each do |question| %>
@@ -65,3 +68,8 @@
     <%= gmaps4rails(@markers) %>
   </div>
 </div>
+<script>
+  $(document).ready(function() {
+    new ExcelDownloader(<%= @survey.id %>)
+  });
+</script>

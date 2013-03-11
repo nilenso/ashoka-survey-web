@@ -169,8 +169,6 @@ en:
       added_by: Added by
       last_updated_at: Last Updated At
 
-      excel_dialog_title: "Generating Excel…"
-      excel_downloading_message: "Your excel file is getting generated.\nThis mght take a few minutes. Please wait."
     edit:
       delete: "Delete"
       edit: "Edit"
@@ -182,6 +180,10 @@ en:
       location: "Location"
       location_unavailable: "Location Unavailable"
       create_record: "Create Another Record"
+
+    excel:
+      excel_dialog_title: "Generating Excel…"
+      excel_downloading_message: "Your excel file is getting generated.\nThis mght take a few minutes. Please wait."
 
   answers:
     validations:

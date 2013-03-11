@@ -166,8 +166,6 @@ fr:
       added_by: "fr Added By"
       last_updated_at: Dernière mise à jour A
 
-      excel_dialog_title: "Production Excel…"
-      excel_downloading_message: "Votre fichier Excel est généré se. Cette mght prendre quelques minutes. S'il vous plaît attendre."
     edit:
       delete: "Delete-fr"
       edit: "Edit-fr"
@@ -180,6 +178,11 @@ fr:
       location_unavailable: "fr Location Unavailable"
 
       create_record: "Créer un autre dossier"
+
+    excel:
+      excel_dialog_title: "Production Excel…"
+      excel_downloading_message: "Votre fichier Excel est généré se. Cette mght prendre quelques minutes. S'il vous plaît attendre."
+
   answers:
     validations:
       mandatory_question: Cette question est obligatoire.
@@ -188,7 +191,6 @@ fr:
       exceeded_higher_limit: fr Your answer is lesser than the maximum value.
       exceeds_maximum_size: fr Your photo is bigger than the maximum size.
       invalid_date: La date que vous avez donné n'est pas valide
-
   questions:
     validations:
       min_value_higher: ne peut pas être supérieure à la valeur maximale
