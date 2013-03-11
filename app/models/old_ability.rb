@@ -92,7 +92,7 @@ class OldAbility
       when 'field_agent'
         field_agent_actions(user_info)
       when 'viewer'
-        can :read, Survey, :organization_id => user_info[:org_id]
+        cmethod_namean :read, Survey, :organization_id => user_info[:org_id]
         can :report, Survey, :organization_id => user_info[:org_id]
         can :read, Response, :survey => { :organization_id => user_info[:org_id] }
       end
