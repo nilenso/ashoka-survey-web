@@ -280,10 +280,10 @@ module Api::V1
         it "returns the question for each answer as well" do
           resp = FactoryGirl.create(:response, :survey => survey)
           question = FactoryGirl.create :question, :survey => survey
-          answer = FactoryGirl.create(:answer, :response => resp, :question => question)
+          FactoryGirl.create(:answer, :response => resp, :question => question)
           get :show, :id => resp.id, :survey_id => survey.id
           response.should be_ok
-          JSON.parse(response.body)['answers'][0]['question'].should == JSON.parse(question.to_json)
+          JSON.parse(response.body)['answers'][0]['question'].should == JSON.parse(question.to_json(:methods => :options))
         end
 
         it "returns bad request if the response is not accessible to the current user" do

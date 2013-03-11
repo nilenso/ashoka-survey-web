@@ -66,7 +66,7 @@ describe Question do
       question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
       question.options << Option.create(content: "Option", order_number: 1)
       nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-      nested_json = nested_question.as_json(:methods => :type)
+      nested_json = nested_question.as_json(:methods => [:type, :options])
       # Need to do a #to_s because for some reason the direct hash comparison fails on ActiveSupport::TimeWithZone objects on Linux machines
       question.json[:options][0][:questions].map(&:to_s).should include nested_json.to_s
     end
@@ -75,7 +75,7 @@ describe Question do
       question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
       question.options << Option.create(content: "Option", order_number: 1)
       nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-      question.json[:options][0][:questions].map(&:to_s).should include nested_question.as_json(:methods => :type).to_s
+      question.json[:options][0][:questions].map(&:to_s).should include nested_question.as_json(:methods => [:type, :options]).to_s
     end
 
     it "returns self for all other types of questions" do
@@ -344,6 +344,11 @@ describe Question do
       expect { question.create_blank_answers(:response_id => response.id) }.not_to raise_error
       response.reload.answers.should_not be_empty
     end
+  end
+
+  it "returns an empty array if a question doesn't have option" do
+    question = FactoryGirl.create(:question, :max_length => 5)
+    question.options.should be_empty
   end
 
   include_examples 'a question'

@@ -50,6 +50,10 @@ class Question < ActiveRecord::Base
     [self]
   end
 
+  def options
+    []
+  end
+
   def json(opts={})
     return as_json(opts).merge({:options => options.map(&:as_json)}) if respond_to? :options
     return as_json(opts)
