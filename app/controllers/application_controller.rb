@@ -32,7 +32,7 @@ class ApplicationController < ActionController::Base
     if params[:controller] == 'responses'
       @current_ability ||= PublicResponseAbility.new(current_user_info)
     else
-      @current_ability ||= Ability.new(current_user_info)
+      @current_ability ||= Ability.ability_for(current_user_info)
     end
   end
 
