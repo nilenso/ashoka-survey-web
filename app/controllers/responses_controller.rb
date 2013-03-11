@@ -18,6 +18,7 @@ class ResponsesController < ApplicationController
   end
 
   def generate_excel
+    authorize! :generate_excel, @survey
     user_names = User.names_for_ids(access_token, @responses.map(&:user_id).uniq)
     organization_names = Organization.all(access_token)
     filename = @survey.filename_for_excel

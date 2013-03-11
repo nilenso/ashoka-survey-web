@@ -46,6 +46,7 @@ describe "Abilities" do
         it { should be_able_to(:questions_count, survey) }
         it { should be_able_to(:finalize, survey) }
         it { should be_able_to(:report, survey) }
+        it { should be_able_to(:generate_excel, survey) }
         it { should be_able_to(:update, survey) }
 
         it { should be_able_to(:manage, question) }
@@ -84,6 +85,7 @@ describe "Abilities" do
         it { should_not be_able_to(:update, survey) }
         it { should_not be_able_to(:share_with_organizations, survey) }
         it { should_not be_able_to(:update_share_with_organizations, survey) }
+        it { should_not be_able_to(:generate_excel, survey) }
 
         it { should_not be_able_to(:manage, question) }
 
@@ -106,6 +108,7 @@ describe "Abilities" do
         it { should_not be_able_to(:archive, survey) }
         it { should be_able_to(:questions_count, survey) }
         it { should be_able_to :duplicate, survey }
+        it { should be_able_to(:generate_excel, survey) }
 
         it { should be_able_to(:edit_publication, survey) }
         it { should be_able_to(:update_publication, survey) }
@@ -148,6 +151,7 @@ describe "Abilities" do
         it { should be_able_to :read, survey }
         it { should_not be_able_to(:archive, survey) }
         it { should be_able_to :questions_count, survey }
+        it { should be_able_to(:generate_excel, survey) }
         it { should be_able_to :create, Response.new(:survey => survey) }
         it { should be_able_to :manage,  response }
         it { should be_able_to :image_upload,  response }
@@ -168,6 +172,7 @@ describe "Abilities" do
           SurveyUser.create(:survey_id => survey.id, :user_id => 123)
         end
 
+        it { should_not be_able_to(:generate_excel, survey) }
         it { should_not be_able_to :read, survey }
         it { should_not be_able_to(:archive, survey) }
         it { should_not be_able_to :questions_count, survey }
@@ -180,6 +185,23 @@ describe "Abilities" do
         it { should_not be_able_to :read, category }
         it { should_not be_able_to :read, option }
       end
+    end
+
+    context "when is a viewer" do
+      let(:user_info) { base_user_info.merge(:role => 'viewer') }
+      let(:survey) { FactoryGirl.create(:survey, :organization_id => user_info[:org_id]) }
+
+      it { should_not be_able_to :manage, Survey }
+      it { should be_able_to(:read, survey) }
+      it { should be_able_to(:report, survey) }
+      it { should_not be_able_to :generate_excel, Survey }
+
+      it { should_not be_able_to(:manage, Question) }
+      it { should_not be_able_to(:manage, Category) }
+      it { should_not be_able_to(:manage, Option) }
+
+      it { should_not be_able_to :manage, Response }
+      it { should be_able_to :read, Response.new(:survey => survey) }
     end
   end
 end

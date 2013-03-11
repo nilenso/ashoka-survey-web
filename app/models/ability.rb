@@ -22,6 +22,7 @@ class Ability
     can_perform_on_shared_surveys(:questions_count, user_info)
     can_perform_on_shared_surveys(:duplicate, user_info)
     can_perform_on_shared_surveys(:edit_publication, user_info)
+    can_perform_on_shared_surveys(:generate_excel, user_info)
     can_perform_on_shared_surveys(:update_publication, user_info)
   end
 
@@ -34,6 +35,7 @@ class Ability
     can :archive, Survey, :organization_id => user_info[:org_id]
     can :destroy, Survey, :organization_id => user_info[:org_id], :finalized => false
     can :report, Survey, :organization_id => user_info[:org_id]
+    can :generate_excel, Survey, :organization_id => user_info[:org_id]
   end
 
   def cso_admin_actions_on_responses(user_info)
@@ -56,6 +58,7 @@ class Ability
 
   def field_agent_actions(user_info)
     can :read, Survey, :survey_users => { :user_id => user_info[:user_id ] }
+    can :generate_excel, Survey, :survey_users => { :user_id => user_info[:user_id] }
     can :questions_count, Survey, :survey_users => { :user_id => user_info[:user_id ] }
     can :create, Response, :survey => { :survey_users => { :user_id => user_info[:user_id ] } }
     can :complete, Response, :user_id  => user_info[:user_id]
@@ -75,9 +78,10 @@ class Ability
       end
     else
       role = user_info[:role]
-      if role == 'admin'
+      case role
+      when 'admin'
         admin_actions(user_info)
-      elsif role == 'cso_admin'
+      when 'cso_admin'
         cso_admin_actions_on_shared_surveys(user_info)
         cso_admin_actions_on_own_surveys(user_info)
         cso_admin_actions_on_responses(user_info)
@@ -85,8 +89,12 @@ class Ability
         can :manage, Question, :survey => { :organization_id => user_info[:org_id] }
         can :manage, Category, :survey => { :organization_id => user_info[:org_id] }
         can :manage, Option, :question => { :survey => {:organization_id => user_info[:org_id] }}
-      elsif role == 'field_agent'
+      when 'field_agent'
         field_agent_actions(user_info)
+      when 'viewer'
+        can :read, Survey, :organization_id => user_info[:org_id]
+        can :report, Survey, :organization_id => user_info[:org_id]
+        can :read, Response, :survey => { :organization_id => user_info[:org_id] }
       end
     end
   end
