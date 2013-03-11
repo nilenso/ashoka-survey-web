@@ -54,6 +54,17 @@ describe Api::V1::SurveysController do
       end
     end
 
+    it "doesn't return archived surveys" do
+      archived_surveys = FactoryGirl.create_list :survey, 5, :organization_id => LOGGED_IN_ORG_ID, :finalized => true, :archived => true
+      surveys = FactoryGirl.create_list :survey, 5, :organization_id => LOGGED_IN_ORG_ID, :expiry_date => 5.days.from_now, :finalized => true
+      get :index
+      returned_json = JSON.parse response.body
+      returned_json.length.should == 5
+      returned_json.each do |survey|
+       survey[:archived].should_not be
+      end
+    end
+
     context "when fetching extra expired surveys" do
       it "returns all the surveys specified in params[:extra_surveys]" do
         FactoryGirl.create_list :survey, 5, :organization_id => LOGGED_IN_ORG_ID, :finalized => true
