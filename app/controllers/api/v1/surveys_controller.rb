@@ -51,7 +51,8 @@ module Api
         @surveys = @surveys.where(
           (
             survey[:expiry_date].gt(Date.today). # Not expired
-            and(survey[:finalized].eq(true))     # Finalized
+            and(survey[:finalized].eq(true)).     # Finalized
+            and(survey[:archived].eq(false))
           ).
           or(survey[:id].in(extra_surveys))
         )
