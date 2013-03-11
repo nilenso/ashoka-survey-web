@@ -1,4 +1,4 @@
-class Ability
+class OldAbility
   include CanCan::Ability
   attr_reader :user_info
 
