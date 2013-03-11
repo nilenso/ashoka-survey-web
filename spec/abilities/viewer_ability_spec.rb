@@ -59,12 +59,5 @@ describe ViewerAbility do
       it { should_not be_able_to :edit_publication, Survey }
       it { should_not be_able_to :update_publication, Survey }
     end
-
-    context "when generating reports" do
-      it { should be_able_to :report, survey_in_same_org  }
-      it { should_not be_able_to :report, survey_in_other_org  }
-
-      it { should_not be_able_to :generate_excel, Survey  }
-    end
   end
 end
