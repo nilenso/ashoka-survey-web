@@ -2,9 +2,16 @@ class Ability
   include CanCan::Ability
 
   def self.ability_for(user)
-    return ViewerAbility.new(user) if user[:role] == 'viewer'
-    return AdminAbility.new(user) if user[:role] == 'cso_admin'
-    return Ability.new(user)
+    case user[:role]
+      when 'viewer'
+        ViewerAbility.new(user)
+      when 'cso_admin'
+        AdminAbility.new(user)
+      when 'field_agent'
+        FieldAgentAbility.new(user)
+      else
+        Ability.new(user)
+    end
   end
 
   def initialize(user_info)
