@@ -5,7 +5,7 @@ module Api
 
       def create
         question = Question.new_question_by_type(params[:question][:type], params[:question])
-        authorize! :update, question.survey
+        authorize! :update, question.try(:survey)
         if question.save
           render :json => question.to_json(:methods => [:type, :has_multi_record_ancestor])
         else
@@ -15,7 +15,7 @@ module Api
 
       def update
         question = Question.find(params[:id])
-        authorize! :update, question.survey
+        authorize! :update, question.try(:survey)
         if question.update_attributes(params[:question])
           render :json => question.to_json(:methods => :type)
         else
@@ -24,8 +24,8 @@ module Api
       end
 
       def destroy
-        question = Question.find(params[:id])
-        authorize! :update, question.survey
+        question = Question.find_by_id(params[:id])
+        authorize! :update, question.try(:survey)
         begin
           Question.destroy(params[:id])
           render :nothing => true
@@ -36,7 +36,7 @@ module Api
 
       def image_upload
         question = Question.find(params[:id])
-        authorize! :update, question.survey
+        authorize! :update, question.try(:survey)
         question.update_attributes({ :image => params[:image] })
         if question.save
           render :json => { :image_url => question.image_url }
@@ -59,7 +59,7 @@ module Api
 
       def show
         question = Question.find_by_id(params[:id])
-        authorize! :read, question.survey
+        authorize! :read, question.try(:survey)
         methods = [:type, :image_url, :has_multi_record_ancestor]
         methods << :image_in_base64 if request.referrer.nil?
         if question
@@ -71,7 +71,7 @@ module Api
 
       def duplicate
         question = Question.find_by_id(params[:id])
-        authorize! :edit, question.survey
+        authorize! :edit, question.try(:survey)
         if question && question.copy_with_order
           flash[:notice] = t("flash.question_duplicated")
         else

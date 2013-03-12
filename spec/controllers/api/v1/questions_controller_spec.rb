@@ -40,6 +40,7 @@ module Api
         end
 
         it "doesn't create the question if the current user doesn't have permission to do so" do
+          sign_in_as('viewer')
           survey = FactoryGirl.create(:survey, :organization_id => 500)
           question = FactoryGirl.attributes_for(:question, :survey_id => survey.id, :type => 'SingleLineQuestion')
           expect {
@@ -108,6 +109,7 @@ module Api
         end
 
         it "doesn't update the question if the current user doesn't have permission to do so" do
+          sign_in_as('viewer')
           survey = FactoryGirl.create(:survey, :organization_id => 500)
           question = FactoryGirl.create(:question, :survey => survey)
           put :update, :id => question.id, :question => {:content => "someuniquestring"}
@@ -136,6 +138,7 @@ module Api
         end
 
         it "doesn't destroy the question if the current user doesn't have permission to do so" do
+          sign_in_as('viewer')
           survey = FactoryGirl.create(:survey, :organization_id => 500)
           question = FactoryGirl.create(:question, :survey => survey)
           delete :destroy, :id => question.id
@@ -172,6 +175,7 @@ module Api
         end
 
         it "doesn't perform the upload if the current user doesn't have permission to do so" do
+          sign_in_as('viewer')
           survey = FactoryGirl.create(:survey, :organization_id => 500)
           question = FactoryGirl.create(:question, :survey => survey)
           @file = fixture_file_upload('/images/sample.jpg', 'text/xml')
@@ -224,6 +228,7 @@ module Api
         end
 
         it "authorizes the current user's access to the given survey" do
+          sign_in_as('viewer')
           survey = FactoryGirl.create(:survey, :organization_id => 500)
           question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id))
           get :index, :survey_id => survey.id
@@ -245,6 +250,7 @@ module Api
         end
 
         it "authorizes the current user's access to the given question's survey" do
+          sign_in_as('viewer')
           survey = FactoryGirl.create(:survey, :organization_id => 500)
           question = FactoryGirl.create(:question, :survey => survey)
           get :show, :id => question.id
@@ -283,6 +289,7 @@ module Api
         end
 
         it "doesn't duplicate the question if the current user doesn't have access to the survey" do
+          sign_in_as('viewer')
           survey = FactoryGirl.create(:survey, :organization_id => 500)
           question = FactoryGirl.create(:question, :survey => survey)
           expect { post :duplicate, :id => question.id }.not_to change { Question.count }
