@@ -39,6 +39,14 @@ module Api
           end.to change { RadioQuestion.count }.by(1)
         end
 
+        it "doesn't create the question if the current user doesn't have permission to do so" do
+          survey = FactoryGirl.create(:survey, :organization_id => 500)
+          question = FactoryGirl.attributes_for(:question, :survey_id => survey.id, :type => 'SingleLineQuestion')
+          expect {
+            post :create, :survey_id => survey.id, :question => question
+          }.not_to change { Question.count }
+        end
+
         it "returns the created question as JSON" do
           expected_keys = Question.attribute_names
           question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion', :survey_id => survey.id)
@@ -98,6 +106,13 @@ module Api
             JSON.parse(response.body).should be_any {|m| m =~ /can\'t be blank/ }
           end
         end
+
+        it "doesn't update the question if the current user doesn't have permission to do so" do
+          survey = FactoryGirl.create(:survey, :organization_id => 500)
+          question = FactoryGirl.create(:question, :survey => survey)
+          put :update, :id => question.id, :question => {:content => "someuniquestring"}
+          question.reload.content.should_not == 'someuniquestring'
+        end
       end
 
       context "DELETE 'destroy'" do
@@ -118,6 +133,13 @@ module Api
           expect do
             delete :destroy, :id => question.id
           end.to change { Answer.count }.by(-5)
+        end
+
+        it "doesn't destroy the question if the current user doesn't have permission to do so" do
+          survey = FactoryGirl.create(:survey, :organization_id => 500)
+          question = FactoryGirl.create(:question, :survey => survey)
+          delete :destroy, :id => question.id
+          question.reload.should be_present
         end
       end
 
@@ -147,6 +169,15 @@ module Api
           question.stub(:errors).and_return("error message")
           post :image_upload, :id => question.id, :image => nil
           JSON.parse(response.body)['errors'].should =~ /error/
+        end
+
+        it "doesn't perform the upload if the current user doesn't have permission to do so" do
+          survey = FactoryGirl.create(:survey, :organization_id => 500)
+          question = FactoryGirl.create(:question, :survey => survey)
+          @file = fixture_file_upload('/images/sample.jpg', 'text/xml')
+          post :image_upload, :id => question.id, :image => @file
+          response.should_not be_ok
+          question.reload.image.should be_blank
         end
       end
 
@@ -191,6 +222,13 @@ module Api
           get :index
           response.should_not be_ok
         end
+
+        it "authorizes the current user's access to the given survey" do
+          survey = FactoryGirl.create(:survey, :organization_id => 500)
+          question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id))
+          get :index, :survey_id => survey.id
+          response.should_not be_ok
+        end
       end
 
       context "GET 'show'" do
@@ -205,6 +243,14 @@ module Api
           get :show, :id => 456787
           response.should_not be_ok
         end
+
+        it "authorizes the current user's access to the given question's survey" do
+          survey = FactoryGirl.create(:survey, :organization_id => 500)
+          question = FactoryGirl.create(:question, :survey => survey)
+          get :show, :id => question.id
+          response.should_not be_ok
+        end
+
       end
 
       context "POST 'duplicate'" do
@@ -234,6 +280,13 @@ module Api
             response.should redirect_to(:back)
             flash[:error].should_not be_nil
           end
+        end
+
+        it "doesn't duplicate the question if the current user doesn't have access to the survey" do
+          survey = FactoryGirl.create(:survey, :organization_id => 500)
+          question = FactoryGirl.create(:question, :survey => survey)
+          expect { post :duplicate, :id => question.id }.not_to change { Question.count }
+          response.should_not be_ok
         end
       end
     end
