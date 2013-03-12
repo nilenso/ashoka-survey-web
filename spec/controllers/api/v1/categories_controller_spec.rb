@@ -36,6 +36,15 @@ describe Api::V1::CategoriesController do
       response.should_not be_ok
       JSON.parse(response.body).should include "Content can't be blank"
     end
+
+    it "doesn't create the category if the current user doesn't have permission to do so" do
+      sign_in_as('viewer')
+      survey = FactoryGirl.create(:survey, :organization_id => 5)
+      category = FactoryGirl.attributes_for(:category, :survey_id => survey.id, :type => 'MultiRecordCategory')
+      expect {
+        post :create, :survey_id => survey.id, :category => category
+      }.not_to change { MultiRecordCategory.count }
+    end
   end
 
   context "PUT 'update'" do
@@ -66,6 +75,15 @@ describe Api::V1::CategoriesController do
       response.should_not be_ok
       JSON.parse(response.body).should include "Content can't be blank"
     end
+
+    it "doesn't update the category if the current user doesn't have permission to do so" do
+      sign_in_as('viewer')
+      survey = FactoryGirl.create(:survey, :organization_id => 5)
+      category = FactoryGirl.create :category, :order_number => 0, :content => "XYZ", :survey => survey
+      put :update, :id => category.id, :category => { :content => "FOO", :order_number => 42 }
+      response.should_not be_ok
+      category.content.should_not == "FOO"
+    end
   end
 
   context "DELETE destroy" do
@@ -79,6 +97,15 @@ describe Api::V1::CategoriesController do
     it "returns a 'bad request' if an invalid ID is specified" do
       delete :destroy, :id => 12345
       response.should_not be_ok
+    end
+
+    it "doesn't destroy the category if the current user doesn't have permission to do so" do
+      sign_in_as('viewer')
+      survey = FactoryGirl.create(:survey, :organization_id => 5)
+      category = FactoryGirl.create :category, :order_number => 0, :content => "XYZ", :survey => survey
+      put :destroy, :id => category.id
+      response.should_not be_ok
+      category.reload.should be_present
     end
   end
 
@@ -105,6 +132,14 @@ describe Api::V1::CategoriesController do
       get :index, :survey_id => 12355
       response.should_not be_ok
     end
+
+    it "returns a bad response if the current user doesn't have access to the parent survey" do
+      sign_in_as('viewer')
+      survey = FactoryGirl.create(:survey, :organization_id => 5)
+      category = FactoryGirl.create :category, :order_number => 0, :content => "XYZ", :survey => survey
+      get :index, :survey_id => survey.id
+      response.should_not be_ok
+    end
   end
 
   context "GET 'show'" do
@@ -127,6 +162,14 @@ describe Api::V1::CategoriesController do
 
     it "returns a 'bad_request' if the ID is invalid" do
       get :show, :id => 12355
+      response.should_not be_ok
+    end
+
+    it "returns a bad response if the current user doesn't have access to the parent survey" do
+      sign_in_as('viewer')
+      survey = FactoryGirl.create(:survey, :organization_id => 5)
+      category = FactoryGirl.create :category, :order_number => 0, :content => "XYZ", :survey => survey
+      get :show, :id => category.id
       response.should_not be_ok
     end
   end
@@ -158,6 +201,14 @@ describe Api::V1::CategoriesController do
         response.should redirect_to(:back)
         flash[:error].should_not be_nil
       end
+    end
+
+    it "doesn't duplicate the category if the current user doesn't have access to the parent survey" do
+      sign_in_as('viewer')
+      survey = FactoryGirl.create(:survey, :organization_id => 5)
+      category = FactoryGirl.create :category, :order_number => 0, :content => "XYZ", :survey => survey
+      expect { post :duplicate, :id => category.id }.not_to change { Category.count }
+      response.should_not be_ok
     end
   end
 end
