@@ -3,10 +3,10 @@ module Api
   module V1
     class CategoriesController < APIApplicationController
       before_filter :dont_cache
-      authorize_resource
 
       def create
         category = Category.new_category_by_type(params[:category][:type], params[:category])
+        authorize! :update, category.try(:survey)
         if category.save
           render :json => category.to_json
         else
@@ -16,6 +16,7 @@ module Api
 
       def update
         category = Category.find_by_id(params[:id])
+        authorize! :update, category.try(:survey)
         if category && category.update_attributes(params[:category])
           render :json => category.to_json
         else
@@ -25,6 +26,7 @@ module Api
 
       def destroy
         category = Category.find_by_id(params[:id])
+        authorize! :destroy, category.try(:survey)
         if category
           Category.destroy(params[:id])
           render :nothing => true
@@ -35,6 +37,7 @@ module Api
 
       def index
         survey = Survey.find_by_id(params[:survey_id])
+        authorize! :read, survey
         if survey
           render :json => survey.first_level_categories
         else
@@ -44,6 +47,7 @@ module Api
 
       def show
         category = Category.find_by_id(params[:id])
+        authorize! :read, category.try(:survey)
         if category
           render :json => category.to_json_with_sub_elements
         else
@@ -53,6 +57,7 @@ module Api
 
       def duplicate
         category = Category.find_by_id(params[:id])
+        authorize! :update, category.try(:survey)
         if category && category.copy_with_order
           flash[:notice] = t("flash.category_duplicated")
         else
