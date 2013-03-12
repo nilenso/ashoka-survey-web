@@ -225,10 +225,10 @@ module Api::V1
         end
 
         it "returns responses accessible by the current user" do
-          sign_in_as('field_agent')
+          sign_in_as('viewer')
           survey = FactoryGirl.create :survey, :organization_id => 12
           resp = FactoryGirl.create :response, :survey => survey, :status => 'complete', :user_id => 123
-          another_resp = FactoryGirl.create :response, :survey => survey, :user_id => 125
+          another_resp = FactoryGirl.create :response, :survey => survey, :user_id => 125, :organization_id => 13
           get :index, :survey_id => survey.id
           response.should be_ok
           json = JSON.parse(response.body)
@@ -287,8 +287,9 @@ module Api::V1
         end
 
         it "returns bad request if the response is not accessible to the current user" do
+          sign_in_as('viewer')
           survey = FactoryGirl.create(:survey, :organization_id => 100)
-          resp = FactoryGirl.create(:response, :survey => survey)
+          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 101)
           get :show, :id => resp.id, :survey_id => survey.id
           response.should_not be_ok
         end
@@ -305,8 +306,9 @@ module Api::V1
         end
 
         it "returns bad request if the response is not accessible to the current user" do
+          sign_in_as('viewer')
           survey = FactoryGirl.create(:survey, :organization_id => 100)
-          resp = FactoryGirl.create(:response, :survey => survey)
+          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 101)
           get :show, :id => resp.id, :survey_id => survey.id
           response.should_not be_ok
         end

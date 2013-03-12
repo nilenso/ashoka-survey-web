@@ -20,7 +20,7 @@ module Api
         if survey
           render :json => survey.identifier_questions
         else
-          render :nothing, :status => :bad_request
+          render :nothing => true, :status => :bad_request
         end 
       end
 

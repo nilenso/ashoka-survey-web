@@ -88,6 +88,7 @@ describe Api::V1::SurveysController do
       end
 
       it "ignores the surveys that the user doesn't have access to" do
+        sign_in_as('viewer')
         survey = FactoryGirl.create :survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true
         off_limits_survey = FactoryGirl.create :survey, :organization_id => 1234, :finalized => true, :name => "OFF!"
         get :index
