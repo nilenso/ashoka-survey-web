@@ -29,10 +29,10 @@ class ApplicationController < ActionController::Base
   end
 
   def current_ability
-    if params[:controller] == 'responses'
-      @current_ability ||= PublicResponseAbility.new(current_user_info)
-    else
+    if user_currently_logged_in?
       @current_ability ||= Ability.ability_for(current_user_info)
+    else
+      @current_ability ||= PublicResponseAbility.new(current_user_info)
     end
   end
 

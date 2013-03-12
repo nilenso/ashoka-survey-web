@@ -31,16 +31,17 @@ describe ApplicationController do
       end
     end
 
-    context "for the responses controller" do
+    context "if the user isn't logged in" do
       it "creates a `PublicResponseAbility`" do
         get :index
         controller.current_ability.class.should == PublicResponseAbility
       end
     end
 
-    context "for any other controller" do
-      it "creates an `Ability`" do
-        controller.current_ability.class.should == Ability
+    context "if the user is logged in" do
+      it "creates the relevant `Ability`" do
+        sign_in_as('viewer')
+        controller.current_ability.class.should == ViewerAbility
       end
     end
   end
