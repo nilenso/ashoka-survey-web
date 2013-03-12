@@ -1,15 +1,15 @@
 require "cancan/matchers"
 
-describe "Abilities" do
+describe ViewerAbility do
   subject { ability }
   let(:user_info) {
     {
-      :name => "John",
-      :email => "john@gmail.com",
-      :org_id => 5,
-      :user_id => 6,
-      :session_token => "rdsfgasidufyasd",
-      :role => 'viewer'
+        :name => "John",
+        :email => "john@gmail.com",
+        :org_id => 5,
+        :user_id => 6,
+        :session_token => "rdsfgasidufyasd",
+        :role => 'viewer'
     }
   }
   let(:ability){ ViewerAbility.new(user_info) }
@@ -23,26 +23,18 @@ describe "Abilities" do
     it { should_not be_able_to :build, Survey }
     it { should_not be_able_to :destroy, Survey }
     it { should_not be_able_to :duplicate, Survey }
+    it { should_not be_able_to :archive, Survey }
 
-    context "belonging to another organization" do
-      it { should_not be_able_to :read, survey_in_other_org }
-      it { should_not be_able_to :questions_count, survey_in_other_org }
-      it { should_not be_able_to :manage, survey_in_other_org.questions[0] }
-      it { should_not be_able_to :manage, survey_in_other_org.categories[0] }
-      it { should_not be_able_to :manage, survey_in_other_org.questions[0].options[0] }
-    end
+    it { should_not be_able_to :read, survey_in_other_org }
+    it { should be_able_to :read, survey_in_same_org }
 
-    context "belonging to the same organization" do
-      it { should be_able_to :read, survey_in_same_org }
-      it { should be_able_to :questions_count, survey_in_same_org }
+    context "with responses" do
+      let(:response_in_same_org) { FactoryGirl.create(:response, :organization_id => 5) }
+      let(:response_in_other_org) { FactoryGirl.create(:response, :organization_id => 54) }
 
-      it { should be_able_to :read, survey_in_same_org.questions[0] }
-      it { should be_able_to :read, survey_in_same_org.questions[0].options[0] }
-      it { should_not be_able_to :manage, survey_in_same_org.questions[0] }
-      it { should_not be_able_to :manage, survey_in_same_org.questions[0].options[0] }
-
-      it { should be_able_to :read, survey_in_same_org.categories[0] }
-      it { should_not be_able_to :manage, survey_in_same_org.categories[0] }
+      it { should_not be_able_to :manage, Response }
+      it { should be_able_to :read, response_in_same_org }
+      it { should_not be_able_to :read, response_in_other_org }
     end
 
     context "when publishing/sharing" do
