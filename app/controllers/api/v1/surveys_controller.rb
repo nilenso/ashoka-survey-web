@@ -1,7 +1,7 @@
 module Api
   module V1
     class SurveysController < APIApplicationController
-      authorize_resource :except => :identifier_questions
+      authorize_resource :except => [:identifier_questions, :questions_count]
       before_filter :only_finalized_and_unexpired_surveys, :only => [:index, :questions_count]
 
       def index
