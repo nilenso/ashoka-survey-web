@@ -30,24 +30,29 @@ describe DesignerAbility do
     it { should_not be_able_to :update, survey_in_another_org_shared_with_his_org }
     it { should_not be_able_to :update, survey_in_another_organization }
 
-    it { should be_able_to :build, FactoryGirl.build(:survey, :organization_id => 5) }
-    it { should_not be_able_to :build, FactoryGirl.build(:survey, :organization_id => 6) }
+    it { should be_able_to :build, survey_in_his_organization }
+    it { should_not be_able_to :build, survey_in_another_organization }
+    it { should_not be_able_to :build, survey_in_another_org_shared_with_his_org }
 
     it { should be_able_to :destroy, survey_in_his_organization }
     it { should_not be_able_to :destroy, survey_in_another_org_shared_with_his_org }
     it { should_not be_able_to :destroy, survey_in_another_organization }
 
     it { should be_able_to :duplicate, survey_in_his_organization }
-    it { should be_able_to :duplicate, survey_in_another_org_shared_with_his_org }
+    it { should_not be_able_to :duplicate, survey_in_another_org_shared_with_his_org }
     it { should_not be_able_to :duplicate, survey_in_another_organization }
 
     it { should be_able_to :read, survey_in_his_organization }
-    it { should be_able_to :read, survey_in_another_org_shared_with_his_org }
+    it { should_not be_able_to :read, survey_in_another_org_shared_with_his_org }
     it { should_not be_able_to :read, survey_in_another_organization }
 
     it { should be_able_to :report, survey_in_his_organization }
-    it { should be_able_to :report, survey_in_another_org_shared_with_his_org }
+    it { should_not be_able_to :report, survey_in_another_org_shared_with_his_org }
     it { should_not be_able_to :report, survey_in_another_organization }
+
+    it { should be_able_to :finalize, survey_in_his_organization }
+    it { should_not be_able_to :finalize, survey_in_another_org_shared_with_his_org }
+    it { should_not be_able_to :finalize, survey_in_another_organization }
 
 
     it { should_not be_able_to :generate_excel, Survey }
@@ -62,9 +67,8 @@ describe DesignerAbility do
         FactoryGirl.create(:response, :organization_id => 54, :survey => survey_in_his_organization)
       end
 
-      it { should_not be_able_to :manage, Response }
-      it { should be_able_to :read, response_in_same_org }
-      it { should_not be_able_to :read, response_in_other_org }
+      it { should be_able_to :manage, response_in_same_org }
+      it { should_not be_able_to :manage, response_in_other_org }
 
       it { should be_able_to :read, response_in_other_org_belonging_to_survey_in_his_organization }
     end
@@ -73,8 +77,8 @@ describe DesignerAbility do
       it { should be_able_to :edit_publication, survey_in_his_organization }
       it { should be_able_to :update_publication, survey_in_his_organization }
 
-      it { should be_able_to :edit_publication, survey_in_another_org_shared_with_his_org }
-      it { should be_able_to :update_publication, survey_in_another_org_shared_with_his_org }
+      it { should_not be_able_to :edit_publication, survey_in_another_org_shared_with_his_org }
+      it { should_not be_able_to :update_publication, survey_in_another_org_shared_with_his_org }
 
       it { should_not be_able_to :edit_publication, survey_in_another_organization }
       it { should_not be_able_to :update_publication, survey_in_another_organization }
