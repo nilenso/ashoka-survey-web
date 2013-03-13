@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ResponsesController do
   let(:survey) { FactoryGirl.create(:survey_with_questions, :finalized => true, :organization_id => 1) }
   before(:each) do
-    sign_in_as('admin')
+    sign_in_as('cso_admin')
     session[:user_info][:org_id] = 1
   end
 
