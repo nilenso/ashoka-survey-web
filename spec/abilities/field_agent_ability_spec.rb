@@ -32,6 +32,9 @@ describe FieldAgentAbility do
     it { should be_able_to :report, survey_published_to_him }
     it { should_not be_able_to :report, survey_not_published_to_him }
 
+    it { should be_able_to :generate_excel, survey_published_to_him }
+    it { should_not be_able_to :generate_excel, survey_not_published_to_him }
+
     it { should_not be_able_to :manage, Survey }
     it { should be_able_to :read, survey_published_to_him }
     it { should_not be_able_to :read, survey_not_published_to_him }
