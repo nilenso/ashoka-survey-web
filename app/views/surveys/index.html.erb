@@ -1,6 +1,5 @@
 <header>
-  <% if can? :create, Survey %>
-    <% if @surveys.present? %>
+    <% if user_currently_logged_in? %>
       <ul class="filters">
         <li><%= link_to t(".active"), surveys_path, :class => "#{'selected' unless params[:filter]}"%></li>
         <li><%= link_to t(".expired"), surveys_path(:filter => "expired"), :class => "#{'selected' if params[:filter] == "expired"}" %></li>
@@ -8,7 +7,6 @@
         <li><%= link_to t(".archived"), surveys_path(:filter => "archived"), :class => "#{'selected' if params[:filter] == "archived"}"%></li>
       </ul>
     <% end %>
-  <% end %>
 
   <h2>
     <%= user_currently_logged_in? ?  t('.surveys') : t('.welcome') %>
@@ -17,33 +15,33 @@
 </header>
 
 <% unless user_currently_logged_in? %>
-  <p class="application_description"><%= t('.description_part_1') %></p>
-  <p class="application_description"><%= t('.description_part_2') %></p>
+    <p class="application_description"><%= t('.description_part_1') %></p>
+    <p class="application_description"><%= t('.description_part_2') %></p>
 <% end %>
 
 <% if user_currently_logged_in? && @surveys.blank? %>
-  <p class="no-surveys"><%= t('.no_surveys') %></p>
+    <p class="no-surveys"><%= t('.no_surveys') %></p>
 <% end %>
 
 <% unless @surveys.blank? or @organizations.blank? %>
-<ul class="surveys">
-  <li class="survey header">
-    <span class="info">&nbsp;</span>
-    <span class="published-on">Published On</span>
-    <span class="expires-on">Expires On</span>
-    <span class="responses-complete">Complete</span>
-    <span class="responses-incomplete">Incomplete</span>
-  </li>
+    <ul class="surveys">
+      <li class="survey header">
+        <span class="info">&nbsp;</span>
+        <span class="published-on">Published On</span>
+        <span class="expires-on">Expires On</span>
+        <span class="responses-complete">Complete</span>
+        <span class="responses-incomplete">Incomplete</span>
+      </li>
 
 
-  <% @surveys.each do |survey| %>
-    <li class="survey <%= survey.finalized? ? 'finalized' : 'incomplete' %>">
-      <div class="info">
-        <h2 class="name"><%= survey.name %>
-        <em><%= survey.organization_name(@organizations) %></em>
-        </h2>
-        <p class="description"><%= survey.description %></p>
-      </div>
+      <% @surveys.each do |survey| %>
+          <li class="survey <%= survey.finalized? ? 'finalized' : 'incomplete' %>">
+            <div class="info">
+              <h2 class="name"><%= survey.name %>
+                <em><%= survey.organization_name(@organizations) %></em>
+              </h2>
+              <p class="description"><%= survey.description %></p>
+            </div>
 
       <span class="published-on">
         <% if survey.published? && survey.published_on %>
@@ -57,61 +55,61 @@
         <%= I18n.localize(survey.expiry_date) %>
       </span>
 
-      <span class="responses-complete"><%= survey.complete_responses_count %></span>
+            <span class="responses-complete"><%= survey.complete_responses_count %></span>
 
-      <span class="responses-incomplete"><%= survey.incomplete_responses_count %></span>
+            <span class="responses-incomplete"><%= survey.incomplete_responses_count %></span>
 
-      <div class="operations">
-        <ul class="response_operations">
-          <% unless survey.archived? %>
-            <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled if can?(:create, Response.new(:survey => survey)) && !survey.expired? %></li>
-            <li><%= link_to icon_for('icon-paste', t(".crowd_source")), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url } if can?(:read, survey) && survey.public? %></li>
-          <% end %>
-          <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can?(:read, survey) && survey.has_responses? %></li>
-        </ul>
+            <div class="operations">
+              <ul class="response_operations">
+                <% unless survey.archived? %>
+                    <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled if can?(:create, Response.new(:survey => survey)) && !survey.expired? %></li>
+                    <li><%= link_to icon_for('icon-paste', t(".crowd_source")), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url } if can?(:read, survey) && survey.public? %></li>
+                <% end %>
+                <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can?(:read, survey) && survey.has_responses? %></li>
+              </ul>
 
-        <ul class="cso_admin_operations">
-          <% unless survey.archived? %>
-            <% if survey.finalized %>
-              <li><%= link_to icon_for('icon-arrow-up', t(".publish")), edit_survey_publication_path(survey.id) if can? :edit_publication, survey %></li>
-              <li><%= link_to icon_for('icon-arrow-up', t(".unpublish")), unpublish_survey_publication_path(survey.id) if can?(:edit_publication, survey) && survey.survey_users.any? %></li>
-              <li><%= link_to icon_for('icon-icon', t(".archive")), survey_archive_path(survey.id), :method => :put if can? :archive, survey %></li>
-            <% else %>
-              <li><%= link_to icon_for('icon-edit', t('.edit')), survey_build_path(survey.id)  if can? :edit, survey %></li>
-              <li><%= link_to icon_for('icon-ok', t(".finalize")), survey_finalize_path(survey.id), :method => :put, :data => { :confirm => t("surveys.confirm_finalize") } if can? :finalize, survey %></li>
-            <% end %>
-            <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
-            <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %></li>
-          <% end %>
-          <li><%= link_to icon_for('icon-bar-chart', t('.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.finalized? && survey.has_responses? %></li>
-        </ul>
-      </div>
-    </li>
-  <% end %>
-</ul>
+              <ul class="cso_admin_operations">
+                <% unless survey.archived? %>
+                    <% if survey.finalized %>
+                        <li><%= link_to icon_for('icon-arrow-up', t(".publish")), edit_survey_publication_path(survey.id) if can? :edit_publication, survey %></li>
+                        <li><%= link_to icon_for('icon-arrow-up', t(".unpublish")), unpublish_survey_publication_path(survey.id) if can?(:edit_publication, survey) && survey.survey_users.any? %></li>
+                        <li><%= link_to icon_for('icon-icon', t(".archive")), survey_archive_path(survey.id), :method => :put if can? :archive, survey %></li>
+                    <% else %>
+                        <li><%= link_to icon_for('icon-edit', t('.edit')), survey_build_path(survey.id)  if can? :edit, survey %></li>
+                        <li><%= link_to icon_for('icon-ok', t(".finalize")), survey_finalize_path(survey.id), :method => :put, :data => { :confirm => t("surveys.confirm_finalize") } if can? :finalize, survey %></li>
+                    <% end %>
+                    <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
+                    <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %></li>
+                <% end %>
+                <li><%= link_to icon_for('icon-bar-chart', t('.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.finalized? && survey.has_responses? %></li>
+              </ul>
+            </div>
+          </li>
+      <% end %>
+    </ul>
 <% end %>
 
 <%= will_paginate @surveys %>
 
 <script type="text/javascript">
-  $(document).ready(function(){
-    $('a.disabled').click(function(){
-      return false;
-    });
+    $(document).ready(function(){
+        $('a.disabled').click(function(){
+            return false;
+        });
 
-    $('a.copy_public_link').each(function(){
-      $(this).zclip({
-        path: 'assets/ZeroClipboard.swf',
-        copy: $(this).data('public-link'),
-        afterCopy: function() {
-          var cache = $(this).html();
-          $(this).text("<%= t('.copied') %>");
-          var that = $(this);
-          setTimeout(function(){
-            that.html(cache);
-          }, 3000)
-        }
-      });
+        $('a.copy_public_link').each(function(){
+            $(this).zclip({
+                path: 'assets/ZeroClipboard.swf',
+                copy: $(this).data('public-link'),
+                afterCopy: function() {
+                    var cache = $(this).html();
+                    $(this).text("<%= t('.copied') %>");
+                    var that = $(this);
+                    setTimeout(function(){
+                        that.html(cache);
+                    }, 3000)
+                }
+            });
+        });
     });
-  });
 </script>
