@@ -11,6 +11,10 @@ class Ability
         FieldAgentAbility.new(user)
       when 'supervisor'
         SupervisorAbility.new(user)
+      when 'designer'
+        DesignerAbility.new(user)
+      when 'manager'
+        ManagerAbility.new(user)
       else
         Ability.new(user)
     end
