@@ -53,6 +53,10 @@ describe ManagerAbility do
     it { should be_able_to :generate_excel, survey_in_another_org_shared_with_his_org }
     it { should_not be_able_to :generate_excel, survey_in_another_organization }
 
+    it { should be_able_to :finalize, survey_in_his_organization }
+    it { should_not be_able_to :finalize, survey_in_another_org_shared_with_his_org }
+    it { should_not be_able_to :finalize, survey_in_another_organization }
+
     it { should be_able_to :archive, survey_in_his_organization }
     it { should_not be_able_to :archive, survey_in_another_org_shared_with_his_org }
     it { should_not be_able_to :archive, survey_in_another_organization }
@@ -70,6 +74,10 @@ describe ManagerAbility do
       it { should_not be_able_to :manage, response_in_other_org }
 
       it { should be_able_to :manage, response_in_other_org_belonging_to_survey_in_his_organization }
+
+      it { should be_able_to :create, Response.new(:survey => survey_in_another_org_shared_with_his_org) }
+      it { should be_able_to :create, Response.new(:survey => survey_in_his_organization) }
+      it { should_not be_able_to :create, Response.new(:survey => survey_in_another_organization) }
     end
 
     context "when publishing/sharing" do
