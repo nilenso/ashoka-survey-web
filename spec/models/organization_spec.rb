@@ -35,10 +35,17 @@ describe Organization do
     end
   end
 
-  it "returns all users for the particular organization" do
-    users = Organization.users(@access_token, 1)
-    users.map(&:id).should include(1, 2, 3)
-    users.map(&:name).should include "Bob"
+  context "#users" do
+    it "returns all users for the particular organization" do
+      users = Organization.users(@access_token, 1)
+      users.map(&:id).should include(1, 2, 3)
+      users.map(&:name).should include "Bob"
+    end
+
+    it "returns an empty array if the organization_id is nil" do
+      users = Organization.users(@access_token, nil)
+      users.should == []
+    end
   end
 
   it "returns all field agents for the particular organization" do
