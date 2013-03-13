@@ -9,6 +9,8 @@ class Ability
         AdminAbility.new(user)
       when 'field_agent'
         FieldAgentAbility.new(user)
+      when 'supervisor'
+        SupervisorAbility.new(user)
       else
         Ability.new(user)
     end
