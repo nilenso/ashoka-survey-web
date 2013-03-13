@@ -4,7 +4,7 @@ describe Api::V1::SurveysController do
   let(:survey) { FactoryGirl.create :survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true }
 
   before(:each) do
-    sign_in_as('cso_admin')
+    sign_in_as('admin')
     response = double('response')
     parsed_response = { "email" => "admin@admin.com",
                         "id" => 1,
@@ -30,7 +30,7 @@ describe Api::V1::SurveysController do
       FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true)
       get :index
       returned_json = JSON.parse(response.body).first
-      returned_json.keys.should =~ Survey.attribute_names
+       returned_json.keys.should =~ Survey.attribute_names
     end
 
     it "returns only the finalized surveys" do

@@ -6,7 +6,7 @@ describe PublicationsController do
   let(:survey) { FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true) }
 
   before(:each) do
-    sign_in_as('cso_admin')
+    sign_in_as('admin')
     users_response = mock(OAuth2::Response)
     access_token = mock(OAuth2::AccessToken)
     controller.stub(:access_token).and_return(access_token)
