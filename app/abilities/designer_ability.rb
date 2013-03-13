@@ -6,15 +6,16 @@ class DesignerAbility < Ability
     can :build, Survey, :organization_id => user_info[:org_id]
     can :update, Survey, :organization_id => user_info[:org_id]
     can :destroy, Survey, :organization_id => user_info[:org_id]
+    can :duplicate, Survey, :organization_id => user_info[:org_id]
+    can :read, Survey, :organization_id => user_info[:org_id]
+    can :report, Survey, :organization_id => user_info[:org_id]
+    can :finalize, Survey, :organization_id => user_info[:org_id]
 
-    can_perform_on_own_and_shared_surveys(:duplicate)
-    can_perform_on_own_and_shared_surveys(:read)
-    can_perform_on_own_and_shared_surveys(:report)
+    can :edit_publication, Survey, :organization_id => user_info[:org_id]
+    can :update_publication, Survey, :organization_id => user_info[:org_id]
 
-    can :read, Response, :survey => { :organization_id => user_info[:org_id] }
-    can :read, Response, :organization_id => user_info[:org_id]
 
-    can_perform_on_own_and_shared_surveys(:edit_publication)
-    can_perform_on_own_and_shared_surveys(:update_publication)
+    can :manage, Response, :survey => { :organization_id => user_info[:org_id] }
+    can :manage, Response, :organization_id => user_info[:org_id]
   end
 end
