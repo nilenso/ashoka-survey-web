@@ -120,7 +120,7 @@ describe ApplicationController do
   end
 
   it "returns current user's name" do
-    sign_in_as('admin')
+    sign_in_as('cso_admin')
     session[:user_info][:name] = 'Tim'
     controller.current_username.should == 'Tim'
   end
@@ -157,7 +157,7 @@ describe ApplicationController do
     end
 
     it "returns the path to create a user" do
-      sign_in_as('admin')
+      sign_in_as('cso_admin')
       controller.new_user_path.should match /#{ENV['OAUTH_SERVER_URL']}/
       controller.new_user_path.should match /#{controller.current_user_org}/
       controller.new_user_path.should match /new/

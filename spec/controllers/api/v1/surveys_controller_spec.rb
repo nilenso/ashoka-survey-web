@@ -4,7 +4,7 @@ describe Api::V1::SurveysController do
   let(:survey) { FactoryGirl.create :survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true }
 
   before(:each) do
-    sign_in_as('admin')
+    sign_in_as('cso_admin')
     response = double('response')
     parsed_response = { "email" => "admin@admin.com",
                         "id" => 1,
