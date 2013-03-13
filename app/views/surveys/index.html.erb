@@ -79,7 +79,7 @@
                         <li><%= link_to icon_for('icon-ok', t(".finalize")), survey_finalize_path(survey.id), :method => :put, :data => { :confirm => t("surveys.confirm_finalize") } if can? :finalize, survey %></li>
                     <% end %>
                     <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
-                    <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, survey %></li>
+                    <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can?(:destroy, survey) && survey.responses.count == 0  %></li>
                 <% end %>
                 <li><%= link_to icon_for('icon-bar-chart', t('.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.finalized? && survey.has_responses? %></li>
               </ul>
