@@ -52,7 +52,7 @@
   }
 </script>
 <header>
-  <%= link_to icon_for('icon-table', t('.download_excel')), 'javascript:void(0);', :class => 'download_excel'%>
+  <%= link_to icon_for('icon-table', t('.download_excel')), 'javascript:void(0);', :class => 'download_excel' if @complete_responses.present? && can?(:generate_excel, @survey) %>
   <h2><%= t '.reports' %></h2>
 </header>
 <div id="dialog" title="<%= t('responses.excel.excel_dialog_title') %>">
