@@ -3,5 +3,7 @@ class SuperAdminAbility < Ability
     @user_info = user_info
 
     can :manage, :all
+    cannot :create, Survey
+    cannot :create, Response
   end
 end
