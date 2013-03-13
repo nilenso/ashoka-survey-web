@@ -32,8 +32,26 @@ describe ViewerAbility do
       let(:response_in_same_org) { FactoryGirl.create(:response, :organization_id => 5) }
       let(:response_in_other_org) { FactoryGirl.create(:response, :organization_id => 54) }
 
-      it { should_not be_able_to :manage, Response }
       it { should be_able_to :read, response_in_same_org }
+      it { should_not be_able_to :read, response_in_other_org }
+    end
+
+    context "with responses" do
+      let(:response_in_same_org) { FactoryGirl.create(:response, :organization_id => 5) }
+      let(:response_in_other_org) { FactoryGirl.create(:response, :organization_id => 54) }
+
+      let(:response_in_other_org_belonging_to_survey_in_his_organization) do
+        FactoryGirl.create(:response, :organization_id => 54, :survey => survey_in_same_org)
+      end
+
+      it { should_not be_able_to :manage, Response }
+      it { should_not be_able_to :manage, response_in_same_org }
+      it { should_not be_able_to :manage, response_in_other_org }
+      it { should_not be_able_to :manage, response_in_other_org_belonging_to_survey_in_his_organization }
+
+
+      it { should be_able_to :read, response_in_same_org }
+      it { should be_able_to :read, response_in_other_org_belonging_to_survey_in_his_organization }
       it { should_not be_able_to :read, response_in_other_org }
     end
 
