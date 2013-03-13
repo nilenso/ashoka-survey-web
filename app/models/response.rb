@@ -13,9 +13,8 @@ class Response < ActiveRecord::Base
   delegate :questions, :to => :survey
   delegate :public?, :to => :survey, :prefix => true, :allow_nil => true
   reverse_geocoded_by :latitude, :longitude, :address => :location
-  after_validation :reverse_geocode
   geocoded_by :ip_address, :latitude => :latitude, :longitude => :longitude
-  before_validation :geocode
+  before_save :reverse_geocode, :geocode, :on => :create
   acts_as_gmappable :lat => :latitude, :lng => :longitude, :check_process => false, :process_geocoding => false
 
   MAX_PAGE_SIZE = 50
