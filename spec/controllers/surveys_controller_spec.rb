@@ -35,7 +35,7 @@ describe SurveysController do
     context "when filtering" do
       before(:each) do
         Survey.delete_all
-        sign_in_as('cso_admin')
+        sign_in_as('admin')
         @draft_survey = FactoryGirl.create(:survey, :finalized => false, :organization_id => LOGGED_IN_ORG_ID)
         @finalized_survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => LOGGED_IN_ORG_ID)
         @archived_survey = FactoryGirl.create(:survey, :archived => true, :organization_id => LOGGED_IN_ORG_ID)
@@ -66,7 +66,7 @@ describe SurveysController do
     let!(:survey) { FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID) }
 
     before(:each) do
-      sign_in_as('cso_admin')
+      sign_in_as('admin')
     end
 
     it "deletes a survey" do
@@ -82,7 +82,7 @@ describe SurveysController do
 
   context "POST 'create'" do
     before(:each) do
-      sign_in_as('cso_admin')
+      sign_in_as('admin')
       session[:user_info][:org_id] = 123
       @survey_attributes = FactoryGirl.attributes_for(:survey)
     end
@@ -115,7 +115,7 @@ describe SurveysController do
 
   context "GET 'build'" do
     before(:each) do
-      sign_in_as('cso_admin')
+      sign_in_as('admin')
       @survey = FactoryGirl.create(:survey)
     end
 
@@ -134,7 +134,7 @@ describe SurveysController do
 
   context "when finalizing" do
     before(:each) do
-      sign_in_as('cso_admin')
+      sign_in_as('admin')
       @survey = FactoryGirl.create(:survey)
     end
 
@@ -156,7 +156,7 @@ describe SurveysController do
 
   context "when archiving" do
     before(:each) do
-      sign_in_as('cso_admin')
+      sign_in_as('admin')
       session[:user_info][:org_id] = 123
       @survey = FactoryGirl.create(:survey, :organization_id => 123)
     end
@@ -185,7 +185,7 @@ describe SurveysController do
 
   context "POST 'duplicate'" do
     before(:each) do
-      sign_in_as('cso_admin')
+      sign_in_as('admin')
       session[:user_info][:org_id] = 123
       request.env["HTTP_REFERER"] = 'http://google.com'
     end
@@ -218,7 +218,7 @@ describe SurveysController do
 
   context "GET 'report'" do
     before(:each) do
-      sign_in_as('cso_admin')
+      sign_in_as('admin')
       session[:user_info][:org_id] = 123
     end
 

@@ -8,7 +8,7 @@ module Api
       let(:question) { FactoryGirl.create(:question, :survey => survey) }
 
       before(:each) do
-        sign_in_as('cso_admin')
+        sign_in_as('admin')
         session[:user_info][:org_id] = organization_id
         response = double('response')
         parsed_response = { "email" => "admin@admin.com",

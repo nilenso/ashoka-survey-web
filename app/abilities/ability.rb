@@ -15,6 +15,8 @@ class Ability
         DesignerAbility.new(user)
       when 'manager'
         ManagerAbility.new(user)
+      when 'admin'
+        SuperAdminAbility.new(user)
       else
         Ability.new(user)
     end

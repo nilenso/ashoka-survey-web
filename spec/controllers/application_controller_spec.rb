@@ -115,12 +115,12 @@ describe ApplicationController do
   it "knows if the current user is a cso admin" do
     sign_in_as('cso_admin')
     controller.signed_in_as_cso_admin?.should be_true
-    sign_in_as('user')
+    sign_in_as('field_agent')
     controller.signed_in_as_cso_admin?.should be_false
   end
 
   it "returns current user's name" do
-    sign_in_as('cso_admin')
+    sign_in_as('admin')
     session[:user_info][:name] = 'Tim'
     controller.current_username.should == 'Tim'
   end
@@ -157,7 +157,7 @@ describe ApplicationController do
     end
 
     it "returns the path to create a user" do
-      sign_in_as('cso_admin')
+      sign_in_as('admin')
       controller.new_user_path.should match /#{ENV['OAUTH_SERVER_URL']}/
       controller.new_user_path.should match /#{controller.current_user_org}/
       controller.new_user_path.should match /new/
