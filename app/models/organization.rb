@@ -25,7 +25,7 @@ class Organization
   end
 
   def self.field_agents(client, organization_id)
-    users(client, organization_id)
+    users(client, organization_id).select { |user| user.role == 'field_agent' }
   end
 
   def self.exists?(client, org_ids)
