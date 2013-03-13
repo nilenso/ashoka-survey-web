@@ -2,7 +2,6 @@ module Api
   module V1
     class OptionsController < APIApplicationController
       before_filter :dont_cache
-      authorize_resource
 
       def create
         option = Option.new(params[:option])
