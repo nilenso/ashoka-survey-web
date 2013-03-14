@@ -17,8 +17,8 @@
 
   function drawChart() {
     <% @survey.questions_for_reports.each do |question| %>
-      data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
       <% if question.respond_to? :options %>
+        data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
         chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
         params['title'] = "<%= question.decorate.content_with_answer_count %>";
         chart.draw(data, params);
@@ -41,6 +41,7 @@
         chart.draw(data, params);
       <% elsif question.type == 'NumericQuestion' %>
         chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
+        data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
         params = {
           vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %> },
           hAxis: {'title': 'Answer', minValue: <%= question.min_value_for_report %> , maxValue: <%= question.max_value_for_report %>},
