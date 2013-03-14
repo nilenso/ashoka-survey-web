@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Api::V1::CategoriesController do
   before(:each) do
-    sign_in_as('admin')
+    sign_in_as('super_admin')
   end
   context "POST 'create'" do
     it "creates a new category in the database" do
