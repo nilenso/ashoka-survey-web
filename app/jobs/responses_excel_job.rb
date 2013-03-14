@@ -1,10 +1,11 @@
 class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names, :user_names, :server_url, :filename)
   def perform
+    return if response_ids.empty?
     package = Axlsx::Package.new do |p|
       wb = p.workbook
       bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
       border = wb.styles.add_style border: { style: :thin, color: '000000' }
-      questions = survey.first_level_elements.map(&:with_sub_questions_in_order).flatten
+      questions = Response.find(response_ids[0]).sorted_answers.map(&:question)
       wb.add_worksheet(name: "Responses") do |sheet|
         headers = questions.map { |question| "#{QuestionDecorator.find(question).question_number}) #{question.content}" }
         headers.unshift("Response No.")
