@@ -25,7 +25,7 @@ module Api
 
       def destroy
         option = Option.find_by_id(params[:id])
-        authorize! :destroy, option.try(:survey)
+        authorize! :update, option.try(:survey)
         begin
           Option.destroy(params[:id])
           render :nothing => true

@@ -26,7 +26,7 @@ module Api
 
       def destroy
         category = Category.find_by_id(params[:id])
-        authorize! :destroy, category.try(:survey)
+        authorize! :update, category.try(:survey)
         if category
           Category.destroy(params[:id])
           render :nothing => true
