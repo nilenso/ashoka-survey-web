@@ -58,5 +58,12 @@ describe User do
       user_ids = [1, 2]
       User.names_for_ids(nil, user_ids).should == {}
     end
+
+    it "checks if whether the user is publishable or not" do
+      user = User.json_to_user({"id" => 1, "name" => "John", "role" => "field_agent"})
+      another_user = User.json_to_user({"id" => 1, "name" => "John", "role" => "cso_admin"})
+      user.should be_publishable
+      another_user.should_not be_publishable
+    end
   end
 end

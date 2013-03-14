@@ -30,4 +30,8 @@ class User
     user_exists = client.get("/api/users/validate_users", :params => {:user_ids => user_ids.to_json})
     user_exists.parsed
   end
+
+  def publishable?
+    role == "field_agent" || role == "supervisor"
+  end
 end

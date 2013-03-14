@@ -4,9 +4,9 @@ class PublicationsController < ApplicationController
   def edit
     @survey = Survey.find(params[:survey_id])
     authorize! :edit_publication, @survey
-    field_agents = @survey.users_for_organization(access_token, current_user_org)
-    @published_users = field_agents[:published]
-    @unpublished_users = field_agents[:unpublished]
+    publishable_users = @survey.users_for_organization(access_token, current_user_org)
+    @published_users = publishable_users[:published]
+    @unpublished_users = publishable_users[:unpublished]
 
     partitioned_organizations = @survey.partitioned_organizations(access_token)
     @shared_organizations = partitioned_organizations[:participating]

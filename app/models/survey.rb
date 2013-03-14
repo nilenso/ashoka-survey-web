@@ -42,9 +42,9 @@ class Survey < ActiveRecord::Base
 
   def users_for_organization(access_token, organization_id)
     users = {}
-    field_agents = Organization.field_agents(access_token, organization_id)
-    users[:published], users[:unpublished] = field_agents.partition do |field_agent|
-      user_ids.include?(field_agent.id)
+    publishable_users = Organization.publishable_users(access_token, organization_id)
+    users[:published], users[:unpublished] = publishable_users.partition do |publishable_user|
+      user_ids.include?(publishable_user.id)
     end
     users
   end

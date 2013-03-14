@@ -11,7 +11,7 @@ describe Organization do
     orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
 
     @access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
-    users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => 'field_agent'}, {"id" => 2, "name" => "John", "role" => 'field_agent'}, {"id" => 3, "name" => "Rambo", "role" => 'cso_admin'}])
+    users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => 'field_agent'}, {"id" => 2, "name" => "John", "role" => 'supervisor'}, {"id" => 3, "name" => "Rambo", "role" => 'cso_admin'}])
 
     @access_token.stub(:get).with('/api/organizations/validate_orgs', :params => { :org_ids => [1, 2].to_json}).and_return(org_exists)
     org_exists.stub(:parsed).and_return(true)
@@ -49,9 +49,11 @@ describe Organization do
   end
 
   it "returns all field agents for the particular organization" do
-    users = Organization.field_agents(@access_token, 1)
+    users = Organization.publishable_users(@access_token, 1)
     users.map(&:id).should_not include 3
+    users.map(&:id).should include(1,2)
     users.map(&:name).should_not include "Rambo"
+    users.map(&:name).should include("Bob","John")
   end
 
   it "returns true if the organizations exists" do
