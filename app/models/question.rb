@@ -46,8 +46,8 @@ class Question < ActiveRecord::Base
     true
   end
 
-  def with_sub_questions_in_order
-    [self]
+  def as_json_with_elements_in_order
+    self.as_json
   end
 
   def options

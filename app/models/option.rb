@@ -36,6 +36,12 @@ class Option < ActiveRecord::Base
     question.try(:has_multi_record_ancestor?)
   end
 
+  def as_json_with_elements_in_order
+    json = { 'id' => id, 'content' => content, 'question_id' => question_id }
+    json['elements'] = elements.map(&:as_json_with_elements_in_order).flatten
+    json
+  end
+
   def elements_with_questions
     (questions + categories_with_questions).sort_by(&:order_number)
   end

@@ -105,40 +105,13 @@ describe Question do
     question_under_category.first_level?.should be_false
   end
 
-  context "when returning all its subquestions in order" do
-    it "returns itself and all its sub-questions in order for a RadioQuestion" do
-      question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
-      question.options << Option.create(content: "Option", order_number: 0)
-      nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
-      second_nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-      nested_question.options << Option.create(content: "Nested Option", order_number: 0)
-      second_level_nested_question = RadioQuestion.create({content: "Nested Again", survey_id: 18, order_number: 0, parent_id: nested_question.options.first.id})
-      question.with_sub_questions_in_order.should == [question, nested_question, second_level_nested_question, second_nested_question]
-    end
-
-    it "returns itself and all its sub-questions in order for a DropDownQuestion" do
-      question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
-      question.options << Option.create(content: "Option", order_number: 0)
-      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
-      second_nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-      nested_question.options << Option.create(content: "Nested Option", order_number: 0)
-      second_level_nested_question = DropDownQuestion.create({content: "Nested Again", survey_id: 18, order_number: 0, parent_id: nested_question.options.first.id})
-      question.with_sub_questions_in_order.should == [question, nested_question, second_level_nested_question, second_nested_question]
-    end
-
-    it "returns itself and all its sub-questions in order for a MultiChoiceQuestion" do
-      question = MultiChoiceQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
-      question.options << Option.create(content: "Option", order_number: 0)
-      nested_question = MultiChoiceQuestion.create({content: "Nested", survey_id: 18, order_number: 0, parent_id: question.options.first.id})
-      second_nested_question = MultiChoiceQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-      nested_question.options << Option.create(content: "Nested Option", order_number: 0)
-      second_level_nested_question = MultiChoiceQuestion.create({content: "Nested Again", survey_id: 18, order_number: 0, parent_id: nested_question.options.first.id})
-      question.with_sub_questions_in_order.should == [question, nested_question, second_level_nested_question, second_nested_question]
-    end
-
-    it "returns itself for all other types of questions" do
-      question = SingleLineQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
-      question.with_sub_questions_in_order.should == [question]
+  context "when fetching question with its elements in order as json" do
+    it "includes itself" do
+      question = FactoryGirl.create(:question)
+      json = question.as_json_with_elements_in_order
+      %w(type content id parent_id category_id).each do |attr|
+        json[attr].should == question[attr]
+      end
     end
   end
 

@@ -23,8 +23,10 @@ class Category < ActiveRecord::Base
     klass.new(params)
   end
 
-  def with_sub_questions_in_order
-    elements.map(&:with_sub_questions_in_order).flatten
+  def as_json_with_elements_in_order
+    json = self.as_json
+    json['elements'] = elements.map(&:as_json_with_elements_in_order).flatten
+    json
   end
 
   def as_json(opts={})

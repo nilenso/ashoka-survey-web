@@ -412,4 +412,14 @@ describe Survey do
     survey.publish
     survey.published_on.should_not be_nil
   end
+
+  context "#elements_in_order_as_json" do
+    it "should include all the elements of the survey" do
+      survey = FactoryGirl.create :survey
+      question = FactoryGirl.create :question, :survey => survey
+      category = FactoryGirl.create :category, :survey => survey
+      category.questions << FactoryGirl.create(:question)
+      survey.elements_in_order_as_json.size.should == 2
+    end
+  end
 end

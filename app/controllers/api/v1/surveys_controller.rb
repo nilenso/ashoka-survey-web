@@ -28,7 +28,9 @@ module Api
         survey = Survey.find_by_id(params[:id])
         authorize! :read, survey
         if survey
-          render :json => survey.to_json
+          survey_json = survey.as_json
+          survey_json['elements'] = survey.elements_in_order_as_json
+          render :json => survey_json
         else
           render :nothing => true, :status => :bad_request
         end

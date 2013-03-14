@@ -111,8 +111,8 @@ class Survey < ActiveRecord::Base
     (first_level_questions + first_level_categories_with_questions).sort_by(&:order_number)
   end
 
-  def question_ids_in_order
-    first_level_elements.map(&:with_sub_questions_in_order).flatten.map(&:id)
+  def elements_in_order_as_json
+    first_level_elements.map(&:as_json_with_elements_in_order)
   end
 
   def questions_for_reports

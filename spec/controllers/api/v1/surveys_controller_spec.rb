@@ -145,16 +145,24 @@ describe Api::V1::SurveysController do
   end
 
   context "GET 'show" do
-
     it "returns the survey information as JSON" do
       get :show, :id => survey.id
+      json = JSON.parse(response.body)
       response.should be_ok
-      JSON.parse(response.body).should == JSON.parse(survey.to_json)
+      %w(id name description finalized organization_id public published_on archived).each do |attr|
+        json[attr].should == survey[attr]
+      end
     end
 
     it "returns a :bad_request if the survey isn't found" do
       get :show, :id => 1234
       response.should_not be_ok
+    end
+
+    it "returns all the elements of the survey as well" do
+      get :show, :id => survey.id
+      response.should be_ok
+      JSON.parse(response.body).should have_key 'elements'
     end
   end
 

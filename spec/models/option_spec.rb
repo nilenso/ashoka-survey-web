@@ -162,4 +162,22 @@ describe Option do
       option.should have_multi_record_ancestor
     end
   end
+
+  context "when fetching an option with its elements in order as json" do
+    it "includes itself" do
+      option = FactoryGirl.create(:option)
+      json = option.as_json_with_elements_in_order
+      %w(content id question_id).each do |attr|
+        json[attr].should == option[attr]
+      end
+    end
+
+    it "includes its sub elements" do
+      option = FactoryGirl.create(:option)
+      sub_question = FactoryGirl.create(:question, :parent => option)
+      sub_category = FactoryGirl.create(:category, :parent => option)
+      json = option.as_json_with_elements_in_order
+      json['elements'].size.should == option.elements.size
+    end
+  end
 end

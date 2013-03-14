@@ -27,4 +27,21 @@ describe QuestionWithOptions do
       sub_question.answers.should_not be_blank
     end
   end
+
+  context "when fetching question with its elements in order as json" do
+    it "includes itself" do
+      question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)
+      json = question.as_json_with_elements_in_order
+      %w(type content id parent_id category_id).each do |attr|
+        json[attr].should == question[attr]
+      end
+    end
+
+    it "includes its options" do
+      question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)
+      option = FactoryGirl.create(:option, :question_id => question.id)
+      json = question.as_json_with_elements_in_order
+      json['options'].size.should == question.options.size
+    end
+  end
 end

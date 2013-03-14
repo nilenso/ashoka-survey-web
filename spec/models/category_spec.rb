@@ -297,4 +297,22 @@ describe Category do
       response.reload.answers.size.should == 5
     end
   end
+
+  context "when fetching category with its elements in order as json" do
+    it "includes itself" do
+      category = FactoryGirl.create(:category)
+      json = category.as_json_with_elements_in_order
+      Category.attribute_names.each do |attr|
+        json[attr].should == category[attr]
+      end
+    end
+
+    it "includes its sub elements" do
+      category = FactoryGirl.create(:category)
+      sub_question = FactoryGirl.create(:question, :category => category)
+      sub_category = FactoryGirl.create(:category, :category => category)
+      json = category.as_json_with_elements_in_order
+      json['elements'].size.should == category.elements.size
+    end
+  end
 end
