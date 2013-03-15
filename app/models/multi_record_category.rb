@@ -2,7 +2,11 @@ class MultiRecordCategory < Category
   validate :dont_allow_nested_multi_record, :if => :has_multi_record_ancestor?
 
   def sorted_answers_for_response(response_id, record_id=nil)
-    records.where(:response_id => response_id).map { |record| super(response_id, record.id) }.flatten
+    records_for_response(response_id).map { |record| super(response_id, record.id) }.flatten
+  end
+  
+  def records_for_response(response_id)
+    records.where(:response_id => response_id)
   end
 
   def create_blank_answers(params={})

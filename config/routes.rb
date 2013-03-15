@@ -35,7 +35,9 @@ SurveyWeb::Application.routes.draw do
       resources :questions, :except => [:edit, :new] do
         member { post "duplicate" }
       end
-      resources :records, :only => [:create, :update]
+      resources :records, :only => [:create, :update] do
+        collection { get 'ids_for_response' }
+      end
       resources :categories, :except => [:edit, :new] do
         member { post "duplicate" }
       end

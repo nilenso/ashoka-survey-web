@@ -36,4 +36,27 @@ describe Api::V1::RecordsController do
       JSON.parse(response.body).except('created_at', 'updated_at').should == record.as_json.except('created_at', 'updated_at')
     end
   end
+
+  context "GET 'ids_for_response'" do
+    before(:each) { sign_in_as('cso_admin') }
+    let(:mr_category) { MultiRecordCategory.create(content: "HELLO") }
+
+    it "gets all the IDs for records of the given category belonging to the given response" do
+      record = FactoryGirl.create(:record, :category => mr_category, :response => FactoryGirl.create(:response))
+      get :ids_for_response, category_id: mr_category.id, response_id: record.response_id
+      JSON.parse(response.body).should == [record.id]
+    end
+
+    it "requires a response_id" do
+      expect {
+        get :ids_for_response, category_id: mr_category.id, response_id: nil
+      }.to raise_error
+    end
+
+    it "requires a category_id" do
+      expect {
+        get :ids_for_response, category_id: nil, response_id: FactoryGirl.create(:response).id
+      }.to raise_error
+    end
+  end
 end

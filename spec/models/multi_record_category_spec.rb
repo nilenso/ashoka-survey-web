@@ -80,4 +80,14 @@ describe MultiRecordCategory do
       end.not_to change { Record.count }
     end
   end
+
+  context "when fetching all child records that belong to a given response" do
+    it "fetches all the records with the given response_id" do
+      mr_category = MultiRecordCategory.create(:content => "hello")
+      record = FactoryGirl.create(:record, :category => mr_category, :response_id => 5)
+      record_from_another_Response = FactoryGirl.create(:record, :category => mr_category, :response_id => 6)
+      orphan_record = FactoryGirl.create(:record)
+      mr_category.records_for_response(5).should == [record]
+    end
+  end
 end

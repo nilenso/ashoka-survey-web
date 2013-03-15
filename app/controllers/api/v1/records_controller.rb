@@ -3,6 +3,7 @@ class Api::V1::RecordsController < ApplicationController
 
   def create
     record = Record.create(params[:record])
+    # TODO: Authorize!
     if record.valid?
       render :json => record
     else
@@ -17,5 +18,12 @@ class Api::V1::RecordsController < ApplicationController
     else
       render :json => record
     end
+  end
+
+  def ids_for_response
+    response = Response.find(params[:response_id])
+    authorize! :read, response
+    category = MultiRecordCategory.find(params[:category_id])
+    render :json => category.records_for_response(params[:response_id]).map(&:id)
   end
 end
