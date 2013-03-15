@@ -107,9 +107,9 @@ describe Question do
 
   context "when fetching question with its elements in order as json" do
     it "includes itself" do
-      question = FactoryGirl.create(:question)
+      question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
       json = question.as_json_with_elements_in_order
-      %w(type content id parent_id category_id).each do |attr|
+      %w(type content id parent_id type category_id).each do |attr|
         json[attr].should == question[attr]
       end
     end

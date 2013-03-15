@@ -47,7 +47,7 @@ class Question < ActiveRecord::Base
   end
 
   def as_json_with_elements_in_order
-    self.as_json
+    self.as_json(:methods => 'type')
   end
 
   def options
