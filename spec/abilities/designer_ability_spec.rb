@@ -67,7 +67,8 @@ describe DesignerAbility do
         FactoryGirl.create(:response, :organization_id => 54, :survey => survey_in_his_organization)
       end
 
-      it { should be_able_to :manage, response_in_same_org }
+      it { should be_able_to :create, response_in_same_org }
+      it { should_not be_able_to :destroy, response_in_same_org }
       it { should_not be_able_to :manage, response_in_other_org }
 
       it { should be_able_to :read, response_in_other_org_belonging_to_survey_in_his_organization }
@@ -85,4 +86,4 @@ describe DesignerAbility do
     end
   end
 end
-      
+
