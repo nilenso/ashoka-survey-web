@@ -18,7 +18,7 @@ class QuestionWithOptions < Question
 
   def as_json_with_elements_in_order
     json = self.as_json(:methods => 'type')
-    json['options'] = options.map(&:as_json_with_elements_in_order).flatten
+    json['options'] = options.includes(:questions).map(&:as_json_with_elements_in_order).flatten
     json
   end
 
