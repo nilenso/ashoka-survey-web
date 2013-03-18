@@ -104,7 +104,7 @@ class Survey < ActiveRecord::Base
   end
 
   def first_level_categories_with_questions
-    first_level_categories.select { |x| x.has_questions? }
+    first_level_categories.includes([:questions, :categories]).select { |x| x.has_questions? }
   end
 
   def first_level_elements
