@@ -21,11 +21,11 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
             question_answers ? question_answers.map { |answer| answer.content_for_excel(server_url) }.join(', ') : ""
           end
           answers_for_excel.unshift(i+1)
-          answers_for_excel << user_names[response[:user_id]]
+          answers_for_excel << user_names[response.user_id]
           answers_for_excel << organization_names.find { |org| org.id == response[:organization_id] }.try(:name)
-          answers_for_excel << response[:last_update]
-          answers_for_excel << response[:location]
-          answers_for_excel << response[:ip_address]
+          answers_for_excel << response.last_update
+          answers_for_excel << response.location
+          answers_for_excel << response.ip_address
           sheet.add_row answers_for_excel, style: border
         end
       end
