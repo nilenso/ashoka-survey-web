@@ -17,7 +17,7 @@
 
   function drawChart() {
     <% @survey.questions_for_reports.each do |question| %>
-      <% if question.respond_to? :options %>
+      <% if question.is_a? QuestionWithOptions %>
         data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
         chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
         params['title'] = "<%= question.decorate.content_with_answer_count %>";
