@@ -48,6 +48,7 @@ describe FieldAgentAbility do
 
       it { should be_able_to :manage, response_added_by_him }
       it { should_not be_able_to :manage, response_added_by_someone_else }
+      it { should_not be_able_to :destroy, Response }
     end
 
     context "when publishing/sharing" do
