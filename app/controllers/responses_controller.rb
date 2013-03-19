@@ -66,6 +66,7 @@ class ResponsesController < ApplicationController
   end
 
   def complete
+    @disabled = false
     @response = ResponseDecorator.find(params[:id])
     verify_recaptcha(:model => @response, :attribute => :captcha) if @response.survey_public?
     response_complete = @response.complete?
