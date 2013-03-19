@@ -295,9 +295,27 @@ describe ResponsesController do
       resp.reload.should be_complete
     end
 
-    it "redirects to the response index page on success" do
+    it "redirects to the response index page on success if the survey is not crowd_sourced" do
       put :complete, :id => resp.id, :survey_id => resp.survey_id
       response.should redirect_to(survey_responses_path(resp.survey_id))
+    end
+
+    context "when completing a response to public survey" do
+      it "redirects to the root_path if no user is logged in" do
+        session[:user_id] = nil
+        survey = FactoryGirl.create(:survey, :public => true, :finalized => true)
+        resp = FactoryGirl.create(:response, :session_token => "123", :survey => survey)
+        session[:session_token] = "123"
+        put :complete, :id => resp.id, :survey_id => resp.survey_id
+        response.should redirect_to root_path
+      end
+
+      it "redirects to the responses index page if a user is logged in" do
+        survey = FactoryGirl.create(:survey, :public => true, :finalized => true, :organization_id => 1)
+        resp = FactoryGirl.create(:response, :organization_id => 1, :user_id => 1, :survey => survey)
+        put :complete, :id => resp.id, :survey_id => resp.survey_id
+        response.should redirect_to survey_responses_path(survey.id)
+      end
     end
 
     it "updates the response" do

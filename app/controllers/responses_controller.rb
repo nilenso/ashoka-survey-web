@@ -66,20 +66,11 @@ class ResponsesController < ApplicationController
   end
 
   def complete
-    @disabled = false
     @response = ResponseDecorator.find(params[:id])
     verify_recaptcha(:model => @response, :attribute => :captcha) if @response.survey_public?
-    response_complete = @response.complete?
-    if @response.errors.empty? && @response.update_answers(params.try(:[],:response).try(:[], :answers_attributes))
-      @response.complete
-      redirect_to survey_responses_path(@response.survey_id), :notice => "Successfully updated"
-    else
-      response_complete ? @response.complete : @response.incomplete
-      @response.attributes = params[:response]
-      flash.delete(:recaptcha_error)
-      flash[:error] = @response.errors.messages[:captcha] || t("responses.edit.error_saving_response")
-      render :edit
-    end
+    was_complete = @response.complete?
+    answers_attributes = params.try(:[],:response).try(:[], :answers_attributes)
+    @response.valid_for?(answers_attributes) ? complete_valid_response : revert_response(was_complete, params[:response])
   end
 
   def destroy
@@ -90,6 +81,25 @@ class ResponsesController < ApplicationController
   end
 
   private
+
+  def complete_valid_response
+    @response.complete
+    success_path = @response.survey_public? && !user_currently_logged_in? ? root_path : survey_responses_path(@response.survey_id)
+    redirect_to success_path, :notice => "Successfully updated"
+  end
+
+  def revert_response(was_complete, response)
+    if was_complete
+      @response.complete
+    else
+      @response.incomplete
+    end
+    @response.attributes = response
+    flash.delete(:recaptcha_error)
+    flash[:error] = @response.errors.messages[:captcha] || t("responses.edit.error_saving_response")
+    @disabled = false
+    render :edit
+  end
 
   def survey_finalized
     survey = Survey.find(params[:survey_id])

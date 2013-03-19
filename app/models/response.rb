@@ -127,6 +127,10 @@ class Response < ActiveRecord::Base
     ResponseSerializer.new(self)
   end
 
+  def valid_for?(answer_attributes)
+    self.errors.empty? && self.update_answers(answer_attributes)
+  end
+
   private
 
   def five_first_level_answers

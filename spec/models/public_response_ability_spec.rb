@@ -58,6 +58,8 @@ describe "Abilities" do
         end
 
         it { should be_able_to :manage, response }
+        it { should_not be_able_to :destroy, Response }
+        it { should_not be_able_to :read, Response }
       end
 
       context "cannot manage a response that he didn't create" do
