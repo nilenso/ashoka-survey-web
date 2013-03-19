@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130227111901) do
+ActiveRecord::Schema.define(:version => 20130319103549) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -67,6 +67,45 @@ ActiveRecord::Schema.define(:version => 20130227111901) do
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
+  create_table "oauth_access_grants", :force => true do |t|
+    t.integer  "resource_owner_id", :null => false
+    t.integer  "application_id",    :null => false
+    t.string   "token",             :null => false
+    t.integer  "expires_in",        :null => false
+    t.string   "redirect_uri",      :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "revoked_at"
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_grants", ["token"], :name => "index_oauth_access_grants_on_token", :unique => true
+
+  create_table "oauth_access_tokens", :force => true do |t|
+    t.integer  "resource_owner_id"
+    t.integer  "application_id",    :null => false
+    t.string   "token",             :null => false
+    t.string   "refresh_token"
+    t.integer  "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at",        :null => false
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_tokens", ["refresh_token"], :name => "index_oauth_access_tokens_on_refresh_token", :unique => true
+  add_index "oauth_access_tokens", ["resource_owner_id"], :name => "index_oauth_access_tokens_on_resource_owner_id"
+  add_index "oauth_access_tokens", ["token"], :name => "index_oauth_access_tokens_on_token", :unique => true
+
+  create_table "oauth_applications", :force => true do |t|
+    t.string   "name",         :null => false
+    t.string   "uid",          :null => false
+    t.string   "secret",       :null => false
+    t.string   "redirect_uri", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "oauth_applications", ["uid"], :name => "index_oauth_applications_on_uid", :unique => true
+
   create_table "options", :force => true do |t|
     t.string   "content"
     t.integer  "question_id"
@@ -76,6 +115,15 @@ ActiveRecord::Schema.define(:version => 20130227111901) do
   end
 
   add_index "options", ["question_id"], :name => "index_options_on_question_id"
+
+  create_table "organizations", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.string   "status",         :default => "active"
+    t.string   "default_locale", :default => "en"
+    t.string   "org_type"
+  end
 
   create_table "participating_organizations", :force => true do |t|
     t.integer  "survey_id"
@@ -125,7 +173,7 @@ ActiveRecord::Schema.define(:version => 20130227111901) do
     t.string   "location"
     t.string   "ip_address"
     t.string   "mobile_id"
-    t.string   "state"
+    t.string   "state",           :default => "clean"
     t.text     "comment"
   end
 
@@ -154,5 +202,17 @@ ActiveRecord::Schema.define(:version => 20130227111901) do
   end
 
   add_index "surveys", ["organization_id"], :name => "index_surveys_on_organization_id"
+
+  create_table "users", :force => true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "password_digest"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+    t.string   "role"
+    t.integer  "organization_id"
+    t.string   "password_reset_token"
+    t.string   "status"
+  end
 
 end
