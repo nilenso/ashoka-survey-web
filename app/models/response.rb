@@ -130,7 +130,7 @@ class Response < ActiveRecord::Base
   private
 
   def five_first_level_answers
-    answers.find_all{ |answer| answer.question.first_level? }[0..5]
+    answers.find_all{ |answer| answer.question.first_level? }[0..4]
   end
 
   def response_validating?

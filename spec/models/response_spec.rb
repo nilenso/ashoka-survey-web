@@ -32,14 +32,21 @@ describe Response do
     response.answers_for_identifier_questions.should == identifier_question.answers
   end
 
-  it "gives you first five answers to first level questions if there are no identfier questions " do
-    response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
-    question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
-    question.options << Option.create(content: "Option", order_number: 1)
-    nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-    response.answers << FactoryGirl.create(:answer, :question_id => question.id, :response_id => response.id)
-    response.answers << FactoryGirl.create(:answer, :question_id => nested_question.id, :response_id => response.id)
-    response.answers_for_identifier_questions.should == question.answers
+  context "when there are no identifier questions" do
+    it "gives you answers to first level questions " do
+      response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
+      question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
+      question.options << Option.create(content: "Option", order_number: 1)
+      nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
+      response.answers << FactoryGirl.create(:answer, :question_id => question.id, :response_id => response.id)
+      response.answers << FactoryGirl.create(:answer, :question_id => nested_question.id, :response_id => response.id)
+      response.answers_for_identifier_questions.should == question.answers
+    end
+
+    it "returns a list of first five answers" do
+      response = FactoryGirl.create(:response_with_answers, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
+      response.reload.answers_for_identifier_questions.size.should == 5
+    end
   end
 
   it "merges the response status based on updated_at" do
