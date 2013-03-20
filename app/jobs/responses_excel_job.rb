@@ -48,7 +48,7 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
   private
 
   def delete_excel
-    directory = directory = aws_excel_directory
+    directory = aws_excel_directory
     directory.files.get(filename).destroy
   end
   handle_asynchronously :delete_excel, :run_at => Proc.new { 30.minutes.from_now }, :queue => 'delete_excel'

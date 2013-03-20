@@ -13,7 +13,7 @@ class window.ExcelDownloader
     $.ajax
       type: "HEAD"
       async: true
-      url: "/#{@filename}"
+      url: "https://s3.amazonaws.com/surveywebexcel/#{@filename}"
       success: (message, text, response) =>
         console.log "Generated excel. Downloading..."
         clearInterval(@interval)
