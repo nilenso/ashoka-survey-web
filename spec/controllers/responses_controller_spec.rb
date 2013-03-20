@@ -173,6 +173,14 @@ describe ResponsesController do
       response.should be_ok
       JSON.parse(response.body)['excel_path'].should =~ /#{survey.name}.*\.xlsx/
     end
+
+    it "renders the id of the new delayed job as json" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+      get :generate_excel, :survey_id => survey.id
+      response.should be_ok
+      JSON.parse(response.body)['id'].should == Delayed::Job.all.last.id
+    end
   end
 
   context "GET 'edit'" do
