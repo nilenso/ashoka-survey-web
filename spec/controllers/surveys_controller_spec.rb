@@ -38,27 +38,25 @@ describe SurveysController do
         sign_in_as('cso_admin')
         @draft_survey = FactoryGirl.create(:survey, :finalized => false, :organization_id => LOGGED_IN_ORG_ID)
         @finalized_survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => LOGGED_IN_ORG_ID)
-      end
-
-
-      it "shows all finalized surveys if filter is finalized" do
-        get :index, :finalized => true
-        response.should be_ok
-        assigns(:surveys).should include @finalized_survey
-        assigns(:surveys).should_not include @draft_survey
+        @archived_survey = FactoryGirl.create(:survey, :archived => true, :organization_id => LOGGED_IN_ORG_ID)
       end
 
       it "shows all draft surveys if filter is draft" do
-        get :index, :drafts => true
+        get :index, :filter => "drafts"
         response.should be_ok
         assigns(:surveys).should include @draft_survey
         assigns(:surveys).should_not include @finalized_survey
       end
 
-      it "shows all surveys if filter is not specified" do
+      it "shows all draft surveys if filter is archived" do
+        get :index, :filter => "archived"
+        response.should be_ok
+        assigns(:surveys).should == [@archived_survey]
+      end
+
+      it "shows active surveys if filter is not specified" do
         get :index
         response.should be_ok
-        assigns(:surveys).should include @draft_survey
         assigns(:surveys).should include @finalized_survey
       end
     end
@@ -153,6 +151,35 @@ describe SurveysController do
     it "shows a flash message saying the survey was finalized" do
       put :finalize, :survey_id => @survey.id
       flash.notice.should_not be_nil
+    end
+  end
+
+  context "when archiving" do
+    before(:each) do
+      sign_in_as('cso_admin')
+      session[:user_info][:org_id] = 123
+      @survey = FactoryGirl.create(:survey, :organization_id => 123)
+    end
+
+    it "archives the survey" do
+      put :archive, :survey_id => @survey.id
+      @survey.reload.should be_archived
+    end
+
+    it "redirects to the root page" do
+      put :archive, :survey_id => @survey.id
+      response.should redirect_to root_path
+    end
+
+    it "shows a flash message saying the survey was archived" do
+      put :archive, :survey_id => @survey.id
+      flash.notice.should_not be_nil
+    end
+
+    it "shows a flash error when trying to archive an archived survey" do
+      put :archive, :survey_id => @survey.id
+      put :archive, :survey_id => @survey.id
+      flash[:error].should_not be_nil
     end
   end
 

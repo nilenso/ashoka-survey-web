@@ -21,6 +21,7 @@ fr:
     not_authorized: "Vous n'êtes pas autorisé à le faire"
     edit_finalized_survey: "Vous ne pouvez pas éditer un sondage publié"
     publish_draft_survey: "fr You can't publish a draft survey"
+    unpublish_draft_survey: "fr You can't unpublish a non published survey"
     sharing_draft_survey: "In french: You can't share an unpublished survey"
     survey_shared: "In french: %{survey_name} has been shared"
     user_not_selected: "In francais: You haven't selected any user to publish the survey to"
@@ -30,11 +31,19 @@ fr:
     survey_finalized: "fr The survey was finalized"
     users_and_organizations_blank: "fr You have not selected any users or oganizations to publish to"
     survey_published: "fr Survey Published!"
-
+    question_duplicated: "fr Question Duplicated successfully!"
+    question_duplication_failed : "fr Question duplication failed"
+    category_duplicated: "fr Category Duplicated successfully!"
+    category_duplication_failed : "fr Category duplication failed"
+    no_finalized_surveys: "Impossible d'effectuer une opération sur une enquête archivés"
+    survey_archived: "%{survey_name} a été archivé."
 
   publication:
     edit:
       publish_survey: "fr Publish Survey"
+    unpublish:
+      unpublish_survey: "fr Unpublish Survey"
+      survey_users: "fr Survey users"
 
   surveys:
     confirm_finalize: "fr: The survey can't be edited after this. Are you sure?"
@@ -64,8 +73,12 @@ fr:
       responses: "Réponse"
       show: "Montrer"
       finalized: "fr Finalized"
+      archived: "Archivés"
+      archive: "Archive"
       drafts: "fr Drafts"
       all: "Tous"
+      active: "Active"
+      expired: "Expired"
       create: "Créer sondage"
       delete: "Effacer"
       publish: "Publier"
@@ -106,11 +119,13 @@ fr:
       add_drop_down_question: "Laissez-vous tomber"
       add_photo_question: "Photo"
       add_rating_question: "Rating"
+      add_multi_record_category: "Enregistrement Multi"
       pick_question_type: "Choisissez Type de Question"
       question_settings: "Paramètres"
       option: "Option"
       category: "fr Category"
       question_title: "Titre de la question"
+      multi_record_title: "Titre enregistrement multi"
       save_survey: "Économiser de l'enquête"
       delete_survey: "Delete de l'enquête"
       finalize_survey: "fr Finalize and continue"
@@ -153,11 +168,20 @@ fr:
 
     edit:
       delete: "Delete-fr"
+      edit: "Edit-fr"
       edit_response: "Edit response-fr for"
       error_saving_response: "La réponse économie erreur"
       save_as_draft: "fr Save as Draft"
       mark_as_complete: "fr Mark as Complete"
       save_response: "fr Save Response"
+      location: "fr Location"
+      location_unavailable: "fr Location Unavailable"
+
+      create_record: "Créer un autre dossier"
+
+    excel:
+      excel_dialog_title: "Production Excel…"
+      excel_downloading_message: "Votre fichier Excel est généré se. Cette mght prendre quelques minutes. S'il vous plaît attendre."
 
   answers:
     validations:
@@ -167,7 +191,6 @@ fr:
       exceeded_higher_limit: fr Your answer is lesser than the maximum value.
       exceeds_maximum_size: fr Your photo is bigger than the maximum size.
       invalid_date: La date que vous avez donné n'est pas valide
-
   questions:
     validations:
       min_value_higher: ne peut pas être supérieure à la valeur maximale
@@ -187,6 +210,7 @@ fr:
         expiry_date: "Expire le"
         description: "Description"
         copied: (de Copie)
+        archive: "fr (Archived)"
         crowd_source: 'fr Crowd source'
 
       question:
@@ -224,7 +248,10 @@ fr:
     third_option: fr Third Option
     questions_for: fr Questions for
     require_csv_format: "S'il vous plaît entrer une liste séparée par des virgules des options.\nLe format fourni n'est pas valide."
+    reordering_questions: fr Reordering Questions
+    new_record_unsaved_warning: "Les modifications non enregistrées seront perdues si vous continuez. Continuer?"
 
+    untitled_multi_record_category: "Untitled multi-enregistrement"
   recaptcha:
     errors:
       verification_failed: "La réponse de vérification Parole est incorrecte, s'il vous plaît essayer à nouveau."
@@ -233,7 +260,7 @@ fr:
   templates:
     loading:
       loading: "Chargement..."
-      
+
   date:
     formats:
       default: "%d %b, %Y"

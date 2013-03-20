@@ -6,12 +6,18 @@
 {{#id}}
   <div>
     <%= render 'templates/question_types_dropdown' %>
-    <button class='add_sub_question' href='#'>Add Sub-Question</button>  
+    <button class='add_sub_question' href='#'>Add Sub-Question</button>
   </div>
 
   <div>
-    <button class='add_sub_category' href='#'>Add Sub-Category</button>
+    <button class='add_sub_category' data-type="" href='#'>Add Sub-Category</button>
   </div>
+
+  {{^has_multi_record_ancestor}}
+    <div>
+      <button class='add_sub_multi_record' data-type="MultiRecordCategory" href='#'>Add Sub-MultiRecord</button>
+    </div>
+  {{/has_multi_record_ancestor}}
 {{/id}}
 {{^id}}
   <%= render 'templates/loading' %>

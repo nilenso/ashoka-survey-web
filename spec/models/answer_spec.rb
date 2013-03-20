@@ -3,9 +3,11 @@ require 'spec_helper'
 describe Answer do
   it { should respond_to(:content) }
   it { should belong_to(:question) }
+  it { should belong_to(:record) }
   it { should belong_to(:response) }
   it { should have_many(:choices).dependent(:destroy) }
   it { should allow_mass_assignment_of(:updated_at) }
+  it { should allow_mass_assignment_of(:response_id) }
 
   context "validations" do
     context "for mandatory questions" do
@@ -56,6 +58,13 @@ describe Answer do
 
         answer.content = 'foobarbaz'
         answer.should_not be_valid
+      end
+
+      it "does not run this validation if the answer has no content" do
+        question = FactoryGirl.create(:question, :max_length => 7)
+        expect do
+          FactoryGirl.create(:answer, :content => nil, :question_id => question.id)
+        end.not_to raise_error
       end
     end
 

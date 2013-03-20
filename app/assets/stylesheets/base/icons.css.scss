@@ -6,7 +6,7 @@
   font-style: normal;
 }
 
-a.delete_question, a.delete_category {
+a.delete_question, a.delete_category, a.copy_question {
   display: block;
   position: relative;
   float: right;
@@ -14,7 +14,7 @@ a.delete_question, a.delete_category {
   height: 16px;
   text-indent: -1000em;
   overflow: hidden;
-  background: $gray-dark;
+  background: $secondary-color-dark;
   @include border-radius(8px);
 
   &:after{
@@ -31,5 +31,15 @@ a.delete_question, a.delete_category {
     text-align: center;
     line-height: 18px;
     font-size: 10px;
+  }
+}
+
+a.copy_question {
+  background: $secondary-color;
+  margin-right: 4px;
+  @include border-radius(2px);
+  &:after{
+    content: "\f0c5";
+    font-size: 14px;
   }
 }

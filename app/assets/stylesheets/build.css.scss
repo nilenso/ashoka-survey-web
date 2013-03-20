@@ -26,7 +26,7 @@ body#build{
         line-height: 24px;
 
         li{
-          width: 18%;
+          width: 14%;
           padding: 0;
           margin: 1%;
           list-style: none;
@@ -193,12 +193,12 @@ body#build{
 
         span{display: block; float: left; margin-left: -20px; font-weight: bold;}
 
-        a.delete_question, a.delete_category {display: none;}
+        a.delete_question, a.delete_category, a.copy_question, a.copy_question_hidden {display: none;}
         &:hover{ background: $gray-xxlight;}
 
         &.active{
           background: $secondary-color-light;
-          a.delete_question, a.delete_category  {display: block; background: $secondary-color;}
+          a.delete_question, a.delete_category, a.copy_question {display: block; }
 
           &:after{
             content: "";

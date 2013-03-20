@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130213111554) do
+ActiveRecord::Schema.define(:version => 20130319103549) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -22,6 +22,7 @@ ActiveRecord::Schema.define(:version => 20130213111554) do
     t.string   "photo"
     t.string   "photo_secure_token"
     t.string   "photo_tmp"
+    t.integer  "record_id"
   end
 
   add_index "answers", ["question_id"], :name => "index_answers_on_question_id"
@@ -30,11 +31,13 @@ ActiveRecord::Schema.define(:version => 20130213111554) do
   create_table "categories", :force => true do |t|
     t.integer  "category_id"
     t.text     "content"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.integer  "survey_id"
     t.integer  "order_number"
     t.integer  "parent_id"
+    t.string   "type"
+    t.boolean  "mandatory",    :default => false
   end
 
   add_index "categories", ["category_id"], :name => "index_categories_on_category_id"
@@ -64,6 +67,45 @@ ActiveRecord::Schema.define(:version => 20130213111554) do
 
   add_index "delayed_jobs", ["priority", "run_at"], :name => "delayed_jobs_priority"
 
+  create_table "oauth_access_grants", :force => true do |t|
+    t.integer  "resource_owner_id", :null => false
+    t.integer  "application_id",    :null => false
+    t.string   "token",             :null => false
+    t.integer  "expires_in",        :null => false
+    t.string   "redirect_uri",      :null => false
+    t.datetime "created_at",        :null => false
+    t.datetime "revoked_at"
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_grants", ["token"], :name => "index_oauth_access_grants_on_token", :unique => true
+
+  create_table "oauth_access_tokens", :force => true do |t|
+    t.integer  "resource_owner_id"
+    t.integer  "application_id",    :null => false
+    t.string   "token",             :null => false
+    t.string   "refresh_token"
+    t.integer  "expires_in"
+    t.datetime "revoked_at"
+    t.datetime "created_at",        :null => false
+    t.string   "scopes"
+  end
+
+  add_index "oauth_access_tokens", ["refresh_token"], :name => "index_oauth_access_tokens_on_refresh_token", :unique => true
+  add_index "oauth_access_tokens", ["resource_owner_id"], :name => "index_oauth_access_tokens_on_resource_owner_id"
+  add_index "oauth_access_tokens", ["token"], :name => "index_oauth_access_tokens_on_token", :unique => true
+
+  create_table "oauth_applications", :force => true do |t|
+    t.string   "name",         :null => false
+    t.string   "uid",          :null => false
+    t.string   "secret",       :null => false
+    t.string   "redirect_uri", :null => false
+    t.datetime "created_at",   :null => false
+    t.datetime "updated_at",   :null => false
+  end
+
+  add_index "oauth_applications", ["uid"], :name => "index_oauth_applications_on_uid", :unique => true
+
   create_table "options", :force => true do |t|
     t.string   "content"
     t.integer  "question_id"
@@ -73,6 +115,15 @@ ActiveRecord::Schema.define(:version => 20130213111554) do
   end
 
   add_index "options", ["question_id"], :name => "index_options_on_question_id"
+
+  create_table "organizations", :force => true do |t|
+    t.string   "name"
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.string   "status",         :default => "active"
+    t.string   "default_locale", :default => "en"
+    t.string   "org_type"
+  end
 
   create_table "participating_organizations", :force => true do |t|
     t.integer  "survey_id"
@@ -102,6 +153,13 @@ ActiveRecord::Schema.define(:version => 20130213111554) do
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"
 
+  create_table "records", :force => true do |t|
+    t.integer  "category_id"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.integer  "response_id"
+  end
+
   create_table "responses", :force => true do |t|
     t.integer  "survey_id"
     t.datetime "created_at",                                :null => false
@@ -115,6 +173,8 @@ ActiveRecord::Schema.define(:version => 20130213111554) do
     t.string   "location"
     t.string   "ip_address"
     t.string   "mobile_id"
+    t.string   "state",           :default => "clean"
+    t.text     "comment"
   end
 
   add_index "responses", ["organization_id"], :name => "index_responses_on_organization_id"
@@ -138,8 +198,21 @@ ActiveRecord::Schema.define(:version => 20130213111554) do
     t.boolean  "public",          :default => false
     t.string   "auth_key"
     t.date     "published_on"
+    t.boolean  "archived",        :default => false
   end
 
   add_index "surveys", ["organization_id"], :name => "index_surveys_on_organization_id"
+
+  create_table "users", :force => true do |t|
+    t.string   "name"
+    t.string   "email"
+    t.string   "password_digest"
+    t.datetime "created_at",           :null => false
+    t.datetime "updated_at",           :null => false
+    t.string   "role"
+    t.integer  "organization_id"
+    t.string   "password_reset_token"
+    t.string   "status"
+  end
 
 end

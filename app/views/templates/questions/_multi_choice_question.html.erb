@@ -10,7 +10,7 @@
   <label><%= t("activerecord.attributes.question.mandatory") %> </label>
 </div>
 
-{{^parent_id}}
+{{#allow_identifier}}
   <div class="checkbox">
     {{#identifier}}
       <input type="checkbox" name="identifier" value="{{identifier}}" checked ></input>
@@ -20,7 +20,7 @@
     {{/identifier}}
     <label><%= t "surveys.build.mark_identifier" %></label>
   </div>
-{{/parent_id}}
+{{/allow_identifier}}
 
 {{#id}}
   <div class="upload_files">

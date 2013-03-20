@@ -1,79 +1,110 @@
 class SurveyBuilder.Views.QuestionFactory extends Backbone.View
+  @Types = {
+    SINGLE_LINE : 'SingleLineQuestion',
+    MULTILINE : 'MultilineQuestion',
+    NUMERIC :'NumericQuestion',
+    DATE : 'DateQuestion',
+    RADIO : 'RadioQuestion',
+    MULTI_CHOICE : 'MultiChoiceQuestion',
+    DROP_DOWN : 'DropDownQuestion',
+    PHOTO : 'PhotoQuestion'
+    RATING : 'RatingQuestion',
+    MULTI_RECORD : 'MultiRecordCategory',
+    CATEGORY : null
+  }
+
+  @is_with_options: (type) =>
+    type in [@Types.RADIO, @Types.MULTI_CHOICE, @Types.DROP_DOWN]
+
   @dummy_view_for: (type, model) =>
+    type = null unless type
     switch type
-      when 'SingleLineQuestion'
+      when @Types.SINGLE_LINE
         template = $('#dummy_single_line_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
-      when 'MultilineQuestion'
+      when @Types.MULTILINE
         template = $('#dummy_multiline_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
-      when 'NumericQuestion'
+      when @Types.NUMERIC
         template = $('#dummy_numeric_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
-      when 'DateQuestion'
+      when @Types.DATE
         template = $('#dummy_date_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
-      when 'RadioQuestion'
+      when @Types.RADIO
         template = $('#dummy_radio_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template)
-      when 'MultiChoiceQuestion'
+      when @Types.MULTI_CHOICE
         template = $('#dummy_multi_choice_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template)
-      when 'DropDownQuestion'
+      when @Types.DROP_DOWN
         template = $('#dummy_drop_down_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionWithOptionsView(model, template)
-      when 'PhotoQuestion'
+      when @Types.PHOTO
         template = $('#dummy_photo_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
-      when 'RatingQuestion'
+      when @Types.RATING
         template = $('#dummy_rating_question_template').html()
         return new SurveyBuilder.Views.Dummies.QuestionView(model, template)
-      when undefined
+      when 'MultiRecordQuestion'
+        template = $('#dummy_multi_record_question_template').html()
+        return new SurveyBuilder.Views.Dummies.MultiRecordQuestionView(model)
+      when @Types.CATEGORY
         if model instanceof SurveyBuilder.Models.CategoryModel
-          return new SurveyBuilder.Views.Dummies.CategoryView(model)
+          template = $('#dummy_category_template').html()
+          return new SurveyBuilder.Views.Dummies.CategoryView(model, template)
+      when @Types.MULTI_RECORD
+        template = $('#dummy_multi_record_category_template').html()
+        return new SurveyBuilder.Views.Dummies.MultiRecordCategoryView(model, template)
 
   @settings_view_for: (type, model) =>
+    type = null unless type
     switch type
-      when 'SingleLineQuestion'
+      when @Types.SINGLE_LINE
         template = $('#single_line_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'MultilineQuestion'
+      when @Types.MULTILINE
         template = $('#multiline_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'NumericQuestion'
+      when @Types.NUMERIC
         template = $('#numeric_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'DateQuestion'
+      when @Types.DATE
         template = $('#date_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'RadioQuestion'
+      when @Types.RADIO
         template = $('#radio_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
-      when 'MultiChoiceQuestion'
+      when @Types.MULTI_CHOICE
         template = $('#multi_choice_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
-      when 'DropDownQuestion'
+      when @Types.DROP_DOWN
         template = $('#drop_down_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionWithOptionsView(model, template)
-      when 'PhotoQuestion'
+      when @Types.PHOTO
         template = $('#photo_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when 'RatingQuestion'
+      when @Types.RATING
         template = $('#rating_question_template').html()
         return new SurveyBuilder.Views.Questions.QuestionView(model, template)
-      when undefined
+      when 'MultiRecordQuestion'
+        template = $('#multi_record_question_template').html()
+        return new SurveyBuilder.Views.Questions.MultiRecordQuestionView(model)
+      when @Types.CATEGORY
         if model instanceof SurveyBuilder.Models.CategoryModel
-          return new SurveyBuilder.Views.Questions.CategoryView(model)
+          template = $('#category_template').html()
+          return new SurveyBuilder.Views.Questions.CategoryView(model, template)
+      when @Types.MULTI_RECORD
+        template = $('#multi_record_category_template').html()
+        return new SurveyBuilder.Views.Questions.MultiRecordCategoryView(model, template)
 
-  @model_for: (type, model) =>
-    switch type
-      when 'MultiChoiceQuestion'
-        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
-      when 'DropDownQuestion'
-        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
-      when 'RadioQuestion'
-        sub_question_model = new SurveyBuilder.Models.QuestionWithOptionsModel(model)
-      when undefined
-        sub_question_model = new SurveyBuilder.Models.CategoryModel(model)
-      else
-        sub_question_model = new SurveyBuilder.Models.QuestionModel(model)
+  @model_for: (model) =>
+    model.type = null unless model.type
+    if (@is_with_options(model.type))
+      new SurveyBuilder.Models.QuestionWithOptionsModel(model)
+    else if  model.type == @Types.CATEGORY
+      new SurveyBuilder.Models.CategoryModel(model)
+    else if  model.type == @Types.MULTI_RECORD
+      new SurveyBuilder.Models.MultiRecordCategoryModel(model)
+    else
+      new SurveyBuilder.Models.QuestionModel(model)

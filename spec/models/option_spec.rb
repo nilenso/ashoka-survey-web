@@ -9,6 +9,7 @@ describe Option do
   it { should validate_presence_of(:question_id) }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:categories).dependent(:destroy) }
+  it { should delegate_method(:survey).to(:question) }
 
   context "validation" do
     it "Ensures that the order number for an option is unique within a question" do
@@ -41,6 +42,21 @@ describe Option do
     option.elements.should == [question, category, another_question]
   end
 
+  it "fetches all it's sub-questions and sub-categories with sub_questions" do
+    option = FactoryGirl.create(:option)
+    question = FactoryGirl.create :question, :order_number => 0
+    category = FactoryGirl.create :category, :order_number => 1
+    another_category = FactoryGirl.create :category, :order_number => 2
+    another_question = FactoryGirl.create :question, :order_number => 2
+    option.questions << question
+    option.categories << category
+    another_category.questions << FactoryGirl.create(:question)
+    option.questions << another_question
+    option.categories << another_category
+
+    option.elements_with_questions.should == [question, another_question, another_category]
+  end
+
   context "when fetching all the sub_questions of an option" do
     let(:question) { FactoryGirl.create :question }
 
@@ -64,13 +80,20 @@ describe Option do
       option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
       option.as_json.should == option.as_json
     end
+
+    it "includes the `has_multi_record_ancestor` method" do
+      option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
+      option.as_json.should have_key(:has_multi_record_ancestor)
+    end
   end
 
   context "reports" do
     it "counts the number of times it has been the answer to its question" do
-      option = FactoryGirl.create(:option)
+      question = FactoryGirl.create :question
+      option = FactoryGirl.create(:option, :question => question)
       5.times { FactoryGirl.create(:answer_with_complete_response, :content => option.content, :question_id => option.question_id) }
-      option.report_data.should == 5
+      answers = question.answers
+      option.report_data(answers).should == 5
     end
   end
 
@@ -114,5 +137,47 @@ describe Option do
       nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
       option.categories_with_questions.should include(category)
       option.categories_with_questions.should_not include(another_category)
+  end
+
+  context "#has_multi_record_ancestor" do
+    it "returns true if its parent question belongs to a MultiRecordCategory" do
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      parent_question = FactoryGirl.create(:question_with_options, :category => mr_category)
+      option = FactoryGirl.create(:option, :question => parent_question)
+      option.should have_multi_record_ancestor
+    end
+
+    it "returns false if its parent question belongs to a regular category" do
+      category = Category.create(:content => "cat")
+      parent_question = FactoryGirl.create(:question_with_options, :category => category)
+      option = FactoryGirl.create(:option, :question => parent_question)
+      option.should_not have_multi_record_ancestor
+    end
+
+    it "returns true if there is a multi-record category higher up in the chain" do
+      mr_category = MultiRecordCategory.create(:content => "MR")
+      category = FactoryGirl.create(:category, :category => mr_category)
+      question = FactoryGirl.create(:question_with_options, :category => category)
+      option = FactoryGirl.create(:option, :question => question)
+      option.should have_multi_record_ancestor
+    end
+  end
+
+  context "when fetching an option with its elements in order as json" do
+    it "includes itself" do
+      option = FactoryGirl.create(:option)
+      json = option.as_json_with_elements_in_order
+      %w(content id question_id).each do |attr|
+        json[attr].should == option[attr]
+      end
+    end
+
+    it "includes its sub elements" do
+      option = FactoryGirl.create(:option)
+      sub_question = FactoryGirl.create(:question, :parent => option)
+      sub_category = FactoryGirl.create(:category, :parent => option)
+      json = option.as_json_with_elements_in_order
+      json['elements'].size.should == option.elements.size
+    end
   end
 end

@@ -14,7 +14,7 @@ module Api
                               "id" => 1,
                               "name" => "admin",
                               "organization_id" => 1,
-                              "role" => "admin"
+                              "role" => "super_admin"
                               }
           OAuth2::Client.stub(:new).and_return(client)
           client.stub(:password).and_return(password)

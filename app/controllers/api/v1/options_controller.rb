@@ -2,10 +2,10 @@ module Api
   module V1
     class OptionsController < APIApplicationController
       before_filter :dont_cache
-      authorize_resource
 
       def create
         option = Option.new(params[:option])
+        authorize! :update, option.try(:survey)
         if option.save
           render :json => option
         else
@@ -15,6 +15,7 @@ module Api
 
       def update
         option = Option.find(params[:id])
+        authorize! :update, option.try(:survey)
         if option.update_attributes(params[:option])
           render :json => option
         else
@@ -23,6 +24,8 @@ module Api
       end
 
       def destroy
+        option = Option.find_by_id(params[:id])
+        authorize! :update, option.try(:survey)
         begin
           Option.destroy(params[:id])
           render :nothing => true
@@ -33,8 +36,9 @@ module Api
 
       def index
         question = Question.find_by_id(params[:question_id])
-        if question.respond_to?(:options)
-          render :json => question.options.as_json(:include => :categories)
+        authorize! :read, question.try(:survey)
+        if question.is_a? QuestionWithOptions
+          render :json => question.options.as_json(:include => { :categories => { :methods => :type }})
         else
           render :nothing => true, :status => :bad_request
         end

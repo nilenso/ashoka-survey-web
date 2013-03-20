@@ -17,10 +17,19 @@ class Organization
   end
 
   def self.users(client, organization_id)
-    User.find_by_organization(client, organization_id)
+    if organization_id
+      User.find_by_organization(client, organization_id)
+    else
+      []
+    end
   end
 
-  def self.field_agents(client, organization_id)
-    users(client, organization_id).select { |user| user.role == 'field_agent' }
+  def self.publishable_users(client, organization_id)
+    users(client, organization_id).select { |user| user.publishable? }
+  end
+
+  def self.exists?(client, org_ids)
+    org_exists = client.get("/api/organizations/validate_orgs", :params => {:org_ids => org_ids.to_json})
+    org_exists.parsed
   end
 end

@@ -7,10 +7,10 @@ FactoryGirl.define do
       response.organization_id = 1 if response.organization_id.blank?
       response.user_id = 1 if response.user_id.blank?
       response.save
-    end    
+    end
     factory :response_with_answers do
       after(:create) do |response, evaluator|
-        FactoryGirl.create_list(:answer, 5, :response => response)
+        FactoryGirl.create_list(:answer, 10, :response => response)
       end
     end
   end

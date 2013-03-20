@@ -17,11 +17,10 @@
 
   function drawChart() {
     <% @survey.questions_for_reports.each do |question| %>
-      data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
-      <% if question.respond_to? :options %>
+      <% if question.is_a? QuestionWithOptions %>
+        data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
         chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
-        <!-- TODO: The logic to get the title with the number of answers should be in QuestionDecorator. Do this after develop is merged in. -->
-        params['title'] = "<%= question.content + " " + I18n.t('surveys.report.total', :count => question.answers.complete.count) %>";
+        params['title'] = "<%= question.decorate.content_with_answer_count %>";
         chart.draw(data, params);
       <% elsif question.type == 'DateQuestion'%>
         data = new google.visualization.DataTable();
@@ -38,26 +37,28 @@
           hAxis: {'title': 'Answer'},
         }
 
-        <!-- TODO: The logic to get the title with the number of answers should be in QuestionDecorator. Do this after develop is merged in. -->
-        params['title'] = "<%= question.content + " " + I18n.t('surveys.report.total', :count => question.answers.complete.count) %>";
+        params['title'] = "<%= question.decorate.content_with_answer_count %>";
         chart.draw(data, params);
       <% elsif question.type == 'NumericQuestion' %>
         chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
+        data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
         params = {
           vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %> },
           hAxis: {'title': 'Answer', minValue: <%= question.min_value_for_report %> , maxValue: <%= question.max_value_for_report %>},
         }
-        <!-- TODO: The logic to get the title with the number of answers should be in QuestionDecorator. Do this after develop is merged in. -->
-        params['title'] = "<%= question.content + " " + I18n.t('surveys.report.total', :count => question.answers.complete.count) %>";
+        params['title'] = "<%= question.decorate.content_with_answer_count %>";
         chart.draw(data, params);
       <% end %>
     <% end %>
   }
 </script>
 <header>
-  <%= link_to icon_for('icon-table', t('.download_excel')), survey_responses_path(@survey,format: :xlsx), :class => 'download_excel'%>
+  <%= link_to icon_for('icon-table', t('.download_excel')), 'javascript:void(0);', :class => 'download_excel' if @complete_responses.present? && can?(:generate_excel, @survey) %>
   <h2><%= t '.reports' %></h2>
 </header>
+<div id="dialog" title="<%= t('responses.excel.excel_dialog_title') %>">
+  <p><%= t('responses.excel.excel_downloading_message') %></p>
+</div>
 <div class="reports">
   <%= render "layouts/status_bar", :status => "analyze" %>
   <% @survey.questions_for_reports.each do |question| %>
@@ -68,3 +69,8 @@
     <%= gmaps4rails(@markers) %>
   </div>
 </div>
+<script>
+  $(document).ready(function() {
+    new ExcelDownloader(<%= @survey.id %>)
+  });
+</script>

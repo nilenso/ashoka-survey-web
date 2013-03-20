@@ -8,7 +8,7 @@ class Question < ActiveRecord::Base
   validates_presence_of :content
   has_many :answers, :dependent => :destroy
   mount_uploader :image, ImageUploader
-  store_in_background :image
+  store_in_background  :image
   validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id, :category_id], :allow_nil => true
 
   default_scope :order => 'order_number'
@@ -19,10 +19,16 @@ class Question < ActiveRecord::Base
     return image.url(format) if image.file
   end
 
+
   def image_in_base64
     file =  File.read("#{image.root}/#{image.cache_dir}/#{image_tmp}") if image_tmp
     file = image.thumb.file.read if image.thumb.file.try(:exists?)
     return Base64.encode64(file) if file
+  end
+
+  def create_blank_answers(params={})
+    answer = Answer.new(:question_id => id, :response_id => params[:response_id], :record_id => params[:record_id])
+    answer.save(:validate => false)
   end
 
   def duplicate(survey_id)
@@ -33,8 +39,19 @@ class Question < ActiveRecord::Base
     question
   end
 
-  def with_sub_questions_in_order
-    [self]
+  def copy_with_order
+    duplicate_question = duplicate(survey_id)
+    duplicate_question.order_number += 1
+    return false unless duplicate_question.save
+    true
+  end
+
+  def as_json_with_elements_in_order
+    self.as_json(:methods => 'type')
+  end
+
+  def options
+    []
   end
 
   def json(opts={})
@@ -47,12 +64,18 @@ class Question < ActiveRecord::Base
     question_class.new(question_params)
   end
 
+  def sorted_answers_for_response(response_id, record_id=nil)
+    [answers.find_by_response_id_and_record_id(response_id, record_id)].compact.flatten
+  end
+
   def first_level?
     self.parent == nil && self.category == nil
   end
 
   def report_data
-    []
+    Answer.unscoped.joins(:response).where("answers.question_id = ? 
+                                 AND responses.status = 'complete'
+                                 AND responses.state = 'clean'", id)
   end
 
   def nesting_level
@@ -66,4 +89,13 @@ class Question < ActiveRecord::Base
     parent_options.index(parent)
   end
 
+  def has_multi_record_ancestor?
+    category.try(:is_a?, MultiRecordCategory) || category.try(:has_multi_record_ancestor?) || parent.try(:has_multi_record_ancestor?)
+  end
+
+  protected
+
+  def has_multi_record_ancestor
+    has_multi_record_ancestor?
+  end
 end

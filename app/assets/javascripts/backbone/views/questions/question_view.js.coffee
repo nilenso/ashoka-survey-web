@@ -15,9 +15,14 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     this.model.on('change:id', this.render, this)
 
   render:(template) =>
-    $(this.el).html(Mustache.render(this.template, this.model.toJSON().question))
+    json = this.model.toJSON().question
+    json.allow_identifier = @allow_identifier()
+    $(this.el).html(Mustache.render(this.template, json))
     @renderImageUploader()
     return this
+
+  allow_identifier: =>
+    !(this.model.get('parent_id') || this.model.get('has_multi_record_ancestor'))
 
   handle_textbox_keyup: (event) =>
     this.model.off('change', this.render)
@@ -39,7 +44,7 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
   renderImageUploader: =>
     $(this.el).children(".upload_files").children(".fileupload").fileupload
       dataType: "json"
-      url: @model.imageUploadUrl()
+      url: @model.image_upload_url()
       done: (e, data) =>
         this.model.set('image_url', data.result.image_url)
         @renderImageUploader()

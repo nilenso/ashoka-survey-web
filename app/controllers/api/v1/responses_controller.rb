@@ -1,9 +1,21 @@
 module Api::V1
   class ResponsesController < APIApplicationController
+    load_resource :survey, :only => [:index, :show, :count]
+    load_resource :through => :survey, :only => [:index, :show, :count]
     authorize_resource
 
-    before_filter :decode_base64_images, :convert_to_datetime
+    before_filter :decode_base64_images, :convert_to_datetime, :only => [:create, :update]
     before_filter :require_response_to_not_exist, :only => :create
+
+    def index
+      render :json => @responses.paginate(:page => params[:page],
+                                          :per_page => Response.page_size(params[:page_size]
+                                          )).as_json(:methods => :answers_for_identifier_questions)
+    end
+
+    def count
+      render :json => { count: @responses.count }
+    end
 
     def create
       response = Response.new
@@ -11,18 +23,14 @@ module Api::V1
       response.organization_id = params[:organization_id]
       response.update_attributes(params[:response].except(:answers_attributes)) # Response isn't created before the answers, so we need to create the answers after this.
       response.validating if params[:response][:status] == "complete"
-      response.update_attributes({:answers_attributes => params[:response][:answers_attributes]}) if response.save
-
-      if response.incomplete? && response.valid?
-        render :json => response.to_json_with_answers_and_choices
-      elsif response.validating? && response.valid?
-        response.complete
-        render :json => response.to_json_with_answers_and_choices
-      else
+      response.update_attributes({:answers_attributes => params[:response][:answers_attributes]}) if response.valid?
+      response.update_records
+      if response.invalid?
+        render :json => response.render_json, :status => :bad_request
+        destroy_response(response)
         Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
-        response_json = response.to_json_with_answers_and_choices
-        response.destroy
-        render :json => response_json, :status => :bad_request
+      else
+        render :json => response.render_json
       end
     end
 
@@ -33,19 +41,27 @@ module Api::V1
       response.validating if response.complete?
       answers_to_update = response.select_new_answers(params[:response][:answers_attributes])
       response.update_attributes({ :answers_attributes => answers_to_update })
-      if response.incomplete? && response.valid?
-        render :json => response.to_json_with_answers_and_choices
-      elsif response.validating? && response.valid?
-        response.complete
-        render :json => response.to_json_with_answers_and_choices
-      else
+      response.update_records
+
+      if response.invalid?
+        response.incomplete
+        render :json => response.render_json, :status => :bad_request
         Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
-        response_json = response.to_json_with_answers_and_choices
-        render :json => response_json, :status => :bad_request
+      else
+        render :json => response.render_json
       end
     end
 
+    def show
+      response = Response.find_by_id(params[:id])
+      render :json => response.as_json(:include => :answers)
+    end
+
     private
+
+    def destroy_response(response)
+      Response.find(response).destroy if response.persisted?
+    end
 
     def decode_base64_images
       answers_attributes = params[:response][:answers_attributes] || []

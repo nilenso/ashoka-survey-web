@@ -4,6 +4,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   defaults: {
     content: 'untitled'
   }
+  ORDER_NUMBER_STEP: 2
 
   initialize: =>
     @sub_question_order_counter = 0
@@ -24,10 +25,9 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     @dirty
 
   save_model: =>
-    if @is_dirty()
-      this.save({}, {error: this.error_callback, success: this.success_callback})
-    _.each @sub_question_models, (question) =>
-      question.save_model()
+    this.save({}, {error: this.error_callback, success: this.success_callback}) if @is_dirty()
+    for sub_question_model in @sub_question_models
+      sub_question_model.save_model()
 
   success_callback: (model, response) =>
     @make_clean()
@@ -39,7 +39,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     this.trigger('change:errors')
 
   next_sub_question_order_number: =>
-    ++@sub_question_order_counter
+    @sub_question_order_counter += @ORDER_NUMBER_STEP
 
   add_sub_question: (type) =>
 
@@ -51,7 +51,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
       parent_question: this.get('question')
     }
 
-    sub_question_model = SurveyBuilder.Views.QuestionFactory.model_for(question.type, question)
+    sub_question_model = SurveyBuilder.Views.QuestionFactory.model_for(question)
 
     @sub_question_models.push sub_question_model
     sub_question_model.on('destroy', this.delete_sub_question, this)
@@ -75,8 +75,8 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     this.get('questions').length > 0 || this.get('categories').length > 0
 
   reorder_sub_questions_models: =>
-    _.each @sub_question_models, (question) =>
-      question.set('order_number', @next_sub_question_order_number())
+    for sub_question_model in @sub_question_models
+      sub_question_model.set('order_number', @next_sub_question_order_number())
     @save_model()
 
   preload_sub_questions: =>
@@ -86,7 +86,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
       parent_question = this.get('question')
       _(question).extend({parent_question: parent_question})
 
-      question_model = SurveyBuilder.Views.QuestionFactory.model_for(question.type, question)
+      question_model = SurveyBuilder.Views.QuestionFactory.model_for(question)
 
       @sub_question_models.push question_model
       question_model.on('destroy', this.delete_sub_question, this)

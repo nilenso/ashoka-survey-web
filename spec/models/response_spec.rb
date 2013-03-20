@@ -4,6 +4,7 @@ describe Response do
   it { should belong_to(:survey) }
   it { should have_db_column(:status).with_options(default: 'incomplete') }
   it { should have_many(:answers).dependent(:destroy) }
+  it { should have_many(:records).dependent(:destroy) }
   it { should accept_nested_attributes_for(:answers) }
   it { should respond_to(:user_id) }
   it { should respond_to(:latitude) }
@@ -31,14 +32,21 @@ describe Response do
     response.answers_for_identifier_questions.should == identifier_question.answers
   end
 
-  it "gives you first five answers to first level questions if there are no identfier questions " do
-    response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
-    question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
-    question.options << Option.create(content: "Option", order_number: 1)
-    nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
-    response.answers << FactoryGirl.create(:answer, :question_id => question.id, :response_id => response.id)
-    response.answers << FactoryGirl.create(:answer, :question_id => nested_question.id, :response_id => response.id)
-    response.answers_for_identifier_questions.should == question.answers
+  context "when there are no identifier questions" do
+    it "gives you answers to first level questions " do
+      response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
+      question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
+      question.options << Option.create(content: "Option", order_number: 1)
+      nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
+      response.answers << FactoryGirl.create(:answer, :question_id => question.id, :response_id => response.id)
+      response.answers << FactoryGirl.create(:answer, :question_id => nested_question.id, :response_id => response.id)
+      response.answers_for_identifier_questions.should == question.answers
+    end
+
+    it "returns a list of first five answers" do
+      response = FactoryGirl.create(:response_with_answers, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
+      response.reload.answers_for_identifier_questions.size.should == 5
+    end
   end
 
   it "merges the response status based on updated_at" do
@@ -79,9 +87,14 @@ describe Response do
   context "when marking a response incomplete" do
     it "marks the response incomplete" do
       survey = FactoryGirl.create(:survey)
-      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1, :status => 'validating')
       response.incomplete
       response.reload.should_not be_complete
+    end
+
+    it "marks response complete if it's validating" do
+      survey = FactoryGirl.create(:survey)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1, :status => 'validating')
       response.complete
       response.reload.should be_complete
     end
@@ -132,15 +145,6 @@ describe Response do
     survey = FactoryGirl.create(:survey, :public => true)
     response = FactoryGirl.build(:response, :survey_id => survey.id)
     response.survey_public?.should be_true
-  end
-
-  it "provides the filename for the excel file" do
-    survey = FactoryGirl.create(:survey)
-    response = FactoryGirl.build(:response, :survey_id => survey.id)
-    response.filename_for_excel.should =~ /#{survey.name}/
-    response.filename_for_excel.should =~ /#{survey.id}/
-    response.filename_for_excel.should include Time.now.to_s
-    response.filename_for_excel.should =~ /.*xlsx$/
   end
 
   context "when updating answers" do
@@ -229,6 +233,114 @@ describe Response do
       response_json = JSON.parse(response.to_json_with_answers_and_choices)
       response_json['answers'][0].should have_key('choices')
       response_json['answers'][0]['choices'].size.should == response.answers[0].choices.size
+    end
+  end
+
+  context "when fetching sorted answers" do
+    let(:survey) {FactoryGirl.create(:survey)}
+    let(:response) { FactoryGirl.create :response, :survey => survey }
+
+    it "returns a sorted list of answers for all its first level questions" do
+      question = FactoryGirl.create(:question, :survey => survey, :order_number => 2)
+      another_question = FactoryGirl.create(:question , :survey => survey, :order_number => 1)
+      answer = FactoryGirl.create(:answer, :response => response, :question => question)
+      another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)
+      response.sorted_answers.should == [another_answer, answer]
+    end
+
+    it "returns a sorted list of answers for all sub-questions of a category" do
+      category = FactoryGirl.create(:category, :survey => survey)
+      question = FactoryGirl.create(:question, :survey => survey, :order_number => 2, :category => category)
+      another_question = FactoryGirl.create(:question , :survey => survey, :order_number => 1, :category => category)
+      answer = FactoryGirl.create(:answer, :response => response, :question => question)
+      another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)
+      response.sorted_answers.should == [another_answer, answer]
+    end
+
+    it "returns a sorted list of answers for all sub-questions of an option" do
+      radio_question = RadioQuestion.create(:content => "X")
+      radio_answer = FactoryGirl.create(:answer, :response => response, :question => radio_question)
+      survey.questions << radio_question
+
+      option = FactoryGirl.create(:option, :question => radio_question)
+      question = FactoryGirl.create(:question, :survey => survey, :order_number => 2, :parent => option)
+      another_question = FactoryGirl.create(:question , :survey => survey, :order_number => 1, :parent => option)
+
+      answer = FactoryGirl.create(:answer, :response => response, :question => question)
+      another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)
+
+      response.sorted_answers.should == [radio_answer, another_answer, answer]
+    end
+  end
+
+  context 'when creating blank answers' do
+    it "creates blank answers for each of its survey's questions" do
+      survey = FactoryGirl.create :survey
+      question = FactoryGirl.create :question, :survey => survey
+
+      response = FactoryGirl.create :response, :survey => survey
+      response.create_blank_answers
+
+      question.answers.should_not be_nil
+    end
+
+    it "creates blank answers for each of its survey's categories" do
+      survey = FactoryGirl.create :survey
+      category = FactoryGirl.create :category, :survey => survey
+      question = FactoryGirl.create :question, :survey => survey, :category => category
+
+      response = FactoryGirl.create :response, :survey => survey
+      response.create_blank_answers
+
+      question.answers.should_not be_nil
+    end
+
+    it "creates blank answers with the correct response_id" do
+      survey = FactoryGirl.create :survey
+      question = FactoryGirl.create :question, :survey => survey
+
+      response = FactoryGirl.create :response, :survey => survey
+      response.create_blank_answers
+
+      question.answers[0].response_id.should == response.id
+    end
+
+    context "for its answers' records" do
+      context "if the response_id is not set" do
+        it "sets it to its own id" do
+          response = FactoryGirl.create(:response)
+          record = FactoryGirl.create(:record, :response_id => nil)
+          response.answers << FactoryGirl.create(:answer, :record => record)
+          response.update_records
+          record.reload.response.should == response
+        end
+      end
+
+      context "if the response_id is set" do
+        it "doesn't change the response_id" do
+          response = FactoryGirl.create :response
+          record = FactoryGirl.create(:record, :response_id => 123)
+          response.answers << FactoryGirl.create(:answer, :record => record)
+          response.update_records
+          record.reload.response_id.should == 123
+        end
+      end
+    end
+  end
+
+  context 'when calculating the page size' do
+    before(:each) { stub_const('Response::MAX_PAGE_SIZE', 50) }
+
+    it "allows the passed in value if it is below MAX_PAGE_SIZE" do
+      Response.page_size(10).should == 10
+    end
+
+    it "doesn't allow the passed in value if it is above MAX_PAGE_SIZE" do
+      Response.page_size(51).should == 50
+    end
+
+    it "returns the MAX_PAGE_SIZE if nothing is passed in" do
+      Response.page_size.should == 50
     end
   end
 end

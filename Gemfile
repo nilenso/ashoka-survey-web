@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.11'
+gem 'rails', '3.2.12'
+gem 'date_validator'
 gem 'unicorn'
 gem 'newrelic_rpm'
 gem 'pg'
@@ -20,7 +21,7 @@ gem "recaptcha", :require => "recaptcha/rails"
 gem 'dalli'
 gem "geocoder"
 gem 'gmaps4rails'
-gem 'axlsx_rails'
+gem 'axlsx'
 gem 'carrierwave'
 gem 'rmagick', '2.12.2'
 gem "fog"

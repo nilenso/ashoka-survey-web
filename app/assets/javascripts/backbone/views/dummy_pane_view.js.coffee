@@ -2,16 +2,27 @@
 # Collection of dummy questions
 class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   el: "#dummy_pane"
+  DETAILS: "#dummy_survey_details"
+  QUESTIONS_CONTAINER: "#dummy_questions"
+
+  events:
+    'copy_question.save_all_changes': 'save_all_changes'
 
   initialize: (survey_model) =>
     @questions = []
     @survey_model = survey_model
     @add_survey_details(survey_model)
-    ($(this.el).find("#dummy_questions")).sortable({
+    @init_sortable()
+
+  init_sortable: =>
+    ($(@el).find(@QUESTIONS_CONTAINER)).sortable({
+      start: ((event, ui) =>
+          ui.item.startPos = ui.item.index()
+      ),
       update : ((event, ui) =>
-        window.loading_overlay.show_overlay("Reordering Questions")
+        window.loading_overlay.show_overlay(I18n.t('js.reordering_questions'))
         _.delay(=>
-          this.reorder_questions(event,ui)
+          @reorder_questions(event,ui)
         , 10)
       )
     })
@@ -19,14 +30,14 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   add_question: (type, model, parent) =>
     view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model)
     @questions.push(view)
-    model.on('destroy', this.delete_question_view, this)
-    $(this.el).children("#dummy_questions").append(view.render().el)
+    model.on('destroy', @delete_question_view, this)
+    $(@el).children(@QUESTIONS_CONTAINER).append(view.render().el)
 
-  add_category: (model) =>
-    view = new SurveyBuilder.Views.Dummies.CategoryView(model)
+  add_category: (type, model) =>
+    view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model)
     @questions.push(view)
-    model.on('destroy', this.delete_question_view, this)
-    $(this.el).children("#dummy_questions").append(view.render().el)
+    model.on('destroy', @delete_question_view, this)
+    $(@el).children(@QUESTIONS_CONTAINER).append(view.render().el)
 
   insert_view_at_index: (view, index) =>
     if index == -1
@@ -40,8 +51,8 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @show_survey_details()
 
   render: =>
-    ($(this.el).find("#dummy_survey_details").append(@dummy_survey_details.render().el))
-    ($(this.el).find("#dummy_questions").append(question.render().el)) for question in @questions
+    ($(@el).find(@DETAILS).append(@dummy_survey_details.render().el))
+    ($(@el).find(@QUESTIONS_CONTAINER).append(question.render().el)) for question in @questions
     return this
 
   unfocus_all: =>
@@ -52,32 +63,49 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     question = _(@questions).find((question) => question.model == model )
     question.remove()
     @questions = _(@questions).without(question)
-    @reorder_questions_after_deletion()
+    @set_order_numbers()
     @render()
 
   reorder_questions: (event, ui) =>
-    @reorder_questions_after_deletion(false)
-    @sort_questions_by_order_number()
+    @set_order_numbers()
+    @reorder_questions_views_by_index(ui)
+    @render()
     @hide_overlay(event)
 
   hide_overlay: (event) =>
-      window.loading_overlay.hide_overlay() if event
+    window.loading_overlay.hide_overlay() if event
 
-  sort_questions_by_order_number: =>
+  reorder_questions_views_by_index: (ui) =>
+    return unless ui
+    start = ui.item.startPos
+    end = ui.item.index()
+    if start > end
+        rotate = @questions.slice(end, start)
+        rotated_questions = [@questions[start]].concat(rotate)
+        @questions = _.union(@questions.slice(0, end), rotated_questions, @questions.slice(start+1))
+    else
+        rotate = @questions.slice(start+1, end+1)
+        rotated_questions = rotate.concat(@questions[start])
+        @questions = _.union(@questions.slice(0, start), rotated_questions, @questions.slice(end+1))
+
+  sort_question_views_by_order_number: =>
     @questions = _(@questions).sortBy (question) =>
       question.model.get('order_number')
     @render()
 
-  reorder_questions_after_deletion: (is_deleting=true) =>
+  set_order_numbers: =>
     last_order_number = @survey_model.next_order_number()
-    _(@questions).each (question) =>
-        index = $(question.el).index()
-        question.model.set({order_number: last_order_number + index + 1}, {silent: is_deleting})
-        question.model.question_number = index + 1
-
-        question.reorder_question_number() if question instanceof SurveyBuilder.Views.Dummies.QuestionWithOptionsView
-        question.reorder_question_number() if question instanceof SurveyBuilder.Views.Dummies.CategoryView
+    for question_view in @questions
+      question_view.set_order_number(last_order_number)
+      question_view.reset_question_number()
+      question_view.reset_sub_question_numbers() if question_view.can_have_sub_questions
 
   show_survey_details: =>
     @dummy_survey_details.show_actual()
+
+  save_all_changes: (event, question_view) =>
+    $(this.el).bind "ajaxStop.copy_question", =>
+      $(this.el).unbind "ajaxStop.copy_question"
+      question_view.copy_question() unless @survey_model.has_errors()
+    $(@el).trigger('save_all_questions')
 

@@ -37,12 +37,16 @@
     for sub_question in sub_questions_for(option)
       $(sub_question).removeClass('hidden')
 
+    update_visible_records()
+
   hide_sub_questions_of = (option) ->
     sub_questions_for(option).each (index) ->
       sub_question = $(this)
       clear_content_of sub_question
       sub_question.addClass('hidden')
       hide_sub_questions_of(option) for option in sub_question.find('input[type=radio],option')
+
+    update_visible_records()
 
   clear_content_of = (sub_question) ->
     $(sub_question).find('input[type!=hidden]').val('')
@@ -53,22 +57,30 @@
     $(sub_question).find('.star').raty('cancel')
 
   sub_questions_for = (option) ->
+    record_id = $(option).closest('.question').data('recordId')
     option_id = $(option).data('option-id')
-    sub_questions = $(".sub_question[data-parent-id=#{option_id}]") 
+    if record_id
+      sub_questions = $(".sub_question[data-parent-id=#{option_id}][data-record-id=#{record_id}]")
+    else
+      sub_questions = $(".sub_question[data-parent-id=#{option_id}]")
 
     sub_questions.each ->
       sub_question = $(this)
-      sub_questions.push(sub_questions_for_category(sub_question)) if (sub_question.hasClass('category'))
+      sub_questions.push(sub_questions_for_category(sub_question, record_id)) if (sub_question.hasClass('category'))
 
     $(_(sub_questions).flatten())
 
-  sub_questions_for_category = (category) ->
+  sub_questions_for_category = (category, record_id) ->
     category_id = $(category).data('id')
-    sub_questions = $(".sub_question[data-category-id=#{category_id}]")
+    if record_id
+      sub_questions = $(".sub_question[data-category-id=#{category_id}][data-record-id=#{record_id}]")
+    else
+      sub_questions = $(".sub_question[data-category-id=#{category_id}]")
+
 
     sub_questions.each ->
       sub_question = $(this)      
-      sub_questions.push(sub_questions_for_category(sub_question)) if (sub_question.hasClass('category'))
+      sub_questions.push(sub_questions_for_category(sub_question, record_id)) if (sub_question.hasClass('category'))
 
     _(sub_questions).flatten()
 
@@ -83,6 +95,19 @@
       sub_question = $(this)
       nesting_level = $(sub_question).data('nesting-level') - 1
       sub_question.css('margin-left', nesting_level * 15)
+
+      record = $(sub_question).closest('.record')
+      record.css('margin-left', nesting_level * 15) if record
+
+  update_visible_records = () ->
+    $('div.record').each ->
+      record = $(this)
+      # If a single child of the record is visible, show the record
+      if record.children('div:not(.hidden)').length > 0
+        record.removeClass("hidden")
+      else
+        record.addClass('hidden')
+
 
   $ ->
     initialize()

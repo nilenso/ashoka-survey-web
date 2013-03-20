@@ -21,6 +21,7 @@ en:
     not_authorized: "You are not authorized to do that"
     edit_finalized_survey: "You can't edit a finalized survey"
     publish_draft_survey: "You can't publish a draft survey"
+    unpublish_draft_survey: "You can't unpublish a non published survey"
     sharing_draft_survey: "You can't share an draft survey"
     survey_shared: "%{survey_name} has been shared"
     user_not_selected: "You haven't selected any user to publish the survey to"
@@ -29,10 +30,21 @@ en:
     denied_access: "Denied access to %{action} %{subject}"
     users_and_organizations_blank: "You have not selected any users or oganizations to publish to"
     survey_published: "Survey Published!"
+    question_duplication_failed : "question_duplication_failed"
+    question_duplicated: "Question Duplicated successfully!"
+    question_duplication_failed : "Question duplication failed"
+    category_duplicated: "Category Duplicated successfully!"
+    category_duplication_failed : "Category duplication failed"
+    no_finalized_surveys: "Can't perform operation on an archived survey"
+    survey_archived: "%{survey_name} has been archived."
 
   publication:
     edit:
       publish_survey: "Publish Survey"
+      published_to_users: "Publish to users"
+    unpublish:
+      unpublish_survey: "Unpublish Survey"
+      survey_users: "Survey users"
 
   surveys:
     confirm_finalize: "The survey can't be edited after this. Are you sure?"
@@ -62,12 +74,16 @@ en:
       responses: "Response"
       show: "Show"
       finalized: "Finalized"
+      archived: "Archived"
       drafts: "Drafts"
       all: "All"
+      active: "Active"
+      expired: "Expired"
       create_survey: "Create survey"
       delete: "Delete"
       publish: "Publish"
       unpublish: "Unpublish"
+      archive: "Archive"
       share: "Share"
       add_response: "Add Response"
       edit: "Edit"
@@ -103,6 +119,7 @@ en:
       add_drop_down_question: "Drop Down"
       add_photo_question: "Photo"
       add_rating_question: "Rating"
+      add_multi_record_category: "Multi Record"
       pick_question_type: "Pick Question"
       question_settings: "Settings"
       pick_question_type: "Pick Question"
@@ -110,6 +127,7 @@ en:
       option: "Option"
       category: "Category"
       question_title: "Question Title"
+      multi_record_title: "Multi Record Title"
       save_survey: "Save Survey"
       delete_survey: "Delete Survey"
       finalize_survey: "Finalize and continue"
@@ -153,11 +171,19 @@ en:
 
     edit:
       delete: "Delete"
+      edit: "Edit"
       edit_response: "Edit response for"
       error_saving_response: "Error saving response"
       save_as_draft: "Save as Draft"
       mark_as_complete: "Mark as Complete"
       save_response: "Save Response"
+      location: "Location"
+      location_unavailable: "Location Unavailable"
+      create_record: "Create Another Record"
+
+    excel:
+      excel_dialog_title: "Generating Excel…"
+      excel_downloading_message: "Your excel file is getting generated.\nThis mght take a few minutes. Please wait."
 
   answers:
     validations:
@@ -187,6 +213,7 @@ en:
         expiry_date: "Expires on"
         description: "Description"
         copied: "(Copy)"
+        archive: "(Archived)"
         crowd_source: 'Crowd source'
 
       question:
@@ -224,7 +251,10 @@ en:
     third_option: Third Option
     questions_for: Questions for
     require_csv_format: "Please enter a comma-separated list of options.\nThe provided format is invalid."
+    reordering_questions: Reordering Questions
+    new_record_unsaved_warning: "Unsaved changes will be lost if you proceed. Continue?"
 
+    untitled_multi_record_category: "Untitled Multi-Record"
   recaptcha:
     errors:
       verification_failed: "Word verification response is incorrect, please try again."

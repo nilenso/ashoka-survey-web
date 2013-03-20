@@ -1,31 +1,60 @@
 <%= render "layouts/status_bar", :status => "collect" %>
 
 <header>
+  <%= button_to t(".edit"), edit_survey_response_path(@survey.id, @response.id),:class => "edit-button", :method => :get if @disabled && (can? :edit, @response) %>
   <%= button_to t(".delete"), survey_response_path(@survey.id, @response.id),:class => "delete-button", :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, @response %>
   <h2><%= t('.edit_response') %> <%= @survey.name %></h2>
 </header>
+<% cache = [] %>
+<% @response.sort_answers %>
+
 <%= semantic_form_for [@survey, @response], :html => { :multipart => true } do |f| %>
   <%= f.semantic_fields_for :answers do |f| %>
     <% question = f.object.question %>
-    <%= @response.category_name_for(question.category) %>
-    <div class="question <%= "hidden sub_question" if question.parent || question.category.try(:sub_question?)  %>" data-parent-id="<%= question.parent_id %>" data-category-id="<%= question.category_id %>" data-nesting-level="<%= question.nesting_level %>">
+    <%= question.category.decorate.category_name(f.object.record_id, f.object.response_id, cache, @disabled)  if question.category %>
+    <div class="question <%= "hidden sub_question" if question.parent || question.category.try(:sub_question?)  %>" data-parent-id="<%= question.parent_id %>" data-category-id="<%= question.category_id %>" data-nesting-level="<%= question.nesting_level %>" data-record-id="<%= f.object.record_id %>">
       <%= image_tag question.image_url(:medium), :class => "medium" if question.image_url %>
-      <%= @response.input_tag_for(question, f) %>
+      <%= question.decorate.input_tag(f, :disabled => @disabled) %>
       <%= f.input :question_id, :as => :hidden %>
     </div>
   <% end %>
 
-  <%= f.actions do %>
-  <% if @response.survey_public? %>
-      <%= recaptcha_tags :display => { :theme => :clean } %>
-      <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'complete_button' } %>
-    <% else %>
-      <%= f.action :submit, :as => :button, :label => t('.save_as_draft'), :button_html => { :id => 'save_as_draft_button' } unless @response.complete? %>
-      <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' }  %>
+  <% unless @disabled %>
+    <%= f.actions do %>
+      <% if @response.survey_public? %>
+        <%= recaptcha_tags :display => { :theme => :clean } %>
+        <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'complete_button' } %>
+      <% else %>
+        <%= f.action :submit, :as => :button, :label => t('.save_as_draft'), :button_html => { :id => 'save_as_draft_button' } unless @response.complete? %>
+        <%= f.action :submit, :as => :button, :label => t('.mark_as_complete'), :button_html => { :id => 'complete_button' }  %>
+      <% end %>
     <% end %>
   <% end %>
 <% end %>
 
+<% if @disabled && JSON.parse(@marker).any? %>
+  <div id="location_map">
+    <p><%= t('.location') %></p>
+    <%= gmaps4rails(@marker) %>
+  </div>
+<% else %>
+  <div id="location_map">
+    <p><%= t('.location_unavailable') %></p>
+  </div>
+<% end %>
+
+<% if @disabled %>
+  <%= semantic_form_for [@survey, @response] do |f| %>
+    <div class="question ">
+      <%= f.input :state, :as => :select, :collection => ["clean", "dirty"] %>
+      <%= f.input :comment %>
+    </div>
+
+    <%= f.actions do %>
+        <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'save_as_draft_button' } %>
+    <% end %>
+  <% end %>
+<% end %>
 
 <script type="text/javascript">
   $(document).ready(function(){
@@ -41,12 +70,13 @@
       $(this).raty({
         number: $(this).data('number-of-stars') || 5,
         score: $(this).data('score'),
+        <%= 'readOnly: true,' if @disabled %>
         click: function() {
           $(this).prev().children('input').val($(this).raty('score'))
         }
       });
     });
-    $('#complete_button').click(function(){      
+    $('#complete_button').click(function(){
       var action = $('form.response').attr('action')
       $('form.response').attr('action', action + '/complete')
     })
@@ -56,6 +86,7 @@
       $("#save_as_draft_button").attr('disabled', true);
     });
 
+    prepare_multi_record(<%= @response.records.map { |r| [r.id, r.category_id] } %>, <%= @disabled %>)
     organize_sub_questions()
     $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
   });

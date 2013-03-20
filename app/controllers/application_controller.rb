@@ -8,6 +8,10 @@ class ApplicationController < ActionController::Base
     return { :locale => nil }
   end
 
+  def server_url
+    request.protocol + request.host_with_port
+  end
+
   rescue_from OAuth2::Error do |exception|
     if exception.response.status == 401
       session[:user_id] = nil
@@ -25,10 +29,10 @@ class ApplicationController < ActionController::Base
   end
 
   def current_ability
-    if params[:controller] == 'responses'
-      @current_ability ||= PublicResponseAbility.new(current_user_info)
+    if current_user_info[:user_id].present?
+      @current_ability ||= Ability.ability_for(current_user_info)
     else
-      @current_ability ||= Ability.new(current_user_info)
+      @current_ability ||= PublicResponseAbility.new(current_user_info)
     end
   end
 
@@ -54,6 +58,10 @@ class ApplicationController < ActionController::Base
 
   def current_user_org
     session[:user_info][:org_id] if user_currently_logged_in?
+  end
+
+  def current_user_org_type
+    session[:user_info][:org_type] if user_currently_logged_in?
   end
 
   def current_username

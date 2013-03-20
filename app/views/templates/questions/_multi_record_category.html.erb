@@ -1,0 +1,28 @@
+<div>
+  <label><%= t("surveys.build.multi_record_title") %> </label>
+  <input type="text" name="content" value="{{content}}"></input>
+</div>
+
+<div class="checkbox">
+  {{#mandatory}}
+  <input type="checkbox" name="mandatory" value="{{mandatory}}" checked ></input>
+  {{/mandatory}}
+  {{^mandatory}}
+  <input type="checkbox" name="mandatory" value="{{mandatory}}"></input>
+  {{/mandatory}}
+  <label><%= t("activerecord.attributes.question.mandatory") %> </label>
+</div>
+
+{{#id}}
+  <div>
+    <%= render 'templates/question_types_dropdown' %>
+    <button class='add_sub_question' href='#'>Add Sub-Question</button>  
+  </div>
+
+  <div>
+    <button class='add_sub_category' href='#'>Add Sub-Category</button>
+  </div>
+{{/id}}
+{{^id}}
+  <%= render 'templates/loading' %>
+{{/id}}

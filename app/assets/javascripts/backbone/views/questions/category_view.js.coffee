@@ -5,9 +5,9 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
 
   events:
     'keyup  input[type=text]': 'handle_textbox_keyup'
+    'change input[type=checkbox]': 'handle_checkbox_change'
 
-  initialize: (@model) =>
-    this.template = $('#category_template').html()
+  initialize: (@model, @template) =>
     this.model.actual_view = this
     this.sub_questions = []
     this.model.on('save:completed', this.renderImageUploader, this)
@@ -17,9 +17,12 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
     this.model.on('change:preload_sub_questions', this.preload_sub_questions)
 
   render:(template) =>
-    $(this.el).html(Mustache.render(this.template, this.model.toJSON().category))
+    data = this.model.toJSON().category
+    _(data).extend({ has_multi_record_ancestor: @model.get('has_multi_record_ancestor') })
+    $(this.el).html(Mustache.render(this.template, data))
     $(this.el).children('div').children('.add_sub_question').bind('click', this.add_sub_question_model)
     $(this.el).children('div').children('.add_sub_category').bind('click', this.add_sub_category_model)
+    $(this.el).children('div').children('.add_sub_multi_record').bind('click', this.add_sub_category_model)
     return this
 
   handle_textbox_keyup: (event) =>
@@ -27,6 +30,13 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
     input = $(event.target)
     propertyHash = {}
     propertyHash[input.attr('name')] = input.val()
+    this.update_model(propertyHash)
+
+  handle_checkbox_change: (event) =>
+    this.model.off('change', this.render)
+    input = $(event.target)
+    propertyHash = {}
+    propertyHash[input.attr('name')] = input.is(':checked')
     this.update_model(propertyHash)
 
   update_model: (propertyHash) =>
@@ -41,7 +51,8 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
     this.model.add_sub_question(type)
 
   add_sub_category_model: (event) =>
-    this.model.add_sub_question()
+    type = $(event.target).data('type')
+    this.model.add_sub_question(type)
 
   add_sub_question: (sub_question_model) =>
     sub_question_model.on('destroy', this.delete_sub_question, this)

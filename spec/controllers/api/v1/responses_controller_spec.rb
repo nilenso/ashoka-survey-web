@@ -112,6 +112,15 @@ module Api::V1
             JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
           end
         end
+
+        it "updates the response_id for its answers' records" do
+          record = FactoryGirl.create :record, :response_id => nil
+          question = FactoryGirl.create :question, :survey => survey
+          answers_attrs = { '0' => { :content => 'AnswerFoo', :question_id => question.id, :record_id => record.id } }
+          resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes => answers_attrs)
+          post :create, :response => resp, :user_id => 15, :organization_id => 42, :mobile_id => "foo123"
+          record.reload.response_id.should_not be_nil
+        end
       end
 
       context "PUT 'update'" do
@@ -188,6 +197,111 @@ module Api::V1
             put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42
             answer.reload.photo.filename.should == old_filename
           end
+        end
+
+        it "updates the response_id for its answers' records" do
+          survey = FactoryGirl.create(:survey, :organization_id => 42)
+          record = FactoryGirl.create :record, :response_id => nil
+          question = FactoryGirl.create :question, :survey => survey
+          resp = FactoryGirl.create(:response, :survey => survey)
+
+          answers_attrs = { '0' => { :content => 'AnswerFoo', :question_id => question.id, :record_id => record.id } }
+          resp_attrs = FactoryGirl.attributes_for(:response, :id => resp.id, :answers_attributes => answers_attrs)
+
+          put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42
+          record.reload.response_id.should_not be_nil
+        end
+      end
+
+      context "GET 'index'" do
+        it "returns a list of responses" do
+          survey = FactoryGirl.create :survey, :organization_id => 12
+          resp = FactoryGirl.create :response, :survey => survey, :status => 'complete'
+          get :index, :survey_id => survey.id
+          response.should be_ok
+          json = JSON.parse(response.body)[0]
+          json['id'].should == resp.id
+          json['status'].should == 'complete'
+        end
+
+        it "returns responses accessible by the current user" do
+          sign_in_as('viewer')
+          survey = FactoryGirl.create :survey, :organization_id => 12
+          resp = FactoryGirl.create :response, :survey => survey, :status => 'complete', :user_id => 123
+          another_resp = FactoryGirl.create :response, :survey => survey, :user_id => 125, :organization_id => 13
+          get :index, :survey_id => survey.id
+          response.should be_ok
+          json = JSON.parse(response.body)
+          json.length.should == 1
+          json[0]['id'].should == resp.id
+        end
+
+        it "paginates the response" do
+          survey = FactoryGirl.create :survey, :organization_id => 12
+          5.times { FactoryGirl.create :response, :survey => survey, :status => 'complete' }
+          get :index, :survey_id => survey.id, :page_size => 2
+          response.should be_ok
+          json = JSON.parse(response.body)
+          json.length.should == 2
+        end
+
+        it "returns an error if the survey_id is invalid" do
+          expect { get :index, :survey_id => 123 }.to raise_exception
+        end
+
+        it "returns the identifier answers" do
+          survey = FactoryGirl.create :survey, :organization_id => 12
+          FactoryGirl.create :response, :survey => survey, :status => 'complete'
+          get :index, :survey_id => survey.id
+          JSON.parse(response.body)[0].should have_key 'answers_for_identifier_questions'
+        end
+      end
+
+      context "GET 'show'" do
+        let(:survey) { FactoryGirl.create :survey, :organization_id => 12 }
+
+        it "returns the JSON version of the response" do
+          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 12)
+          get :show, :id => resp.id, :survey_id => survey.id
+          response.should be_ok
+          JSON.parse(response.body)['id'].should == resp.id
+        end
+
+        it "returns all the answers for a particular response" do
+          resp = FactoryGirl.create(:response, :survey => survey)
+          answer = FactoryGirl.create(:answer, :response => resp)
+          another_answer = FactoryGirl.create(:answer, :response => resp)
+          get :show, :id => resp.id, :survey_id => survey.id
+          response.should be_ok
+          answer_ids = JSON.parse(response.body)['answers'].map { |r| r['id'] }
+          answer_ids.should =~ [answer.id, another_answer.id]
+        end
+
+        it "returns bad request if the response is not accessible to the current user" do
+          sign_in_as('viewer')
+          survey = FactoryGirl.create(:survey, :organization_id => 100)
+          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 101)
+          get :show, :id => resp.id, :survey_id => survey.id
+          response.should_not be_ok
+        end
+      end
+      
+      context "GET 'count'" do
+        let(:survey) { FactoryGirl.create :survey, :organization_id => 12 }
+
+        it "returns number of responses available to the current user" do
+          5.times { FactoryGirl.create(:response, :survey => survey, :organization_id => 12) }
+          get :count, :survey_id => survey.id
+          response.should be_ok
+          JSON.parse(response.body)['count'].should == 5
+        end
+
+        it "returns bad request if the response is not accessible to the current user" do
+          sign_in_as('viewer')
+          survey = FactoryGirl.create(:survey, :organization_id => 100)
+          resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 101)
+          get :show, :id => resp.id, :survey_id => survey.id
+          response.should_not be_ok
         end
       end
     end

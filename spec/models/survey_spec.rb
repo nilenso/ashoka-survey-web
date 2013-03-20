@@ -5,6 +5,7 @@ describe Survey do
   it { should respond_to :expiry_date }
   it { should respond_to :description }
   it { should respond_to :finalized }
+  it { should respond_to :archived }
   it { should respond_to :organization_id }
   it { should respond_to :public }
   it { should respond_to(:auth_key) }
@@ -54,6 +55,14 @@ describe Survey do
       draft_survey = FactoryGirl.create(:survey, :finalized => true)
       Survey.all.should == [survey, another_survey, draft_survey]
     end
+  end
+
+  it "provides the filename for the excel file" do
+    survey = FactoryGirl.create(:survey)
+    survey.filename_for_excel.should =~ /#{survey.name}/
+    survey.filename_for_excel.should =~ /#{survey.id}/
+    survey.filename_for_excel.should include Time.now.strftime("%Y-%m-%d %I.%M.%S%P")
+    survey.filename_for_excel.should =~ /.*xlsx$/
   end
 
   context "when duplicating" do
@@ -136,6 +145,35 @@ describe Survey do
       Survey.finalized.should_not include(survey)
       Survey.finalized.should include(another_survey)
     end
+
+    it "returns a list of active surveys" do
+      survey = FactoryGirl.create(:survey)
+      another_survey = FactoryGirl.create(:survey, :finalized => true)
+      other_survey = FactoryGirl.create(:survey, :archived => true)
+      Survey.active.should_not include(survey)
+      Survey.active.should_not include(other_survey)
+      Survey.active.should include(another_survey)
+    end
+
+    it "returns a list of expired surveys" do
+      survey = FactoryGirl.create(:survey)
+      another_survey = FactoryGirl.create(:survey, :finalized => true)
+      another_survey.update_column(:expiry_date, 5.days.ago)
+      Survey.expired.should_not include(survey)
+      Survey.expired.should include(another_survey)
+    end
+
+    it "returns a empty activerecord relation" do
+      Survey.none.should be_empty
+      Survey.none.should be_a ActiveRecord::Relation
+    end
+  end
+
+  it "can be archived" do
+    survey = FactoryGirl.create :survey
+    survey.archive
+    survey.reload.should be_archived
+    survey.name.should =~ /\(Archived\)/
   end
 
   context "users" do
@@ -156,36 +194,6 @@ describe Survey do
       field_agents = survey.users_for_organization(access_token, 1)
       field_agents[:published].first.id.should == 1
       field_agents[:unpublished].first.id.should == 2
-    end
-
-    context "while publishing" do
-      it "publishes survey to the given users" do
-        survey = FactoryGirl.create(:survey, :finalized => true)
-        users = [1, 2]
-        survey.publish_to_users(users)
-        survey.user_ids.should == users
-      end
-
-      it "does not allow publishing if it is not finalized" do
-        survey = FactoryGirl.create(:survey)
-        users = [3, 4]
-        survey.publish_to_users(users)
-        survey.user_ids.should == []
-      end
-
-      it "sets the published_on to the date on which it is published" do
-        survey = FactoryGirl.create(:survey, :finalized => true)
-        users = [3, 4]
-        survey.publish_to_users(users)
-        survey.reload.published_on.should == Date.today
-      end
-
-      it "does not set the published_on date if it is already set" do
-        survey = FactoryGirl.create(:survey, :finalized => true, :published_on => Date.yesterday)
-        users = [3, 4]
-        survey.publish_to_users(users)
-        survey.reload.published_on.should == Date.yesterday
-      end
     end
   end
 
@@ -246,16 +254,9 @@ describe Survey do
       survey.should be_published
     end
 
-    it "if it is published to at least one user" do
-      survey = FactoryGirl.create(:survey, :finalized => true)
-      users = [1, 2]
-      survey.publish_to_users(users)
-      survey.should be_published
-    end
-
     it "if it is public" do
       survey = FactoryGirl.create(:survey, :finalized => true)
-      survey.publicize()
+      survey.publicize
       survey.should be_published
     end
 
@@ -308,17 +309,6 @@ describe Survey do
     end
   end
 
-  context "reports" do
-    it "finds all questions which have report data" do
-      survey = FactoryGirl.create(:survey)
-      question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey_id => survey.id).id)
-      another_question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey_id => survey.id).id)
-      5.times { question.answers << FactoryGirl.create(:answer_with_complete_response, :content => question.options.first.content) }
-      3.times { question.answers << FactoryGirl.create(:answer_with_complete_response, :content => question.options.last.content) }
-      survey.questions_with_report_data.should == [question]
-    end
-  end
-
   context "authorization key for public surveys" do
     it "contains a urlsafe random string" do
       survey = FactoryGirl.create :survey, :public => true
@@ -364,6 +354,13 @@ describe Survey do
       FactoryGirl.create_list(:survey_with_questions, 5)
       Survey.with_questions.count.should == (5 * 5)
     end
+
+    it "returns a list of archived surveys" do
+      archived_survey = FactoryGirl.create :survey, :archived => true
+      another_archived_survey = FactoryGirl.create :survey, :archived => true
+      survey = FactoryGirl.create :survey
+      Survey.archived.should =~ [archived_survey, another_archived_survey]
+    end
   end
 
   context "publicize" do
@@ -380,10 +377,11 @@ describe Survey do
     end
   end
 
-  it "returns questions with at least one answer" do
+  it "returns questions with at least one answer of a complete response" do
     survey = FactoryGirl.create(:survey)
     question = FactoryGirl.create(:question, :survey => survey)
-    question.answers << FactoryGirl.create(:answer)
+    resp = FactoryGirl.create(:response, :status => 'complete', :state => 'clean')
+    question.answers << FactoryGirl.create(:answer, :response => resp)
     another_question = FactoryGirl.create(:question, :survey => survey)
     survey.questions << question
     survey.questions << another_question
@@ -401,5 +399,21 @@ describe Survey do
     survey = FactoryGirl.create(:survey)
     question = FactoryGirl.create :question, :identifier => false, :survey => survey
     survey.identifier_questions.should include question
+  end
+
+  it "publishes the survey if finalized" do
+    survey = FactoryGirl.create(:survey, :finalized => true)
+    survey.publish
+    survey.published_on.should_not be_nil
+  end
+
+  context "#elements_in_order_as_json" do
+    it "should include all the elements of the survey" do
+      survey = FactoryGirl.create :survey
+      question = FactoryGirl.create :question, :survey => survey
+      category = FactoryGirl.create :category, :survey => survey
+      category.questions << FactoryGirl.create(:question)
+      survey.elements_in_order_as_json.size.should == 2
+    end
   end
 end

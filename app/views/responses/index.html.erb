@@ -2,7 +2,7 @@
 
 <header>
   <%= link_to icon_for('icon-plus', t('.add_response')), survey_responses_path(@survey), :method => :post, :class => 'add_response' if can?(:create, Response.new(:survey => @survey)) && !@survey.expired?  %>
-  <%= link_to icon_for('icon-table', t('.download_excel')), survey_responses_path(format: :xlsx), :class => 'download_excel' unless @complete_responses.blank? %>
+  <%= link_to icon_for('icon-table', t('.download_excel')), 'javascript:void(0);', :class => 'download_excel' if @complete_responses.present? && can?(:generate_excel, @survey) %>
   <h2><%= t('.list_of_responses', :survey_name => @survey.name) %></h2>
 </header>
 <div>
@@ -47,7 +47,12 @@
           <% end %>
           </td>
 
+          <div id="dialog" title="<%= t('responses.excel.excel_dialog_title') %>">
+            <p><%= t('responses.excel.excel_downloading_message') %></p>
+          </div>
+
           <td class="actions">
+            <%= link_to icon_for('icon-edit', 'Show'), survey_response_path(:id => response.id), :class => 'show_response' if can? :show, response %>
             <%= link_to icon_for('icon-edit', 'Edit'), edit_survey_response_path(:id => response.id), :class => 'edit_response' if can? :edit, response %>
             <%= link_to icon_for('icon-remove', 'Delete'), survey_response_path(:id => response.id), :method => :delete, :class => 'delete_response', :data => { :confirm => t(:confirm) } if can? :destroy, response %>
           </td>
@@ -59,3 +64,8 @@
 </div>
 
 <%= will_paginate @responses %>
+
+<script type="text/javascript">
+    new ExcelDownloader(<%= @survey.id %>)
+</script>
+

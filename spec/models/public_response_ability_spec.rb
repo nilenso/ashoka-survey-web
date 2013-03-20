@@ -14,7 +14,7 @@ describe "Abilities" do
     let(:ability){ PublicResponseAbility.new(base_user_info) }
 
 
-    roles =  ['admin', 'cso_admin', 'field_agent']
+    roles =  %w(viewer field_agent supervisor designer manager cso_admin super_admin)
     user_info_array = roles.map { |role| base_user_info.merge(:role => role) }
     user_info_array = user_info_array.push({ :role => 'non-logged-in user', :session_token => "foo" })
 
@@ -58,6 +58,8 @@ describe "Abilities" do
         end
 
         it { should be_able_to :manage, response }
+        it { should_not be_able_to :destroy, Response }
+        it { should_not be_able_to :read, Response }
       end
 
       context "cannot manage a response that he didn't create" do

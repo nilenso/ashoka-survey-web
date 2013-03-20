@@ -41,6 +41,26 @@ describe ResponsesController do
       response.should redirect_to surveys_path
       flash[:error].should_not be_nil
     end
+
+    it "creates blank answers for each of its survey's questions" do
+      question = FactoryGirl.create :question, :survey => survey
+      post :create, :survey_id => survey.id
+      question.answers.should_not be_blank
+    end
+
+    it "creates blank answers for each of its survey's questions nested under a category" do
+      category = FactoryGirl.create :category, :survey => survey
+      question = FactoryGirl.create :question, :survey => survey, :category => category
+      post :create, :survey_id => survey.id
+      question.answers.should_not be_blank
+    end
+
+    it "creates blank answers for each of its survey's questions nested under a question with options" do
+      question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey => survey).id)
+      sub_question = FactoryGirl.create :question, :survey => survey, :parent => question.options[0]
+      post :create, :survey_id => survey.id
+      sub_question.answers.should_not be_blank
+    end
   end
 
   context "GET 'index'" do
@@ -104,42 +124,79 @@ describe ResponsesController do
       assigns(:complete_responses).should == responses
     end
 
-    context "excel" do
-      it "responds to XLSX" do
-        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
-        get :index, :survey_id => survey.id, :format => :xlsx
-        response.should be_ok
-      end
+    it "orders the complete responses by their `updated_at` time" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      responses = FactoryGirl.create_list(:response, 5, :survey => survey,
+                                          :organization_id => 1, :user_id => 1, :status => 'complete')
+      get :index, :survey_id => survey.id
+      assigns(:complete_responses).should == responses
+    end
+  end
 
-      it "assigns only the completed responses" do
-        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-        response = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
-        incomplete_response = FactoryGirl.create(:response, :status => 'incomplete', :survey => survey)
-        validating_response = FactoryGirl.create(:response, :status => 'validating', :survey => survey)
-        get :index, :survey_id => survey.id, :format => :xls
-        assigns(:complete_responses).should == [response]
-      end
+  context "GET 'generate_excel'" do
+    before(:each) do
+      session[:access_token] = "123"
+      response = mock(OAuth2::Response)
+      access_token = mock(OAuth2::AccessToken)
+      names_response = mock(OAuth2::Response)
+      organizations_response = mock(OAuth2::Response)
+      controller.stub(:access_token).and_return(access_token)
+
+      access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
+      access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
+      names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
+      organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "Foo"}, {"id" => 2, "name" => "Bar"}])
+    end
+
+    it "assigns only the completed responses" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+      incomplete_response = FactoryGirl.create(:response, :status => 'incomplete', :survey => survey)
+      validating_response = FactoryGirl.create(:response, :status => 'validating', :survey => survey)
+      get :generate_excel, :survey_id => survey.id
+      response.should be_ok
+      assigns(:complete_responses).should == [resp]
+    end
+
+    it "creates a delayed job to generate the excel" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      response = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+      expect {
+        get :generate_excel, :survey_id => survey.id
+      }.to change { Delayed::Job.count }.by 1
+    end
+
+    it "renders the path of the excel file generated as json" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+      get :generate_excel, :survey_id => survey.id
+      response.should be_ok
+      JSON.parse(response.body)['excel_path'].should =~ /#{survey.name}.*\.xlsx/
     end
   end
 
   context "GET 'edit'" do
-    it "renders the edit page" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey,
+    before(:each) do
+      @survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      @res = FactoryGirl.create(:response, :survey => @survey,
                                :organization_id => 1, :user_id => 2)
-      get :edit, :id => res.id, :survey_id => survey.id
+    end
+
+    it "renders the edit page" do
+      get :edit, :id => @res.id, :survey_id => @survey.id
       response.should be_ok
       response.should render_template('edit')
     end
 
     it "assigns a survey and response" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey,
-                               :organization_id => 1, :user_id => 2)
-      get :edit, :id => res.id, :survey_id => survey.id
-      assigns(:response).should == Response.find(res.id)
-      assigns(:survey).should == survey
+      get :edit, :id => @res.id, :survey_id => @survey.id
+      assigns(:response).should == Response.find(@res.id)
+      assigns(:survey).should == @survey
+    end
+
+    it "assigns disabled as false" do
+      get :edit, :id => @res.id, :survey_id => @survey.id
+      assigns(:disabled).should be_false
     end
 
     it "assigns public_response if the page is accessed externally using the public link" do
@@ -153,7 +210,33 @@ describe ResponsesController do
     end
   end
 
+  context "GET 'show'" do
+    before(:each) do
+      @survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      @res = FactoryGirl.create(:response, :survey => @survey,
+                               :organization_id => 1, :user_id => 2)
+    end
+
+    it "renders the edit page" do
+      get :show, :id => @res.id, :survey_id => @survey.id
+      response.should be_ok
+      response.should render_template('edit')
+    end
+
+    it "assigns a survey and response" do
+      get :show, :id => @res.id, :survey_id => @survey.id
+      assigns(:response).should == Response.find(@res.id)
+      assigns(:survey).should == @survey
+    end
+
+    it "assigns disabled as true" do
+      get :show, :id => @res.id, :survey_id => @survey.id
+      assigns(:disabled).should be_true
+    end
+  end
+
   context "PUT 'update'" do
+    before(:each) { request.env["HTTP_REFERER"] = 'http://example.com' }
     it "doesn't run validations on answers that are empty" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       question_1 = FactoryGirl.create(:question, :survey => survey, :max_length => 15)
@@ -170,7 +253,6 @@ describe ResponsesController do
                                    "1" => { :content => "hello", :id => answer_1.id} } }
 
         answer_1.reload.content.should == "hello"
-      response.should redirect_to survey_responses_path
       flash[:notice].should_not be_nil
     end
 
@@ -186,8 +268,15 @@ describe ResponsesController do
         { :answers_attributes => { "0" => { :content => "yeah123", :id => answer.id} } }
 
       Answer.find(answer.id).content.should == "yeah123"
-      response.should redirect_to survey_responses_path
       flash[:notice].should_not be_nil
+    end
+
+    it "renders the edit page if the response is saved successfully" do
+      request.env["HTTP_REFERER"] = 'http://example.com'
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res = FactoryGirl.create(:response, :survey => survey)
+      put :update, :id => res.id, :survey_id => survey.id
+      response.should redirect_to :back
     end
 
     it "renders edit page in case of any validations error" do
@@ -207,16 +296,34 @@ describe ResponsesController do
   end
 
   context "PUT 'complete'" do
-    let(:resp) { FactoryGirl.create(:response, :survey_id => survey.id, :organization_id => 1, :user_id => 1) }
+    let(:resp) { FactoryGirl.create(:response, :survey_id => survey.id, :organization_id => 1, :user_id => 1, :status => 'validating') }
 
     it "marks the response complete" do
       put :complete, :id => resp.id, :survey_id => resp.survey_id
       resp.reload.should be_complete
     end
 
-    it "redirects to the response index page on success" do
+    it "redirects to the response index page on success if the survey is not crowd_sourced" do
       put :complete, :id => resp.id, :survey_id => resp.survey_id
       response.should redirect_to(survey_responses_path(resp.survey_id))
+    end
+
+    context "when completing a response to public survey" do
+      it "redirects to the root_path if no user is logged in" do
+        session[:user_id] = nil
+        survey = FactoryGirl.create(:survey, :public => true, :finalized => true)
+        resp = FactoryGirl.create(:response, :session_token => "123", :survey => survey)
+        session[:session_token] = "123"
+        put :complete, :id => resp.id, :survey_id => resp.survey_id
+        response.should redirect_to root_path
+      end
+
+      it "redirects to the responses index page if a user is logged in" do
+        survey = FactoryGirl.create(:survey, :public => true, :finalized => true, :organization_id => 1)
+        resp = FactoryGirl.create(:response, :organization_id => 1, :user_id => 1, :survey => survey)
+        put :complete, :id => resp.id, :survey_id => resp.survey_id
+        response.should redirect_to survey_responses_path(survey.id)
+      end
     end
 
     it "updates the response" do
@@ -265,7 +372,7 @@ describe ResponsesController do
     let!(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :finalized => true) }
     let!(:res) { FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 2) }
 
-    it "deletes a survey" do
+    it "deletes a response" do
       expect { delete :destroy, :id => res.id, :survey_id => survey.id }.to change { Response.count }.by(-1)
       flash[:notice].should_not be_nil
     end

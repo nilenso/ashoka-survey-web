@@ -3,17 +3,16 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
   urlRoot: '/api/questions'
 
   defaults:
-    content: 'Untitled question'
+    content: I18n.t('js.untitled_question')
     mandatory: false
     identifier: false
 
   initialize: =>
-    this.set('content', I18n.t('js.untitled_question'))
-    this.on('change', @make_dirty, this)
+    @on('change', @make_dirty, this)
     @make_dirty()
 
   has_errors: =>
-    !_.isEmpty(this.errors)
+    !_.isEmpty(@errors)
 
   make_dirty: =>
     @dirty = true
@@ -26,37 +25,40 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
 
   save_model: =>
     if @is_dirty()
-      this.save({}, {error: this.error_callback, success: this.success_callback})
+      @save({}, {error: @error_callback, success: @success_callback})
 
-  fetch: =>
-    super({error: this.error_callback, success: this.success_callback})
+  fetch: (options={}) =>
+    super({error: options.error || @error_callback, success: options.success || @success_callback})
 
   remove_image_attributes: =>
-    this.unset('image', {silent: true})
-    this.unset('image_content_type', {silent: true})
-    this.unset('image_file_name', {silent: true})
-    this.unset('image_file_size', {silent: true})
-    this.unset('image_updated_at', {silent: true})
+    @unset('image', {silent: true})
+    @unset('image_content_type', {silent: true})
+    @unset('image_file_name', {silent: true})
+    @unset('image_file_size', {silent: true})
+    @unset('image_updated_at', {silent: true})
 
   success_callback: (model, response) =>
     @make_clean()
     @remove_image_attributes()
-    this.errors = []
-    this.trigger('change:errors')
-    this.trigger('save:completed')
+    @errors = []
+    @trigger('change:errors')
+    @trigger('save:completed')
 
   error_callback: (model, response) =>
-    this.errors = JSON.parse(response.responseText)
-    this.trigger('change:errors')
-    this.trigger('set:errors')
+    @errors = JSON.parse(response.responseText)
+    @trigger('change:errors')
+    @trigger('set:errors')
 
-  imageUploadUrl: =>
-    "/api/questions/"+this.id+'/image_upload'
+  image_upload_url: =>
+    "/api/questions/"+@id+'/image_upload'
+
+  duplicate_url: =>
+    "/api/questions/"+@id+'/duplicate'
 
   toJSON: =>
     question_attrs = {}
     _.each @attributes, (val, key) =>
       question_attrs[key] = val  if val? and not _.isObject(val)
-    { question: _.omit( question_attrs, ['created_at', 'updated_at', 'image_url', 'image_in_base64', 'photo_secure_token', 'image_tmp']) }
+    { question: _.omit( question_attrs, ['created_at', 'updated_at', 'image_url', 'image_in_base64', 'photo_secure_token', 'image_tmp', 'multi_record_question_id', 'has_multi_record_ancestor']) }
 
 SurveyBuilder.Models.QuestionModel.setup()

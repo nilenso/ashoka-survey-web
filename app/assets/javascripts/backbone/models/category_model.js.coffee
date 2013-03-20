@@ -2,8 +2,7 @@
 class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
   urlRoot: '/api/categories'
 
-  defaults:
-    content: 'Untitled Category'
+  ORDER_NUMBER_STEP: 2
 
   initialize: =>
     this.set('content', I18n.t('js.untitled_category'))
@@ -11,6 +10,9 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     @sub_question_models = []
     this.on('change', @make_dirty, this)
     @make_dirty()
+
+  duplicate_url: =>
+    '/api/categories/'+ @id + '/duplicate'
 
   make_dirty: =>
     @dirty = true
@@ -50,7 +52,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     category_attrs = {}
     _.each @attributes, (val, key) =>
       category_attrs[key] = val  if val? and not _.isObject(val)
-    { category: _.omit( category_attrs, ['created_at', 'updated_at']) }
+    { category: _.omit( category_attrs, ['created_at', 'updated_at', 'has_multi_record_ancestor']) }
 
   add_sub_question: (type) =>
     question = {
@@ -60,7 +62,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
       order_number: @next_sub_question_order_number(),
     }
 
-    sub_question_model = SurveyBuilder.Views.QuestionFactory.model_for(question.type, question)
+    sub_question_model = SurveyBuilder.Views.QuestionFactory.model_for(question)
 
     @sub_question_models.push sub_question_model
     sub_question_model.on('destroy', this.delete_sub_question, this)
@@ -69,7 +71,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     this.trigger('add:sub_question', sub_question_model)
 
   next_sub_question_order_number: =>
-    ++@sub_question_order_counter
+    @sub_question_order_counter += @ORDER_NUMBER_STEP
 
   delete_sub_question: (sub_question_model) =>
     @sub_question_models = _(@sub_question_models).without(sub_question_model)
@@ -78,7 +80,7 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     elements = _((this.get('questions')).concat(this.get('categories'))).sortBy('order_number')
     _.each elements, (question, counter) =>
       _(question).extend({category_id: this.get('id')})
-      question_model = SurveyBuilder.Views.QuestionFactory.model_for(question.type, question)
+      question_model = SurveyBuilder.Views.QuestionFactory.model_for(question)
 
       @sub_question_models.push question_model
       question_model.on('destroy', this.delete_sub_question, this)

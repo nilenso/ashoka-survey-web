@@ -5,27 +5,31 @@ class Answer < ActiveRecord::Base
 
   belongs_to :question
   belongs_to :response
-  attr_accessible :content, :question_id, :option_ids, :updated_at
+  belongs_to :record
+  attr_accessible :content, :question_id, :option_ids, :updated_at, :response_id, :record_id
   validate :mandatory_questions_should_be_answered, :if => :response_validating?
-  validate :content_should_not_exceed_max_length
-  validate :content_should_be_in_range
-  validates_uniqueness_of :question_id, :scope => [:response_id]
+  with_options :if => :has_been_answered? do |condition|
+    condition.validate :date_should_be_valid
+    condition.validate :content_should_be_in_range
+  end
+  validate :content_should_not_exceed_max_length, :if => :max_length_and_content_present?
+  validates_uniqueness_of :question_id, :scope => [:response_id, :record_id]
   has_many :choices, :dependent => :destroy
-  validate :date_should_be_valid
   attr_accessible :photo
-  #has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>"}
-  #validates_attachment_content_type :photo, :content_type=>['image/jpeg', 'image/png']
   mount_uploader :photo, ImageUploader
   store_in_background :photo
-  validate :maximum_photo_size
-  validates_numericality_of :content, :if => Proc.new {|answer| (answer.content.present?) && (answer.question.type == 'NumericQuestion') }
+  validate :maximum_photo_size, :if => :content_present?
+  validates_numericality_of :content, :if => :numeric_question?
   after_save :touch_multi_choice_answer
 
   default_scope includes('question').order('questions.order_number')
   delegate :content, :to => :question, :prefix => true
   delegate :validating?, :to => :response, :prefix => true
+  delegate :type, :to => :question, :prefix => true
   delegate :identifier?, :to => :question
   delegate :first_level?, :to => :question
+  delegate :order_number, :to => :question, :prefix => true
+
   scope :complete, joins(:response).where("responses.status = 'complete'")
 
   def option_ids
@@ -40,7 +44,7 @@ class Answer < ActiveRecord::Base
   end
 
   def content
-    if question.type == "MultiChoiceQuestion"
+    if question_type == "MultiChoiceQuestion"
       choices.map(&:content).join(", ")
     else
       self[:content]
@@ -54,7 +58,7 @@ class Answer < ActiveRecord::Base
   end
 
   def image?
-    question.type == "PhotoQuestion"
+    question_type == "PhotoQuestion"
   end
 
   def clear_content
@@ -91,15 +95,21 @@ class Answer < ActiveRecord::Base
   private
 
   def maximum_photo_size
-    if question.type == "PhotoQuestion"
-      if question.max_length && photo && question.max_length.megabytes < photo.size
-        errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
-      elsif photo && 5.megabytes < photo.size
-        errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
-      end
+    return unless question_type == "PhotoQuestion"
+    if question.max_length && question.max_length.megabytes < photo.size
+      errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
+    elsif 5.megabytes < photo.size
+      errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
     end
   end
 
+  def max_length_and_content_present?
+    content_present? && question.max_length
+  end
+
+  def content_present?
+    content.present? || photo.present?
+  end
 
   def mandatory_questions_should_be_answered
     if question.mandatory && has_not_been_answered?
@@ -111,37 +121,48 @@ class Answer < ActiveRecord::Base
     end
   end
 
+  def photo_or_numeric_type_question
+    question_type == "PhotoQuestion" || question_type == "NumericQuestion"
+  end
+
+  def content_max_legnth_validation
+    if question_type == "RatingQuestion"
+      content.to_i > question.max_length
+    else
+      content.length > question.max_length
+    end
+  end
+
   def content_should_not_exceed_max_length
-    if question.type != "PhotoQuestion" && question.max_length && content && content.length > question.max_length
-      errors.add(:content, I18n.t("answers.validations.max_length"))
-    elsif question.type == "RatingQuestion" && question.max_length && content && content.to_i > question.max_length
+    return if photo_or_numeric_type_question
+    if content_max_legnth_validation
       errors.add(:content, I18n.t("answers.validations.max_length"))
     end
   end
 
   def content_should_be_in_range
-    unless has_not_been_answered?
-      min_value, max_value = question.min_value, question.max_value
-      if min_value && content.to_i < min_value
-        errors.add(:content, I18n.t("answers.validations.exceeded_lower_limit"))
-      elsif max_value && content.to_i > max_value
-        errors.add(:content, I18n.t("answers.validations.exceeded_higher_limit"))
-      end
+    min_value, max_value = question.min_value, question.max_value
+    if min_value && content.to_i < min_value
+      errors.add(:content, I18n.t("answers.validations.exceeded_lower_limit"))
+    elsif max_value && content.to_i > max_value
+      errors.add(:content, I18n.t("answers.validations.exceeded_higher_limit"))
     end
   end
 
   def date_should_be_valid
-    unless has_not_been_answered?
-      if question.type == "DateQuestion"
-        unless content =~ /\A\d{4}\/(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[1-2]\d|3[01])\Z/
-          errors.add(:content, I18n.t("answers.validations.invalid_date"))
-        end
+    if question_type == "DateQuestion"
+      unless content =~ /\A\d{4}\/(?:0?[1-9]|1[0-2])\/(?:0?[1-9]|[1-2]\d|3[01])\Z/
+        errors.add(:content, I18n.t("answers.validations.invalid_date"))
       end
     end
   end
 
+  def numeric_question?
+    content.present? && question_type == "NumericQuestion"
+  end
+
   # Editing choices doesn't change the `updated_at` for the answer by default.
   def touch_multi_choice_answer
-    touch if question.type == "MultiChoiceQuestion"
+    touch if question_type == "MultiChoiceQuestion"
   end
 end

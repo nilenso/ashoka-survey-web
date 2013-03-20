@@ -30,7 +30,7 @@ describe Api::V1::SurveysController do
       FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true)
       get :index
       returned_json = JSON.parse(response.body).first
-      returned_json.keys.should =~ Survey.attribute_names
+       returned_json.keys.should =~ Survey.attribute_names
     end
 
     it "returns only the finalized surveys" do
@@ -51,6 +51,17 @@ describe Api::V1::SurveysController do
       returned_json.length.should == 5
       returned_json.each do |survey|
         (Time.now < Time.parse(survey['expiry_date'])).should == true
+      end
+    end
+
+    it "doesn't return archived surveys" do
+      archived_surveys = FactoryGirl.create_list :survey, 5, :organization_id => LOGGED_IN_ORG_ID, :finalized => true, :archived => true
+      surveys = FactoryGirl.create_list :survey, 5, :organization_id => LOGGED_IN_ORG_ID, :expiry_date => 5.days.from_now, :finalized => true
+      get :index
+      returned_json = JSON.parse response.body
+      returned_json.length.should == 5
+      returned_json.each do |survey|
+       survey[:archived].should_not be
       end
     end
 
@@ -77,6 +88,7 @@ describe Api::V1::SurveysController do
       end
 
       it "ignores the surveys that the user doesn't have access to" do
+        sign_in_as('viewer')
         survey = FactoryGirl.create :survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true
         off_limits_survey = FactoryGirl.create :survey, :organization_id => 1234, :finalized => true, :name => "OFF!"
         get :index
@@ -106,18 +118,51 @@ describe Api::V1::SurveysController do
       JSON.parse(response.body)['count'].should == 25
     end
   end
+  
+  context "GET 'identifier_questions'" do
+    it "responds with JSON" do
+      get :identifier_questions, :id => survey.id
+      response.should be_ok
+      lambda { JSON.parse(response.body) }.should_not raise_error
+    end
+
+    it "responds with the details of the survey as JSON" do
+      survey = FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID)
+      question = FactoryGirl.create(:question, :identifier => true)
+      survey.questions << question
+
+      get :identifier_questions, :id => survey.id
+      response.should be_ok
+      excluded_keys = ['created_at', 'updated_at', 'image']
+      returned_json = JSON.parse(response.body)
+      returned_json[0].except(*excluded_keys).should == question.as_json.except(*excluded_keys)
+    end
+
+    it "returns a :bad_request if an invalid survey ID is passed" do
+      get :identifier_questions, :id => 40
+      response.should_not be_ok
+    end
+  end
 
   context "GET 'show" do
-
     it "returns the survey information as JSON" do
       get :show, :id => survey.id
+      json = JSON.parse(response.body)
       response.should be_ok
-      JSON.parse(response.body).should == JSON.parse(survey.to_json)
+      %w(id name description finalized organization_id public published_on archived).each do |attr|
+        json[attr].should == survey[attr]
+      end
     end
 
     it "returns a :bad_request if the survey isn't found" do
       get :show, :id => 1234
       response.should_not be_ok
+    end
+
+    it "returns all the elements of the survey as well" do
+      get :show, :id => survey.id
+      response.should be_ok
+      JSON.parse(response.body).should have_key 'elements'
     end
   end
 

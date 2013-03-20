@@ -3,18 +3,29 @@
 class Response < ActiveRecord::Base
   belongs_to :survey
   has_many :answers, :dependent => :destroy
+  has_many :records, :dependent => :destroy
   accepts_nested_attributes_for :answers
-  attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status, :updated_at, :latitude, :longitude, :ip_address
+  attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status, :updated_at, :latitude, :longitude, :ip_address, :state, :comment
   validates_presence_of :survey_id
   validates_presence_of :organization_id, :user_id, :unless => :survey_public?
   validates_associated :answers
+  delegate :to_json_with_answers_and_choices, :render_json, :to => :response_serializer
   delegate :questions, :to => :survey
   delegate :public?, :to => :survey, :prefix => true, :allow_nil => true
   reverse_geocoded_by :latitude, :longitude, :address => :location
-  after_validation :reverse_geocode
   geocoded_by :ip_address, :latitude => :latitude, :longitude => :longitude
-  before_validation :geocode
+  before_save :reverse_geocode, :geocode, :on => :create
   acts_as_gmappable :lat => :latitude, :lng => :longitude, :check_process => false, :process_geocoding => false
+
+  MAX_PAGE_SIZE = 50
+
+  def self.page_size(params_page_size=nil)
+    if params_page_size.blank?
+      MAX_PAGE_SIZE
+    else
+      [params_page_size.to_i, MAX_PAGE_SIZE].min
+    end
+  end
 
   def gmaps4rails_infowindow
     location
@@ -31,7 +42,7 @@ class Response < ActiveRecord::Base
   end
 
   def complete
-    update_column(:status, 'complete')
+    update_column(:status, 'complete') if response_validating?
   end
 
   def incomplete
@@ -61,8 +72,12 @@ class Response < ActiveRecord::Base
     self.session_token = session_token
   end
 
-  def filename_for_excel
-    "#{survey.name} (##{survey.id}) - #{Time.now}.xlsx"
+  def create_blank_answers
+    survey.first_level_elements.each { |element| element.create_blank_answers(:response_id => id) }
+  end
+
+  def sorted_answers
+    survey.first_level_elements.map { |element| element.sorted_answers_for_response(id) }.flatten
   end
 
   def select_new_answers(answers_attributes)
@@ -101,13 +116,28 @@ class Response < ActiveRecord::Base
     end
   end
 
-  def to_json_with_answers_and_choices
-    to_json(:include => {:answers => {:include => :choices, :methods => :photo_in_base64}})
+  def update_records
+    records = answers.includes(:record).map(&:record).compact.uniq
+    records.each do |record|
+      record.update_attributes(:response_id => self.id) unless record.response_id
+    end
+  end
+
+  def response_serializer
+    ResponseSerializer.new(self)
+  end
+
+  def valid_for?(answer_attributes)
+    self.errors.empty? && self.update_answers(answer_attributes)
   end
 
   private
 
   def five_first_level_answers
-    answers.find_all{ |answer| answer.question.first_level? }[0..5]
+    answers.find_all{ |answer| answer.question.first_level? }[0..4]
+  end
+
+  def response_validating?
+    valid? && validating?
   end
 end

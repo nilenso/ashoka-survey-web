@@ -9,6 +9,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'click #save': 'save_all_questions'
     'click #finalize': 'finalize'
     'show_survey_details': 'show_survey_details'
+    'save_all_questions': 'save_all_questions'
 
   initialize:(survey_id) =>
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
@@ -31,7 +32,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
       $(this.el).bind('ajaxStop.preload', =>
         window.loading_overlay.hide_overlay()
         $(this.el).unbind('ajaxStop.preload')
-        this.dummy_pane.sort_questions_by_order_number()
+        this.dummy_pane.sort_question_views_by_order_number()
         this.dummy_pane.reorder_questions())
     )
 
@@ -48,8 +49,8 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   new_category: (event, type) =>
     @loading_overlay()
     model = this.survey.add_new_question_model()
-    this.dummy_pane.add_category(model)
-    this.settings_pane.add_category(model)
+    this.dummy_pane.add_category(type, model)
+    this.settings_pane.add_category(type, model)
     model.save_model()
 
   preload_questions: (data) =>
@@ -62,10 +63,10 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   preload_categories: (data) =>
     _(data).each (category) =>
-      model = this.survey.add_new_question_model()
+      model = this.survey.add_new_question_model(category.type)
       model.set('id', category.id)
-      this.dummy_pane.add_category(model)
-      this.settings_pane.add_category(model)
+      this.dummy_pane.add_category(category.type, model)
+      this.settings_pane.add_category(category.type, model)
       model.fetch()
 
   loading_overlay: =>

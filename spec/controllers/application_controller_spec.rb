@@ -31,16 +31,17 @@ describe ApplicationController do
       end
     end
 
-    context "for the responses controller" do
+    context "if the user isn't logged in" do
       it "creates a `PublicResponseAbility`" do
         get :index
         controller.current_ability.class.should == PublicResponseAbility
       end
     end
 
-    context "for any other controller" do
-      it "creates an `Ability`" do
-        controller.current_ability.class.should == Ability
+    context "if the user is logged in" do
+      it "creates the relevant `Ability`" do
+        sign_in_as('viewer')
+        controller.current_ability.class.should == ViewerAbility
       end
     end
   end
@@ -90,6 +91,13 @@ describe ApplicationController do
     controller.current_user_org.should == 23
   end
 
+  it "returns current user organization type" do
+    controller.current_user_org_type.should be_nil
+    session[:user_id] = 12
+    session[:user_info] = {:org_type => "CSO"}
+    controller.current_user_org_type.should == "CSO"
+  end
+
   context "#current_user_info" do
     it "returns current user info along with the user_id and the session_token" do
       session[:user_id] = 12
@@ -107,7 +115,7 @@ describe ApplicationController do
   it "knows if the current user is a cso admin" do
     sign_in_as('cso_admin')
     controller.signed_in_as_cso_admin?.should be_true
-    sign_in_as('user')
+    sign_in_as('field_agent')
     controller.signed_in_as_cso_admin?.should be_false
   end
 

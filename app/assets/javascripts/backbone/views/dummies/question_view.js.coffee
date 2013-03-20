@@ -2,42 +2,62 @@ SurveyBuilder.Views.Dummies ||= {}
 
 # Represents a dummy question on the DOM
 class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
+  ORDER_NUMBER_STEP: 2
 
   initialize: (model, template) =>
-    this.model = model
-    this.template = template
-    this.model.dummy_view = this
-    this.model.on('change', this.render, this)
-    this.model.on('change:errors', this.render, this)
+    @model = model
+    @template = template
+    @model.dummy_view = this
+    @can_have_sub_questions = false
+    @model.on('change', @render, this)
+    @model.on('change:errors', @render, this)
 
   render: =>
-    $(this.el).html('<div class="dummy_question_content"><div class="top_level_content"></div></div>') if $(this.el).is(':empty')
-    this.model.set('content', I18n.t('js.untitled_question')) if _.isEmpty(this.model.get('content'))
-    data = _.extend(this.model.toJSON().question, {errors: this.model.errors, image_url: this.model.get('image_url')})
-    data = _(data).extend({question_number: this.model.question_number})
-    $(this.el).children('.dummy_question_content').children(".top_level_content").html(Mustache.render(this.template, data))
-    $(this.el).addClass("dummy_question")
-    $(this.el).find('abbr').show() if this.model.get('mandatory')
-    $(this.el).find('.star').raty({
+    $(@el).html('<div class="dummy_question_content"><div class="top_level_content"></div></div>') if $(@el).is(':empty')
+    @model.set('content', I18n.t('js.untitled_question')) if _.isEmpty(@model.get('content'))
+    data = _.extend(@model.toJSON().question, {errors: @model.errors, image_url: @model.get('image_url')})
+    data = _(data).extend({question_number: @model.question_number})
+    data = _(data).extend({duplicate_url: @model.duplicate_url()})
+    $(@el).children('.dummy_question_content').children(".top_level_content").html(Mustache.render(@template, data))
+    $(@el).addClass("dummy_question")
+    $(@el).find('abbr').show() if @model.get('mandatory')
+    $(@el).find('.star').raty({
       readOnly: true,
-      number: this.model.get('max_length') || 5
+      number: @model.get('max_length') || 5
     })
 
-    $(this.el).children(".dummy_question_content").click (e) =>
+    $(@el).children(".dummy_question_content").click (e) =>
       @show_actual(e)
 
-    $(this.el).children('.dummy_question_content').children(".top_level_content").children(".delete_question").click (e) => @delete(e)
+    $(@el).children('.dummy_question_content').children(".top_level_content").children(".delete_question").click (e) => @delete(e)
+    $(@el).children('.dummy_question_content').children(".top_level_content").children(".copy_question").click (e) => @save_all_changes(e)
 
     return this
 
   delete: =>
-    this.model.destroy()
+    @model.destroy()
 
   show_actual: (event) =>
-    $(this.el).trigger("dummy_click")
-    this.model.actual_view.show()
-    $(this.el).children('.dummy_question_content').addClass("active")
-
+    $(@el).trigger("dummy_click")
+    @model.actual_view.show()
+    $(@el).children('.dummy_question_content').addClass("active")
 
   unfocus: =>
-    $(this.el).children('.dummy_question_content').removeClass("active")
+    $(@el).children('.dummy_question_content').removeClass("active")
+
+  set_order_number: (last_order_number) =>
+    index = $(@el).index()
+    @model.set({order_number: last_order_number + (index * @ORDER_NUMBER_STEP)})
+    index
+
+  reset_question_number: =>
+    index = $(@el).index()
+    @model.question_number = index + 1
+
+  save_all_changes: =>
+    $(@el).trigger("copy_question.save_all_changes", this)
+
+  copy_question: =>
+    $(@el).children('.dummy_question_content').children(".top_level_content").children(".copy_question_hidden").click()
+
+

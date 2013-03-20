@@ -33,6 +33,11 @@ table{
 
 }
 
+#dialog, .no-close .ui-dialog-titlebar-close {
+  display:none;
+}
+
+
 div.hidden {
   display: none;
 }
@@ -43,4 +48,20 @@ li {
 
 img.medium {
   width: 300px;
+}
+
+div.record {
+  border: 1px solid $secondary-color-light;
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 20px;
+  .question, .category {
+    margin-bottom: 5px;
+  }
+}
+
+a.create_record {
+  font-size: 12px;
+  color: $primary-color-light;
+  margin-left: 5px;
 }

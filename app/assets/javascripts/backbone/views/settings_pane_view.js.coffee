@@ -1,6 +1,7 @@
 # Collection of all questions' settings
 class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
   el: "#settings_pane"
+  DETAILS: "#survey_details_template"
 
   initialize: (survey_model) =>
     @questions = []
@@ -13,15 +14,15 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
     $(this.el).append($(view.render().el))
     $(view.render().el).hide()
 
-  add_category: (model) =>
-    view = new SurveyBuilder.Views.Questions.CategoryView(model)
+  add_category: (type, model) =>
+    view = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, model)
     @questions.push(view)
     model.on('destroy', this.delete_question_view, this)
     $(this.el).append($(view.render().el))
     $(view.render().el).hide()
 
   add_survey_details: (survey_model) =>
-    template = $("#survey_details_template").html()
+    template = $(@DETAILS).html()
     question = new SurveyBuilder.Views.Questions.SurveyDetailsView({ model: survey_model, template: template })
     @questions.push(question)
     $(this.el).append($(question.render().el))
