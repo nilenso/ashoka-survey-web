@@ -11,7 +11,7 @@ class window.ExcelDownloader
 
   poll: =>
     console.log "Polling for the excel file."
-    $.getJSON("/api/jobs/#{id}/alive", (data) =>
+    $.getJSON("/api/jobs/#{@id}/alive", (data) =>
       if(data.alive)
         console.log "Generated excel. Downloading..."
         clearInterval(@interval)
