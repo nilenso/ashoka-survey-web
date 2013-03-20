@@ -32,12 +32,10 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
       end
     end
 
-    connection = Fog::Storage.new(:provider => "AWS",
-                                  :aws_secret_access_key=>ENV['S3_SECRET'],
-                                  :aws_secret_access_key => ENV['S3_ACCESS_KEY'])
-    directory = connection.directories.get('surveywebexcel')
+    directory = aws_excel_directory
     directory.files.create(:key => filename, :body => package.to_stream, :public => true)
   end
+
 
   def after(job)
     delete_excel
@@ -50,13 +48,17 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
   private
 
   def delete_excel
-    connection = Fog::Storage.new(:provider => "AWS",
-                                  :aws_secret_access_key=>ENV['S3_SECRET'],
-                                  :aws_secret_access_key => ENV['S3_ACCESS_KEY'])
-    directory = connection.directories.get('surveywebexcel')
+    directory = directory = aws_excel_directory
     directory.files.get(filename).destroy
   end
   handle_asynchronously :delete_excel, :run_at => Proc.new { 30.minutes.from_now }, :queue => 'delete_excel'
+
+  def aws_excel_directory
+    connection = Fog::Storage.new(:provider => "AWS",
+                                  :aws_secret_access_key => ENV['S3_SECRET'],
+                                  :aws_access_key_id => ENV['S3_ACCESS_KEY'])
+    connection.directories.get('surveywebexcel')
+  end
 
   def excel_save_path
     if(FileTest.exists?(ENV['EXCEL_SAVE_PATH'].to_s))
