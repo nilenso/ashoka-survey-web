@@ -31,12 +31,16 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
         end
       end
     end
-    f = File.open(excel_save_path.join(filename), 'w')
-    package.serialize(f)
+
+    connection = Fog::Storage.new(:provider => "AWS",
+                                  :aws_secret_access_key=>ENV['S3_SECRET'],
+                                  :aws_secret_access_key => ENV['S3_ACCESS_KEY'])
+    directory = connection.directories.get('surveywebexcel')
+    directory.files.create(:key => filename, :body => package.to_stream, :public => true)
   end
 
   def after(job)
-    delete_excel if FileTest.exists?(excel_save_path.join(filename))
+    delete_excel
   end
 
   def error(job, exception)
@@ -46,7 +50,11 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
   private
 
   def delete_excel
-    File.delete excel_save_path.join(filename)
+    connection = Fog::Storage.new(:provider => "AWS",
+                                  :aws_secret_access_key=>ENV['S3_SECRET'],
+                                  :aws_secret_access_key => ENV['S3_ACCESS_KEY'])
+    directory = connection.directories.get('surveywebexcel')
+    directory.files.get(filename).destroy
   end
   handle_asynchronously :delete_excel, :run_at => Proc.new { 30.minutes.from_now }, :queue => 'delete_excel'
 

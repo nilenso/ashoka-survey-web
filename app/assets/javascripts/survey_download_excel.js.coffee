@@ -17,7 +17,7 @@ class window.ExcelDownloader
       success: (message, text, response) =>
         console.log "Generated excel. Downloading..."
         clearInterval(@interval)
-        window.location = "/#{@filename}"
+        window.location = "https://s3.amazonaws.com/surveywebexcel/#{@filename}"
         @close_dialog()
       error: (message, text, response) =>
         console.log "404. Polling again. File still being generated."
