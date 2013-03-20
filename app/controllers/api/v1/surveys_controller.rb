@@ -1,7 +1,7 @@
 module Api
   module V1
     class SurveysController < APIApplicationController
-      caches_action :show
+      caches_action :show, :if => :survey_finalized?
       authorize_resource :except => [:identifier_questions, :questions_count]
       before_filter :only_finalized_and_unexpired_surveys, :only => [:index, :questions_count]
 
@@ -38,7 +38,6 @@ module Api
       end
 
       def update
-        expire_action :action => :show
         survey = Survey.find_by_id(params[:id])
         if survey && survey.update_attributes(params[:survey])
           render :json => survey.to_json
@@ -65,6 +64,11 @@ module Api
       def extra_surveys
         extra_survey_ids = params[:extra_surveys] || ""
         extra_survey_ids.split(',').map(&:to_i)
+      end
+
+      def survey_finalized?
+        survey = Survey.find_by_id(params[:id])
+        survey.finalized?
       end
     end
   end
