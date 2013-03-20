@@ -51,7 +51,7 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
   handle_asynchronously :delete_excel, :run_at => Proc.new { 30.minutes.from_now }, :queue => 'delete_excel'
 
   def excel_save_path
-    if(FileTest.writable?(ENV['EXCEL_SAVE_PATH'].to_s))
+    if(FileTest.exists?(ENV['EXCEL_SAVE_PATH'].to_s))
       Pathname.new(ENV['EXCEL_SAVE_PATH'])
     else
       Rails.root.join("public")
