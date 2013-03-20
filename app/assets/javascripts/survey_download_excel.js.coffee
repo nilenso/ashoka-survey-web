@@ -13,12 +13,12 @@ class window.ExcelDownloader
     console.log "Polling for the excel file."
     $.getJSON("/api/jobs/#{@id}/alive", (data) =>
       if(data.alive)
+        console.log "404. Polling again. File still being generated."
+      else
         console.log "Generated excel. Downloading..."
         clearInterval(@interval)
         window.location = "https://s3.amazonaws.com/surveywebexcel/#{@filename}"
         @close_dialog()
-      else
-        console.log "404. Polling again. File still being generated."
     )
 
   close_dialog: =>
