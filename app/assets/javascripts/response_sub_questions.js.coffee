@@ -44,7 +44,7 @@
       sub_question = $(this)
       clear_content_of sub_question
       sub_question.addClass('hidden')
-      hide_sub_questions_of(option) for option in sub_question.find('input[type=radio],option')
+      hide_sub_questions_of(option) for option in sub_question.find('input[type=radio],input[type=checkbox],option')
 
     update_visible_records()
 
