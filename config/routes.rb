@@ -32,6 +32,7 @@ SurveyWeb::Application.routes.draw do
 
   namespace :api, :defaults => { :format => 'json' } do
     scope :module => :v1 do
+      get '/jobs/:id/alive' => "jobs#alive"
       resources :questions, :except => [:edit, :new] do
         member { post "duplicate" }
       end
