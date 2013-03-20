@@ -37,21 +37,11 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
   end
 
 
-  def after(job)
-    delete_excel
-  end
-
   def error(job, exception)
     Airbrake.notify(exception)
   end
 
   private
-
-  def delete_excel
-    directory = aws_excel_directory
-    directory.files.get(filename).destroy
-  end
-  handle_asynchronously :delete_excel, :run_at => Proc.new { 30.minutes.from_now }, :queue => 'delete_excel'
 
   def aws_excel_directory
     connection = Fog::Storage.new(:provider => "AWS",
