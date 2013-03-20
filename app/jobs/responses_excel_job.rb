@@ -9,7 +9,7 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
       wb.add_worksheet(name: "Responses") do |sheet|
         headers = questions.map { |question| "#{QuestionDecorator.find(question).question_number}) #{question.content}" }
         headers.unshift("Response No.")
-        headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address"
+        headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address" << "State"
         sheet.add_row headers, :style => bold_style
         responses = Response.where('responses.id in (?)', response_ids)
         responses.each_with_index do |response, i|
@@ -26,6 +26,7 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
           answers_for_excel << response.last_update
           answers_for_excel << response.location
           answers_for_excel << response.ip_address
+          answers_for_excel << response.state
           sheet.add_row answers_for_excel, style: border
         end
       end
