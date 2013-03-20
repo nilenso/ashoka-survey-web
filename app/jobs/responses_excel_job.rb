@@ -30,12 +30,12 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
         end
       end
     end
-    f = File.open(Rails.root.join('public', filename), 'w')
+    f = File.open(excel_save_path.join(filename), 'w')
     package.serialize(f)
   end
 
   def after(job)
-    delete_excel if FileTest.exists?(Rails.root.join('public', filename))
+    delete_excel if FileTest.exists?(excel_save_path.join(filename))
   end
 
   def error(job, exception)
@@ -45,7 +45,15 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
   private
 
   def delete_excel
-    File.delete Rails.root.join('public', filename)
+    File.delete excel_save_path.join(filename)
   end
   handle_asynchronously :delete_excel, :run_at => Proc.new { 30.minutes.from_now }, :queue => 'delete_excel'
+
+  def excel_save_path
+    if(FileTest.writable?(ENV['EXCEL_SAVE_PATH'].to_s))
+      Pathname.new(ENV['EXCEL_SAVE_PATH'])
+    else
+      Rails.root.join("public")
+    end
+  end
 end
