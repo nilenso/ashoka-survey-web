@@ -49,12 +49,4 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
                                   :aws_access_key_id => ENV['S3_ACCESS_KEY'])
     connection.directories.get('surveywebexcel')
   end
-
-  def excel_save_path
-    if(FileTest.exists?(ENV['EXCEL_SAVE_PATH'].to_s))
-      Pathname.new(ENV['EXCEL_SAVE_PATH'])
-    else
-      Rails.root.join("public")
-    end
-  end
 end
