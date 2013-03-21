@@ -17,7 +17,7 @@ class DesignerAbility < Ability
 
     can :manage, Response, :survey => { :organization_id => user_info[:org_id] }
     can :manage, Response, :organization_id => user_info[:org_id]
-    cannot :destroy, Response, :survey => { :organization_id => user_info[:org_id] }
-    cannot :destroy, Response, :organization_id => user_info[:org_id]
+    cannot :destroy, Response
+    cannot :provide_state, Response
   end
 end
