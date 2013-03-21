@@ -76,7 +76,7 @@
     $('.star').each(function(index){
       $(this).raty({
         number: $(this).data('number-of-stars') || 5,
-        score: $(t  his).data('score'),
+        score: $(this).data('score'),
         <%= 'readOnly: true,' if @disabled %>
         click: function() {
           $(this).prev().children('input').val($(this).raty('score'))
