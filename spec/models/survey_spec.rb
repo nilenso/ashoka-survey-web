@@ -337,16 +337,20 @@ describe Survey do
     another_survey.should_not be_expired
   end
 
-  it "returns the number of complete responses" do
+  it "returns the number of complete responses accessible by the current user" do
     survey = FactoryGirl.create(:survey, :finalized => true)
-    6.times { FactoryGirl.create(:response, :survey => survey, :status => 'complete') }
-    survey.complete_responses_count.should == 6
+    6.times { FactoryGirl.create(:response, :survey => survey, :status => 'complete', :user_id => 123) }
+    FactoryGirl.create(:response, :survey => survey, :status => 'complete', :user_id => 456)
+    survey.responses.should_receive(:accessible_by).and_return(Response.where(:user_id => 123))
+    survey.complete_responses_count(stub).should == 6
   end
 
-  it "returns the number of incomplete responses" do
+  it "returns the number of incomplete responses accessible by the current user" do
     survey = FactoryGirl.create(:survey, :finalized => true)
-    6.times { FactoryGirl.create(:response, :survey => survey) }
-    survey.incomplete_responses_count.should == 6
+    6.times { FactoryGirl.create(:response, :survey => survey, :user_id => 123) }
+    FactoryGirl.create(:response, :survey => survey, :user_id => 456)
+    survey.responses.should_receive(:accessible_by).and_return(Response.where(:user_id => 123))
+    survey.incomplete_responses_count(stub).should == 6
   end
 
   context "for scopes" do

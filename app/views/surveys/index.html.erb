@@ -55,9 +55,9 @@
         <%= I18n.localize(survey.expiry_date) %>
       </span>
 
-            <span class="responses-complete"><%= survey.complete_responses_count %></span>
+            <span class="responses-complete"><%= survey.complete_responses_count(current_ability) %></span>
 
-            <span class="responses-incomplete"><%= survey.incomplete_responses_count %></span>
+            <span class="responses-incomplete"><%= survey.incomplete_responses_count(current_ability) %></span>
 
             <div class="operations">
               <ul class="response_operations">

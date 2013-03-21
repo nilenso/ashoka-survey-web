@@ -119,12 +119,12 @@ class Survey < ActiveRecord::Base
     questions.joins(:answers => :response).where("responses.status = 'complete' AND responses.state = 'clean' AND answers.content  <> '' AND answers.content IS NOT NULL")
   end
 
-  def complete_responses_count
-    responses.where(:status => 'complete').count
+  def complete_responses_count(current_ability)
+    responses.accessible_by(current_ability).where(:status => 'complete').count
   end
 
-  def incomplete_responses_count
-    responses.where(:status => 'incomplete').count
+  def incomplete_responses_count(current_ability)
+    responses.accessible_by(current_ability).where(:status => 'incomplete').count
   end
 
   def publicize
