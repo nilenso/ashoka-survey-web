@@ -42,6 +42,14 @@ table{
   display: block;
 }
 
+div.ui-widget-overlay {
+  z-index: 20;
+}
+
+div.ui-dialog {
+  z-index: 21;
+}
+
 
 div.hidden {
   display: none;

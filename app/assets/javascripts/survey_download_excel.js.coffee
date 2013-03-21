@@ -3,6 +3,8 @@ class window.ExcelDownloader
     $('.download_excel').click =>
       @dialog = $("#dialog" ).dialog
         dialogClass: "no-close"
+        modal: true
+
       $.getJSON("/surveys/#{survey_id}/responses/generate_excel", (data) =>
         @filename = data.excel_path
         @id = data.id
