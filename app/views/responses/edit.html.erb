@@ -43,9 +43,9 @@
   </div>
 <% end %>
 
-<% if @disabled %>
+<% if @disabled && can?(:provide_state, @response) %>
   <%= semantic_form_for [@survey, @response] do |f| %>
-    <div class="question ">
+    <div class="question">
       <%= f.input :state, :as => :select, :collection => ["clean", "dirty"] %>
       <%= f.input :comment %>
     </div>
