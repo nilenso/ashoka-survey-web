@@ -179,6 +179,7 @@ fr:
 
       create_record: "Créer un autre dossier"
 
+      data_cleaning: "Nettoyage des Données"
     excel:
       excel_dialog_title: "Production Excel…"
       excel_downloading_message: "Votre fichier Excel est généré se. Cette mght prendre quelques minutes. S'il vous plaît attendre."

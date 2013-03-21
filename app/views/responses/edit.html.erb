@@ -44,16 +44,23 @@
 <% end %>
 
 <% if @disabled && can?(:provide_state, @response) %>
-  <%= semantic_form_for [@survey, @response] do |f| %>
-    <div class="question">
-      <%= f.input :state, :as => :select, :collection => ["clean", "dirty"] %>
-      <%= f.input :comment %>
-    </div>
+  <div id="data_cleaning">
+      <%= semantic_form_for [@survey, @response] do |f| %>
+        <fieldset>
+            <legend>
+              <h2><%= t('.data_cleaning') %></h2>
+            </legend>
+            <div class="question">
+              <%= f.input :state, :as => :select, :collection => ["clean", "dirty"] %>
+              <%= f.input :comment %>
+            </div>
 
-    <%= f.actions do %>
-        <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'save_as_draft_button' } %>
-    <% end %>
-  <% end %>
+            <%= f.actions do %>
+                <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'save_as_draft_button' } %>
+            <% end %>
+        </fieldset>
+      <% end %>
+  </div>
 <% end %>
 
 <script type="text/javascript">
@@ -69,7 +76,7 @@
     $('.star').each(function(index){
       $(this).raty({
         number: $(this).data('number-of-stars') || 5,
-        score: $(this).data('score'),
+        score: $(t  his).data('score'),
         <%= 'readOnly: true,' if @disabled %>
         click: function() {
           $(this).prev().children('input').val($(this).raty('score'))

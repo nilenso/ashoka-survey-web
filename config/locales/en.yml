@@ -180,6 +180,7 @@ en:
       location: "Location"
       location_unavailable: "Location Unavailable"
       create_record: "Create Another Record"
+      data_cleaning: "Data Cleaning"
 
     excel:
       excel_dialog_title: "Generating Excel…"
