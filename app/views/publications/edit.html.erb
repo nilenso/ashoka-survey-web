@@ -40,32 +40,34 @@
       <% end %>
     </div>
 
-    <div class="share-with-organizations">
-      <h3>Share with an Organization</h3>
-      <% if @shared_organizations.present? %>
-        <fieldset>
-          <legend>Shared with:</legend>
-          <ol class="published">
-            <% @shared_organizations.each do |org| %>
-              <li>
-                <%= org.name %>
-              </li>
-            <% end %>
-          </ol>
-        </fieldset>
-      <% end %>
+    <% if @survey.organization_id == current_user_org %>
+        <div class="share-with-organizations">
+          <h3>Share with an Organization</h3>
+          <% if @shared_organizations.present? %>
+            <fieldset>
+              <legend>Shared with:</legend>
+              <ol class="published">
+                <% @shared_organizations.each do |org| %>
+                  <li>
+                    <%= org.name %>
+                  </li>
+                <% end %>
+              </ol>
+            </fieldset>
+          <% end %>
 
-        <% if @unshared_organizations.empty? %>
-        <fieldset>
-          <legend>Choose organizations to share with:</legend>
-          There are no organizations you can share with. Sorry.
-        </fieldset>
-        <% else %>
-          <ol>
-            <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => @unshared_organizations, :member_label => Proc.new { |org| org.name }, :label => "Choose organizations to share with:" %>
-          </ol>
-        <% end %>
-    </div>
+            <% if @unshared_organizations.empty? %>
+            <fieldset>
+              <legend>Choose organizations to share with:</legend>
+              There are no organizations you can share with. Sorry.
+            </fieldset>
+            <% else %>
+              <ol>
+                <%= f.input :participating_organization_ids, :as => :check_boxes, :collection => @unshared_organizations, :member_label => Proc.new { |org| org.name }, :label => "Choose organizations to share with:" %>
+              </ol>
+            <% end %>
+        </div>
+    <% end %>
 
     <%= f.actions do %>
       <%= f.action :submit, :as => :button , :label => t('.publish_survey')%>
