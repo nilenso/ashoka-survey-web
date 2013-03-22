@@ -17,7 +17,7 @@ class PublicationsController < ApplicationController
     survey = Survey.find(params[:survey_id])
     authorize! :update_publication, survey
     publisher = Publisher.new(survey, access_token, params[:survey])
-    if publisher.publish
+    if publisher.publish(:organization_id => current_user_org)
       flash[:notice] = t "flash.survey_published", :survey_name => survey.name
       redirect_to surveys_path
     else

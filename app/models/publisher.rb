@@ -16,11 +16,11 @@ class Publisher
     @expiry_date = params[:expiry_date]
   end
 
-  def publish
+  def publish(options={})
     return unless valid?
     publish_to_users
     survey.publish
-    survey.share_with_organizations(organizations)
+    survey.share_with_organizations(organizations) if survey.organization_id == options[:organization_id]
     survey.publicize if public?
     survey.update_attributes(:expiry_date => expiry_date)
   end

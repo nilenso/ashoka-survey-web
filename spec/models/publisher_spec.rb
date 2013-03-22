@@ -67,4 +67,12 @@ describe Publisher do
     publisher.unpublish_users
     SurveyUser.all.map(&:user_id).should_not include(1,2)
   end
+
+  it "doesn't share with organizations if the survey isn't owned by the current_org_id" do
+    survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 42)
+    client = stub
+    publisher = Publisher.new(survey, client, @params.merge({ :organization_ids => [1, 2]}))
+    publisher.should_receive(:valid?).and_return(true)
+    expect { publisher.publish(:organization_id => 50) }.not_to change { ParticipatingOrganization.count }
+  end
 end
