@@ -83,7 +83,7 @@ class ResponsesController < ApplicationController
   private
 
   def complete_valid_response
-    @response.complete
+    @response.update_column('status', 'complete')
     success_path = @response.survey_public? && !user_currently_logged_in? ? root_path : survey_responses_path(@response.survey_id)
     redirect_to success_path, :notice => "Successfully updated"
   end
