@@ -59,7 +59,8 @@ module Api
         category = Category.find_by_id(params[:id])
         authorize! :update, category.try(:survey)
         if category && category.copy_with_order
-          flash[:notice] = t("flash.category_duplicated")
+          notice = category.type == "MultiRecordCategory" ? t("flash.mr_duplicated") : t("flash.category_duplicated")
+          flash[:notice] = notice
         else
           flash[:error] = t("flash.category_duplication_failed")
         end

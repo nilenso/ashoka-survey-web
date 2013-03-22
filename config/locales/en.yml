@@ -37,6 +37,7 @@ en:
     category_duplication_failed : "Category duplication failed"
     no_finalized_surveys: "Can't perform operation on an archived survey"
     survey_archived: "%{survey_name} has been archived."
+    mr_duplicated: "Multi-Record Duplicated successfully!"
 
   publication:
     edit:

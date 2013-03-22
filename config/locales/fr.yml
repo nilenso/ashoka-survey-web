@@ -37,6 +37,7 @@ fr:
     category_duplication_failed : "fr Category duplication failed"
     no_finalized_surveys: "Impossible d'effectuer une opération sur une enquête archivés"
     survey_archived: "%{survey_name} a été archivé."
+    mr_duplicated: "Multi-enregistrement dupliqué avec succès!"
 
   publication:
     edit:
