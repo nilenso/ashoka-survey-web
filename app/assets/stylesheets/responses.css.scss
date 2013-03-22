@@ -86,3 +86,7 @@ a.create_record {
     fieldset.actions { border-top:  none; }
   }
 }
+
+.inline-errors {
+  color: $danger;
+}
