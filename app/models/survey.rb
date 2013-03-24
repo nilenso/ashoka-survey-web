@@ -115,10 +115,6 @@ class Survey < ActiveRecord::Base
     first_level_elements.map(&:as_json_with_elements_in_order)
   end
 
-  def questions_for_reports
-    questions.joins(:answers => :response).where("responses.status = 'complete' AND responses.state = 'clean' AND answers.content  <> '' AND answers.content IS NOT NULL")
-  end
-
   def complete_responses_count(current_ability)
     responses.accessible_by(current_ability).where(:status => 'complete').count
   end
