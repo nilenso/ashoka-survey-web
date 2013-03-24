@@ -116,7 +116,8 @@ class Survey < ActiveRecord::Base
   end
 
   def questions_for_reports
-    questions.joins(:answers => :response).where("responses.status = 'complete' AND responses.state = 'clean' AND answers.content  <> ''").uniq
+    questions.joins(:answers => :response).where("responses.status = 'complete' AND responses.state = 'clean' AND ((answers.content  <> '' AND answers.content IS NOT NULL) OR
+                                                questions.type = 'MultiChoiceQuestion')").uniq
   end
 
   def complete_responses_count(current_ability)
