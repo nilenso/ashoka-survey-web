@@ -16,38 +16,41 @@
   }
 
   function drawChart() {
-    <% @survey.questions_for_reports.each do |question| %>
-      <% if question.is_a? QuestionWithOptions %>
-        data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
-        chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
-        params['title'] = "<%= question.decorate.content_with_answer_count %>";
-        chart.draw(data, params);
-      <% elsif question.type == 'DateQuestion'%>
-        data = new google.visualization.DataTable();
-        chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
+    <% @survey.questions.each do |question| %>
+      <% report_data = @survey.report_data_for(question) %>
+      <% if report_data.present? %>
+          <% if question.is_a? QuestionWithOptions %>
+            data = google.visualization.arrayToDataTable(JSON.parse('<%= report_data %>'))
+            chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
+            params['title'] = "<%= question.decorate.content_with_answer_count %>";
+            chart.draw(data, params);
+          <% elsif question.type == 'DateQuestion'%>
+            data = new google.visualization.DataTable();
+            chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
 
-        data.addColumn('date', 'Value');
-        data.addColumn('number', 'Answer / Count');
+            data.addColumn('date', 'Value');
+            data.addColumn('number', 'Answer / Count');
 
-        var report_data = dateReportData('<%= @survey.report_data_for(question) %>')
+            var report_data = dateReportData('<%= report_data %>')
 
-        data.addRows(report_data)
-        params = {
-          vAxis: {'title': 'Count'},
-          hAxis: {'title': 'Answer'},
-        }
+            data.addRows(report_data)
+            params = {
+              vAxis: {'title': 'Count'},
+              hAxis: {'title': 'Answer'},
+            }
 
-        params['title'] = "<%= question.decorate.content_with_answer_count %>";
-        chart.draw(data, params);
-      <% elsif question.type == 'NumericQuestion' %>
-        chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
-        data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
-        params = {
-          vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %> },
-          hAxis: {'title': 'Answer', minValue: <%= question.min_value_for_report %> , maxValue: <%= question.max_value_for_report %>},
-        }
-        params['title'] = "<%= question.decorate.content_with_answer_count %>";
-        chart.draw(data, params);
+            params['title'] = "<%= question.decorate.content_with_answer_count %>";
+            chart.draw(data, params);
+          <% elsif question.type == 'NumericQuestion' %>
+            chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
+            data = google.visualization.arrayToDataTable(JSON.parse('<%= report_data %>'))
+            params = {
+              vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %> },
+              hAxis: {'title': 'Answer', minValue: <%= question.min_value_for_report %> , maxValue: <%= question.max_value_for_report %>},
+            }
+            params['title'] = "<%= question.decorate.content_with_answer_count %>";
+            chart.draw(data, params);
+          <% end %>
       <% end %>
     <% end %>
   }
@@ -59,7 +62,7 @@
 <%= render "responses/excel_dialog" %>
 <div class="reports">
   <%= render "layouts/status_bar", :status => "analyze" %>
-  <% @survey.questions_for_reports.each do |question| %>
+  <% @survey.questions.each do |question| %>
     <div id="chart_div_<%= question.id %>"></div>
   <% end %>
   <div id="location_map">
