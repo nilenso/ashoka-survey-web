@@ -30,7 +30,7 @@ class ResponsesController < ApplicationController
   end
 
   def create
-    response = ResponseDecorator.new(Response.new)
+    response = ResponseDecorator.new(Response.new(:blank => true))
     response.set(params[:survey_id], current_user, current_user_org, session_token)
     response.save
     survey = Survey.find(params[:survey_id])

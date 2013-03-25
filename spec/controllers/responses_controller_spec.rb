@@ -18,6 +18,11 @@ describe ResponsesController do
       }.to change { Response.count }.by(1)
     end
 
+    it "saves the response with blank as true" do
+      post :create, :survey_id => survey.id
+      Response.last.should be_blank
+    end
+
     it "saves the response to the right survey" do
       post :create, :survey_id => survey.id
       assigns(:response).survey.should ==  survey
