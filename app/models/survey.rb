@@ -121,11 +121,11 @@ class Survey < ActiveRecord::Base
   end
 
   def complete_responses_count(current_ability)
-    responses.accessible_by(current_ability).where(:status => 'complete').count
+    responses.accessible_by(current_ability).where(:status => 'complete', :blank => false).count
   end
 
   def incomplete_responses_count(current_ability)
-    responses.accessible_by(current_ability).where(:status => 'incomplete').count
+    responses.accessible_by(current_ability).where(:status => 'incomplete', :blank => false).count
   end
 
   def publicize
