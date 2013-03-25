@@ -306,6 +306,13 @@ describe ResponsesController do
       answer.reload.content.should == "MyText"
       flash[:error].should_not be_empty
     end
+
+    it "marks the response as not blank" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res = FactoryGirl.create(:response, :survey => survey)
+      put :update, :id => res.id, :survey_id => survey.id
+      res.reload.should_not be_blank
+    end
   end
 
   context "PUT 'complete'" do
@@ -378,6 +385,13 @@ describe ResponsesController do
       put :complete, :id => res.id, :survey_id => survey.id, :response =>
         { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
       res.reload.should be_complete
+    end
+
+    it "marks the response as not blank" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res = FactoryGirl.create(:response, :survey => survey)
+      put :complete, :id => res.id, :survey_id => survey.id
+      res.reload.should_not be_blank
     end
   end
 

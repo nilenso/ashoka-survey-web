@@ -57,6 +57,7 @@ class ResponsesController < ApplicationController
 
   def update
     @response = ResponseDecorator.find(params[:id])
+    @response.update_column(:blank, false)
     if @response.update_attributes(params[:response])
       redirect_to :back, :notice => "Successfully updated"
     else
@@ -67,6 +68,7 @@ class ResponsesController < ApplicationController
 
   def complete
     @response = ResponseDecorator.find(params[:id])
+    @response.update_column(:blank, false)
     verify_recaptcha(:model => @response, :attribute => :captcha) if @response.survey_public?
     was_complete = @response.complete?
     answers_attributes = params.try(:[],:response).try(:[], :answers_attributes)
