@@ -121,20 +121,12 @@ describe ResponsesController do
       assigns(:organization_names)[1].name.should == "Bar"
     end
 
-    it "orders the complete responses by their `updated_at` time" do
+    it "doesn't include blank responses" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      responses = FactoryGirl.create_list(:response, 5, :survey => survey,
-                                          :organization_id => 1, :user_id => 1, :status => 'complete')
+      blank_response = FactoryGirl.create(:response, :blank => true, :survey => survey)
+      non_blank_response = FactoryGirl.create(:response, :blank => false, :survey => survey)
       get :index, :survey_id => survey.id
-      assigns(:complete_responses).should == responses
-    end
-
-    it "orders the complete responses by their `updated_at` time" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      responses = FactoryGirl.create_list(:response, 5, :survey => survey,
-                                          :organization_id => 1, :user_id => 1, :status => 'complete')
-      get :index, :survey_id => survey.id
-      assigns(:complete_responses).should == responses
+      assigns(:responses).should == [non_blank_response]
     end
   end
 
