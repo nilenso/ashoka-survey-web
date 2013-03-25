@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130325102547) do
+ActiveRecord::Schema.define(:version => 20130325124920) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -127,7 +127,7 @@ ActiveRecord::Schema.define(:version => 20130325102547) do
     t.string   "mobile_id"
     t.string   "state",           :default => "clean"
     t.text     "comment"
-    t.boolean  "blank"
+    t.boolean  "blank",           :default => false
   end
 
   add_index "responses", ["organization_id"], :name => "index_responses_on_organization_id"
