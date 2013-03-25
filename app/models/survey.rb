@@ -139,7 +139,7 @@ class Survey < ActiveRecord::Base
   end
 
   def filename_for_excel
-    "#{name} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}.xlsx"
+    "#{CGI::escape(name)} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}.xlsx"
   end
 
   private
