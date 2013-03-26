@@ -17,10 +17,6 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     }
   ]
 
-  initialize: =>
-    super
-    @order_counter = 0
-
   has_errors: =>
     !_.isEmpty(@errors) || @get('options').has_errors()
 
@@ -58,7 +54,7 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
 
   create_new_option: (content) =>
     content = "Another Option" unless _(content).isString()
-    @get('options').create({content: content, order_number: @order_counter++ })
+    @get('options').create({content: content, order_number: @get_order_counter() })
 
   has_drop_down_options: =>
     @get('type') == "DropDownQuestion" && @get('options').first()
