@@ -15,10 +15,10 @@ class Survey < ActiveRecord::Base
   has_many :categories, :dependent => :destroy
   validates_uniqueness_of :auth_key, :allow_nil => true
   scope :finalized, where(:finalized => true)
-  scope :active, where('finalized = ? AND expiry_date > ? AND archived = ?', true, Date.today, false)
+  scope :active, lambda { where('finalized = ? AND expiry_date > ? AND archived = ?', true, Date.today, false) }
   scope :none, limit(0)
-  scope :not_expired, where('expiry_date > ?', Date.today)
-  scope :expired, where('expiry_date < ?', Date.today)
+  scope :not_expired, lambda { where('expiry_date > ?', Date.today) }
+  scope :expired, lambda { where('expiry_date < ?', Date.today) }
   scope :with_questions, joins(:questions)
   scope :drafts, where(:finalized => false)
   scope :archived, where(:archived => true)
