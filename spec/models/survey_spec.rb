@@ -119,6 +119,12 @@ describe Survey do
       new_survey = survey.duplicate(:organization_id => 42)
       new_survey.organization_id.should == 42
     end
+
+    it "saves the survey with archived false when duplicating an archived survey" do
+      survey = FactoryGirl.create :survey_with_questions, :organization_id => 1, :archived => true
+      new_survey = survey.duplicate
+      new_survey.should_not be_archived
+    end
   end
 
   context "finalize" do

@@ -65,6 +65,7 @@ class Survey < ActiveRecord::Base
   def duplicate(options = {})
     survey = self.dup
     survey.finalized = false
+    survey.archived = false
     survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
     survey.organization_id = options[:organization_id] if options[:organization_id]
     survey.public = false
