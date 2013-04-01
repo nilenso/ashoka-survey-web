@@ -5,7 +5,7 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
       wb = p.workbook
       bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
       border = wb.styles.add_style border: { style: :thin, color: '000000' }
-      questions = survey.elements_in_order
+      questions = survey.questions_in_order
       wb.add_worksheet(name: "Responses") do |sheet|
         headers = questions.map { |question| "#{QuestionDecorator.find(question).question_number}) #{question.content}" }
         headers.unshift("Response No.")
