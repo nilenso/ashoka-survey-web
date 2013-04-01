@@ -437,4 +437,15 @@ describe Survey do
       survey.elements_in_order_as_json.size.should == 2
     end
   end
+
+  context "#questions_in_order" do
+    it "should include all the elements of the survey" do
+      survey = FactoryGirl.create :survey
+      question = FactoryGirl.create :question, :survey => survey
+      category = FactoryGirl.create :category, :survey => survey
+      sub_question = FactoryGirl.create(:question)
+      category.questions << sub_question
+      survey.questions_in_order.should =~ [question, sub_question]
+    end
+  end
 end

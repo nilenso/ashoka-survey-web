@@ -115,6 +115,13 @@ describe Question do
     end
   end
 
+  context "when fetching a question with its questions in order" do
+    it "includes itself" do
+      question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
+      question.questions_in_order.should == [question]
+    end
+  end
+
   it "returns parent question of current child question" do
       question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
       question.options << Option.create(content: "Option", order_number: 0)

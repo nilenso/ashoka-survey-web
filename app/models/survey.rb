@@ -116,6 +116,10 @@ class Survey < ActiveRecord::Base
     first_level_elements.map(&:as_json_with_elements_in_order)
   end
 
+  def questions_in_order
+    first_level_elements.map(&:questions_in_order).flatten
+  end
+
   def questions_for_reports
     questions.joins(:answers => :response).where("responses.status = 'complete' AND responses.state = 'clean' AND ((answers.content  <> '' AND answers.content IS NOT NULL) OR
                                                 questions.type = 'MultiChoiceQuestion')").uniq

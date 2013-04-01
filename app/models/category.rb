@@ -29,6 +29,10 @@ class Category < ActiveRecord::Base
     json
   end
 
+  def questions_in_order
+    elements.map(&:questions_in_order).flatten
+  end
+
   def as_json(opts={})
     super(opts.merge({ :methods => [:type, :has_multi_record_ancestor] }))
   end

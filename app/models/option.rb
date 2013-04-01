@@ -42,6 +42,10 @@ class Option < ActiveRecord::Base
     json
   end
 
+  def questions_in_order
+    elements.map(&:questions_in_order).flatten
+  end
+
   def elements_with_questions
     (questions + categories_with_questions).sort_by(&:order_number)
   end

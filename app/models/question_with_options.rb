@@ -22,6 +22,9 @@ class QuestionWithOptions < Question
     json
   end
 
+  def questions_in_order
+    [self, options.map(&:questions_in_order)].flatten
+  end
 
   private
   def no_answers?

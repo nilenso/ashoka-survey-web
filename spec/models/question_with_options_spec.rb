@@ -44,4 +44,18 @@ describe QuestionWithOptions do
       json['options'].size.should == question.options.size
     end
   end
+
+  context "when fetching question with its sub_questions in order" do
+    it "includes itself" do
+      question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)
+      question.questions_in_order.should include question
+    end
+
+    it "includes its options" do
+      question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)
+      option = FactoryGirl.create(:option, :question_id => question.id)
+      sub_question = FactoryGirl.create(:question, :parent => option)
+      question.questions_in_order.should include sub_question
+    end
+  end
 end

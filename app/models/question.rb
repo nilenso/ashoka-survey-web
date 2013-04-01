@@ -50,6 +50,10 @@ class Question < ActiveRecord::Base
     self.as_json(:methods => 'type')
   end
 
+  def questions_in_order
+    [self]
+  end
+
   def options
     []
   end
