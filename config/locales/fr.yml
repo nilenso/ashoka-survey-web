@@ -177,6 +177,7 @@ fr:
       save_response: "fr Save Response"
       location: "fr Location"
       location_unavailable: "fr Location Unavailable"
+      errors_in_response: "Il semble y avoir quelques erreurs dans votre réponse. S'il vous plaît vérifier votre saisie et essayez à nouveau"
 
       create_record: "Créer un autre dossier"
 

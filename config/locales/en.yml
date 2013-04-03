@@ -182,6 +182,7 @@ en:
       location_unavailable: "Location Unavailable"
       create_record: "Create Another Record"
       data_cleaning: "Data Cleaning"
+      errors_in_response: "There seem to be some errors in your response. Please check your input and try again."
 
     excel:
       excel_dialog_title: "Generating Excel…"

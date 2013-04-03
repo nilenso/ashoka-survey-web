@@ -66,7 +66,7 @@
 <% end %>
 
 <% if @response.answers.any? { |a| a.errors.full_messages.present? } && @survey.public? %>
-  <script type="text/javascript">alert("There are errors in your response.")</script>
+  <script type="text/javascript">alert("<%= t('.errors_in_response') %>")</script>
 <% end %>
 <script type="text/javascript">
   $(document).ready(function(){
