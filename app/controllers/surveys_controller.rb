@@ -63,7 +63,7 @@ class SurveysController < ApplicationController
 
   def report
     @survey = SurveyDecorator.find(params[:id])
-    @markers = @survey.responses.to_gmaps4rails
+    @markers = @survey.responses.not_blank.to_gmaps4rails
   end
 
   private
