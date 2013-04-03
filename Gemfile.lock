@@ -269,7 +269,6 @@ GEM
       ffi (>= 0.5.0)
     rdoc (3.12.1)
       json (~> 1.4)
-    recaptcha (0.3.4)
     rest-client (1.6.7)
       mime-types (>= 1.16)
     rmagick (2.12.2)
@@ -377,7 +376,6 @@ DEPENDENCIES
   rails-footnotes
   rails-i18n
   rails_best_practices
-  recaptcha
   rmagick (= 2.12.2)
   rspec-http
   rspec-rails

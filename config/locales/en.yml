@@ -257,10 +257,6 @@ en:
     new_record_unsaved_warning: "Unsaved changes will be lost if you proceed. Continue?"
 
     untitled_multi_record_category: "Untitled Multi-Record"
-  recaptcha:
-    errors:
-      verification_failed: "Word verification response is incorrect, please try again."
-      recaptcha_unavailable: "The CAPTCHA service is unavailable."
 
   templates:
     loading:

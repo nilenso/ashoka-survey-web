@@ -254,10 +254,6 @@ fr:
     new_record_unsaved_warning: "Les modifications non enregistrées seront perdues si vous continuez. Continuer?"
 
     untitled_multi_record_category: "Untitled multi-enregistrement"
-  recaptcha:
-    errors:
-      verification_failed: "La réponse de vérification Parole est incorrecte, s'il vous plaît essayer à nouveau."
-      recaptcha_unavailable: "Le service CAPTCHA n'est pas disponible."
 
   templates:
     loading:
