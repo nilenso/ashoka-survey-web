@@ -34,10 +34,9 @@ describe ResponsesController do
       Response.find_by_survey_id(survey.id).user_id.should == 1234
     end
 
-    it "redirects to the edit path with a flash message" do
+    it "redirects to the edit path" do
       post :create, :survey_id => survey.id
       response.should redirect_to edit_survey_response_path(:id => Response.find_by_survey_id(survey.id).id)
-      flash[:notice].should_not be_nil
     end
 
     it "redirects to the root path with a flash message when the survey has expired" do
