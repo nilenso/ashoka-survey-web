@@ -7,9 +7,6 @@
   <% if @response.survey_public? %>
     <h3><%= @survey.description %></h3>
   <% end %>
-  <% if @response.answers.any? { |a| a.errors.full_messages.present? } && @survey.public? %>
-    <script type="text/javascript">alert("There are errors in your response.")</script>
-  <% end %>
 </header>
 <% cache = [] %>
 <% @response.sort_answers %>
@@ -68,6 +65,9 @@
   </div>
 <% end %>
 
+<% if @response.answers.any? { |a| a.errors.full_messages.present? } && @survey.public? %>
+  <script type="text/javascript">alert("There are errors in your response.")</script>
+<% end %>
 <script type="text/javascript">
   $(document).ready(function(){
     $('.date').datepicker({ dateFormat: "yy/mm/dd", changeMonth: true, changeYear: true });
