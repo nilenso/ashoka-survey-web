@@ -7,6 +7,9 @@
   <% if @response.survey_public? %>
     <h3><%= @survey.description %></h3>
   <% end %>
+  <% if @response.answers.any? { |a| a.errors.full_messages.present? } && @survey.public? %>
+    <script type="text/javascript">alert("There are errors in your response.")</script>
+  <% end %>
 </header>
 <% cache = [] %>
 <% @response.sort_answers %>
@@ -25,7 +28,6 @@
   <% unless @disabled %>
     <%= f.actions do %>
       <% if @response.survey_public? %>
-        <%= recaptcha_tags :display => { :theme => :clean } %>
         <%= f.action :submit, :as => :button, :label => t('.save_response'), :button_html => { :id => 'complete_button' } %>
       <% else %>
         <%= f.action :submit, :as => :button, :label => t('.save_as_draft'), :button_html => { :id => 'save_as_draft_button' } unless @response.complete? %>

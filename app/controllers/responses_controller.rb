@@ -65,7 +65,6 @@ class ResponsesController < ApplicationController
   def complete
     @response = ResponseDecorator.find(params[:id])
     @response.update_column(:blank, false)
-    verify_recaptcha(:model => @response, :attribute => :captcha) if @response.survey_public?
     was_complete = @response.complete?
     answers_attributes = params.try(:[],:response).try(:[], :answers_attributes)
     @response.valid_for?(answers_attributes) ? complete_valid_response : revert_response(was_complete, params[:response])
@@ -93,8 +92,7 @@ class ResponsesController < ApplicationController
       @response.incomplete
     end
     @response.attributes = response
-    flash.delete(:recaptcha_error)
-    flash[:error] = @response.errors.messages[:captcha] || t("responses.edit.error_saving_response")
+    flash[:error] = t("responses.edit.error_saving_response")
     @disabled = false
     render :edit
   end

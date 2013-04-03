@@ -17,7 +17,6 @@ gem 'cancan'
 gem 'draper'
 gem 'i18n-js'
 gem 'airbrake'
-gem "recaptcha", :require => "recaptcha/rails"
 gem 'dalli'
 gem "geocoder"
 gem 'gmaps4rails'
