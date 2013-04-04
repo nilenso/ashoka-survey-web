@@ -2,7 +2,8 @@ class Ability
   include CanCan::Ability
 
   def self.ability_for(user)
-    case user[:role]
+    if user[:org_type] != "Financial Institution"
+      case user[:role]
       when 'viewer'
         ViewerAbility.new(user)
       when 'cso_admin'
@@ -19,6 +20,9 @@ class Ability
         SuperAdminAbility.new(user)
       else
         Ability.new(user)
+      end
+    else
+      FinancialInstituteAbility.new(user)
     end
   end
 

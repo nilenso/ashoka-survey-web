@@ -14,7 +14,8 @@ module Api
             :email => raw_info['email'],
             :role => raw_info['role'],
             :user_id => raw_info['id'],
-            :org_id => raw_info['organization_id']
+            :org_id => raw_info['organization_id'],
+            :org_type => raw_info["organization"]["org_type"]
           }
           user_info
         end

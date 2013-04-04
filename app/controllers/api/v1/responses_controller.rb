@@ -1,13 +1,14 @@
 module Api::V1
   class ResponsesController < APIApplicationController
     load_resource :survey, :only => [:index, :show, :count]
-    load_resource :through => :survey, :only => [:index, :show, :count]
+    load_resource :through => :survey, :only => [:show, :count]
     authorize_resource
 
     before_filter :decode_base64_images, :convert_to_datetime, :only => [:create, :update]
     before_filter :require_response_to_not_exist, :only => :create
 
     def index
+      @responses = @survey.responses.where(:state => "clean", :status => "complete")
       render :json => @responses.paginate(:page => params[:page],
                                           :per_page => Response.page_size(params[:page_size]
                                           )).as_json(:methods => :answers_for_identifier_questions)
