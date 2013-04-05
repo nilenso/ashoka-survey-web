@@ -287,7 +287,7 @@ describe ResponsesController do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
       res = FactoryGirl.create(:response, :survey => survey,
-                               :organization_id => 1, :user_id => 2, :status => 'validating', :blank => true)
+                               :organization_id => 1, :user_id => 2, :status => 'validating')
       answer = FactoryGirl.create(:answer, :question => question)
       res.answers << answer
       put :update, :id => res.id, :survey_id => survey.id, :response =>
@@ -298,23 +298,11 @@ describe ResponsesController do
       flash[:error].should_not be_empty
     end
 
-    it "marks the response as not blank if the response is successfully updated" do
+    it "marks the response as not blank" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey, :blank => true)
+      res = FactoryGirl.create(:response, :survey => survey)
       put :update, :id => res.id, :survey_id => survey.id
       res.reload.should_not be_blank
-    end
-
-    it "keeps the response as blank if the response update fails" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
-      res = FactoryGirl.create(:response, :survey => survey,
-                               :organization_id => 1, :user_id => 2, :status => 'validating', :blank => true)
-      answer = FactoryGirl.create(:answer, :question => question)
-      res.answers << answer
-      put :update, :id => res.id, :survey_id => survey.id, :response =>
-        { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
-      res.reload.should be_blank
     end
   end
 
@@ -378,7 +366,7 @@ describe ResponsesController do
       res.reload.should_not be_complete
     end
 
-    it "doesn't mark an already complete response as incomplete when save is unsuccessful" do
+    it "doesn't mark an already complete response as incomplete when save if unsuccessful" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
       res = FactoryGirl.create(:response, :survey => survey,
@@ -395,25 +383,6 @@ describe ResponsesController do
       res = FactoryGirl.create(:response, :survey => survey)
       put :complete, :id => res.id, :survey_id => survey.id
       res.reload.should_not be_blank
-    end
-
-    it "marks the response as not blank if save is successful" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey, :blank => true)
-      put :complete, :id => res.id, :survey_id => survey.id
-      res.reload.should_not be_blank
-    end
-
-    it "keeps the response as blank if save is unsuccessful" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
-      res = FactoryGirl.create(:response, :survey => survey,
-                               :organization_id => 1, :user_id => 2, :status => 'validating', :blank => true)
-      answer = FactoryGirl.create(:answer, :question => question)
-      res.answers << answer
-      put :complete, :id => res.id, :survey_id => survey.id, :response =>
-        { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
-      res.reload.should be_blank
     end
   end
 

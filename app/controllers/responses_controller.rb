@@ -53,8 +53,8 @@ class ResponsesController < ApplicationController
 
   def update
     @response = ResponseDecorator.find(params[:id])
+    @response.update_column(:blank, false)
     if @response.update_attributes(params[:response])
-      @response.update_column(:blank, false)
       redirect_to :back, :notice => "Successfully updated"
     else
       flash[:error] = "Error"
@@ -64,6 +64,7 @@ class ResponsesController < ApplicationController
 
   def complete
     @response = ResponseDecorator.find(params[:id])
+    @response.update_column(:blank, false)
     was_complete = @response.complete?
     answers_attributes = params.try(:[],:response).try(:[], :answers_attributes)
     @response.valid_for?(answers_attributes) ? complete_valid_response : revert_response(was_complete, params[:response])
@@ -79,7 +80,6 @@ class ResponsesController < ApplicationController
   private
 
   def complete_valid_response
-    @response.update_column(:blank, false)
     @response.update_column('status', 'complete')
     success_path = @response.survey_public? && !user_currently_logged_in? ? root_path : survey_responses_path(@response.survey_id)
     redirect_to success_path, :notice => "Successfully updated"
