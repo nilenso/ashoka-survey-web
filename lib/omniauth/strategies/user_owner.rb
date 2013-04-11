@@ -18,7 +18,7 @@ module OmniAuth
           :email => raw_info["email"],
           :role => raw_info["role"],
           :org_id => raw_info["organization_id"],
-          :org_type => raw_info["organization"]["org_type"]
+          :org_type => raw_info["organization"].try(:[], "org_type")
         }
       end
 
