@@ -98,7 +98,7 @@ class Answer < ActiveRecord::Base
     return unless question_type == "PhotoQuestion"
     if question.max_length && question.max_length.megabytes < photo.size
       errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
-    elsif 5.megabytes < photo.size
+    elsif 50.megabytes < photo.size
       errors.add(:photo, I18n.t('answers.validations.exceeds_maximum_size'))
     end
   end
