@@ -204,6 +204,9 @@ GEM
       activesupport (>= 3.0.0)
       cocaine (>= 0.0.2)
       mime-types
+    parallel (0.5.21)
+    parallel_tests (0.8.14)
+      parallel
     pg (0.14.0)
     polyglot (0.3.3)
     progressbar (0.11.0)
@@ -361,6 +364,7 @@ DEPENDENCIES
   newrelic_rpm
   omniauth-oauth2
   paperclip
+  parallel_tests (~> 0.8.14)
   pg
   pry-rails
   quiet_assets

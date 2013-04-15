@@ -45,6 +45,7 @@ end
 
 
 group :test, :development do
+  gem "parallel_tests", "~> 0.8.14"
   gem 'rails-footnotes'
   gem 'commands'
   gem 'binding_of_caller'

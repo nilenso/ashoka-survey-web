@@ -1,4 +1,5 @@
 -r spec_helper
---format documentation
+--format progress
+--format ParallelTests::RSpec::SummaryLogger --out tmp/spec_summary.log
 --color
 --drb
