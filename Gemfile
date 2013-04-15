@@ -8,7 +8,6 @@ gem 'pg'
 gem 'formtastic'
 gem 'will_paginate'
 gem 'rails-i18n'
-gem 'heroku'
 gem 'omniauth-oauth2'
 gem 'figaro'
 gem "rails-backbone"
@@ -47,39 +46,16 @@ end
 group :test, :development do
   gem "parallel_tests", "~> 0.8.14"
   gem 'rails-footnotes'
-  gem 'commands'
-  gem 'binding_of_caller'
-  gem 'jasminerice'
   gem 'quiet_assets'
   gem 'simplecov', :require => false
-  gem 'guard-jasmine'
   gem 'rspec-rails', '~> 2.11.4'
   gem 'rspec-http'
-  gem 'spork'
-  gem 'guard-spork'
-  gem 'guard-rspec'
   gem 'factory_girl_rails', '~> 4.2.0'
   gem "shoulda-matchers", '~> 2.0.0'
-  gem 'growl'
-  gem 'forgery'
-  gem 'guard-livereload'
   gem 'database_cleaner'
   gem "rails_best_practices"
+  gem 'debugger'
+  gem 'unicorn-rails'
 end
 
 gem 'jquery-rails'
-
-# To use ActiveModel has_secure_password
-# gem 'bcrypt-ruby', '~> 3.0.0'
-
-# To use Jbuilder templates for JSON
-# gem 'jbuilder'
-
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Deploy with Capistrano
-# gem 'capistrano'
-
-# To use debugger
-# gem 'debugger'
