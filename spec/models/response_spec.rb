@@ -68,14 +68,16 @@ describe Response do
       response = FactoryGirl.create :response, :updated_at => 2.days.from_now
       answer = FactoryGirl.create(:answer)
       response.answers << answer
-      answer.update_attribute :updated_at, 5.days.from_now
-      response.last_update.to_i.should ==  5.days.from_now.to_i
+      time = 5.days.from_now
+      answer.update_attribute :updated_at, time
+      response.last_update.to_i.should ==  time.to_i
     end
 
     it "looks at the response's `updated_at` as well" do
-      response = FactoryGirl.create :response, :updated_at => 2.days.from_now      
+      time = 2.days.from_now
+      response = FactoryGirl.create :response, :updated_at => time
       response.answers << FactoryGirl.create(:answer)
-      response.last_update.to_i.should ==  2.days.from_now.to_i      
+      response.last_update.to_i.should ==  time.to_i
     end
 
     it "doesn't complain if the response has no answers" do
