@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'rails', '3.2.12'
+gem 'rails', '3.2.13'
 gem 'date_validator'
 gem 'unicorn'
 gem 'newrelic_rpm'
@@ -52,13 +52,13 @@ group :test, :development do
   gem 'quiet_assets'
   gem 'simplecov', :require => false
   gem 'guard-jasmine'
-  gem 'rspec-rails'
+  gem 'rspec-rails', '~> 2.11.4'
   gem 'rspec-http'
   gem 'spork'
   gem 'guard-spork'
   gem 'guard-rspec'
-  gem 'factory_girl_rails'
-  gem "shoulda-matchers"
+  gem 'factory_girl_rails', '~> 4.2.0'
+  gem "shoulda-matchers", '~> 2.0.0'
   gem 'growl'
   gem 'forgery'
   gem 'guard-livereload'

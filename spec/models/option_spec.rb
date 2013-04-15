@@ -9,7 +9,12 @@ describe Option do
   it { should validate_presence_of(:question_id) }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:categories).dependent(:destroy) }
-  it { should delegate_method(:survey).to(:question) }
+  
+  it "delegates `survey` to its parent question" do
+    survey = FactoryGirl.create(:survey)
+    option = FactoryGirl.create(:option, :question => FactoryGirl.create(:question, :survey => survey))
+    option.survey.should == survey
+  end
 
   context "validation" do
     it "Ensures that the order number for an option is unique within a question" do
