@@ -25,3 +25,5 @@ coverage/
 .rvmrc
 db/database.yml
 public/uploads
+zeus.json
+custom_plan.rb
