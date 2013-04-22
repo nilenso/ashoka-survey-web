@@ -7,7 +7,7 @@ module Api
 
       def index
         @surveys ||= Survey.accessible_by(current_ability)
-        render :json => @surveys
+        render :json => SurveysSerializer.new(@surveys).as_json(:with_sub_elements => params[:with_sub_elements])
       end
 
       def questions_count
