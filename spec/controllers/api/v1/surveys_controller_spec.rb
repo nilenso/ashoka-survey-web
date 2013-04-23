@@ -109,29 +109,6 @@ describe Api::V1::SurveysController do
         Date.parse(returned_json[index]['expiry_date']).should == survey.expiry_date
       end
     end
-
-    context "when the 'with_sub_elements' flag" do
-      context "is set to true" do
-        it "includes all the questions in the JSON output" do
-          survey = FactoryGirl.create(:survey, :finalized, :organization_id => LOGGED_IN_ORG_ID)
-          questions = FactoryGirl.create_list(:question, 5, :survey => survey)
-          get :index, :with_sub_elements => true
-          survey_json = JSON.parse(response.body)[0]
-          survey_json.should have_key 'questions'
-          survey_json['questions'].map { |q| q['id'] }.should =~ questions.as_json.map { |q| q['id'] }
-        end        
-      end
-
-      context "is not set" do
-        it "doesn't include questions in the JSON output" do
-          survey = FactoryGirl.create(:survey, :finalized, :organization_id => LOGGED_IN_ORG_ID)
-          questions = FactoryGirl.create_list(:question, 5, :survey => survey)
-          get :index
-          survey_json = JSON.parse(response.body)[0]
-          survey_json.should_not have_key 'questions'
-        end
-      end
-    end
   end
 
   context "GET 'question_count'" do

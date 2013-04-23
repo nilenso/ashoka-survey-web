@@ -7,10 +7,6 @@ FactoryGirl.define do
     description "MyText"
     finalized :false
 
-    trait :finalized do
-      finalized true
-    end
-
     factory :survey_with_questions do
       after(:create) do |survey, evaluator|
         survey.finalize
