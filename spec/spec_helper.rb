@@ -23,6 +23,10 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
   config.order = "random"
 
+  config.before(:each) do
+    SimpleCov.command_name "RSpec:#{Process.pid.to_s}#{ENV['TEST_ENV_NUMBER']}"
+  end
+
 
   OmniAuth.config.test_mode = true
   OmniAuth.config.mock_auth[:user_owner] = OmniAuth::AuthHash.new({
