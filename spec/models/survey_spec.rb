@@ -152,15 +152,6 @@ describe Survey do
       Survey.finalized.should include(another_survey)
     end
 
-    it "returns a list of active surveys" do
-      survey = FactoryGirl.create(:survey)
-      another_survey = FactoryGirl.create(:survey, :finalized => true)
-      other_survey = FactoryGirl.create(:survey, :archived => true)
-      Survey.active.should_not include(survey)
-      Survey.active.should_not include(other_survey)
-      Survey.active.should include(another_survey)
-    end
-
     it "returns a list of expired surveys" do
       survey = FactoryGirl.create(:survey)
       another_survey = FactoryGirl.create(:survey, :finalized => true)
@@ -381,6 +372,36 @@ describe Survey do
       another_archived_survey = FactoryGirl.create :survey, :archived => true
       survey = FactoryGirl.create :survey
       Survey.archived.should =~ [archived_survey, another_archived_survey]
+    end
+
+    context "active" do
+      it "returns finalized surveys" do
+        draft_survey = FactoryGirl.create(:survey, :finalized => false)  
+        finalized_survey = FactoryGirl.create(:survey, :finalized => true)  
+        Survey.active.should == [finalized_survey]
+      end
+
+      it "return unarchived surveys" do
+        archived_survey = FactoryGirl.create(:survey, :archived => true, :finalized => true)
+        unarchived_survey = FactoryGirl.create(:survey, :archived => false, :finalized => true)
+        Survey.active.should == [unarchived_survey]
+      end
+
+      it "returns unexpired surveys" do
+        expired_survey = FactoryGirl.create(:survey, :expiry_date => 5.days.from_now, :finalized => true)
+        unexpired_survey = FactoryGirl.create(:survey, :expiry_date => 10.days.from_now, :finalized => true)
+        Timecop.freeze(7.days.from_now) do
+          Survey.active.should == [unexpired_survey]
+        end
+      end 
+    end
+
+    context "active_plus" do
+      it "returns the active surveys along with the extra surveys passed in" do
+        active_survey = FactoryGirl.create(:survey, :finalized => true)
+        inactive_survey = FactoryGirl.create(:survey, :finalized => false)
+        Survey.active_plus([inactive_survey.id]).should =~ [active_survey, inactive_survey]
+      end
     end
   end
 

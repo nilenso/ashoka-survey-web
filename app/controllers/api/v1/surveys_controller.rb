@@ -3,16 +3,15 @@ module Api
     class SurveysController < APIApplicationController
       caches_action :show, :if => :survey_finalized?
       authorize_resource :except => [:identifier_questions, :questions_count]
-      before_filter :only_finalized_and_unexpired_surveys, :only => [:index, :questions_count]
 
       def index
-        @surveys ||= Survey.accessible_by(current_ability)
-        render :json => @surveys
+        surveys = Survey.accessible_by(current_ability).active_plus(extra_survey_ids)
+        render :json => surveys
       end
 
       def questions_count
-        @surveys ||= Survey.accessible_by(current_ability)
-        render :json => { count: @surveys.with_questions.count }
+        surveys = Survey.accessible_by(current_ability).active_plus(extra_survey_ids)
+        render :json => { count: surveys.with_questions.count }
       end
       
       def identifier_questions
@@ -48,20 +47,7 @@ module Api
 
       private
 
-      def only_finalized_and_unexpired_surveys
-        @surveys = Survey.accessible_by(current_ability)
-        survey = Survey.arel_table
-        @surveys = @surveys.where(
-          (
-            survey[:expiry_date].gt(Date.today). # Not expired
-            and(survey[:finalized].eq(true)).     # Finalized
-            and(survey[:archived].eq(false))
-          ).
-          or(survey[:id].in(extra_surveys))
-        )
-      end
-
-      def extra_surveys
+      def extra_survey_ids
         extra_survey_ids = params[:extra_surveys] || ""
         extra_survey_ids.split(',').map(&:to_i)
       end

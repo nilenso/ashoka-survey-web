@@ -15,7 +15,6 @@ class Survey < ActiveRecord::Base
   has_many :categories, :dependent => :destroy
   validates_uniqueness_of :auth_key, :allow_nil => true
   scope :finalized, where(:finalized => true)
-  scope :active, lambda { where('finalized = ? AND expiry_date > ? AND archived = ?', true, Date.today, false) }
   scope :none, limit(0)
   scope :not_expired, lambda { where('expiry_date > ?', Date.today) }
   scope :expired, lambda { where('expiry_date < ?', Date.today) }
@@ -24,6 +23,14 @@ class Survey < ActiveRecord::Base
   scope :archived, where(:archived => true)
   default_scope :order => 'published_on DESC NULLS LAST, created_at DESC'
   before_save :generate_auth_key, :if => :public?
+
+  def self.active
+    where(active_arel)
+  end
+
+  def self.active_plus(extras)
+    where(active_arel.or(extra_arel(extras)))
+  end
 
   def finalize
     self.finalized = true
@@ -148,6 +155,20 @@ class Survey < ActiveRecord::Base
   end
 
   private
+
+  def self.active_arel
+    survey = Survey.arel_table
+    (
+      survey[:expiry_date].gt(Date.today). # Not expired
+      and(survey[:finalized].eq(true)).     # Finalized
+      and(survey[:archived].eq(false))
+    )
+  end
+
+  def self.extra_arel(extras)
+    survey = Survey.arel_table
+    survey[:id].in(extras)
+  end
 
   def generate_auth_key
     self.auth_key = SecureRandom.urlsafe_base64

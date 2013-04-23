@@ -56,6 +56,7 @@ group :test, :development do
   gem "rails_best_practices"
   gem 'debugger'
   gem 'unicorn-rails'
+  gem 'timecop', '~> 0.6.1'
 end
 
 gem 'jquery-rails'
