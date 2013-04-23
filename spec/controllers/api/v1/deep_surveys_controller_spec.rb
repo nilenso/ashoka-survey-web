@@ -39,5 +39,25 @@ describe Api::V1::DeepSurveysController do
       response_hash = JSON.parse(response.body)
       response_hash.map { |s| s['id'] }.should =~ [authorized_survey.id]
     end
+
+    context "for nested elements" do      
+      it "should list questions along with the surveys" do
+        survey = FactoryGirl.create(:survey, :finalized, :organization_id => LOGGED_IN_ORG_ID)
+        question_list = FactoryGirl.create_list(:question, 5, :survey => survey)
+        get :index
+        response_hash = JSON.parse(response.body)
+        survey_json = response_hash[0]
+        survey_json['questions'].map { |q| q['id']}.should =~ question_list.map(&:id)
+      end
+
+      it "should list categories along with the surveys" do
+        survey = FactoryGirl.create(:survey, :finalized, :organization_id => LOGGED_IN_ORG_ID)
+        category_list = FactoryGirl.create_list(:category, 5, :survey => survey)
+        get :index
+        response_hash = JSON.parse(response.body)
+        survey_json = response_hash[0]
+        survey_json['categories'].map { |q| q['id']}.should =~ category_list.map(&:id)
+      end
+    end
   end
 end

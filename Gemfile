@@ -29,6 +29,8 @@ gem 'daemons'
 gem 'rack-mini-profiler'
 gem 'paperclip'
 gem 'feature'
+gem "active_model_serializers", "~> 0.7.0"
+gem 'jquery-rails'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -58,5 +60,3 @@ group :test, :development do
   gem 'unicorn-rails'
   gem 'timecop', '~> 0.6.1'
 end
-
-gem 'jquery-rails'

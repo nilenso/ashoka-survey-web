@@ -3,7 +3,7 @@ class Api::V1::DeepSurveysController < ApplicationController
 
   def index
     surveys = Survey.accessible_by(current_ability)
-    render :json => surveys.active_plus(extra_survey_ids)
+    render :json => surveys.active_plus(extra_survey_ids), :each_serializer => DeepSurveySerializer
   end  
 
   private
