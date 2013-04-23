@@ -48,6 +48,7 @@ SurveyWeb::Application.routes.draw do
         get 'questions_count', :on => :collection
         get 'identifier_questions', :on => :member
       end
+      get 'deep_surveys', :to => 'deep_surveys#index'
       match '/login', :to => 'auth#create'
       resources :responses, :only => [:create, :update, :index, :show] do
         member { put "image_upload" }
