@@ -21,19 +21,23 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
             question.formatted_answers_for(question_answers, :server_url => server_url)
           end.flatten
           answers_for_excel.unshift(i+1)
-          answers_for_excel << user_names[response.user_id]
-          answers_for_excel << organization_names.find { |org| org.id == response[:organization_id] }.try(:name)
-          answers_for_excel << response.last_update
-          answers_for_excel << response.location
-          answers_for_excel << response.ip_address
-          answers_for_excel << response.state
+          answers_for_excel += metadata_for(response)          
           sheet.add_row answers_for_excel, style: border
         end
       end
     end
 
-    directory = aws_excel_directory
-    directory.files.create(:key => filename, :body => package.to_stream, :public => true)
+  def metadata_for(response)
+    [user_name_for(response), organization_name_for(response), response.last_update,
+      response.location, response.ip_address, response.state]
+  end
+
+  def user_name_for(response)
+    user_names[response.user_id]
+  end
+
+  def organization_name_for(response)
+    organization_names.find { |org| org.id == response[:organization_id] }.try(:name)
   end
 
 
