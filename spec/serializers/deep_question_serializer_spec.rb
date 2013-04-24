@@ -20,8 +20,8 @@ describe DeepQuestionSerializer do
   it "should include its options" do
     question_with_options = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)  
     serializer = DeepQuestionSerializer.new(question_with_options)
-    json = serializer.as_json
-    json[:options].map { |option| option['id'] }.should =~ question_with_options.options.map(&:id)
+    json = serializer.as_json    
+    json[:options].map { |option| option[:id] }.should =~ question_with_options.options.map(&:id)
   end
 
   it "doesn't include options if not a QuestionWithOptions" do
