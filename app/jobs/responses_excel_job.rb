@@ -27,6 +27,10 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
       end
     end
 
+    directory = aws_excel_directory
+    directory.files.create(:key => filename, :body => package.to_stream, :public => true)
+  end
+
   def metadata_for(response)
     [user_name_for(response), organization_name_for(response), response.last_update,
       response.location, response.ip_address, response.state]
