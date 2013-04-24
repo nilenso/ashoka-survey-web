@@ -1,6 +1,8 @@
 class QuestionWithOptions < Question
   has_many :options, :dependent => :destroy,  :foreign_key => :question_id
 
+  alias_method :serializable_options, :options
+
   def create_blank_answers(params={})
     super
     options.map(&:elements).flatten.each { |element| element.create_blank_answers(params) }

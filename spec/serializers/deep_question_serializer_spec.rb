@@ -16,4 +16,18 @@ describe DeepQuestionSerializer do
   it { should have_json_key :image_url}  
   it { should have_json_key :order_number}  
   it { should have_json_key :category_id}
+
+  it "should include its options" do
+    question_with_options = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)  
+    serializer = DeepQuestionSerializer.new(question_with_options)
+    json = serializer.as_json
+    json[:options].map { |option| option['id'] }.should =~ question_with_options.options.map(&:id)
+  end
+
+  it "doesn't include options if not a QuestionWithOptions" do
+    question = SingleLineQuestion.find(FactoryGirl.create(:question, :type => "SingleLineQuestion").id)
+    serializer = DeepQuestionSerializer.new(question)
+    json = serializer.as_json
+    json.should_not have_key 'options'
+  end
 end

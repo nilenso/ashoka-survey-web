@@ -13,20 +13,17 @@ FactoryGirl.define do
     end
 
     factory :question_with_options do
-      ignore do
-        options_count 5
-      end
       after(:create) do |question, evaluator|
         question.type = 'RadioQuestion' if question.type.blank?
-        FactoryGirl.create_list(:option, evaluator.options_count, :question => question)
-        question.save
+        FactoryGirl.create_list(:option, 5, :question => question)
+        question.save!
       end
     end
 
     factory :question_with_image do
       after(:create) do |question, e|
         question.image = fixture_file_upload(Rails.root.to_s + '/spec/fixtures/images/sample.jpg', 'image/jpeg')
-        question.save
+        question.save!
       end
     end
   end
