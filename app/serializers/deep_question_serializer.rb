@@ -4,10 +4,9 @@ class DeepQuestionSerializer < ActiveModel::Serializer
 
   # Need to do this because `option` is a reserved name in this gem's NS.
   # http://stackoverflow.com/questions/15944179/issue-adding-has-many-to-activemodelserializer
-  has_many :serializable_options, :key => :options
+  has_many :serializable_options, :key => :options, :serializer => DeepOptionSerializer
 
   def include_serializable_options?
-    p object.is_a? QuestionWithOptions
     object.is_a? QuestionWithOptions
   end
 end
