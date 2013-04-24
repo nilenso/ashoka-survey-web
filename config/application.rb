@@ -72,5 +72,7 @@ module SurveyWeb
 
     # Set I18n fallbacks
     I18n.fallbacks.map('fr' => 'en')
+
+    config.middleware.use Rack::ContentLength
   end
 end
