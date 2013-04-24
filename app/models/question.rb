@@ -19,7 +19,6 @@ class Question < ActiveRecord::Base
     return image.url(format) if image.file
   end
 
-
   def image_in_base64
     file =  File.read("#{image.root}/#{image.cache_dir}/#{image_tmp}") if image_tmp
     file = image.thumb.file.read if image.thumb.file.try(:exists?)
@@ -95,6 +94,10 @@ class Question < ActiveRecord::Base
 
   def has_multi_record_ancestor?
     category.try(:is_a?, MultiRecordCategory) || category.try(:has_multi_record_ancestor?) || parent.try(:has_multi_record_ancestor?)
+  end
+
+  def reporter
+    QuestionReporter.decorate(self)
   end
 
   protected

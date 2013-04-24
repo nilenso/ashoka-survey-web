@@ -7,6 +7,10 @@ class MultiChoiceQuestion < QuestionWithOptions
     options.map { |option| [option.content, choice_ids.count(option.id)] }
   end
 
+  def reporter
+    MultiChoiceQuestionReporter.decorate(self)
+  end
+
   private
 
   def choices

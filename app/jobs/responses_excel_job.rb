@@ -5,9 +5,9 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
       wb = p.workbook
       bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
       border = wb.styles.add_style border: { style: :thin, color: '000000' }
-      questions = survey.questions_in_order
+      questions = survey.questions_in_order.map(&:reporter)
       wb.add_worksheet(name: "Responses") do |sheet|
-        headers = questions.map { |question| "#{QuestionDecorator.find(question).question_number}) #{question.content}" }
+        headers = questions.map(&:header).flatten
         headers.unshift("Response No.")
         headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address" << "State"
         sheet.add_row headers, :style => bold_style
@@ -18,8 +18,8 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
           .includes(:choices => :option).all
           answers_for_excel = questions.map do |question|
             question_answers = response_answers.find_all { |a| a.question_id == question.id }
-            question_answers ? question_answers.map { |answer| answer.content_for_excel(server_url) }.join(', ') : ""
-          end
+            question.formatted_answers_for(question_answers, :server_url => server_url)
+          end.flatten
           answers_for_excel.unshift(i+1)
           answers_for_excel << user_names[response.user_id]
           answers_for_excel << organization_names.find { |org| org.id == response[:organization_id] }.try(:name)
