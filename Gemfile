@@ -49,7 +49,7 @@ group :test, :development do
   gem "parallel_tests", "~> 0.8.14"
   gem 'rails-footnotes'
   gem 'quiet_assets'
-  gem 'simplecov', :require => false
+  gem "simplecov", "~> 0.7.1", :require => false
   gem 'rspec-rails', '~> 2.11.4'
   gem 'rspec-http'
   gem 'factory_girl_rails', '~> 4.2.0'

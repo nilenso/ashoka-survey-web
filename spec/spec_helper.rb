@@ -1,5 +1,7 @@
-require 'simplecov'
-SimpleCov.start 'rails'
+if ENV["ENABLE_COVERAGE"]
+  require 'simplecov'
+  SimpleCov.start 'rails'
+end
 
 ENV["RAILS_ENV"] ||= 'test'
 require File.expand_path("../../config/environment", __FILE__)
@@ -23,8 +25,10 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
   config.order = "random"
 
-  config.before(:each) do
-    SimpleCov.command_name "RSpec:#{Process.pid.to_s}#{ENV['TEST_ENV_NUMBER']}"
+  if ENV["ENABLE_COVERAGE"]
+    config.before(:each) do
+      SimpleCov.command_name "RSpec:#{Process.pid.to_s}#{ENV['TEST_ENV_NUMBER']}"
+    end
   end
 
 
