@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe ResponsesExcelJob do
+  METADATA_SIZE = 6
+
   let(:survey) { FactoryGirl.create(:survey) }
   let(:organization_names) { [Organization.new(1, "C42")] }
   let(:user_names) { { 1 => "Han", 2 => "Solo" } }
@@ -41,14 +43,46 @@ describe ResponsesExcelJob do
     it "should include the metadata information" do
       Geocoder.configure(:lookup => :test)
       Geocoder::Lookup::Test.set_default_stub([{ 'address' => 'foo_location' }])
-
-      metadata_size = 6
       user_names = { 1 => "hansel", 2 => "gretel" }
       organization_names = [Organization.new(1, "C42"), Organization.new(2, "Ashoka")]
       response = FactoryGirl.create(:response, :user_id => 1, :ip_address => "0.0.0.0", :organization_id => 1, :state => "dirty")
       job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
       ws = job.package.workbook.worksheets[0]
-      ws.rows[1].cells.last(metadata_size).map(&:value).should == ["hansel", "C42", response.last_update, "foo_location", "0.0.0.0", "dirty"] 
+      ws.rows[1].cells.last(METADATA_SIZE).map(&:value).should == ["hansel", "C42", response.last_update, "foo_location", "0.0.0.0", "dirty"]
+    end
+  end
+
+  context "when setting the answers for a response" do
+    it "includes the answer for each question" do
+      response = FactoryGirl.create(:response, :survey => survey)
+      question = FactoryGirl.create(:question, :survey => survey)
+      answer = FactoryGirl.create(:answer, :question => question, :response => response, :content => "answer_foo")
+      job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+      ws = job.package.workbook.worksheets[0]
+      ws.rows[1].cells.map(&:value).should include "answer_foo"
+    end
+
+    context "when setting answers for a multi-choice question" do
+      it "insert a single blank cell corresponding to the question" do
+        response = FactoryGirl.create(:response, :survey => survey)
+        question = MultiChoiceQuestion.create(:content => "foo_content")
+        question.update_column(:survey_id, survey.id)
+        answer = FactoryGirl.create(:answer, :question => question, :response => response)
+        job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        ws = job.package.workbook.worksheets[0]
+        ws.rows[1].cells[1].value.should == ""
+      end
+
+      it "subsequently inserts a cell for each option" do
+        response = FactoryGirl.create(:response, :survey => survey)
+        question = MultiChoiceQuestion.create(:content => "foo_content")
+        question.update_column(:survey_id, survey.id)
+        options = FactoryGirl.create_list(:option, 5, :question => question)
+        answer = FactoryGirl.create(:answer, :question => question, :response => response)
+        job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        ws = job.package.workbook.worksheets[0]
+        ws.rows[1].cells[2..-1].size.should == (options.size + METADATA_SIZE)        
+      end
     end
   end
 end
