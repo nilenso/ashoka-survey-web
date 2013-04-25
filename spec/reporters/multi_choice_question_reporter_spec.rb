@@ -44,5 +44,15 @@ describe MultiChoiceQuestionReporter do
       option = FactoryGirl.create(:option, :question => question)
       reporter.formatted_answers_for([])[-1].should == "NO"
     end
+
+    context "for multi-records" do
+      it "returns a comma separated list of YES/NOs for each option; one for each answer passed in" do
+        reporter = MultiChoiceQuestionReporter.decorate(question)
+        option = FactoryGirl.create(:option, :question => question)
+        answers = FactoryGirl.create_list(:answer, 2, :question => question)
+        choice = FactoryGirl.create(:choice, :answer => answers[0], :option => option)
+        reporter.formatted_answers_for(answers)[-1].should == "YES, NO"
+      end
+    end
   end
 end
