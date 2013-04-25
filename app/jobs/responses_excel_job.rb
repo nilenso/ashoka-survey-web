@@ -1,7 +1,12 @@
 class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names, :user_names, :server_url, :filename)
   def perform
+    directory = aws_excel_directory
+    directory.files.create(:key => filename, :body => package.to_stream, :public => true)
+  end
+
+  def package
     return if response_ids.empty?
-    package = Axlsx::Package.new do |p|
+    Axlsx::Package.new do |p|
       wb = p.workbook
       bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
       border = wb.styles.add_style border: { style: :thin, color: '000000' }
@@ -26,9 +31,6 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
         end
       end
     end
-
-    directory = aws_excel_directory
-    directory.files.create(:key => filename, :body => package.to_stream, :public => true)
   end
 
   def metadata_for(response)
