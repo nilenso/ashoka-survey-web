@@ -326,7 +326,7 @@ describe ResponsesController do
         resp = FactoryGirl.create(:response, :session_token => "123", :survey => survey)
         session[:session_token] = "123"
         put :complete, :id => resp.id, :survey_id => resp.survey_id
-        response.should redirect_to root_path
+        response.should render_template("thank_you")
       end
 
       it "redirects to the responses index page if a user is logged in" do
