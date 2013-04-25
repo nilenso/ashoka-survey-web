@@ -5,7 +5,9 @@ namespace :coverage do
     ENV["ENABLE_COVERAGE"] = "true"
   end
 
-  task :default => :prepare_environment do
+  task :all => :prepare_environment do
     Rake::Task["parallel:spec"].invoke
   end
 end
+
+task :coverage => ["coverage:all"]
