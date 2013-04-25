@@ -36,8 +36,8 @@ describe ResponsesExcelJob do
       question_with_options.update_column :survey_id, survey.id
       option_foo = FactoryGirl.create(:option, :question => question_with_options, :content => "Foo Option")
       job = ResponsesExcelJob.new(survey, response_ids, organization_names, user_names, server_url, filename)
-      ws = job.package.workbook.worksheets[0]
-      ws.rows[0].cells.map(&:value).should include "Foo Option"
+      ws = job.package.workbook.worksheets[0]      
+      ws.should have_header_cell("Foo Option")
     end
 
     it "should include the metadata information" do
@@ -59,7 +59,7 @@ describe ResponsesExcelJob do
       answer = FactoryGirl.create(:answer, :question => question, :response => response, :content => "answer_foo")
       job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
       ws = job.package.workbook.worksheets[0]
-      ws.rows[1].cells.map(&:value).should include "answer_foo"
+      ws.should have_cell("answer_foo").in_row(1)
     end
 
     context "when setting answers for a multi-choice question" do
