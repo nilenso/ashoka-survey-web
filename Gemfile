@@ -17,7 +17,7 @@ gem 'draper'
 gem 'i18n-js'
 gem 'airbrake'
 gem 'dalli'
-gem "geocoder"
+gem "geocoder", '~> 1.1.8'
 gem 'gmaps4rails'
 gem 'axlsx'
 gem 'carrierwave'
