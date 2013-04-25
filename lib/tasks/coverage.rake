@@ -1,7 +1,7 @@
 namespace :coverage do
   desc "Set up coverage config in enviroment"
   task :prepare_environment do
-    puts "preparing enviroment"
+    puts "Preparing coverage environment"
     ENV["ENABLE_COVERAGE"] = "true"
   end
 

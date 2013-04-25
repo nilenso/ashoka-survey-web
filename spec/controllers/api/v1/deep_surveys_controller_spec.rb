@@ -19,12 +19,12 @@ describe Api::V1::DeepSurveysController do
         get :index, :extra_surveys => "#{expired_survey.id}"
         response_hash = JSON.parse(response.body)
         response_hash.map { |s| s['id'] }.should =~ [finalized_survey.id, expired_survey.id]
-      end  
+      end
     end
 
     it "does not include unauthorized surveys" do
-      OTHER_ORGANIZATION_ID = 500
-      unauthorized_survey = FactoryGirl.create(:survey, :finalized, :organization_id => OTHER_ORGANIZATION_ID)
+      other_organization_id = 500
+      unauthorized_survey = FactoryGirl.create(:survey, :finalized, :organization_id => other_organization_id)
       authorized_survey = FactoryGirl.create(:survey, :finalized, :organization_id => LOGGED_IN_ORG_ID)
       get :index
       response_hash = JSON.parse(response.body)
@@ -32,15 +32,15 @@ describe Api::V1::DeepSurveysController do
     end
 
     it "does not include unauthorized surveys even if explicitly specified in the params" do
-      OTHER_ORGANIZATION_ID = 500
-      unauthorized_survey = FactoryGirl.create(:survey, :finalized, :organization_id => OTHER_ORGANIZATION_ID)
+      other_organization_id = 500
+      unauthorized_survey = FactoryGirl.create(:survey, :finalized, :organization_id => other_organization_id)
       authorized_survey = FactoryGirl.create(:survey, :finalized, :organization_id => LOGGED_IN_ORG_ID)
       get :index, :extra_surveys => "#{unauthorized_survey.id}"
       response_hash = JSON.parse(response.body)
       response_hash.map { |s| s['id'] }.should =~ [authorized_survey.id]
     end
 
-    context "for nested elements" do      
+    context "for nested elements" do
       it "should list questions along with the surveys" do
         survey = FactoryGirl.create(:survey, :finalized, :organization_id => LOGGED_IN_ORG_ID)
         question_list = FactoryGirl.create_list(:question_with_options, 5, :survey => survey)
