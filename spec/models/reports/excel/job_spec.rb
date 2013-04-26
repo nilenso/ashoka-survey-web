@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ResponsesExcelJob do
+describe Reports::Excel::Job do
   METADATA_SIZE = 6
 
   let(:survey) { FactoryGirl.create(:survey) }
@@ -12,7 +12,7 @@ describe ResponsesExcelJob do
 
   it "sets first cell of each row to the serial number of that response" do
     response_ids = FactoryGirl.create_list(:response, 5, :survey => survey).map(&:id)
-    job = ResponsesExcelJob.new(survey, response_ids, organization_names, user_names, server_url, filename)
+    job = Reports::Excel::Job.new(survey, response_ids, organization_names, user_names, server_url, filename)
     wb = job.package.workbook
     col = wb.worksheets[0].cols[0]
     col.map(&:value).should == ["Response No.", 1, 2, 3, 4, 5]
@@ -23,7 +23,7 @@ describe ResponsesExcelJob do
       questions = []
       questions << FactoryGirl.create(:question, :survey => survey, :content => "foo")
       questions << FactoryGirl.create(:question, :survey => survey, :content => "bar")
-      job = ResponsesExcelJob.new(survey, response_ids, organization_names, user_names, server_url, filename)
+      job = Reports::Excel::Job.new(survey, response_ids, organization_names, user_names, server_url, filename)
       ws = job.package.workbook.worksheets[0]
       question_cells = ws.rows[0].cells[1..2]
       question_cells.each.with_index do |q, i|
@@ -35,8 +35,8 @@ describe ResponsesExcelJob do
       question_with_options = MultiChoiceQuestion.create(:content => "Foo")
       question_with_options.update_column :survey_id, survey.id
       option_foo = FactoryGirl.create(:option, :question => question_with_options, :content => "Foo Option")
-      job = ResponsesExcelJob.new(survey, response_ids, organization_names, user_names, server_url, filename)
-      ws = job.package.workbook.worksheets[0]      
+      job = Reports::Excel::Job.new(survey, response_ids, organization_names, user_names, server_url, filename)
+      ws = job.package.workbook.worksheets[0]
       ws.should have_header_cell("Foo Option")
     end
 
@@ -46,7 +46,7 @@ describe ResponsesExcelJob do
       user_names = { 1 => "hansel", 2 => "gretel" }
       organization_names = [Organization.new(1, "C42"), Organization.new(2, "Ashoka")]
       response = FactoryGirl.create(:response, :user_id => 1, :ip_address => "0.0.0.0", :organization_id => 1, :state => "dirty")
-      job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+      job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
       ws = job.package.workbook.worksheets[0]
       ["hansel", "C42", "foo_location", "0.0.0.0", "dirty"].each { |md| ws.should have_cell(md).in_row(1) }
     end
@@ -57,7 +57,7 @@ describe ResponsesExcelJob do
       response = FactoryGirl.create(:response, :survey => survey)
       question = FactoryGirl.create(:question, :survey => survey)
       answer = FactoryGirl.create(:answer, :question => question, :response => response, :content => "answer_foo")
-      job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+      job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
       ws = job.package.workbook.worksheets[0]
       ws.should have_cell("answer_foo").in_row(1)
     end
@@ -68,7 +68,7 @@ describe ResponsesExcelJob do
         question = MultiChoiceQuestion.create(:content => "foo_content")
         question.update_column(:survey_id, survey.id)
         answer = FactoryGirl.create(:answer, :question => question, :response => response)
-        job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
         ws = job.package.workbook.worksheets[0]
         ws.rows[1].cells[1].value.should == ""
       end
@@ -79,10 +79,10 @@ describe ResponsesExcelJob do
         question.update_column(:survey_id, survey.id)
         options = FactoryGirl.create_list(:option, 5, :question => question)
         answer = FactoryGirl.create(:answer, :question => question, :response => response)
-        job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
         ws = job.package.workbook.worksheets[0]
-        ws.rows[1].cells[2..-1].size.should == (options.size + METADATA_SIZE)        
-      end      
+        ws.rows[1].cells[2..-1].size.should == (options.size + METADATA_SIZE)
+      end
     end
 
     context "when setting answers for questions in a multi-record category" do
@@ -92,7 +92,7 @@ describe ResponsesExcelJob do
         question = FactoryGirl.create(:question, :category => category, :survey => survey)
         answer_one = FactoryGirl.create(:answer_in_record, :question => question, :response => response, :content => "foo_answer")
         answer_two = FactoryGirl.create(:answer_in_record, :question => question, :response => response, :content => "bar_answer")
-        job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
         ws = job.package.workbook.worksheets[0]
         ws.should have_cell_containing("foo_answer").in_row(1)
         ws.should have_cell_containing("bar_answer").in_row(1)
@@ -112,7 +112,7 @@ describe ResponsesExcelJob do
         FactoryGirl.create(:answer, :question => question_one, :response => response, :content => "bar_answer", :record => record_two)
         FactoryGirl.create(:answer, :question => question_two, :response => response, :content => "y_answer", :record => record_two)
 
-        job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
         ws = job.package.workbook.worksheets[0]
 
         ws.should have_cell("foo_answer, bar_answer").in_row(1)

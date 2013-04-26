@@ -1,4 +1,4 @@
-class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names, :user_names, :server_url, :filename)
+class Reports::Excel::Job < Struct.new(:survey, :response_ids, :organization_names, :user_names, :server_url, :filename)
   def perform
     directory = aws_excel_directory
     directory.files.create(:key => filename, :body => package.to_stream, :public => true)

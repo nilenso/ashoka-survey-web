@@ -20,7 +20,7 @@ class ResponsesController < ApplicationController
     filename = @survey.filename_for_excel
     @complete_responses = @responses.where(:status => 'complete').order('updated_at')
     response_ids = @complete_responses.to_a.map(&:id)
-    job = Delayed::Job.enqueue(ResponsesExcelJob.new(@survey, response_ids, organization_names,
+    job = Delayed::Job.enqueue(Reports::Excel::Job.new(@survey, response_ids, organization_names,
                                                user_names, server_url, filename), :queue => 'generate_excel')
     render :json => { :excel_path => filename, :id => job.id }
   end

@@ -5,7 +5,7 @@ module Api
     describe JobsController do
       context "GET 'alive'" do
         it "returns true (as JSON) if the given job is running" do
-          job = Delayed::Job.enqueue(ResponsesExcelJob.new)
+          job = Delayed::Job.enqueue(Reports::Excel::Job.new)
           get :alive, :id => job.id
           response.should be_ok
           JSON.parse(response.body).should == { 'alive' => true }
