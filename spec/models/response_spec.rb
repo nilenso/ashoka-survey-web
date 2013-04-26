@@ -23,6 +23,20 @@ describe Response do
   it { should allow_mass_assignment_of(:ip_address) }
 
 
+  context "scopes" do
+    it "returns responses in the chronological order" do
+      old_response = Timecop.freeze(5.days.ago) { FactoryGirl.create(:response)}
+      new_response = Timecop.freeze(5.days.from_now) { FactoryGirl.create(:response)}
+      Response.earliest_first.should == [old_response, new_response]
+    end
+
+    it "returns complete responses" do
+      complete_response = FactoryGirl.create(:response, :status => "complete")
+      incomplete_response = FactoryGirl.create(:response, :status => "incomplete")
+      Response.completed.should == [complete_response]
+    end
+  end
+
   it "fetches the answers for the identifier questions" do
     response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
     identifier_question = FactoryGirl.create :question, :identifier => true

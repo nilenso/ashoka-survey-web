@@ -1,22 +1,28 @@
-# Set of answers for a survey
-
 class Response < ActiveRecord::Base
   belongs_to :survey
   has_many :answers, :dependent => :destroy
   has_many :records, :dependent => :destroy
+
   accepts_nested_attributes_for :answers
+
   attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status, :updated_at,
                   :latitude, :longitude, :ip_address, :state, :comment, :blank
+
   validates_presence_of :survey_id
   validates_presence_of :organization_id, :user_id, :unless => :survey_public?
   validates_associated :answers
+  before_save :geocode, :reverse_geocode, :on => :create
+
   delegate :to_json_with_answers_and_choices, :render_json, :to => :response_serializer
   delegate :questions, :to => :survey
   delegate :public?, :to => :survey, :prefix => true, :allow_nil => true
+
   reverse_geocoded_by :latitude, :longitude, :address => :location
   geocoded_by :ip_address, :latitude => :latitude, :longitude => :longitude
-  before_save :geocode, :reverse_geocode, :on => :create
   acts_as_gmappable :lat => :latitude, :lng => :longitude, :check_process => false, :process_geocoding => false
+
+  scope :earliest_first, order('updated_at')
+  scope :completed, where(:status => "complete")
 
   MAX_PAGE_SIZE = 50
 

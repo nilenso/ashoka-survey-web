@@ -10,6 +10,6 @@ class Reports::Excel::Data
   end
 
   def responses
-    @responses.where(:status => 'complete').order('updated_at')
+    @responses.completed.earliest_first
   end
 end
