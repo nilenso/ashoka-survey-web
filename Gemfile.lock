@@ -187,6 +187,7 @@ GEM
       rack
     rack-test (0.6.2)
       rack (>= 1.0)
+    railroady (1.1.0)
     rails (3.2.13)
       actionmailer (= 3.2.13)
       actionpack (= 3.2.13)
@@ -317,6 +318,7 @@ DEPENDENCIES
   pry-rails
   quiet_assets
   rack-mini-profiler
+  railroady (~> 1.1.0)
   rails (= 3.2.13)
   rails-backbone
   rails-footnotes

@@ -46,6 +46,7 @@ end
 
 
 group :test, :development do
+  gem 'railroady', "~> 1.1.0"
   gem "parallel_tests", "~> 0.8.14"
   gem 'rails-footnotes'
   gem 'quiet_assets'
