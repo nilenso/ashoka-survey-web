@@ -1,7 +1,7 @@
 class Reports::Excel::Job < Struct.new(:excel_data)
   def perform
     directory = aws_excel_directory
-    directory.files.create(:key => filename, :body => package.to_stream, :public => true)
+    directory.files.create(:key => excel_data.file_name, :body => package.to_stream, :public => true)
   end
 
   # REFACTOR: Use a `sheet` abstraction which internally adds all its rows to a AXSLX worksheet

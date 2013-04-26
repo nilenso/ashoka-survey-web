@@ -137,4 +137,16 @@ describe Reports::Excel::Job do
       end
     end
   end
+
+  it "creates the file with an appropriate filename" do
+    connection = Fog::Storage.new(:provider => "AWS",
+                                  :aws_secret_access_key => ENV['S3_SECRET'],
+                                  :aws_access_key_id => ENV['S3_ACCESS_KEY'])
+    connection.directories.create(:key => 'surveywebexcel')
+
+    data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+    Reports::Excel::Job.new(data).perform
+
+    connection.directories.get("surveywebexcel").files.get(survey.filename_for_excel).should be_present
+  end
 end
