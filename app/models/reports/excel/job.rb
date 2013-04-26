@@ -1,6 +1,7 @@
 class Reports::Excel::Job < Struct.new(:excel_data)
+
   def start
-    Delayed::Job.enqueue(self, :queue => 'generate_excel')
+    @delayed_job ||= Delayed::Job.enqueue(self, :queue => 'generate_excel')
   end
 
   def perform
@@ -38,14 +39,8 @@ class Reports::Excel::Job < Struct.new(:excel_data)
     end
   end
 
-  def metadata_headers
-    ["Added By", "Organization", "Last updated at", "Address", "IP Address", "State"]
-  end
-
-  # REFACTOR: Move these three methods to a ResponseReporter
-  def metadata_for(response)
-    [excel_data.user_name_for(response.user_id), excel_data.organization_name_for(response.organization_id), response.last_update,
-      response.location, response.ip_address, response.state]
+  def delayed_job_id
+    @delayed_job.id
   end
 
   def error(job, exception)
@@ -59,5 +54,15 @@ class Reports::Excel::Job < Struct.new(:excel_data)
                                   :aws_secret_access_key => ENV['S3_SECRET'],
                                   :aws_access_key_id => ENV['S3_ACCESS_KEY'])
     connection.directories.get('surveywebexcel')
+  end
+
+  def metadata_headers
+    ["Added By", "Organization", "Last updated at", "Address", "IP Address", "State"]
+  end
+
+  # REFACTOR: Move these three methods to a ResponseReporter
+  def metadata_for(response)
+    [excel_data.user_name_for(response.user_id), excel_data.organization_name_for(response.organization_id), response.last_update,
+      response.location, response.ip_address, response.state]
   end
 end

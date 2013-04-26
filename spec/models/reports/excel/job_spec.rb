@@ -152,6 +152,7 @@ describe Reports::Excel::Job do
 
   it "enqueues a delayed job which will run it's own perform method" do
     data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+    p responses.count
     job = Reports::Excel::Job.new(data)
     expect { job.start }.to change { Delayed::Job.where(:queue => 'generate_excel').count }.by(1)
   end
