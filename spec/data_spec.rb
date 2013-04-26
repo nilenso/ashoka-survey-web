@@ -23,4 +23,9 @@ describe Reports::Excel::Data do
     data = Reports::Excel::Data.new(survey, [], server_url, access_token)
     data.organization_name_for(1).should == "CSOOrganization"
   end
+
+  it "finds the filename from the survey" do
+    data = Reports::Excel::Data.new(survey, [], server_url, access_token)
+    data.file_name.should == survey.filename_for_excel
+  end
 end

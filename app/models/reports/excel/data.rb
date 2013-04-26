@@ -16,4 +16,8 @@ class Reports::Excel::Data
     @organizations ||= Organization.all(@access_token)
     @organizations.find { |o| o.id == id }.name
   end
+
+  def file_name
+    survey.filename_for_excel
+  end
 end

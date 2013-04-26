@@ -10,6 +10,8 @@ require 'rspec/autorun'
 require 'rubygems'
 
 Fog.mock!
+ENV['S3_SECRET'] = "Foo"
+ENV['S3_ACCESS_KEY'] = "Bar"
 
 CarrierWave.configure do |config|
   config.storage = :file
