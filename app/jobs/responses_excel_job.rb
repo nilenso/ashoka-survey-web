@@ -4,6 +4,8 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
     directory.files.create(:key => filename, :body => package.to_stream, :public => true)
   end
 
+  # REFACTOR: Use a `sheet` abstraction which internally adds all its rows to a AXSLX worksheet
+  # REFACTOR: Use a `style` abstraction
   def package
     return if response_ids.empty?
     Axlsx::Package.new do |p|
@@ -37,6 +39,7 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
     ["Added By", "Organization", "Last updated at", "Address", "IP Address", "State"]
   end
 
+  # REFACTOR: Move these three methods to a ResponseReporter
   def metadata_for(response)
     [user_name_for(response), organization_name_for(response), response.last_update,
       response.location, response.ip_address, response.state]
