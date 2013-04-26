@@ -1,5 +1,8 @@
 class Reports::Excel::Data
-  def initialize(responses, access_token)
+  attr_reader :survey
+
+  def initialize(survey, responses, access_token)
+    @survey = survey
     @responses = responses
     @access_token = access_token
   end
