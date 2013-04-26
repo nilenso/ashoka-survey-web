@@ -28,4 +28,13 @@ describe Reports::Excel::Data do
       data.responses.should == [old_response, new_response]
     end
   end
+
+  it "finds the organization name for an ID" do
+    orgs_response = mock(OAuth2::Response)
+    access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
+    orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
+
+    data = Reports::Excel::Data.new(Response.where(:user_id => 1), access_token)
+    data.organization_name_for(1).should == "CSOOrganization"
+  end
 end

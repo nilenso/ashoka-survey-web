@@ -9,6 +9,11 @@ class Reports::Excel::Data
     @user_names[id]
   end
 
+  def organization_name_for(id)
+    @organizations ||= Organization.all(@access_token)
+    @organizations.find { |o| o.id == id }.name
+  end
+
   def responses
     @responses.completed.earliest_first
   end
