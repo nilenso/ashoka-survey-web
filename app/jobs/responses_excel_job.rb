@@ -14,7 +14,7 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
       border = wb.styles.add_style border: { style: :thin, color: '000000' }
       questions = survey.questions_in_order.map(&:reporter)
       wb.add_worksheet(name: "Responses") do |sheet|
-        headers = ExcelReports::Row.new("Response No.")
+        headers = Reports::Excel::Row.new("Response No.")
         headers << questions.map(&:header)
         headers << metadata_headers
         sheet.add_row headers.to_a, :style => bold_style
@@ -23,12 +23,12 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
           response_answers =  Answer.where(:response_id => response[:id])
           .order('answers.record_id')
           .includes(:choices => :option).all
-          answers_row = ExcelReports::Row.new(i + 1)
+          answers_row = Reports::Excel::Row.new(i + 1)
           answers_row << questions.map do |question|
             question_answers = response_answers.find_all { |a| a.question_id == question.id }
             question.formatted_answers_for(question_answers, :server_url => server_url)
           end
-          answers_row << metadata_for(response)          
+          answers_row << metadata_for(response)
           sheet.add_row answers_row.to_a, style: border
         end
       end

@@ -1,4 +1,4 @@
-class ExcelReports::Row
+class Reports::Excel::Row
   attr_reader :elements
 
   def initialize(*args)
