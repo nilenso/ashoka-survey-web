@@ -24,6 +24,15 @@ describe Reports::Excel::Data do
     data.organization_name_for(1).should == "CSOOrganization"
   end
 
+  it "returns an empty string if an organization is not found" do
+    orgs_response = mock(OAuth2::Response)
+    access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
+    orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
+
+    data = Reports::Excel::Data.new(survey, [], server_url, access_token)
+    data.organization_name_for(42).should == ""
+  end
+
   it "finds the filename from the survey" do
     data = Reports::Excel::Data.new(survey, [], server_url, access_token)
     data.file_name.should == survey.filename_for_excel

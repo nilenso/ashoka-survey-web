@@ -14,7 +14,8 @@ class Reports::Excel::Data
 
   def organization_name_for(id)
     @organizations ||= Organization.all(@access_token)
-    @organizations.find { |o| o.id == id }.name
+    organization = @organizations.find { |o| o.id == id }
+    organization ? organization.name : ""
   end
 
   def file_name
