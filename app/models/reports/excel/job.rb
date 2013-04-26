@@ -1,4 +1,8 @@
 class Reports::Excel::Job < Struct.new(:excel_data)
+  def start
+    Delayed::Job.enqueue(self, :queue => 'generate_excel')
+  end
+
   def perform
     directory = aws_excel_directory
     directory.files.create(:key => excel_data.file_name, :body => package.to_stream, :public => true)

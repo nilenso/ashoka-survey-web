@@ -149,4 +149,10 @@ describe Reports::Excel::Job do
 
     connection.directories.get("surveywebexcel").files.get(survey.filename_for_excel).should be_present
   end
+
+  it "enqueues a delayed job which will run it's own perform method" do
+    data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+    job = Reports::Excel::Job.new(data)
+    expect { job.start }.to change { Delayed::Job.where(:queue => 'generate_excel').count }.by(1)
+  end
 end
