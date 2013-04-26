@@ -82,6 +82,41 @@ describe ResponsesExcelJob do
         job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
         ws = job.package.workbook.worksheets[0]
         ws.rows[1].cells[2..-1].size.should == (options.size + METADATA_SIZE)        
+      end      
+    end
+
+    context "when setting answers for questions in a multi-record category" do
+      it "inserts a comma-separated list of answers; one from each record" do
+        response = FactoryGirl.create(:response, :survey => survey)
+        category = MultiRecordCategory.create(:content => "foo_category", :survey_id => survey.id)
+        question = FactoryGirl.create(:question, :category => category, :survey => survey)
+        answer_one = FactoryGirl.create(:answer_in_record, :question => question, :response => response, :content => "foo_answer")
+        answer_two = FactoryGirl.create(:answer_in_record, :question => question, :response => response, :content => "bar_answer")
+        job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        ws = job.package.workbook.worksheets[0]
+        ws.should have_cell_containing("foo_answer").in_row(1)
+        ws.should have_cell_containing("bar_answer").in_row(1)
+      end
+
+      it "inserts the answers for each question in the same order of records" do
+        category = MultiRecordCategory.create(:content => "foo_category", :survey_id => survey.id)
+        question_one = FactoryGirl.create(:question, :category => category, :survey => survey)
+        question_two = FactoryGirl.create(:question, :category => category, :survey => survey)
+        response = FactoryGirl.create(:response, :survey => survey)
+
+        record_one = FactoryGirl.create(:record, :response => response)
+        FactoryGirl.create(:answer, :question => question_one, :response => response, :content => "foo_answer", :record => record_one)
+        FactoryGirl.create(:answer, :question => question_two, :response => response, :content => "x_answer", :record => record_one)
+
+        record_two = FactoryGirl.create(:record, :response => response)
+        FactoryGirl.create(:answer, :question => question_one, :response => response, :content => "bar_answer", :record => record_two)
+        FactoryGirl.create(:answer, :question => question_two, :response => response, :content => "y_answer", :record => record_two)
+
+        job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        ws = job.package.workbook.worksheets[0]
+
+        ws.should have_cell("foo_answer, bar_answer").in_row(1)
+        ws.should have_cell("x_answer, y_answer").in_row(1)
       end
     end
   end

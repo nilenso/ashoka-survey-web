@@ -16,6 +16,13 @@ FactoryGirl.define do
       end
     end
 
+    factory :answer_in_record do
+      after(:create) do |answer, _|
+        answer.record = FactoryGirl.create(:record, :response => answer.response)
+        answer.save
+      end
+    end
+
     factory :answer_with_choices do
       question { FactoryGirl.create(:question, :type => 'MultiChoiceQuestion') }
       choices  { FactoryGirl.create_list(:choice, 5) }
