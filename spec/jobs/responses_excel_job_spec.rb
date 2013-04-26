@@ -48,7 +48,7 @@ describe ResponsesExcelJob do
       response = FactoryGirl.create(:response, :user_id => 1, :ip_address => "0.0.0.0", :organization_id => 1, :state => "dirty")
       job = ResponsesExcelJob.new(survey, [response.id], organization_names, user_names, server_url, filename)
       ws = job.package.workbook.worksheets[0]
-      ws.rows[1].cells.last(METADATA_SIZE).map(&:value).should == ["hansel", "C42", response.last_update, "foo_location", "0.0.0.0", "dirty"]
+      ["hansel", "C42", "foo_location", "0.0.0.0", "dirty"].each { |md| ws.should have_cell(md).in_row(1) }
     end
   end
 
