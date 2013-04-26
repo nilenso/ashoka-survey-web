@@ -15,14 +15,11 @@ class ResponsesController < ApplicationController
 
   def generate_excel
     authorize! :generate_excel, @survey
-    user_names = User.names_for_ids(access_token, @responses.map(&:user_id).uniq)
-    organization_names = Organization.all(access_token)
-    filename = @survey.filename_for_excel
-    @complete_responses = @responses.where(:status => 'complete').order('updated_at')
-    response_ids = @complete_responses.to_a.map(&:id)
-    job = Delayed::Job.enqueue(Reports::Excel::Job.new(@survey, response_ids, organization_names,
-                                               user_names, server_url, filename), :queue => 'generate_excel')
-    render :json => { :excel_path => filename, :id => job.id }
+    @complete_responses = @responses.completed.earliest_first.all
+    data = Reports::Excel::Data.new(@survey, @complete_responses, server_url, access_token)
+    job = Reports::Excel::Job.new(data)
+    job.start
+    render :json => { :excel_path => data.file_name, :id => job.delayed_job_id }
   end
 
   def create
