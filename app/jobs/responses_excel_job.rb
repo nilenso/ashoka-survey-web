@@ -12,25 +12,29 @@ class ResponsesExcelJob < Struct.new(:survey, :response_ids, :organization_names
       border = wb.styles.add_style border: { style: :thin, color: '000000' }
       questions = survey.questions_in_order.map(&:reporter)
       wb.add_worksheet(name: "Responses") do |sheet|
-        headers = questions.map(&:header).flatten
-        headers.unshift("Response No.")
-        headers << "Added By" << "Organization" << "Last updated at" << "Address" << "IP Address" << "State"
-        sheet.add_row headers, :style => bold_style
+        headers = ExcelReports::Row.new("Response No.")
+        headers << questions.map(&:header)
+        headers << metadata_headers
+        sheet.add_row headers.to_a, :style => bold_style
         responses = Response.where('responses.id in (?)', response_ids)
         responses.each_with_index do |response, i|
           response_answers =  Answer.where(:response_id => response[:id])
           .order('answers.record_id')
           .includes(:choices => :option).all
-          answers_for_excel = questions.map do |question|
+          answers_row = ExcelReports::Row.new(i + 1)
+          answers_row << questions.map do |question|
             question_answers = response_answers.find_all { |a| a.question_id == question.id }
             question.formatted_answers_for(question_answers, :server_url => server_url)
-          end.flatten
-          answers_for_excel.unshift(i+1)
-          answers_for_excel += metadata_for(response)          
-          sheet.add_row answers_for_excel, style: border
+          end
+          answers_row << metadata_for(response)          
+          sheet.add_row answers_row.to_a, style: border
         end
       end
     end
+  end
+
+  def metadata_headers
+    ["Added By", "Organization", "Last updated at", "Address", "IP Address", "State"]
   end
 
   def metadata_for(response)
