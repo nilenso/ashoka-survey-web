@@ -1,4 +1,4 @@
-class Reports::Excel::Job < Struct.new(:survey, :response_ids, :organization_names, :user_names, :server_url, :filename)
+class Reports::Excel::Job < Struct.new(:excel_data)
   def perform
     directory = aws_excel_directory
     directory.files.create(:key => filename, :body => package.to_stream, :public => true)
@@ -7,26 +7,25 @@ class Reports::Excel::Job < Struct.new(:survey, :response_ids, :organization_nam
   # REFACTOR: Use a `sheet` abstraction which internally adds all its rows to a AXSLX worksheet
   # REFACTOR: Use a `style` abstraction
   def package
-    return if response_ids.empty?
+    return if excel_data.responses.empty?
     Axlsx::Package.new do |p|
       wb = p.workbook
       bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
       border = wb.styles.add_style border: { style: :thin, color: '000000' }
-      questions = survey.questions_in_order.map(&:reporter)
+      questions = excel_data.survey.questions_in_order.map(&:reporter)
       wb.add_worksheet(name: "Responses") do |sheet|
         headers = Reports::Excel::Row.new("Response No.")
         headers << questions.map(&:header)
         headers << metadata_headers
         sheet.add_row headers.to_a, :style => bold_style
-        responses = Response.where('responses.id in (?)', response_ids)
-        responses.each_with_index do |response, i|
+        excel_data.responses.each_with_index do |response, i|
           response_answers =  Answer.where(:response_id => response[:id])
           .order('answers.record_id')
           .includes(:choices => :option).all
           answers_row = Reports::Excel::Row.new(i + 1)
           answers_row << questions.map do |question|
             question_answers = response_answers.find_all { |a| a.question_id == question.id }
-            question.formatted_answers_for(question_answers, :server_url => server_url)
+            question.formatted_answers_for(question_answers, :server_url => excel_data.server_url)
           end
           answers_row << metadata_for(response)
           sheet.add_row answers_row.to_a, style: border
@@ -41,18 +40,9 @@ class Reports::Excel::Job < Struct.new(:survey, :response_ids, :organization_nam
 
   # REFACTOR: Move these three methods to a ResponseReporter
   def metadata_for(response)
-    [user_name_for(response), organization_name_for(response), response.last_update,
+    [excel_data.user_name_for(response.user_id), excel_data.organization_name_for(response.organization_id), response.last_update,
       response.location, response.ip_address, response.state]
   end
-
-  def user_name_for(response)
-    user_names[response.user_id]
-  end
-
-  def organization_name_for(response)
-    organization_names.find { |org| org.id == response[:organization_id] }.try(:name)
-  end
-
 
   def error(job, exception)
     Airbrake.notify(exception)

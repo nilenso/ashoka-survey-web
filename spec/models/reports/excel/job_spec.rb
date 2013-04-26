@@ -2,17 +2,24 @@ require 'spec_helper'
 
 describe Reports::Excel::Job do
   METADATA_SIZE = 6
-
   let(:survey) { FactoryGirl.create(:survey) }
-  let(:organization_names) { [Organization.new(1, "C42")] }
-  let(:user_names) { { 1 => "Han", 2 => "Solo" } }
+  let(:responses) { FactoryGirl.create_list(:response, 5, :survey => survey) }
   let(:server_url) { "http://example.com" }
-  let(:filename) { "foo.xlsx" }
-  let(:response_ids) { FactoryGirl.create_list(:response, 5, :survey => survey).map(&:id) }
+
+  before(:each) do
+    @access_token = mock(OAuth2::AccessToken)
+    @orgs_response = mock(OAuth2::Response)
+    @access_token.stub(:get).with('/api/organizations').and_return(@orgs_response)
+    @orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
+    @names_response = mock(OAuth2::Response)
+    @access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1].to_json}).and_return(@names_response)
+    @names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}])
+  end
 
   it "sets first cell of each row to the serial number of that response" do
-    response_ids = FactoryGirl.create_list(:response, 5, :survey => survey).map(&:id)
-    job = Reports::Excel::Job.new(survey, response_ids, organization_names, user_names, server_url, filename)
+    responses = FactoryGirl.create_list(:response, 5, :survey => survey, :status => "complete")
+    data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+    job = Reports::Excel::Job.new(data)
     wb = job.package.workbook
     col = wb.worksheets[0].cols[0]
     col.map(&:value).should == ["Response No.", 1, 2, 3, 4, 5]
@@ -23,7 +30,8 @@ describe Reports::Excel::Job do
       questions = []
       questions << FactoryGirl.create(:question, :survey => survey, :content => "foo")
       questions << FactoryGirl.create(:question, :survey => survey, :content => "bar")
-      job = Reports::Excel::Job.new(survey, response_ids, organization_names, user_names, server_url, filename)
+      data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+      job = Reports::Excel::Job.new(data)
       ws = job.package.workbook.worksheets[0]
       question_cells = ws.rows[0].cells[1..2]
       question_cells.each.with_index do |q, i|
@@ -35,18 +43,22 @@ describe Reports::Excel::Job do
       question_with_options = MultiChoiceQuestion.create(:content => "Foo")
       question_with_options.update_column :survey_id, survey.id
       option_foo = FactoryGirl.create(:option, :question => question_with_options, :content => "Foo Option")
-      job = Reports::Excel::Job.new(survey, response_ids, organization_names, user_names, server_url, filename)
+      data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+      job = Reports::Excel::Job.new(data)
       ws = job.package.workbook.worksheets[0]
       ws.should have_header_cell("Foo Option")
     end
 
     it "should include the metadata information" do
+      @orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "C42"}, {"id" => 2, "name" => "Ashoka"}])
+      @names_response.stub(:parsed).and_return([{"id" => 1, "name" => "hansel"}])
+
       Geocoder.configure(:lookup => :test)
       Geocoder::Lookup::Test.set_default_stub([{ 'address' => 'foo_location' }])
-      user_names = { 1 => "hansel", 2 => "gretel" }
-      organization_names = [Organization.new(1, "C42"), Organization.new(2, "Ashoka")]
+
       response = FactoryGirl.create(:response, :user_id => 1, :ip_address => "0.0.0.0", :organization_id => 1, :state => "dirty")
-      job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
+      data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+      job = Reports::Excel::Job.new(data)
       ws = job.package.workbook.worksheets[0]
       ["hansel", "C42", "foo_location", "0.0.0.0", "dirty"].each { |md| ws.should have_cell(md).in_row(1) }
     end
@@ -57,7 +69,8 @@ describe Reports::Excel::Job do
       response = FactoryGirl.create(:response, :survey => survey)
       question = FactoryGirl.create(:question, :survey => survey)
       answer = FactoryGirl.create(:answer, :question => question, :response => response, :content => "answer_foo")
-      job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
+      data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+      job = Reports::Excel::Job.new(data)
       ws = job.package.workbook.worksheets[0]
       ws.should have_cell("answer_foo").in_row(1)
     end
@@ -68,7 +81,8 @@ describe Reports::Excel::Job do
         question = MultiChoiceQuestion.create(:content => "foo_content")
         question.update_column(:survey_id, survey.id)
         answer = FactoryGirl.create(:answer, :question => question, :response => response)
-        job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+        job = Reports::Excel::Job.new(data)
         ws = job.package.workbook.worksheets[0]
         ws.rows[1].cells[1].value.should == ""
       end
@@ -79,7 +93,8 @@ describe Reports::Excel::Job do
         question.update_column(:survey_id, survey.id)
         options = FactoryGirl.create_list(:option, 5, :question => question)
         answer = FactoryGirl.create(:answer, :question => question, :response => response)
-        job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+        job = Reports::Excel::Job.new(data)
         ws = job.package.workbook.worksheets[0]
         ws.rows[1].cells[2..-1].size.should == (options.size + METADATA_SIZE)
       end
@@ -92,7 +107,8 @@ describe Reports::Excel::Job do
         question = FactoryGirl.create(:question, :category => category, :survey => survey)
         answer_one = FactoryGirl.create(:answer_in_record, :question => question, :response => response, :content => "foo_answer")
         answer_two = FactoryGirl.create(:answer_in_record, :question => question, :response => response, :content => "bar_answer")
-        job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+        job = Reports::Excel::Job.new(data)
         ws = job.package.workbook.worksheets[0]
         ws.should have_cell_containing("foo_answer").in_row(1)
         ws.should have_cell_containing("bar_answer").in_row(1)
@@ -112,7 +128,8 @@ describe Reports::Excel::Job do
         FactoryGirl.create(:answer, :question => question_one, :response => response, :content => "bar_answer", :record => record_two)
         FactoryGirl.create(:answer, :question => question_two, :response => response, :content => "y_answer", :record => record_two)
 
-        job = Reports::Excel::Job.new(survey, [response.id], organization_names, user_names, server_url, filename)
+        data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+        job = Reports::Excel::Job.new(data)
         ws = job.package.workbook.worksheets[0]
 
         ws.should have_cell("foo_answer, bar_answer").in_row(1)
