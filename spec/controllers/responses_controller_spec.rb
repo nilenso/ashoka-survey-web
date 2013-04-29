@@ -151,7 +151,7 @@ describe ResponsesController do
       validating_response = FactoryGirl.create(:response, :status => 'validating', :survey => survey)
       get :generate_excel, :survey_id => survey.id
       response.should be_ok
-      assigns(:complete_responses).should == [resp]
+      assigns(:responses).should == [resp]
     end
 
     it "creates a delayed job to generate the excel" do

@@ -15,8 +15,8 @@ class ResponsesController < ApplicationController
 
   def generate_excel
     authorize! :generate_excel, @survey
-    @complete_responses = @responses.completed.earliest_first.all
-    data = Reports::Excel::Data.new(@survey, @complete_responses, server_url, access_token)
+    @responses = Reports::Excel::ResponsesFilter.new(@responses).filter.all
+    data = Reports::Excel::Data.new(@survey, @responses, server_url, access_token)
     job = Reports::Excel::Job.new(data)
     job.start
     render :json => { :excel_path => data.file_name, :id => job.delayed_job_id }
