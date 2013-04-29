@@ -11,7 +11,6 @@ class URL::Shortener
   end
 
   def shorten
-    foo = @client.shorten(@url)
-    foo.short_url
+    @client.shorten(@url).short_url
   end
 end
