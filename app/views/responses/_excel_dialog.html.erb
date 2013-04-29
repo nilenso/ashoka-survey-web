@@ -1,14 +1,23 @@
 <div id="excel-dialog" title="<%= t('responses.excel.excel_dialog_title') %>">
-  <fieldset class="pick-date-range">
-    <legend>
-      <input id="date-range-checkbox" type="checkbox"></input>
-      <label class='date-range' for="date-range-checkbox">Pick Date Range</label>
-    </legend>
+  <div class="setup">
+    <fieldset class="pick-date-range">
+      <legend>
+        <input id="date-range-checkbox" type="checkbox"></input>
+        <label class='date-range' for="date-range-checkbox">Pick Date Range</label>
+      </legend>
 
-    <input disabled type="text" class="from-date date-picker" placeholder="From"></input>
-    <input disabled type="text" class="to-date date-picker" placeholder="To"></input>
-  </fieldset>
+      <input disabled type="text" class="from-date date-picker" placeholder="<%= t('responses.excel.from_date')%>"></input>
+      <input disabled type="text" class="to-date date-picker" placeholder="<%= t('responses.excel.to_date')%>"></input>
+    </fieldset>
 
-  <button class="generate-button">Generate Excel</button>
-  <button class="cancel-button">Cancel</button>
+    <button class="generate-button"><%= t("responses.excel.generate_excel") %></button>
+    <button class="cancel-button"><%= t("responses.excel.cancel") %></button>
+  </div>
+
+  <div class="polling">
+    <div id="dialog" title="<%= t('responses.excel.excel_dialog_title') %>">
+      <%= image_tag 'spinner.gif', :class => "excel_spinner" %>
+      <p class="polling-message"><%= t('responses.excel.excel_downloading_message') %></p>
+    </div>
+  </div>
 </div>

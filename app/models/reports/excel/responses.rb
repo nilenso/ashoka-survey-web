@@ -22,7 +22,7 @@ class Reports::Excel::Responses
   end
 
   def between(from, to)
-    @responses = @responses.created_between(from, to) if from && to
+    @responses = @responses.created_between(from, to) if from.present? && to.present?
     self
   end
 end

@@ -25,8 +25,8 @@
             <td>
             <% if answer.photo_url.present? %>
               <%= image_tag answer.photo_url(:format => :thumb), :class => 'thumb' %>
-            <% else %>  
-              <%= answer.content %> 
+            <% else %>
+              <%= answer.content %>
             <% end %>
             </td>
           <% end %>
@@ -65,7 +65,6 @@
 <%= will_paginate @responses %>
 
 <script type="text/javascript">
-    var excel_downloader = new ExcelDownloader($("#excel-dialog"), $(".download_excel"), <%= @survey.id %>)
-    excel_downloader.start
+    new ExcelDownloader($("#excel-dialog"), $(".download_excel"), <%= @survey.id %>)
 </script>
 

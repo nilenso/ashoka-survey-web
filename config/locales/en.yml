@@ -185,8 +185,12 @@ en:
       errors_in_response: "There seem to be some errors in your response. Please check your input and try again."
 
     excel:
+      from_date: "From"
+      to_date: "To"
+      generate_excel: "Download Excel"
+      cancel: "Cancel"
       excel_dialog_title: "Generating Excel…"
-      excel_downloading_message: "Your excel file is getting generated.\nThis mght take a few minutes. Please wait."
+      excel_downloading_message: "Your excel file is getting generated.\nThis might take a few minutes. Please wait."
 
   answers:
     validations:

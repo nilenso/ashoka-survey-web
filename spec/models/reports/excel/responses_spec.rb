@@ -28,5 +28,12 @@ describe Reports::Excel::Responses do
       response_after_range = Timecop.freeze(2.days.ago) { FactoryGirl.create(:response, :status => "complete") }
       Reports::Excel::Responses.new(Response.scoped).build.all.should =~ [response_before_range, response_within_range, response_after_range]
     end
+
+    it "includes all the responses if empty strings are passed in as the date range" do
+      response_before_range = Timecop.freeze(15.days.ago) { FactoryGirl.create(:response, :status => "complete") }
+      response_within_range = Timecop.freeze(7.days.ago) { FactoryGirl.create(:response, :status => "complete") }
+      response_after_range = Timecop.freeze(2.days.ago) { FactoryGirl.create(:response, :status => "complete") }
+      Reports::Excel::Responses.new(Response.scoped).build(:from => "", :to => "").all.should =~ [response_before_range, response_within_range, response_after_range]
+    end
   end
 end
