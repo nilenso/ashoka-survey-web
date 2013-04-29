@@ -1,4 +1,4 @@
-require 'URI'
+require 'uri'
 
 class URL::Shortener
   def initialize(url)
