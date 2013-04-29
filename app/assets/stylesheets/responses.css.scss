@@ -33,13 +33,37 @@ table{
 
 }
 
-#dialog, .no-close .ui-dialog-titlebar-close {
+.no-close .ui-dialog-titlebar-close {
   display:none;
 }
 
-.excel_spinner {
-  margin: 10px auto 0 auto;
-  display: block;
+#excel-dialog {
+  display: none;
+  padding: 15px;
+
+  .pick-date-range {
+    padding: 15px;
+
+    label.date-range { display: inline; }
+    legend { padding: 0 10px;}
+
+    .from-date {
+      width: 48%;
+      float:left;
+      padding: 10px;
+    }
+
+    .to-date {
+      padding: 10px;
+      width: 48%;
+      float: right;
+    }
+  }
+
+  .excel_spinner {
+    margin: 10px auto 0 auto;
+    display: block;
+  }
 }
 
 div.ui-widget-overlay {

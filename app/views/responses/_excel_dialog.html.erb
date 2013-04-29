@@ -1,4 +1,11 @@
-<div id="dialog" title="<%= t('responses.excel.excel_dialog_title') %>">
-  <%= image_tag 'spinner.gif', :class => "excel_spinner" %>
-  <p><%= t('responses.excel.excel_downloading_message') %></p>
+<div id="excel-dialog" title="<%= t('responses.excel.excel_dialog_title') %>">
+  <fieldset class="pick-date-range">
+    <legend>
+      <input id="date-range-checkbox" type="checkbox"></input>
+      <label class='date-range' for="date-range-checkbox">Pick Date Range</label>
+    </legend>
+
+    <input type="text" class="from-date" placeholder="From"></input>
+    <input type="text" class="to-date" placeholder="To"></input>
+  </fieldset>
 </div>

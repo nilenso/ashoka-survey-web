@@ -47,8 +47,6 @@
           <% end %>
           </td>
 
-          <%= render "responses/excel_dialog" %>
-
           <td class="actions">
             <%= link_to icon_for('icon-edit', 'Show'), survey_response_path(:id => response.id), :class => 'show_response' if can? :show, response %>
             <%= link_to icon_for('icon-edit', 'Edit'), edit_survey_response_path(:id => response.id), :class => 'edit_response' if can? :edit, response %>
@@ -59,11 +57,15 @@
       </tbody>
     </table>
   <% end %>
+
+<%= render "responses/excel_dialog" %>
+
 </div>
 
 <%= will_paginate @responses %>
 
 <script type="text/javascript">
-    new ExcelDownloader(<%= @survey.id %>)
+    var excel_downloader = new ExcelDownloader($("#excel-dialog"), $(".download_excel"), <%= @survey.id %>)
+    excel_downloader.start
 </script>
 

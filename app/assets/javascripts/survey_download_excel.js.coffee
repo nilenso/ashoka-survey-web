@@ -1,15 +1,20 @@
 class window.ExcelDownloader
-  constructor: (survey_id) ->
-    $('.download_excel').click =>
-      @dialog = $("#dialog" ).dialog
+  constructor: (@container, download_button, survey_id) ->
+    download_button.click =>
+      @container.find(".from-date").datepicker({ dateFormat: "yy-mm-dd" });
+      @container.find(".to-date").datepicker({ dateFormat: "yy-mm-dd" });
+      @dialog = $("#excel-dialog" ).dialog
         dialogClass: "no-close"
         modal: true
+        width: 600
+        height: 200
 
-      $.getJSON("/surveys/#{survey_id}/responses/generate_excel", (data) =>
-        @filename = data.excel_path
-        @id = data.id
-        @interval = setInterval(@poll, 5000)
-      )
+  start: =>
+    $.getJSON("/surveys/#{survey_id}/responses/generate_excel", (data) =>
+      @filename = data.excel_path
+      @id = data.id
+      @interval = setInterval(@poll, 5000)
+    )
 
   poll: =>
     console.log "Polling for the excel file."
