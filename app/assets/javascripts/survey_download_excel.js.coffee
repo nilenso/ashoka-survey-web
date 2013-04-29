@@ -1,13 +1,24 @@
 class window.ExcelDownloader
   constructor: (@container, download_button, survey_id) ->
-    download_button.click =>
-      @container.find(".from-date").datepicker({ dateFormat: "yy-mm-dd" });
-      @container.find(".to-date").datepicker({ dateFormat: "yy-mm-dd" });
-      @dialog = $("#excel-dialog" ).dialog
-        dialogClass: "no-close"
-        modal: true
-        width: 600
-        height: 200
+    download_button.click(@initialize)
+
+  initialize: =>
+    @pickers = @container.find(".date-picker")
+    @container.find(".from-date").datepicker({ dateFormat: "yy-mm-dd" });
+    @container.find(".to-date").datepicker({ dateFormat: "yy-mm-dd" });
+    @dialog = $("#excel-dialog" ).dialog
+      dialogClass: "no-close"
+      modal: true
+      width: 600
+      height: 200
+    @container.find("#date-range-checkbox").click =>
+      @toggle_date_pickers()
+
+  toggle_date_pickers:  =>
+    if @pickers.attr('disabled')
+      @pickers.removeAttr('disabled')
+    else
+      @pickers.attr('disabled', 'disabled')
 
   start: =>
     $.getJSON("/surveys/#{survey_id}/responses/generate_excel", (data) =>
