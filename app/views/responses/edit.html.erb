@@ -3,9 +3,11 @@
 <header>
   <%= button_to t(".edit"), edit_survey_response_path(@survey.id, @response.id),:class => "edit-button", :method => :get if @disabled && (can? :edit, @response) %>
   <%= button_to t(".delete"), survey_response_path(@survey.id, @response.id),:class => "delete-button", :method => :delete, :data => { :confirm => t(:confirm) } if can? :destroy, @response %>
-  <h2><%= t('.edit_response') %> <%= @survey.name %></h2>
   <% if @response.survey_public? %>
+    <h2><%= @survey.name %></h2>
     <h3><%= @survey.description %></h3>
+   <% else %>
+    <h2><%= t('.edit_response') %> <%= @survey.name %></h2>
   <% end %>
 </header>
 <% cache = [] %>
