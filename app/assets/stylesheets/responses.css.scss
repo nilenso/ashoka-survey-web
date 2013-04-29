@@ -60,6 +60,27 @@ table{
     }
   }
 
+  .generate-button {
+    float: right;
+    margin: 19px 0 0 10px;
+  }
+
+  .cancel-button {
+    float:right;
+    margin-top: 19px;
+    background: none;
+    border: none;
+    color: $secondary-color-dark;
+    margin-top: 22px;
+    font-size: 13px;
+    font-weight: 400;
+
+    &:hover {
+      color: darken($secondary-color-dark, 10%);
+      text-decoration: underline;
+    }
+  }
+
   .excel_spinner {
     margin: 10px auto 0 auto;
     display: block;
