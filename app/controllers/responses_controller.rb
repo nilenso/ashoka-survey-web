@@ -15,7 +15,7 @@ class ResponsesController < ApplicationController
 
   def generate_excel
     authorize! :generate_excel, @survey
-    @responses = Reports::Excel::ResponsesFilter.new(@responses).filter.all
+    @responses = Reports::Excel::Responses.new(@responses).build(:from => params[:from], :to => params[:to]).all
     data = Reports::Excel::Data.new(@survey, @responses, server_url, access_token)
     job = Reports::Excel::Job.new(data)
     job.start

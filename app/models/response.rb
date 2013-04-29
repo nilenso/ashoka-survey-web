@@ -26,6 +26,10 @@ class Response < ActiveRecord::Base
 
   MAX_PAGE_SIZE = 50
 
+  def self.created_between(from, to)
+    where(:created_at => from..to)
+  end
+  
   def self.page_size(params_page_size=nil)
     if params_page_size.blank?
       MAX_PAGE_SIZE

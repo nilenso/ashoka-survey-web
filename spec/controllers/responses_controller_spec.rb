@@ -177,6 +177,18 @@ describe ResponsesController do
       response.should be_ok
       JSON.parse(response.body)['id'].should == Delayed::Job.all.last.id
     end
+
+    context "when filtering by date range" do
+      it "includes responses created during the specified range" do
+        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+        date_range = (5.days.ago)..(5.days.from_now)
+        early_response = Timecop.freeze(7.days.ago) { FactoryGirl.create(:response, :status => 'complete', :survey => survey) }
+        late_response = Timecop.freeze(7.days.from_now) { FactoryGirl.create(:response, :status => 'complete', :survey => survey) }
+        response = FactoryGirl.create(:response, :status => 'complete', :survey => survey)
+        get :generate_excel, :survey_id => survey.id, :from => date_range.first, :to => date_range.last
+        assigns(:responses).should == [response]
+      end
+    end
   end
 
   context "GET 'edit'" do

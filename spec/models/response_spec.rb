@@ -35,6 +35,23 @@ describe Response do
       incomplete_response = FactoryGirl.create(:response, :status => "incomplete")
       Response.completed.should == [complete_response]
     end
+
+    context "created_between" do
+      it "returns responses in a date range" do
+        from, to = (10.days.ago), (5.days.ago)
+        response_before_range = Timecop.freeze(15.days.ago) { FactoryGirl.create(:response) }
+        response_within_range = Timecop.freeze(7.days.ago) { FactoryGirl.create(:response) }
+        response_after_range = Timecop.freeze(2.days.ago) { FactoryGirl.create(:response) }
+        Response.created_between(from, to).should == [response_within_range]
+      end
+
+      it "includes responses created at the from and to dates" do
+        from, to = (10.days.ago), (5.days.ago)
+        from_date_response = Timecop.freeze(from) { FactoryGirl.create(:response) }
+        to_date_response = Timecop.freeze(to) { FactoryGirl.create(:response) }
+        Response.created_between(from, to).should =~ [from_date_response, to_date_response]
+      end
+    end
   end
 
   it "fetches the answers for the identifier questions" do
