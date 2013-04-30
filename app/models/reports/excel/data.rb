@@ -19,6 +19,6 @@ class Reports::Excel::Data
   end
 
   def file_name
-    survey.filename_for_excel
+    @file_name ||= survey.filename_for_excel
   end
 end

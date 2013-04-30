@@ -37,4 +37,10 @@ describe Reports::Excel::Data do
     data = Reports::Excel::Data.new(survey, [], server_url, access_token)
     data.file_name.should == survey.filename_for_excel
   end
+
+  it "does not mutate the filename" do
+    data = Reports::Excel::Data.new(survey, [], server_url, access_token)
+    old_file_name = data.file_name
+    Timecop.freeze(5.days.from_now) { data.file_name.should == old_file_name  }
+  end
 end
