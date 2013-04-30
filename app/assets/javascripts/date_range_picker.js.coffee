@@ -8,11 +8,11 @@ class SurveyApp.DateRangePicker
     @toggle.click(@toggle_date_pickers)
 
   toggle_date_pickers:  =>
-    pickers = @container.find(".date-picker")
-    if pickers.attr('disabled')
-      pickers.removeAttr('disabled')
+    @pickers = @container.find(".date-picker")
+    if @toggle.attr('checked')
+      @pickers.removeAttr('disabled')
     else
-      pickers.attr('disabled', 'disabled')
+      @pickers.attr('disabled', 'disabled')
 
   prepare_params: =>
     if @toggle.attr('checked')
@@ -38,4 +38,10 @@ class SurveyApp.DateRangePicker
         true
     else
       true
+
+  reset: =>
+    @from.val('')
+    @to.val('')
+    @toggle.removeAttr('checked')
+    @pickers.attr("disabled", "disabled")
 

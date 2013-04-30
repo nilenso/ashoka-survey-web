@@ -1,13 +1,13 @@
 class SurveyApp.ExcelDownloader
   constructor: (@container, download_button, @survey_id) ->
     download_button.click(@initialize)
-
-  initialize: =>
     @container.find(".polling").hide()
     @date_range = new SurveyApp.DateRangePicker(@container.find(".pick-date-range"))
     @container.find(".cancel-button").click(@close_dialog)
     @container.find(".generate-button").click(@start)
     @error_message_container = @container.find(".error-message")
+
+  initialize: =>
     @dialog = $("#excel-dialog" ).dialog
       dialogClass: "no-close"
       modal: true
@@ -37,7 +37,7 @@ class SurveyApp.ExcelDownloader
       else
         console.log "Generated excel. Downloading..."
         clearInterval(@interval)
-        window.location = "https://s3.amazonaws.com/surveywebexcel/#{@filename}"
+        #window.location = "https://s3.amazonaws.com/surveywebexcel/#{@filename}"
         @close_dialog()
     )
 
@@ -50,4 +50,9 @@ class SurveyApp.ExcelDownloader
     @error_message_container.html(error_message)
 
   close_dialog: =>
+    @reset()
     @dialog.dialog('close')
+
+  reset: =>
+    @date_range.reset()
+    @error_message_container.val('')
