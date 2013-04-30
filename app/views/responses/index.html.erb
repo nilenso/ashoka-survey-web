@@ -65,6 +65,6 @@
 <%= will_paginate @responses %>
 
 <script type="text/javascript">
-    new ExcelDownloader($("#excel-dialog"), $(".download_excel"), <%= @survey.id %>)
+    new SurveyApp.ExcelDownloader($("#excel-dialog"), $(".download_excel"), <%= @survey.id %>)
 </script>
 

@@ -1,10 +1,10 @@
-class window.ExcelDownloader
+class SurveyApp.ExcelDownloader
   constructor: (@container, download_button, @survey_id) ->
     download_button.click(@initialize)
 
   initialize: =>
     @container.find(".polling").hide()
-    @prepare_datepickers()
+    @date_range = new SurveyApp.DateRangePicker(@container.find(".pick-date-range"))
     @container.find(".cancel-button").click(@close_dialog)
     @container.find(".generate-button").click(@start)
     @dialog = $("#excel-dialog" ).dialog
@@ -12,20 +12,6 @@ class window.ExcelDownloader
       modal: true
       width: 600
       height: 200
-    @container.find("#date-range-checkbox").click =>
-      @toggle_date_pickers()
-
-  prepare_datepickers: =>
-    date_format = "yy-mm-dd"
-    @container.find(".from-date").datepicker({ dateFormat: date_format })
-    @container.find(".to-date").datepicker({ dateFormat: date_format })
-
-  toggle_date_pickers:  =>
-    pickers = @container.find(".date-picker")
-    if pickers.attr('disabled')
-      pickers.removeAttr('disabled')
-    else
-      pickers.attr('disabled', 'disabled')
 
   start: =>
     @container.find(".setup").hide()
@@ -33,9 +19,7 @@ class window.ExcelDownloader
 
     $.ajax "/surveys/#{@survey_id}/responses/generate_excel",
       type: "GET"
-      data:
-        from: @container.find(".from-date").val()
-        to: @container.find(".to-date").val()
+      data: @date_range.prepare_params()
       success: (data) =>
         @filename = data.excel_path
         @id = data.id

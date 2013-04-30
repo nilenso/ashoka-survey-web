@@ -69,6 +69,6 @@
 </div>
 <script>
   $(document).ready(function() {
-    new ExcelDownloader(<%= @survey.id %>)
+    new SurveyApp.ExcelDownloader($("#excel-dialog"), $(".download_excel"), <%= @survey.id %>)
   });
 </script>
