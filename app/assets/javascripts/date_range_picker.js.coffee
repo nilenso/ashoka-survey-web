@@ -1,5 +1,6 @@
 class SurveyApp.DateRangePicker
   constructor: (@container) ->
+    @errors = []
     date_format = "yy-mm-dd"
     @from = @container.find(".from-date").datepicker({ dateFormat: date_format })
     @to = @container.find(".to-date").datepicker({ dateFormat: date_format })
@@ -20,4 +21,21 @@ class SurveyApp.DateRangePicker
     else
       {}
 
+  both_dates_present: =>
+    valid = !_(@from.val()).isEmpty() && !_(@to.val()).isEmpty()
+    @errors.push "You need to add both dates." unless valid
+    valid
+
+  from_less_than_to: =>
+    valid = @from.datepicker("getDate") <= @to.datepicker("getDate")
+    @errors.push "From date must precede To date." unless valid
+    valid
+
+  is_valid: =>
+    @errors = []
+    if @toggle.attr('checked')
+      if @both_dates_present() && @from_less_than_to()
+        true
+    else
+      true
 

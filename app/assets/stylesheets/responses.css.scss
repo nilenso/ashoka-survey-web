@@ -60,6 +60,12 @@ table{
     }
   }
 
+  .error-message {
+    float: left;
+    color: $danger;
+    margin: 19px 0 0 10px;
+  }
+
   .generate-button {
     float: right;
     margin: 19px 0 0 10px;

@@ -7,6 +7,7 @@ class SurveyApp.ExcelDownloader
     @date_range = new SurveyApp.DateRangePicker(@container.find(".pick-date-range"))
     @container.find(".cancel-button").click(@close_dialog)
     @container.find(".generate-button").click(@start)
+    @error_message_container = @container.find(".error-message")
     @dialog = $("#excel-dialog" ).dialog
       dialogClass: "no-close"
       modal: true
@@ -14,6 +15,7 @@ class SurveyApp.ExcelDownloader
       height: 200
 
   start: =>
+    return unless @is_valid()
     @container.find(".setup").hide()
     @container.find(".polling").show()
 
@@ -38,6 +40,14 @@ class SurveyApp.ExcelDownloader
         window.location = "https://s3.amazonaws.com/surveywebexcel/#{@filename}"
         @close_dialog()
     )
+
+  is_valid: =>
+    valid = @date_range.is_valid()
+    @set_error_message(@date_range.errors.toString()) unless valid
+    return valid
+
+  set_error_message: (error_message) =>
+    @error_message_container.html(error_message)
 
   close_dialog: =>
     @dialog.dialog('close')
