@@ -6,9 +6,9 @@ class SurveyApp.DateRangePicker
     @to = @container.find(".to-date").datepicker({ dateFormat: date_format })
     @toggle = @container.find("#date-range-checkbox")
     @toggle.click(@toggle_date_pickers)
+    @pickers = @container.find(".date-picker")
 
   toggle_date_pickers:  =>
-    @pickers = @container.find(".date-picker")
     if @toggle.attr('checked')
       @pickers.removeAttr('disabled')
     else

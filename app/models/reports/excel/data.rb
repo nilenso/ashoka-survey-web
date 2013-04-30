@@ -1,10 +1,11 @@
 class Reports::Excel::Data
-  attr_reader :survey, :responses, :server_url
+  attr_reader :survey, :responses, :server_url, :file_name
 
   def initialize(survey, responses, server_url, access_token)
     @survey = survey
     @responses = responses
     @access_token = access_token
+    @file_name = survey.filename_for_excel
   end
 
   def user_name_for(id)
@@ -16,9 +17,5 @@ class Reports::Excel::Data
     @organizations ||= Organization.all(@access_token)
     organization = @organizations.find { |o| o.id == id }
     organization ? organization.name : ""
-  end
-
-  def file_name
-    @file_name ||= survey.filename_for_excel
   end
 end
