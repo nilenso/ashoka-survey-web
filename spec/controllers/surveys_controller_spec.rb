@@ -233,5 +233,12 @@ describe SurveysController do
       get :report, :id => survey.id
       assigns(:survey).should be_true
     end
+
+    it "assigns the completed responses count" do
+      survey = FactoryGirl.create(:survey, :organization_id => 123)
+      response = FactoryGirl.create(:response, :survey => survey, :status => "complete")
+      get :report, :id => survey.id
+      assigns(:complete_responses_count).should == 1
+    end
   end
 end

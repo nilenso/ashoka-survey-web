@@ -63,6 +63,8 @@ class SurveysController < ApplicationController
 
   def report
     @survey = SurveyDecorator.find(params[:id])
+    responses = Response.accessible_by(current_ability)
+    @complete_responses_count = responses.where(:status => 'complete').count
     @markers = @survey.responses.where(:status => "complete").to_gmaps4rails
   end
 
