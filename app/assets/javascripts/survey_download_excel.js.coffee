@@ -54,5 +54,7 @@ class SurveyApp.ExcelDownloader
     @dialog.dialog('close')
 
   reset: =>
+    @container.find(".polling").hide()
+    @container.find(".setup").show()
     @date_range.reset()
     @error_message_container.val('')
