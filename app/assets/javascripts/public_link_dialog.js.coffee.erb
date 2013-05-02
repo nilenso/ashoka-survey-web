@@ -1,9 +1,9 @@
 class SurveyApp.PublicLinkDialog
-  constructor: (@url)->
+  constructor: (@url) ->
     @dialog = $("#public-link-dialog")
     @dialog.find(".spinner").css('display', 'block')
     @dialog.find(".public-link-container").html("")
-    @dialog.find(".clipboard-button").text("Copy to Clipboard")
+    @dialog.find(".clipboard-button").text(I18n.t('surveys.public_link.copy_to_clipboard'));
     @dialog.find(".clipboard-button").hide()
 
     @dialog.find(".ok-button").click =>
@@ -31,7 +31,7 @@ class SurveyApp.PublicLinkDialog
     @dialog.find(".public-link-container").html(@template(@url))
 
   template: (url) =>
-    "This survey can be crowd-sourced using this link: <div class='public-link'><a href='#{url}'>#{url}</a></div>"
+    I18n.t('surveys.public_link.message') + "<div class='public-link'><a href='#{url}'>#{url}</a></div>"
 
   setup_clipboard: =>
     @dialog.find(".clipboard-button").zclip
@@ -40,11 +40,8 @@ class SurveyApp.PublicLinkDialog
         @dialog.find(".public-link").text()
       afterCopy: ->
         cache = $(this).html()
-        $(this).text "Copied!"
+        $(this).text I18n.t("surveys.public_link.copied")
         that = $(this)
         setTimeout (->
           that.html cache
         ), 1500
-
-
-

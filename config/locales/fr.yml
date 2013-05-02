@@ -54,6 +54,13 @@ fr:
       invalid: "fr is not valid"
       older_than_existing: "fr can not be older than existing value"
 
+    public_link:
+      copy_to_clipboard: "Copier dans le presse papier"
+      message: "Cette enquête peut être foule à un fournisseur via ce lien: "
+      ok_button_text: "Fait"
+      dialog_title: "Obtenez Foule Source référence"
+      copied: "Copié!"
+
     new:
       create_survey: "Créer un nouveau sondage"
       add_single_line_question: "Ajouter une question simple ligne"
