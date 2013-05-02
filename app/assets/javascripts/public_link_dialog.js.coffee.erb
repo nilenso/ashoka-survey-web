@@ -3,21 +3,48 @@ class SurveyApp.PublicLinkDialog
     @dialog = $("#public-link-dialog")
     @dialog.find(".spinner").css('display', 'block')
     @dialog.find(".public-link-container").html("")
+    @dialog.find(".clipboard-button").text("Copy to Clipboard")
+    @dialog.find(".clipboard-button").hide()
+
+    @dialog.find(".ok-button").click =>
+      @dialog.dialog('close')
 
   open: =>
     @dialog.dialog
       modal: true
-      width: 600
-      height: 150
+      width: 400
+      height: 175
+      dialogClass: "no-close"
+
     new SurveyApp.URLShortener().shorten(@url, @success, @failure)
 
   success: (data) =>
+    @dialog.find(".clipboard-button").css('display', 'block')
+    @setup_clipboard()
     @dialog.find(".spinner").hide()
     @dialog.find(".public-link-container").html(@template(data.url))
 
   failure: (data) =>
+    @dialog.find(".clipboard-button").css('display', 'block')
+    @setup_clipboard()
     @dialog.find(".spinner").hide()
     @dialog.find(".public-link-container").html(@template(@url))
 
   template: (url) =>
     "This survey can be crowd-sourced using this link: <div class='public-link'><a href='#{url}'>#{url}</a></div>"
+
+  setup_clipboard: =>
+    @dialog.find(".clipboard-button").zclip
+      path: "assets/ZeroClipboard.swf"
+      copy: =>
+        @dialog.find(".public-link").text()
+      afterCopy: ->
+        cache = $(this).html()
+        $(this).text "Copied!"
+        that = $(this)
+        setTimeout (->
+          that.html cache
+        ), 1500
+
+
+
