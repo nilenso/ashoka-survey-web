@@ -80,6 +80,7 @@ class ResponsesController < ApplicationController
     @response.update_column('status', 'complete')
     if @response.survey_public? && !user_currently_logged_in?
       @public_response = public_response?
+      @survey = @response.survey.decorate
       render "thank_you"
     else
       redirect_to survey_responses_path(@response.survey_id), :notice => "Successfully updated"
