@@ -1,7 +1,7 @@
 class SurveyApp.PublicLinkDialog
   constructor: (@url)->
     @dialog = $("#public-link-dialog")
-    @dialog.find(".spinner").show()
+    @dialog.find(".spinner").css('display', 'block')
     @dialog.find(".public-link-container").html("")
 
   open: =>
