@@ -8,6 +8,7 @@ class SurveyApp.URLShortener
     , (response) =>
       if response.status_code >= 400
         console.log("Error while shortening URL")
+        console.log(response)
         failure && failure(response)
       else
         console.log("Successfully shortened #{url} to #{response.data.url}")

@@ -89,6 +89,8 @@
     </ul>
 <% end %>
 
+<%= render "surveys/public_link_dialog" %>
+
 <%= will_paginate @surveys %>
 
 <script type="text/javascript">
@@ -97,19 +99,8 @@
             return false;
         });
 
-        $('a.copy_public_link').each(function(){
-            $(this).zclip({
-                path: 'assets/ZeroClipboard.swf',
-                copy: $(this).data('public-link'),
-                afterCopy: function() {
-                    var cache = $(this).html();
-                    $(this).text("<%= t('.copied') %>");
-                    var that = $(this);
-                    setTimeout(function(){
-                        that.html(cache);
-                    }, 3000)
-                }
-            });
+        $('a.copy_public_link').click(function(){
+            new SurveyApp.PublicLinkDialog($(this).data('public-link')).open();
         });
     });
 </script>

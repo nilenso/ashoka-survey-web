@@ -1,0 +1,23 @@
+class SurveyApp.PublicLinkDialog
+  constructor: (@url)->
+    @dialog = $("#public-link-dialog")
+    @dialog.find(".spinner").show()
+    @dialog.find(".public-link-container").html("")
+
+  open: =>
+    @dialog.dialog
+      modal: true
+      width: 600
+      height: 150
+    new SurveyApp.URLShortener().shorten(@url, @success, @failure)
+
+  success: (data) =>
+    @dialog.find(".spinner").hide()
+    @dialog.find(".public-link-container").html(@template(data.url))
+
+  failure: (data) =>
+    @dialog.find(".spinner").hide()
+    @dialog.find(".public-link-container").html(@template(@url))
+
+  template: (url) =>
+    "This survey can be crowd-sourced using this link: <div class='public-link'><a href='#{url}'>#{url}</a></div>"

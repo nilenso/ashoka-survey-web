@@ -1,0 +1,19 @@
+div#public-link-dialog {
+
+  .no-close .ui-dialog-titlebar-close {
+    display:none;
+  }
+
+  display: none;
+  .spinner {
+    display: none;
+    margin: 10px auto 0 auto;
+  }
+
+  div.public-link {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 20px;
+    line-height: 25px;
+  }
+}
