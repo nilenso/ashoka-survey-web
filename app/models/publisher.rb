@@ -12,8 +12,9 @@ class Publisher
     @organizations = Sanitizer.clean_params(params[:participating_organization_ids])
     @users = Sanitizer.clean_params(params[:user_ids])
     @client = client
-    @public = params[:public] 
+    @public = params[:public]
     @expiry_date = params[:expiry_date]
+    @thank_you_message = params[:thank_you_message]
   end
 
   def publish(options={})
@@ -21,13 +22,16 @@ class Publisher
     publish_to_users
     survey.publish
     survey.share_with_organizations(organizations) if survey.organization_id == options[:organization_id]
-    survey.publicize if public?
+    if public?
+      survey.publicize
+      survey.thank_you_message = @thank_you_message
+    end
     survey.update_attributes(:expiry_date => expiry_date)
   end
 
   def unpublish_users
     if survey.finalized?
-      users.each { |user_id|  survey.survey_users.find_by_user_id(user_id).destroy } 
+      users.each { |user_id|  survey.survey_users.find_by_user_id(user_id).destroy }
     end
   end
 

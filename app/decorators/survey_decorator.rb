@@ -28,6 +28,10 @@ class SurveyDecorator < Draper::Base
     model.finalized? ? '' : 'disabled'
   end
 
+  def thank_you_message
+    model.thank_you_message.blank? ?  h.t("publication.edit.thank_you_message") : model.thank_you_message
+  end
+
   def public_url
     if survey.public?
       h.survey_public_response_url(model.id) + "?auth_key=#{model.auth_key}"

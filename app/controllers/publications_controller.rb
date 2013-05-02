@@ -2,7 +2,7 @@ class PublicationsController < ApplicationController
   before_filter :require_finalized_survey
 
   def edit
-    @survey = Survey.find(params[:survey_id])
+    @survey = Survey.find(params[:survey_id]).decorate
     authorize! :edit_publication, @survey
     publishable_users = @survey.users_for_organization(access_token, current_user_org)
     @published_users = publishable_users[:published]

@@ -12,7 +12,7 @@
       <%= f.input :expiry_date, :as => :string, :required => true, :input_html => { :value => @survey.expiry_date, :class => 'expiry-date' } %>
       <%= f.input :public, :as => :boolean, :label => "Crowd source", :input_html => { :class => "crowd-source-toggle", :checked => @survey.public } %>
       <div class="thank-you-message">
-        <%= f.input :thank_you_message, :as => :text, :label => "Thank you message", :class=>'foo', :input_html => { :value => @survey.thank_you_message } %>
+        <%= f.input :thank_you_message, :as => :text, :label => "Thank you message", :input_html => { :value => @survey.thank_you_message } %>
       </div>
     </ol>
     <div class="publish-to-users">

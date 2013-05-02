@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Publisher do
-  before(:each) do 
+  before(:each) do
     @params = { :expiry_date => Date.tomorrow.to_s,
                 :user_ids => [1,2],
                 :participating_organization_ids => [2,3]}
@@ -56,6 +56,16 @@ describe Publisher do
     SurveyUser.all.map(&:user_id).should include(1,2)
     ParticipatingOrganization.all.map(&:organization_id).should include(2,3)
     survey.should be_public
+  end
+
+  it "sets the thank_you_message of a public survey" do
+    survey = FactoryGirl.create(:survey, :finalized => true, :public => true)
+    @params[:thank_you_message] = 'Thank You!'
+    client = stub
+    publisher = Publisher.new(survey, client, @params)
+    publisher.should_receive(:valid?).and_return(true)
+    publisher.publish
+    survey.reload.thank_you_message.should == 'Thank You!'
   end
 
   it "unpublishes to all of ther users" do

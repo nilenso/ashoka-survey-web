@@ -43,6 +43,7 @@ en:
     edit:
       publish_survey: "Publish Survey"
       published_to_users: "Publish to users"
+      thank_you_message: "Thank you for participating in the survey."
     unpublish:
       unpublish_survey: "Unpublish Survey"
       survey_users: "Survey users"
