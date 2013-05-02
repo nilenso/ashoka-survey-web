@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130325124920) do
+ActiveRecord::Schema.define(:version => 20130502065801) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -144,14 +144,15 @@ ActiveRecord::Schema.define(:version => 20130325124920) do
     t.string   "name"
     t.date     "expiry_date"
     t.text     "description"
-    t.datetime "created_at",                         :null => false
-    t.datetime "updated_at",                         :null => false
-    t.boolean  "finalized",       :default => false
+    t.datetime "created_at",                           :null => false
+    t.datetime "updated_at",                           :null => false
+    t.boolean  "finalized",         :default => false
     t.integer  "organization_id"
-    t.boolean  "public",          :default => false
+    t.boolean  "public",            :default => false
     t.string   "auth_key"
     t.date     "published_on"
-    t.boolean  "archived",        :default => false
+    t.boolean  "archived",          :default => false
+    t.text     "thank_you_message"
   end
 
   add_index "surveys", ["organization_id"], :name => "index_surveys_on_organization_id"

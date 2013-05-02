@@ -9,10 +9,12 @@
 <div id="publish_survey">
   <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :put do |f| %>
     <ol>
-      <%= f.input :expiry_date, :as => :string, :required => true, :input_html => { :value => @survey.expiry_date, :class => 'date' } %>
-      <%= f.input :public, :as => :boolean, :label => "Crowd Source", :input_html => { :checked => @survey.public } %>
+      <%= f.input :expiry_date, :as => :string, :required => true, :input_html => { :value => @survey.expiry_date, :class => 'expiry-date' } %>
+      <%= f.input :public, :as => :boolean, :label => "Crowd source", :input_html => { :class => "crowd-source-toggle", :checked => @survey.public } %>
+      <div class="thank-you-message">
+        <%= f.input :thank_you_message, :as => :text, :label => "Thank you message", :class=>'foo', :input_html => { :value => @survey.thank_you_message } %>
+      </div>
     </ol>
-
     <div class="publish-to-users">
       <h3><%= t ".published_to_users" %></h3>
       <% if @published_users.present? %>
@@ -78,7 +80,6 @@
 
 <script type="text/javascript">
   $(document).ready(function(){
-    $('.date').datepicker({ dateFormat: "yy/mm/dd", changeMonth: true, changeYear: true });
-    $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
+    new SurveyApp.SurveyPublisher($("#publish_survey"));
   });
 </script>
