@@ -6,6 +6,7 @@ class SurveyApp.ExcelDownloader
     @container.find(".cancel-button").click(@close_dialog)
     @container.find(".generate-button").click(@start)
     @error_message_container = @container.find(".error-message")
+    @filter_private_checkbox = @container.find("#filter-private-checkbox")
 
   initialize: =>
     @dialog = $("#excel-dialog" ).dialog
@@ -20,7 +21,9 @@ class SurveyApp.ExcelDownloader
 
     $.ajax "/surveys/#{@survey_id}/responses/generate_excel",
       type: "GET"
-      data: @date_range.prepare_params()
+      data:
+        date_range: @date_range.prepare_params()
+        filter_private_questions: @filter_private_checkbox.is(":checked")
       success: (data) =>
         @filename = data.excel_path
         @id = data.id

@@ -178,6 +178,15 @@ describe ResponsesController do
       JSON.parse(response.body)['id'].should == Delayed::Job.all.last.id
     end
 
+    it "filters the private questions out if the parameter is passed in" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      private_question = FactoryGirl.create(:question, :survey => survey, :private => true)
+      resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+      get :generate_excel, :survey_id => survey.id, :filter_private_questions => true
+      response.should be_ok
+      assigns(:data).questions.map(&:id).should_not include private_question.id
+    end
+
     context "when filtering by date range" do
       it "includes responses created during the specified range" do
         survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
@@ -185,7 +194,7 @@ describe ResponsesController do
         early_response = Timecop.freeze(7.days.ago) { FactoryGirl.create(:response, :status => 'complete', :survey => survey) }
         late_response = Timecop.freeze(7.days.from_now) { FactoryGirl.create(:response, :status => 'complete', :survey => survey) }
         response = FactoryGirl.create(:response, :status => 'complete', :survey => survey)
-        get :generate_excel, :survey_id => survey.id, :from => date_range.first, :to => date_range.last
+        get :generate_excel, :survey_id => survey.id, :date_range => { :from => date_range.first, :to => date_range.last }
         assigns(:responses).should == [response]
       end
     end
