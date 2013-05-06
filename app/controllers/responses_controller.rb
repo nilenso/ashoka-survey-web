@@ -16,7 +16,7 @@ class ResponsesController < ApplicationController
   def generate_excel
     authorize! :generate_excel, @survey
     @responses = Reports::Excel::Responses.new(@responses).build(params[:date_range]).all
-    @questions = Reports::Excel::Questions.new(@survey).build(:filter_private_questions => params[:filter_private_questions]).all
+    @questions = Reports::Excel::Questions.new(@survey, current_ability).build(:disable_filtering => params[:disable_filtering]).all
     data = Reports::Excel::Data.new(@survey, @questions, @responses, server_url, access_token)
     job = Reports::Excel::Job.new(data)
     job.start

@@ -61,6 +61,10 @@ describe AdminAbility do
     it { should_not be_able_to :archive, survey_in_another_org_shared_with_his_org }
     it { should_not be_able_to :archive, survey_in_another_organization }
 
+    it { should be_able_to :change_excel_filters, survey_in_his_organization }
+    it { should_not be_able_to :change_excel_filters, survey_in_another_org_shared_with_his_org }
+    it { should_not be_able_to :change_excel_filters, survey_in_another_organization }
+
 
     context "with responses" do
       let(:response_in_same_org) { FactoryGirl.create(:response, :organization_id => 5) }
@@ -92,4 +96,4 @@ describe AdminAbility do
     end
   end
 end
-      
+

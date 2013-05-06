@@ -179,20 +179,20 @@ describe ResponsesController do
     end
 
     context "when filtering private questions" do
-      it "filters the private questions out if the parameter is passed in" do
+      it "filters the private questions out by default" do
         survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
         private_question = FactoryGirl.create(:question, :survey => survey, :private => true)
         resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
-        get :generate_excel, :survey_id => survey.id, :filter_private_questions => "true"
+        get :generate_excel, :survey_id => survey.id
         response.should be_ok
         assigns(:questions).map(&:id).should_not include private_question.id
       end
 
-      it "doesn't filter the private questions out if the parameter is not passed in" do
+      it "doesn't filter the private questions out if the parameter is passed in" do
         survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
         private_question = FactoryGirl.create(:question, :survey => survey, :private => true)
         resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
-        get :generate_excel, :survey_id => survey.id, :filter_private_questions => "false"
+        get :generate_excel, :survey_id => survey.id, :disable_filtering => "true"
         response.should be_ok
         assigns(:questions).map(&:id).should include private_question.id
       end
