@@ -178,13 +178,24 @@ describe ResponsesController do
       JSON.parse(response.body)['id'].should == Delayed::Job.all.last.id
     end
 
-    it "filters the private questions out if the parameter is passed in" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      private_question = FactoryGirl.create(:question, :survey => survey, :private => true)
-      resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
-      get :generate_excel, :survey_id => survey.id, :filter_private_questions => true
-      response.should be_ok
-      assigns(:data).questions.map(&:id).should_not include private_question.id
+    context "when filtering private questions" do
+      it "filters the private questions out if the parameter is passed in" do
+        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+        private_question = FactoryGirl.create(:question, :survey => survey, :private => true)
+        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+        get :generate_excel, :survey_id => survey.id, :filter_private_questions => "true"
+        response.should be_ok
+        assigns(:data).questions.map(&:id).should_not include private_question.id
+      end
+
+      it "doesn't filter the private questions out if the parameter is not passed in" do
+        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+        private_question = FactoryGirl.create(:question, :survey => survey, :private => true)
+        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+        get :generate_excel, :survey_id => survey.id, :filter_private_questions => "false"
+        response.should be_ok
+        assigns(:data).questions.map(&:id).should include private_question.id
+      end
     end
 
     context "when filtering by date range" do
