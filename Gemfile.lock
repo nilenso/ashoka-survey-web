@@ -39,10 +39,6 @@ GEM
       htmlentities (~> 4.3.1)
       nokogiri (>= 1.4.1)
       rubyzip (>= 0.9.5)
-    bitly (0.9.0)
-      httparty (>= 0.7.6)
-      multi_json (~> 1.3)
-      oauth2 (>= 0.5.0, < 0.9)
     builder (3.0.4)
     cancan (1.6.8)
     carrierwave (0.7.1)
@@ -129,9 +125,6 @@ GEM
     hashie (1.2.0)
     hike (1.2.2)
     htmlentities (4.3.1)
-    httparty (0.11.0)
-      multi_json (~> 1.0)
-      multi_xml (>= 0.5.2)
     httpauth (0.1)
     i18n (0.6.1)
     i18n-js (2.1.2)
@@ -149,7 +142,6 @@ GEM
     method_source (0.8)
     mime-types (1.22)
     multi_json (1.7.2)
-    multi_xml (0.5.3)
     multipart-post (1.1.5)
     net-scp (1.0.4)
       net-ssh (>= 1.99.1)
@@ -296,7 +288,6 @@ DEPENDENCIES
   active_model_serializers (~> 0.7.0)
   airbrake
   axlsx
-  bitly (~> 0.9.0)
   cancan
   carrierwave
   carrierwave_backgrounder
