@@ -12,7 +12,6 @@ class SurveyApp.ExcelDownloader
       dialogClass: "no-close"
       modal: true
       width: 600
-      height: 200
 
   start: =>
     return unless @is_valid()

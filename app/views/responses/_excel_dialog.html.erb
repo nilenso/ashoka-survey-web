@@ -10,6 +10,17 @@
       <input disabled type="text" class="to-date date-picker" placeholder="<%= t('responses.excel.to_date')%>"></input>
     </fieldset>
 
+    <fieldset class='other-settings'>
+      <legend>
+        <span>Settings</span>
+      </legend>
+      <div class="filter-private-questions">
+        <input id="filter-private-checkbox" type="checkbox" checked></input>
+        <label class='filter-private-label' for="filter-private-checkbox">Filter Private Questions</label>
+      </div>
+    </fieldset>
+
+
     <div class="error-message"></div>
     <button class="generate-button"><%= t("responses.excel.generate_excel") %></button>
     <button class="cancel-button"><%= t("responses.excel.cancel") %></button>

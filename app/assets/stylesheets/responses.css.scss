@@ -60,6 +60,22 @@ table{
     }
   }
 
+  .other-settings {
+    legend {
+      padding: 0 10px;
+      font-weight: 600;
+    }
+    margin-top: 20px;
+  }
+
+  .filter-private-questions {
+    margin: 10px;
+    label {
+      display: inline;
+      font-weight: 400;
+    }
+  }
+
   .error-message {
     float: left;
     color: $danger;
