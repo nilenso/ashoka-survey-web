@@ -54,6 +54,7 @@ group :test, :development do
   gem 'rspec-rails', '~> 2.11.4'
   gem 'rspec-http'
   gem 'factory_girl_rails', '~> 4.2.0'
+  gem 'fuubar'
   gem "shoulda-matchers", '~> 2.0.0'
   gem 'database_cleaner'
   gem "rails_best_practices"
