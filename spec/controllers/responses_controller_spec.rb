@@ -185,7 +185,7 @@ describe ResponsesController do
         resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
         get :generate_excel, :survey_id => survey.id, :filter_private_questions => "true"
         response.should be_ok
-        assigns(:data).questions.map(&:id).should_not include private_question.id
+        assigns(:questions).map(&:id).should_not include private_question.id
       end
 
       it "doesn't filter the private questions out if the parameter is not passed in" do
@@ -194,7 +194,7 @@ describe ResponsesController do
         resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
         get :generate_excel, :survey_id => survey.id, :filter_private_questions => "false"
         response.should be_ok
-        assigns(:data).questions.map(&:id).should include private_question.id
+        assigns(:questions).map(&:id).should include private_question.id
       end
     end
 

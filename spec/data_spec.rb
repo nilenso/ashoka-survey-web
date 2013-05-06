@@ -11,7 +11,7 @@ describe Reports::Excel::Data do
     names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}])
 
     response = FactoryGirl.create(:response, :user_id => 1)
-    data = Reports::Excel::Data.new(survey, [response], server_url, access_token)
+    data = Reports::Excel::Data.new(survey, [], [response], server_url, access_token)
     data.user_name_for(1).should == "Bob"
   end
 
@@ -20,7 +20,7 @@ describe Reports::Excel::Data do
     access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
     orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
 
-    data = Reports::Excel::Data.new(survey, [], server_url, access_token)
+    data = Reports::Excel::Data.new(survey, [], [], server_url, access_token)
     data.organization_name_for(1).should == "CSOOrganization"
   end
 
@@ -29,40 +29,24 @@ describe Reports::Excel::Data do
     access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
     orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
 
-    data = Reports::Excel::Data.new(survey, [], server_url, access_token)
+    data = Reports::Excel::Data.new(survey, [], [], server_url, access_token)
     data.organization_name_for(42).should == ""
   end
 
   it "finds the filename from the survey" do
-    data = Reports::Excel::Data.new(survey, [], server_url, access_token)
+    data = Reports::Excel::Data.new(survey, [], [], server_url, access_token)
     data.file_name.should == survey.filename_for_excel
   end
 
   it "does not mutate the filename" do
-    data = Reports::Excel::Data.new(survey, [], server_url, access_token)
+    data = Reports::Excel::Data.new(survey, [], [], server_url, access_token)
     old_file_name = data.file_name
     Timecop.freeze(5.days.from_now) { data.file_name.should == old_file_name  }
   end
 
   it "doesn't mutate the filename after serializing/deserializing" do
-    data_1 = Reports::Excel::Data.new(survey, [], server_url, "fooaccesstoken")
+    data_1 = Reports::Excel::Data.new(survey, [], [], server_url, "fooaccesstoken")
     data_2 = YAML::load(YAML::dump(data_1))
     data_1.file_name.should == Timecop.freeze(1.hour.from_now) { data_2.file_name }
-  end
-
-  context "when filtering questions" do
-    it "does't perform any filtering if options[:filter_private_questions] is false/nil" do
-      private_question = FactoryGirl.create(:question, :private => true)
-      survey.questions << private_question
-      data = Reports::Excel::Data.new(survey, [], server_url, access_token, :filter_private_questions => false)
-      data.questions.should include private_question
-    end
-
-    it "filters out questions marked private if [:filter_private_questions] is true" do
-      private_question = FactoryGirl.create(:question, :private => true)
-      survey.questions << private_question
-      data = Reports::Excel::Data.new(survey, [], server_url, access_token, :filter_private_questions => true)
-      data.questions.should_not include private_question
-    end
   end
 end

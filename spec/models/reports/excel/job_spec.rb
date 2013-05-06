@@ -18,7 +18,7 @@ describe Reports::Excel::Job do
 
   it "sets first cell of each row to the serial number of that response" do
     responses = FactoryGirl.create_list(:response, 5, :survey => survey, :status => "complete")
-    data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+    data = Reports::Excel::Data.new(survey, [], responses, server_url, @access_token)
     job = Reports::Excel::Job.new(data)
     wb = job.package.workbook
     col = wb.worksheets[0].cols[0]
@@ -30,7 +30,7 @@ describe Reports::Excel::Job do
       questions = []
       questions << FactoryGirl.create(:question, :survey => survey, :content => "foo")
       questions << FactoryGirl.create(:question, :survey => survey, :content => "bar")
-      data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+      data = Reports::Excel::Data.new(survey, questions, responses, server_url, @access_token)
       job = Reports::Excel::Job.new(data)
       ws = job.package.workbook.worksheets[0]
       question_cells = ws.rows[0].cells[1..2]
@@ -43,7 +43,7 @@ describe Reports::Excel::Job do
       question_with_options = MultiChoiceQuestion.create(:content => "Foo")
       question_with_options.update_column :survey_id, survey.id
       option_foo = FactoryGirl.create(:option, :question => question_with_options, :content => "Foo Option")
-      data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+      data = Reports::Excel::Data.new(survey, [question_with_options], responses, server_url, @access_token)
       job = Reports::Excel::Job.new(data)
       ws = job.package.workbook.worksheets[0]
       ws.should have_header_cell("Foo Option")
@@ -57,7 +57,7 @@ describe Reports::Excel::Job do
       Geocoder::Lookup::Test.set_default_stub([{ 'address' => 'foo_location' }])
 
       response = FactoryGirl.create(:response, :user_id => 1, :ip_address => "0.0.0.0", :organization_id => 1, :state => "dirty")
-      data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+      data = Reports::Excel::Data.new(survey, [], [response], server_url, @access_token)
       job = Reports::Excel::Job.new(data)
       ws = job.package.workbook.worksheets[0]
       ["hansel", "C42", "foo_location", "0.0.0.0", "dirty"].each { |md| ws.should have_cell(md).in_row(1) }
@@ -69,7 +69,7 @@ describe Reports::Excel::Job do
       response = FactoryGirl.create(:response, :survey => survey)
       question = FactoryGirl.create(:question, :survey => survey)
       answer = FactoryGirl.create(:answer, :question => question, :response => response, :content => "answer_foo")
-      data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+      data = Reports::Excel::Data.new(survey, [question], [response], server_url, @access_token)
       job = Reports::Excel::Job.new(data)
       ws = job.package.workbook.worksheets[0]
       ws.should have_cell("answer_foo").in_row(1)
@@ -81,7 +81,7 @@ describe Reports::Excel::Job do
         question = MultiChoiceQuestion.create(:content => "foo_content")
         question.update_column(:survey_id, survey.id)
         answer = FactoryGirl.create(:answer, :question => question, :response => response)
-        data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+        data = Reports::Excel::Data.new(survey, [question], [response], server_url, @access_token)
         job = Reports::Excel::Job.new(data)
         ws = job.package.workbook.worksheets[0]
         ws.rows[1].cells[1].value.should == ""
@@ -93,7 +93,7 @@ describe Reports::Excel::Job do
         question.update_column(:survey_id, survey.id)
         options = FactoryGirl.create_list(:option, 5, :question => question)
         answer = FactoryGirl.create(:answer, :question => question, :response => response)
-        data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+        data = Reports::Excel::Data.new(survey, [question], [response], server_url, @access_token)
         job = Reports::Excel::Job.new(data)
         ws = job.package.workbook.worksheets[0]
         ws.rows[1].cells[2..-1].size.should == (options.size + METADATA_SIZE)
@@ -107,7 +107,7 @@ describe Reports::Excel::Job do
         question = FactoryGirl.create(:question, :category => category, :survey => survey)
         answer_one = FactoryGirl.create(:answer_in_record, :question => question, :response => response, :content => "foo_answer")
         answer_two = FactoryGirl.create(:answer_in_record, :question => question, :response => response, :content => "bar_answer")
-        data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+        data = Reports::Excel::Data.new(survey, [question], [response], server_url, @access_token)
         job = Reports::Excel::Job.new(data)
         ws = job.package.workbook.worksheets[0]
         ws.should have_cell_containing("foo_answer").in_row(1)
@@ -128,7 +128,7 @@ describe Reports::Excel::Job do
         FactoryGirl.create(:answer, :question => question_one, :response => response, :content => "bar_answer", :record => record_two)
         FactoryGirl.create(:answer, :question => question_two, :response => response, :content => "y_answer", :record => record_two)
 
-        data = Reports::Excel::Data.new(survey, [response], server_url, @access_token)
+        data = Reports::Excel::Data.new(survey, [question_one, question_two], [response], server_url, @access_token)
         job = Reports::Excel::Job.new(data)
         ws = job.package.workbook.worksheets[0]
 
@@ -144,14 +144,14 @@ describe Reports::Excel::Job do
                                   :aws_access_key_id => ENV['S3_ACCESS_KEY'])
     connection.directories.create(:key => 'surveywebexcel')
 
-    data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+    data = Reports::Excel::Data.new(survey, [], responses, server_url, @access_token)
     Reports::Excel::Job.new(data).perform
 
     connection.directories.get("surveywebexcel").files.get(data.file_name).should be_present
   end
 
   it "enqueues a delayed job which will run it's own perform method" do
-    data = Reports::Excel::Data.new(survey, responses, server_url, @access_token)
+    data = Reports::Excel::Data.new(survey, [], responses, server_url, @access_token)
     job = Reports::Excel::Job.new(data)
     expect { job.start }.to change { Delayed::Job.where(:queue => 'generate_excel').count }.by(1)
   end

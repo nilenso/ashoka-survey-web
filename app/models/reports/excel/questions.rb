@@ -7,7 +7,8 @@ class Reports::Excel::Questions
   end
 
   def build(options = {})
-    if options[:filter_private_questions]
+    filter_private_questions = ActiveRecord::ConnectionAdapters::Column.value_to_boolean(options[:filter_private_questions])
+    if filter_private_questions
       @questions = @questions.where("private != ?", true)
     end
     self

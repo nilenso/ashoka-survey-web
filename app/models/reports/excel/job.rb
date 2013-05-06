@@ -17,7 +17,7 @@ class Reports::Excel::Job < Struct.new(:excel_data)
       wb = p.workbook
       bold_style = wb.styles.add_style sz: 12, b: true, alignment: { horizontal: :center }
       border = wb.styles.add_style border: { style: :thin, color: '000000' }
-      questions = excel_data.questions
+      questions = excel_data.questions.map(&:reporter)
       wb.add_worksheet(name: "Responses") do |sheet|
         headers = Reports::Excel::Row.new("Response No.")
         headers << questions.map(&:header)
