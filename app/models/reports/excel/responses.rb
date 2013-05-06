@@ -6,7 +6,7 @@ class Reports::Excel::Responses
     @responses = responses
   end
 
-  def build(options)
+  def build(options={})
     options ||= {}
     completed.earliest_first.between(options[:from], options[:to])
     self
