@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130502065801) do
+ActiveRecord::Schema.define(:version => 20130506085516) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -101,6 +101,7 @@ ActiveRecord::Schema.define(:version => 20130502065801) do
     t.string   "image"
     t.string   "photo_secure_token"
     t.string   "image_tmp"
+    t.boolean  "private"
   end
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"
