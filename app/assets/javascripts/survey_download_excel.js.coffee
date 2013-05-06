@@ -23,7 +23,7 @@ class SurveyApp.ExcelDownloader
       type: "GET"
       data:
         date_range: @date_range.prepare_params()
-        filter_private_questions: @filter_private_checkbox.is(":checked")
+        disable_filtering: @filter_private_checkbox.is(":checked")
       success: (data) =>
         @filename = data.excel_path
         @id = data.id
