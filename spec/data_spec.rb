@@ -49,4 +49,20 @@ describe Reports::Excel::Data do
     data_2 = YAML::load(YAML::dump(data_1))
     data_1.file_name.should == Timecop.freeze(1.hour.from_now) { data_2.file_name }
   end
+
+  context "when filtering questions" do
+    it "does't perform any filtering if options[:filter_private_questions] is false/nil" do
+      private_question = FactoryGirl.create(:question, :private => true)
+      survey.questions << private_question
+      data = Reports::Excel::Data.new(survey, [], server_url, access_token, :filter_private_questions => false)
+      data.questions.should include private_question
+    end
+
+    it "filters out questions marked private if [:filter_private_questions] is true" do
+      private_question = FactoryGirl.create(:question, :private => true)
+      survey.questions << private_question
+      data = Reports::Excel::Data.new(survey, [], server_url, access_token, :filter_private_questions => true)
+      data.questions.should_not include private_question
+    end
+  end
 end
