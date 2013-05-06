@@ -14,20 +14,6 @@
 	<input type="number" name="max_length" value="{{max_length}}"></input>
 </div>
 
-{{#allow_identifier}}
-  <div class="checkbox">
-    {{#identifier}}
-      <input type="checkbox" name="identifier" value="{{identifier}}" checked ></input>
-    {{/identifier}}
-    {{^identifier}}
-      <input type="checkbox" name="identifier" value="{{identifier}}"></input>
-    {{/identifier}}
-    <label><%= t "surveys.build.mark_identifier" %></label>
-  </div>
-{{/allow_identifier}}
+<%= render "templates/questions/identifier" %>
 
-<div class="upload_files">
-  <label><%= t("activerecord.attributes.question.image") %> </label>
-  <input name="image" class="fileupload" type="file" name="files[]" accept="image/png, image/jpg">
-  <div class="spinner"></div>
- </div>
+<%= render "templates/questions/file_upload" %>
