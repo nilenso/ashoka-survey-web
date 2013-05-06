@@ -138,6 +138,7 @@ fr:
       delete_survey: "Delete de l'enquête"
       finalize_survey: "fr Finalize and continue"
       mark_identifier: "Marquer comme identifiant?"
+      mark_private: "Marquer comme privé?"
       saving_your_survey_message: "Sauver votre enquête. S'il vous plaît ne fermez pas cette page"
       loading_survey: "Chargement de votre enquête Veuillez patienter."
       add_options_in_bulk_help_text: "Entrez une liste séparée par des virgules des options"

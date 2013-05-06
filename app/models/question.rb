@@ -4,7 +4,8 @@ class Question < ActiveRecord::Base
   belongs_to :parent, :class_name => Option
   belongs_to :category
   belongs_to :survey
-  attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number, :parent_id, :identifier, :category_id
+  attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number,
+                    :parent_id, :identifier, :category_id, :private
   validates_presence_of :content
   has_many :answers, :dependent => :destroy
   mount_uploader :image, ImageUploader
@@ -76,7 +77,7 @@ class Question < ActiveRecord::Base
   end
 
   def report_data
-    Answer.unscoped.joins(:response).where("answers.question_id = ? 
+    Answer.unscoped.joins(:response).where("answers.question_id = ?
                                  AND responses.status = 'complete'
                                  AND responses.state = 'clean'", id)
   end
