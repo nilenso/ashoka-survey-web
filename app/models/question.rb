@@ -17,6 +17,9 @@ class Question < ActiveRecord::Base
 
   delegate :question, :to => :parent, :prefix => true
 
+  before_save :require_draft_survey
+  before_destroy :require_draft_survey
+
   def image_url(format=nil)
     return "/#{image.cache_dir}/#{image_tmp}" if image_tmp
     return image.url(format) if image.file
@@ -107,5 +110,15 @@ class Question < ActiveRecord::Base
 
   def has_multi_record_ancestor
     has_multi_record_ancestor?
+  end
+
+  private
+
+  def require_draft_survey
+    if survey.finalized?
+      false
+    else
+      true
+    end
   end
 end

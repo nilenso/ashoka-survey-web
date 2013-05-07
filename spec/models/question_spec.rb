@@ -27,6 +27,30 @@ describe Question do
     end
   end
 
+  context "callbacks" do
+    let(:survey) { FactoryGirl.create(:survey, :finalized => true) }
+
+    it "doesn't create if its survey is finalized" do
+      expect { Question.create(:survey_id => survey.id) }.not_to change { Question.count }
+    end
+
+    it "doesn't update if its survey is finalized" do
+      survey = FactoryGirl.create(:survey)
+      question = FactoryGirl.create(:question, :survey => survey, :content => "FOO")
+      survey.update_column :finalized, true
+      question.content = "BAR"
+      question.save
+      question.reload.content.should == "FOO"
+    end
+
+    it "doesn't destroy if its survey is finalized" do
+      survey = FactoryGirl.create(:survey)
+      question = FactoryGirl.create(:question, :survey => survey, :content => "FOO")
+      survey.update_column :finalized, true
+      expect { question.destroy }.not_to change { Question.count }
+    end
+  end
+
   context "validation" do
     it "allows multiple rows to have nil for order_number" do
       survey = FactoryGirl.create(:survey)
