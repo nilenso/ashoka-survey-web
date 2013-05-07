@@ -115,7 +115,7 @@ class Question < ActiveRecord::Base
   private
 
   def require_draft_survey
-    if survey.finalized?
+    if survey && survey.finalized?
       false
     else
       true
