@@ -8,9 +8,9 @@ class AdminAbility < Ability
     can :destroy, Survey, :organization_id => user_info[:org_id]
     can :archive, Survey, :organization_id => user_info[:org_id]
     can :finalize, Survey, :organization_id => user_info[:org_id]
-    can :change_excel_filters, Survey, :organization_id => user_info[:org_id]
 
     can_perform_on_own_and_shared_surveys(:duplicate)
+    can_perform_on_own_and_shared_surveys(:change_excel_filters)
     can_perform_on_own_and_shared_surveys(:read)
     can_perform_on_own_and_shared_surveys(:report)
     can_perform_on_own_and_shared_surveys(:generate_excel)
