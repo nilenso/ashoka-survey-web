@@ -1,9 +1,8 @@
-# Collection of questions
-
 class Survey < ActiveRecord::Base
   validates_presence_of :name
   validates_uniqueness_of :auth_key, :allow_nil => true
-  validates :expiry_date, :presence => true, :date => { :after => Proc.new { Date.current }}, :if => :expiry_date_changed?
+  validates :expiry_date, :date => { :after => Proc.new { Date.current }}, :if => :expiry_date_changed?
+  validates_presence_of :expiry_date
   validate :ensure_survey_to_be_archivable
   validate :description_should_be_short
 
