@@ -1,16 +1,29 @@
 class Reports::Excel::Metadata
-  def initialize(responses, access_token)
+  def initialize(responses, access_token, options={})
     @responses = responses
     @access_token = access_token
+    @options = options
   end
 
   def headers
-    ["Added By", "Organization", "Last updated at", "Address", "IP Address", "State"]
+    if disable_filtering?
+      ["Added By", "Organization", "Last updated at", "Address", "IP Address", "State"]
+    else
+      ["Added By", "Organization", "Last updated at", "State"]
+    end
   end
 
   def for(response)
-    [user_name_for(response.user_id), organization_name_for(response.organization_id), response.last_update,
-      response.location, response.ip_address, response.state]
+    if disable_filtering?
+      [user_name_for(response.user_id), organization_name_for(response.organization_id), response.last_update,
+        response.location, response.ip_address, response.state]
+    else
+      [user_name_for(response.user_id), organization_name_for(response.organization_id), response.last_update, response.state]
+    end
+  end
+
+  def disable_filtering?
+    @options[:disable_filtering]
   end
 
   def user_name_for(id)

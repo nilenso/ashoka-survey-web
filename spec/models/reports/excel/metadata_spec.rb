@@ -14,22 +14,38 @@ describe Reports::Excel::Metadata do
       orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
     end
 
+    context "when the `disable_filtering` flag is false" do
+      it "doesn't return the location of the response" do
+        response = FactoryGirl.create(:response, :user_id => 1)
+        metadata = Reports::Excel::Metadata.new([response], access_token, :disable_filtering => false)
+        metadata.for(response).should_not include response.location
+      end
+
+      it "doesn't return the ip address of the response" do
+        response = FactoryGirl.create(:response, :user_id => 1)
+        metadata = Reports::Excel::Metadata.new([response], access_token, :disable_filtering => false)
+        metadata.for(response).should_not include response.ip_address
+      end
+    end
+
+    context "when the `disable_filtering` flag is true" do
+      it "returns the location of the response" do
+        response = FactoryGirl.create(:response, :user_id => 1)
+        metadata = Reports::Excel::Metadata.new([response], access_token, :disable_filtering => true)
+        metadata.for(response).should include response.location
+      end
+
+      it "returns the ip address of the response" do
+        response = FactoryGirl.create(:response, :user_id => 1)
+        metadata = Reports::Excel::Metadata.new([response], access_token, :disable_filtering => true)
+        metadata.for(response).should include response.ip_address
+      end
+    end
+
     it "returns the `last_update` of the response" do
       response = FactoryGirl.create(:response, :user_id => 1)
       metadata = Reports::Excel::Metadata.new([response], access_token)
       metadata.for(response).should include response.last_update
-    end
-
-    it "returns the location of the response" do
-      response = FactoryGirl.create(:response, :user_id => 1)
-      metadata = Reports::Excel::Metadata.new([response], access_token)
-      metadata.for(response).should include response.location
-    end
-
-    it "returns the ip address of the response" do
-      response = FactoryGirl.create(:response, :user_id => 1)
-      metadata = Reports::Excel::Metadata.new([response], access_token)
-      metadata.for(response).should include response.ip_address
     end
 
     it "returns the state of the response" do

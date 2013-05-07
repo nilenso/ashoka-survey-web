@@ -198,6 +198,26 @@ describe ResponsesController do
       end
     end
 
+    context "when filtering metadata" do
+      it "filters the private metadata out by default" do
+        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete', :ip_address => "0.0.0.0")
+        get :generate_excel, :survey_id => survey.id
+        response.should be_ok
+        assigns(:metadata).for(resp).should_not include resp.location
+        assigns(:metadata).for(resp).should_not include "0.0.0.0"
+      end
+
+      it "doesn't filter the private questions out if the parameter is passed in" do
+        survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete', :ip_address => "0.0.0.0")
+        get :generate_excel, :survey_id => survey.id, :disable_filtering => "true"
+        response.should be_ok
+        assigns(:metadata).for(resp).should include resp.location
+        assigns(:metadata).for(resp).should include "0.0.0.0"
+      end
+    end
+
     context "when filtering by date range" do
       it "includes responses created during the specified range" do
         survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
