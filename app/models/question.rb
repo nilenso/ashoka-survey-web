@@ -16,7 +16,6 @@ class Question < ActiveRecord::Base
   scope :not_private, where("private IS NOT true")
 
   delegate :question, :to => :parent, :prefix => true
-  delegate :finalized?, :to => :survey, :prefix => true
 
   def image_url(format=nil)
     return "/#{image.cache_dir}/#{image_tmp}" if image_tmp

@@ -79,13 +79,6 @@ module Api
             JSON.parse(response.body).should be_any {|m| m =~ /can\'t be blank/ }
           end
         end
-
-        it "returns an error code if the survey has been finalized" do
-          survey = FactoryGirl.create(:survey, :finalized => true)
-          question = FactoryGirl.attributes_for(:question, :type => 'RadioQuestion', :survey_id => survey.id)
-          post :create, :question => question
-          response.should_not be_ok
-        end
       end
 
       context "PUT 'update'" do
@@ -122,13 +115,6 @@ module Api
           put :update, :id => question.id, :question => {:content => "someuniquestring"}
           question.reload.content.should_not == 'someuniquestring'
         end
-
-        it "returns an error code if the survey has been finalized" do
-          survey = FactoryGirl.create(:survey, :finalized => true)
-          question = FactoryGirl.create(:question, :survey => survey)
-          put :update, :id => question.id, :question => {:content => "someuniquestring"}
-          response.should_not be_ok
-        end
       end
 
       context "DELETE 'destroy'" do
@@ -157,13 +143,6 @@ module Api
           question = FactoryGirl.create(:question, :survey => survey)
           delete :destroy, :id => question.id
           question.reload.should be_present
-        end
-
-        it "returns an error code if the survey has been finalized" do
-          survey = FactoryGirl.create(:survey, :finalized => true)
-          question = FactoryGirl.create(:question, :survey => survey)
-          delete :destroy, :id => question.id
-          response.should_not be_ok
         end
       end
 
@@ -203,14 +182,6 @@ module Api
           post :image_upload, :id => question.id, :image => @file
           response.should_not be_ok
           question.reload.image.should be_blank
-        end
-
-        it "returns an error code if the survey has been finalized" do
-          survey = FactoryGirl.create(:survey, :finalized => true)
-          question = FactoryGirl.create(:question, :survey => survey)
-          @file = fixture_file_upload('/images/sample.jpg', 'text/xml')
-          post :image_upload, :id => question.id, :image => @file
-          response.should_not be_ok
         end
       end
 
@@ -311,7 +282,6 @@ module Api
 
         context "when unsuccessful" do
           it "redirects back with a error message" do
-            #controller.class.skip_before_filter :require_question_belonging_to_draft_survey
             post :duplicate, :id => 456787
             response.should redirect_to(:back)
             flash[:error].should_not be_nil
@@ -323,13 +293,6 @@ module Api
           survey = FactoryGirl.create(:survey, :organization_id => 500)
           question = FactoryGirl.create(:question, :survey => survey)
           expect { post :duplicate, :id => question.id }.not_to change { Question.count }
-          response.should_not be_ok
-        end
-
-        it "returns an error code if the survey has been finalized" do
-          survey = FactoryGirl.create(:survey, :finalized => true)
-          question = FactoryGirl.create(:question, :survey => survey)
-          post :duplicate, :id => question.id
           response.should_not be_ok
         end
       end
