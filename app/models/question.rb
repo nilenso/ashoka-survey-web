@@ -13,6 +13,8 @@ class Question < ActiveRecord::Base
   validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id, :category_id], :allow_nil => true
 
   default_scope :order => 'order_number'
+  scope :not_private, where("private IS NOT true")
+
   delegate :question, :to => :parent, :prefix => true
 
   def image_url(format=nil)

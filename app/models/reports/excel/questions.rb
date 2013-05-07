@@ -18,8 +18,7 @@ class Reports::Excel::Questions
     if disable_filtering
       @ability.authorize!(:change_excel_filters, @survey)
     else
-      # REFACTOR: Move this to a scope
-      @questions = @questions.where("private IS NOT true")
+      @questions = @questions.not_private
     end
     self
   end

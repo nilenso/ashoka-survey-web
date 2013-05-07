@@ -8,6 +8,25 @@ describe Question do
   it { should belong_to(:parent).class_name(Option) }
   it { should belong_to(:category) }
 
+  context "scopes" do
+    context "when finding non-private questions" do
+      it "gets questions which have the private flag set to false" do
+        question = FactoryGirl.create(:question, :private => false)
+        Question.not_private.should == [question]
+      end
+
+      it "gets questions which have the private flag set to nil" do
+        question = FactoryGirl.create(:question, :private => nil)
+        Question.not_private.should == [question]
+      end
+
+      it "filters out questions which are private" do
+        private_question = FactoryGirl.create(:question, :private => true)
+        Question.not_private.should_not include private_question
+      end
+    end
+  end
+
   context "validation" do
     it "allows multiple rows to have nil for order_number" do
       survey = FactoryGirl.create(:survey)
