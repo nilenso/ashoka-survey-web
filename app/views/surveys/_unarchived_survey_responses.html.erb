@@ -1,21 +1,27 @@
 <div class="operations">
   <ul class="response_operations">
-    <li><%= link_to icon_for('icon-plus-sign', t(".add_response")), survey.public_url, :method => :post, :class => survey.class_for_disabled if can?(:create, Response.new(:survey => survey)) && !survey.expired? %></li>
-    <li><%= link_to icon_for('icon-paste', t(".crowd_source")), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url } if can?(:read, survey) && survey.public? %></li>
-    <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can?(:read, survey) && survey.has_responses? %></li>
+    <li><%= link_to icon_for('icon-plus-sign', t('surveys.index.add_response')), survey.public_url, :method => :post, :class => survey.class_for_disabled if can?(:create, Response.new(:survey => survey)) && !survey.expired? %></li>
+    <li><%= link_to icon_for('icon-paste', t('surveys.index.crowd_source')), "#", :class => "#{survey.class_for_disabled} copy_public_link", :data => { :public_link => survey.public_url } if can?(:read, survey) && survey.public? %></li>
+    <li><%= link_to icon_for('icon-list', t('surveys.index.list_responses')), survey_responses_path(survey.id), :class => survey.class_for_disabled if can?(:read, survey) && survey.has_responses? %></li>
   </ul>
 
   <ul class="cso_admin_operations">
     <% if survey.finalized? %>
-        <li><%= link_to icon_for('icon-arrow-up', t(".publish")), edit_survey_publication_path(survey.id) if can? :edit_publication, survey %></li>
-        <li><%= link_to icon_for('icon-arrow-up', t(".unpublish")), unpublish_survey_publication_path(survey.id) if can?(:edit_publication, survey) && survey.survey_users.any? %></li>
-        <li><%= link_to icon_for('icon-icon', t(".archive")), survey_archive_path(survey.id), :method => :put if can? :archive, survey %></li>
+        <li><%= link_to icon_for('icon-arrow-up', t('surveys.index.publish')), edit_survey_publication_path(survey.id) if can? :edit_publication, survey %></li>
+        <li><%= link_to icon_for('icon-arrow-up', t('surveys.index.unpublish')), unpublish_survey_publication_path(survey.id) if can?(:edit_publication, survey) && survey.survey_users.any? %></li>
+        <li><%= link_to icon_for('icon-icon', t('surveys.index.archive')), survey_archive_path(survey.id), :id => "archive", :method => :put if can? :archive, survey %></li>
     <% else %>
-        <li><%= link_to icon_for('icon-edit', t('.edit')), survey_build_path(survey.id)  if can? :edit, survey %></li>
-        <li><%= link_to icon_for('icon-ok', t(".finalize")), survey_finalize_path(survey.id), :method => :put, :data => { :confirm => t("surveys.confirm_finalize") } if can? :finalize, survey %></li>
+        <li><%= link_to icon_for('icon-edit', t('surveys.index.edit')), survey_build_path(survey.id)  if can? :edit, survey %></li>
+        <li><%= link_to icon_for('icon-ok', t('surveys.index.finalize')), survey_finalize_path(survey.id), :method => :put, :data => { :confirm => t("surveys.confirm_finalize") } if can? :finalize, survey %></li>
     <% end %>
-    <li><%= link_to icon_for('icon-trash', t('.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can?(:destroy, survey) && survey.responses.where(:blank => false).count == 0  %></li>
-    <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
-    <li><%= link_to icon_for('icon-bar-chart', t('.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.finalized? && survey.has_responses? %></li>
+    <li><%= link_to icon_for('icon-trash', t('surveys.index.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can?(:destroy, survey) && survey.responses.where(:blank => false).count == 0  %></li>
+    <li><%= link_to icon_for('icon-copy', t('surveys.index.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
+    <li><%= link_to icon_for('icon-bar-chart', t('surveys.index.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.finalized? && survey.has_responses? %></li>
   </ul>
 </div>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    new SurveyApp.AddConfirmation($("#archive"));
+  });
+</script>
