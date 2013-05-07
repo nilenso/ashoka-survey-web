@@ -193,6 +193,8 @@ fr:
     excel:
       excel_dialog_title: "Production Excel…"
       excel_downloading_message: "Votre fichier Excel est généré se. Cette mght prendre quelques minutes. S'il vous plaît attendre."
+      settings: Réglages
+      include_private_fields: Inclure les champs privés
 
   answers:
     validations:

@@ -200,6 +200,8 @@ en:
       cancel: "Cancel"
       excel_dialog_title: "Generating Excel…"
       excel_downloading_message: "Your excel file is getting generated.\nThis might take a few minutes. Please wait."
+      settings: Settings
+      include_private_fields: Include Private Fields
 
   answers:
     validations:

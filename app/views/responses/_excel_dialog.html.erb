@@ -13,11 +13,11 @@
     <% if can? :change_excel_filters, @survey %>
       <fieldset class='other-settings'>
         <legend>
-          <span>Settings</span>
+          <span><%= t('responses.excel.settings') %></span>
         </legend>
         <div class="filter-private-questions">
           <input id="filter-private-checkbox" type="checkbox"></input>
-          <label class='filter-private-label' for="filter-private-checkbox">Include Private Questions</label>
+          <label class='filter-private-label' for="filter-private-checkbox"><%= t('responses.excel.include_private_fields') %></label>
         </div>
       </fieldset>
     <% end %>
