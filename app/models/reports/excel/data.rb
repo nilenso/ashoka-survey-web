@@ -1,5 +1,5 @@
 class Reports::Excel::Data
-  attr_reader :survey, :responses, :server_url, :file_name, :questions
+  attr_reader :survey, :responses, :server_url, :file_name, :questions, :metadata
 
   def initialize(survey, questions, responses, server_url, access_token)
     @survey = survey
@@ -7,16 +7,6 @@ class Reports::Excel::Data
     @access_token = access_token
     @file_name = survey.filename_for_excel
     @questions = questions
-  end
-
-  def user_name_for(id)
-    @user_names ||= User.names_for_ids(@access_token, @responses.map(&:user_id).uniq)
-    @user_names[id]
-  end
-
-  def organization_name_for(id)
-    @organizations ||= Organization.all(@access_token)
-    organization = @organizations.find { |o| o.id == id }
-    organization ? organization.name : ""
+    @metadata = Reports::Excel::Metadata.new(@responses, access_token)
   end
 end
