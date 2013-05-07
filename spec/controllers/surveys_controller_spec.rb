@@ -34,11 +34,10 @@ describe SurveysController do
 
     context "when filtering" do
       before(:each) do
-        Survey.delete_all
         sign_in_as('cso_admin')
         @draft_survey = FactoryGirl.create(:survey, :finalized => false, :organization_id => LOGGED_IN_ORG_ID)
-        @finalized_survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => LOGGED_IN_ORG_ID)
-        @archived_survey = FactoryGirl.create(:survey, :archived => true, :organization_id => LOGGED_IN_ORG_ID)
+        @finalized_survey = FactoryGirl.create(:survey, :finalized, :organization_id => LOGGED_IN_ORG_ID)
+        @archived_survey = FactoryGirl.create(:survey, :archived, :organization_id => LOGGED_IN_ORG_ID)
       end
 
       it "shows all draft surveys if filter is draft" do
@@ -158,7 +157,7 @@ describe SurveysController do
     before(:each) do
       sign_in_as('cso_admin')
       session[:user_info][:org_id] = 123
-      @survey = FactoryGirl.create(:survey, :organization_id => 123)
+      @survey = FactoryGirl.create(:survey, :finalized, :organization_id => 123)
     end
 
     it "archives the survey" do

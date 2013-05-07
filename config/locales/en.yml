@@ -35,7 +35,6 @@ en:
     question_duplication_failed : "Question duplication failed"
     category_duplicated: "Category Duplicated successfully!"
     category_duplication_failed : "Category duplication failed"
-    no_finalized_surveys: "Can't perform operation on an archived survey"
     survey_archived: "%{survey_name} has been archived."
     mr_duplicated: "Multi-Record Duplicated successfully!"
 
@@ -249,6 +248,7 @@ en:
       models:
         survey:
           finalize_before_archive: "The survey must be finalized before archiving"
+          must_not_be_archived: "Can't archive an archived survey"
 
   add_option: "Add Option"
 # Library strings
