@@ -148,6 +148,12 @@ describe Question do
       nested_question.parent_question.should == question
   end
 
+  it "returns the finalized status of its parent survey" do
+    survey = FactoryGirl.create(:survey, :finalized => true)
+    question = FactoryGirl.create(:question, :survey => survey)
+    question.reload.survey_finalized?.should be_true
+  end
+
   context "when returning it's level of nesting" do
     it "takes into account nesting under an option" do
       question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})

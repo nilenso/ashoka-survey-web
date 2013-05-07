@@ -2,6 +2,8 @@ module Api
   module V1
     class QuestionsController < APIApplicationController
       before_filter :dont_cache
+      before_filter :require_draft_survey, :only => [:create]
+      before_filter :require_question_belonging_to_draft_survey, :only => [:update, :destroy, :image_upload, :duplicate]
 
       def create
         question = Question.new_question_by_type(params[:question][:type], params[:question])
@@ -83,6 +85,20 @@ module Api
       private
       def dont_cache
         expires_now
+      end
+
+      def require_draft_survey
+        survey = Survey.find(params[:question][:survey_id])
+        if survey.finalized?
+          render :json => { :error => "Survey is finalized." }, :status => :bad_request
+        end
+      end
+
+      def require_question_belonging_to_draft_survey
+        question = Question.find_by_id(params[:id])
+        if question && question.survey_finalized?
+          render :json => { :error => "Survey is finalized." }, :status => :bad_request
+        end
       end
     end
   end
