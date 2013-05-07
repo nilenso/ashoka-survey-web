@@ -24,15 +24,25 @@ describe Survey do
     it { should validate_presence_of :name }
     it { should validate_presence_of :expiry_date }
 
-    it "should not accept an invalid expiry date" do
-      survey = FactoryGirl.build(:survey, :expiry_date => nil)
-      survey.should_not be_valid
-    end
+    context "validates the expiry date" do
+      it "to not be in the past when survey is created" do
+        date = Date.new(1990,10,24)
+        survey = FactoryGirl.build(:survey, :expiry_date => date)
+        survey.should_not be_valid
+      end
 
-    it "validates the expiry date to not be in the past" do
-      date = Date.new(1990,10,24)
-      survey = FactoryGirl.build(:survey, :expiry_date => date)
-      survey.should_not be_valid
+      it "to not be in the past when expiry date is updated" do
+        date = Date.new(1990,10,24)
+        survey = FactoryGirl.create(:survey)
+        survey.expiry_date = date
+        survey.should_not be_valid
+      end
+
+      it "only when it is changed during a survey updation" do
+        survey = Timecop.freeze(1.week.ago) { FactoryGirl.create(:survey, :expiry_date => 2.days.from_now) }
+        survey.description = "foo"
+        survey.should be_valid
+      end
     end
 
     it "does not allow the description to be more than 250 characters" do
@@ -376,8 +386,8 @@ describe Survey do
 
     context "active" do
       it "returns finalized surveys" do
-        draft_survey = FactoryGirl.create(:survey, :finalized => false)  
-        finalized_survey = FactoryGirl.create(:survey, :finalized => true)  
+        draft_survey = FactoryGirl.create(:survey, :finalized => false)
+        finalized_survey = FactoryGirl.create(:survey, :finalized => true)
         Survey.active.should == [finalized_survey]
       end
 
@@ -393,7 +403,7 @@ describe Survey do
         Timecop.freeze(7.days.from_now) do
           Survey.active.should == [unexpired_survey]
         end
-      end 
+      end
     end
 
     context "active_plus" do

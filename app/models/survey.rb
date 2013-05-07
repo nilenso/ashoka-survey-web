@@ -4,7 +4,7 @@ class Survey < ActiveRecord::Base
   attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
   validates_presence_of :name
   validates_presence_of :expiry_date
-  validates :expiry_date, :date => { :after => Proc.new { Date.today }}
+  validates :expiry_date, :date => { :after => Proc.new { Date.current }}, :if => :expiry_date_changed?
   validate :description_should_be_short
   has_many :questions, :dependent => :destroy
   has_many :responses, :dependent => :destroy
