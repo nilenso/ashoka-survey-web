@@ -19,6 +19,29 @@ describe Category do
   it { should allow_mass_assignment_of :mandatory }
   it { should allow_mass_assignment_of :order_number }
 
+  context "callbacks" do
+    let!(:survey) { FactoryGirl.create(:survey) }
+
+    it "doesn't create when its survey is finalized" do
+      survey.finalize
+      expect { Category.create(:content => "FOO",:survey_id => survey.id) }.not_to change { Category.count }
+    end
+
+    it "doesn't update if its survey is finalized" do
+      category = FactoryGirl.create(:category, :survey => survey, :content => "FOO")
+      survey.finalize
+      category.content = "BAR"
+      category.save
+      category.reload.content.should == "FOO"
+    end
+
+    it "doesn't destroy if its survey is finalized" do
+      category = FactoryGirl.create(:category, :survey => survey, :content => "FOO")
+      survey.finalize
+      expect { category.destroy }.not_to change { Category.count }
+    end
+  end
+
   it "fetches all it's sub-questions and sub-categories in order" do
     question = FactoryGirl.create :question, :order_number => 0
     category = FactoryGirl.create :category, :order_number => 1

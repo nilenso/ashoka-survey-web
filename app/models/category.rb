@@ -10,6 +10,9 @@ class Category < ActiveRecord::Base
 
   delegate :question, :to => :parent, :prefix => true, :allow_nil => true
 
+  before_save :require_draft_survey
+  before_destroy :require_draft_survey
+
   def elements
     (questions + categories.includes([:questions, :categories])).sort_by(&:order_number)
   end
@@ -96,5 +99,15 @@ class Category < ActiveRecord::Base
 
   def has_multi_record_ancestor
     has_multi_record_ancestor?
+  end
+
+  private
+
+  def require_draft_survey
+    if survey && survey.finalized?
+      false
+    else
+      true
+    end
   end
 end
