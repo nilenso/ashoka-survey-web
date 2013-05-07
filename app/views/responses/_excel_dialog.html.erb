@@ -10,15 +10,17 @@
       <input disabled type="text" class="to-date date-picker" placeholder="<%= t('responses.excel.to_date')%>"></input>
     </fieldset>
 
-    <fieldset class='other-settings'>
-      <legend>
-        <span>Settings</span>
-      </legend>
-      <div class="filter-private-questions">
-        <input id="filter-private-checkbox" type="checkbox"></input>
-        <label class='filter-private-label' for="filter-private-checkbox">Include Private Questions</label>
-      </div>
-    </fieldset>
+    <% if can? :change_excel_filters, @survey %>
+      <fieldset class='other-settings'>
+        <legend>
+          <span>Settings</span>
+        </legend>
+        <div class="filter-private-questions">
+          <input id="filter-private-checkbox" type="checkbox"></input>
+          <label class='filter-private-label' for="filter-private-checkbox">Include Private Questions</label>
+        </div>
+      </fieldset>
+    <% end %>
 
 
     <div class="error-message"></div>
