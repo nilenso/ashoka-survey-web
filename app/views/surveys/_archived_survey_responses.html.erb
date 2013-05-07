@@ -1,0 +1,10 @@
+<div class="operations">
+  <ul class="response_operations">
+    <li><%= link_to icon_for('icon-list', t(".list_responses")), survey_responses_path(survey.id), :class => survey.class_for_disabled if can?(:read, survey) && survey.has_responses? %></li>
+  </ul>
+
+  <ul class="cso_admin_operations">
+    <li><%= link_to icon_for('icon-copy', t('.duplicate')), duplicate_survey_path(survey.id), :method => :post, :data => { :confirm => t(:confirm) } if can? :duplicate, survey %></li>
+    <li><%= link_to icon_for('icon-bar-chart', t('.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.finalized? && survey.has_responses? %></li>
+  </ul>
+</div>
