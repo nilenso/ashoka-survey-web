@@ -245,6 +245,10 @@ en:
 
       response:
         location: "Location"
+    errors:
+      models:
+        survey:
+          finalize_before_archive: "The survey must be finalized before archiving"
 
   add_option: "Add Option"
 # Library strings

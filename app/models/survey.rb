@@ -5,6 +5,7 @@ class Survey < ActiveRecord::Base
   validates_presence_of :name
   validates_presence_of :expiry_date
   validates :expiry_date, :date => { :after => Proc.new { Date.current }}, :if => :expiry_date_changed?
+  validate :ensure_survey_should_be_finalized_before_archiving
   validate :description_should_be_short
   has_many :questions, :dependent => :destroy
   has_many :responses, :dependent => :destroy
@@ -185,5 +186,9 @@ class Survey < ActiveRecord::Base
       self.published_on ||= Date.today
       self.save
     end
+  end
+
+  def ensure_survey_should_be_finalized_before_archiving
+    errors.add(:base, :finalize_before_archive) if archived? && !finalized?
   end
 end

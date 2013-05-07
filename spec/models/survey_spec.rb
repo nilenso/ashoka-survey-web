@@ -131,7 +131,7 @@ describe Survey do
     end
 
     it "saves the survey with archived false when duplicating an archived survey" do
-      survey = FactoryGirl.create :survey_with_questions, :organization_id => 1, :archived => true
+      survey = FactoryGirl.create(:survey, :archived, :organization_id => 1)
       new_survey = survey.duplicate
       new_survey.should_not be_archived
     end
@@ -176,11 +176,22 @@ describe Survey do
     end
   end
 
-  it "can be archived" do
-    survey = FactoryGirl.create :survey
-    survey.archive
-    survey.reload.should be_archived
-    survey.name.should =~ /\(Archived\)/
+  context "archive" do
+    it "can be archived" do
+      survey = FactoryGirl.create(:survey, :finalized => true)
+      survey.archive
+      survey.reload
+      survey.should be_archived
+      survey.name.should =~ /\(Archived\)/
+    end
+
+    it "cannot be archived if the survey is not finalized" do
+      survey = FactoryGirl.create(:survey, :finalized => false)
+      survey.archive
+      survey.should_not be_valid
+      survey.reload.should_not be_archived
+      survey.should have(1).error
+    end
   end
 
   context "users" do
@@ -378,9 +389,9 @@ describe Survey do
     end
 
     it "returns a list of archived surveys" do
-      archived_survey = FactoryGirl.create :survey, :archived => true
-      another_archived_survey = FactoryGirl.create :survey, :archived => true
-      survey = FactoryGirl.create :survey
+      archived_survey = FactoryGirl.create(:survey, :archived)
+      another_archived_survey = FactoryGirl.create(:survey, :archived)
+      unarchived_survey = FactoryGirl.create(:survey)
       Survey.archived.should =~ [archived_survey, another_archived_survey]
     end
 
