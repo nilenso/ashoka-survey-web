@@ -1,20 +1,19 @@
 # Collection of questions
 
 class Survey < ActiveRecord::Base
-  attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
   validates_presence_of :name
-  validates_presence_of :expiry_date
-  validates :expiry_date, :date => { :after => Proc.new { Date.current }}, :if => :expiry_date_changed?
+  validates_uniqueness_of :auth_key, :allow_nil => true
+  validates :expiry_date, :presence => true, :date => { :after => Proc.new { Date.current }}, :if => :expiry_date_changed?
   validate :ensure_survey_to_be_archivable
   validate :description_should_be_short
+
+  belongs_to :organization
   has_many :questions, :dependent => :destroy
   has_many :responses, :dependent => :destroy
-  accepts_nested_attributes_for :questions
-  belongs_to :organization
   has_many :survey_users, :dependent => :destroy
   has_many :participating_organizations, :dependent => :destroy
   has_many :categories, :dependent => :destroy
-  validates_uniqueness_of :auth_key, :allow_nil => true
+
   scope :finalized, where(:finalized => true)
   scope :none, limit(0)
   scope :not_expired, lambda { where('expiry_date > ?', Date.today) }
@@ -22,8 +21,14 @@ class Survey < ActiveRecord::Base
   scope :with_questions, joins(:questions)
   scope :drafts, where(:finalized => false)
   scope :archived, where(:archived => true)
+  scope :unarchived, where(:archived => false)
   default_scope :order => 'published_on DESC NULLS LAST, created_at DESC'
+
   before_save :generate_auth_key, :if => :public?
+
+  attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
+  accepts_nested_attributes_for :questions
+
 
   def self.active
     where(active_arel)

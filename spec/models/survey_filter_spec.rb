@@ -18,20 +18,22 @@ describe SurveyFilter do
       filter_surveys.filter.should_not include(another_survey)
     end
 
-    it "returns expired surveys if survey filter is set to 'expired'" do
-      survey = FactoryGirl.create(:survey)
-      survey.update_attribute(:expiry_date, 2.days.ago)
-      another_survey = FactoryGirl.create(:survey, :finalized => true)
-      filter_surveys = SurveyFilter.new(Survey.limit(2), "expired")
-      filter_surveys.filter.should include(survey)
-      filter_surveys.filter.should_not include(another_survey)
-    end
+    context "when survey filter is set to 'expired'" do
+      it "returns expired surveys" do
+        survey = FactoryGirl.create(:survey)
+        survey.update_attribute(:expiry_date, 2.days.ago)
+        another_survey = FactoryGirl.create(:survey, :finalized => true)
+        filter_surveys = SurveyFilter.new(Survey.limit(2), "expired")
+        filter_surveys.filter.should include(survey)
+        filter_surveys.filter.should_not include(another_survey)
+      end
 
-    it "does not include archived surveys when fetching expired surveys" do
-      expired_archived_survey = Timecop.freeze(1.week.ago) { FactoryGirl.create(:survey, :archived, :expiry_date => 3.days.from_now) }
-      expired_survey = Timecop.freeze(1.week.ago) { FactoryGirl.create(:survey, :expiry_date => 3.days.from_now) }
-      filter_surveys = SurveyFilter.new(Survey.limit(2), "expired")
-      filter_surveys.filter.should == [expired_survey]
+      it "does not include archived surveys" do
+        expired_archived_survey = Timecop.freeze(1.week.ago) { FactoryGirl.create(:survey, :archived, :expiry_date => 3.days.from_now) }
+        expired_survey = Timecop.freeze(1.week.ago) { FactoryGirl.create(:survey, :expiry_date => 3.days.from_now) }
+        filter_surveys = SurveyFilter.new(Survey.limit(2), "expired")
+        filter_surveys.filter.should == [expired_survey]
+      end
     end
 
     it "returns active surveys if no survey filter is specified" do

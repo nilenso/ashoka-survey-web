@@ -121,7 +121,8 @@ describe Survey do
   context "finalize" do
     it "should not be finalized by default" do
       survey = FactoryGirl.create(:survey)
-    survey.should_not be_finalized    end
+      survey.should_not be_finalized
+    end
 
     it "changes finalized to true" do
       survey = FactoryGirl.create(:survey)
@@ -141,14 +142,6 @@ describe Survey do
       another_survey = FactoryGirl.create(:survey, :finalized => true)
       Survey.finalized.should_not include(survey)
       Survey.finalized.should include(another_survey)
-    end
-
-    it "returns a list of expired surveys" do
-      survey = FactoryGirl.create(:survey)
-      another_survey = FactoryGirl.create(:survey, :finalized => true)
-      another_survey.update_column(:expiry_date, 5.days.ago)
-      Survey.expired.should_not include(survey)
-      Survey.expired.should include(another_survey)
     end
 
     it "returns a empty activerecord relation" do
@@ -374,6 +367,18 @@ describe Survey do
       another_archived_survey = FactoryGirl.create(:survey, :archived)
       unarchived_survey = FactoryGirl.create(:survey)
       Survey.archived.should =~ [archived_survey, another_archived_survey]
+    end
+
+    it "returns a list of expired surveys" do
+      survey = FactoryGirl.create(:survey)
+      expired_survey = Timecop.freeze(1.week.ago) { FactoryGirl.create(:survey, :finalized => true, :expiry_date => 2.days.from_now) }
+      Survey.expired.should == [expired_survey]
+    end
+
+    it "returns a list of unarchived surveys" do
+      archived_survey = FactoryGirl.create(:survey, :archived)
+      unarchived_survey = FactoryGirl.create(:survey, :archived => false)
+      Survey.unarchived.should == [unarchived_survey]
     end
 
     context "active" do
