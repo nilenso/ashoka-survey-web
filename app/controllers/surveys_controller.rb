@@ -4,7 +4,6 @@ class SurveysController < ApplicationController
   load_and_authorize_resource
 
   before_filter :require_draft_survey, :only => [:build]
-  before_filter :no_archived_surveys
 
   def index
     @surveys ||= Survey.none
@@ -47,8 +46,11 @@ class SurveysController < ApplicationController
 
   def archive
     survey = Survey.find(params[:survey_id])
-    survey.archive
-    flash[:notice] = t "flash.survey_archived", :survey_name => survey.name
+    if survey.archive
+      flash[:notice] = t("flash.survey_archived", :survey_name => survey.name)
+    else
+      flash[:error] = survey.errors.messages
+    end
     redirect_to root_path
   end
 
@@ -74,14 +76,6 @@ class SurveysController < ApplicationController
     survey = Survey.find(params[:survey_id])
     if survey.finalized?
       flash[:error] = t "flash.edit_finalized_survey"
-      redirect_to root_path
-    end
-  end
-
-  def no_archived_surveys
-    survey = Survey.find_by_id(params[:survey_id])
-    if survey.try :archived?
-      flash[:error] = t "flash.no_finalized_surveys"
       redirect_to root_path
     end
   end

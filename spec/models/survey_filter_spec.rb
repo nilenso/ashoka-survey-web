@@ -11,10 +11,10 @@ describe SurveyFilter do
     end
 
     it "returns archived surveys if survey filter is set to 'archived'" do
-      survey = FactoryGirl.create(:survey, :archived => true)
+      archived_survey = FactoryGirl.create(:survey, :archived)
       another_survey = FactoryGirl.create(:survey, :archived => false)
       filter_surveys = SurveyFilter.new(Survey.limit(2), "archived")
-      filter_surveys.filter.should include(survey)
+      filter_surveys.filter.should include(archived_survey)
       filter_surveys.filter.should_not include(another_survey)
     end
 

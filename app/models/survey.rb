@@ -4,7 +4,8 @@ class Survey < ActiveRecord::Base
   attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
   validates_presence_of :name
   validates_presence_of :expiry_date
-  validates :expiry_date, :date => { :after => Proc.new { Date.today }}
+  validates :expiry_date, :date => { :after => Proc.new { Date.current }}, :if => :expiry_date_changed?
+  validate :ensure_survey_to_be_archivable
   validate :description_should_be_short
   has_many :questions, :dependent => :destroy
   has_many :responses, :dependent => :destroy
@@ -185,5 +186,10 @@ class Survey < ActiveRecord::Base
       self.published_on ||= Date.today
       self.save
     end
+  end
+
+  def ensure_survey_to_be_archivable
+    errors.add(:base, :must_not_be_archived) if archived? && archived_was
+    errors.add(:base, :finalize_before_archive) if archived? && !finalized?
   end
 end
