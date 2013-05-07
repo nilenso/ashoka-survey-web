@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe QuestionWithOptions do
-  it { should have_many(:options).dependent(:destroy) }
-
   context 'when creating blank answers' do
     let(:response) { FactoryGirl.create :response }
 

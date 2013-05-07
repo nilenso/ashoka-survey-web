@@ -5,10 +5,6 @@ describe SurveyUser do
   let(:finalized_survey) { FactoryGirl.create(:survey, :finalized => true) }
   subject { SurveyUser.create(:survey_id => draft_survey.id, :user_id => 1) }
 
-  it { should respond_to :survey_id }
-  it { should respond_to :user_id }
-  it { should belong_to :survey }
-
   context "when validating that the survey is finalized" do
 
     it "fails when the survey is not finalized" do

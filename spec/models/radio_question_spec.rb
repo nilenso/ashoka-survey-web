@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe RadioQuestion do
-  it { should have_many(:options).dependent(:destroy) }
-
   it "is a question with type = 'RadioQuestion'" do
     RadioQuestion.create(:content => "hello", :order_number => 12345)
     question = Question.find_by_content("hello")

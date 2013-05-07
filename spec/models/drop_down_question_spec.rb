@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe DropDownQuestion do
-  it { should have_many(:options).dependent(:destroy) }
-
   it "is a question with type = 'DropDownQuestion'" do
     DropDownQuestion.create(:content => "hello")
     question = Question.find_by_content("hello")

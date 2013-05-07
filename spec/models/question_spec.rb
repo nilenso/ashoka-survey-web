@@ -1,13 +1,6 @@
 require 'spec_helper'
 
 describe Question do
-  it { should allow_mass_assignment_of(:type) }
-  it { should allow_mass_assignment_of(:parent_id) }
-  it { should allow_mass_assignment_of(:identifier) }
-  it { should allow_mass_assignment_of(:category_id) }
-  it { should belong_to(:parent).class_name(Option) }
-  it { should belong_to(:category) }
-
   context "scopes" do
     context "when finding non-private questions" do
       it "gets questions which have the private flag set to false" do

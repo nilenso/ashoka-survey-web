@@ -1,8 +1,6 @@
 require 'spec_helper'
 
 describe NumericQuestion do
-  it { should respond_to :max_value }
-  it { should respond_to :min_value }
   it { should validate_numericality_of :max_value }
   it { should validate_numericality_of :min_value }
 

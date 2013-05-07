@@ -1,25 +1,6 @@
 require 'spec_helper'
 
 describe Survey do
-  it { should respond_to :name }
-  it { should respond_to :expiry_date }
-  it { should respond_to :description }
-  it { should respond_to :finalized }
-  it { should respond_to :archived }
-  it { should respond_to :organization_id }
-  it { should respond_to :public }
-  it { should respond_to(:auth_key) }
-  it { should respond_to(:published_on) }
-  it { should have_many(:questions).dependent(:destroy) }
-  it { should have_many(:responses).dependent(:destroy) }
-  it { should have_many(:categories).dependent(:destroy) }
-  it { should have_many(:survey_users).dependent(:destroy) }
-  it { should have_many(:participating_organizations).dependent(:destroy) }
-  it { should accept_nested_attributes_for :questions }
-  it { should belong_to :organization }
-  it { should allow_mass_assignment_of(:public) }
-
-
   context "when validating" do
     it { should validate_presence_of :name }
     it { should validate_presence_of :expiry_date }

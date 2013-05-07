@@ -1,27 +1,9 @@
 require 'spec_helper'
 
 describe Response do
-  it { should belong_to(:survey) }
-  it { should have_db_column(:status).with_options(default: 'incomplete') }
-  it { should have_many(:answers).dependent(:destroy) }
-  it { should have_many(:records).dependent(:destroy) }
-  it { should accept_nested_attributes_for(:answers) }
-  it { should respond_to(:user_id) }
-  it { should respond_to(:latitude) }
-  it { should respond_to(:longitude) }
-  it { should respond_to(:ip_address) }
-  it { should respond_to(:location) }
-  it { should respond_to(:mobile_id) }
   it { should validate_presence_of(:survey_id)}
   it { should validate_presence_of(:organization_id)}
   it { should validate_presence_of(:user_id)}
-  it { should allow_mass_assignment_of(:survey_id) }
-  it { should allow_mass_assignment_of(:status) }
-  it { should allow_mass_assignment_of(:updated_at) }
-  it { should allow_mass_assignment_of(:latitude) }
-  it { should allow_mass_assignment_of(:longitude) }
-  it { should allow_mass_assignment_of(:ip_address) }
-
 
   context "scopes" do
     it "returns responses in the chronological order" do

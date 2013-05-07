@@ -1,14 +1,6 @@
 require 'spec_helper'
 
 describe Answer do
-  it { should respond_to(:content) }
-  it { should belong_to(:question) }
-  it { should belong_to(:record) }
-  it { should belong_to(:response) }
-  it { should have_many(:choices).dependent(:destroy) }
-  it { should allow_mass_assignment_of(:updated_at) }
-  it { should allow_mass_assignment_of(:response_id) }
-
   context "validations" do
     context "for mandatory questions" do
       it "does not save if a mandatory question is not answered for a complete response" do
@@ -279,7 +271,7 @@ describe Answer do
     it "clears the content of the answer" do
       answer = FactoryGirl.create(:answer)
       answer.clear_content
-      answer.reload.content.should be_blank 
+      answer.reload.content.should be_blank
     end
   end
 
