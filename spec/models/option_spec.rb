@@ -9,7 +9,7 @@ describe Option do
   it { should validate_presence_of(:question_id) }
   it { should have_many(:questions).dependent(:destroy) }
   it { should have_many(:categories).dependent(:destroy) }
-  
+
   it "delegates `survey` to its parent question" do
     survey = FactoryGirl.create(:survey)
     option = FactoryGirl.create(:option, :question => FactoryGirl.create(:question, :survey => survey))
@@ -22,6 +22,30 @@ describe Option do
       option_1 = FactoryGirl.create(:option, :question => question, :order_number => 1)
       option_2 = FactoryGirl.build(:option, :question => question, :order_number => 1)
       option_2.should_not be_valid
+    end
+  end
+
+  context "callbacks" do
+    let!(:survey) { FactoryGirl.create(:survey) }
+    let!(:question) { FactoryGirl.create(:question, :survey => survey) }
+
+    it "creates even if its survey is finalized" do
+      survey.finalize
+      expect { Option.create(:content => "FOO",:question_id => question.id) }.to change { Option.count }.by(1)
+    end
+
+    it "doesn't update if its survey is finalized" do
+      option = FactoryGirl.create(:option, :question => question, :content => "FOO")
+      survey.finalize
+      option.content = "BAR"
+      option.save
+      option.reload.content.should == "FOO"
+    end
+
+    it "doesn't destroy if its survey is finalized" do
+      option = FactoryGirl.create(:option, :question => question, :content => "FOO")
+      survey.finalize
+      expect { option.destroy }.not_to change { Option.count }
     end
   end
 
