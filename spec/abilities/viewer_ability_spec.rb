@@ -17,6 +17,11 @@ describe ViewerAbility do
   context "for surveys" do
     let(:survey_in_same_org) { FactoryGirl.create :survey_with_all, :organization_id => user_info[:org_id] }
     let(:survey_in_other_org) { FactoryGirl.create :survey_with_all, :organization_id => 341 }
+    let(:survey_in_another_org_shared_with_his_org) do
+      survey = FactoryGirl.create :survey_with_all, :organization_id => 300
+      ParticipatingOrganization.create(:survey_id => survey.id, :organization_id => 5)
+      survey
+    end
 
     it { should_not be_able_to :create, Survey }
     it { should_not be_able_to :update, Survey }
@@ -27,6 +32,10 @@ describe ViewerAbility do
 
     it { should_not be_able_to :read, survey_in_other_org }
     it { should be_able_to :read, survey_in_same_org }
+
+    it { should_not be_able_to :change_excel_filters, survey_in_same_org }
+    it { should_not be_able_to :change_excel_filters, survey_in_another_org_shared_with_his_org }
+    it { should_not be_able_to :change_excel_filters, survey_in_other_org }
 
     context "with responses" do
       let(:response_in_same_org) { FactoryGirl.create(:response, :organization_id => 5) }

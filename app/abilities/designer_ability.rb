@@ -10,6 +10,7 @@ class DesignerAbility < Ability
     can :read, Survey, :organization_id => user_info[:org_id]
     can :report, Survey, :organization_id => user_info[:org_id]
     can :finalize, Survey, :organization_id => user_info[:org_id]
+    can :change_excel_filters, Survey, :organization_id => user_info[:org_id]
 
     can :edit_publication, Survey, :organization_id => user_info[:org_id]
     can :update_publication, Survey, :organization_id => user_info[:org_id]

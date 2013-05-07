@@ -39,6 +39,9 @@ describe FieldAgentAbility do
     it { should be_able_to :read, survey_published_to_him }
     it { should_not be_able_to :read, survey_not_published_to_him }
 
+    it { should_not be_able_to :change_excel_filters, survey_published_to_him }
+    it { should_not be_able_to :change_excel_filters, survey_not_published_to_him }
+
     context "with responses" do
       let(:response_added_by_him) { FactoryGirl.create(:response, :user_id => 6) }
       let(:response_added_by_someone_else) { FactoryGirl.create(:response, :user_id => 50) }
