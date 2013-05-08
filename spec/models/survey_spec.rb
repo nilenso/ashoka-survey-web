@@ -4,6 +4,7 @@ describe Survey do
   context "when validating" do
     it { should validate_presence_of :name }
     it { should validate_presence_of :expiry_date }
+    it { should ensure_length_of(:description).is_at_most(250) }
 
     context "validates the expiry date" do
       it "to not be in the past when survey is created" do
@@ -24,12 +25,6 @@ describe Survey do
         survey.description = "foo"
         survey.should be_valid
       end
-    end
-
-    it "does not allow the description to be more than 250 characters" do
-      long_description = '*' * 251
-      survey = FactoryGirl.build(:survey, :description => long_description)
-      survey.should_not be_valid
     end
   end
 

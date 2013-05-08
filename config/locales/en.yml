@@ -51,7 +51,6 @@ en:
     confirm_finalize: "The survey can't be edited after this. Are you sure?"
     validations:
       cant_be_in_past: "Can't be in the past"
-      too_long: "Can't be more than 250 characters"
       invalid: "is not valid"
       older_than_existing: "can not be older than existing value"
 

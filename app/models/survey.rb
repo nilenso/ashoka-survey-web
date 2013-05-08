@@ -4,7 +4,7 @@ class Survey < ActiveRecord::Base
   validates :expiry_date, :date => { :after => Proc.new { Date.current }}, :if => :expiry_date_changed?
   validates_presence_of :expiry_date
   validate :ensure_survey_to_be_archivable
-  validate :description_should_be_short
+  validates :description, :length => { :maximum => 250 }
 
   belongs_to :organization
   has_many :questions, :dependent => :destroy
@@ -177,12 +177,6 @@ class Survey < ActiveRecord::Base
 
   def generate_auth_key
     self.auth_key = SecureRandom.urlsafe_base64
-  end
-
-  def description_should_be_short
-    if description && description.length > 250
-      errors.add(:description, I18n.t('surveys.validations.too_long'))
-    end
   end
 
   def set_published_on
