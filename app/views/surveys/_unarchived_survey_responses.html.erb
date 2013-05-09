@@ -6,12 +6,12 @@
   </ul>
 
   <ul class="cso_admin_operations">
+    <li><%= link_to icon_for('icon-edit', t('surveys.index.edit')), survey_build_path(survey.id)  if can? :edit, survey %></li>
     <% if survey.finalized? %>
         <li><%= link_to icon_for('icon-arrow-up', t('surveys.index.publish')), edit_survey_publication_path(survey.id) if can? :edit_publication, survey %></li>
         <li><%= link_to icon_for('icon-arrow-up', t('surveys.index.unpublish')), unpublish_survey_publication_path(survey.id) if can?(:edit_publication, survey) && survey.survey_users.any? %></li>
         <li><%= link_to icon_for('icon-icon', t('surveys.index.archive')), survey_archive_path(survey.id), :id => "archive", :method => :put if can? :archive, survey %></li>
     <% else %>
-        <li><%= link_to icon_for('icon-edit', t('surveys.index.edit')), survey_build_path(survey.id)  if can? :edit, survey %></li>
         <li><%= link_to icon_for('icon-ok', t('surveys.index.finalize')), survey_finalize_path(survey.id), :method => :put, :data => { :confirm => t("surveys.confirm_finalize") } if can? :finalize, survey %></li>
     <% end %>
     <li><%= link_to icon_for('icon-trash', t('surveys.index.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can?(:destroy, survey) && survey.responses.where(:blank => false).count == 0  %></li>
