@@ -1,0 +1,17 @@
+<div class="actions">
+  {{#id}}
+    <%= render 'templates/question_types_dropdown' %>
+    <button class='add_sub_question button' href='javascript:void(0);'>Add</button>
+    <br/>
+    <button class='add_sub_category button' data-type="" href='javascript:void(0);'>Add Category</button>
+    {{^has_multi_record_ancestor}}
+        <button class='add_sub_multi_record button' data-type="MultiRecordCategory" href='javascript:void(0);'>Add MR</button>
+    {{/has_multi_record_ancestor}}
+    <button class='delete_option button' href='javascript:void(0);'>Delete Option</button>
+  {{/id}}
+  {{^id}}
+    <%= render 'templates/loading' %>
+  {{/id}}
+</div>
+<div>{{errors}}</div>
+<input type="text" value="{{content}}" class="option"></input>
