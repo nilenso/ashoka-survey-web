@@ -63,4 +63,5 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
   limit_edit: =>
     $(this.el).find(":input").attr("disabled", true)
     $(this.el).find(".option").attr("disabled", false)
+    sub_question.limit_edit() for sub_question in @sub_questions
 
