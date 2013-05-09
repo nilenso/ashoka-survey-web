@@ -75,3 +75,4 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
   freeze_view: =>
     super
     $(this.el).find(".add_option").attr("disabled", false)
+    option.freeze_view() for option in @options
