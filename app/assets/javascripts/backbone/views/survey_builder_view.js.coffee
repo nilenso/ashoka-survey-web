@@ -16,6 +16,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.survey        = new SurveyBuilder.Models.SurveyModel(survey_id)
     this.settings_pane = new SurveyBuilder.Views.SettingsPaneView(this.survey)
     this.dummy_pane    = new SurveyBuilder.Views.DummyPaneView(this.survey)
+    this.actions_view  = new SurveyBuilder.Views.ActionsView
     $(this.el).ajaxStart(window.notifications_view.show_spinner)
     $(this.el).ajaxStop(window.notifications_view.hide_spinner)
 
@@ -127,6 +128,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
   freeze_view: =>
     @settings_pane.freeze_view()
     @picker_pane.freeze_view()
-    $(".delete-survey").remove()
+    @actions_view.freeze_view()
     window.notifications_view.set_notice("You are editing a finalized survey. Certain features will be disabled in this mode.",
       { no_timeout: true})
