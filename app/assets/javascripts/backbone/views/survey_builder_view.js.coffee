@@ -11,7 +11,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'show_survey_details': 'show_survey_details'
     'save_all_questions': 'save_all_questions'
 
-  initialize:(survey_id, survey_frozen) =>
+  initialize:(survey_id, @survey_frozen) =>
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
     this.survey        = new SurveyBuilder.Models.SurveyModel(survey_id)
     this.settings_pane = new SurveyBuilder.Views.SettingsPaneView(this.survey)
@@ -117,6 +117,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     $(this.el).find("#save input").prop('disabled', false)
     $(this.el).trigger('save_finished')
     @display_save_status()
+    @limit_edit() if @survey_frozen
     window.loading_overlay.hide_overlay()
 
   display_save_status: =>
