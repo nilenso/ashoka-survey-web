@@ -1,17 +1,19 @@
 class Category < ActiveRecord::Base
   belongs_to :parent, :class_name => Option
   belongs_to :category
-  attr_accessible :content, :survey_id, :order_number, :category_id, :parent_id, :type, :mandatory
+  belongs_to :survey
   has_many :questions, :dependent => :destroy
   has_many :categories, :dependent => :destroy
   has_many :records, :dependent => :destroy
+
   validates_presence_of :content
-  belongs_to :survey
 
   delegate :question, :to => :parent, :prefix => true, :allow_nil => true
 
   before_save :require_draft_survey
   before_destroy :require_draft_survey
+
+  attr_accessible :content, :survey_id, :order_number, :category_id, :parent_id, :type, :mandatory
 
   def elements
     (questions + categories.includes([:questions, :categories])).sort_by(&:order_number)
@@ -66,8 +68,7 @@ class Category < ActiveRecord::Base
   def copy_with_order
     duplicated_category = duplicate(survey_id)
     duplicated_category.order_number += 1
-    return false unless duplicated_category.save
-    true
+    duplicated_category.save
   end
 
   def has_questions?
@@ -104,10 +105,6 @@ class Category < ActiveRecord::Base
   private
 
   def require_draft_survey
-    if survey && survey.finalized?
-      false
-    else
-      true
-    end
+    !survey.finalized?
   end
 end

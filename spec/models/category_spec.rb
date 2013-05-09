@@ -52,27 +52,23 @@ describe Category do
   end
 
   it "returns it's parent question" do
-    question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
-    option = Option.create(content: "Option", order_number: 0)
-    nested_category = FactoryGirl.create :category
-    question.options << option
-    option.categories << nested_category
+    question = FactoryGirl.create(:drop_down_question)
+    option = FactoryGirl.create(:option, :question => question)
+    nested_category = FactoryGirl.create(:category, :parent => option)
     nested_category.parent_question.should == question
   end
 
   it "knows if it (or one of it's parent categories) is a sub-question" do
-    question = DropDownQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
-    option = Option.create(content: "Option", order_number: 0)
-    nested_category = FactoryGirl.create :category
-    second_level_category = FactoryGirl.create :category
-    third_level_category = FactoryGirl.create :category
-    question.options << option
-    option.categories << nested_category
-    nested_category.categories << second_level_category
-    second_level_category.categories << third_level_category
-    second_level_category.sub_question?.should be_true
-    third_level_category.sub_question?.should be_true
-    FactoryGirl.create(:category).sub_question?.should be_false
+    question = FactoryGirl.create(:drop_down_question)
+    option = FactoryGirl.create(:option, :question => question)
+    first_level_category = FactoryGirl.create(:category)
+    second_level_category = FactoryGirl.create(:category, :parent => option)
+    third_level_category = FactoryGirl.create(:category, :category => second_level_category)
+    fourth_level_category = FactoryGirl.create(:category, :category => third_level_category)
+    first_level_category.should_not be_sub_question
+    second_level_category.should be_sub_question
+    third_level_category.should be_sub_question
+    fourth_level_category.should be_sub_question
   end
 
   context "when creating categories of the given type" do
@@ -118,44 +114,51 @@ describe Category do
     end
   end
 
-  context "Duplicate" do
-    it "duplicates category with sub questions" do
-      category = FactoryGirl.create :category, :order_number => 0
-      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
-      duplicated_category = category.duplicate(0)
+  context "duplicate" do
+    let(:survey) { FactoryGirl.create(:survey) }
+
+    it "duplicates category" do
+      category = FactoryGirl.create(:category, :content => "foo category")
+      nested_question = DropDownQuestion.create({:survey_id => category.survey.id, :category_id => category.id})
+      duplicated_category = category.duplicate(survey.id)
       duplicated_category.id.should_not == category.id
-      duplicated_category.content.should == category.content
-      duplicated_category.questions.size.should == category.questions.size
+      duplicated_category.content.should == "foo category"
+      duplicated_category.survey.id.should == survey.id
+    end
+
+    it "duplicates sub questions in a category" do
+      category = FactoryGirl.create(:category)
+      nested_question = DropDownQuestion.create({content: "foo question", :survey_id => category.survey.id, :category_id => category.id})
+      duplicated_category = category.duplicate(survey.id)
+      duplicated_questions = duplicated_category.questions
+      duplicated_questions.map(&:id).should_not include(nested_question.id)
+      duplicated_questions.map(&:survey_id).should == [survey.id]
+      duplicated_questions.map(&:content).should == ["foo question"]
     end
 
     it "duplicates the nested sub categories as well" do
-      category = FactoryGirl.create :category, :order_number => 0
-      nested_category = FactoryGirl.create(:category, :category_id => category.id)
-      duplicated_category = category.duplicate(0)
-      duplicated_category.categories.size.should == category.categories.size
-    end
-
-    it "sets the sub-questions' survey ID to the new survey's ID which is passed in" do
-      category = FactoryGirl.create :category, :order_number => 0
-      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
-      duplicated_category = category.duplicate(18)
-      duplicated_category.questions[0].survey_id.should == 18
+      category = FactoryGirl.create(:category)
+      nested_category = FactoryGirl.create(:category, :content => "foo subcategory", :category_id => category.id, :survey => category.survey)
+      duplicated_category = category.duplicate(survey.id)
+      duplicated_sub_categories = duplicated_category.categories
+      duplicated_sub_categories.map(&:id).should_not include(nested_category.id)
+      duplicated_sub_categories.map(&:survey_id).should == [survey.id]
+      duplicated_sub_categories.map(&:content).should == ["foo subcategory"]
     end
   end
 
   context "has any questions" do
     it "returns true if the category has sub questions" do
-      category = FactoryGirl.create :category, :order_number => 0
-      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
-      category.has_questions?.should be_true
+      category = FactoryGirl.create(:category)
+      nested_question = FactoryGirl.create(:drop_down_question, :category => category)
+      category.should have_questions
     end
 
     it "returns true if the sub-category has sub questions" do
-      category = FactoryGirl.create :category, :order_number => 0
-      sub_category = FactoryGirl.create :category, :order_number => 1
-      category.categories << sub_category
-      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: sub_category.id})
-      category.has_questions?.should be_true
+      category = FactoryGirl.create(:category)
+      sub_category = FactoryGirl.create(:category, :category => category)
+      nested_question = FactoryGirl.create(:drop_down_question, :category => sub_category)
+      category.should have_questions
     end
 
     it "returns true if the sub-category has sub questions" do
@@ -167,54 +170,52 @@ describe Category do
     end
 
     it "returns categories with questions" do
-      category = FactoryGirl.create :category, :order_number => 0
-      sub_category = FactoryGirl.create :category, :order_number => 1
-      category.categories << sub_category
-      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: sub_category.id})
-      category.categories_with_questions.should include(sub_category)
+      category = FactoryGirl.create(:category)
+      sub_category = FactoryGirl.create(:category, :category => category)
+      nested_question = FactoryGirl.create(:drop_down_question, :category => sub_category)
+      category.categories_with_questions.should == [sub_category]
     end
   end
 
   it "returns the index of the parent's option amongst its siblings" do
-    question = MultiChoiceQuestion.create({content: "Untitled question", survey_id: 18, order_number: 0})
-    parent_option = Option.create(content: "Option", order_number: 0)
-    question.options << parent_option
-    question.options << Option.create(content: "Option", order_number: 1)
-    question.options << Option.create(content: "Option", order_number: 2)
-    sub_category = FactoryGirl.create :category, :order_number => 0
-    parent_option.categories << sub_category
+    question = FactoryGirl.create(:multi_choice_question)
+    parent_option = FactoryGirl.create(:option, :question => question)
+    FactoryGirl.create(:option, :question => question)
+    FactoryGirl.create(:option, :question => question)
+    sub_category = FactoryGirl.create(:category, :parent => parent_option)
     sub_category.index_of_parent_option.should == 0
   end
 
   context "Copy" do
     it "assigns the correct order_number to the duplicated category" do
       category = FactoryGirl.create(:category)
-      category.copy_with_order()
+      category.copy_with_order
       Category.find_by_order_number(category.order_number + 1).should_not be_nil
     end
 
     it "duplicates category with sub questions" do
-      category = FactoryGirl.create(:category)
-      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
-      category.copy_with_order()
-      duplicated_category = Category.find_by_order_number(category.order_number + 1)
+      category = FactoryGirl.create(:category, :content => "foo category")
+      nested_question = FactoryGirl.create(:drop_down_question, :content => "foo question", :category => category, :order_number => 1)
+      category.copy_with_order
+      duplicated_category = Category.last
       duplicated_category.id.should_not == category.id
-      duplicated_category.content.should == category.content
-      duplicated_category.questions.size.should == category.questions.size
+      duplicated_category.content.should == "foo category"
+      duplicated_category.questions.map(&:content)== ["foo question"]
     end
 
     it "sets the sub-questions' survey ID to the same survey_id as of the original question" do
-      category = FactoryGirl.create(:category)
-      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
-      category.copy_with_order()
-      duplicated_category = Category.find_by_order_number(category.order_number + 1)
-      duplicated_category.questions[0].survey_id.should == category.survey_id
+      survey = FactoryGirl.create(:survey)
+      category = FactoryGirl.create(:category, :survey => survey, :order_number => 1)
+      nested_question = FactoryGirl.create(:drop_down_question, :category => category)
+      category.copy_with_order
+      duplicated_category = Category.find_by_order_number(2)
+      duplicated_category.questions.map(&:survey_id).should == [survey.id]
     end
   end
 
   context "#has_multi_record_ancestor?" do
     it "returns true if its parent option has a multi record ancestor" do
-      mr_category = MultiRecordCategory.create(:content => "MR")
+      mr_category = FactoryGirl.create(:multi_record_category)
       parent_question = FactoryGirl.create(:question_with_options, :category => mr_category)
       option = FactoryGirl.create(:option, :question => parent_question)
       question = FactoryGirl.create(:question, :parent => option)
@@ -222,7 +223,7 @@ describe Category do
     end
 
     it "returns false if its parent option doesn't have a multi record ancestor" do
-      category = Category.create(:content => "Cat")
+      category = FactoryGirl.create(:category)
       parent_question = FactoryGirl.create(:question_with_options, :category => category)
       option = FactoryGirl.create(:option, :question => parent_question)
       question = FactoryGirl.create(:question, :parent => option)
@@ -230,21 +231,21 @@ describe Category do
     end
 
     it "returns true if its parent category has a multi record ancestor" do
-      ancestor_category = MultiRecordCategory.create(:content => "Anc")
+      ancestor_category = FactoryGirl.create(:multi_record_category)
       category = FactoryGirl.create(:category, :category => ancestor_category)
       question = FactoryGirl.create(:question, :category => category)
       question.should have_multi_record_ancestor
     end
 
     it "returns false if its parent category doesn't have a multi record ancestor" do
-      ancestor_category = Category.create(:content => "Anc")
+      ancestor_category = FactoryGirl.create(:category)
       category = FactoryGirl.create(:category, :category => ancestor_category)
       question = FactoryGirl.create(:question, :category => category)
       question.should_not have_multi_record_ancestor
     end
 
     it "returns true if there is a multi-record category higher up in the chain" do
-      mr_category = MultiRecordCategory.create(:content => "MR")
+      mr_category = FactoryGirl.create(:multi_record_category)
       category = FactoryGirl.create(:category, :category => mr_category)
       question = FactoryGirl.create(:question_with_options, :category => category)
       option = FactoryGirl.create(:option, :question => question)
@@ -252,13 +253,13 @@ describe Category do
     end
 
     it "returns true if its parent category is a multi-record category" do
-      category = MultiRecordCategory.create(:content => "MR")
+      category = FactoryGirl.create(:multi_record_category)
       question = FactoryGirl.create(:question, :category => category)
       question.should have_multi_record_ancestor
     end
 
     it "returns false if its parent category is not a multi-record category" do
-      category = Category.create(:content => "Cat")
+      category = FactoryGirl.create(:category)
       question = FactoryGirl.create(:question, :category => category)
       question.should_not have_multi_record_ancestor
     end
@@ -271,16 +272,14 @@ describe Category do
       category= FactoryGirl.create(:category)
 
       category_question_1 = FactoryGirl.create(:question, :category => category, :order_number => 1)
-      category_question_1_answer = FactoryGirl.create :answer, :response => response, :question => category_question_1
+      category_question_1_answer = FactoryGirl.create(:answer, :response => response, :question => category_question_1)
 
-      category_question_2 = RadioQuestion.create(:content => "Foo", :order_number => 2)
-      category.questions << category_question_2
-      option = FactoryGirl.create(:option)
-      category_question_2.options << option
-      category_question_2_answer = FactoryGirl.create :answer, :response => response, :question => category_question_2
+      category_question_2 = FactoryGirl.create(:radio_question, :order_number => 2, :category => category)
+      category_question_2_answer = FactoryGirl.create(:answer, :response => response, :question => category_question_2)
 
+      option = FactoryGirl.create(:option, :question => category_question_2)
       category_question_2_sub_question = FactoryGirl.create(:question, :parent => option)
-      category_question_2_sub_question_answer = FactoryGirl.create :answer, :response => response, :question => category_question_2_sub_question
+      category_question_2_sub_question_answer = FactoryGirl.create(:answer, :response => response, :question => category_question_2_sub_question)
 
       category.sorted_answers_for_response(response.id).should == [category_question_1_answer, category_question_2_answer, category_question_2_sub_question_answer]
     end
