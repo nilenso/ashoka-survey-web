@@ -28,12 +28,12 @@ describe Option do
       expect { Option.create(:content => "FOO",:question_id => question.id) }.to change { Option.count }.by(1)
     end
 
-    it "doesn't update if its survey is finalized" do
+    it "updates even if its survey is finalized" do
       option = FactoryGirl.create(:option, :question => question, :content => "FOO")
       survey.finalize
       option.content = "BAR"
       option.save
-      option.reload.content.should == "FOO"
+      option.reload.content.should == "BAR"
     end
 
     it "doesn't destroy if its survey is finalized" do

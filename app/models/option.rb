@@ -8,7 +8,6 @@ class Option < ActiveRecord::Base
   default_scope :order => 'order_number'
   delegate :survey, :to => :question, :prefix => false, :allow_nil => true
 
-  before_update :require_draft_survey
   before_destroy :require_draft_survey
 
   def duplicate(survey_id)

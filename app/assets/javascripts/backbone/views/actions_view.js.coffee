@@ -3,4 +3,5 @@ class SurveyBuilder.Views.ActionsView extends Backbone.View
 
   limit_edit: =>
     $(this.el).find(":input").attr("disabled", true)
+    $(this.el).find("#save").attr("disabled", false)
     $(this.el).find(".delete-survey").remove()
