@@ -60,7 +60,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     @sub_questions = _(@sub_questions).without(view)
     view.remove()
 
-  freeze_view: =>
+  limit_edit: =>
     $(this.el).find(":input").attr("disabled", true)
     $(this.el).find(".option").attr("disabled", false)
 

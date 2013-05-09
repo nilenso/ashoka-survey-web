@@ -72,7 +72,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
       window.loading_overlay.hide_overlay()
     , 10)
 
-  freeze_view: =>
+  limit_edit: =>
     super
     $(this.el).find(".add_option").attr("disabled", false)
-    option.freeze_view() for option in @options
+    option.limit_edit() for option in @options

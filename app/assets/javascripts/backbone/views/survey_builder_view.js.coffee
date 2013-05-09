@@ -35,7 +35,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
         $(this.el).unbind('ajaxStop.preload')
         this.dummy_pane.sort_question_views_by_order_number()
         this.dummy_pane.reorder_questions()
-        this.freeze_view() if survey_frozen
+        this.limit_edit() if survey_frozen
       )
     )
 
@@ -125,9 +125,9 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     else
       window.notifications_view.set_notice(I18n.t('js.save_successful'),)
 
-  freeze_view: =>
-    @settings_pane.freeze_view()
-    @picker_pane.freeze_view()
-    @actions_view.freeze_view()
+  limit_edit: =>
+    @settings_pane.limit_edit()
+    @picker_pane.limit_edit()
+    @actions_view.limit_edit()
     window.notifications_view.set_notice("You are editing a finalized survey. Certain features will be disabled in this mode.",
-      { no_timeout: true})
+      { no_timeout: true })

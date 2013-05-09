@@ -72,5 +72,5 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
     @sub_questions = _(@sub_questions).without(view)
     view.remove()
 
-  freeze_view: =>
+  limit_edit: =>
     $(this.el).find(":input").attr("disabled", true)

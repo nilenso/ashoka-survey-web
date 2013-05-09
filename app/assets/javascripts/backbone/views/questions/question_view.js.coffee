@@ -58,6 +58,6 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     first_input = $($(this.el).find('input:text'))[0]
     $(first_input).select()
 
-  freeze_view: =>
+  limit_edit: =>
     $(this.el).find(":input").attr("disabled", true)
 
