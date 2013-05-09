@@ -11,7 +11,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'show_survey_details': 'show_survey_details'
     'save_all_questions': 'save_all_questions'
 
-  initialize:(survey_id) =>
+  initialize:(survey_id, survey_frozen) =>
     this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
     this.survey        = new SurveyBuilder.Models.SurveyModel(survey_id)
     this.settings_pane = new SurveyBuilder.Views.SettingsPaneView(this.survey)
@@ -33,7 +33,9 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
         window.loading_overlay.hide_overlay()
         $(this.el).unbind('ajaxStop.preload')
         this.dummy_pane.sort_question_views_by_order_number()
-        this.dummy_pane.reorder_questions())
+        this.dummy_pane.reorder_questions()
+        this.disable_all_elements() if survey_frozen
+      )
     )
 
 
@@ -121,3 +123,10 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
       window.notifications_view.set_error(I18n.t('js.save_unsuccessful'),)
     else
       window.notifications_view.set_notice(I18n.t('js.save_successful'),)
+
+  disable_all_elements: =>
+    $("#survey_builder :input").attr("disabled", true)
+    window.notifications_view.set_notice("You are editing a finalized survey. Certain features will be disabled in this mode.",
+      { no_timeout: true})
+    @picker_pane.remove()
+    $(".delete-survey").remove()
