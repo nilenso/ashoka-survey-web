@@ -1,5 +1,3 @@
-# A specificaton for a piece of info that the survey designer wants to collect.
-
 class Question < ActiveRecord::Base
   belongs_to :parent, :class_name => Option
   belongs_to :category
@@ -47,8 +45,7 @@ class Question < ActiveRecord::Base
   def copy_with_order
     duplicate_question = duplicate(survey_id)
     duplicate_question.order_number += 1
-    return false unless duplicate_question.save
-    true
+    duplicate_question.save
   end
 
   def as_json_with_elements_in_order
@@ -115,10 +112,6 @@ class Question < ActiveRecord::Base
   private
 
   def require_draft_survey
-    if survey && survey.finalized?
-      false
-    else
-      true
-    end
+    !survey.finalized?
   end
 end
