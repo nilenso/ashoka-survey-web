@@ -60,4 +60,8 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
   copy_question: =>
     $(@el).children('.dummy_question_content').children(".top_level_content").children(".copy_question_hidden").click()
 
+  limit_edit: =>
+    $(this.el).find(".copy_question").remove()
+    $(this.el).find(".delete_question").remove()
+
 

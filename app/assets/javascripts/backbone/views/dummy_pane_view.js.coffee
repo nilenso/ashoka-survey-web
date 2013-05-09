@@ -109,3 +109,5 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       question_view.copy_question() unless @survey_model.has_errors()
     $(@el).trigger('save_all_questions')
 
+  limit_edit: =>
+    question_view.limit_edit() for question_view in @questions

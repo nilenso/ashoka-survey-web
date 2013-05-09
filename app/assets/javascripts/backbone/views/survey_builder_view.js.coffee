@@ -128,6 +128,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   limit_edit: =>
     @settings_pane.limit_edit()
+    @dummy_pane.limit_edit()
     @picker_pane.limit_edit()
     @actions_view.limit_edit()
     window.notifications_view.set_notice("You are editing a finalized survey. Certain features will be disabled in this mode.",
