@@ -1,10 +1,18 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
-
 FactoryGirl.define do
   factory :question do
     content "MyText"
     survey_id { FactoryGirl.create(:survey).id }
     sequence(:order_number, 1000)
+
+    trait :with_options do
+      after(:create) do |question|
+        create_list(:option, 5, :question => question)
+      end
+    end
+
+    trait :mandatory do
+      mandatory true
+    end
 
     factory :question_with_answers do
       after(:create) do |question, evaluator|
@@ -25,6 +33,18 @@ FactoryGirl.define do
         question.image = fixture_file_upload(Rails.root.to_s + '/spec/fixtures/images/sample.jpg', 'image/jpeg')
         question.save!
       end
+    end
+
+    factory :drop_down_question, :parent => :question, :class => DropDownQuestion do
+      type 'DropDownQuestion'
+    end
+
+    factory :radio_question, :parent => :question, :class => RadioQuestion do
+      type 'RadioQuestion'
+    end
+
+    factory :multi_choice_question, :parent => :question, :class => MultiChoiceQuestion do
+      type 'MultiChoiceQuestion'
     end
   end
 end

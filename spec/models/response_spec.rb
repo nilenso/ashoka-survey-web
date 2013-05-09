@@ -48,9 +48,9 @@ describe Response do
   context "when there are no identifier questions" do
     it "gives you answers to first level questions " do
       response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
-      question = RadioQuestion.create({content: "Untitled question", survey_id: 18, order_number: 1})
+      question = FactoryGirl.create(:radio_question, content: "Untitled question", order_number: 1)
       question.options << Option.create(content: "Option", order_number: 1)
-      nested_question = SingleLineQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: question.options.first.id})
+      nested_question = FactoryGirl.create(:single_line_question, {content: "Nested", order_number: 1, parent_id: question.options.first.id})
       response.answers << FactoryGirl.create(:answer, :question_id => question.id, :response_id => response.id)
       response.answers << FactoryGirl.create(:answer, :question_id => nested_question.id, :response_id => response.id)
       response.answers_for_identifier_questions.should == question.answers
@@ -273,7 +273,7 @@ describe Response do
     end
 
     it "returns a sorted list of answers for all sub-questions of an option" do
-      radio_question = RadioQuestion.create(:content => "X")
+      radio_question = FactoryGirl.create(:radio_question, :content => "X")
       radio_answer = FactoryGirl.create(:answer, :response => response, :question => radio_question)
       survey.questions << radio_question
 

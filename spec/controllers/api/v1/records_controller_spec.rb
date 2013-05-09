@@ -39,7 +39,7 @@ describe Api::V1::RecordsController do
 
   context "GET 'ids_for_response'" do
     before(:each) { sign_in_as('cso_admin') }
-    let(:mr_category) { MultiRecordCategory.create(content: "HELLO") }
+    let(:mr_category) { FactoryGirl.create(:multi_record_category) }
 
     it "gets all the IDs for records of the given category belonging to the given response" do
       record = FactoryGirl.create(:record, :category => mr_category, :response => FactoryGirl.create(:response))

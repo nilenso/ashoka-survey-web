@@ -262,8 +262,7 @@ describe Survey do
 
     it "returns a list of first level categories" do
       survey = FactoryGirl.create(:survey)
-      category = FactoryGirl.create :category
-      survey.categories << category
+      category = FactoryGirl.create(:category, :survey => survey)
       question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
       question.options << Option.create(content: "Option", order_number: 2)
       nested_category = Category.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
@@ -273,8 +272,7 @@ describe Survey do
 
     it "returns the list of first_level_categories with sub questions" do
       survey = FactoryGirl.create(:survey)
-      category = FactoryGirl.create :category
-      survey.categories << category
+      category = FactoryGirl.create(:category, :survey => survey)
       question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1, category_id: category.id})
       question.options << Option.create(content: "Option", order_number: 2)
       nested_category = Category.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
@@ -287,8 +285,7 @@ describe Survey do
       question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1})
       question.options << Option.create(content: "Option", order_number: 2)
       nested_question = RadioQuestion.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})
-      category = FactoryGirl.create :category
-      survey.categories << category
+      category = FactoryGirl.create :category, :survey => survey
       question = RadioQuestion.create({content: "Untitled question", survey_id: survey.id, order_number: 1, category_id: category.id})
       question.options << Option.create(content: "Option", order_number: 2)
       nested_category = Category.create({content: "Nested", survey_id: survey.id, order_number: 1, parent_id: question.options.first.id})

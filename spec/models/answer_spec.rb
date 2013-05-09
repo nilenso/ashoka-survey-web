@@ -121,13 +121,13 @@ describe Answer do
 
     context "for multi-choice questions" do
       it "does not save if it doesn't have any choices selected" do
-        question = FactoryGirl.create(:question, :type => 'MultiChoiceQuestion', :mandatory => true)
+        question = FactoryGirl.create(:multi_choice_question, :mandatory)
         answer = FactoryGirl.build(:answer, :question_id => question.id)
         answer.should_not be_valid
       end
 
       it "saves if even a single choice is selected" do
-        question = MultiChoiceQuestion.create(:type => 'MultiChoiceQuestion', :mandatory => true, :content => "some question")
+        question = FactoryGirl.create(:multi_choice_question, :mandatory, :content => "foo")
         option = FactoryGirl.create(:option, :question_id => question.id)
         answer = FactoryGirl.build(:answer, :question_id => question.id, :option_ids => [option.id])
         answer.should be_valid
@@ -136,9 +136,8 @@ describe Answer do
 
     context "when creating choices for a MultiChoiceQuestion" do
       it "creates choices for the selected options" do
-        question = MultiChoiceQuestion.create(:type => 'MultiChoiceQuestion', :content => 'some question')
-        options = FactoryGirl.create_list(:option, 3, :question_id => question.id)
-        option_ids = options.map(&:id).unshift('')
+        question = FactoryGirl.create(:multi_choice_question, :with_options)
+        option_ids = question.options.map(&:id)
         answer = FactoryGirl.create(:answer, :question_id => question.id, :option_ids => option_ids)
         answer.choices.map(&:option_id).should =~ option_ids
       end
@@ -171,7 +170,7 @@ describe Answer do
       end
 
       it "looks at choices instead of content when checking for a mandatory question" do
-        question = MultiChoiceQuestion.create(:type => 'MultiChoiceQuestion', :mandatory => true, :content => "multi-choice-question")
+        question = FactoryGirl.create(:multi_choice_question, :mandatory, :content => "foo")
         option = FactoryGirl.create(:option, :question_id => question.id)
         answer = FactoryGirl.build(:answer, :content => nil, :question_id => question.id, :option_ids => [option.id])
         answer.should be_valid
@@ -191,7 +190,7 @@ describe Answer do
 
     it "Ensures that it is the only answer for a question within the response" do
       response = FactoryGirl.create(:response, :organization_id => 1, :user_id => 2, :survey_id => 3)
-      question = RadioQuestion.create( :type => "RadioQuestion", :content => "hollo!")
+      question = FactoryGirl.create(:radio_question)
       answer_1 = FactoryGirl.create(:answer, :question_id => question.id, :response_id => response.id)
       answer_2 = FactoryGirl.build(:answer, :question_id => question.id, :response_id => response.id)
       answer_2.should_not be_valid

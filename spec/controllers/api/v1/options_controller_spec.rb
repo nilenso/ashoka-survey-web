@@ -118,7 +118,7 @@ module Api
 
       context "GET 'index'" do
         it "returns all options for a question" do
-          question = RadioQuestion.create(:content => "question with options")
+          question = FactoryGirl.create(:radio_question)
           question.survey = survey
           question.save
           option = FactoryGirl.create(:option, :question => question)

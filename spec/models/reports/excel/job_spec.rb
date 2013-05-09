@@ -40,7 +40,7 @@ describe Reports::Excel::Job do
     end
 
     it "should include each option for all the multi-choice questions" do
-      question_with_options = MultiChoiceQuestion.create(:content => "Foo")
+      question_with_options = FactoryGirl.create(:multi_choice_question)
       question_with_options.update_column :survey_id, survey.id
       option_foo = FactoryGirl.create(:option, :question => question_with_options, :content => "Foo Option")
       data = Reports::Excel::Data.new(survey, [question_with_options], responses, server_url, metadata)
@@ -78,7 +78,7 @@ describe Reports::Excel::Job do
     context "when setting answers for a multi-choice question" do
       it "insert a single blank cell corresponding to the question" do
         response = FactoryGirl.create(:response, :survey => survey)
-        question = MultiChoiceQuestion.create(:content => "foo_content")
+        question = FactoryGirl.create(:multi_choice_question)
         question.update_column(:survey_id, survey.id)
         answer = FactoryGirl.create(:answer, :question => question, :response => response)
         data = Reports::Excel::Data.new(survey, [question], [response], server_url, metadata)
@@ -89,7 +89,7 @@ describe Reports::Excel::Job do
 
       it "subsequently inserts a cell for each option" do
         response = FactoryGirl.create(:response, :survey => survey)
-        question = MultiChoiceQuestion.create(:content => "foo_content")
+        question = FactoryGirl.create(:multi_choice_question)
         question.update_column(:survey_id, survey.id)
         options = FactoryGirl.create_list(:option, 5, :question => question)
         answer = FactoryGirl.create(:answer, :question => question, :response => response)

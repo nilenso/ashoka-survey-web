@@ -4,34 +4,35 @@ describe Api::V1::CategoriesController do
   before(:each) do
     sign_in_as('super_admin')
   end
+
   context "POST 'create'" do
+    let(:survey) { FactoryGirl.create(:survey) }
+
     it "creates a new category in the database" do
-      category = FactoryGirl.attributes_for :category
+      category_hash = FactoryGirl.attributes_for(:category, :survey_id => survey.id)
       expect {
-        post :create, :category => category
+        post :create, :category => category_hash
       }.to change { Category.count }.by 1
       response.should be_ok
     end
 
     it "creates a new category based on the type" do
-      survey = FactoryGirl.create :survey
-      category = FactoryGirl.attributes_for(:category, :survey_id => survey.id)
-      category['type'] = 'MultiRecordCategory'
+      category_hash = FactoryGirl.attributes_for(:multi_record_category, :survey_id => survey.id)
       expect do
-        post :create, :survey_id => survey.id, :category => category
+        post :create, :survey_id => survey.id, :category => category_hash
       end.to change { MultiRecordCategory.count }.by(1)
     end
 
     it "returns the created category as JSON, including the new ID" do
-      category = FactoryGirl.attributes_for :category
-      post :create, :category => category
+      category_hash = FactoryGirl.attributes_for(:category, :survey_id => survey.id)
+      post :create, :category => category_hash
       created_category = JSON.parse(response.body)
       Category.find_by_id(created_category['id']).should be
       created_category.keys.should include(*Category.attribute_names)
     end
 
     it "returns the error message as JSON if save fails" do
-      category = FactoryGirl.attributes_for :category, :content => nil
+      category = FactoryGirl.attributes_for(:category, :survey_id => survey.id, :content => nil)
       post :create, :category => category
       response.should_not be_ok
       JSON.parse(response.body).should include "Content can't be blank"
@@ -49,7 +50,7 @@ describe Api::V1::CategoriesController do
 
   context "PUT 'update'" do
     it "updates the specified category" do
-      category = FactoryGirl.create :category, :order_number => 0, :content => "XYZ"
+      category = FactoryGirl.create(:category, :order_number => 0, :content => "XYZ")
       put :update, :id => category.id, :category => { :content => "FOO", :order_number => 42 }
       response.should be_ok
       category.reload.content.should == "FOO"
@@ -57,7 +58,7 @@ describe Api::V1::CategoriesController do
     end
 
     it "returns the updated category as JSON" do
-      category = FactoryGirl.create :category, :order_number => 0, :content => "XYZ"
+      category = FactoryGirl.create(:category, :order_number => 0, :content => "XYZ")
       put :update, :id => category.id, :category => { :content => "FOO", :order_number => 42 }
       updated_category = JSON.parse(response.body)
       updated_category['content'].should == "FOO"
@@ -70,7 +71,7 @@ describe Api::V1::CategoriesController do
     end
 
     it "returns the error message as JSON if save fails" do
-      category = FactoryGirl.create :category
+      category = FactoryGirl.create(:category)
       put :update, :id => category.id, :category => { :content => nil }
       response.should_not be_ok
       JSON.parse(response.body).should include "Content can't be blank"
@@ -112,7 +113,7 @@ describe Api::V1::CategoriesController do
   context "GET 'index'" do
     it "returns the first level categories for a survey" do
       survey = FactoryGirl.create(:survey)
-      survey.categories << FactoryGirl.create_list(:category, 4)
+      FactoryGirl.create_list(:category, 4, :survey => survey)
       get :index, :survey_id => survey.id
       response.should be_ok
       JSON.parse(response.body).size.should == 4
@@ -120,10 +121,8 @@ describe Api::V1::CategoriesController do
 
     it "doesn't return nested categories" do
       survey = FactoryGirl.create(:survey)
-      category = FactoryGirl.create(:category)
-      survey.categories << category
-      nested_category = FactoryGirl.create(:category)
-      category.categories << nested_category
+      category = FactoryGirl.create(:category, :survey => survey)
+      nested_category = FactoryGirl.create(:category, :category => category)
       get :index, :survey_id => survey.id
       JSON.parse(response.body).length.should == 1
     end

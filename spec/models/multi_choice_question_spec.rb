@@ -1,16 +1,11 @@
 require 'spec_helper'
 
 describe MultiChoiceQuestion do
-  it "is a question with type = 'MultiChoiceQuestion'" do
-    MultiChoiceQuestion.create(:content => "hello")
-    question = Question.find_by_content("hello")
-    question.should be_a MultiChoiceQuestion
-    question.type.should == "MultiChoiceQuestion"
-  end
+  it_behaves_like "a question"
 
   context "reports" do
     it "returns the number of answers grouped by option content" do
-      question = MultiChoiceQuestion.find(FactoryGirl.create(:question_with_options, :type => 'MultiChoiceQuestion').id)
+      question = FactoryGirl.create(:multi_choice_question, :with_options)
       5.times do
         answer = FactoryGirl.create(:answer_with_complete_response)
         answer.choices << FactoryGirl.create(:choice, :option => question.options.first)
@@ -23,7 +18,7 @@ describe MultiChoiceQuestion do
   context "when fetching sorted answers for a response" do
     let(:response) { FactoryGirl.create :response, :state => 'clean' }
     let(:answer) { FactoryGirl.create(:answer, :response_id => response.id) }
-    let(:question) { MultiChoiceQuestion.create(:content => "hello", :order_number => 12345) }
+    let(:question) { FactoryGirl.create(:multi_choice_question) }
 
     it "returns its answer for the specified response if it has no sub-elements" do
       question.answers << answer
@@ -44,6 +39,4 @@ describe MultiChoiceQuestion do
       question.sorted_answers_for_response(response.id).should == [answer, sub_question_answer, sub_category_question_answer]
     end
   end
-
-  it_behaves_like "a question"
 end

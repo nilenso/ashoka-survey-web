@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe PhotoQuestion do
   it "is a question with type = 'PhotoQuestion'" do
-    PhotoQuestion.create(:content => "hello")
-    question = Question.find_by_content("hello")
+    question = FactoryGirl.create(:photo_question)
     question.should be_a PhotoQuestion
     question.type.should == "PhotoQuestion"
   end

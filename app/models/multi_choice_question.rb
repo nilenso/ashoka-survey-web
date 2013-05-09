@@ -1,5 +1,3 @@
-# A question with multiple options and multiple answers
-
 class MultiChoiceQuestion < QuestionWithOptions
   def report_data
     return [] if choices.blank?

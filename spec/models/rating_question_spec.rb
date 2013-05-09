@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe RatingQuestion do
   it "is a question with type = 'RatingQuestion'" do
-    RatingQuestion.create(:content => "hello")
-    question = Question.find_by_content("hello")
+    question = FactoryGirl.create(:rating_question)
     question.should be_a RatingQuestion
     question.type.should == "RatingQuestion"
   end
@@ -13,7 +12,7 @@ describe RatingQuestion do
   it_behaves_like "a question with max length"
 
   context "for report data" do
-    let (:rating_question) { RatingQuestion.new(:content => "foo", :max_length => 10) }
+    let (:rating_question) { FactoryGirl.create(:rating_question, :max_length => 10) }
 
     it "generates report data" do
       5.times { rating_question.answers << FactoryGirl.create(:answer_with_complete_response, :content=>'2') }

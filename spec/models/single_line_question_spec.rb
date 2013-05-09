@@ -2,8 +2,7 @@ require 'spec_helper'
 
 describe SingleLineQuestion do
   it "is a question with type = 'SingleLineQuestion'" do
-    SingleLineQuestion.create(:content => "hello")
-    question = Question.find_by_content("hello")
+    question = FactoryGirl.create(:single_line_question)
     question.should be_a SingleLineQuestion
     question.type.should == "SingleLineQuestion"
   end
