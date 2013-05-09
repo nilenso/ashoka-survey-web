@@ -83,19 +83,12 @@ describe Option do
   context "when fetching all the sub_questions of an option" do
     let(:question) { FactoryGirl.create :question }
 
-    it "fetches all the directly nested sub_questions" do
-      option = FactoryGirl.create(:option)
-      nested_question = FactoryGirl.create(:question, :parent => option)
-      # Need to do a #to_s because for some reason the direct hash comparison fails on ActiveSupport::TimeWithZone objects on Linux machines
-      option.as_json[:questions].map(&:to_s).should include nested_question.json(:methods => :type).to_s
-    end
-
-    it "fetches the nested subquestions at all levels" do
+    it "fetches the first level nested subquestions" do
       option = FactoryGirl.create(:option)
       nested_question_with_options = FactoryGirl.create(:radio_question, :with_options, :parent => option)
       another_nested_question = FactoryGirl.create(:radio_question, :parent => nested_question_with_options.options.first)
-      option.as_json[:questions].should include nested_question_with_options.json(:methods => :type)
-      option.as_json[:questions].should_not include  another_nested_question.json(:methods => :type)
+      option.as_json[:questions].map(&:to_json).should include nested_question_with_options.json(:methods => :type).to_json
+      option.as_json[:questions].map(&:to_json).should_not include  another_nested_question.json(:methods => :type).to_json
     end
 
     it "returns itself when there are no sub_questions" do
