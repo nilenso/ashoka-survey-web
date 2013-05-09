@@ -41,4 +41,7 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
   hide_all: =>
     question.hide() for question in @questions
 
+  freeze_view: =>
+    question_view.freeze_view() for question_view in @questions
+
 

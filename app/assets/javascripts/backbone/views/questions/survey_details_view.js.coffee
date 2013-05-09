@@ -39,3 +39,6 @@ class SurveyBuilder.Views.Questions.SurveyDetailsView extends Backbone.View
 
   hide : =>
     $(this.el).hide()
+
+  freeze_view: =>
+    $(this.el).find(":input").attr("disabled", true)

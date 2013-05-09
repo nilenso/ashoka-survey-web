@@ -47,3 +47,6 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
 
   add_multi_record_category: =>
     $(this.el).trigger('new_question', { type: 'MultiRecordCategory' })
+
+  freeze_view: =>
+    @remove()

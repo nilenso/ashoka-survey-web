@@ -34,7 +34,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
         $(this.el).unbind('ajaxStop.preload')
         this.dummy_pane.sort_question_views_by_order_number()
         this.dummy_pane.reorder_questions()
-        this.disable_all_elements() if survey_frozen
+        this.freeze_view() if survey_frozen
       )
     )
 
@@ -124,9 +124,9 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     else
       window.notifications_view.set_notice(I18n.t('js.save_successful'),)
 
-  disable_all_elements: =>
-    $("#survey_builder :input").attr("disabled", true)
+  freeze_view: =>
+    @settings_pane.freeze_view()
+    @picker_pane.freeze_view()
+    $(".delete-survey").remove()
     window.notifications_view.set_notice("You are editing a finalized survey. Certain features will be disabled in this mode.",
       { no_timeout: true})
-    @picker_pane.remove()
-    $(".delete-survey").remove()
