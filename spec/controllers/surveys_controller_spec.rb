@@ -123,11 +123,11 @@ describe SurveysController do
       response.should render_template(:build)
     end
 
-    it "redirect_to the root path if survey is already finalized" do
+    it "loads up even if the survey is finalized" do
       @survey.finalize
       get :build, :survey_id => @survey.id
-      response.should redirect_to(root_path)
-      flash[:error].should_not be_nil
+      response.should be_ok
+      flash[:error].should be_nil
     end
   end
 

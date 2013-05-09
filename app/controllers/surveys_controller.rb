@@ -3,8 +3,6 @@ require 'will_paginate/array'
 class SurveysController < ApplicationController
   load_and_authorize_resource
 
-  before_filter :require_draft_survey, :only => [:build]
-
   def index
     @surveys ||= Survey.none
     filtered_surveys = SurveyFilter.new(@surveys, params[:filter]).filter
