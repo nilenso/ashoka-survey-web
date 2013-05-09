@@ -12,7 +12,7 @@ describe Option do
 
   context "validation" do
     it "Ensures that the order number for an option is unique within a question" do
-      question = RadioQuestion.create( :type => "RadioQuestion", :content => "hollo!")
+      question = FactoryGirl.create(:radio_question)
       option_1 = FactoryGirl.create(:option, :question => question, :order_number => 1)
       option_2 = FactoryGirl.build(:option, :question => question, :order_number => 1)
       option_2.should_not be_valid
@@ -45,11 +45,11 @@ describe Option do
 
   context "orders by order number" do
     it "fetches all option in ascending order of order_number for a particular question" do
-      question = RadioQuestion.create( :content => "hollo!")
-      option = FactoryGirl.create(:option, :question => question, :order_number => 2)
-      another_option = FactoryGirl.create(:option, :question => question, :order_number => 1)
-      question.options.last.should == option
-      question.options.first.should == another_option
+      question = FactoryGirl.create(:radio_question)
+      first_option = FactoryGirl.create(:option, :question => question, :order_number => 1)
+      third_option = FactoryGirl.create(:option, :question => question, :order_number => 3)
+      second_option = FactoryGirl.create(:option, :question => question, :order_number => 2)
+      question.options.should == [first_option, second_option, third_option]
     end
   end
 
@@ -84,19 +84,18 @@ describe Option do
     let(:question) { FactoryGirl.create :question }
 
     it "fetches all the directly nested sub_questions" do
-      option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
-      nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: option.id})
+      option = FactoryGirl.create(:option)
+      nested_question = FactoryGirl.create(:question, :parent => option)
       # Need to do a #to_s because for some reason the direct hash comparison fails on ActiveSupport::TimeWithZone objects on Linux machines
       option.as_json[:questions].map(&:to_s).should include nested_question.json(:methods => :type).to_s
     end
 
     it "fetches the nested subquestions at all levels" do
-      option = Option.create(content: "Option", order_number: 2, :question_id => question.id)
-      nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: option.id})
-      nested_question.options << Option.create(content: "Option", order_number: 2, :question_id => nested_question.id)
-      another_nested_question = RadioQuestion.create({content: "Nested", survey_id: 18, order_number: 1, parent_id: nested_question.options.first.id})
-      option.as_json[:questions].map(&:to_s).should include nested_question.json(:methods => :type).to_s
-      option.as_json[:questions].map(&:to_s).should_not include  another_nested_question.json(:methods => :type).to_s
+      option = FactoryGirl.create(:option)
+      nested_question_with_options = FactoryGirl.create(:radio_question, :with_options, :parent => option)
+      another_nested_question = FactoryGirl.create(:radio_question, :parent => nested_question_with_options.options.first)
+      option.as_json[:questions].should include nested_question_with_options.json(:methods => :type)
+      option.as_json[:questions].should_not include  another_nested_question.json(:methods => :type)
     end
 
     it "returns itself when there are no sub_questions" do
@@ -121,64 +120,62 @@ describe Option do
   end
 
   context "duplicate" do
-    it "dupicates option and its sub questions" do
-      option = FactoryGirl.create(:option)
-      option.questions << FactoryGirl.create(:question)
-      duplicated_option = option.duplicate(0)
+    let(:survey) { FactoryGirl.create(:survey) }
+
+    it "dupicates option" do
+      option = FactoryGirl.create(:option, :content => "foo content")
+      duplicated_option = option.duplicate(survey.id)
       duplicated_option.id.should_not == option.id
-      duplicated_option.content.should == option.content
-      duplicated_option.questions.size.should == option.questions.size
+      duplicated_option.content.should == "foo content"
+    end
+
+    it "duplicates sub questions" do
+      option = FactoryGirl.create(:option)
+      question = FactoryGirl.create(:question, :parent => option, :content => "foo question")
+      duplicated_option = option.duplicate(survey.id)
+      duplicated_questions = duplicated_option.questions
+      duplicated_questions.map(&:id).should_not include(question.id)
+      duplicated_questions.map(&:content).should == ["foo question"]
+      duplicated_questions.map(&:survey_id).should == [survey.id]
     end
 
     it "dupicates sub categories as well" do
       option = FactoryGirl.create(:option)
-      option.categories << FactoryGirl.create(:category)
-      duplicated_option = option.duplicate(0)
-      duplicated_option.categories.size.should == option.categories.size
-    end
-
-    it "sets the sub-question's survey ID to the survey ID of the new survey which is passed in" do
-      option = FactoryGirl.create(:option)
-      option.questions << FactoryGirl.create(:question)
-      duplicated_option = option.duplicate(15)
-      duplicated_option.questions[0].survey_id.should == 15
-    end
-
-    it "sets the sub-category's survey ID to the survey ID of the new survey which is passed in" do
-      option = FactoryGirl.create(:option)
-      option.categories << FactoryGirl.create(:category)
-      duplicated_option = option.duplicate(15)
-      duplicated_option.categories[0].survey_id.should == 15
+      category = FactoryGirl.create(:category, :content => "foo category", :parent => option)
+      duplicated_option = option.duplicate(survey.id)
+      duplicated_categories = duplicated_option.categories
+      duplicated_categories.map(&:id).should_not include(category.id)
+      duplicated_categories.map(&:content).should == ["foo category"]
+      duplicated_categories.map(&:survey_id).should == [survey.id]
     end
   end
 
   it "returns categories with questions" do
-    category = FactoryGirl.create :category, :order_number => 0
-    another_category = FactoryGirl.create :category, :order_number => 1
     option = FactoryGirl.create(:option)
-    option.categories << category
-      nested_question = DropDownQuestion.create({content: "Nested", survey_id: 18, order_number: 0, category_id: category.id})
-      option.categories_with_questions.should include(category)
-      option.categories_with_questions.should_not include(another_category)
+    category = FactoryGirl.create(:category, :parent => option)
+    another_category = FactoryGirl.create(:category)
+    nested_question = FactoryGirl.create(:drop_down_question, :category => category)
+    option.categories_with_questions.should include(category)
+    option.categories_with_questions.should_not include(another_category)
   end
 
   context "#has_multi_record_ancestor" do
     it "returns true if its parent question belongs to a MultiRecordCategory" do
-      mr_category = MultiRecordCategory.create(:content => "MR")
+      mr_category = FactoryGirl.create(:multi_record_category)
       parent_question = FactoryGirl.create(:question_with_options, :category => mr_category)
       option = FactoryGirl.create(:option, :question => parent_question)
       option.should have_multi_record_ancestor
     end
 
     it "returns false if its parent question belongs to a regular category" do
-      category = Category.create(:content => "cat")
+      category = FactoryGirl.create(:category)
       parent_question = FactoryGirl.create(:question_with_options, :category => category)
       option = FactoryGirl.create(:option, :question => parent_question)
       option.should_not have_multi_record_ancestor
     end
 
     it "returns true if there is a multi-record category higher up in the chain" do
-      mr_category = MultiRecordCategory.create(:content => "MR")
+      mr_category = FactoryGirl.create(:multi_record_category)
       category = FactoryGirl.create(:category, :category => mr_category)
       question = FactoryGirl.create(:question_with_options, :category => category)
       option = FactoryGirl.create(:option, :question => question)

@@ -61,10 +61,6 @@ class Option < ActiveRecord::Base
   private
 
   def require_draft_survey
-    if survey && survey.finalized?
-      false
-    else
-      true
-    end
+    !survey.finalized?
   end
 end
