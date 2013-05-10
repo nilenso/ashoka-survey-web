@@ -21,20 +21,31 @@ describe Question do
   end
 
   context "callbacks" do
-    let(:survey) { FactoryGirl.create(:survey, :finalized => true) }
-
     it "doesn't create if its survey is finalized" do
+      survey = FactoryGirl.create(:survey, :finalized)
       expect { Question.create(:survey_id => survey.id) }.not_to change { Question.count }
     end
 
-    it "doesn't update if its survey is finalized" do
-      survey = FactoryGirl.create(:survey)
-      question = FactoryGirl.create(:question, :survey => survey, :content => "FOO")
-      survey.update_column :finalized, true
-      question.content = "BAR"
-      question.save
-      question.reload.content.should == "FOO"
+    context "when updating a question belonging to a finalized survey" do
+      it "allows updating of content" do
+        survey = FactoryGirl.create(:survey)
+        question = FactoryGirl.create(:question, :survey => survey, :content => "FOO")
+        survey.update_column(:finalized, true)
+        question.content = "BAR"
+        question.save
+        question.reload.content.should == "BAR"
+      end
+
+      it "does not allow updation of any other field" do
+        survey = FactoryGirl.create(:survey)
+        question = FactoryGirl.create(:question, :survey => survey, :order_number => 1)
+        survey.update_column(:finalized, true)
+        question.order_number = 3
+        question.save
+        question.reload.order_number.should == 1
+      end
     end
+
 
     it "doesn't destroy if its survey is finalized" do
       survey = FactoryGirl.create(:survey)
@@ -154,9 +165,9 @@ describe Question do
   end
 
   it "returns parent question of current child question" do
-      question = FactoryGirl.create(:drop_down_question)
-      nested_question = FactoryGirl.create(:drop_down_question, :parent => FactoryGirl.create(:option, :question => question))
-      nested_question.parent_question.should == question
+    question = FactoryGirl.create(:drop_down_question)
+    nested_question = FactoryGirl.create(:drop_down_question, :parent => FactoryGirl.create(:option, :question => question))
+    nested_question.parent_question.should == question
   end
 
   context "when returning it's level of nesting" do
@@ -207,14 +218,14 @@ describe Question do
   end
 
   it "returns the index of the parent's option amongst its siblings" do
-      question = FactoryGirl.create(:multi_choice_question)
-      parent_option = Option.create(content: "Option", order_number: 0)
-      question.options << parent_option
-      question.options << Option.create(content: "Option", order_number: 1)
-      question.options << Option.create(content: "Option", order_number: 2)
-      sub_question = FactoryGirl.create(:single_line_question)
-      parent_option.questions << sub_question
-      sub_question.index_of_parent_option.should == 0
+    question = FactoryGirl.create(:multi_choice_question)
+    parent_option = Option.create(content: "Option", order_number: 0)
+    question.options << parent_option
+    question.options << Option.create(content: "Option", order_number: 1)
+    question.options << Option.create(content: "Option", order_number: 2)
+    sub_question = FactoryGirl.create(:single_line_question)
+    parent_option.questions << sub_question
+    sub_question.index_of_parent_option.should == 0
   end
 
   context "copy" do
