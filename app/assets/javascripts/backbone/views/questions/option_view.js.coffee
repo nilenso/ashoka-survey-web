@@ -2,7 +2,7 @@ SurveyBuilder.Views.Questions ||= {}
 
 #  The settings of a single option in the settings pane
 class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
-  initialize: (@model, @template) =>
+  initialize: (@model, @template, @frozen) =>
     this.sub_questions = []
     this.model.on('change:errors', this.render, this)
     this.model.on('change:id', this.render, this)
@@ -19,6 +19,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     $(this.el).children('div').children('.add_sub_multi_record').bind('click', this.add_sub_category_model)
     $(this.el).children('div').children('.delete_option').bind('click', this.delete)
     $(this.el).children('input').bind('keyup', this.update_model)
+    @limit_edit() if @frozen
     return this
 
   update_model: (event) =>
@@ -64,4 +65,3 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     $(this.el).find(":input").attr("disabled", true)
     $(this.el).find(".option").attr("disabled", false)
     sub_question.limit_edit() for sub_question in @sub_questions
-

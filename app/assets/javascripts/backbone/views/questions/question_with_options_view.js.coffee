@@ -35,7 +35,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
       when 'DropDownQuestion'
         template = $('#drop_down_option_template').html()
 
-    option = new SurveyBuilder.Views.Questions.OptionView(option_model, template)
+    option = new SurveyBuilder.Views.Questions.OptionView(option_model, template, @frozen)
     this.options.push option
     $(this.el).append($(option.render().el))
 
