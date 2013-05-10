@@ -36,24 +36,22 @@ describe Question do
         question.reload.content.should == "BAR"
       end
 
-      it "does not allow updating if the content as well as other fields have changed" do
+      it "allows updating if the order_number has changed" do
         survey = FactoryGirl.create(:survey)
-        question = FactoryGirl.create(:question, :survey => survey, :content => "FOO", :max_length => 10)
+        question = FactoryGirl.create(:question, :survey => survey, :order_number => 1)
         survey.update_column(:finalized, true)
-        question.content = "BAR"
-        question.max_length = 15
+        question.order_number = 2
         question.save
-        question.reload.content.should == "FOO"
-        question.reload.max_length.should == 10
+        question.reload.order_number.should == 2
       end
 
       it "does not allow updation of any other field" do
         survey = FactoryGirl.create(:survey)
-        question = FactoryGirl.create(:question, :survey => survey, :order_number => 1)
+        question = FactoryGirl.create(:question, :survey => survey, :max_length => 1)
         survey.update_column(:finalized, true)
-        question.order_number = 3
+        question.max_length = 3
         question.save
-        question.reload.order_number.should == 1
+        question.reload.max_length.should == 1
       end
     end
 
