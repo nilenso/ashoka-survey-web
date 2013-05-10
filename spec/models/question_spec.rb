@@ -27,13 +27,24 @@ describe Question do
     end
 
     context "when updating a question belonging to a finalized survey" do
-      it "allows updating of content" do
+      it "allows updating if the content has changed" do
         survey = FactoryGirl.create(:survey)
         question = FactoryGirl.create(:question, :survey => survey, :content => "FOO")
         survey.update_column(:finalized, true)
         question.content = "BAR"
         question.save
         question.reload.content.should == "BAR"
+      end
+
+      it "does not allow updating if the content as well as other fields have changed" do
+        survey = FactoryGirl.create(:survey)
+        question = FactoryGirl.create(:question, :survey => survey, :content => "FOO", :max_length => 10)
+        survey.update_column(:finalized, true)
+        question.content = "BAR"
+        question.max_length = 15
+        question.save
+        question.reload.content.should == "FOO"
+        question.reload.max_length.should == 10
       end
 
       it "does not allow updation of any other field" do

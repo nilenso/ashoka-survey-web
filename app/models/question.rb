@@ -16,7 +16,7 @@ class Question < ActiveRecord::Base
   delegate :question, :to => :parent, :prefix => true
 
   before_create :require_draft_survey
-  before_update { |question| require_draft_survey unless question.content_changed? }
+  before_update { |question| require_draft_survey unless question.changes.keys == ['content'] }
   before_destroy :require_draft_survey
 
   def image_url(format=nil)
