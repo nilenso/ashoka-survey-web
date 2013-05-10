@@ -59,5 +59,6 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     $(first_input).select()
 
   limit_edit: =>
+    @frozen = true
     $(this.el).find(":input").attr("disabled", true)
 
