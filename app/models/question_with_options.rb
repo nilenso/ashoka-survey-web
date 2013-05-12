@@ -1,6 +1,7 @@
 class QuestionWithOptions < Question
   has_many :options, :dependent => :destroy,  :foreign_key => :question_id
 
+  before_create :require_draft_survey
   alias_method :serializable_options, :options
 
   def create_blank_answers(params={})

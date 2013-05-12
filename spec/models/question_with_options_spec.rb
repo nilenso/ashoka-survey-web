@@ -1,6 +1,13 @@
 require 'spec_helper'
 
 describe QuestionWithOptions do
+  context "validations" do
+    it "does not create if its survey is finalized" do
+      survey = FactoryGirl.create(:survey, :finalized)
+      expect { RadioQuestion.create(:survey_id => survey.id, :content => "Foo") }.not_to change { RadioQuestion.count }
+    end
+  end
+
   context 'when creating blank answers' do
     let(:response) { FactoryGirl.create :response }
 

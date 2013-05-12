@@ -49,4 +49,7 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
     $(this.el).trigger('new_question', { type: 'MultiRecordCategory' })
 
   limit_edit: =>
-    @remove()
+    $(this.el).find("[id$=category]").parent('li').remove()
+    $(this.el).find("[id$=radio_question]").parent('li').remove()
+    $(this.el).find("[id$=drop_down_question]").parent('li').remove()
+    $(this.el).find("[id$=multi_choice_question]").parent('li').remove()

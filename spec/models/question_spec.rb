@@ -21,9 +21,9 @@ describe Question do
   end
 
   context "callbacks" do
-    it "doesn't create if its survey is finalized" do
+    it "creates even if its survey is finalized" do
       survey = FactoryGirl.create(:survey, :finalized)
-      expect { Question.create(:survey_id => survey.id) }.not_to change { Question.count }
+      expect { Question.create(:survey_id => survey.id, :content => "Foo") }.to change { Question.count }.by 1
     end
 
     context "when updating a question belonging to a finalized survey" do
