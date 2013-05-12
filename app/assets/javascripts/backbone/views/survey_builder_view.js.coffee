@@ -49,6 +49,10 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.settings_pane.add_question(type, model)
     model.save_model()
 
+    $(this.el).bind "ajaxStop.new_question", =>
+      $(this.el).unbind "ajaxStop.new_question"
+      @limit_edit() if @survey_frozen
+
   new_category: (event, type) =>
     @loading_overlay()
     model = this.survey.add_new_question_model()
