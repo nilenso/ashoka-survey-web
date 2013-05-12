@@ -15,6 +15,7 @@ class Question < ActiveRecord::Base
 
   delegate :question, :to => :parent, :prefix => true
 
+  before_create { |question| require_draft_survey if question.mandatory? }
   # Order number changes for every update. View code logic dependent.
   before_update :allow_content_and_order_number_for_draft_survey
   before_destroy :require_draft_survey

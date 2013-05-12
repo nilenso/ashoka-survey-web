@@ -21,9 +21,16 @@ describe Question do
   end
 
   context "callbacks" do
-    it "creates even if its survey is finalized" do
-      survey = FactoryGirl.create(:survey, :finalized)
-      expect { Question.create(:survey_id => survey.id, :content => "Foo") }.to change { Question.count }.by 1
+    context "when creating a question belonging to a finalized survey" do
+      it "allows creating a non-mandatory question" do
+        survey = FactoryGirl.create(:survey, :finalized)
+        expect { Question.create(:survey_id => survey.id, :content => "Foo") }.to change { Question.count }.by 1
+      end
+
+      it "doesn't create a mandatory question" do
+        survey = FactoryGirl.create(:survey, :finalized)
+        expect { Question.create(:survey_id => survey.id, :content => "Foo", :mandatory => true) }.not_to change { Question.count }
+      end
     end
 
     context "when updating a question belonging to a finalized survey" do
