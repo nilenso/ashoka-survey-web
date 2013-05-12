@@ -274,7 +274,7 @@ en:
     require_csv_format: "Please enter a comma-separated list of options.\nThe provided format is invalid."
     reordering_questions: Reordering Questions
     new_record_unsaved_warning: "Unsaved changes will be lost if you proceed. Continue?"
-
+    confirm_add_question_to_finalized_survey: "Are you sure you wish to add a question to a finalized survey? This action cannot be undone."
     untitled_multi_record_category: "Untitled Multi-Record"
 
   templates:

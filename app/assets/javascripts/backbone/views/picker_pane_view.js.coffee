@@ -16,39 +16,46 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
     'click #add_multi_record_category': 'add_multi_record_category'
 
   add_radio_question: =>
-    $(this.el).trigger('new_question', { type: 'RadioQuestion' })
+    $(this.el).trigger('new_question', { type: 'RadioQuestion' }) if @confirm_if_frozen()
 
   add_single_line_question: =>
-    $(this.el).trigger('new_question', { type: 'SingleLineQuestion' })
+    $(this.el).trigger('new_question', { type: 'SingleLineQuestion' }) if @confirm_if_frozen()
 
   add_multiline_question: =>
-    $(this.el).trigger('new_question', { type: 'MultilineQuestion' })
+    $(this.el).trigger('new_question', { type: 'MultilineQuestion' }) if @confirm_if_frozen()
 
   add_numeric_question: =>
-    $(this.el).trigger('new_question', { type: 'NumericQuestion' })
+    $(this.el).trigger('new_question', { type: 'NumericQuestion' }) if @confirm_if_frozen()
 
   add_date_question: =>
-    $(this.el).trigger('new_question', { type: 'DateQuestion' })
+    $(this.el).trigger('new_question', { type: 'DateQuestion' }) if @confirm_if_frozen()
 
   add_multi_choice_question: =>
-    $(this.el).trigger('new_question', { type: 'MultiChoiceQuestion' })
+    $(this.el).trigger('new_question', { type: 'MultiChoiceQuestion' }) if @confirm_if_frozen()
 
   add_drop_down_question: =>
-    $(this.el).trigger('new_question', { type: 'DropDownQuestion' })
+    $(this.el).trigger('new_question', { type: 'DropDownQuestion' }) if @confirm_if_frozen()
 
   add_photo_question: =>
-    $(this.el).trigger('new_question', { type: 'PhotoQuestion' })
+    $(this.el).trigger('new_question', { type: 'PhotoQuestion' }) if @confirm_if_frozen()
 
   add_rating_question: =>
-    $(this.el).trigger('new_question', { type: 'RatingQuestion' })
+    $(this.el).trigger('new_question', { type: 'RatingQuestion' }) if @confirm_if_frozen()
 
   add_category: =>
-    $(this.el).trigger('new_category')
+    $(this.el).trigger('new_category') if @confirm_if_frozen()
 
   add_multi_record_category: =>
-    $(this.el).trigger('new_question', { type: 'MultiRecordCategory' })
+    $(this.el).trigger('new_question', { type: 'MultiRecordCategory' }) if @confirm_if_frozen()
+
+  confirm_if_frozen: =>
+    if @frozen
+      confirm(I18n.t('js.confirm_add_question_to_finalized_survey'))
+    else
+      true
 
   limit_edit: =>
+    @frozen = true
     $(this.el).find("[id$=category]").parent('li').remove()
     $(this.el).find("[id$=radio_question]").parent('li').remove()
     $(this.el).find("[id$=drop_down_question]").parent('li').remove()
