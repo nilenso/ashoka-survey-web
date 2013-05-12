@@ -264,6 +264,7 @@ fr:
     reordering_questions: fr Reordering Questions
     new_record_unsaved_warning: "Les modifications non enregistrées seront perdues si vous continuez. Continuer?"
     confirm_add_question_to_finalized_survey: "Etes-vous sûr que vous voulez ajouter une question à un sondage finalisé? Cette action ne peut pas être annulée."
+    confirm_add_option_to_finalized_survey: "Etes-vous sûr que vous voulez ajouter une option à une enquête finalisée Cette action ne peut être annulée."
     untitled_multi_record_category: "Untitled multi-enregistrement"
 
   templates:

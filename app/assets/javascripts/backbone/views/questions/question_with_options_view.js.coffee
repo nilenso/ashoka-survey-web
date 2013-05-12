@@ -24,7 +24,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     )
 
   add_new_option_model: (content) =>
-    this.model.create_new_option(content)
+    this.model.create_new_option(content) if @confirm_if_frozen()
 
   add_new_option: (option_model) =>
     switch this.model.get('type')
@@ -71,6 +71,12 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
         @add_new_option_model(content.trim()) if content && content.trim().length > 0
       window.loading_overlay.hide_overlay()
     , 10)
+
+  confirm_if_frozen: =>
+    if @frozen
+      confirm(I18n.t("js.confirm_add_option_to_finalized_survey"))
+    else
+      true
 
   limit_edit: =>
     super
