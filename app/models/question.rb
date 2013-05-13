@@ -118,8 +118,6 @@ class Question < ActiveRecord::Base
   end
 
   def allow_content_and_order_number_for_draft_survey
-    require_draft_survey unless self.changed.map(&:to_sym).all? do |attr|
-      attr.in? [:content, :order_number]
-    end
+    require_draft_survey if self.changed.reject { |attr| attr.in? ['content', 'order_number'] }.present?
   end
 end
