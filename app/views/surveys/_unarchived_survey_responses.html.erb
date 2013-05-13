@@ -6,7 +6,7 @@
   </ul>
 
   <ul class="cso_admin_operations">
-    <li><%= link_to icon_for('icon-edit', t('surveys.index.edit')), survey_build_path(survey.id)  if can? :edit, survey %></li>
+    <li><%= link_to icon_for('icon-edit', t('surveys.index.edit')), survey_build_path(survey.id)  if can? :build, survey %></li>
     <% if survey.finalized? %>
         <li><%= link_to icon_for('icon-arrow-up', t('surveys.index.publish')), edit_survey_publication_path(survey.id) if can? :edit_publication, survey %></li>
         <li><%= link_to icon_for('icon-arrow-up', t('surveys.index.unpublish')), unpublish_survey_publication_path(survey.id) if can?(:edit_publication, survey) && survey.survey_users.any? %></li>
