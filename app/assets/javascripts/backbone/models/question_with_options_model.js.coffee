@@ -25,7 +25,6 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     return if @seeded
     @create_new_option('First Option')
     @create_new_option('Second Option')
-    @create_new_option('Third Option')
     @seeded = true
 
   save_model: =>
