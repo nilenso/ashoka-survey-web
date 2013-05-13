@@ -8,7 +8,7 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     'change input[type=number]': 'handle_textbox_keyup'
     'change input[type=checkbox]': 'handle_checkbox_change'
 
-  initialize: (@model, @template) =>
+  initialize: (@model, @template, @survey_frozen) =>
     this.model.actual_view = this
     this.model.on('save:completed', this.renderImageUploader, this)
     this.model.on('change', this.render, this)
@@ -19,6 +19,7 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     json.allow_identifier = @allow_identifier()
     $(this.el).html(Mustache.render(this.template, json))
     @renderImageUploader()
+    @limit_edit() if @survey_frozen
     return this
 
   allow_identifier: =>
@@ -59,7 +60,6 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     $(first_input).select()
 
   limit_edit: =>
-    @frozen = true
     $(this.el).find(":input").attr("disabled", true)
     $(this.el).find("input[name=content]").attr("disabled", false)
 

@@ -4,7 +4,7 @@ SurveyBuilder.Views.Dummies ||= {}
 # Represents a dummy radio question on the DOM
 class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.Views.Dummies.QuestionView
 
-  initialize: (model, template) =>
+  initialize: (model, template, @survey_frozen) =>
     super
     @options = []
     @can_have_sub_questions = true
@@ -38,7 +38,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       $(@el).append(group) unless _(option.sub_questions).isEmpty()
 
     @render_dropdown()
-
+    @limit_edit() if @survey_frozen
     return this
 
   preload_options: (collection) =>
@@ -66,7 +66,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
       when 'DropDownQuestion'
         template = $('#dummy_drop_down_option_template').html()
 
-    view = new SurveyBuilder.Views.Dummies.OptionView(model, template)
+    view = new SurveyBuilder.Views.Dummies.OptionView(model, template, @survey_frozen)
     @options.push view
     view.on('render_preloaded_sub_questions', @render, this)
     view.on('render_added_sub_question', @render, this)

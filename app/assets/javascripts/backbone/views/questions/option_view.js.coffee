@@ -2,7 +2,7 @@ SurveyBuilder.Views.Questions ||= {}
 
 #  The settings of a single option in the settings pane
 class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
-  initialize: (@model, @template, @frozen) =>
+  initialize: (@model, @template, @survey_frozen) =>
     this.sub_questions = []
     this.model.on('change:errors', this.render, this)
     this.model.on('change:id', this.render, this)
@@ -19,7 +19,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     $(this.el).children('div').children('.add_sub_multi_record').bind('click', this.add_sub_category_model)
     $(this.el).children('div').children('.delete_option').bind('click', this.delete)
     $(this.el).children('input').bind('keyup', this.update_model)
-    @limit_edit() if @frozen
+    @limit_edit() if @survey_frozen
     return this
 
   update_model: (event) =>
@@ -46,7 +46,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
       )
     sub_question_model.on('destroy', this.delete_sub_question, this)
     type = sub_question_model.get('type')
-    question = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, sub_question_model)
+    question = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, sub_question_model, @survey_frozen)
     this.sub_questions.push question
     $('#settings_pane').append($(question.render().el))
     $(question.render().el).hide()
@@ -64,4 +64,3 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
   limit_edit: =>
     $(this.el).find(":input").attr("disabled", true)
     $(this.el).find(".option").attr("disabled", false)
-    sub_question.limit_edit() for sub_question in @sub_questions

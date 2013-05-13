@@ -8,7 +8,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
   events:
     'copy_question.save_all_changes': 'save_all_changes'
 
-  initialize: (survey_model) =>
+  initialize: (survey_model, @survey_frozen) =>
     @questions = []
     @survey_model = survey_model
     @add_survey_details(survey_model)
@@ -28,13 +28,13 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     })
 
   add_question: (type, model, parent) =>
-    view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model)
+    view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model, @survey_frozen)
     @questions.push(view)
     model.on('destroy', @delete_question_view, this)
     $(@el).children(@QUESTIONS_CONTAINER).append(view.render().el)
 
   add_category: (type, model) =>
-    view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model)
+    view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model, @survey_frozen)
     @questions.push(view)
     model.on('destroy', @delete_question_view, this)
     $(@el).children(@QUESTIONS_CONTAINER).append(view.render().el)
@@ -109,5 +109,3 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       question_view.copy_question() unless @survey_model.has_errors()
     $(@el).trigger('save_all_questions')
 
-  limit_edit: =>
-    question_view.limit_edit() for question_view in @questions

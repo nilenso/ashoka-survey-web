@@ -1,4 +1,3 @@
-# Container of list of available question types that can be added
 class SurveyBuilder.Views.PickerPaneView extends Backbone.View
   el: "#picker_pane"
 
@@ -14,6 +13,8 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
     'click #add_rating_question': 'add_rating_question'
     'click #add_category': 'add_category'
     'click #add_multi_record_category': 'add_multi_record_category'
+
+  initialize: (@survey_frozen) =>
 
   add_radio_question: =>
     $(this.el).trigger('new_question', { type: 'RadioQuestion' }) if @confirm_if_frozen()
@@ -49,10 +50,4 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
     $(this.el).trigger('new_question', { type: 'MultiRecordCategory' }) if @confirm_if_frozen()
 
   confirm_if_frozen: =>
-    if @frozen
-      confirm(I18n.t('js.confirm_add_question_to_finalized_survey'))
-    else
-      true
-
-  limit_edit: =>
-    @frozen = true
+    if @survey_frozen then confirm(I18n.t('js.confirm_add_question_to_finalized_survey')) else true

@@ -3,19 +3,19 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
   el: "#settings_pane"
   DETAILS: "#survey_details_template"
 
-  initialize: (survey_model) =>
+  initialize: (survey_model, @survey_frozen) =>
     @questions = []
     @add_survey_details(survey_model)
 
   add_question: (type, model) =>
-    view = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, model)
+    view = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, model, @survey_frozen)
     @questions.push(view)
     model.on('destroy', this.delete_question_view, this)
     $(this.el).append($(view.render().el))
     $(view.render().el).hide()
 
   add_category: (type, model) =>
-    view = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, model)
+    view = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, model, @survey_frozen)
     @questions.push(view)
     model.on('destroy', this.delete_question_view, this)
     $(this.el).append($(view.render().el))
@@ -40,8 +40,5 @@ class SurveyBuilder.Views.SettingsPaneView extends Backbone.View
 
   hide_all: =>
     question.hide() for question in @questions
-
-  limit_edit: =>
-    question_view.limit_edit() for question_view in @questions
 
 

@@ -7,7 +7,7 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
     'keyup  input[type=text]': 'handle_textbox_keyup'
     'change input[type=checkbox]': 'handle_checkbox_change'
 
-  initialize: (@model, @template) =>
+  initialize: (@model, @template, @survey_frozen) =>
     this.model.actual_view = this
     this.sub_questions = []
     this.model.on('save:completed', this.renderImageUploader, this)
@@ -23,6 +23,7 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
     $(this.el).children('div').children('.add_sub_question').bind('click', this.add_sub_question_model)
     $(this.el).children('div').children('.add_sub_category').bind('click', this.add_sub_category_model)
     $(this.el).children('div').children('.add_sub_multi_record').bind('click', this.add_sub_category_model)
+    @limit_edit() if @survey_frozen
     return this
 
   handle_textbox_keyup: (event) =>
@@ -57,7 +58,7 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
   add_sub_question: (sub_question_model) =>
     sub_question_model.on('destroy', this.delete_sub_question, this)
     type = sub_question_model.get('type')
-    question = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, sub_question_model)
+    question = SurveyBuilder.Views.QuestionFactory.settings_view_for(type, sub_question_model, @survey_frozen)
     this.sub_questions.push question
     $('#settings_pane').append($(question.render().el))
     $(question.render().el).hide()
@@ -73,5 +74,3 @@ class SurveyBuilder.Views.Questions.CategoryView extends Backbone.View
     view.remove()
 
   limit_edit: =>
-    $(this.el).find(":input").attr("disabled", true)
-    sub_question.limit_edit() for sub_question in @sub_questions

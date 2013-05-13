@@ -10,7 +10,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     'click button.add_option': 'add_new_option_model'
     'click button.add_options_in_bulk': 'add_options_in_bulk'
 
-  initialize: (model, template) =>
+  initialize: (model, template, @survey_frozen) =>
     super
     this.options = []
     this.model.on('add:options', this.add_new_option, this)
@@ -35,13 +35,14 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
       when 'DropDownQuestion'
         template = $('#drop_down_option_template').html()
 
-    option = new SurveyBuilder.Views.Questions.OptionView(option_model, template, @frozen)
+    option = new SurveyBuilder.Views.Questions.OptionView(option_model, template, @survey_frozen)
     this.options.push option
     $(this.el).append($(option.render().el))
 
   render: =>
     super
     $(this.el).append($(option.render().el)) for option in @options
+    @limit_edit() if @survey_frozen
     return this
 
   delete_option_view: (model) =>
@@ -73,7 +74,7 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
     , 10)
 
   confirm_if_frozen: =>
-    if @frozen
+    if @survey_frozen
       confirm(I18n.t("js.confirm_add_option_to_finalized_survey"))
     else
       true
@@ -81,4 +82,3 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
   limit_edit: =>
     super
     $(this.el).find(".add_option").attr("disabled", false)
-    option.limit_edit() for option in @options

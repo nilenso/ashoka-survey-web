@@ -4,7 +4,7 @@ SurveyBuilder.Views.Dummies ||= {}
 class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
   ORDER_NUMBER_STEP: 2
 
-  initialize: (@model, @template) =>
+  initialize: (@model, @template, @survey_frozen) =>
     this.sub_questions = []
     this.model.on('change', this.render, this)
     this.model.on('change:errors', this.render, this)
@@ -20,7 +20,7 @@ class SurveyBuilder.Views.Dummies.OptionView extends Backbone.View
   add_sub_question: (sub_question_model) =>
     sub_question_model.on('destroy', this.delete_sub_question, this)
     type = sub_question_model.get('type')
-    question = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, sub_question_model)
+    question = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, sub_question_model, @survey_frozen)
     this.sub_questions.push question
     this.trigger('render_added_sub_question')
     this.render()

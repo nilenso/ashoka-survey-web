@@ -4,9 +4,7 @@ SurveyBuilder.Views.Dummies ||= {}
 class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
   ORDER_NUMBER_STEP: 2
 
-  initialize: (model, template) =>
-    @model = model
-    @template = template
+  initialize: (@model, @template, @survey_frozen) =>
     @model.dummy_view = this
     @can_have_sub_questions = false
     @model.on('change', @render, this)
@@ -31,7 +29,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
 
     $(@el).children('.dummy_question_content').children(".top_level_content").children(".delete_question").click (e) => @delete(e)
     $(@el).children('.dummy_question_content').children(".top_level_content").children(".copy_question").click (e) => @save_all_changes(e)
-
+    @limit_edit() if @survey_frozen
     return this
 
   delete: =>

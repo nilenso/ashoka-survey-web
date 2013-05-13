@@ -12,11 +12,11 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     'save_all_questions': 'save_all_questions'
 
   initialize:(survey_id, @survey_frozen) =>
-    this.picker_pane   = new SurveyBuilder.Views.PickerPaneView
+    this.picker_pane   = new SurveyBuilder.Views.PickerPaneView(survey_frozen)
     this.survey        = new SurveyBuilder.Models.SurveyModel(survey_id)
-    this.settings_pane = new SurveyBuilder.Views.SettingsPaneView(this.survey)
-    this.dummy_pane    = new SurveyBuilder.Views.DummyPaneView(this.survey)
-    this.actions_view  = new SurveyBuilder.Views.ActionsView
+    this.settings_pane = new SurveyBuilder.Views.SettingsPaneView(this.survey, survey_frozen)
+    this.dummy_pane    = new SurveyBuilder.Views.DummyPaneView(this.survey, survey_frozen)
+    this.actions_view  = new SurveyBuilder.Views.ActionsView(survey_frozen)
     $(this.el).ajaxStart(window.notifications_view.show_spinner)
     $(this.el).ajaxStop(window.notifications_view.hide_spinner)
 
@@ -35,7 +35,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
         $(this.el).unbind('ajaxStop.preload')
         this.dummy_pane.sort_question_views_by_order_number()
         this.dummy_pane.reorder_questions()
-        this.limit_edit() if survey_frozen
+        @limit_edit() if @survey_frozen
       )
     )
 
@@ -48,10 +48,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.dummy_pane.add_question(type, model, parent)
     this.settings_pane.add_question(type, model)
     model.save_model()
-
-    $(this.el).bind "ajaxStop.new_question", =>
-      $(this.el).unbind "ajaxStop.new_question"
-      @limit_edit() if @survey_frozen
 
   new_category: (event, type) =>
     @loading_overlay()
@@ -121,7 +117,6 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     $(this.el).find("#save input").prop('disabled', false)
     $(this.el).trigger('save_finished')
     @display_save_status()
-    @limit_edit() if @survey_frozen
     window.loading_overlay.hide_overlay()
 
   display_save_status: =>
@@ -131,9 +126,5 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
       window.notifications_view.set_notice(I18n.t('js.save_successful'),)
 
   limit_edit: =>
-    @settings_pane.limit_edit()
-    @dummy_pane.limit_edit()
-    @picker_pane.limit_edit()
-    @actions_view.limit_edit()
     window.notifications_view.set_notice("You are editing a finalized survey. Certain features will be disabled in this mode.",
       { no_timeout: true })

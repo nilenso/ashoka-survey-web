@@ -5,7 +5,7 @@ SurveyBuilder.Views.Dummies ||= {}
 class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummies.QuestionView
   ORDER_NUMBER_STEP: 2
 
-  initialize: (@model, @template) =>
+  initialize: (@model, @template, @survey_frozen) =>
     @sub_questions = []
     @model.dummy_view = this
     @can_have_sub_questions = true
@@ -45,7 +45,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
 
     $(@el).append(group) unless _(@sub_questions).isEmpty()
     @collapse(false) if @collapsed
-
+    @limit_edit() if @survey_frozen
     return this
 
   add_sub_question: (sub_question_model) =>
@@ -55,7 +55,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
     , this)
     sub_question_model.on('destroy', @delete_sub_question, this)
     type = sub_question_model.get('type')
-    question = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, sub_question_model)
+    question = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, sub_question_model, @survey_frozen)
     @sub_questions.push question
     @uncollapse()
     @render()
