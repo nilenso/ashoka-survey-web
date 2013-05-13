@@ -62,5 +62,4 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     view.remove()
 
   limit_edit: =>
-    $(this.el).find(":input").attr("disabled", true)
-    $(this.el).find(".option").attr("disabled", false)
+    $(this.el).find(".delete_option").attr("disabled", true)
