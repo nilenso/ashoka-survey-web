@@ -56,4 +56,3 @@ class SurveyBuilder.Views.PickerPaneView extends Backbone.View
 
   limit_edit: =>
     @frozen = true
-    $(this.el).find("[id$=category]").parent('li').remove()

@@ -132,3 +132,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
 
   copy_question: =>
     $(@el).children('.dummy_category_content').children(".copy_question_hidden").click();
+
+  limit_edit: =>
+    super
+    $(this.el).find(".delete_category").remove()
