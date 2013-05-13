@@ -6,17 +6,17 @@ describe Category do
   context "callbacks" do
     let!(:survey) { FactoryGirl.create(:survey) }
 
-    it "doesn't create when its survey is finalized" do
+    it "creates category when its survey is finalized" do
       survey.finalize
-      expect { Category.create(:content => "FOO",:survey_id => survey.id) }.not_to change { Category.count }
+      expect { Category.create(:content => "FOO",:survey_id => survey.id) }.to change { Category.count }.by(1)
     end
 
-    it "doesn't update if its survey is finalized" do
+    it "updates even if its survey is finalized" do
       category = FactoryGirl.create(:category, :survey => survey, :content => "FOO")
       survey.finalize
       category.content = "BAR"
       category.save
-      category.reload.content.should == "FOO"
+      category.reload.content.should == "BAR"
     end
 
     it "doesn't destroy if its survey is finalized" do
