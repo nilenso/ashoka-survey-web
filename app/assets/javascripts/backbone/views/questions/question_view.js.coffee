@@ -60,6 +60,12 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     $(first_input).select()
 
   limit_edit: =>
-    $(this.el).find(":input").attr("disabled", true)
+    $(this.el).find("input[name=identifier]").attr("disabled", true)
+    $(this.el).find("input[name=private]").attr("disabled", true)
+    $(this.el).find("input[name=mandatory]").attr("disabled", true)
+    $(this.el).find("input[name=max_length]").attr("disabled", true)
+    $(this.el).find("input[name=max_value]").attr("disabled", true)
+    $(this.el).find("input[name=min_value]").attr("disabled", true)
+    $(this.el).find("input.fileupload").attr("disabled", true)
     $(this.el).find("input[name=content]").attr("disabled", false)
 
