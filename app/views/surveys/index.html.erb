@@ -82,5 +82,7 @@
         $('a.copy_public_link').click(function(){
             new SurveyApp.PublicLinkDialog($(this).data('public-link')).open();
         });
+
+        new SurveyApp.AddConfirmation($(".archive"));
     });
 </script>
