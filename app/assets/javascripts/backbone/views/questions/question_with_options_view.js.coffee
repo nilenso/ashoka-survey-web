@@ -81,4 +81,6 @@ class SurveyBuilder.Views.Questions.QuestionWithOptionsView extends SurveyBuilde
 
   limit_edit: =>
     super
+    $(this.el).find("div.add_options_in_bulk").hide()
+    $(this.el).find("textarea.add_options_in_bulk").hide()
     $(this.el).find(".add_option").attr("disabled", false)
