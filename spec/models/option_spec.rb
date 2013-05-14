@@ -20,25 +20,8 @@ describe Option do
   end
 
   context "callbacks" do
-    let!(:survey) { FactoryGirl.create(:survey) }
-    let!(:question) { FactoryGirl.create(:question, :survey => survey) }
-
-    it "creates even if its survey is finalized" do
-      survey.finalize
-      expect { Option.create(:content => "FOO",:question_id => question.id) }.to change { Option.count }.by(1)
-    end
-
-    it "updates even if its survey is finalized" do
-      option = FactoryGirl.create(:option, :question => question, :content => "FOO")
-      survey.finalize
-      option.content = "BAR"
-      option.save
-      option.reload.content.should == "BAR"
-    end
-
-    it "doesn't destroy if its survey is finalized" do
-      option = FactoryGirl.create(:option, :question => question, :content => "FOO")
-      survey.finalize
+    it "doesn't destroy if it is finalized" do
+      option = FactoryGirl.create(:option, :finalized)
       expect { option.destroy }.not_to change { Option.count }
     end
   end

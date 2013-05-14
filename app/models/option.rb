@@ -8,7 +8,7 @@ class Option < ActiveRecord::Base
   default_scope :order => 'order_number'
   delegate :survey, :to => :question, :prefix => false, :allow_nil => true
 
-  before_destroy :require_draft_survey
+  before_destroy { |option| !option.finalized? }
 
   def duplicate(survey_id)
     option = self.dup
@@ -56,11 +56,5 @@ class Option < ActiveRecord::Base
 
   def has_multi_record_ancestor
     has_multi_record_ancestor?
-  end
-
-  private
-
-  def require_draft_survey
-    !survey.finalized?
   end
 end
