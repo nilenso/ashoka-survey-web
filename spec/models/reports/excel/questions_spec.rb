@@ -17,6 +17,15 @@ describe Reports::Excel::Questions do
     questions.all.should == [question, private_question]
   end
 
+  it "includes the sub-questions adjacent to their parent question" do
+    survey = FactoryGirl.create(:survey)
+    first_question = FactoryGirl.create(:radio_question, :survey => survey, :order_number => 1)
+    sub_question = FactoryGirl.create(:question, :survey => survey, :parent => FactoryGirl.create(:option, :question => first_question))
+    second_question = FactoryGirl.create(:question, :survey => survey, :order_number => 2)
+    questions = Reports::Excel::Questions.new(survey, admin_ability).build
+    questions.all.should == [first_question, sub_question, second_question]
+  end
+
   context "when filtering out private questions" do
     it "performs the filtering by default" do
       questions = Reports::Excel::Questions.new(survey, admin_ability)

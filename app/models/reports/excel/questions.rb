@@ -1,10 +1,10 @@
 class Reports::Excel::Questions
-  delegate :all, :to => :questions
   attr_reader :questions
+  alias_method :all, :questions
 
   def initialize(survey, current_ability)
     @survey = survey
-    @questions = survey.questions
+    @questions = survey.questions_in_order
     @ability = current_ability
   end
 
@@ -18,7 +18,7 @@ class Reports::Excel::Questions
     if disable_filtering
       @ability.authorize!(:change_excel_filters, @survey)
     else
-      @questions = @questions.not_private
+      @questions = @questions.reject {|question| question.private? }
     end
     self
   end
