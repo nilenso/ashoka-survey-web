@@ -14,6 +14,10 @@ FactoryGirl.define do
       mandatory true
     end
 
+    trait :finalized do
+      finalized true
+    end
+
     factory :question_with_answers do
       after(:create) do |question, evaluator|
         FactoryGirl.create_list(:answer, 5, :question => question)

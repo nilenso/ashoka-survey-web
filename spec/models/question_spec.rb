@@ -33,40 +33,31 @@ describe Question do
       end
     end
 
-    context "when updating a question belonging to a finalized survey" do
+    context "when updating a finalized question" do
       it "allows updating if the content has changed" do
-        survey = FactoryGirl.create(:survey)
-        question = FactoryGirl.create(:question, :survey => survey, :content => "FOO")
-        survey.update_column(:finalized, true)
+        question = FactoryGirl.create(:question, :finalized, :content => "FOO")
         question.content = "BAR"
         question.save
         question.reload.content.should == "BAR"
       end
 
       it "allows updating if the order_number has changed" do
-        survey = FactoryGirl.create(:survey)
-        question = FactoryGirl.create(:question, :survey => survey, :order_number => 1)
-        survey.update_column(:finalized, true)
+        question = FactoryGirl.create(:question, :finalized, :order_number => 1)
         question.order_number = 2
         question.save
         question.reload.order_number.should == 2
       end
 
       it "does not allow updation of any other field" do
-        survey = FactoryGirl.create(:survey)
-        question = FactoryGirl.create(:question, :survey => survey, :max_length => 1)
-        survey.update_column(:finalized, true)
+        question = FactoryGirl.create(:question, :finalized, :max_length => 1)
         question.max_length = 3
         question.save
         question.reload.max_length.should == 1
       end
     end
 
-
-    it "doesn't destroy if its survey is finalized" do
-      survey = FactoryGirl.create(:survey)
-      question = FactoryGirl.create(:question, :survey => survey, :content => "FOO")
-      survey.update_column :finalized, true
+    it "doesn't destroy if it is finalized" do
+      question = FactoryGirl.create(:question, :finalized, :content => "FOO")
       expect { question.destroy }.not_to change { Question.count }
     end
   end

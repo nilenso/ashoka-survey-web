@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130506105709) do
+ActiveRecord::Schema.define(:version => 20130514100420) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -38,6 +38,7 @@ ActiveRecord::Schema.define(:version => 20130506105709) do
     t.integer  "parent_id"
     t.string   "type"
     t.boolean  "mandatory",    :default => false
+    t.boolean  "finalized",    :default => false
   end
 
   add_index "categories", ["category_id"], :name => "index_categories_on_category_id"
@@ -70,9 +71,10 @@ ActiveRecord::Schema.define(:version => 20130506105709) do
   create_table "options", :force => true do |t|
     t.string   "content"
     t.integer  "question_id"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+    t.datetime "created_at",                      :null => false
+    t.datetime "updated_at",                      :null => false
     t.integer  "order_number"
+    t.boolean  "finalized",    :default => false
   end
 
   add_index "options", ["question_id"], :name => "index_options_on_question_id"
@@ -102,6 +104,7 @@ ActiveRecord::Schema.define(:version => 20130506105709) do
     t.string   "photo_secure_token"
     t.string   "image_tmp"
     t.boolean  "private",                         :default => false
+    t.boolean  "finalized",                       :default => false
   end
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"

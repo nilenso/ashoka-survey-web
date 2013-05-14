@@ -3,7 +3,7 @@ class Question < ActiveRecord::Base
   belongs_to :category
   belongs_to :survey
   attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number,
-                    :parent_id, :identifier, :category_id, :private
+                    :parent_id, :identifier, :category_id, :private, :finalized
   validates_presence_of :content
   has_many :answers, :dependent => :destroy
   mount_uploader :image, ImageUploader
@@ -15,10 +15,10 @@ class Question < ActiveRecord::Base
 
   delegate :question, :to => :parent, :prefix => true
 
-  before_create { |question| require_draft_survey if question.mandatory? }
+  before_create :require_draft_survey_if_mandatory
   # Order number changes for every update. View code logic dependent.
-  before_update :allow_content_and_order_number_for_draft_survey
-  before_destroy :require_draft_survey
+  before_update :allow_content_and_order_number_for_finalized
+  before_destroy { |question| !question.finalized? }
 
   def image_url(format=nil)
     return "/#{image.cache_dir}/#{image_tmp}" if image_tmp
@@ -113,11 +113,15 @@ class Question < ActiveRecord::Base
 
   private
 
-  def require_draft_survey
-    !survey.finalized?
+  def require_draft_survey_if_mandatory
+    !survey.finalized? if mandatory?
   end
 
-  def allow_content_and_order_number_for_draft_survey
-    require_draft_survey if self.changed.reject { |attr| attr.in? ['content', 'order_number'] }.present?
+  def allow_content_and_order_number_for_finalized
+    if finalized?
+      self.changed.reject { |attr| attr.in? ['content', 'order_number'] }.empty?
+    else
+      true
+    end
   end
 end
