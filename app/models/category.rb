@@ -10,7 +10,7 @@ class Category < ActiveRecord::Base
 
   delegate :question, :to => :parent, :prefix => true, :allow_nil => true
 
-  before_destroy :require_draft_survey
+  before_destroy { |category| !category.finalized? }
 
   attr_accessible :content, :survey_id, :order_number, :category_id, :parent_id, :type, :mandatory
 
@@ -99,11 +99,5 @@ class Category < ActiveRecord::Base
 
   def has_multi_record_ancestor
     has_multi_record_ancestor?
-  end
-
-  private
-
-  def require_draft_survey
-    !survey.finalized?
   end
 end

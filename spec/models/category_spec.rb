@@ -4,24 +4,8 @@ describe Category do
   it { should validate_presence_of :content }
 
   context "callbacks" do
-    let!(:survey) { FactoryGirl.create(:survey) }
-
-    it "creates category when its survey is finalized" do
-      survey.finalize
-      expect { Category.create(:content => "FOO",:survey_id => survey.id) }.to change { Category.count }.by(1)
-    end
-
-    it "updates even if its survey is finalized" do
-      category = FactoryGirl.create(:category, :survey => survey, :content => "FOO")
-      survey.finalize
-      category.content = "BAR"
-      category.save
-      category.reload.content.should == "BAR"
-    end
-
-    it "doesn't destroy if its survey is finalized" do
-      category = FactoryGirl.create(:category, :survey => survey, :content => "FOO")
-      survey.finalize
+    it "doesn't destroy if the category is finalized" do
+      category = FactoryGirl.create(:category, :finalized)
       expect { category.destroy }.not_to change { Category.count }
     end
   end
