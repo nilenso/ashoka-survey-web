@@ -45,7 +45,7 @@ describe Reports::Excel::Metadata do
     it "returns the `last_update` of the response" do
       response = FactoryGirl.create(:response, :user_id => 1)
       metadata = Reports::Excel::Metadata.new([response], access_token)
-      metadata.for(response).should include response.last_update
+      metadata.for(response).should include response.last_update.strftime("%d/%m/%Y")
     end
 
     it "returns the state of the response" do
