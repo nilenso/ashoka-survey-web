@@ -37,22 +37,20 @@ describe Question do
       it "allows updating if the content has changed" do
         question = FactoryGirl.create(:question, :finalized, :content => "FOO")
         question.content = "BAR"
-        question.save
-        question.reload.content.should == "BAR"
+        question.should be_valid
       end
 
       it "allows updating if the order_number has changed" do
         question = FactoryGirl.create(:question, :finalized, :order_number => 1)
         question.order_number = 2
-        question.save
-        question.reload.order_number.should == 2
+        question.should be_valid
       end
 
       it "does not allow updation of any other field" do
         question = FactoryGirl.create(:question, :finalized, :max_length => 1)
         question.max_length = 3
-        question.save
-        question.reload.max_length.should == 1
+        question.should_not be_valid
+        question.should have(1).error_on(:max_length)
       end
     end
 

@@ -248,6 +248,11 @@ en:
         survey:
           finalize_before_archive: "The survey must be finalized before archiving"
           must_not_be_archived: "Can't archive an archived survey"
+        question:
+          attributes:
+            survey_id:
+              draft_survey: "Can't perform this action on a question belonging to a finalized survey."
+          not_allowed: "%{attribute} is not allowed to change for a finalized question"
 
   add_option: "Add Option"
 # Library strings

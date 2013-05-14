@@ -5,19 +5,19 @@ class Question < ActiveRecord::Base
   attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number,
                     :parent_id, :identifier, :category_id, :private, :finalized
   validates_presence_of :content
+  validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id, :category_id], :allow_nil => true
+  validate :ensure_survey_is_draft, :if => :mandatory?, :on => :create
+  validate :allow_content_and_order_number_for_finalized, :on => :update
+
   has_many :answers, :dependent => :destroy
   mount_uploader :image, ImageUploader
   store_in_background  :image
-  validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id, :category_id], :allow_nil => true
 
   default_scope :order => 'order_number'
   scope :not_private, where("private IS NOT true")
 
   delegate :question, :to => :parent, :prefix => true
 
-  before_create :require_draft_survey_if_mandatory
-  # Order number changes for every update. View code logic dependent.
-  before_update :allow_content_and_order_number_for_finalized
   before_destroy { |question| !question.finalized? }
 
   def image_url(format=nil)
@@ -113,15 +113,14 @@ class Question < ActiveRecord::Base
 
   private
 
-  def require_draft_survey_if_mandatory
-    !survey.finalized? if mandatory?
+  def ensure_survey_is_draft
+    if survey.finalized?
+      errors.add(:survey_id, :draft_survey)
+    end
   end
 
   def allow_content_and_order_number_for_finalized
-    if finalized?
-      self.changed.reject { |attr| attr.in? ['content', 'order_number'] }.empty?
-    else
-      true
-    end
+    disallowed_attributes = self.changed.reject { |attr| attr.in? ['content', 'order_number'] }
+    disallowed_attributes.each {|attr| errors.add(attr.to_sym, I18n.t(:not_allowed, :scope => [:activerecord, :errors, :models, :question], :attribute => attr)) }
   end
 end
