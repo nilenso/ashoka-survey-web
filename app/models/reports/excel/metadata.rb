@@ -15,11 +15,15 @@ class Reports::Excel::Metadata
 
   def for(response)
     if disable_filtering?
-      [user_name_for(response.user_id), organization_name_for(response.organization_id), response.last_update,
+      [user_name_for(response.user_id), organization_name_for(response.organization_id), formatted_last_update_for(response),
         response.location, response.ip_address, response.state]
     else
-      [user_name_for(response.user_id), organization_name_for(response.organization_id), response.last_update, response.state]
+      [user_name_for(response.user_id), organization_name_for(response.organization_id), formatted_last_update_for(response), response.state]
     end
+  end
+
+  def formatted_last_update_for(response)
+    response.last_update.strftime("%d/%m/%Y")
   end
 
   def disable_filtering?
