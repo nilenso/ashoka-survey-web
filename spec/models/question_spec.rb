@@ -54,6 +54,16 @@ describe Question do
       end
     end
 
+
+    context "when updating a non-finalized question" do
+      it "allows updation of all fields" do
+        question = FactoryGirl.create(:question)
+        question.max_length = 3
+        question.mandatory = true
+        question.should be_valid
+      end
+    end
+
     it "doesn't destroy if it is finalized" do
       question = FactoryGirl.create(:question, :finalized, :content => "FOO")
       expect { question.destroy }.not_to change { Question.count }

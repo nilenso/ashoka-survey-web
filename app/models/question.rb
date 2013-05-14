@@ -7,7 +7,7 @@ class Question < ActiveRecord::Base
   validates_presence_of :content
   validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id, :category_id], :allow_nil => true
   validate :ensure_survey_is_draft, :if => :mandatory?, :on => :create
-  validate :allow_content_and_order_number_for_finalized, :on => :update
+  validate :allow_content_and_order_number_for_finalized, :if => :finalized?, :on => :update
 
   has_many :answers, :dependent => :destroy
   mount_uploader :image, ImageUploader
