@@ -39,6 +39,9 @@ class Survey < ActiveRecord::Base
 
   def finalize
     self.finalized = true
+    questions.update_all(:finalized => true)
+    categories.update_all(:finalized => true)
+    options.update_all(:finalized => true)
     self.save
   end
 
@@ -130,6 +133,10 @@ class Survey < ActiveRecord::Base
 
   def questions_in_order
     first_level_elements.map(&:questions_in_order).flatten
+  end
+
+  def options
+    Option.unscoped.joins(:question).where('questions.survey_id = ?', self.id)
   end
 
   def questions_for_reports

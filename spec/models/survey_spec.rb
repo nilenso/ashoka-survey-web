@@ -119,12 +119,6 @@ describe Survey do
       survey.should_not be_finalized
     end
 
-    it "changes finalized to true" do
-      survey = FactoryGirl.create(:survey)
-      survey.finalize
-      survey.should be_finalized
-    end
-
     it "returns a list of draft surveys" do
       survey = FactoryGirl.create(:survey)
       another_survey = FactoryGirl.create(:survey, :finalized => true)
@@ -145,6 +139,36 @@ describe Survey do
     end
   end
 
+  context "when finalizing" do
+    it "changes finalized to true" do
+      survey = FactoryGirl.create(:survey)
+      survey.finalize
+      survey.should be_finalized
+    end
+
+    it "finalizes its questions" do
+      survey = FactoryGirl.create(:survey)
+      question = FactoryGirl.create(:question, :survey => survey)
+      survey.finalize
+      question.reload.should be_finalized
+    end
+
+    it "finalizes its options" do
+      survey = FactoryGirl.create(:survey)
+      radio_question = FactoryGirl.create(:radio_question, :survey => survey)
+      option = FactoryGirl.create(:option, :question => radio_question)
+      survey.finalize
+      option.reload.should be_finalized
+    end
+
+    it "finalizes its categories" do
+      survey = FactoryGirl.create(:survey)
+      category = FactoryGirl.create(:category, :survey => survey)
+      survey.finalize
+      category.reload.should be_finalized
+    end
+  end
+
   context "archive" do
     it "can be archived" do
       survey = FactoryGirl.create(:survey, :finalized => true)
@@ -161,6 +185,13 @@ describe Survey do
       survey.reload.should_not be_archived
       survey.should have(1).error
     end
+  end
+
+  it "finds all its options" do
+    survey = FactoryGirl.create(:survey)
+    option_1 = FactoryGirl.create(:option, :question => FactoryGirl.create(:radio_question, :survey => survey))
+    option_2 = FactoryGirl.create(:option, :question => FactoryGirl.create(:radio_question, :survey => survey, :parent => option_1))
+    survey.options.should =~ [option_1, option_2]
   end
 
   context "users" do
