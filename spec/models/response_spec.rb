@@ -37,23 +37,22 @@ describe Response do
   end
 
   it "fetches the answers for the identifier questions" do
-    response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
-    identifier_question = FactoryGirl.create :question, :identifier => true
-    normal_question = FactoryGirl.create :question, :identifier => false
-    response.answers << FactoryGirl.create(:answer, :question_id => identifier_question.id,  :response_id => response.id)
-    response.answers << FactoryGirl.create(:answer, :question_id => normal_question.id,  :response_id => response.id)
-    response.answers_for_identifier_questions.should == identifier_question.answers
+    response = FactoryGirl.create(:response)
+    identifier_question = FactoryGirl.create(:question, :finalized, :identifier)
+    normal_question = FactoryGirl.create(:question, :finalized, :identifier => false)
+    FactoryGirl.create(:answer, :question => identifier_question,  :response => response)
+    FactoryGirl.create(:answer, :question => normal_question, :response => response)
+    response.reload.answers_for_identifier_questions.should == identifier_question.answers
   end
 
   context "when there are no identifier questions" do
     it "gives you answers to first level questions " do
-      response = FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
-      question = FactoryGirl.create(:radio_question, content: "Untitled question", order_number: 1)
-      question.options << Option.create(content: "Option", order_number: 1)
-      nested_question = FactoryGirl.create(:single_line_question, {content: "Nested", order_number: 1, parent_id: question.options.first.id})
-      response.answers << FactoryGirl.create(:answer, :question_id => question.id, :response_id => response.id)
-      response.answers << FactoryGirl.create(:answer, :question_id => nested_question.id, :response_id => response.id)
-      response.answers_for_identifier_questions.should == question.answers
+      response = FactoryGirl.create(:response)
+      question = FactoryGirl.create(:radio_question, :finalized)
+      nested_question = FactoryGirl.create(:single_line_question, :finalized, :parent => FactoryGirl.create(:option, :question => question))
+      FactoryGirl.create(:answer, :question => question, :response => response)
+      FactoryGirl.create(:answer, :question => nested_question, :response => response)
+      response.reload.answers_for_identifier_questions.should == question.answers
     end
 
     it "returns a list of first five answers" do
@@ -165,9 +164,9 @@ describe Response do
   context "when updating answers" do
     it "selects only the new answers to update" do
       survey = FactoryGirl.create(:survey)
-      response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
-      question_1 = FactoryGirl.create(:question, :survey_id => survey.id)
-      question_2 = FactoryGirl.create(:question, :survey_id => survey.id)
+      response = FactoryGirl.create(:response, :survey => survey)
+      question_1 = FactoryGirl.create(:question, :finalized, :survey_id => survey.id)
+      question_2 = FactoryGirl.create(:question, :finalized, :survey_id => survey.id)
       answer_1 = FactoryGirl.create(:answer, :question_id => question_1.id, :updated_at => Time.now, :content => "older", :response_id => response.id)
       answer_2 = FactoryGirl.create(:answer, :question_id => question_2.id, :updated_at => 5.hours.from_now, :content => "newer", :response_id => response.id)
       answers_attributes = { '0' => {"question_id" => question_1.id, "updated_at" => 5.hours.from_now.to_s, "id" => answer_1.id, "content" => "newer"},
@@ -194,10 +193,10 @@ describe Response do
     end
 
     it "rolls back all DB changes if there's a single validation error" do
-      response = FactoryGirl.create :response
-      mandatory_question = FactoryGirl.create :question, :mandatory => true
-      answer_1 = FactoryGirl.create :answer, :content => "ABCD", :response_id => response.id, :question_id => mandatory_question.id
-      answer_2 = FactoryGirl.create :answer, :content => "DEF", :response_id => response.id
+      response = FactoryGirl.create(:response)
+      mandatory_question = FactoryGirl.create(:question, :finalized, :mandatory => true)
+      answer_1 = FactoryGirl.create(:answer, :content => "ABCD", :response_id => response.id, :question_id => mandatory_question.id)
+      answer_2 = FactoryGirl.create(:answer, :content => "DEF", :response_id => response.id)
       response.reload.update_answers({ '0' => {:content => '', :id => answer_1.id}})
       answer_1.reload.content.should == "ABCD"
       answer_2.reload.content.should == "DEF"
@@ -231,12 +230,9 @@ describe Response do
     end
 
     it "renders the answers' image as base64 as well" do
-      ImageUploader.storage = :file
-      response = (FactoryGirl.create :response).reload
-      photo = Rack::Test::UploadedFile.new('spec/fixtures/images/sample.jpg')
-      photo.content_type = 'image/jpeg'
-      photo_answer = FactoryGirl.create(:answer, :photo => photo, :question => FactoryGirl.create(:question, :type => 'PhotoQuestion'))
-      response.answers << photo_answer
+      response = FactoryGirl.create(:response)
+      photo_answer = FactoryGirl.create(:answer_with_image, :response => response)
+      response.reload
       response_json = JSON.parse(response.to_json_with_answers_and_choices)
       response_json['answers'][0].should have_key('photo_in_base64')
       response_json['answers'][0]['photo_in_base64'].should == photo_answer.photo_in_base64
@@ -256,8 +252,8 @@ describe Response do
     let(:response) { FactoryGirl.create :response, :survey => survey }
 
     it "returns a sorted list of answers for all its first level questions" do
-      question = FactoryGirl.create(:question, :survey => survey, :order_number => 2)
-      another_question = FactoryGirl.create(:question , :survey => survey, :order_number => 1)
+      question = FactoryGirl.create(:question, :finalized, :survey => survey, :order_number => 2)
+      another_question = FactoryGirl.create(:question, :finalized, :survey => survey, :order_number => 1)
       answer = FactoryGirl.create(:answer, :response => response, :question => question)
       another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)
       response.sorted_answers.should == [another_answer, answer]
@@ -265,21 +261,20 @@ describe Response do
 
     it "returns a sorted list of answers for all sub-questions of a category" do
       category = FactoryGirl.create(:category, :survey => survey)
-      question = FactoryGirl.create(:question, :survey => survey, :order_number => 2, :category => category)
-      another_question = FactoryGirl.create(:question , :survey => survey, :order_number => 1, :category => category)
+      question = FactoryGirl.create(:question, :finalized, :survey => survey, :order_number => 2, :category => category)
+      another_question = FactoryGirl.create(:question , :finalized, :survey => survey, :order_number => 1, :category => category)
       answer = FactoryGirl.create(:answer, :response => response, :question => question)
       another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)
       response.sorted_answers.should == [another_answer, answer]
     end
 
     it "returns a sorted list of answers for all sub-questions of an option" do
-      radio_question = FactoryGirl.create(:radio_question, :content => "X")
+      radio_question = FactoryGirl.create(:radio_question, :finalized, :survey => survey)
       radio_answer = FactoryGirl.create(:answer, :response => response, :question => radio_question)
-      survey.questions << radio_question
 
       option = FactoryGirl.create(:option, :question => radio_question)
-      question = FactoryGirl.create(:question, :survey => survey, :order_number => 2, :parent => option)
-      another_question = FactoryGirl.create(:question , :survey => survey, :order_number => 1, :parent => option)
+      question = FactoryGirl.create(:question, :finalized, :survey => survey, :order_number => 2, :parent => option)
+      another_question = FactoryGirl.create(:question , :finalized, :survey => survey, :order_number => 1, :parent => option)
 
       answer = FactoryGirl.create(:answer, :response => response, :question => question)
       another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)

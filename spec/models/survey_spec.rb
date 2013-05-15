@@ -420,12 +420,10 @@ describe Survey do
 
   it "returns questions with at least one answer of a complete response" do
     survey = FactoryGirl.create(:survey)
-    question = FactoryGirl.create(:question, :survey => survey)
+    question = FactoryGirl.create(:question, :finalized, :survey => survey)
     resp = FactoryGirl.create(:response, :status => 'complete', :state => 'clean')
-    question.answers << FactoryGirl.create(:answer, :response => resp)
+    FactoryGirl.create(:answer, :response => resp, :question => question)
     another_question = FactoryGirl.create(:question, :survey => survey)
-    survey.questions << question
-    survey.questions << another_question
     survey.questions_for_reports.should == [question]
   end
 

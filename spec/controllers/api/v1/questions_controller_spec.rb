@@ -129,14 +129,6 @@ module Api
           response.should_not be_ok
         end
 
-        it "deletes all the answers for that question" do
-          question = FactoryGirl.create(:question, :survey => survey)
-          answers = FactoryGirl.create_list(:answer, 5, :question_id => question.id)
-          expect do
-            delete :destroy, :id => question.id
-          end.to change { Answer.count }.by(-5)
-        end
-
         it "doesn't destroy the question if the current user doesn't have permission to do so" do
           sign_in_as('viewer')
           survey = FactoryGirl.create(:survey, :organization_id => 500)

@@ -67,7 +67,7 @@ describe Reports::Excel::Job do
   context "when setting the answers for a response" do
     it "includes the answer for each question" do
       response = FactoryGirl.create(:response, :survey => survey)
-      question = FactoryGirl.create(:question, :survey => survey)
+      question = FactoryGirl.create(:question, :finalized, :survey => survey)
       answer = FactoryGirl.create(:answer, :question => question, :response => response, :content => "answer_foo")
       data = Reports::Excel::Data.new(survey, [question], [response], server_url, metadata)
       job = Reports::Excel::Job.new(data)
@@ -78,7 +78,7 @@ describe Reports::Excel::Job do
     context "when setting answers for a multi-choice question" do
       it "insert a single blank cell corresponding to the question" do
         response = FactoryGirl.create(:response, :survey => survey)
-        question = FactoryGirl.create(:multi_choice_question)
+        question = FactoryGirl.create(:multi_choice_question, :finalized)
         question.update_column(:survey_id, survey.id)
         answer = FactoryGirl.create(:answer, :question => question, :response => response)
         data = Reports::Excel::Data.new(survey, [question], [response], server_url, metadata)
@@ -89,7 +89,7 @@ describe Reports::Excel::Job do
 
       it "subsequently inserts a cell for each option" do
         response = FactoryGirl.create(:response, :survey => survey)
-        question = FactoryGirl.create(:multi_choice_question)
+        question = FactoryGirl.create(:multi_choice_question, :finalized)
         question.update_column(:survey_id, survey.id)
         options = FactoryGirl.create_list(:option, 5, :question => question)
         answer = FactoryGirl.create(:answer, :question => question, :response => response)
@@ -104,7 +104,7 @@ describe Reports::Excel::Job do
       it "inserts a comma-separated list of answers; one from each record" do
         response = FactoryGirl.create(:response, :survey => survey)
         category = MultiRecordCategory.create(:content => "foo_category", :survey_id => survey.id)
-        question = FactoryGirl.create(:question, :category => category, :survey => survey)
+        question = FactoryGirl.create(:question, :finalized, :category => category, :survey => survey)
         answer_one = FactoryGirl.create(:answer_in_record, :question => question, :response => response, :content => "foo_answer")
         answer_two = FactoryGirl.create(:answer_in_record, :question => question, :response => response, :content => "bar_answer")
         data = Reports::Excel::Data.new(survey, [question], [response], server_url, metadata)
@@ -116,8 +116,8 @@ describe Reports::Excel::Job do
 
       it "inserts the answers for each question in the same order of records" do
         category = MultiRecordCategory.create(:content => "foo_category", :survey_id => survey.id)
-        question_one = FactoryGirl.create(:question, :category => category, :survey => survey)
-        question_two = FactoryGirl.create(:question, :category => category, :survey => survey)
+        question_one = FactoryGirl.create(:question, :finalized, :category => category, :survey => survey)
+        question_two = FactoryGirl.create(:question, :finalized, :category => category, :survey => survey)
         response = FactoryGirl.create(:response, :survey => survey)
 
         record_one = FactoryGirl.create(:record, :response => response)

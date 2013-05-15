@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe MultiChoiceQuestionReporter do
-  let(:question) { MultiChoiceQuestion.find(FactoryGirl.create(:question, :type => "MultiChoiceQuestion").id) }
+  let(:question) { FactoryGirl.create(:multi_choice_question, :finalized) }
 
   context "header" do
     it "includes a header of each of the options as well" do

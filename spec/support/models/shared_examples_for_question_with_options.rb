@@ -6,7 +6,7 @@ shared_examples "a question with options" do |question_klass|
 
   context "reports" do
     it "counts all its answers grouped by the option's content" do
-      question = FactoryGirl.create(factory_name, :with_options)
+      question = FactoryGirl.create(factory_name, :finalized, :with_options)
       5.times { FactoryGirl.create(:answer_with_complete_response, :content => question.options.first.content, :question => question) }
       3.times { FactoryGirl.create(:answer_with_complete_response, :content => question.options.last.content, :question => question) }
       question.report_data.should include [question.options.first.content, 5]
@@ -25,7 +25,7 @@ shared_examples "a question with options" do |question_klass|
   context "when fetching sorted answers for a response" do
     let(:response) { FactoryGirl.create(:response) }
     let(:answer) { FactoryGirl.create(:answer, :response_id => response.id) }
-    let(:question) { FactoryGirl.create(factory_name)}
+    let(:question) { FactoryGirl.create(factory_name, :finalized)}
 
     it "returns its answer for the specified response if it has no sub-elements" do
       question.answers << answer
@@ -36,11 +36,11 @@ shared_examples "a question with options" do |question_klass|
       question.answers << answer
       option = FactoryGirl.create(:option, :question => question)
 
-      sub_question = FactoryGirl.create(:question, :parent => option, :order_number => 1)
+      sub_question = FactoryGirl.create(:question, :finalized, :parent => option, :order_number => 1)
       sub_question_answer = FactoryGirl.create(:answer, :response => response, :question => sub_question)
 
       sub_category= FactoryGirl.create(:category, :parent => option, :order_number => 2)
-      sub_category_question = FactoryGirl.create(:question, :category => sub_category)
+      sub_category_question = FactoryGirl.create(:question, :finalized, :category => sub_category)
       sub_category_question_answer = FactoryGirl.create(:answer, :response => response, :question => sub_category_question)
 
       question.sorted_answers_for_response(response.id).should == [answer, sub_question_answer, sub_category_question_answer]

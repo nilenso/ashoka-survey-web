@@ -303,13 +303,11 @@ describe ResponsesController do
     before(:each) { request.env["HTTP_REFERER"] = 'http://example.com' }
     it "doesn't run validations on answers that are empty" do
       survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question_1 = FactoryGirl.create(:question, :survey => survey, :max_length => 15)
-      question_2 = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
       survey.finalize
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
-      answer_1 = FactoryGirl.create(:answer, :question => question_1, :response => res)
-      answer_2 = FactoryGirl.create(:answer, :question => question_2, :response => res)
+      answer_1 = FactoryGirl.create(:answer, :response => res)
+      answer_2 = FactoryGirl.create(:answer, :response => res)
       res.answers << answer_1
       res.answers << answer_2
 
@@ -317,17 +315,16 @@ describe ResponsesController do
         { :answers_attributes => { "0" => { :content => "", :id => answer_2.id},
                                    "1" => { :content => "hello", :id => answer_1.id} } }
 
-        answer_1.reload.content.should == "hello"
+      answer_1.reload.content.should == "hello"
       flash[:notice].should_not be_nil
     end
 
     it "updates the response" do
       survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question = FactoryGirl.create(:question, :survey => survey)
       survey.finalize
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
-      answer = FactoryGirl.create(:answer, :question => question)
+      answer = FactoryGirl.create(:answer)
       res.answers << answer
 
       put :update, :id => res.id, :survey_id => survey.id, :response =>
@@ -347,7 +344,7 @@ describe ResponsesController do
 
     it "renders edit page in case of any validations error" do
       survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
+      question = FactoryGirl.create(:question, :mandatory, :finalized, :survey => survey)
       survey.finalize
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2, :status => 'validating')
@@ -402,11 +399,10 @@ describe ResponsesController do
 
     it "updates the response" do
       survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question = FactoryGirl.create(:question, :survey => survey)
       survey.finalize
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
-      answer = FactoryGirl.create(:answer, :question => question)
+      answer = FactoryGirl.create(:answer)
       res.answers << answer
 
       put :complete, :id => res.id, :survey_id => survey.id, :response =>
@@ -419,7 +415,7 @@ describe ResponsesController do
 
     it "marks the response incomplete if save is unsuccessful" do
       survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
+      question = FactoryGirl.create(:question, :finalized, :survey => survey, :mandatory => true)
       survey.finalize
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2)
@@ -433,7 +429,7 @@ describe ResponsesController do
 
     it "doesn't mark an already complete response as incomplete when save if unsuccessful" do
       survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question = FactoryGirl.create(:question, :survey => survey, :mandatory => true)
+      question = FactoryGirl.create(:question, :finalized, :survey => survey, :mandatory => true)
       survey.finalize
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 2, :status => 'complete')

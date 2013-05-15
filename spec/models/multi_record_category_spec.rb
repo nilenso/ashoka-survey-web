@@ -12,7 +12,7 @@ describe MultiRecordCategory do
 
     it "returns answers for each of its records" do
       mr_category = FactoryGirl.create(:multi_record_category)
-      question = FactoryGirl.create(:question, :category => mr_category)
+      question = FactoryGirl.create(:question, :finalized, :category => mr_category)
       5.times do
         record = FactoryGirl.create(:record, :response => response)
         mr_category.records << record
@@ -25,7 +25,7 @@ describe MultiRecordCategory do
     it "includes records belonging only to the specified response" do
       another_response = FactoryGirl.create(:response)
       mr_category = FactoryGirl.create(:multi_record_category)
-      question = FactoryGirl.create(:question, :category => mr_category)
+      question = FactoryGirl.create(:question, :finalized, :category => mr_category)
 
       5.times do
         record = Record.create(:response_id => response.id)

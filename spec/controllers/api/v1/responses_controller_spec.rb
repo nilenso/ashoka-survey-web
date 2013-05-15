@@ -23,7 +23,7 @@ module Api::V1
 
       context "POST 'create'" do
         let (:survey) { FactoryGirl.create(:survey, :organization_id => organization_id) }
-        let (:question) { FactoryGirl.create(:question) }
+        let (:question) { FactoryGirl.create(:question, :finalized) }
 
         it "creates an response" do
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>{})
@@ -42,10 +42,9 @@ module Api::V1
         context "for photo uploading" do
           before(:each) { ImageUploader.storage = :file }
 
-          it "accepts an image for a PhotoQuestion in Base64 format" do            
+          it "accepts an image for a PhotoQuestion in Base64 format" do
             image = File.read 'spec/fixtures/images/sample.jpg'
             base64_image = Base64.encode64(image)
-            question = FactoryGirl.create :question, :type => 'PhotoQuestion'
             resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes =>  { '0' => {'question_id' => question.id, 'photo' => base64_image }})
             post :create, :survey_id => survey.id, :response => resp, :user_id => 15, :organization_id => 42
             answer = Answer.find_by_id(JSON.parse(response.body)['answers'][0]['id'])
@@ -115,7 +114,6 @@ module Api::V1
 
         it "updates the response_id for its answers' records" do
           record = FactoryGirl.create :record, :response_id => nil
-          question = FactoryGirl.create :question, :survey => survey
           answers_attrs = { '0' => { :content => 'AnswerFoo', :question_id => question.id, :record_id => record.id } }
           resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes => answers_attrs)
           post :create, :response => resp, :user_id => 15, :organization_id => 42, :mobile_id => "foo123"
@@ -126,7 +124,7 @@ module Api::V1
       context "PUT 'update'" do
         it "updates a response" do
           survey = FactoryGirl.create(:survey, :organization_id => organization_id)
-          question = FactoryGirl.create(:question)
+          question = FactoryGirl.create(:question, :finalized)
           resp = FactoryGirl.create(:response, :survey => survey, :organization_id => organization_id, :user_id => 1)
           resp_attr = { :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id, 'updated_at' => Time.now.to_s} } }
           put :update, :id => resp.id, :response => resp_attr
@@ -146,8 +144,8 @@ module Api::V1
 
         it "updates only the answers which are newer than their corresponding answers in the DB" do
           survey = FactoryGirl.create(:survey, :organization_id => organization_id)
-          question_1 = FactoryGirl.create(:question)
-          question_2 = FactoryGirl.create(:question)
+          question_1 = FactoryGirl.create(:question, :finalized)
+          question_2 = FactoryGirl.create(:question, :finalized)
           resp = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 1)
           resp.answers << FactoryGirl.create(:answer, :question_id => question_1.id)
           resp.answers << FactoryGirl.create(:answer, :question_id => question_2.id)
@@ -177,7 +175,7 @@ module Api::V1
             image = File.read 'spec/fixtures/images/sample.jpg'
             base64_image = Base64.encode64(image)
             resp = FactoryGirl.create(:response, :survey_id => survey.id)
-            question = FactoryGirl.create :question, :type => 'PhotoQuestion', :survey_id => survey.id
+            question = FactoryGirl.create :photo_question, :finalized, :survey => survey
             resp_attrs = FactoryGirl.attributes_for(:response, :id => resp.id, :survey_id => survey.id, :answers_attributes =>  { '0' => {'question_id' => question.id, 'photo' => base64_image }})
             put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42
             answer = Answer.find_by_question_id_and_response_id(question.id, resp.id)
@@ -189,7 +187,7 @@ module Api::V1
             base64_image = Base64.encode64(image)
             photo = Rack::Test::UploadedFile.new('spec/fixtures/images/sample.jpg')
             photo.content_type = 'image/jpeg'
-            question = FactoryGirl.create :question, :type => 'PhotoQuestion'
+            question = FactoryGirl.create :photo_question, :finalized
             resp = FactoryGirl.create(:response, :survey_id => survey.id)
             answer = FactoryGirl.create(:answer, :response_id => resp.id, :question_id => question.id, :photo => photo)
             resp_attrs = FactoryGirl.attributes_for(:response, :id => resp.id, :survey_id => survey.id, :answers_attributes =>  { '0' => {'id' => answer.id, 'question_id' => question.id, 'photo' => base64_image, 'updated_at' => 5.days.ago.to_i }})
@@ -202,7 +200,7 @@ module Api::V1
         it "updates the response_id for its answers' records" do
           survey = FactoryGirl.create(:survey, :organization_id => 42)
           record = FactoryGirl.create :record, :response_id => nil
-          question = FactoryGirl.create :question, :survey => survey
+          question = FactoryGirl.create :question, :finalized, :survey => survey
           resp = FactoryGirl.create(:response, :survey => survey)
 
           answers_attrs = { '0' => { :content => 'AnswerFoo', :question_id => question.id, :record_id => record.id } }
@@ -285,7 +283,7 @@ module Api::V1
           response.should_not be_ok
         end
       end
-      
+
       context "GET 'count'" do
         let(:survey) { FactoryGirl.create :survey, :organization_id => 12 }
 

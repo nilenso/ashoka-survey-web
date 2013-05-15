@@ -9,6 +9,7 @@ class Answer < ActiveRecord::Base
     condition.validate :content_should_be_in_range
   end
   validate :content_should_not_exceed_max_length, :if => :max_length_and_content_present?
+  validate :question_should_be_finalized
   validates_uniqueness_of :question_id, :scope => [:response_id, :record_id]
   has_many :choices, :dependent => :destroy
   attr_accessible :photo
@@ -163,5 +164,11 @@ class Answer < ActiveRecord::Base
   # Editing choices doesn't change the `updated_at` for the answer by default.
   def touch_multi_choice_answer
     touch if question_type == "MultiChoiceQuestion"
+  end
+
+  def question_should_be_finalized
+    unless question.finalized?
+      errors.add(:question_id, :should_be_finalized)
+    end
   end
 end

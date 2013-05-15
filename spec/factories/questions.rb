@@ -18,7 +18,12 @@ FactoryGirl.define do
       finalized true
     end
 
+    trait :identifier do
+      identifier true
+    end
+
     factory :question_with_answers do
+      finalized true
       after(:create) do |question, evaluator|
         FactoryGirl.create_list(:answer, 5, :question => question)
       end

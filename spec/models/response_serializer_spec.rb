@@ -15,8 +15,7 @@ describe ResponseSerializer do
       response = (FactoryGirl.create :response).reload
       photo = Rack::Test::UploadedFile.new('spec/fixtures/images/sample.jpg')
       photo.content_type = 'image/jpeg'
-      photo_answer = FactoryGirl.create(:answer, :photo => photo, :question => FactoryGirl.create(:question, :type => 'PhotoQuestion'))
-      response.answers << photo_answer
+      photo_answer = FactoryGirl.create(:answer_with_image, :response => response)
       response_serializer = ResponseSerializer.new(response)
       response_json = JSON.parse(response_serializer.to_json_with_answers_and_choices)
       response_json['answers'][0].should have_key('photo_in_base64')

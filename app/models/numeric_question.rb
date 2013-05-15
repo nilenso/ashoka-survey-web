@@ -1,7 +1,6 @@
-# A question with a single line answer
-
 class NumericQuestion < Question
   attr_accessible  :max_value, :min_value
+
   validates_numericality_of :max_value, :min_value, :allow_nil => true
   validate :min_value_less_than_max_value
 

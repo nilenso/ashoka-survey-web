@@ -210,10 +210,6 @@ en:
       exceeds_maximum_size: Your photo is bigger than the maximum size.
       invalid_date: The date you gave is not valid
 
-  questions:
-    validations:
-      min_value_higher: can't be greater than maximum value
-
   participating_organizations:
     validations:
       require_finalized: Must be finalized
@@ -253,6 +249,9 @@ en:
             survey_id:
               draft_survey: "Can't perform this action on a question belonging to a finalized survey."
           not_allowed: "is not allowed to change for a finalized question"
+          min_value_higher: can't be greater than maximum value
+        answer:
+          should_be_finalized: "must be finalized"
 
   add_option: "Add Option"
 # Library strings
