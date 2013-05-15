@@ -3,4 +3,8 @@ class DeepSurveySerializer < ActiveModel::Serializer
 
   has_many :questions, :serializer => DeepQuestionSerializer
   has_many :categories, :serializer => DeepCategorySerializer
+
+  def questions
+    object.questions.finalized
+  end
 end

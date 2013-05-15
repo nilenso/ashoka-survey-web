@@ -15,6 +15,7 @@ class Question < ActiveRecord::Base
 
   default_scope :order => 'order_number'
   scope :not_private, where("private IS NOT true")
+  scope :finalized, where(:finalized => true)
 
   delegate :question, :to => :parent, :prefix => true
 

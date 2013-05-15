@@ -18,6 +18,12 @@ describe Question do
         Question.not_private.should_not include private_question
       end
     end
+
+    it "gets questions which are finalized" do
+      finalized_question = FactoryGirl.create(:question, :finalized)
+      non_finalized_question = FactoryGirl.create(:question)
+      Question.finalized.should == [finalized_question]
+    end
   end
 
   context "callbacks" do
