@@ -122,6 +122,6 @@ class Question < ActiveRecord::Base
 
   def allow_content_and_order_number_for_finalized
     disallowed_attributes = self.changed.reject { |attr| attr.in? ['content', 'order_number'] }
-    disallowed_attributes.each {|attr| errors.add(attr.to_sym, I18n.t(:not_allowed, :scope => [:activerecord, :errors, :models, :question], :attribute => attr)) }
+    disallowed_attributes.each {|attr| errors.add(attr.to_sym, :not_allowed) }
   end
 end

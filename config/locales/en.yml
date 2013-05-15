@@ -252,7 +252,7 @@ en:
           attributes:
             survey_id:
               draft_survey: "Can't perform this action on a question belonging to a finalized survey."
-          not_allowed: "%{attribute} is not allowed to change for a finalized question"
+          not_allowed: "is not allowed to change for a finalized question"
 
   add_option: "Add Option"
 # Library strings

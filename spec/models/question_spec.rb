@@ -26,16 +26,19 @@ describe Question do
     end
   end
 
-  context "callbacks" do
+  context "validation" do
     context "when creating a question belonging to a finalized survey" do
       it "allows creating a non-mandatory question" do
         survey = FactoryGirl.create(:survey, :finalized)
-        expect { Question.create(:survey_id => survey.id, :content => "Foo") }.to change { Question.count }.by 1
+        question = FactoryGirl.build(:question, :survey => survey)
+        question.should be_valid
       end
 
       it "doesn't create a mandatory question" do
         survey = FactoryGirl.create(:survey, :finalized)
-        expect { Question.create(:survey_id => survey.id, :content => "Foo", :mandatory => true) }.not_to change { Question.count }
+        question = FactoryGirl.build(:question, :mandatory, :survey => survey)
+        question.should_not be_valid
+        question.should have(1).error_on(:survey_id)
       end
     end
 
@@ -60,7 +63,6 @@ describe Question do
       end
     end
 
-
     context "when updating a non-finalized question" do
       it "allows updation of all fields" do
         question = FactoryGirl.create(:question)
@@ -74,15 +76,14 @@ describe Question do
       question = FactoryGirl.create(:question, :finalized, :content => "FOO")
       expect { question.destroy }.not_to change { Question.count }
     end
-  end
 
-  context "validation" do
     it "allows multiple rows to have nil for order_number" do
       survey = FactoryGirl.create(:survey)
       FactoryGirl.create(:question, :order_number => nil, :survey_id => survey.id)
       another_question = FactoryGirl.build(:question, :order_number => nil, :survey_id => survey.id)
       another_question.should be_valid
     end
+
     it "ensures that the order number for a question is unique within a survey" do
       survey = FactoryGirl.create(:survey)
       question_1 = FactoryGirl.create(:question, :survey => survey, :order_number => 1)
