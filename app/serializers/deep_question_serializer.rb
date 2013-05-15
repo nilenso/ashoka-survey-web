@@ -9,4 +9,8 @@ class DeepQuestionSerializer < ActiveModel::Serializer
   def include_serializable_options?
     object.is_a? QuestionWithOptions
   end
+
+  def serializable_options
+    object.options.finalized
+  end
 end

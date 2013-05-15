@@ -8,6 +8,8 @@ class Option < ActiveRecord::Base
   default_scope :order => 'order_number'
   delegate :survey, :to => :question, :prefix => false, :allow_nil => true
 
+  scope :finalized, where(:finalized => true)
+
   before_destroy { |option| !option.finalized? }
 
   def duplicate(survey_id)

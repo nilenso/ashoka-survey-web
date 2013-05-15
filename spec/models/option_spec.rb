@@ -4,6 +4,14 @@ describe Option do
   it { should validate_presence_of(:content) }
   it { should validate_presence_of(:question_id) }
 
+  context "scopes" do
+    it "includes only finalized options" do
+      finalized_option = FactoryGirl.create(:option, :finalized)
+      non_finalized_option = FactoryGirl.create(:option)
+      Option.finalized.should == [finalized_option]
+    end
+  end
+
   it "delegates `survey` to its parent question" do
     survey = FactoryGirl.create(:survey)
     option = FactoryGirl.create(:option, :question => FactoryGirl.create(:question, :survey => survey))
