@@ -47,27 +47,24 @@ describe ResponsesController do
     end
 
     it "creates blank answers for each of its survey's questions" do
-      survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question = FactoryGirl.create :question, :survey => survey
-      survey.finalize
+      survey = FactoryGirl.create(:survey, :finalized, :organization_id => 1)
+      question = FactoryGirl.create :question, :finalized, :survey => survey
       post :create, :survey_id => survey.id
       question.answers.should_not be_blank
     end
 
     it "creates blank answers for each of its survey's questions nested under a category" do
-      survey = FactoryGirl.create(:survey, :organization_id => 1)
+      survey = FactoryGirl.create(:survey, :finalized, :organization_id => 1)
       category = FactoryGirl.create :category, :survey => survey
-      question = FactoryGirl.create :question, :survey => survey, :category => category
-      survey.finalize
+      question = FactoryGirl.create :question, :finalized, :survey => survey, :category => category
       post :create, :survey_id => survey.id
       question.answers.should_not be_blank
     end
 
     it "creates blank answers for each of its survey's questions nested under a question with options" do
-      survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question = RadioQuestion.find(FactoryGirl.create(:question_with_options, :survey => survey).id)
-      sub_question = FactoryGirl.create :question, :survey => survey, :parent => question.options[0]
-      survey.finalize
+      survey = FactoryGirl.create(:survey, :finalized, :organization_id => 1)
+      question = FactoryGirl.create(:radio_question, :with_options, :finalized, :survey => survey)
+      sub_question = FactoryGirl.create :question, :finalized, :survey => survey, :parent => question.options[0]
       post :create, :survey_id => survey.id
       sub_question.answers.should_not be_blank
     end

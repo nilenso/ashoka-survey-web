@@ -33,6 +33,7 @@ class Question < ActiveRecord::Base
   end
 
   def create_blank_answers(params={})
+    return unless finalized?
     answer = Answer.new(:question_id => id, :response_id => params[:response_id], :record_id => params[:record_id])
     answer.save(:validate => false)
   end

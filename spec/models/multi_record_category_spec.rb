@@ -55,10 +55,9 @@ describe MultiRecordCategory do
 
     it "creates empty answers for the new record" do
       mr_category = FactoryGirl.create(:multi_record_category)
-      question = FactoryGirl.create(:question, :category => mr_category)
-
+      question = FactoryGirl.create(:question, :finalized, :category => mr_category)
       mr_category.create_blank_answers(:response_id => response.id)
-      question.reload.answers.should_not be_empty
+      question.answers.should_not be_empty
     end
 
     it "doesn't create a record if a record_id is passed in" do

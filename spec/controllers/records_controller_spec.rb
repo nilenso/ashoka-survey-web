@@ -24,7 +24,7 @@ describe RecordsController do
     end
 
     it "creates blank answers for the new record" do
-      5.times { category.questions << FactoryGirl.create(:question) }
+      5.times { FactoryGirl.create(:question, :finalized, :category => category) }
       get 'create', :record => { :response_id => response.id, :category_id => category.id }
       Record.last.answers.count.should == 5
     end

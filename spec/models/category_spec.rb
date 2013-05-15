@@ -282,7 +282,7 @@ describe Category do
 
     it "creates empty answers for each of it's sub-questions" do
       category = FactoryGirl.create(:category)
-      5.times { category.questions << FactoryGirl.create(:question) }
+      5.times { FactoryGirl.create(:question, :finalized, :category => category) }
       category.create_blank_answers(:response_id => response.id)
       response.reload.answers.count.should == 5
     end
@@ -290,7 +290,7 @@ describe Category do
     it "creates empty answers for each of it's sub-categories' sub-questions" do
       category = FactoryGirl.create(:category)
       sub_category = FactoryGirl.create(:category, :category => category)
-      5.times { sub_category.questions << FactoryGirl.create(:question) }
+      5.times { FactoryGirl.create(:question, :finalized, :category => category) }
       category.create_blank_answers(:response_id => response.id)
       response.reload.answers.size.should == 5
     end

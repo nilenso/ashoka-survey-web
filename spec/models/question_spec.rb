@@ -364,22 +364,28 @@ describe Question do
     let(:response) { FactoryGirl.create :response }
 
     it "creates an empty answer to itself" do
-      question = FactoryGirl.create(:question)
+      question = FactoryGirl.create(:question, :finalized)
       question.create_blank_answers(:response_id => response.id)
       response.reload.answers.should_not be_empty
     end
 
     it "creates an empty answer belonging to a record (if specified)" do
       record = FactoryGirl.create(:record)
-      question = FactoryGirl.create(:question)
+      question = FactoryGirl.create(:question, :finalized)
       question.create_blank_answers(:response_id => response.id, :record_id => record.id)
       record.reload.answers.should_not be_empty
     end
 
     it "creates the empty answer without running validations" do
-      question = FactoryGirl.create(:question, :max_length => 5)
+      question = FactoryGirl.create(:question, :finalized, :max_length => 5)
       expect { question.create_blank_answers(:response_id => response.id) }.not_to raise_error
       response.reload.answers.should_not be_empty
+    end
+
+    it "doesn't create blank answers if it is not finalized" do
+      question = FactoryGirl.create(:question, :finalized => false)
+      question.create_blank_answers(:response_id => response.id)
+      question.answers.should be_empty
     end
   end
 

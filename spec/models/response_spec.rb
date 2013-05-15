@@ -307,7 +307,7 @@ describe Response do
 
     it "creates blank answers with the correct response_id" do
       survey = FactoryGirl.create :survey
-      question = FactoryGirl.create :question, :survey => survey
+      question = FactoryGirl.create :question, :finalized, :survey => survey
 
       response = FactoryGirl.create :response, :survey => survey
       response.create_blank_answers
