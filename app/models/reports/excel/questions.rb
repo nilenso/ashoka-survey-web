@@ -4,7 +4,7 @@ class Reports::Excel::Questions
 
   def initialize(survey, current_ability)
     @survey = survey
-    @questions = survey.questions_in_order
+    @questions = survey.questions_in_order.select(&:finalized?)
     @ability = current_ability
   end
 
@@ -18,7 +18,7 @@ class Reports::Excel::Questions
     if disable_filtering
       @ability.authorize!(:change_excel_filters, @survey)
     else
-      @questions = @questions.reject {|question| question.private? }
+      @questions = @questions.reject(&:private?)
     end
     self
   end

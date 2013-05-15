@@ -14,6 +14,10 @@ FactoryGirl.define do
       mandatory true
     end
 
+    trait :private do
+      private true
+    end
+
     trait :finalized do
       finalized true
     end
