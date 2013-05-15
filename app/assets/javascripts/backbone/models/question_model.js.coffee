@@ -56,9 +56,15 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     "/api/questions/"+@id+'/duplicate'
 
   toJSON: =>
-    question_attrs = {}
-    _.each @attributes, (val, key) =>
-      question_attrs[key] = val  if val? and not _.isObject(val)
-    { question: _.omit( question_attrs, ['created_at', 'updated_at', 'image_url', 'image_in_base64', 'photo_secure_token', 'image_tmp', 'multi_record_question_id', 'has_multi_record_ancestor']) }
+    acc = _(@attr_accessible()).reduce((acc,elem) =>
+            acc[elem] = @get(elem)
+            acc
+          , {})
+    { question: acc }
+
+  attr_accessible: =>
+    _.filter ["id", "content", "survey_id", "mandatory", "max_length", "type", "max_value", "min_value",
+    "order_number", "parent_id", "identifier", "category_id", "image", "private", "finalized"], (elem) =>
+      @get(elem) != null
 
 SurveyBuilder.Models.QuestionModel.setup()

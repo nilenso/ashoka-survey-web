@@ -29,6 +29,14 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
     for sub_question_model in @sub_question_models
       sub_question_model.save_model()
 
+  toJSON: =>
+    acc = _(@attr_accessible()).reduce((acc,elem) =>
+            acc[elem] = @get(elem)
+            acc
+          , {})
+    { option: acc }
+
+
   success_callback: (model, response) =>
     @make_clean()
     this.errors = []
@@ -95,6 +103,9 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
 
     this.trigger('change:preload_sub_questions', @sub_question_models)
     @sub_question_order_counter = _(elements).last().order_number
+
+  attr_accessible: =>
+    ['id', 'content', 'order_number', 'question_id']
 
 SurveyBuilder.Models.OptionModel.setup()
 

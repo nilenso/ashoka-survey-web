@@ -48,12 +48,6 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     this.trigger('change:errors')
     this.trigger('set:errors')
 
-  toJSON: =>
-    category_attrs = {}
-    _.each @attributes, (val, key) =>
-      category_attrs[key] = val  if val? and not _.isObject(val)
-    { category: _.omit( category_attrs, ['created_at', 'updated_at', 'has_multi_record_ancestor']) }
-
   add_sub_question: (type) =>
     question = {
       type: type,
@@ -97,5 +91,15 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
     parent_question_number = this.question_number
     index = _(@sub_question_models).indexOf(sub_question_model) + 1
     sub_question_model.question_number = "#{parent_question_number}.#{index}"
+
+  toJSON: =>
+    acc = _(@attr_accessible()).reduce((acc,elem) =>
+            acc[elem] = @get(elem)
+            acc
+          , {})
+    { category: acc }
+
+  attr_accessible: =>
+    ["id", "category_id", "content", "survey_id", "order_number", "parent_id", "type", "mandatory"]
 
 SurveyBuilder.Models.CategoryModel.setup()
