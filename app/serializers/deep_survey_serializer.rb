@@ -7,4 +7,8 @@ class DeepSurveySerializer < ActiveModel::Serializer
   def questions
     object.questions.finalized
   end
+
+  def categories
+    object.categories.finalized
+  end
 end

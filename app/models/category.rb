@@ -5,14 +5,15 @@ class Category < ActiveRecord::Base
   has_many :questions, :dependent => :destroy
   has_many :categories, :dependent => :destroy
   has_many :records, :dependent => :destroy
-
   validates_presence_of :content
+  attr_accessible :content, :survey_id, :order_number, :category_id, :parent_id, :type, :mandatory
 
   delegate :question, :to => :parent, :prefix => true, :allow_nil => true
 
   before_destroy { |category| !category.finalized? }
 
-  attr_accessible :content, :survey_id, :order_number, :category_id, :parent_id, :type, :mandatory
+  scope :finalized, where(:finalized => true)
+
 
   def elements
     (questions + categories.includes([:questions, :categories])).sort_by(&:order_number)

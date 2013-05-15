@@ -9,7 +9,7 @@ describe DeepSurveySerializer do
   it { should have_json_key :description }
   it { should have_json_key :expiry_date }
 
-  context "when serializing the questions" do
+  context "when serializing the associated elements" do
     it "includes only the finalized questions" do
       survey = FactoryGirl.create(:survey)
       finalized_question = FactoryGirl.create(:question, :finalized, :survey => survey)
@@ -17,6 +17,15 @@ describe DeepSurveySerializer do
       serializer = DeepSurveySerializer.new(survey)
       json = serializer.as_json
       json[:questions].map { |q| q[:id] }.should == [finalized_question.id]
+    end
+
+    it "includes only the finalized categories" do
+      survey = FactoryGirl.create(:survey)
+      finalized_category = FactoryGirl.create(:category, :finalized, :survey => survey)
+      non_finalized_category = FactoryGirl.create(:category, :survey => survey)
+      serializer = DeepSurveySerializer.new(survey)
+      json = serializer.as_json
+      json[:categories].map { |q| q[:id] }.should == [finalized_category.id]
     end
   end
 end

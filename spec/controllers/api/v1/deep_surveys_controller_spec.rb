@@ -53,7 +53,7 @@ describe Api::V1::DeepSurveysController do
 
       it "should list categories along with the surveys" do
         survey = FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID)
-        category_list = FactoryGirl.create_list(:category, 5, :survey => survey)
+        category_list = FactoryGirl.create_list(:category, 5, :finalized, :survey => survey)
         survey.finalize
         get :index
         response_hash = JSON.parse(response.body)

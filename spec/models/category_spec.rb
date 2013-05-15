@@ -3,6 +3,14 @@ require 'spec_helper'
 describe Category do
   it { should validate_presence_of :content }
 
+  context "scopes" do
+    it "finds the finalized categories" do
+      finalized_category = FactoryGirl.create(:category, :finalized)
+      non_finalized_category = FactoryGirl.create(:category)
+      Category.finalized.should == [finalized_category]
+    end
+  end
+
   context "callbacks" do
     it "doesn't destroy if the category is finalized" do
       category = FactoryGirl.create(:category, :finalized)
