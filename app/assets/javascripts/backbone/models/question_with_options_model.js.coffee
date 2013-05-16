@@ -53,7 +53,7 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
 
   create_new_option: (content) =>
     content = "Another Option" unless _(content).isString()
-    @get('options').create({content: content, order_number: @get_order_counter() })
+    @get('options').create({content: content, order_number: @get_order_counter(), question_id: @get('id') })
 
   has_drop_down_options: =>
     @get('type') == "DropDownQuestion" && @get('options').first()
