@@ -27,34 +27,40 @@ describe Question do
   end
 
   context "validation" do
-    context "when creating a question belonging to a finalized survey" do
+    context "for a finalized survey" do
       it "allows creating a non-mandatory question" do
         survey = FactoryGirl.create(:survey, :finalized)
         question = FactoryGirl.build(:question, :survey => survey)
         question.should be_valid
       end
 
-      it "doesn't create a mandatory question" do
+      it "doesn't allow creation of a mandatory question" do
         survey = FactoryGirl.create(:survey, :finalized)
         question = FactoryGirl.build(:question, :mandatory, :survey => survey)
         question.should_not be_valid
         question.should have(1).error_on(:survey_id)
       end
-    end
 
-    context "when making an existing question mandatory" do
-      it "is allowed if the survey is not finalized" do
-        survey = FactoryGirl.create(:survey, :finalized => false)
-        question = FactoryGirl.create(:question, :survey => survey)
-        question.mandatory = true
-        question.should be_valid
-      end
-
-      it "is not allowed if the survey is finalized" do
+      it "doesn't allow making an existing question mandatory" do
         survey = FactoryGirl.create(:survey, :finalized)
         question = FactoryGirl.create(:question, :survey => survey)
         question.mandatory = true
         question.should_not be_valid
+      end
+    end
+
+    context "for a non-finalized survey" do
+      it "allows creation of a mandatory question" do
+        survey = FactoryGirl.create(:survey, :finalized => false)
+        question = FactoryGirl.build(:question, :mandatory, :survey => survey)
+        question.should be_valid
+      end
+
+      it "allows making an existing question mandatory" do
+        survey = FactoryGirl.create(:survey, :finalized => false)
+        question = FactoryGirl.create(:question, :survey => survey)
+        question.mandatory = true
+        question.should be_valid
       end
     end
 
