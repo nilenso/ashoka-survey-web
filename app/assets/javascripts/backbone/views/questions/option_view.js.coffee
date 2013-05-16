@@ -12,6 +12,7 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
 
   render: =>
     data = _.extend(this.model.toJSON().option, {errors: this.model.errors})
+    data = _.extend(data, { finalized: @model.get('finalized') })
     $(this.el).html(Mustache.render(@template, data))
     $(this.el).addClass('option')
     $(this.el).children('div').children('.add_sub_question').bind('click', this.add_sub_question_model)

@@ -147,6 +147,7 @@ en:
       add_options_in_bulk_label: "Add Options in Bulk"
       category_finalized: This category has been published.
       question_finalized: This question has been published.
+      option_finalized: This option has been published.
 
     share_with_organizations:
       share_survey: "Share Survey and continue"

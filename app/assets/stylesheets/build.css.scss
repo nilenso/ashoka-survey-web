@@ -80,6 +80,14 @@ body#build{
 
       div{margin-bottom: 6px;}
 
+      p.question_finalized, p.category_finalized {
+        float: right;
+        font-size: 15px;
+        color: $primary-color;
+      }
+
+      .add_option { float: left; }
+
       div.option{
         clear: both;
         overflow: hidden;
@@ -87,6 +95,8 @@ body#build{
         border: solid 1px $secondary-color;
 
         div, label, input{width: 45%; float: left; margin: 1%;}
+
+        p.option_finalized { text-align: center; }
 
         div.actions{
           float: right; width: 50%;
