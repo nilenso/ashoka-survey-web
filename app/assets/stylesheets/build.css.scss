@@ -180,6 +180,12 @@ body#build{
           .dummy_question_content{margin: 0;}
         }
 
+        .icon-lock {
+          font-size: 20px;
+          float: right;
+          color: $primary-color-light;
+        }
+
         .dummy_category_content{margin: 0; padding-top: 8px;}
         .sub_question_group_message{margin-bottom: 2px;}
       }

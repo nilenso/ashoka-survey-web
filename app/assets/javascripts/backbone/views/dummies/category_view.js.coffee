@@ -19,6 +19,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
     data = @model.toJSON().category
     data = _(data).extend({ question_number: @model.question_number })
     data = _(data).extend({duplicate_url: @model.duplicate_url()})
+    _(data).extend({ finalized: @model.get('finalized') })
     $(@el).html('<div class="dummy_category_content">' + Mustache.render(@template, data) + '</div>')
     $(@el).addClass("dummy_category")
 

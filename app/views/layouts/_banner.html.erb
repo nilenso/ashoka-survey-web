@@ -3,7 +3,7 @@
     <li><%= link_to t("header.home"), root_path, :class => 'home' %></li>
     <% if user_currently_logged_in? %>
       <% if can? :create, Survey %>
-        <li><%= link_to icon_for('icon-plus', t(".create_survey")), surveys_path, :method => :post, :class => "add" %></li>
+        <li><%= link_to t(".create_survey"), surveys_path, :method => :post, :class => "add" %></li>
       <% end %>
 
       <% if signed_in_as_cso_admin? %>
