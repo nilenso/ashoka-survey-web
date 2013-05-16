@@ -7,7 +7,7 @@ class Question < ActiveRecord::Base
   validates_presence_of :content
   validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id, :category_id], :allow_nil => true
   validate :ensure_survey_is_draft, :if => :mandatory?
-  validate :allow_content_and_order_number_for_finalized, :if => :finalized?, :on => :update
+  validate :allow_limited_updates_for_finalized, :if => :finalized?, :on => :update
 
   has_many :answers, :dependent => :destroy
   mount_uploader :image, ImageUploader
@@ -121,8 +121,9 @@ class Question < ActiveRecord::Base
     end
   end
 
-  def allow_content_and_order_number_for_finalized
-    disallowed_attributes = self.changed.reject { |attr| attr.in? ['content', 'order_number'] }
+  def allow_limited_updates_for_finalized
+    allowed_attributes = ['content', 'order_number', 'private', 'identifier']
+    disallowed_attributes = self.changed - allowed_attributes
     disallowed_attributes.each {|attr| errors.add(attr.to_sym, :not_allowed) }
   end
 end

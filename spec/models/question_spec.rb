@@ -78,6 +78,18 @@ describe Question do
         question.should be_valid
       end
 
+      it "allows updating if the private field has changed" do
+        question = FactoryGirl.create(:question, :finalized, :private => false)
+        question.private = true
+        question.should be_valid
+      end
+
+      it "allows updating if the identifier field has changed" do
+        question = FactoryGirl.create(:question, :finalized, :identifier => false)
+        question.identifier = true
+        question.should be_valid
+      end
+
       it "does not allow updation of any other field" do
         question = FactoryGirl.create(:question, :finalized, :max_length => 1)
         question.max_length = 3
