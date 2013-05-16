@@ -10,7 +10,6 @@
  *
  *= require_self
  *= require old/base_layout
- *= require old/font-awesome
  *= require jquery_ui
  *= require formtastic
  */
