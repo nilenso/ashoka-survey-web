@@ -60,11 +60,12 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     $(first_input).select()
 
   limit_edit: =>
-    $(this.el).find("input[name=identifier]").parent('div').hide()
-    $(this.el).find("input[name=private]").parent('div').hide()
     $(this.el).find("input[name=mandatory]").parent('div').hide()
-    $(this.el).find("input[name=max_length]").parent('div').hide()
-    $(this.el).find("input[name=max_value]").parent('div').hide()
-    $(this.el).find("input[name=min_value]").parent('div').hide()
-    $(this.el).find("input.fileupload").parent('div').hide()
+    if @model.get("finalized")
+      $(this.el).find("input[name=identifier]").parent('div').hide()
+      $(this.el).find("input[name=private]").parent('div').hide()
+      $(this.el).find("input[name=max_length]").parent('div').hide()
+      $(this.el).find("input[name=max_value]").parent('div').hide()
+      $(this.el).find("input[name=min_value]").parent('div').hide()
+      $(this.el).find("input.fileupload").parent('div').hide()
 

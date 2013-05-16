@@ -42,6 +42,23 @@ describe Question do
       end
     end
 
+    context "when making an existing question mandatory" do
+      it "is allowed if the survey is not finalized" do
+        survey = FactoryGirl.create(:survey, :finalized => false)
+        question = FactoryGirl.create(:question, :survey => survey)
+        question.mandatory = true
+        question.should be_valid
+      end
+
+      it "is not allowed if the survey is finalized" do
+        survey = FactoryGirl.create(:survey, :finalized)
+        question = FactoryGirl.create(:question, :survey => survey)
+        question.mandatory = true
+        question.should_not be_valid
+      end
+    end
+
+
     context "when updating a finalized question" do
       it "allows updating if the content has changed" do
         question = FactoryGirl.create(:question, :finalized, :content => "FOO")

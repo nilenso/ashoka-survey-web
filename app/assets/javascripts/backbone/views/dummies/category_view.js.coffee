@@ -135,4 +135,5 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
 
   limit_edit: =>
     super
-    $(this.el).find(".delete_category").remove()
+    if @model.get("finalized")
+      $(this.el).find(".delete_category").remove()

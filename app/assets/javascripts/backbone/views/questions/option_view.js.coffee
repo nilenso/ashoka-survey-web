@@ -62,4 +62,5 @@ class SurveyBuilder.Views.Questions.OptionView extends Backbone.View
     view.remove()
 
   limit_edit: =>
-    $(this.el).find(".delete_option").hide()
+    if @model.get("finalized")
+      $(this.el).find(".delete_option").hide()
