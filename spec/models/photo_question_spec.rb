@@ -18,5 +18,12 @@ describe PhotoQuestion do
     end
   end
 
+  context "defaults" do
+    it "is private by default" do
+      question = PhotoQuestion.create(:content => "Foo")
+      question.should be_private
+    end
+  end
+
   it_behaves_like "a question"
 end
