@@ -122,7 +122,7 @@ class Question < ActiveRecord::Base
   end
 
   def allow_limited_updates_for_finalized
-    allowed_attributes = ['content', 'order_number', 'private', 'identifier']
+    allowed_attributes = ['content', 'order_number', 'private', 'identifier', 'image', 'image_tmp']
     disallowed_attributes = self.changed - allowed_attributes
     disallowed_attributes.each {|attr| errors.add(attr.to_sym, :not_allowed) }
   end

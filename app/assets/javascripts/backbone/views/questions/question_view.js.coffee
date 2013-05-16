@@ -65,5 +65,4 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
       $(this.el).find("input[name=max_length]").parent('div').hide()
       $(this.el).find("input[name=max_value]").parent('div').hide()
       $(this.el).find("input[name=min_value]").parent('div').hide()
-      $(this.el).find("input.fileupload").parent('div').hide()
 
