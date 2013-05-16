@@ -13,6 +13,7 @@
   <label><%= t("activerecord.attributes.question.mandatory") %> </label>
 </div>
 
+<%= render "templates/questions/question_finalized_message" %>
 <%= render "templates/questions/identifier" %>
 <%= render "templates/questions/private" %>
 
@@ -25,4 +26,3 @@
 {{^id}}
   <%= render 'templates/loading' %>
 {{/id}}
-<%= render "templates/questions/question_finalized_message" %>
