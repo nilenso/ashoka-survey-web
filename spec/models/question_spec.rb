@@ -47,6 +47,14 @@ describe Question do
         question.mandatory = true
         question.should_not be_valid
       end
+
+      it "allows updation of an existing mandatory question" do
+        survey = FactoryGirl.create(:survey)
+        question = FactoryGirl.create(:question, :mandatory, :survey => survey)
+        survey.finalize
+        question.content = "Foo"
+        question.should be_valid
+      end
     end
 
     context "for a non-finalized survey" do
