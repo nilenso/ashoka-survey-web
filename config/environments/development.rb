@@ -37,5 +37,7 @@ SurveyWeb::Application.configure do
   config.assets.debug = true
 
   Rails.application.routes.default_url_options[:host] = 'localhost:3000'
+
+  config.middleware.insert_before ActionDispatch::Static, Rack::SSL, :exclude => proc { |env| env['HTTPS'] != 'on' }
 end
 ""
