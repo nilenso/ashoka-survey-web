@@ -325,6 +325,7 @@ DEPENDENCIES
   pry-rails
   quiet_assets
   rack-mini-profiler
+  rack-ssl
   railroady (~> 1.1.0)
   rails (= 3.2.13)
   rails-backbone

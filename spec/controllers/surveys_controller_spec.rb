@@ -5,6 +5,7 @@ describe SurveysController do
 
   context "GET 'index'" do
     before(:each) do
+      request.env['HTTPS'] = 'on'
       session[:access_token] = "123"
       response = mock(OAuth2::Response)
       access_token = mock(OAuth2::AccessToken)
@@ -57,6 +58,21 @@ describe SurveysController do
         get :index
         response.should be_ok
         assigns(:surveys).should include @finalized_survey
+      end
+    end
+
+    context "when redirecting to a https:// url" do
+      it "redirects if the request is http://" do
+        request.env['HTTPS'] = 'off'
+        get :index
+        response.should be_a_redirect
+        URI(response.location).scheme.should == "https"
+      end
+
+      it "doesn't redirect if the request is a HEAD request" do
+        request.env['HTTPS'] = 'off'
+        head :index
+        response.should_not be_a_redirect
       end
     end
   end
