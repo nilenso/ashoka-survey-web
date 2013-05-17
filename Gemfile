@@ -31,6 +31,7 @@ gem 'paperclip'
 gem 'feature'
 gem "active_model_serializers", "~> 0.7.0"
 gem 'jquery-rails'
+gem 'rack-ssl', :require => 'rack/ssl'
 
 # Gems used only for assets and not required
 # in production environments by default.
