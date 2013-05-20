@@ -203,6 +203,8 @@ en:
       excel_downloading_message: "Your excel file is getting generated.\nThis might take a few minutes. Please wait."
       settings: Settings
       include_private_fields: Include Private Fields
+      excel_password_dialog_title: "Excel Password"
+      excel_password_message: "You can use the following password to unlock the excel file:"
 
   answers:
     validations:

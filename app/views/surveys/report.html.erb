@@ -57,6 +57,7 @@
   <h2><%= t '.reports' %></h2>
 </header>
 <%= render "responses/excel_dialog" %>
+<%= render "responses/excel_password_dialog" %>
 <div class="reports">
   <%= render "layouts/status_bar", :status => "analyze" %>
   <% @survey.questions_for_reports.each do |question| %>

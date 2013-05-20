@@ -27,6 +27,7 @@ class SurveyApp.ExcelDownloader
       success: (data) =>
         @filename = data.excel_path
         @id = data.id
+        @password = data.password
         @interval = setInterval(@poll, 5000)
       error: (data) =>
         console.log(data)
@@ -41,6 +42,7 @@ class SurveyApp.ExcelDownloader
         clearInterval(@interval)
         window.location = "https://s3.amazonaws.com/surveywebexcel/#{@filename}"
         @close_dialog()
+        new SurveyApp.ExcelPasswordDialog(@password).show()
     )
 
   is_valid: =>
