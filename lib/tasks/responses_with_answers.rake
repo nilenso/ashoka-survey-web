@@ -45,9 +45,9 @@ namespace :db do
     number = get("How many responses do you want to add? ")
     survey = Survey.find_by_id(id.to_i)
     number.to_i.times do |i|
-      questions = survey.questions
+      questions = survey.questions.where(:finalized => true)
 
-      r = Response.new 
+      r = Response.new
       r.survey = survey
       r.organization_id = survey.organization_id
       r.user_id = rand(1..10)
