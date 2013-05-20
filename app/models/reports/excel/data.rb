@@ -9,4 +9,9 @@ class Reports::Excel::Data
     @metadata = metadata
     @server_url = server_url
   end
+
+  def password
+    # Length of password will be (5 * 2)
+    @password ||= SecureRandom.hex(5)
+  end
 end

@@ -21,4 +21,16 @@ describe Reports::Excel::Data do
     data_2 = YAML::load(YAML::dump(data_1))
     data_1.file_name.should == Timecop.freeze(1.hour.from_now) { data_2.file_name }
   end
+
+  context "when generating a password" do
+    it "generates a random ten-character alphanumeric password" do
+      data = Reports::Excel::Data.new(survey, [], [], server_url, metadata)
+      data.password.should match /^\w{10}$/
+    end
+
+    it "generates the same password for a single instance" do
+      data = Reports::Excel::Data.new(survey, [], [], server_url, metadata)
+      data.password.should == data.password
+    end
+  end
 end
