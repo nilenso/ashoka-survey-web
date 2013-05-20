@@ -163,7 +163,7 @@ class Survey < ActiveRecord::Base
   end
 
   def filename_for_excel
-    "#{name.gsub(/\W/, "")} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}.xlsx"
+    "#{name.gsub(/\W/, "")} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}"
   end
 
   private

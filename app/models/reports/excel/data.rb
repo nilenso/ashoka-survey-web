@@ -1,5 +1,5 @@
 class Reports::Excel::Data
-  attr_reader :survey, :responses, :server_url, :file_name, :questions, :metadata
+  attr_reader :survey, :responses, :server_url, :file_name, :questions, :metadata, :password
 
   def initialize(survey, questions, responses, server_url, metadata)
     @survey = survey
@@ -8,10 +8,6 @@ class Reports::Excel::Data
     @questions = questions
     @metadata = metadata
     @server_url = server_url
-  end
-
-  def password
-    # Length of password will be (5 * 2)
-    @password ||= SecureRandom.hex(5)
+    @password = SecureRandom.hex(5) # Length of password will be (5 * 2)
   end
 end

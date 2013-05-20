@@ -40,7 +40,7 @@ class SurveyApp.ExcelDownloader
       else
         console.log "Generated excel. Downloading..."
         clearInterval(@interval)
-        window.location = "https://s3.amazonaws.com/surveywebexcel/#{@filename}"
+        window.location = "https://s3.amazonaws.com/surveywebexcel/#{@filename}.zip"
         @close_dialog()
         new SurveyApp.ExcelPasswordDialog(@password).show()
     )

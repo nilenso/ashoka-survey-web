@@ -48,7 +48,6 @@ describe Survey do
     survey.filename_for_excel.should =~ /#{survey.name}/
     survey.filename_for_excel.should =~ /#{survey.id}/
     survey.filename_for_excel.should include Time.now.strftime("%Y-%m-%d %I.%M.%S%P")
-    survey.filename_for_excel.should =~ /.*xlsx$/
   end
 
   context "when duplicating" do

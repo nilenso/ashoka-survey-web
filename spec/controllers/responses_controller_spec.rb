@@ -165,12 +165,12 @@ describe ResponsesController do
       }.to change { Delayed::Job.count }.by 1
     end
 
-    it "renders the path of the excel file generated as json" do
+    it "renders the filename of the excel file as json" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
       get :generate_excel, :survey_id => survey.id
       response.should be_ok
-      JSON.parse(response.body)['excel_path'].should =~ /#{survey.name}.*\.xlsx/
+      JSON.parse(response.body)['excel_path'].should =~ /#{survey.name}/
     end
 
     it "renders the id of the new delayed job as json" do

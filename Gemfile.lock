@@ -286,6 +286,7 @@ GEM
       rack
       unicorn
     will_paginate (3.0.3)
+    zipruby (0.3.6)
 
 PLATFORMS
   ruby
@@ -343,3 +344,4 @@ DEPENDENCIES
   unicorn
   unicorn-rails
   will_paginate
+  zipruby (~> 0.3.6)

@@ -138,7 +138,7 @@ describe Reports::Excel::Job do
     end
   end
 
-  it "creates the file with an appropriate filename" do
+  it "creates the ZIP file with an appropriate filename" do
     connection = Fog::Storage.new(:provider => "AWS",
                                   :aws_secret_access_key => ENV['S3_SECRET'],
                                   :aws_access_key_id => ENV['S3_ACCESS_KEY'])
@@ -147,7 +147,7 @@ describe Reports::Excel::Job do
     data = Reports::Excel::Data.new(survey, [], responses, server_url, metadata)
     Reports::Excel::Job.new(data).perform
 
-    connection.directories.get("surveywebexcel").files.get(data.file_name).should be_present
+    connection.directories.get("surveywebexcel").files.get(data.file_name + ".zip").should be_present
   end
 
   it "enqueues a delayed job which will run it's own perform method" do

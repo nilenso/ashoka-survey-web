@@ -32,5 +32,11 @@ describe Reports::Excel::Data do
       data = Reports::Excel::Data.new(survey, [], [], server_url, metadata)
       data.password.should == data.password
     end
+
+    it "doesn't change the password after serializing/deserializing" do
+      data_1 = Reports::Excel::Data.new(survey, [], [], server_url, metadata)
+      data_2 = YAML::load(YAML::dump(data_1))
+      data_1.password.should == data_2.password
+    end
   end
 end

@@ -5,8 +5,14 @@ class Reports::Excel::Job < Struct.new(:excel_data)
   end
 
   def perform
-    directory = aws_excel_directory
-    directory.files.create(:key => excel_data.file_name, :body => package.to_stream, :public => true)
+    Tempfile.open('excel', Rails.root.join('tmp')) do |f|
+      Zip::Archive.open(f.path, Zip::CREATE) do |ar|
+        ar.add_io(excel_data.file_name + ".xlsx", package.to_stream)
+        ar.encrypt(excel_data.password)
+      end
+      directory = aws_excel_directory
+      directory.files.create(:key => excel_data.file_name + ".zip", :body => f.open, :public => true)
+    end
   end
 
   # REFACTOR: Use a `sheet` abstraction which internally adds all its rows to a AXSLX worksheet
