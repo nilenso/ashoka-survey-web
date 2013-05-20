@@ -7,5 +7,6 @@ class Reports::Excel::Data
     @file_name = survey.filename_for_excel
     @questions = questions
     @metadata = metadata
+    @server_url = server_url
   end
 end
