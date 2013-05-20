@@ -181,6 +181,15 @@ describe ResponsesController do
       JSON.parse(response.body)['id'].should == Delayed::Job.all.last.id
     end
 
+    it "renders the excel password in the JSON" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
+      get :generate_excel, :survey_id => survey.id
+      response.should be_ok
+      password = assigns(:data).password
+      JSON.parse(response.body)['password'].should == password
+    end
+
     context "when filtering private questions" do
       it "filters the private questions out by default" do
         survey = FactoryGirl.create(:survey, :organization_id => 1)
