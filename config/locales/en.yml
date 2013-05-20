@@ -197,14 +197,14 @@ en:
     excel:
       from_date: "From"
       to_date: "To"
-      generate_excel: "Download Excel"
+      generate_excel: "Download Excel Archive"
       cancel: "Cancel"
-      excel_dialog_title: "Generating Excel…"
-      excel_downloading_message: "Your excel file is getting generated.\nThis might take a few minutes. Please wait."
+      excel_dialog_title: "Generating Excel Archive…"
+      excel_downloading_message: "Your excel archive is being generated.\nThis might take a few minutes. Please wait."
       settings: Settings
       include_private_fields: Include Private Fields
-      excel_password_dialog_title: "Excel Password"
-      excel_password_message: "You can use the following password to unlock the excel file:"
+      excel_password_dialog_title: "Generated Excel Archive"
+      excel_password_message: "Your archive has been generated, and should begin downloading shortly. You can use the following password to unlock it:"
 
   answers:
     validations:
