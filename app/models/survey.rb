@@ -26,175 +26,223 @@ class Survey < ActiveRecord::Base
   before_save :generate_auth_key, :if => :public?
 
   attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
-  accepts_nested_attributes_for :questions
+    accepts_nested_attributes_for :questions
 
 
-  def self.active
-    where(active_arel)
-  end
-
-  def self.active_plus(extras)
-    where(active_arel.or(extra_arel(extras)))
-  end
-
-  def finalize
-    self.finalized = true
-    questions.update_all(:finalized => true)
-    categories.update_all(:finalized => true)
-    options.update_all(:finalized => true)
-    self.save
-  end
-
-  def archive
-    self.archived = true
-    self.name = "#{name} #{I18n.t('activerecord.attributes.survey.archive')}"
-    save
-  end
-
-  def user_ids
-    self.survey_users.map(&:user_id)
-  end
-
-  def users_for_organization(access_token, organization_id)
-    users = {}
-    publishable_users = Organization.publishable_users(access_token, organization_id)
-    users[:published], users[:unpublished] = publishable_users.partition do |publishable_user|
-      user_ids.include?(publishable_user.id)
+    def self.active
+      where(active_arel)
     end
-    users
-  end
 
-  def partitioned_organizations(access_token)
-    organizations = Organization.all(access_token, :except => organization_id)
-    partitioned_organizations = {}
-    partitioned_organizations[:participating], partitioned_organizations[:not_participating] = organizations.partition do |organization|
-      participating_organization_ids.include? organization.id
+    def self.active_plus(extras)
+      where(active_arel.or(extra_arel(extras)))
     end
-    partitioned_organizations
-  end
 
-  def expired?
-    expiry_date < Date.today
-  end
+    def finalize
+      self.finalized = true
+      questions.update_all(:finalized => true)
+      categories.update_all(:finalized => true)
+      options.update_all(:finalized => true)
+      self.save
+    end
 
-  def duplicate(options = {})
-    survey = self.dup
-    survey.finalized = false
-    survey.archived = false
-    survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
-    survey.organization_id = options[:organization_id] if options[:organization_id]
-    survey.public = false
-    survey.auth_key = nil
-    survey.published_on = nil
-    survey.save(:validate => false)
-    survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
-    survey.categories << first_level_categories.map { |category| category.duplicate(survey.id) }
-    survey
-  end
+    def archive
+      self.archived = true
+      self.name = "#{name} #{I18n.t('activerecord.attributes.survey.archive')}"
+      save
+    end
 
-  def share_with_organizations(organizations)
-    organizations.each do |organization_id|
-      participating_organizations.create(:organization_id => organization_id)
-    end if finalized?
-    set_published_on
-  end
+    def user_ids
+      self.survey_users.map(&:user_id)
+    end
 
-  def publish
-    set_published_on
-  end
+    def users_for_organization(access_token, organization_id)
+      users = {}
+      publishable_users = Organization.publishable_users(access_token, organization_id)
+      users[:published], users[:unpublished] = publishable_users.partition do |publishable_user|
+        user_ids.include?(publishable_user.id)
+      end
+      users
+    end
 
-  def published?
-    !participating_organizations.empty? || !survey_users.empty? || public?
-  end
+    def partitioned_organizations(access_token)
+      organizations = Organization.all(access_token, :except => organization_id)
+      partitioned_organizations = {}
+      partitioned_organizations[:participating], partitioned_organizations[:not_participating] = organizations.partition do |organization|
+        participating_organization_ids.include? organization.id
+      end
+      partitioned_organizations
+    end
 
-  def participating_organization_ids
-    self.participating_organizations.map(&:organization_id)
-  end
+    def expired?
+      expiry_date < Date.today
+    end
 
-  def first_level_questions
-    questions.where(:parent_id => nil, :category_id => nil)
-  end
+    def duplicate(options = {})
+      survey = self.dup
+      survey.finalized = false
+      survey.archived = false
+      survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
+      survey.organization_id = options[:organization_id] if options[:organization_id]
+      survey.public = false
+      survey.auth_key = nil
+      survey.published_on = nil
+      survey.save(:validate => false)
+      survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
+      survey.categories << first_level_categories.map { |category| category.duplicate(survey.id) }
+      survey
+    end
 
-  def first_level_categories
-    categories.where(:category_id => nil, :parent_id => nil)
-  end
+    def share_with_organizations(organizations)
+      organizations.each do |organization_id|
+        participating_organizations.create(:organization_id => organization_id)
+      end if finalized?
+      set_published_on
+    end
 
-  def first_level_categories_with_questions
-    first_level_categories.includes([:questions, :categories]).select { |x| x.has_questions? }
-  end
+    def publish
+      set_published_on
+    end
 
-  def first_level_elements
-    (first_level_questions + first_level_categories_with_questions).sort_by(&:order_number)
-  end
+    def published?
+      !participating_organizations.empty? || !survey_users.empty? || public?
+    end
 
-  def elements_in_order_as_json
-    first_level_elements.map(&:as_json_with_elements_in_order)
-  end
+    def participating_organization_ids
+      self.participating_organizations.map(&:organization_id)
+    end
 
-  def questions_in_order
-    first_level_elements.map(&:questions_in_order).flatten
-  end
+    def first_level_questions
+      questions.where(:parent_id => nil, :category_id => nil)
+    end
 
-  def options
-    Option.unscoped.joins(:question).where('questions.survey_id = ?', self.id)
-  end
+    def first_level_categories
+      categories.where(:category_id => nil, :parent_id => nil)
+    end
 
-  def questions_for_reports
-    questions.joins(:answers => :response).where("responses.status = 'complete' AND responses.state = 'clean' AND ((answers.content  <> '' AND answers.content IS NOT NULL) OR
+    def first_level_categories_with_questions
+      first_level_categories.includes([:questions, :categories]).select { |x| x.has_questions? }
+    end
+
+    def first_level_elements
+      (first_level_questions + first_level_categories_with_questions).sort_by(&:order_number)
+    end
+
+    def elements_in_order_as_json
+      first_level_elements.map(&:as_json_with_elements_in_order)
+    end
+
+    def questions_in_order
+      Question.find_by_sql(elements_in_order_sql)
+    end
+
+    def options
+      Option.unscoped.joins(:question).where('questions.survey_id = ?', self.id)
+    end
+
+    def questions_for_reports
+      questions.joins(:answers => :response).where("responses.status = 'complete' AND responses.state = 'clean' AND ((answers.content  <> '' AND answers.content IS NOT NULL) OR
                                                 questions.type = 'MultiChoiceQuestion')").uniq
-  end
+    end
 
-  def complete_responses_count(current_ability)
-    responses.accessible_by(current_ability).where(:status => 'complete', :blank => false).count
-  end
+    def complete_responses_count(current_ability)
+      responses.accessible_by(current_ability).where(:status => 'complete', :blank => false).count
+    end
 
-  def incomplete_responses_count(current_ability)
-    responses.accessible_by(current_ability).where(:status => 'incomplete', :blank => false).count
-  end
+    def incomplete_responses_count(current_ability)
+      responses.accessible_by(current_ability).where(:status => 'incomplete', :blank => false).count
+    end
 
-  def publicize
-    self.public = true
-    set_published_on
-  end
+    def publicize
+      self.public = true
+      set_published_on
+    end
 
-  def identifier_questions
-    identifier_questions = questions.where(:identifier => :true)
-    identifier_questions.blank? ? first_level_questions.limit(5).to_a : identifier_questions
-  end
+    def identifier_questions
+      identifier_questions = questions.where(:identifier => :true)
+      identifier_questions.blank? ? first_level_questions.limit(5).to_a : identifier_questions
+    end
 
-  def filename_for_excel
-    "#{name.gsub(/\W/, "")} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}"
-  end
+    def filename_for_excel
+      "#{name.gsub(/\W/, "")} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}"
+    end
 
   private
 
-  def self.active_arel
-    survey = Survey.arel_table
-    (
-      survey[:expiry_date].gt(Date.today). # Not expired
-      and(survey[:finalized].eq(true)).     # Finalized
-      and(survey[:archived].eq(false))
-    )
-  end
-
-  def self.extra_arel(extras)
-    survey = Survey.arel_table
-    survey[:id].in(extras)
-  end
-
-  def generate_auth_key
-    self.auth_key = SecureRandom.urlsafe_base64
-  end
-
-  def set_published_on
-    if finalized
-      self.published_on ||= Date.today
-      self.save
+    def self.active_arel
+      survey = Survey.arel_table
+      (
+        survey[:expiry_date].gt(Date.today). # Not expired
+        and(survey[:finalized].eq(true)).     # Finalized
+        and(survey[:archived].eq(false))
+      )
     end
-  end
 
-  def ensure_survey_to_be_archivable
-    errors.add(:base, :must_not_be_archived) if archived? && archived_was
-    errors.add(:base, :finalize_before_archive) if archived? && !finalized?
-  end
+    def self.extra_arel(extras)
+      survey = Survey.arel_table
+      survey[:id].in(extras)
+    end
+
+    def generate_auth_key
+      self.auth_key = SecureRandom.urlsafe_base64
+    end
+
+    def set_published_on
+      if finalized
+        self.published_on ||= Date.today
+        self.save
+      end
+    end
+
+    def ensure_survey_to_be_archivable
+      errors.add(:base, :must_not_be_archived) if archived? && archived_was
+      errors.add(:base, :finalize_before_archive) if archived? && !finalized?
+    end
+
+    public
+    def elements_in_order_sql
+      <<-SQL
+      /*
+        - This is a breadth-first search by default. To make it depth first, we keep track of an array of order numbers;
+        from the root up to the current element. We can sort by this array at the end. || is the array concat operator.
+      */
+      WITH RECURSIVE elements_tree(id, content, type, finalized, path) AS (
+        (
+          -- First-level questions and categories
+          SELECT id, content, type, finalized, array[order_number] as path
+          FROM questions
+          WHERE parent_id IS NULL AND category_id IS NULL AND survey_id = #{self.id}
+
+          UNION
+
+          SELECT id, content, type, finalized, array[order_number] as path
+          FROM categories
+          WHERE parent_id IS NULL AND category_id IS NULL AND survey_id = #{self.id}
+        )
+        UNION
+        (
+          -- Recursive
+          SELECT elements.id, elements.content, elements.type, elements.finalized, (parent_elements.path || options.order_number || elements.order_number)
+          FROM  elements_tree parent_elements,
+          options,
+          (
+            -- Cross-product of questions and categories is *very* expensive (and its unnecessary to enumerate all combinations of the two).
+            SELECT id, content, type, order_number, parent_id, category_id, finalized FROM questions WHERE survey_id = #{self.id}
+            UNION
+            SELECT id, content, type, order_number, parent_id, category_id, finalized FROM categories WHERE survey_id = #{self.id}
+          ) elements
+          WHERE
+          -- Closest parent element is a Question with Options
+          (parent_elements.type LIKE '%Question' AND (options.question_id = parent_elements.id AND elements.parent_id = options.id))
+          OR
+          /*
+            - Closest parent element is a Category
+            - We don't need options here; if we don't specify the condition limiting the number of options,
+              we're using `ALL` the options in the system. Enumerating this is expensive.
+          */
+          (elements.category_id = parent_elements.id AND options.id = (SELECT id FROM options LIMIT 1))
+        )
+      )
+      SELECT questions.* FROM questions, elements_tree WHERE elements_tree.type LIKE '%Question' AND questions.id = elements_tree.id ORDER BY path;
+      SQL
+    end
 end

@@ -2,18 +2,19 @@ require "spec_helper"
 
 describe Reports::Excel::Questions do
   let!(:survey) { FactoryGirl.create(:survey) }
-  let!(:finalized_question) { FactoryGirl.create(:question, :finalized, :survey => survey) }
-  let!(:private_question) { FactoryGirl.create(:question, :finalized, :private, :survey => survey) }
+  let!(:finalized_question) { FactoryGirl.create(:single_line_question, :finalized, :survey => survey) }
+  let!(:private_question) { FactoryGirl.create(:single_line_question, :finalized, :private, :survey => survey) }
   let(:admin_ability) { stub }
   let(:user_ability) { stub }
 
   before(:each) do
+    FactoryGirl.create(:option)
     admin_ability.stub(:authorize!).and_return(true)
     user_ability.stub(:authorize!).and_raise(CanCan::AccessDenied)
   end
 
   it "includes only the finalized questions of the survey" do
-    unfinalized_question = FactoryGirl.create(:question, :finalized => false, :survey => survey)
+    unfinalized_question = FactoryGirl.create(:single_line_question, :finalized => false, :survey => survey)
     questions = Reports::Excel::Questions.new(survey, admin_ability)
     questions.all.should == [finalized_question, private_question]
   end
@@ -21,8 +22,8 @@ describe Reports::Excel::Questions do
   it "includes the sub-questions adjacent to their parent question" do
     survey = FactoryGirl.create(:survey)
     first_question = FactoryGirl.create(:radio_question, :finalized, :survey => survey, :order_number => 1)
-    sub_question = FactoryGirl.create(:question, :finalized, :survey => survey, :parent => FactoryGirl.create(:option, :question => first_question))
-    second_question = FactoryGirl.create(:question, :finalized, :survey => survey, :order_number => 2)
+    sub_question = FactoryGirl.create(:single_line_question, :finalized, :survey => survey, :parent => FactoryGirl.create(:option, :question => first_question))
+    second_question = FactoryGirl.create(:single_line_question, :finalized, :survey => survey, :order_number => 2)
     questions = Reports::Excel::Questions.new(survey, admin_ability).build
     questions.all.should == [first_question, sub_question, second_question]
   end
