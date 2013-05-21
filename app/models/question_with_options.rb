@@ -9,9 +9,13 @@ class QuestionWithOptions < Question
   end
 
   def report_data
-    return [] if no_answers?
-    answers = super
-    options.map { |option| [option.content, option.report_data(answers)] }
+    answers = answers_for_reports
+    report_data = options.map { |option| [option.content, option.report_data(answers)] }
+    if report_data.map { |option, count| count }.uniq == [0]
+      []
+    else
+      report_data
+    end
   end
 
   def sorted_answers_for_response(response_id, record_id=nil)
@@ -26,10 +30,5 @@ class QuestionWithOptions < Question
 
   def questions_in_order
     [self, options.map(&:questions_in_order)].flatten
-  end
-
-  private
-  def no_answers?
-    answers.joins(:response).where(:responses => {:status => 'complete'}).count == 0
   end
 end

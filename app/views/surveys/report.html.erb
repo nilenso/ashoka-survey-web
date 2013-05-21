@@ -16,20 +16,24 @@
   }
 
   function drawChart() {
-    <% @survey.questions_for_reports.each do |question| %>
+    <% @survey.questions_in_order.each do |question| %>
+      <%
+        report_data = @survey.report_data_for(question)
+        next if report_data.empty?
+      %>
       <% if question.is_a? QuestionWithOptions %>
-        data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
+        data = google.visualization.arrayToDataTable(JSON.parse('<%= report_data %>'))
         chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
         params['title'] = "<%= question.decorate.content_with_answer_count %>";
         chart.draw(data, params);
-      <% elsif question.type == 'DateQuestion'%>
+      <% elsif question.type == 'DateQuestion' %>
         data = new google.visualization.DataTable();
         chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
 
         data.addColumn('date', 'Value');
         data.addColumn('number', 'Answer / Count');
 
-        var report_data = dateReportData('<%= @survey.report_data_for(question) %>')
+        var report_data = dateReportData('<%= report_data %>')
 
         data.addRows(report_data)
         params = {
@@ -41,7 +45,7 @@
         chart.draw(data, params);
       <% elsif question.type == 'NumericQuestion' %>
         chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
-        data = google.visualization.arrayToDataTable(JSON.parse('<%= @survey.report_data_for(question) %>'))
+        data = google.visualization.arrayToDataTable(JSON.parse('<%= report_data %>'))
         params = {
           vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %> },
           hAxis: {'title': 'Answer', minValue: <%= question.min_value_for_report %> , maxValue: <%= question.max_value_for_report %>},
@@ -60,7 +64,7 @@
 <%= render "responses/excel_password_dialog" %>
 <div class="reports">
   <%= render "layouts/status_bar", :status => "analyze" %>
-  <% @survey.questions_for_reports.each do |question| %>
+  <% @survey.questions_in_order.each do |question| %>
     <div id="chart_div_<%= question.id %>"></div>
   <% end %>
   <div id="location_map">

@@ -6,6 +6,14 @@ FactoryGirl.define do
       status 'incomplete'
     end
 
+    trait :complete do
+      status 'complete'
+    end
+
+    trait :clean do
+      state 'clean'
+    end
+
     before(:create) do |response|
       response.organization_id = 1 if response.organization_id.blank?
       response.user_id = 1 if response.user_id.blank?

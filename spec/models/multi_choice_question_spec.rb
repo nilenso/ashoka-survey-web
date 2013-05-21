@@ -5,13 +5,18 @@ describe MultiChoiceQuestion do
 
   context "reports" do
     it "returns the number of answers grouped by option content" do
-      question = FactoryGirl.create(:multi_choice_question, :with_options)
+      question = FactoryGirl.create(:multi_choice_question, :finalized, :with_options)
       5.times do
-        answer = FactoryGirl.create(:answer_with_complete_response)
+        response = FactoryGirl.create(:response, :clean, :complete)
+        answer = FactoryGirl.create(:answer, :response => response, :question => question)
         answer.choices << FactoryGirl.create(:choice, :option => question.options.first)
-        question.answers << answer
       end
       question.reload.report_data.should include [question.options.first.content, 5]
+    end
+
+    it "returns an empty array if no answers are present" do
+      question = FactoryGirl.create(:multi_choice_question, :finalized, :with_options)
+      question.report_data.should == []
     end
   end
 

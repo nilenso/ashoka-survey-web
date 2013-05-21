@@ -270,6 +270,29 @@ describe Question do
     it "has no report data" do
       FactoryGirl.create(:question).report_data.should be_empty
     end
+
+    context "when getting answers for reports" do
+      it "gets answers belonging to clean, complete responses" do
+        response = FactoryGirl.create(:response, :clean, :complete)
+        question = FactoryGirl.create(:question, :finalized)
+        answer = FactoryGirl.create(:answer, :question => question, :response => response)
+        question.answers_for_reports.should include answer
+      end
+
+      it "doesn't get an answer if its response is not clean" do
+        response = FactoryGirl.create(:response, :complete, :state => 'dirty')
+        question = FactoryGirl.create(:question, :finalized)
+        answer = FactoryGirl.create(:answer, :question => question, :response => response)
+        question.answers_for_reports.should_not include answer
+      end
+
+      it "doesn't get an answer if its response is incomplete" do
+        response = FactoryGirl.create(:response, :clean, :incomplete)
+        question = FactoryGirl.create(:question, :finalized)
+        answer = FactoryGirl.create(:answer, :question => question, :response => response)
+        question.answers_for_reports.should_not include answer
+      end
+    end
   end
 
   context "duplicate" do

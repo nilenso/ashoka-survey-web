@@ -20,6 +20,23 @@ describe QuestionWithOptions do
     end
   end
 
+
+  context "report data" do
+    it "returns an empty array if no answers are present" do
+      FactoryGirl.create(:radio_question).report_data.should == []
+    end
+
+    it "returns an list of option names along with their counts" do
+      question = FactoryGirl.create(:radio_question, :finalized)
+      option = FactoryGirl.create(:option, :question => question, :content => "Foo")
+      5.times do
+        response = FactoryGirl.create(:response, :clean, :complete)
+        FactoryGirl.create(:answer, :response => response, :question => question, :content => "Foo")
+      end
+      question.report_data.should == [["Foo", 5]]
+    end
+  end
+
   context "when fetching question with its elements in order as json" do
     it "includes itself" do
       question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)

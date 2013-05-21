@@ -2,7 +2,7 @@
 
 class DateQuestion < Question
   def report_data
-    answers_content = super.map(&:content)
+    answers_content = answers_for_reports.map(&:content)
     answers_content.uniq.inject([]) do |data, content|
       data.push [content, answers_content.count(content)]
     end

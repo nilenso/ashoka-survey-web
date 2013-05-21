@@ -1,17 +1,15 @@
 class MultiChoiceQuestion < QuestionWithOptions
   def report_data
-    return [] if choices.blank?
-    choice_ids = choices.map(&:option_id)
-    options.map { |option| [option.content, choice_ids.count(option.id)] }
+    choice_ids = answers_for_reports.joins(:choices).pluck('choices.option_id').map(&:to_i)
+    report_data = options.map { |option| [option.content, choice_ids.count(option.id)] }
+    if report_data.map { |option, count| count }.uniq == [0]
+      []
+    else
+      report_data
+    end
   end
 
   def reporter
     MultiChoiceQuestionReporter.decorate(self)
-  end
-
-  private
-
-  def choices
-    Choice.joins(:answer => :response).where(:responses => {:status => 'complete', :state => 'clean'}, :option_id => options.map(&:id))
   end
 end
