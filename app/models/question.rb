@@ -41,6 +41,7 @@ class Question < ActiveRecord::Base
   def duplicate(survey_id)
     question = self.dup
     question.survey_id = survey_id
+    question.finalized = false
     question.options << options.map { |option| option.duplicate(survey_id) } if self.respond_to? :options
     question.save(:validate => false)
     question

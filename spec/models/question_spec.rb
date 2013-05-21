@@ -315,6 +315,12 @@ describe Question do
       duplicated_nested_questions.map(&:survey_id).should == [survey.id]
       duplicated_nested_questions.map(&:content).should == ["foo nested"]
     end
+
+    it "creates a non-finalized question, whether the original is finalized or not" do
+      question = FactoryGirl.create(:question, :finalized)
+      duplicated_question = question.duplicate(survey.id)
+      duplicated_question.should_not be_finalized
+    end
   end
 
   it "returns the index of the parent's option amongst its siblings" do

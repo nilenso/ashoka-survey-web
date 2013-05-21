@@ -137,6 +137,12 @@ describe Category do
       duplicated_sub_categories.map(&:survey_id).should == [survey.id]
       duplicated_sub_categories.map(&:content).should == ["foo subcategory"]
     end
+
+    it "creates a non-finalized category, whether the original is finalized or not" do
+      category = FactoryGirl.create(:category, :finalized)
+      duplicated_category = category.duplicate(survey.id)
+      duplicated_category.should_not be_finalized
+    end
   end
 
   context "has any questions" do

@@ -132,6 +132,12 @@ describe Option do
       duplicated_categories.map(&:content).should == ["foo category"]
       duplicated_categories.map(&:survey_id).should == [survey.id]
     end
+
+    it "creates a non-finalized option, whether the original is finalized or not" do
+      option = FactoryGirl.create(:option, :finalized)
+      duplicate_option = option.duplicate(survey.id)
+      duplicate_option.should_not be_finalized
+    end
   end
 
   it "returns categories with questions" do
