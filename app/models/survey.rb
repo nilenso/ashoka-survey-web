@@ -78,18 +78,20 @@ class Survey < ActiveRecord::Base
   end
 
   def duplicate(options = {})
-    survey = self.dup
-    survey.finalized = false
-    survey.archived = false
-    survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
-    survey.organization_id = options[:organization_id] if options[:organization_id]
-    survey.public = false
-    survey.auth_key = nil
-    survey.published_on = nil
-    survey.save(:validate => false)
-    survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
-    survey.categories << first_level_categories.map { |category| category.duplicate(survey.id) }
-    survey
+    transaction do
+      survey = self.dup
+      survey.finalized = false
+      survey.archived = false
+      survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
+      survey.organization_id = options[:organization_id] if options[:organization_id]
+      survey.public = false
+      survey.auth_key = nil
+      survey.published_on = nil
+      survey.save(:validate => false)
+      survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
+      survey.categories << first_level_categories.map { |category| category.duplicate(survey.id) }
+      survey
+    end
   end
 
   def share_with_organizations(organizations)
