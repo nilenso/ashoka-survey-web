@@ -7,11 +7,11 @@ class Survey < ActiveRecord::Base
   validates :description, :length => { :maximum => 250 }
 
   belongs_to :organization
-  has_many :questions, :dependent => :destroy
+  has_many :questions, :dependent => :delete_all
+  has_many :categories, :dependent => :delete_all
   has_many :responses, :dependent => :destroy
   has_many :survey_users, :dependent => :destroy
   has_many :participating_organizations, :dependent => :destroy
-  has_many :categories, :dependent => :destroy
 
   scope :finalized, where(:finalized => true)
   scope :none, limit(0)
@@ -164,6 +164,14 @@ class Survey < ActiveRecord::Base
 
   def filename_for_excel
     "#{name.gsub(/\W/, "")} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}"
+  end
+
+  def destroy
+    super if deletable?
+  end
+
+  def deletable?
+    responses.where(:blank => false).empty?
   end
 
   private

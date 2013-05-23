@@ -28,6 +28,42 @@ describe Survey do
     end
   end
 
+  context "when destroying the survey" do
+    it "deletes finalized elements" do
+      survey = FactoryGirl.create(:survey, :finalized)
+      question = FactoryGirl.create(:question, :finalized, :survey => survey)
+      category = FactoryGirl.create(:category, :finalized, :survey => survey)
+      survey.destroy
+      Question.find_by_id(question.id).should be_nil
+      Category.find_by_id(category.id).should be_nil
+    end
+
+    it "deletes non-finalized elements" do
+      survey = FactoryGirl.create(:survey)
+      question = FactoryGirl.create(:question, :survey => survey)
+      category = FactoryGirl.create(:category, :survey => survey)
+      survey.destroy
+      Question.find_by_id(question.id).should be_nil
+      Category.find_by_id(category.id).should be_nil
+    end
+
+    it "aborts if the survey is not deletable" do
+      survey = FactoryGirl.create(:survey, :finalized)
+      question = FactoryGirl.create(:question, :finalized, :survey => survey)
+      category = FactoryGirl.create(:category, :finalized, :survey => survey)
+      FactoryGirl.create(:response, :survey => survey)
+      survey.destroy
+      question.reload.should be_present
+      category.reload.should be_present
+    end
+
+    it "it is not deletable if it has any non-blank responses" do
+      survey = FactoryGirl.create(:survey)
+      FactoryGirl.create(:response, :survey => survey)
+      survey.should_not be_deletable
+    end
+  end
+
   context "when ordering" do
     it "fetches all draft surveys in descending order of created_at" do
       survey = FactoryGirl.create(:survey)
