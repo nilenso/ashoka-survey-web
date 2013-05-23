@@ -156,8 +156,7 @@ en:
       publish_survey: "Publish and continue"
 
     duplicate:
-      survey_duplicated: Survey duplicated successfully!
-      duplication_error: There was an error duplicating the survey. Sorry!
+      duplication_in_progress: "Survey duplication in progress. Please check the drafts section in a while."
 
     report:
       location: Location Map
