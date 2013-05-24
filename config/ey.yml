@@ -23,7 +23,7 @@
 #
 ---
 environments:
-  my_testing_environment:
+  survey_web_staging_environment:
     migrate: true
     migration_command: rake db:migrate
     precompile_assets: true
