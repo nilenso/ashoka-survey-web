@@ -10,7 +10,6 @@ SurveyWeb::Application.routes.draw do
         get 'unpublish'
       end
       member do
-       post "duplicate"
        get  "report"
       end
       get 'build'
@@ -47,6 +46,7 @@ SurveyWeb::Application.routes.draw do
       resources :surveys, :only => [:index, :show, :update] do
         get 'questions_count', :on => :collection
         get 'identifier_questions', :on => :member
+        post 'duplicate', :on => :member
       end
       get 'deep_surveys', :to => 'deep_surveys#index'
       match '/login', :to => 'auth#create'

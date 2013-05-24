@@ -182,43 +182,6 @@ describe SurveysController do
     end
   end
 
-  context "POST 'duplicate'" do
-    before(:each) do
-      sign_in_as('cso_admin')
-      session[:user_info][:org_id] = 123
-      request.env["HTTP_REFERER"] = 'http://google.com'
-    end
-
-    it "creates a delayed job" do
-      survey = FactoryGirl.create(:survey, :organization_id => 123)
-      expect {
-        post :duplicate, :id => survey.id
-      }.to change { Delayed::Job.count }.by 1
-      Delayed::Job.last.queue.should == 'survey_duplication'
-    end
-
-    it "redirects to the drafts tab of the survey index page" do
-      survey = FactoryGirl.create(:survey, :organization_id => 123)
-      request.env["HTTP_REFERER"] = 'http://google.com'
-      post :duplicate, :id => survey.id
-      response.should redirect_to surveys_path(:filter => "drafts")
-      flash[:notice].should_not be_nil
-    end
-
-    context "when the user duplicating the survey doesn't belong to the same organization as the user who created it" do
-      it "creates a survey with the current org id" do
-        session[:user_info][:org_id] = 123
-        survey = FactoryGirl.create(:survey, :finalized, :name => "Foo", :organization_id => 42)
-        ParticipatingOrganization.create(:survey_id => survey.id, :organization_id => 123)
-        post :duplicate, :id => survey.id
-        Delayed::Worker.new.work_off
-        duplicated_survey = Survey.order("created_at DESC").first
-        duplicated_survey.should_not == survey
-        duplicated_survey.organization_id.should == 123
-      end
-    end
-  end
-
   context "GET 'report'" do
     before(:each) do
       sign_in_as('cso_admin')

@@ -49,6 +49,8 @@ en:
 
   surveys:
     confirm_finalize: "The survey can't be edited after this. Are you sure?"
+    duplication_in_progress: "Survey duplication in progress…"
+
     validations:
       cant_be_in_past: "Can't be in the past"
       invalid: "is not valid"
@@ -155,8 +157,6 @@ en:
     publish_to_users:
       publish_survey: "Publish and continue"
 
-    duplicate:
-      duplication_in_progress: "Survey duplication in progress. Please check the drafts section in a while."
 
     report:
       location: Location Map

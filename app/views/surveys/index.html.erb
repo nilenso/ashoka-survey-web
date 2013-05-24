@@ -70,6 +70,7 @@
 <% end %>
 
 <%= render "surveys/public_link_dialog" %>
+<%= render "surveys/duplicate_dialog" %>
 
 <%= will_paginate @surveys %>
 
@@ -81,6 +82,12 @@
 
         $('a.copy_public_link').click(function(){
             new SurveyApp.PublicLinkDialog($(this).data('public-link')).open();
+        });
+
+        $('a.duplicate').click(function(){
+          if(confirm("Are you sure you want to duplicate this survey?")) {
+            new SurveyApp.DuplicateSurvey($("#survey-duplicate-dialog"), $(this).data('survey-id'));
+          }
         });
 
         new SurveyApp.AddConfirmation($(".archive"));

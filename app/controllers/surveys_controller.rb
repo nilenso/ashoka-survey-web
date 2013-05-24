@@ -52,12 +52,6 @@ class SurveysController < ApplicationController
     redirect_to root_path
   end
 
-  def duplicate
-    survey = Survey.find(params[:id])
-    survey.delay(:queue => 'survey_duplication').duplicate(:organization_id => current_user_org)
-    redirect_to surveys_path(:filter => "drafts"), :notice => t("surveys.duplicate.duplication_in_progress")
-  end
-
   def report
     @survey = SurveyDecorator.find(params[:id])
     responses = Response.accessible_by(current_ability)

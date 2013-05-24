@@ -1,0 +1,11 @@
+div#survey-duplicate-dialog {
+  .no-close .ui-dialog-titlebar-close {
+    display:none;
+  }
+
+  display: none;
+
+  .spinner {
+    margin: 10px auto 0 auto;
+  }
+}

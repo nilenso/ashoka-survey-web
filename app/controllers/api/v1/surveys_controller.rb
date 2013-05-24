@@ -13,7 +13,7 @@ module Api
         surveys = Survey.accessible_by(current_ability).active_plus(extra_survey_ids)
         render :json => { count: surveys.with_questions.count }
       end
-      
+
       def identifier_questions
         survey = Survey.find_by_id(params[:id])
         authorize! :read, survey
@@ -21,7 +21,7 @@ module Api
           render :json => survey.identifier_questions
         else
           render :nothing => true, :status => :bad_request
-        end 
+        end
       end
 
       def show
@@ -43,6 +43,12 @@ module Api
         else
           render :json => survey.try(:errors).try(:full_messages), :status => :bad_request
         end
+      end
+
+      def duplicate
+        survey = Survey.find(params[:id])
+        job = survey.delay(:queue => 'survey_duplication').duplicate(:organization_id => current_user_org)
+        render :json => { :job_id => job.id }
       end
 
       private
