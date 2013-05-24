@@ -90,7 +90,6 @@ class Survey < ActiveRecord::Base
       survey.save(:validate => false)
       survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
       survey.categories << first_level_categories.map { |category| category.duplicate(survey.id) }
-      survey.save(:validate => false)
       survey
     end
   end
