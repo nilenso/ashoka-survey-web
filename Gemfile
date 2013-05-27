@@ -32,6 +32,7 @@ gem 'feature'
 gem "active_model_serializers", "~> 0.7.0"
 gem 'jquery-rails'
 gem 'zipruby', "~> 0.3.6"
+gem "js-routes", "~> 0.9.0"
 
 # Gems used only for assets and not required
 # in production environments by default.
