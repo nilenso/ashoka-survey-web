@@ -3,9 +3,14 @@ div#survey-duplicate-dialog {
     display:none;
   }
 
+
+  p { text-align: center; }
+
   display: none;
 
   .spinner {
     margin: 10px auto 0 auto;
+    display: block;
+    padding-bottom: 20px;
   }
 }
