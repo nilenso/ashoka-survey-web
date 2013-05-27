@@ -50,6 +50,7 @@ en:
   surveys:
     confirm_finalize: "The survey can't be edited after this. Are you sure?"
     duplication_in_progress: "Survey duplication in progress…"
+    duplication_dialog_title: "Duplicating Survey..."
 
     validations:
       cant_be_in_past: "Can't be in the past"
