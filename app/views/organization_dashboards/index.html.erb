@@ -1,0 +1,20 @@
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<% @organizations.each do |organization| %>
+  <div class="organization">
+    <div class="name">
+      <h1><%= organization.name %></h1>
+    </div>
+
+    <div class="surveys">
+      <h1><%= organization.survey_count_in_words %></h1>
+    </div>
+
+    <div class="responses">
+      <h1><%= organization.response_count_in_words %></h1>
+    </div>
+
+    <div class="users">
+      <h1><%= organization.user_count_in_words %></h1>
+    </div>
+  </div>
+<% end %>

@@ -5,6 +5,8 @@ SurveyWeb::Application.routes.draw do
     match '/auth/failure', :to => 'sessions#failure'
     match '/logout', :to => 'sessions#destroy', :as => 'logout'
 
+    get '/dashboard' => 'organization_dashboards#index'
+
     resources :surveys, :only => [:new, :create, :destroy, :index] do
       resource :publication, :only => [:update, :edit, :destroy] do
         get 'unpublish'

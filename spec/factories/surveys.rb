@@ -16,6 +16,10 @@ FactoryGirl.define do
       archived true
     end
 
+    trait :public do
+      public true
+    end
+
     factory :survey_with_questions do
       after(:create) do |survey, evaluator|
         FactoryGirl.create_list(:question_with_answers, 5, :survey => survey)

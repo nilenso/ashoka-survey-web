@@ -15,8 +15,9 @@ describe SuperAdminAbility do
   let(:ability){ SuperAdminAbility.new(user_info) }
 
   it { should be_able_to :manage, Survey }
+  it { should be_able_to :manage, :dashboard }
   it { should_not be_able_to :create, Survey }
   it { should_not be_able_to :create, Response }
   it { should be_able_to :manage, Response }
 end
-      
+

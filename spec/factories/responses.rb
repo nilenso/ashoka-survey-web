@@ -14,6 +14,10 @@ FactoryGirl.define do
       state 'clean'
     end
 
+    trait :blank do
+      blank true
+    end
+
     before(:create) do |response|
       response.organization_id = 1 if response.organization_id.blank?
       response.user_id = 1 if response.user_id.blank?
