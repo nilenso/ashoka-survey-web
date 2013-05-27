@@ -85,7 +85,7 @@
         });
 
         $('a.duplicate').click(function(){
-          if(confirm("Are you sure you want to duplicate this survey?")) {
+          if(confirm("<%= t('.duplicate_confirm') %>")) {
             new SurveyApp.DuplicateSurvey($("#survey-duplicate-dialog"), $(this).data('survey-id'));
           }
         });
