@@ -1,3 +1,5 @@
+<script src='https://www.google.com/jsapi'></script>
+
 <header>
   <h2>
     <%= t(".heading", :organization_name => @decorated_organization.name) %>
@@ -20,3 +22,9 @@
     <p class="label"><%= t("activerecord.models.user").pluralize(@decorated_organization.user_count) %></p>
   </li>
 </ul>
+
+<div class="organization-dashboard-graphs">
+  <div class="organization-dashboard-graphs-item" id="organization-dashboard-graphs-response">
+    <%= render_chart @decorated_organization.responses_per_month_graph, 'organization-dashboard-graphs-response' %>
+  </div>
+</div>
