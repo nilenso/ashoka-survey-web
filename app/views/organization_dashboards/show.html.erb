@@ -3,3 +3,20 @@
     <%= t(".heading", :organization_name => @decorated_organization.name) %>
   </h2>
 </header>
+
+<ul class="organization-dashboard-overview">
+  <li class="organization-dashboard-overview-item">
+    <span class="count"><%= @decorated_organization.survey_count %></span>
+    <p class="label"><%= Survey.model_name.human.pluralize(@decorated_organization.survey_count) %></p>
+  </li>
+
+  <li class="organization-dashboard-overview-item">
+    <span class="count"><%= @decorated_organization.response_count %></span>
+    <p class="label"><%= Response.model_name.human.pluralize(@decorated_organization.response_count) %></p>
+  </li>
+
+  <li class="organization-dashboard-overview-item">
+    <span class="count"><%= @decorated_organization.user_count %></span>
+    <p class="label"><%= t("activerecord.models.user").pluralize(@decorated_organization.user_count) %></p>
+  </li>
+</ul>

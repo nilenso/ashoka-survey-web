@@ -30,4 +30,28 @@ li.organizations-dashboard-organization {
 .organizations-dashboard-organization-responses,
 .organizations-dashboard-organization-users {
   .count { font-size: 20px; }
+  text-align: center;
+}
+
+
+.organization-dashboard-overview {
+  @include clearfix;
+  width: 60%;
+  margin: 30px auto 0;
+
+  .organization-dashboard-overview-item {
+    width: 15%;
+    float: left;
+    border: 1px solid #eee;
+    padding: 10px 8% 5px;
+    text-align: center;
+    &:not(:last-child) { border-right: none; }
+    &:first-child { @include border-left-radius(5px); }
+    &:last-child { @include border-right-radius(5px); }
+    .count {
+      font-size: 20px;
+      font-weight: bold;
+     }
+    .label { margin: 0; }
+  }
 }

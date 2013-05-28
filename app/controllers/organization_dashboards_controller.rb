@@ -8,7 +8,7 @@ class OrganizationDashboardsController < ApplicationController
   def show
     organization = Organization.find_by_id(access_token, params[:id])
     if organization
-      @decorated_organization = OrganizationDecorator.decorate(organization)
+      @decorated_organization = OrganizationDecorator.decorate(organization, :context => { :access_token => access_token })
     else
       render :nothing => true, :status => :not_found
     end
