@@ -32,4 +32,12 @@ class Organization
     org_exists = client.get("/api/organizations/validate_orgs", :params => {:org_ids => org_ids.to_json})
     org_exists.parsed
   end
+
+  def self.find_by_id(access_token, organization_id)
+    begin
+      organization_attrs = access_token.get("/api/organizations/#{organization_id}").parsed
+      Organization.new(organization_attrs['id'], organization_attrs['name'])
+    rescue OAuth2::Error
+    end
+  end
 end

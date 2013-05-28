@@ -5,6 +5,8 @@ describe Organization do
     orgs_response = mock(OAuth2::Response)
     users_response = mock(OAuth2::Response)
     org_exists = mock(OAuth2::Response)
+    single_organization_response = mock(OAuth2::Response)
+    bad_response = mock(OAuth2::Response).as_null_object
     @access_token = mock(OAuth2::AccessToken)
 
     @access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
@@ -12,6 +14,11 @@ describe Organization do
 
     @access_token.stub(:get).with('/api/organizations/1/users').and_return(users_response)
     users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => 'field_agent'}, {"id" => 2, "name" => "John", "role" => 'supervisor'}, {"id" => 3, "name" => "Rambo", "role" => 'cso_admin'}])
+
+    @access_token.stub(:get).with('/api/organizations/1').and_return(single_organization_response)
+    single_organization_response.stub(:parsed).and_return({"id" => 1, "name" => "Apple"})
+
+    @access_token.stub(:get).with('/api/organizations/42').and_raise(OAuth2::Error.new(bad_response))
 
     @access_token.stub(:get).with('/api/organizations/validate_orgs', :params => { :org_ids => [1, 2].to_json}).and_return(org_exists)
     org_exists.stub(:parsed).and_return(true)
@@ -66,5 +73,17 @@ describe Organization do
     organization.class.should eq Organization
     organization.id.should eq 1
     organization.name.should eq "Foo"
+  end
+
+  context "when fetching information for a single organization" do
+    it "fetches the requested organization if it exists" do
+      organization = Organization.find_by_id(@access_token, 1)
+      organization.name.should == "Apple"
+    end
+
+    it "returns nil if the organization doesn't exist" do
+      organization = Organization.find_by_id(@access_token, 42)
+      organization.should be_nil
+    end
   end
 end
