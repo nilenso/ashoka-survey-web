@@ -11,6 +11,7 @@ en:
     logged_in_as: "Hello, %{username}!"
     register: "Register"
     create_user: "Create User"
+    dashboard: "Dashboard"
 
   flash:
     survey_created: "Survey created successfully"

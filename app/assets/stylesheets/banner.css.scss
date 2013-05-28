@@ -42,7 +42,7 @@ div#banner{
 
         &.home, &.add, &.users, &.create,
         &.organization, &.signin,
-        &.logout, &.register{
+        &.logout, &.register, &.dashboard {
           padding: 40px 0 0 0;
         }
 
@@ -54,6 +54,7 @@ div#banner{
         &.signin:after{ content: "\f090";}
         &.logout:after{ content: "\f08b";}
         &.register:after{ content: "\f040";}
+        &.dashboard:after{ content: "\f0e4";}
       }
     }
   }
