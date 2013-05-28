@@ -1,0 +1,33 @@
+ul.organizations-dashboard {
+  @include clearfix;
+}
+
+li.organizations-dashboard-organization {
+  margin-top: 30px;
+  @include span-columns(11);
+  border-bottom: 1px solid $secondary-color;
+  &:last-child { border-bottom: none; }
+}
+
+.organizations-dashboard-organization-name {
+  @include span-columns(4, 11);
+}
+
+.organizations-dashboard-organization-surveys {
+  @include span-columns(2, 11);
+}
+
+.organizations-dashboard-organization-responses {
+  @include span-columns(2, 11);
+}
+
+.organizations-dashboard-organization-users {
+  @include span-columns(2, 11);
+}
+
+.organizations-dashboard-organization-name,
+.organizations-dashboard-organization-surveys,
+.organizations-dashboard-organization-responses,
+.organizations-dashboard-organization-users {
+  .count { font-size: 20px; }
+}

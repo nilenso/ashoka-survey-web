@@ -1,20 +1,30 @@
-<script type="text/javascript" src="https://www.google.com/jsapi"></script>
-<% @organizations.each do |organization| %>
-  <div class="organization">
-    <div class="name">
-      <h1><%= organization.name %></h1>
-    </div>
+<header>
+  <h2>
+    <%= t(".heading") %>
+  </h2>
+</header>
 
-    <div class="surveys">
-      <h1><%= organization.survey_count_in_words %></h1>
-    </div>
+<ul class="organizations-dashboard">
+  <% @organizations.each do |organization| %>
+    <li class="organizations-dashboard-organization">
+      <div class="organizations-dashboard-organization-name">
+        <h2><%= organization.name %></h2>
+      </div>
 
-    <div class="responses">
-      <h1><%= organization.response_count_in_words %></h1>
-    </div>
+      <span class="organizations-dashboard-organization-surveys">
+        <span class="count"><%= organization.survey_count %></span>
+        <p class="label"><%= Survey.model_name.human.pluralize(organization.survey_count) %></p>
+      </span>
 
-    <div class="users">
-      <h1><%= organization.user_count_in_words %></h1>
-    </div>
-  </div>
-<% end %>
+      <span class="organizations-dashboard-organization-responses">
+        <span class="count"><%= organization.response_count %></span>
+        <p class="label"><%= Response.model_name.human.pluralize(organization.response_count) %></p>
+      </span>
+
+      <span class="organizations-dashboard-organization-users">
+        <span class="count"><%= organization.user_count %></span>
+        <p class="label"><%= t("activerecord.models.user").pluralize(organization.user_count) %></p>
+      </span>
+    </li>
+  <% end %>
+</ul>

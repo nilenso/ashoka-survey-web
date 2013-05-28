@@ -48,6 +48,10 @@ en:
       unpublish_survey: "Unpublish Survey"
       survey_users: "Survey users"
 
+  organization_dashboards:
+    index:
+      heading: Dashboard
+
   surveys:
     confirm_finalize: "The survey can't be edited after this. Are you sure?"
     duplication_in_progress: "Survey duplication in progress…"
@@ -226,6 +230,10 @@ en:
       require_finalized: Must be finalized
 
   activerecord:
+    models:
+      survey: survey
+      response: response
+      user: user
     attributes:
       survey:
         name: "Name"
