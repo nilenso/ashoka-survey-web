@@ -6,7 +6,7 @@
 
 <ul class="organizations-dashboard">
   <% @decorated_organizations.each do |organization| %>
-    <li class="organizations-dashboard-organization">
+    <li class="organizations-dashboard-organization" data-organization-id="<%= organization.id %>">
       <div class="organizations-dashboard-organization-name">
         <h2><%= organization.name %></h2>
       </div>
@@ -28,3 +28,9 @@
     </li>
   <% end %>
 </ul>
+
+<script type="text/javascript">
+  $('li.organizations-dashboard-organization').click(function(){
+    window.location = "/dashboard/" + $(this).data('organization-id');
+  })
+</script>

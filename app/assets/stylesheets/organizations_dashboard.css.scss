@@ -3,10 +3,14 @@ ul.organizations-dashboard {
 }
 
 li.organizations-dashboard-organization {
-  margin-top: 30px;
+  padding-top: 30px;
   @include span-columns(11);
   border-bottom: 1px solid $secondary-color;
   &:last-child { border-bottom: none; }
+  &:hover {
+    background-color: $highlight;
+    cursor: pointer;
+  }
 }
 
 .organizations-dashboard-organization-name {
