@@ -34,7 +34,7 @@ describe OrganizationDecorator do
   end
 
 
-  context "creating a chart of response counts grouped by month" do
+  context "when creating a chart of response counts grouped by month" do
     it "fetches the number of responses for an organization grouped by month of creation" do
       organization = OrganizationDecorator.decorate(FactoryGirl.build(:organization))
       survey = FactoryGirl.create(:survey, :organization_id => organization.id)
@@ -65,6 +65,30 @@ describe OrganizationDecorator do
       survey = FactoryGirl.create(:survey, :organization_id => 12345)
       FactoryGirl.create(:response, :blank, :survey_id => survey.id)
       organization.response_count_grouped_by_month.should == []
+    end
+  end
+
+  context "when creating a chart of survey counts grouped by month" do
+    it "fetches the number of surveys created by an organization grouped by creation month" do
+      organization = OrganizationDecorator.decorate(FactoryGirl.build(:organization))
+      Timecop.freeze("2011/09/02") { FactoryGirl.create(:survey, :organization_id => organization.id) }
+      Timecop.freeze("2012/04/05") { FactoryGirl.create(:survey, :organization_id => organization.id) }
+      Timecop.freeze("2012/04/22") { FactoryGirl.create(:survey, :organization_id => organization.id) }
+      organization.survey_count_grouped_by_month.should =~ [["Sep 2011", 1], ["Apr 2012", 2]]
+    end
+
+    it "sorts the results by date" do
+      organization = OrganizationDecorator.decorate(FactoryGirl.build(:organization))
+      Timecop.freeze("2012/04/15") { FactoryGirl.create(:survey, :organization_id => organization.id) }
+      Timecop.freeze("2013/05/15") { FactoryGirl.create(:survey, :organization_id => organization.id) }
+      Timecop.freeze("2013/01/16") { FactoryGirl.create(:survey, :organization_id => organization.id) }
+      organization.survey_count_grouped_by_month.should == [["Apr 2012", 1], ["Jan 2013", 1], ["May 2013", 1]]
+    end
+
+    it "excludes surveys created by other organizations" do
+      organization = OrganizationDecorator.decorate(FactoryGirl.build(:organization))
+      survey = FactoryGirl.create(:survey, :organization_id => 54321)
+      organization.survey_count_grouped_by_month.should == []
     end
   end
 end

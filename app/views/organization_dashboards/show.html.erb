@@ -24,6 +24,10 @@
 </ul>
 
 <div class="organization-dashboard-graphs">
+  <div class="organization-dashboard-graphs-item" id="organization-dashboard-graphs-survey">
+    <%= render_chart @decorated_organization.surveys_per_month_graph, 'organization-dashboard-graphs-survey' %>
+  </div>
+
   <div class="organization-dashboard-graphs-item" id="organization-dashboard-graphs-response">
     <%= render_chart @decorated_organization.responses_per_month_graph, 'organization-dashboard-graphs-response' %>
   </div>

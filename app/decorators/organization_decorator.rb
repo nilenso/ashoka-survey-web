@@ -1,6 +1,6 @@
 class OrganizationDecorator < Draper::Base
   def survey_count
-    Survey.where(:organization_id => model.id).count
+    surveys.count
   end
 
   def survey_count_in_words
@@ -24,7 +24,11 @@ class OrganizationDecorator < Draper::Base
   end
 
   def response_count_grouped_by_month
-    responses.count(:group => "to_char(created_at, 'YYYY/MM')").to_a.sort_by(&:first).map { |date, count| [Date.parse(date).strftime("%b %Y"), count] }
+    responses.count(:group => "to_char(created_at, 'Mon YYYY')").to_a.sort_by { |date_in_words,_| Date.parse(date_in_words) }
+  end
+
+  def survey_count_grouped_by_month
+    surveys.count(:group => "to_char(created_at, 'Mon YYYY')").to_a.sort_by { |date_in_words,_| Date.parse(date_in_words) }
   end
 
   def responses_per_month_graph
@@ -32,13 +36,36 @@ class OrganizationDecorator < Draper::Base
     data_table.new_column('string', 'Month')
     data_table.new_column('number', 'Responses')
     data_table.add_rows(response_count_grouped_by_month)
-    option = { chartArea: { width: '40%', left: '5%' }, legend: { position: 'bottom' }, title: 'Number of Responses', height: 600, isStacked: true, series: [ { color: '#cd8322' }, { color: '#4d5a6b'} ] }
-    GoogleVisualr::Interactive::ColumnChart.new(data_table, option)
+    options = {
+      legend: { position: 'bottom' },
+      title: 'Number of Responses Created per Month',
+      height: 600,
+      series: [{ color: '#cd8322' }]
+    }
+    GoogleVisualr::Interactive::ColumnChart.new(data_table, options)
+  end
+
+  def surveys_per_month_graph
+    data_table = GoogleVisualr::DataTable.new
+    data_table.new_column('string', 'Month')
+    data_table.new_column('number', 'Surveys')
+    data_table.add_rows(survey_count_grouped_by_month)
+    options = {
+      legend: { position: 'bottom' },
+      title: 'Number of Surveys Created per Month',
+      height: 600,
+      series: [{ color: '#4d5a6b'}]
+    }
+    GoogleVisualr::Interactive::ColumnChart.new(data_table, options)
   end
 
   private
 
   def responses
     Response.where(:survey_id => Survey.where(:organization_id => model.id), :blank => false)
+  end
+
+  def surveys
+    Survey.unscoped.where(:organization_id => model.id)
   end
 end
