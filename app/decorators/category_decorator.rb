@@ -1,5 +1,7 @@
-class CategoryDecorator < Draper::Base
+class CategoryDecorator < Draper::Decorator
   decorates :category
+  decorates_finders
+  delegate_all
   include ElementNumberable
 
   def create_record_link(response_id)

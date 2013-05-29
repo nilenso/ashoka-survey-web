@@ -1,5 +1,6 @@
 class NumericQuestionDecorator < QuestionDecorator
   decorates :numeric_question
+  delegate_all
 
   def input_tag(f, opts={})
     super(f,  :as => :number,

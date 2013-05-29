@@ -1,7 +1,9 @@
 class QuestionReporter < QuestionDecorator
+  delegate_all
+
   def header
     "#{question_number}) #{model.content}"
-  end  
+  end
 
   def formatted_answers_for(answers, options={})
     if answers

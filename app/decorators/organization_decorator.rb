@@ -1,4 +1,6 @@
-class OrganizationDecorator < Draper::Base
+class OrganizationDecorator < Draper::Decorator
+  delegate_all
+
   def survey_count
     surveys.count
   end

@@ -1,5 +1,7 @@
-class ResponseDecorator < Draper::Base
+class ResponseDecorator < Draper::Decorator
   decorates :response
+  decorates_finders
+  delegate_all
 
   def sort_answers
     answer_ids = model.sorted_answers.map(&:id)

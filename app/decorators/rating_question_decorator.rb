@@ -1,5 +1,6 @@
 class RatingQuestionDecorator < QuestionDecorator
   decorates :rating_question
+  delegate_all
 
   def input_tag(f, opts={})
     string = ERB.new "

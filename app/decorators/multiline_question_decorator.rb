@@ -1,5 +1,6 @@
 class MultilineQuestionDecorator < QuestionDecorator
   decorates :multiline_question
+  delegate_all
 
   def input_tag(f, opts={})
     super(f, :as => :text,

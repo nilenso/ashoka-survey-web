@@ -1,5 +1,7 @@
-class QuestionDecorator < Draper::Base
+class QuestionDecorator < Draper::Decorator
   decorates :question
+  decorates_finders
+  delegate_all
   include ElementNumberable
 
   def input_tag(f, opts={})
@@ -7,7 +9,7 @@ class QuestionDecorator < Draper::Base
   end
 
   def content_with_answer_count
-    question.content + " " + I18n.t('surveys.report.total', :count => question.answers.complete.count)
+    model.content + " " + I18n.t('surveys.report.total', :count => model.answers.complete.count)
   end
 
   def label

@@ -1,5 +1,7 @@
-class SurveyDecorator < Draper::Base
+class SurveyDecorator < Draper::Decorator
   decorates :survey
+  decorates_finders
+  delegate_all
 
   def build_mustache_templates
     template_types.inject('') do |string, type|
@@ -38,7 +40,7 @@ class SurveyDecorator < Draper::Base
   end
 
   def public_url
-    if survey.public?
+    if model.public?
       h.survey_public_response_url(model.id) + "?auth_key=#{model.auth_key}"
     else
       h.survey_responses_url(model.id)
@@ -46,7 +48,7 @@ class SurveyDecorator < Draper::Base
   end
 
   def has_responses?
-    survey.responses.accessible_by(h.current_ability).count != 0
+    model.responses.accessible_by(h.current_ability).count != 0
   end
 
   private

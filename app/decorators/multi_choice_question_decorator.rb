@@ -1,5 +1,6 @@
 class MultiChoiceQuestionDecorator < QuestionDecorator
   decorates :multi_choice_question
+  delegate_all
 
   def input_tag(f, opts={})
     super(f,  :field => :option_ids,

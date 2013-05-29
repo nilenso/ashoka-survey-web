@@ -13,7 +13,7 @@ gem 'figaro'
 gem "rails-backbone"
 gem 'pry-rails'
 gem 'cancan'
-gem 'draper'
+gem 'draper', "~> 1.2.1"
 gem 'i18n-js'
 gem 'airbrake'
 gem 'dalli'

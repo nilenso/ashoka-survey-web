@@ -1,5 +1,6 @@
 class DropDownQuestionDecorator < QuestionDecorator
   decorates :drop_down_question
+  delegate_all
 
   def input_tag(f, opts={})
     super(f,  :as => :select,

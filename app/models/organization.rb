@@ -1,5 +1,6 @@
 class Organization
   attr_reader :id, :name
+  include Draper::Decoratable
 
   def initialize(id, name)
     @id = id

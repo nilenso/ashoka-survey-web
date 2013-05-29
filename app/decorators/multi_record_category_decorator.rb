@@ -1,5 +1,6 @@
 class MultiRecordCategoryDecorator < CategoryDecorator
   decorates :multi_record_category
+  delegate_all
 
   def create_record_link(response_id)
     h.link_to I18n.t('responses.edit.create_record'),

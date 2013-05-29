@@ -1,10 +1,12 @@
 class MultiChoiceQuestionReporter < QuestionReporter
+  delegate_all
+
   SELECTED_STRING     = "YES"
   NOT_SELECTED_STRING = "NO"
   BLANK_FIELD_FOR_QUESTION = ""
 
   def header
-    [super] + question.options.map(&:content)
+    [super] + model.options.map(&:content)
   end
 
   def formatted_answers_for(answers, options={})

@@ -1,5 +1,6 @@
 class PhotoQuestionDecorator < QuestionDecorator
   decorates :photo_question
+  delegate_all
 
   def input_tag(f, opts={})
     answer = f.object
