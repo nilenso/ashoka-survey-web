@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130514130610) do
+ActiveRecord::Schema.define(:version => 20130529063226) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20130514130610) do
     t.string   "photo_secure_token"
     t.string   "photo_tmp"
     t.integer  "record_id"
+    t.integer  "photo_file_size"
   end
 
   add_index "answers", ["question_id"], :name => "index_answers_on_question_id"
@@ -105,6 +106,7 @@ ActiveRecord::Schema.define(:version => 20130514130610) do
     t.string   "image_tmp"
     t.boolean  "private",                         :default => false
     t.boolean  "finalized",                       :default => false
+    t.integer  "image_file_size"
   end
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"
