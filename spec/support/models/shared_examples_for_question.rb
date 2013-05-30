@@ -16,11 +16,11 @@ shared_examples "a question" do
     it { should allow_mass_assignment_of(:image) }
   end
 
-  
+
   context "for images" do
     context "when encoding in base64" do
       it "returns the cached image if the remote image is still uploading" do
-        question = FactoryGirl.create :question
+        question = FactoryGirl.create(:question)
         question.image.stub(:root).and_return(Rails.root)
         question.image.stub(:cache_dir).and_return("spec/fixtures/images")
         question.image_tmp = 'sample.jpg'
@@ -28,14 +28,14 @@ shared_examples "a question" do
       end
 
       it "returns the remote image if it's done uploading" do
-        question = FactoryGirl.create :question_with_image
+        question = FactoryGirl.create(:photo_question)
         question.image_in_base64.should == Base64.encode64(File.read(question.image.thumb.path))
       end
     end
 
     context "when getting the URL" do
       it "returns the relative URL to the cached (local) image if the S3 version hasn't uploaded" do
-        question = FactoryGirl.create :question
+        question = FactoryGirl.create(:question)
         question.image.stub(:root).and_return(Rails.root)
         question.image.stub(:cache_dir).and_return("spec/fixtures/images")
         question.image_tmp = 'sample.jpg'
@@ -43,19 +43,19 @@ shared_examples "a question" do
       end
 
       it "returns the URL to the S3 version if it's uploaded" do
-        question = FactoryGirl.create :question_with_image
+        question = FactoryGirl.create(:photo_question)
         question.image_tmp = nil
         question.image_url.should == question.image.url
       end
 
       it "takes a format (medium or thumb) which it returns only for the S3 version" do
-        question = FactoryGirl.create :question_with_image
+        question = FactoryGirl.create(:photo_question)
         question.image_tmp = nil
         question.image_url(:thumb).should == question.image.thumb.url
       end
 
       it "returns nil if the question doesn't have an image" do
-        question = FactoryGirl.create :question
+        question = FactoryGirl.create(:question)
         question.image_url.should be_nil
       end
     end

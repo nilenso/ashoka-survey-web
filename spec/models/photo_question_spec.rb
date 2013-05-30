@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe PhotoQuestion do
-  it "is a question with type = 'PhotoQuestion'" do
-    question = FactoryGirl.create(:photo_question)
-    question.should be_a PhotoQuestion
-    question.type.should == "PhotoQuestion"
-  end
-
   context "when validating max length" do
     it { should allow_mass_assignment_of(:max_length) }
     it { should validate_numericality_of(:max_length) }

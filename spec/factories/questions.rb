@@ -59,5 +59,10 @@ FactoryGirl.define do
     factory :multi_choice_question, :parent => :question, :class => MultiChoiceQuestion do
       type 'MultiChoiceQuestion'
     end
+
+    factory :photo_question, :parent => :question, :class => PhotoQuestion do
+      type 'PhotoQuestion'
+      image { fixture_file_upload(Rails.root.to_s + '/spec/fixtures/images/sample.jpg', 'image/jpeg') }
+    end
   end
 end
