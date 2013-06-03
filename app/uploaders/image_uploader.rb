@@ -4,6 +4,8 @@ class ImageUploader < CarrierWave::Uploader::Base
 
   include CarrierWave::RMagick
 
+  before :cache, :generate_secure_token
+
   def store_dir
     "uploads/#{model.class.to_s.underscore}/#{mounted_as}/#{model.id}"
   end
@@ -21,15 +23,14 @@ class ImageUploader < CarrierWave::Uploader::Base
   end
 
   def filename
-    "#{secure_token(10)}" if original_filename.present?
+    if original_filename.present?
+      model.photo_secure_token
+    end
   end
 
   protected
-  def secure_token(length=16)
-    unless model.photo_secure_token
-      model.photo_secure_token = SecureRandom.hex(length / 2)
-      model.save
-    end
-    model.photo_secure_token
+
+  def generate_secure_token(file)
+    model.photo_secure_token = SecureRandom.hex(5)
   end
 end

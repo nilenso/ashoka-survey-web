@@ -29,7 +29,32 @@ describe ImageUploader do
     end
   end
 
-  it "knows the filename of the image" do
-    @uploader.filename.should == File.basename(@uploader.path)
+  context "when assigning a filename" do
+    it "assigns a random filename" do
+      question = FactoryGirl.create :question
+      uploader = ImageUploader.new(question, :image)
+      file =  File.open "#{Rails.root}/spec/fixtures/images/sample.jpg"
+      uploader.store!(file)
+      uploader.filename.should_not == 'sample.jpg'
+    end
+
+    it "returns the same filename for multiple invocations of the method" do
+      question = FactoryGirl.create :question
+      uploader = ImageUploader.new(question, :image)
+      file =  File.open "#{Rails.root}/spec/fixtures/images/sample.jpg"
+      uploader.store!(file)
+      uploader.filename.should == uploader.filename
+    end
+
+    it "changes the filename when a new image is uploaded" do
+      question = FactoryGirl.create :question
+      uploader = ImageUploader.new(question, :image)
+      file =  File.open "#{Rails.root}/spec/fixtures/images/sample.jpg"
+      uploader.store!(file)
+      old_filename = uploader.filename
+      file =  File.open "#{Rails.root}/spec/fixtures/images/sample.jpg"
+      uploader.store!(file)
+      uploader.filename.should_not == old_filename
+    end
   end
 end
