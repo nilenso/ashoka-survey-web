@@ -43,11 +43,15 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
     this.model.set(propertyHash)
 
   renderImageUploader: =>
+    loading_overlay = new SurveyBuilder.Views.LoadingOverlayView
     $(this.el).children(".upload_files").children(".fileupload").fileupload
       dataType: "json"
       url: @model.image_upload_url()
+      submit: =>
+        loading_overlay.show_overlay(I18n.t("js.uploading_image"))
       done: (e, data) =>
         this.model.set('image_url', data.result.image_url)
+        loading_overlay.hide_overlay()
         @renderImageUploader()
 
   hide : =>
