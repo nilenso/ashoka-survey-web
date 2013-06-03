@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130514130610) do
+ActiveRecord::Schema.define(:version => 20130603061953) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -102,7 +102,6 @@ ActiveRecord::Schema.define(:version => 20130514130610) do
     t.integer  "category_id"
     t.string   "image"
     t.string   "photo_secure_token"
-    t.string   "image_tmp"
     t.boolean  "private",                         :default => false
     t.boolean  "finalized",                       :default => false
   end

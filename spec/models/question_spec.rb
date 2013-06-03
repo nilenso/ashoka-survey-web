@@ -104,12 +104,6 @@ describe Question do
         question.should be_valid
       end
 
-      it "allows updating if the image_tmp field has changed" do
-        question = FactoryGirl.create(:question, :finalized, :image_tmp => nil)
-        question.image = "some_image"
-        question.should be_valid
-      end
-
       it "does not allow updation of any other field" do
         question = FactoryGirl.create(:question, :finalized, :max_length => 1)
         question.max_length = 3

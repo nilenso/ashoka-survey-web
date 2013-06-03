@@ -11,7 +11,6 @@ class Question < ActiveRecord::Base
 
   has_many :answers, :dependent => :destroy
   mount_uploader :image, ImageUploader
-  store_in_background  :image
 
   default_scope :order => 'order_number'
   scope :not_private, where("private IS NOT true")
@@ -21,15 +20,8 @@ class Question < ActiveRecord::Base
 
   before_destroy { |question| !question.finalized? }
 
-  def image_url(format=nil)
-    return "/#{image.cache_dir}/#{image_tmp}" if image_tmp
-    return image.url(format) if image.file
-  end
-
   def image_in_base64
-    file =  File.read("#{image.root}/#{image.cache_dir}/#{image_tmp}") if image_tmp
-    file = image.thumb.file.read if image.thumb.file.try(:exists?)
-    return Base64.encode64(file) if file
+    Base64.encode64(image.thumb.file.read)
   end
 
   def create_blank_answers(params={})
@@ -125,7 +117,7 @@ class Question < ActiveRecord::Base
   end
 
   def allow_limited_updates_for_finalized
-    allowed_attributes = ['content', 'order_number', 'private', 'identifier', 'image', 'image_tmp']
+    allowed_attributes = ['content', 'order_number', 'private', 'identifier', 'image']
     disallowed_attributes = self.changed - allowed_attributes
     disallowed_attributes.each {|attr| errors.add(attr.to_sym, :not_allowed) }
   end
