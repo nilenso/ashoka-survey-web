@@ -23,6 +23,7 @@ ActiveRecord::Schema.define(:version => 20130603061953) do
     t.string   "photo_secure_token"
     t.string   "photo_tmp"
     t.integer  "record_id"
+    t.integer  "photo_file_size"
   end
 
   add_index "answers", ["question_id"], :name => "index_answers_on_question_id"
@@ -104,6 +105,7 @@ ActiveRecord::Schema.define(:version => 20130603061953) do
     t.string   "photo_secure_token"
     t.boolean  "private",                         :default => false
     t.boolean  "finalized",                       :default => false
+    t.integer  "image_file_size"
   end
 
   add_index "questions", ["survey_id"], :name => "index_questions_on_survey_id"

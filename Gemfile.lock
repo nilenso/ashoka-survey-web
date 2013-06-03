@@ -342,6 +342,7 @@ DEPENDENCIES
   rmagick (= 2.12.2)
   rspec-http
   rspec-rails (~> 2.11.4)
+  ruby-progressbar
   sass-rails (~> 3.2.3)
   shoulda-matchers (~> 2.0.0)
   simplecov (~> 0.7.1)
