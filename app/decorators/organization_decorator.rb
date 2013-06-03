@@ -9,6 +9,16 @@ class OrganizationDecorator < Draper::Decorator
     h.pluralize(survey_count, "Survey")
   end
 
+  def asset_space_in_bytes
+    question_space = Question.where("image_file_size IS NOT NULL AND survey_id IN (?)", surveys).sum("image_file_size")
+    answer_space = Answer.where("photo_file_size IS NOT NULL AND response_id IN (?)", responses).sum("photo_file_size")
+    question_space + answer_space
+  end
+
+  def asset_space_in_words
+    h.number_to_human_size(asset_space_in_bytes)
+  end
+
   def response_count
     responses.count
   end

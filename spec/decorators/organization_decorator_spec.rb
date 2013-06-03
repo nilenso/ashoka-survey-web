@@ -91,4 +91,34 @@ describe OrganizationDecorator do
       organization.survey_count_grouped_by_month.should == []
     end
   end
+
+  context "when calculating asset space" do
+    it "calculates the cumulative file size for questions and answers" do
+      organization = OrganizationDecorator.decorate(FactoryGirl.build(:organization))
+      survey = FactoryGirl.create(:survey, :organization_id => organization.id)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => organization.id)
+      question = FactoryGirl.create(:question, :survey => survey, :image_file_size => 2048)
+      answer = FactoryGirl.create(:answer, :response => response, :photo_file_size => 1024)
+      organization.asset_space_in_bytes.should == 3072
+    end
+
+    it "doesn't include questions and answers from other organizations" do
+      organization = OrganizationDecorator.decorate(FactoryGirl.build(:organization))
+      other_organization = OrganizationDecorator.decorate(FactoryGirl.build(:organization))
+      survey = FactoryGirl.create(:survey, :organization_id => other_organization.id)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => other_organization.id)
+      question = FactoryGirl.create(:question, :survey => survey, :image_file_size => 2048)
+      answer = FactoryGirl.create(:answer, :response => response, :photo_file_size => 1024)
+      organization.asset_space_in_bytes.should == 0
+    end
+
+    it "outputs the asset size in a human readable format" do
+      organization = OrganizationDecorator.decorate(FactoryGirl.build(:organization))
+      survey = FactoryGirl.create(:survey, :organization_id => organization.id)
+      response = FactoryGirl.create(:response, :survey => survey, :organization_id => organization.id)
+      question = FactoryGirl.create(:question, :survey => survey, :image_file_size => 2048)
+      answer = FactoryGirl.create(:answer, :response => response, :photo_file_size => 1024)
+      organization.asset_space_in_words.should == "3 KB"
+    end
+  end
 end
