@@ -39,7 +39,7 @@ module Api
         authorize! :update, question.try(:survey)
         question.update_attributes({ :image => params[:image] })
         if question.save
-          render :json => { :image_url => question.image_url }
+          render :json => { :image_url => question.image_url(:thumb) }
         else
           render :json => { :errors => question.errors }
         end
