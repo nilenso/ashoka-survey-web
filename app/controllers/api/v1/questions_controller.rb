@@ -49,7 +49,6 @@ module Api
         survey = Survey.find_by_id(params[:survey_id])
         authorize! :read, survey
         methods = [:type, :image_url]
-        methods << :image_in_base64 if request.referrer.nil?
         if survey
           render :json => survey.first_level_questions.to_json(:methods => methods)
         else
@@ -61,7 +60,6 @@ module Api
         question = Question.find_by_id(params[:id])
         authorize! :read, question.try(:survey)
         methods = [:type, :image_url, :has_multi_record_ancestor]
-        methods << :image_in_base64 if request.referrer.nil?
         if question
           render :json => question.to_json(:methods => methods)
         else
