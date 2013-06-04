@@ -9,7 +9,7 @@ namespace :s3 do
     bar = ProgressBar.create(:format => '%a |%b>%i| %p%% %t', :total => questions_count)
     questions.each do |question|
       file = question.image.file
-      question.update_image_size if file.exists?
+      question.update_image_size! if file.exists?
       bar.increment
     end
 
@@ -22,7 +22,7 @@ namespace :s3 do
     answers_count = answers.count
     bar = ProgressBar.create(:format => '%a |%b>%i| %p%% %t', :total => answers_count)
     answers.each do |answer|
-      answer.update_photo_size
+      answer.update_photo_size!
       bar.increment
     end
 
