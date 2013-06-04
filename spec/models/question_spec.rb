@@ -26,6 +26,42 @@ describe Question do
     end
   end
 
+  context "callbacks" do
+    context "when setting the photo_file_size" do
+      before(:each) do
+        ImageUploader.enable_processing = true
+      end
+
+      after(:each) do
+        ImageUploader.enable_processing = false
+      end
+
+      it "sets the total size of all three versions of the image" do
+        image = fixture_file_upload('/images/sample.jpg')
+        question = FactoryGirl.create(:question, :image => image)
+        total_size = question.image.file.size + question.image.thumb.file.size + question.image.medium.file.size
+        question.photo_file_size.should == total_size
+      end
+
+      it "sets the size to nil if the image is removed" do
+        image = fixture_file_upload('/images/sample.jpg')
+        question = FactoryGirl.create(:question, :image => image)
+        question.remove_image!
+        question.save
+        question.reload.photo_file_size.should be_nil
+      end
+
+      it "changes the size when the image is changed" do
+        image = fixture_file_upload('/images/sample.jpg')
+        question = FactoryGirl.create(:question, :image => image)
+        expect do
+          question.image = fixture_file_upload('/images/another.jpg')
+          question.save
+        end.to change { question.photo_file_size }
+      end
+    end
+  end
+
   context "validation" do
     context "for a finalized survey" do
       it "allows creating a non-mandatory question" do

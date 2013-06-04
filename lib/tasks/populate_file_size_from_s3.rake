@@ -9,9 +9,7 @@ namespace :s3 do
     bar = ProgressBar.create(:format => '%a |%b>%i| %p%% %t', :total => questions_count)
     questions.each do |question|
       file = question.image.file
-      if file.exists?
-        question.update_attribute(:photo_file_size, file.size)
-      end
+      question.update_image_size if file.exists?
       bar.increment
     end
 
