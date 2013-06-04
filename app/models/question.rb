@@ -18,7 +18,7 @@ class Question < ActiveRecord::Base
 
   delegate :question, :to => :parent, :prefix => true
 
-  after_save :update_image_size, :if => :image_changed?
+  after_save :update_image_size!, :if => :image_changed?
   before_destroy { |question| !question.finalized? }
 
   def image_in_base64
@@ -103,7 +103,7 @@ class Question < ActiveRecord::Base
     QuestionReporter.decorate(self)
   end
 
-  def update_image_size
+  def update_image_size!
     if image.present?
       update_column(:photo_file_size, image.file.size + image.thumb.file.size + image.medium.file.size)
     else

@@ -92,7 +92,7 @@ class Answer < ActiveRecord::Base
     !has_not_been_answered?
   end
 
-  def update_photo_size
+  def update_photo_size!
     if photo.present?
       update_column(:photo_file_size, photo.file.size + photo.thumb.file.size + photo.medium.file.size)
     else
