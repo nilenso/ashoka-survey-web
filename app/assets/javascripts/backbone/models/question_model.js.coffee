@@ -34,7 +34,6 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     @unset('image', {silent: true})
     @unset('image_content_type', {silent: true})
     @unset('image_file_name', {silent: true})
-    @unset('image_file_size', {silent: true})
     @unset('image_updated_at', {silent: true})
 
   success_callback: (model, response) =>

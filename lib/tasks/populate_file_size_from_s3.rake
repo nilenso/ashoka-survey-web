@@ -4,13 +4,13 @@ namespace :s3 do
   desc "Populates file size for image assets from s3"
   task :cache_file_size => :environment do
     puts "Setting file size for questions"
-    questions = Question.unscoped.where("image IS NOT NULL AND image_file_size IS NULL")
+    questions = Question.unscoped.where("image IS NOT NULL AND photo_file_size IS NULL")
     questions_count = questions.count
     bar = ProgressBar.create(:format => '%a |%b>%i| %p%% %t', :total => questions_count)
     questions.each do |question|
       file = question.image.file
       if file.exists?
-        question.update_attribute(:image_file_size, file.size)
+        question.update_attribute(:photo_file_size, file.size)
       end
       bar.increment
     end
