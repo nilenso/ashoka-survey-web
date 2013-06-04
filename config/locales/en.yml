@@ -53,6 +53,7 @@ en:
       heading: Dashboard
     show:
       heading: Dashboard for %{organization_name}
+      asset_space: asset space
 
   surveys:
     confirm_finalize: "The survey can't be edited after this. Are you sure?"

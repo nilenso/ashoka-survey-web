@@ -42,12 +42,13 @@ li.organizations-dashboard-organization {
   @include clearfix;
   width: 60%;
   margin: 30px auto 0;
+  padding-left: 0;
 
   .organization-dashboard-overview-item {
-    width: 15%;
+    width: 12.5%;
     float: left;
     border: 1px solid #eee;
-    padding: 10px 8% 5px;
+    padding: 10px 6% 5px;
     text-align: center;
     &:not(:last-child) { border-right: none; }
     &:first-child { @include border-left-radius(5px); }

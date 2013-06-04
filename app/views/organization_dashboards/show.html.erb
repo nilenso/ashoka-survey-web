@@ -21,6 +21,11 @@
     <span class="count"><%= @decorated_organization.user_count %></span>
     <p class="label"><%= t("activerecord.models.user").pluralize(@decorated_organization.user_count) %></p>
   </li>
+
+  <li class="organization-dashboard-overview-item">
+    <span class="count"><%= @decorated_organization.asset_space_in_words %></span>
+    <p class="label"><%= t(".asset_space") %></p>
+  </li>
 </ul>
 
 <div class="organization-dashboard-graphs">
