@@ -14,7 +14,7 @@ class Answer < ActiveRecord::Base
   has_many :choices, :dependent => :destroy
   attr_accessible :photo
   mount_uploader :photo, ImageUploader
-  store_in_background :photo
+  store_in_background :photo, AnswerPhotoWorker
   validate :maximum_photo_size, :if => :content_present?
   validates_numericality_of :content, :if => :numeric_question?
   after_save :touch_multi_choice_answer
@@ -90,6 +90,14 @@ class Answer < ActiveRecord::Base
 
   def has_been_answered?
     !has_not_been_answered?
+  end
+
+  def update_photo_size
+    if photo.present?
+      update_column(:photo_file_size, photo.file.size + photo.thumb.file.size + photo.medium.file.size)
+    else
+      update_column(:photo_file_size, nil)
+    end
   end
 
   private

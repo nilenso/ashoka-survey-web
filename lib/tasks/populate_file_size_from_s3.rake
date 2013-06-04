@@ -22,8 +22,7 @@ namespace :s3 do
     answers_count = answers.count
     bar = ProgressBar.create(:format => '%a |%b>%i| %p%% %t', :total => answers_count)
     answers.each do |answer|
-      answer.photo_file_size = answer.photo.file.size
-      answer.save
+      answer.update_photo_size
       bar.increment
     end
 

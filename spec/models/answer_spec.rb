@@ -28,6 +28,41 @@ describe Answer do
       end
     end
 
+    context "when updating the photo_file_size" do
+      before(:each) do
+        ImageUploader.enable_processing = true
+      end
+
+      after(:each) do
+        ImageUploader.enable_processing = false
+      end
+
+      it "sets the total size of all three versions of the image" do
+        photo = fixture_file_upload('/images/sample.jpg')
+        answer = FactoryGirl.create(:answer, :photo => photo)
+        answer.update_photo_size
+        total_size = answer.photo.file.size + answer.photo.thumb.file.size + answer.photo.medium.file.size
+        answer.photo_file_size.should == total_size
+      end
+
+      it "sets the size to nil if the image is removed" do
+        photo = fixture_file_upload('/images/sample.jpg')
+        answer = FactoryGirl.create(:answer, :photo => photo)
+        answer.remove_photo!
+        answer.update_photo_size
+        answer.reload.photo_file_size.should be_nil
+      end
+
+      it "changes the size when the image is changed" do
+        photo = fixture_file_upload('/images/sample.jpg')
+        answer = FactoryGirl.create(:answer, :photo => photo)
+        answer.photo = fixture_file_upload('/images/another.jpg')
+        expect do
+          answer.update_photo_size
+        end.to change { answer.photo_file_size }
+      end
+    end
+
     context "when validating max length" do
       it "does not save if the content of the answer is larger than the max-length for a RatingQuestion" do
         question = FactoryGirl.create(:rating_question, :finalized, :max_length => 7)
