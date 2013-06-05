@@ -3,7 +3,7 @@ class NumericQuestionDecorator < QuestionDecorator
   delegate_all
 
   def input_tag(f, opts={})
-    super(f,  :as => :number,
+    super(f,  :as => :string,
               :hint => numeric_question_hint(model.min_value, model.max_value),
               :input_html => { :disabled => opts[:disabled] })
   end
