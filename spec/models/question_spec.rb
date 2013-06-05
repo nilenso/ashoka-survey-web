@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'fakeweb'
+include ActionDispatch::TestProcess
 
 describe Question do
   context "scopes" do
@@ -356,7 +356,7 @@ describe Question do
     it "duplicates the question's image" do
       image = fixture_file_upload('/images/sample.jpg', 'image/jpeg')
       question = FactoryGirl.create(:question, :image => image)
-      FakeWeb.register_uri(:get, question.image.file.url, :body => "IMAGE", :content_type => "image/foo")
+      FakeWeb.register_uri(:get, question.image.file.url, :body => "IMAGE")
       duplicated_question = question.duplicate(survey.id)
       duplicated_question.image_url.should_not be_nil
       duplicated_question.image_url.should_not == question.image_url
