@@ -19,8 +19,11 @@ shared_examples "a question" do
 
   context "for images" do
     it "returns the image in base64 format" do
-      question = FactoryGirl.create(:photo_question)
-      question.image_in_base64.should == Base64.encode64(File.read(question.image.thumb.path))
+      image = fixture_file_upload('/images/sample.jpg')
+      image_content = image.read
+      question = FactoryGirl.create(:question, :image => image)
+      question.image.thumb.file.stub(:read).and_return(image_content)
+      question.image_in_base64.should == Base64.encode64(image_content)
     end
   end
 end

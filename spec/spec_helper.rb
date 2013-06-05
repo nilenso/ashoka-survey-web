@@ -10,13 +10,17 @@ require 'rspec/autorun'
 require 'rubygems'
 
 Fog.mock!
-ENV['S3_SECRET'] = "Foo"
-ENV['S3_ACCESS_KEY'] = "Bar"
-
 CarrierWave.configure do |config|
-  config.storage = :file
   config.enable_processing = false
 end
+
+connection = Fog::Storage.new(
+  :aws_access_key_id      => ENV['S3_ACCESS_KEY'],
+  :aws_secret_access_key  => ENV['S3_SECRET'],
+  :provider               => 'AWS',
+  :region                 => "us-east-1"
+)
+connection.directories.create(:key => ENV['S3_BUCKET'])
 
 LOGGED_IN_ORG_ID = 1
 Dir[Rails.root.join("spec/support/**/*.rb")].each {|f| require f}
@@ -36,17 +40,17 @@ RSpec.configure do |config|
 
   OmniAuth.config.test_mode = true
   OmniAuth.config.mock_auth[:user_owner] = OmniAuth::AuthHash.new({
-    :provider => 'user_owner',
-    :uid => '12345',
-    :info => {
-      :name => 'tim',
-      :email => 'smit@smit.smit',
-      :role => 'user',
-      :org_id => '1098',
-      :org_type => 'CSO',
-      :organizations => [{:id => 123, :name => 'nid'}]
-    },
-    :credentials => { :token => "thisisatoken" }
+                                                                    :provider => 'user_owner',
+                                                                    :uid => '12345',
+                                                                    :info => {
+                                                                      :name => 'tim',
+                                                                      :email => 'smit@smit.smit',
+                                                                      :role => 'user',
+                                                                      :org_id => '1098',
+                                                                      :org_type => 'CSO',
+                                                                      :organizations => [{:id => 123, :name => 'nid'}]
+                                                                    },
+                                                                    :credentials => { :token => "thisisatoken" }
   })
 
   config.before(:each) do

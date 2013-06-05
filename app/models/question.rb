@@ -36,8 +36,9 @@ class Question < ActiveRecord::Base
     question.survey_id = survey_id
     question.finalized = false
     question.options << options.map { |option| option.duplicate(survey_id) } if self.respond_to? :options
+    question.remote_image_url = self.image.url
     question.save(:validate => false)
-    question
+    Question.find(question.id) # Need to do this to clear the CarrierWave instance variables that got duplicated
   end
 
   def copy_with_order

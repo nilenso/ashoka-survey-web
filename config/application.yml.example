@@ -1,7 +1,29 @@
-OAUTH_ID: # Application ID of the OAuth provider.
-OAUTH_SECRET: # Secret of the OAuth provider.
-OAUTH_SERVER_URL: # URL where the OAuth Provider instance is hosted.
-S3_ACCESS_KEY: # S3 Access key.
-S3_SECRET: # S3 Secret Key
-BITLY_USERNAME: # Username of your bit.ly account
-BITLY_API_KEY: # API key from your bit.ly account
+production:
+  OAUTH_ID: # Application ID of the OAuth provider.
+  OAUTH_SECRET: # Secret of the OAuth provider.
+  OAUTH_SERVER_URL: # URL where the OAuth Provider instance is hosted.
+  S3_ACCESS_KEY: # S3 Access key.
+  S3_SECRET: # S3 Secret Key
+  S3_BUCKET: # S3 Bucket Name
+  BITLY_USERNAME: # Username of your bit.ly account
+  BITLY_API_KEY: # API key from your bit.ly account
+
+development:
+  OAUTH_ID: # Application ID of the OAuth provider.
+  OAUTH_SECRET: # Secret of the OAuth provider.
+  OAUTH_SERVER_URL: # URL where the OAuth Provider instance is hosted.
+  S3_ACCESS_KEY: # S3 Access key.
+  S3_SECRET: # S3 Secret Key
+  S3_BUCKET: # S3 Bucket Name
+  BITLY_USERNAME: # Username of your bit.ly account
+  BITLY_API_KEY: # API key from your bit.ly account
+
+test:
+  OAUTH_ID: # Application ID of the OAuth provider.
+  OAUTH_SECRET: # Secret of the OAuth provider.
+  OAUTH_SERVER_URL: # URL where the OAuth Provider instance is hosted.
+  S3_ACCESS_KEY: # S3 Access key.
+  S3_SECRET: # S3 Secret Key
+  S3_BUCKET: # S3 Bucket Name
+  BITLY_USERNAME: # Username of your bit.ly account
+  BITLY_API_KEY: # API key from your bit.ly account
