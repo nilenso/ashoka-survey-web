@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'FakeWeb'
+require 'fakeweb'
 
 describe Question do
   context "scopes" do
