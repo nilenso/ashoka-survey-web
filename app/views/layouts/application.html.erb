@@ -7,6 +7,23 @@
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
   </head>
+
+  <script type="text/javascript">
+    I18n.defaultLocale = "<%= I18n.default_locale %>";
+    I18n.locale = "<%= I18n.locale %>";
+    var user_info = {};
+    <% if user_currently_logged_in? %>
+        user_info = {
+          user_id: <%= current_user_info.user_id %>,
+          name: "<%= current_user_info.name %>",
+          email: "<%= current_user_info.email %>",
+          org_id: <%= current_user_info.org_id %>,
+          role: "<%= current_user_info.role %>"
+        };
+    <% end %>
+    SurveyApp.tracker = new SurveyApp.Tracker(user_info, <%= Rails.env.development? %>);
+   </script>
+
   <body<%= yield :body_attributes %>>
     <div id="page">
       <%= render "layouts/header" %>
@@ -23,9 +40,5 @@
 
       <%= render "layouts/footer" %>
     </div>
-    <script type="text/javascript">
-      I18n.defaultLocale = "<%= I18n.default_locale %>";
-      I18n.locale = "<%= I18n.locale %>";
-    </script>
   </body>
 </html>

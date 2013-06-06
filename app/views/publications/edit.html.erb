@@ -7,7 +7,7 @@
 </header>
 
 <div id="publish_survey">
-  <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :put do |f| %>
+  <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :put, :html => { :id => "publish-form" } do |f| %>
     <ol>
       <%= f.input :expiry_date, :as => :string, :required => true, :input_html => { :value => @survey.expiry_date, :class => 'expiry-date' } %>
       <%= f.input :public, :as => :boolean, :label => "Crowd source", :input_html => { :class => "crowd-source-toggle", :checked => @survey.public } %>
@@ -81,5 +81,6 @@
 <script type="text/javascript">
   $(document).ready(function(){
     new SurveyApp.SurveyPublisher($("#publish_survey"));
+    SurveyApp.tracker.track_forms("#publish-form", "Published a survey", { Survey: "<%= @survey.name %>" });
   });
 </script>

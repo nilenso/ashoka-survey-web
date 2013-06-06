@@ -8,7 +8,7 @@
 </header>
 
 <div id="publish_survey">
-  <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :delete do |f| %>
+  <%= semantic_form_for @survey, :url => survey_publication_path(@survey.id), :method => :delete, :html => { :id => "unpublish-form" } do |f| %>
 
     <div class="publish-to-users">
       <% if @unpublished_users.present? %>
@@ -36,3 +36,6 @@
   <% end %>
 </div>
 
+<script>
+  SurveyApp.tracker.track_forms("#unpublish-form", "Unpublished a survey", { Survey: "<%= @survey.name %>" });
+</script>

@@ -35,6 +35,7 @@
 //= require backbone_datalink
 //= require backbone/survey_builder
 //= require js-routes
+//= require mixpanel
 //= require_tree .
 
 var SurveyApp = {};
