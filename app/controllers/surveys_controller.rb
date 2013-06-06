@@ -1,9 +1,12 @@
 require 'will_paginate/array'
 
 class SurveysController < ApplicationController
-  load_and_authorize_resource
+  load_resource :only => :index
+  authorize_resource
   after_filter :only => [:create] { send_to_mixpanel("Survey created") }
-
+  after_filter :only => [:destroy] { send_to_mixpanel("Survey destroyed", {:survey => @survey.name}) if @survey.present? }
+  after_filter :only => [:finalize] { send_to_mixpanel("Survey finalized", {:survey => @survey.name}) if @survey.present? }
+  after_filter :only => [:archive] { send_to_mixpanel("Survey archived", {:survey => @survey.name}) if @survey.present? }
 
   def index
     @surveys ||= Survey.none
@@ -14,8 +17,8 @@ class SurveysController < ApplicationController
   end
 
   def destroy
-    survey = Survey.find(params[:id])
-    survey.destroy
+    @survey = Survey.find(params[:id])
+    @survey.destroy
     flash[:notice] = t "flash.survey_deleted"
     redirect_to(surveys_path)
   end
@@ -38,18 +41,18 @@ class SurveysController < ApplicationController
   end
 
   def finalize
-    survey = Survey.find(params[:survey_id])
-    survey.finalize
-    flash[:notice] = t "flash.survey_finalized", :survey_name => survey.name
-    redirect_to edit_survey_publication_path(survey.id)
+    @survey = Survey.find(params[:survey_id])
+    @survey.finalize
+    flash[:notice] = t "flash.survey_finalized", :survey_name => @survey.name
+    redirect_to edit_survey_publication_path(@survey.id)
   end
 
   def archive
-    survey = Survey.find(params[:survey_id])
-    if survey.archive
-      flash[:notice] = t("flash.survey_archived", :survey_name => survey.name)
+    @survey = Survey.find(params[:survey_id])
+    if @survey.archive
+      flash[:notice] = t("flash.survey_archived", :survey_name => @survey.name)
     else
-      flash[:error] = survey.errors.messages
+      flash[:error] = @survey.errors.messages
     end
     redirect_to root_path
   end

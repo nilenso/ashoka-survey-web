@@ -30,7 +30,7 @@ describe Api::V1::SurveysController do
       FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID, :finalized => true)
       get :index
       returned_json = JSON.parse(response.body).first
-       returned_json.keys.should =~ Survey.attribute_names
+      returned_json.keys.should =~ Survey.attribute_names
     end
 
     it "returns only the finalized surveys" do
@@ -61,7 +61,7 @@ describe Api::V1::SurveysController do
       returned_json = JSON.parse response.body
       returned_json.length.should == 5
       returned_json.each do |survey|
-       survey[:archived].should_not be
+        survey[:archived].should_not be
       end
     end
 
@@ -167,7 +167,6 @@ describe Api::V1::SurveysController do
   end
 
   context "PUT 'update'" do
-
     it "updates the relevant survey" do
       put :update, :id => survey.id, :survey => { :name => "Smit" }
       response.should be_ok
@@ -183,6 +182,12 @@ describe Api::V1::SurveysController do
       put :update, :id => survey.id, :survey => { :expiry_date => -5.days.from_now }
       response.should_not be_ok
     end
+
+    it "sends an event to mixpanel" do
+      expect do
+        put :update, :id => survey.id, :survey => { :name => "Smit" }
+      end.to change { Delayed::Job.count }.by(1)
+    end
   end
 
   context "POST 'duplicate'" do
@@ -196,8 +201,7 @@ describe Api::V1::SurveysController do
       survey = FactoryGirl.create(:survey, :organization_id => 123)
       expect {
         post :duplicate, :id => survey.id
-      }.to change { Delayed::Job.count }.by 1
-      Delayed::Job.last.queue.should == 'survey_duplication'
+      }.to change { Delayed::Job.where(:queue => "survey_duplication").count }.by 1
     end
 
     it "renders the ID of the delayed job in JSON" do
@@ -205,7 +209,7 @@ describe Api::V1::SurveysController do
       request.env["HTTP_REFERER"] = 'http://google.com'
       post :duplicate, :id => survey.id
       json = JSON.parse(response.body).symbolize_keys
-      json[:job_id].should == Delayed::Job.last.id
+      json[:job_id].should == Delayed::Job.where(:queue => "survey_duplication").last.id
     end
 
     context "when the user duplicating the survey doesn't belong to the same organization as the user who created it" do
@@ -219,6 +223,12 @@ describe Api::V1::SurveysController do
         duplicated_survey.should_not == survey
         duplicated_survey.organization_id.should == 123
       end
+    end
+
+    it "sends an event to mixpanel" do
+      expect do
+        post :duplicate, :id => survey.id
+      end.to change { Delayed::Job.where(:queue => "mixpanel").count }.by(1)
     end
   end
 end

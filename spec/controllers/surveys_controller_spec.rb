@@ -77,6 +77,12 @@ describe SurveysController do
       delete :destroy, :id => survey.id
       response.should redirect_to surveys_path
     end
+
+    it "sends an event to mixpanel" do
+      expect do
+        delete :destroy, :id => survey.id
+      end.to change { Delayed::Job.count }.by(1)
+    end
   end
 
   context "POST 'create'" do
@@ -109,6 +115,12 @@ describe SurveysController do
       it "creates a survey with placeholder attrs if params[:survey] doesn't exist" do
         expect { post :create }.to change { Survey.count }.by(1)
       end
+    end
+
+    it "sends an event to mixpanel" do
+      expect do
+        post :create
+      end.to change { Delayed::Job.count }.by(1)
     end
   end
 
@@ -151,6 +163,12 @@ describe SurveysController do
       put :finalize, :survey_id => @survey.id
       flash.notice.should_not be_nil
     end
+
+    it "sends an event to mixpanel" do
+      expect do
+        post :finalize, :survey_id => @survey.id
+      end.to change { Delayed::Job.count }.by(1)
+    end
   end
 
   context "PUT archive" do
@@ -179,6 +197,12 @@ describe SurveysController do
       put :archive, :survey_id => @survey.id
       put :archive, :survey_id => @survey.id
       flash[:error].should_not be_nil
+    end
+
+    it "sends an event to mixpanel" do
+      expect do
+        post :archive, :survey_id => @survey.id
+      end.to change { Delayed::Job.count }.by(1)
     end
   end
 

@@ -4,6 +4,9 @@ module Api
       caches_action :show, :if => :survey_finalized?
       authorize_resource :except => [:identifier_questions, :questions_count]
 
+      after_filter :only => [:update] { send_to_mixpanel("Survey edited", {:survey => @survey.name}) if @survey.present? }
+      after_filter :only => [:duplicate] { send_to_mixpanel("Survey duplicated", {:survey => @survey.name}) if @survey.present? }
+
       def index
         surveys = Survey.accessible_by(current_ability).active_plus(extra_survey_ids)
         render :json => surveys
@@ -37,17 +40,17 @@ module Api
       end
 
       def update
-        survey = Survey.find_by_id(params[:id])
-        if survey && survey.update_attributes(params[:survey])
-          render :json => survey.to_json
+        @survey = Survey.find_by_id(params[:id])
+        if @survey && @survey.update_attributes(params[:survey])
+          render :json => @survey.to_json
         else
-          render :json => survey.try(:errors).try(:full_messages), :status => :bad_request
+          render :json => @survey.try(:errors).try(:full_messages), :status => :bad_request
         end
       end
 
       def duplicate
-        survey = Survey.find(params[:id])
-        job = survey.delay(:queue => 'survey_duplication').duplicate(:organization_id => current_user_org)
+        @survey = Survey.find(params[:id])
+        job = @survey.delay(:queue => 'survey_duplication').duplicate(:organization_id => current_user_org)
         render :json => { :job_id => job.id }
       end
 
