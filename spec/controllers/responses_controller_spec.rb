@@ -370,6 +370,14 @@ describe ResponsesController do
       put :update, :id => res.id, :survey_id => survey.id
       res.reload.should_not be_blank
     end
+
+    it "sends an event to mixpanel" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res = FactoryGirl.create(:response, :survey => survey)
+      expect do
+        put :update, :id => res.id, :survey_id => survey.id
+      end.to change { Delayed::Job.where(:queue => "mixpanel").count }.by(1)
+    end
   end
 
   context "PUT 'complete'" do
@@ -419,6 +427,12 @@ describe ResponsesController do
       flash[:notice].should_not be_nil
     end
 
+    it "sends an event to mixpanel" do
+      expect do
+        put :complete, :id => resp.id, :survey_id => resp.survey_id
+      end.to change { Delayed::Job.where(:queue => "mixpanel").count }.by(1)
+    end
+
     it "marks the response incomplete if save is unsuccessful" do
       survey = FactoryGirl.create(:survey, :organization_id => 1)
       question = FactoryGirl.create(:question, :finalized, :survey => survey, :mandatory => true)
@@ -466,6 +480,12 @@ describe ResponsesController do
     it "redirects to the survey index page" do
       delete :destroy, :id => res.id, :survey_id => survey.id
       response.should redirect_to survey_responses_path
+    end
+
+    it "sends an event to mixpanel" do
+      expect do
+        delete :destroy, :id => res.id, :survey_id => survey.id
+      end.to change { Delayed::Job.where(:queue => "mixpanel").count }.by(1)
     end
   end
 end

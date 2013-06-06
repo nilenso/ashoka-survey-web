@@ -6,6 +6,8 @@ class ResponsesController < ApplicationController
   before_filter :authorize_public_response, :only => :create
   before_filter :survey_not_expired, :only => :create
 
+  after_filter :only => [:destroy] { send_to_mixpanel("Response deleted", {:survey => @response.survey.name}) if @response.present? }
+
   def index
     @user_names = User.names_for_ids(access_token, @responses.map(&:user_id).uniq)
     @organization_names = Organization.all(access_token)
@@ -54,6 +56,7 @@ class ResponsesController < ApplicationController
     @response = ResponseDecorator.find(params[:id])
     @response.update_column(:blank, false)
     if @response.update_attributes(params[:response])
+      send_to_mixpanel("Response updated", { :survey => @response.survey.name })
       redirect_to :back, :notice => "Successfully updated"
     else
       flash[:error] = "Error"
@@ -66,7 +69,12 @@ class ResponsesController < ApplicationController
     @response.update_column(:blank, false)
     was_complete = @response.complete?
     answers_attributes = params.try(:[],:response).try(:[], :answers_attributes)
-    @response.valid_for?(answers_attributes) ? complete_valid_response : revert_response(was_complete, params[:response])
+    if @response.valid_for?(answers_attributes)
+      send_to_mixpanel("Response completed", { :survey => @response.survey.name })
+      complete_valid_response
+    else
+      revert_response(was_complete, params[:response])
+    end
   end
 
   def destroy
