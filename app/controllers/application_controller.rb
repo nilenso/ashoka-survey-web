@@ -92,16 +92,28 @@ class ApplicationController < ActionController::Base
     "#{ENV['OAUTH_SERVER_URL']}/organizations/#{current_user_org}/users/new"
   end
 
+  def send_to_mixpanel(event_name, attributes = {})
+    MixPanel.track(event_name, attributes, current_user_info, mixpanel_env)
+  end
+
   private
 
-  def authorize_profiler
-    unless Rails.env.production?
-      Rack::MiniProfiler.authorize_request
+    def authorize_profiler
+      unless Rails.env.production?
+        Rack::MiniProfiler.authorize_request
+      end
     end
-  end
 
-  def set_locale
-    I18n.locale = params[:locale] || I18n.default_locale
-  end
+    def set_locale
+      I18n.locale = params[:locale] || I18n.default_locale
+    end
 
+    def mixpanel_env
+      {
+        'REMOTE_ADDR' => request.env['REMOTE_ADDR'],
+        'HTTP_X_FORWARDED_FOR' => request.env['HTTP_X_FORWARDED_FOR'],
+        'rack.session' => request.env['rack.session'].to_hash,
+        'mixpanel_events' => request.env['mixpanel_events']
+      }
+    end
 end

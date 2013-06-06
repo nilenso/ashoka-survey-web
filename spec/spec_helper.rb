@@ -65,6 +65,6 @@ end
 
 def sign_in_as(role)
   session[:user_id] = 123
-  session[:user_info] = { :role => role, :org_id => LOGGED_IN_ORG_ID }
+  session[:user_info] = OmniAuth::AuthHash.new({ :role => role, :org_id => LOGGED_IN_ORG_ID })
   session[:access_token] = "123"
 end

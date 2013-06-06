@@ -2,6 +2,8 @@ require 'will_paginate/array'
 
 class SurveysController < ApplicationController
   load_and_authorize_resource
+  after_filter :only => [:create] { send_to_mixpanel("Survey created") }
+
 
   def index
     @surveys ||= Survey.none
