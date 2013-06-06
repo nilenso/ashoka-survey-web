@@ -194,26 +194,37 @@ describe PublicationsController do
       response.should redirect_to surveys_path
     end
 
-    context "DELETE 'destroy'" do
-      let!(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :finalized => true) }
+    it "sends an event to mixpanel" do
+      expect do
+        put :update, :survey_id => survey.id, :survey => {:expiry_date => survey.expiry_date, :public => '1'}
+      end.to change { Delayed::Job.where(:queue => "mixpanel").count }.by(1)
+    end
+  end
 
-      it "deletes a response" do
-        publisher = Publisher.new(survey, stub, { :user_ids => [1,2], :expiry_date => Date.today.to_s })
-        publisher.should_receive(:valid?).and_return(true)
-        publisher.publish
-        expect { delete :destroy, :survey_id => survey.id, :survey => { :user_ids => [1,2]} }.to change { SurveyUser.count }.by(-2)
-        flash[:notice].should_not be_nil
-      end
+  context "DELETE 'destroy'" do
+    let!(:survey) { FactoryGirl.create(:survey, :organization_id => 1, :finalized => true) }
 
-      it "redirects to the survey index page" do
+    it "deletes a response" do
+      publisher = Publisher.new(survey, stub, { :user_ids => [1,2], :expiry_date => Date.today.to_s })
+      publisher.should_receive(:valid?).and_return(true)
+      publisher.publish
+      expect { delete :destroy, :survey_id => survey.id, :survey => { :user_ids => [1,2]} }.to change { SurveyUser.count }.by(-2)
+      flash[:notice].should_not be_nil
+    end
+
+    it "redirects to the survey index page" do
+      delete :destroy, :survey_id => survey.id, :survey => {}
+      response.should redirect_to surveys_path
+    end
+
+    it "sends an event to mixpanel" do
+      expect do
         delete :destroy, :survey_id => survey.id, :survey => {}
-        response.should redirect_to surveys_path
-      end
+      end.to change { Delayed::Job.where(:queue => "mixpanel").count }.by(1)
     end
   end
 
   context "when access is unauthorized" do
-
     it "does not allow editing" do
       sign_in_as('field_agent')
       put :edit, :survey_id => survey.id, :survey => {:participating_organization_ids => [1, 2], :user_ids => [1, 2], :expiry_date => survey.expiry_date}
