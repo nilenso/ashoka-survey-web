@@ -98,13 +98,13 @@ class SurveyBuilder.Views.QuestionFactory extends Backbone.View
         template = $('#multi_record_category_template').html()
         return new SurveyBuilder.Views.Questions.MultiRecordCategoryView(model, template, survey_frozen)
 
-  @model_for: (model) =>
-    model.type = null unless model.type
-    if (@is_with_options(model.type))
-      new SurveyBuilder.Models.QuestionWithOptionsModel(model)
-    else if  model.type == @Types.CATEGORY
-      new SurveyBuilder.Models.CategoryModel(model)
-    else if  model.type == @Types.MULTI_RECORD
-      new SurveyBuilder.Models.MultiRecordCategoryModel(model)
+  @model_for: (attrs) =>
+    attrs.type = null unless attrs.type
+    if (@is_with_options(attrs.type))
+      new SurveyBuilder.Models.QuestionWithOptionsModel(attrs)
+    else if  attrs.type == @Types.CATEGORY
+      new SurveyBuilder.Models.CategoryModel(attrs)
+    else if  attrs.type == @Types.MULTI_RECORD
+      new SurveyBuilder.Models.MultiRecordCategoryModel(attrs)
     else
-      new SurveyBuilder.Models.QuestionModel(model)
+      new SurveyBuilder.Models.QuestionModel(attrs)

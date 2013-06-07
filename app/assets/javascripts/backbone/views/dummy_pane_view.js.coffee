@@ -27,13 +27,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
       )
     })
 
-  add_question: (type, model, parent) =>
-    view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model, @survey_frozen)
-    @questions.push(view)
-    model.on('destroy', @delete_question_view, this)
-    $(@el).children(@QUESTIONS_CONTAINER).append(view.render().el)
-
-  add_category: (type, model) =>
+  add_element: (type, model, parent) =>
     view = SurveyBuilder.Views.QuestionFactory.dummy_view_for(type, model, @survey_frozen)
     @questions.push(view)
     model.on('destroy', @delete_question_view, this)
