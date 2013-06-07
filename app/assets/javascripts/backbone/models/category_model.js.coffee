@@ -4,8 +4,10 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
 
   ORDER_NUMBER_STEP: 2
 
+  defaults:
+    content: I18n.t('js.untitled_category')
+
   initialize: =>
-    this.set('content', I18n.t('js.untitled_category'))
     @sub_question_order_counter = 0
     @sub_question_models = []
     this.on('change', @make_dirty, this)
