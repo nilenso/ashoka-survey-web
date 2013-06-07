@@ -48,4 +48,13 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
   has_errors: =>
     _.any(@question_models, (question_model) => question_model.has_errors())
 
+  toJSON: =>
+    _(@attr_accessible()).reduce((acc,elem) =>
+      acc[elem] = @get(elem)
+      acc
+    , {})
+
+  attr_accessible: =>
+    [ "name", "description", "expiry_date" ]
+
 SurveyBuilder.Models.SurveyModel.setup()
