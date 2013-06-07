@@ -41,9 +41,9 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     prev_order_counter + 1
 
   preload_sub_elements: =>
+    @trigger("preload_options", @get('options'))
     @get('options').each (option) =>
       option.preload_sub_elements()
-    @trigger("preload_options", @get('options'))
     @seeded = true
 
   success_callback: (model, response) =>

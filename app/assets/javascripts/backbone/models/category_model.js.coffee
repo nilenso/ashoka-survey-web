@@ -73,9 +73,13 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
       @sub_question_models.push question_model
       question_model.on('destroy', this.delete_sub_question, this)
       @set_question_number_for_sub_question(question_model)
-      question_model.preload_sub_elements()
 
     this.trigger('change:preload_sub_questions', @sub_question_models)
+
+    _.each(@sub_question_models, (question) =>
+      question.preload_sub_elements()
+    )
+
     if elements.length > 0
       @sub_question_order_counter = _(elements).last().order_number
     else

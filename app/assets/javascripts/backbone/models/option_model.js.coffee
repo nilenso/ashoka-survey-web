@@ -90,7 +90,7 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   preload_sub_elements: =>
     return unless @has_sub_questions()
     elements = @get('elements')
-    _.each elements, (question, counter) =>
+    _.each elements, (question) =>
       parent_question = this.get('question')
       _(question).extend({parent_question: parent_question})
 
@@ -99,9 +99,11 @@ class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
       @sub_question_models.push question_model
       question_model.on('destroy', this.delete_sub_question, this)
       @set_question_number_for_sub_question(question_model)
-      question_model.preload_sub_elements()
 
     this.trigger('change:preload_sub_questions', @sub_question_models)
+    _.each(@sub_question_models, (question) =>
+      question.preload_sub_elements()
+    )
     @sub_question_order_counter = _(elements).last().order_number
 
   attr_accessible: =>
@@ -112,9 +114,6 @@ SurveyBuilder.Models.OptionModel.setup()
 # Collection of all options for radio question
 class SurveyBuilder.Collections.OptionCollection extends Backbone.Collection
   model: SurveyBuilder.Models.OptionModel
-
-  url: =>
-    '/api/options?question_id=' + this.question.id
 
   has_errors: =>
     this.any((option) => option.has_errors())
