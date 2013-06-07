@@ -50,7 +50,7 @@ class SurveyBuilder.Views.Questions.QuestionView extends Backbone.View
       submit: =>
         loading_overlay.show_overlay(I18n.t("js.uploading_image"))
       done: (e, data) =>
-        this.model.set('image_url', data.result.image_url)
+        this.model.set('image', { thumb: { url: data.result.image_url }})
         loading_overlay.hide_overlay()
         @renderImageUploader()
 
