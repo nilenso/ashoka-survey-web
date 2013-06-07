@@ -177,7 +177,7 @@ describe Option do
     it "includes itself" do
       option = FactoryGirl.create(:option)
       json = option.as_json_with_elements_in_order
-      %w(content id question_id).each do |attr|
+      %w(content id question_id order_number).each do |attr|
         json[attr].should == option[attr]
       end
     end

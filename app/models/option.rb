@@ -42,7 +42,7 @@ class Option < ActiveRecord::Base
   end
 
   def as_json_with_elements_in_order
-    json = { 'id' => id, 'content' => content, 'question_id' => question_id }
+    json = { 'id' => id, 'content' => content, 'question_id' => question_id, 'order_number' => order_number}
     json['elements'] = elements.map(&:as_json_with_elements_in_order).flatten
     json
   end
