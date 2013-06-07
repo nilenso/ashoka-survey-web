@@ -6,9 +6,8 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     @urlRoot = "/api/surveys"
     @set('id', survey_id)
 
-  add_new_question_model: (element_attrs) =>
-    #REFACTOR: Rename question to element
-    question_model = SurveyBuilder.Views.QuestionFactory.model_for(element_attrs)
+  add_new_question_model: (type, element_attrs={}) =>
+    question_model = SurveyBuilder.Views.QuestionFactory.model_for(_(element_attrs).extend({ type: type, survey_id: @survey_id }))
     @set_order_number_for_question(question_model)
     @question_models.push question_model
     @set_question_number_for_question(question_model)

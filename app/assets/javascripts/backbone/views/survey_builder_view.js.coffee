@@ -51,7 +51,7 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
   preload_elements: (elements) =>
     _(elements).each (element) =>
-      model = this.survey.add_new_question_model(element)
+      model = this.survey.add_new_question_model(element.type, element)
       model.set('id', element.id)
       this.dummy_pane.add_element(element.type, model)
       this.settings_pane.add_element(element.type, model)
