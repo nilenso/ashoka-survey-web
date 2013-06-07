@@ -40,11 +40,10 @@ class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models
     prev_order_counter = @get('options').last().get('order_number')
     prev_order_counter + 1
 
-  fetch: =>
-    super
-    @get('options').fetch
-      success: (model, response) =>
-        model.preload_sub_questions()
+  preload_sub_elements: =>
+    @get('options').each (option) =>
+      option.preload_sub_elements()
+    @trigger("preload_options", @get('options'))
     @seeded = true
 
   success_callback: (model, response) =>

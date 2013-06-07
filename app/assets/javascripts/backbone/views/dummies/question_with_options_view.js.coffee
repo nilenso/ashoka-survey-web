@@ -10,7 +10,7 @@ class SurveyBuilder.Views.Dummies.QuestionWithOptionsView extends SurveyBuilder.
     @can_have_sub_questions = true
     @model.get('options').on('destroy', @delete_option_view, this)
     @model.on('add:options', @add_new_option, this)
-    @model.on('reset:options', @preload_options, this)
+    @model.on('preload_options', @preload_options, this)
 
   render: =>
     super

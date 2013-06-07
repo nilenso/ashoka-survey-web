@@ -19,8 +19,8 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.actions_view  = new SurveyBuilder.Views.ActionsView(survey_frozen)
 
     this.survey.fetch({
-      success: (data) =>
-        $.getJSON("/api/surveys/#{survey_id}", this.preload_elements)
+      success: (model) =>
+        this.preload_elements(model.get('elements'))
         this.dummy_pane.render()
     })
 
@@ -49,8 +49,8 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     this.settings_pane.add_element(type, model)
     model.save_model()
 
-  preload_elements: (data) =>
-    _(data.elements).each (element) =>
+  preload_elements: (elements) =>
+    _(elements).each (element) =>
       model = this.survey.add_new_question_model(element)
       model.set('id', element.id)
       this.dummy_pane.add_element(element.type, model)
