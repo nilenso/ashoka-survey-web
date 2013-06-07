@@ -20,8 +20,8 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
 
     this.survey.fetch({
       success: (data) =>
-        this.dummy_pane.render()
         $.getJSON("/api/surveys/#{survey_id}", this.preload_elements)
+        this.dummy_pane.render()
     })
 
     $(this.el).bind('ajaxStop.preload', =>
@@ -38,30 +38,31 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
     type = data.type
     parent = data.parent
     model = this.survey.add_new_question_model(type, parent)
-    this.dummy_pane.add_question(type, model, parent)
-    this.settings_pane.add_question(type, model)
+    this.dummy_pane.add_element(type, model, parent)
+    this.settings_pane.add_element(type, model)
     model.save_model()
 
   new_category: (event, type) =>
     @loading_overlay()
     model = this.survey.add_new_question_model()
-    this.dummy_pane.add_category(type, model)
-    this.settings_pane.add_category(type, model)
+    this.dummy_pane.add_element(type, model)
+    this.settings_pane.add_element(type, model)
     model.save_model()
 
   preload_elements: (data) =>
     _(data.elements).each (element) =>
-      model = this.survey.add_new_element_model(element)
+      model = this.survey.add_new_question_model(element)
       model.set('id', element.id)
       this.dummy_pane.add_element(element.type, model)
       this.settings_pane.add_element(element.type, model)
+      model.preload_sub_elements()
 
   loading_overlay: =>
     window.loading_overlay.show_overlay()
     $(this.el).bind('ajaxStop.new_question', =>
       window.loading_overlay.hide_overlay()
       $(this.el).unbind('ajaxStop.new_question')
-      )
+    )
 
   handle_dummy_click: =>
     this.hide_all()

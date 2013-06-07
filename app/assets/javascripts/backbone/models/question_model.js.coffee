@@ -27,8 +27,8 @@ class SurveyBuilder.Models.QuestionModel extends Backbone.RelationalModel
     if @is_dirty()
       @save({}, {error: @error_callback, success: @success_callback})
 
-  fetch: (options={}) =>
-    super({error: options.error || @error_callback, success: options.success || @success_callback})
+  preload_sub_elements: =>
+    null
 
   remove_image_attributes: =>
     @unset('image', {silent: true})

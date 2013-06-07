@@ -31,12 +31,6 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
   has_errors: =>
     false
 
-  fetch: =>
-    super({error: this.error_callback, success: =>
-      this.success_callback
-      this.preload_sub_questions()
-    })
-
   success_callback: (model, response) =>
     @make_clean()
     this.errors = []
@@ -70,8 +64,8 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
   delete_sub_question: (sub_question_model) =>
     @sub_question_models = _(@sub_question_models).without(sub_question_model)
 
-  preload_sub_questions: =>
-    elements = _((this.get('questions')).concat(this.get('categories'))).sortBy('order_number')
+  preload_sub_elements: =>
+    elements = @get('elements')
     _.each elements, (question, counter) =>
       _(question).extend({category_id: this.get('id')})
       question_model = SurveyBuilder.Views.QuestionFactory.model_for(question)
@@ -79,7 +73,6 @@ class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
       @sub_question_models.push question_model
       question_model.on('destroy', this.delete_sub_question, this)
       @set_question_number_for_sub_question(question_model)
-      question_model.fetch()
 
     this.trigger('change:preload_sub_questions', @sub_question_models)
     if elements.length > 0
