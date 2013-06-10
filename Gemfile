@@ -3,7 +3,6 @@ source 'https://rubygems.org'
 gem 'rails', '3.2.13'
 gem 'date_validator', '~> 0.6.3'
 gem 'unicorn', '~> 4.5.0'
-gem 'newrelic_rpm', '~> 3.5.7.59'
 gem 'pg', '~> 0.14.0'
 gem 'formtastic', '~> 2.2.1'
 gem 'will_paginate', '~> 3.0.3'
@@ -26,7 +25,6 @@ gem "fog", '~> 1.8.0'
 gem "carrierwave_backgrounder", '~> 0.1.3'
 gem 'delayed_job_active_record', '~> 0.3.3'
 gem 'daemons', '~> 1.1.9'
-gem 'rack-mini-profiler', '~> 0.1.23'
 gem 'paperclip', '~> 3.1.4'
 gem 'feature', '~> 0.5.0'
 gem "active_model_serializers", "~> 0.7.0"
@@ -37,25 +35,21 @@ gem "google_visualr", ">= 2.1"
 gem 'ruby-progressbar', '~> 1.0.2'
 gem "mixpanel", "~> 4.0.2"
 
-# Gems used only for assets and not required
-# in production environments by default.
 group :assets do
   gem 'compass-rails', '~> 1.0.3'
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
   gem 'susy', '~> 1.0'
   gem 'compass-normalize', '~> 1.1.2'
-  # gem 'formalize-rails', '~> 0.1.3'
   gem 'uglifier', '>= 1.0.3'
 end
 
-
 group :test, :development do
-  gem 'fakeweb', '~> 1.3.0'
-  gem 'railroady', "~> 1.1.0"
   gem "parallel_tests", "~> 0.8.14"
-  gem 'rails-footnotes', '~> 3.7.9'
-  gem 'quiet_assets', '~> 1.0.1'
+end
+
+group :test do
+  gem 'fakeweb', '~> 1.3.0'
   gem "simplecov", "~> 0.7.1", :require => false
   gem 'rspec-rails', '~> 2.11.4'
   gem 'rspec-http', '~> 0.10.0'
@@ -63,8 +57,14 @@ group :test, :development do
   gem 'fuubar', '~> 1.1.0'
   gem "shoulda-matchers", '~> 2.0.0'
   gem 'database_cleaner', '~> 0.8.0'
+  gem 'timecop', '~> 0.6.1'
+end
+
+group :development do
   gem "rails_best_practices", '~> 1.11.1'
   gem 'debugger', '~> 1.5.0'
   gem 'unicorn-rails', '~> 1.0.0'
-  gem 'timecop', '~> 0.6.1'
+  gem 'quiet_assets', '~> 1.0.1'
+  gem 'rails-footnotes', '~> 3.7.9'
+  gem 'rack-mini-profiler', '~> 0.1.23'
 end

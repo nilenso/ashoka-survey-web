@@ -99,7 +99,7 @@ class ApplicationController < ActionController::Base
   private
 
     def authorize_profiler
-      unless Rails.env.production?
+      if Rails.env.development?
         Rack::MiniProfiler.authorize_request
       end
     end
