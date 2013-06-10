@@ -23,7 +23,7 @@ class Survey < ActiveRecord::Base
   scope :unarchived, where(:archived => false)
   default_scope :order => 'published_on DESC NULLS LAST, created_at DESC'
 
-  before_save :generate_auth_key, :if => :public?
+  before_save :generate_auth_key, :if => Proc.new { |s| s.public? && s.auth_key.blank? }
 
   attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
   accepts_nested_attributes_for :questions

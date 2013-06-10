@@ -377,6 +377,13 @@ describe Survey do
       dup_survey.should_not be_valid
       dup_survey.errors.full_messages.should include "Auth key has already been taken"
     end
+
+    it "doesn't change after it is first generated" do
+      survey = FactoryGirl.create :survey, :public => true
+      old_auth_key = survey.auth_key
+      survey.save
+      survey.auth_key.should == old_auth_key
+    end
   end
 
   it "checks whether the survey has expired" do
