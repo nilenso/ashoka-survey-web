@@ -1,49 +1,49 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
-gem 'date_validator'
-gem 'unicorn'
-gem 'newrelic_rpm'
-gem 'pg'
-gem 'formtastic'
-gem 'will_paginate'
-gem 'rails-i18n'
-gem 'omniauth-oauth2'
-gem 'figaro'
-gem "rails-backbone"
-gem 'pry-rails'
-gem 'cancan'
+gem 'date_validator', '~> 0.6.3'
+gem 'unicorn', '~> 4.5.0'
+gem 'newrelic_rpm', '~> 3.5.7.59'
+gem 'pg', '~> 0.14.0'
+gem 'formtastic', '~> 2.2.1'
+gem 'will_paginate', '~> 3.0.3'
+gem 'rails-i18n', '~> 0.6.5'
+gem 'omniauth-oauth2', '~> 1.0.2'
+gem 'figaro', '~> 0.4.1'
+gem "rails-backbone", '~> 0.7.2'
+gem 'pry-rails', '~> 0.2.1'
+gem 'cancan', '~> 1.6.8'
 gem 'draper', "~> 1.2.1"
-gem 'i18n-js'
-gem 'airbrake'
-gem 'dalli'
+gem 'i18n-js', '~> 2.1.2'
+gem 'airbrake', '~> 3.1.6'
+gem 'dalli', '~> 2.3.0'
 gem "geocoder", '~> 1.1.8'
-gem 'gmaps4rails'
-gem 'axlsx'
-gem 'carrierwave'
+gem 'gmaps4rails', '~> 1.5.6'
+gem 'axlsx', '~> 1.3.4'
+gem 'carrierwave', '~> 0.7.1'
 gem 'rmagick', '2.12.2'
-gem "fog"
-gem "carrierwave_backgrounder"
-gem 'delayed_job_active_record'
-gem 'daemons'
-gem 'rack-mini-profiler'
-gem 'paperclip'
-gem 'feature'
+gem "fog", '~> 1.8.0'
+gem "carrierwave_backgrounder", '~> 0.1.3'
+gem 'delayed_job_active_record', '~> 0.3.3'
+gem 'daemons', '~> 1.1.9'
+gem 'rack-mini-profiler', '~> 0.1.23'
+gem 'paperclip', '~> 3.1.4'
+gem 'feature', '~> 0.5.0'
 gem "active_model_serializers", "~> 0.7.0"
-gem 'jquery-rails'
+gem 'jquery-rails', '~> 2.0.2'
 gem 'zipruby', "~> 0.3.6"
 gem "js-routes", "~> 0.9.0"
 gem "google_visualr", ">= 2.1"
-gem 'ruby-progressbar'
+gem 'ruby-progressbar', '~> 1.0.2'
 gem "mixpanel", "~> 4.0.2"
 
 # Gems used only for assets and not required
 # in production environments by default.
 group :assets do
-  gem 'compass-rails'
+  gem 'compass-rails', '~> 1.0.3'
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
-  gem 'susy'
+  gem 'susy', '~> 1.0'
   gem 'compass-normalize', '~> 1.1.2'
   # gem 'formalize-rails', '~> 0.1.3'
   gem 'uglifier', '>= 1.0.3'
@@ -54,17 +54,17 @@ group :test, :development do
   gem 'fakeweb', '~> 1.3.0'
   gem 'railroady', "~> 1.1.0"
   gem "parallel_tests", "~> 0.8.14"
-  gem 'rails-footnotes'
-  gem 'quiet_assets'
+  gem 'rails-footnotes', '~> 3.7.9'
+  gem 'quiet_assets', '~> 1.0.1'
   gem "simplecov", "~> 0.7.1", :require => false
   gem 'rspec-rails', '~> 2.11.4'
-  gem 'rspec-http'
+  gem 'rspec-http', '~> 0.10.0'
   gem 'factory_girl_rails', '~> 4.2.0'
-  gem 'fuubar'
+  gem 'fuubar', '~> 1.1.0'
   gem "shoulda-matchers", '~> 2.0.0'
-  gem 'database_cleaner'
-  gem "rails_best_practices"
-  gem 'debugger'
-  gem 'unicorn-rails'
+  gem 'database_cleaner', '~> 0.8.0'
+  gem "rails_best_practices", '~> 1.11.1'
+  gem 'debugger', '~> 1.5.0'
+  gem 'unicorn-rails', '~> 1.0.0'
   gem 'timecop', '~> 0.6.1'
 end
