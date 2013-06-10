@@ -10,7 +10,7 @@
         <li><%= link_to t("header.create_user"), new_user_path, :class => 'create'%></li>
       <% end %>
       <% if can? :view_dashboard, :index %>
-        <li><%= link_to t("header.dashboard"), dashboard_path, :class => 'dashboard' %></li>
+        <li><%= link_to t("header.dashboard"), dashboards_path, :class => 'dashboard' %></li>
       <% elsif can? :view_dashboard, current_user_info[:org_id] %>
         <li><%= link_to t("header.dashboard"), dashboard_path(:id => current_user_info[:org_id]), :class => 'dashboard' %></li>
       <% end %>

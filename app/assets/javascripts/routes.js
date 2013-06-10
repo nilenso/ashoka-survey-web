@@ -352,10 +352,15 @@
   if (!options){ options = {}; }
   return Utils.build_path([], ["format"], [2,[2,[2,[2,[2,[2,[7,"/",false],[6,"api",false]],[7,"/",false]],[6,"responses",false]],[7,"/",false]],[6,"count",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
   },
-// dashboard => (/:locale)/dashboard(.:format)
-  dashboard_path: function(options) {
+// dashboard => (/:locale)/dashboards/:id(.:format)
+  dashboard_path: function(_id, options) {
   if (!options){ options = {}; }
-  return Utils.build_path([], ["locale","format"], [2,[2,[2,[1,[2,[7,"/",false],[3,"locale",false]],false],[7,"/",false]],[6,"dashboard",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
+  return Utils.build_path(["id"], ["locale","format"], [2,[2,[2,[2,[2,[1,[2,[7,"/",false],[3,"locale",false]],false],[7,"/",false]],[6,"dashboards",false]],[7,"/",false]],[3,"id",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
+  },
+// dashboards => (/:locale)/dashboards(.:format)
+  dashboards_path: function(options) {
+  if (!options){ options = {}; }
+  return Utils.build_path([], ["locale","format"], [2,[2,[2,[1,[2,[7,"/",false],[3,"locale",false]],false],[7,"/",false]],[6,"dashboards",false]],[1,[2,[8,".",false],[3,"format",false]],false]], arguments);
   },
 // duplicate_api_category => /api/categories/:id/duplicate(.:format)
   duplicate_api_category_path: function(_id, options) {

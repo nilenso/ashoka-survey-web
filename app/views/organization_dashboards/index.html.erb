@@ -31,6 +31,6 @@
 
 <script type="text/javascript">
   $('li.organizations-dashboard-organization').click(function(){
-    window.location = "/dashboard/" + $(this).data('organization-id');
+    window.location = Routes.dashboard_path({id: $(this).data('organization-id')});
   })
 </script>

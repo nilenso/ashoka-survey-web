@@ -6,8 +6,8 @@ class OrganizationDashboardsController < ApplicationController
 
   def show
     organization = Organization.find_by_id(access_token, params[:id])
-    authorize! :view_dashboard, organization.id
     if organization
+      authorize! :view_dashboard, organization.id
       @decorated_organization = organization.decorate(:context => { :access_token => access_token })
     else
       render :nothing => true, :status => :not_found
