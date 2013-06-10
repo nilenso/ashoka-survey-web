@@ -9,10 +9,12 @@
       <% if signed_in_as_cso_admin? %>
         <li><%= link_to t("header.create_user"), new_user_path, :class => 'create'%></li>
       <% end %>
-      <li><%= link_to t("header.logout"), logout_path, :class => 'logout' %></li>
-      <% if can? :manage, :dashboard %>
+      <% if can? :view_dashboard, :index %>
         <li><%= link_to t("header.dashboard"), dashboard_path, :class => 'dashboard' %></li>
+      <% elsif can? :view_dashboard, current_user_info[:org_id] %>
+        <li><%= link_to t("header.dashboard"), dashboard_path(:id => current_user_info[:org_id]), :class => 'dashboard' %></li>
       <% end %>
+      <li><%= link_to t("header.logout"), logout_path, :class => 'logout' %></li>
       <% unless Rails.env.production? %>
         <li><%= "You are a #{current_user_info.try(:[], :role)}" %></li>
       <% end %>

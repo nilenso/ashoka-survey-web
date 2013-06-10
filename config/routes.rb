@@ -1,12 +1,12 @@
 SurveyWeb::Application.routes.draw do
 
-  scope "(:locale)", :locale => /#{I18n.available_locales.join('|')}/ do
+#  scope "(:locale)", :locale => /#{I18n.available_locales.join('|')}/ do
     match '/auth/:provider/callback', :to => 'sessions#create'
     match '/auth/failure', :to => 'sessions#failure'
     match '/logout', :to => 'sessions#destroy', :as => 'logout'
 
     get '/dashboard' => 'organization_dashboards#index'
-    get '/dashboard/:id' => 'organization_dashboards#show'
+    get '/dashboard/:id' => 'organization_dashboards#show', :as => :dashboard
 
     resources :surveys, :only => [:new, :create, :destroy, :index] do
       resource :publication, :only => [:update, :edit, :destroy] do
@@ -30,7 +30,7 @@ SurveyWeb::Application.routes.draw do
     resources :records, :only => [:create, :destroy]
 
     root :to => 'surveys#index'
-  end
+#  end
 
   namespace :api, :defaults => { :format => 'json' } do
     scope :module => :v1 do

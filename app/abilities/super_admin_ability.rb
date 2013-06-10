@@ -5,6 +5,6 @@ class SuperAdminAbility < Ability
     can :manage, :all
     cannot :create, Survey
     cannot :create, Response
-    can :manage, :dashboard
+    can :view_dashboard, :all
   end
 end
