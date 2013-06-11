@@ -11,6 +11,8 @@ describe DeepSurveySerializer do
 
   context "when serializing the associated elements" do
     it "includes only the finalized questions" do
+      file = fixture_file_upload('/images/sample.jpg')
+      Question.any_instance.stub_chain(:image, :thumb, :file).and_return(file)
       survey = FactoryGirl.create(:survey)
       finalized_question = FactoryGirl.create(:question, :finalized, :survey => survey)
       non_finalized_question = FactoryGirl.create(:question, :survey => survey)

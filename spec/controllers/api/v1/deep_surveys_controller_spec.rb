@@ -42,6 +42,8 @@ describe Api::V1::DeepSurveysController do
 
     context "for nested elements" do
       it "should list questions along with the surveys" do
+        file = fixture_file_upload('/images/sample.jpg')
+        Question.any_instance.stub_chain(:image, :thumb, :file).and_return(file)
         survey = FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID)
         question_list = FactoryGirl.create_list(:radio_question, 5, :with_options, :finalized, :survey => survey)
         survey.finalize

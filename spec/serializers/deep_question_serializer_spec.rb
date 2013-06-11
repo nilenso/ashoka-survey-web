@@ -3,6 +3,11 @@ require 'spec_helper'
 describe DeepQuestionSerializer do
   subject { DeepQuestionSerializer.new(FactoryGirl.create(:question)) }
 
+  before(:each) do
+    file = fixture_file_upload('/images/sample.jpg')
+    Question.any_instance.stub_chain(:image, :thumb, :file).and_return(file)
+  end
+
   it { should have_json_key :id}
   it { should have_json_key :identifier}
   it { should have_json_key :parent_id}
@@ -16,6 +21,13 @@ describe DeepQuestionSerializer do
   it { should have_json_key :image_url}
   it { should have_json_key :order_number}
   it { should have_json_key :category_id}
+
+  it "includes a base64 version of the image" do
+    question = FactoryGirl.create(:question)
+    serializer = DeepQuestionSerializer.new(question)
+    json = serializer.as_json
+    json.keys.should include :image_in_base64
+  end
 
   context "when including its options" do
     it "includes only the finalized options" do
