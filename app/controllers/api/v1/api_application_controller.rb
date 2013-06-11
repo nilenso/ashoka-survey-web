@@ -16,9 +16,11 @@ module Api
       private
 
       def current_user_info
-        if params[:access_token].blank?
+        if params[:access_token].blank? && user_currently_logged_in?
+          # Survey builder
           super
         else
+          # Mobile
           raw_info = access_token(params[:access_token]).get('api/me').parsed
           user_info = {
             :name => raw_info['name'],
