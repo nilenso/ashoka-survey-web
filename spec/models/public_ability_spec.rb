@@ -11,7 +11,7 @@ describe "Abilities" do
       :user_id => 6,
       :session_token => "foo"
     }
-    let(:ability){ PublicResponseAbility.new(base_user_info) }
+    let(:ability){ PublicAbility.new(base_user_info) }
 
 
     roles =  %w(viewer field_agent supervisor designer manager cso_admin super_admin)

@@ -29,11 +29,7 @@ class ApplicationController < ActionController::Base
   end
 
   def current_ability
-    if current_user_info[:user_id].present?
-      @current_ability ||= Ability.ability_for(current_user_info)
-    else
-      @current_ability ||= PublicResponseAbility.new(current_user_info)
-    end
+    @current_ability ||= Ability.ability_for(current_user_info)
   end
 
   def user_currently_logged_in?
