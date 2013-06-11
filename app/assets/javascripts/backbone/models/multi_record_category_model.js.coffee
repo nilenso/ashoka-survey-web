@@ -1,6 +1,7 @@
-# Interfaces between the views and the rails model for a multiline category
 class SurveyBuilder.Models.MultiRecordCategoryModel extends SurveyBuilder.Models.CategoryModel
+
+  defaults:
+    content: I18n.t('js.untitled_multi_record_category')
 
   initialize: =>
     super
-    this.set('content', I18n.t('js.untitled_multi_record_category'))
