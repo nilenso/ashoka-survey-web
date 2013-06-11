@@ -2,6 +2,17 @@ module Api
   module V1
     class APIApplicationController < ApplicationController
 
+      rescue_from OAuth2::Error do |exception|
+        if exception.response.status == 401
+          render :nothing => true, :status => :unauthorized
+        end
+      end
+
+      rescue_from CanCan::AccessDenied do |exception|
+        render :nothing => true, :status => :unauthorized
+      end
+
+
       private
 
       def current_user_info
