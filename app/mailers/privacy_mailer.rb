@@ -3,7 +3,7 @@ class PrivacyMailer < ActionMailer::Base
 
   def deactivation_mail(organization, users)
     @organization_name = organization.name
-    headers { 'X-SMTPAPI' => { "category" => EY::Config.get('base', 'domain_name') } }
+    headers({ 'X-SMTPAPI' => { "category" => EY::Config.get('base', 'domain_name') } })
     mail(:bcc => users.map(&:email),
          :subject => I18n.t("privacy_mailer.deactivation_mail.subject", :organization_name => @organization_name))
   end
