@@ -58,9 +58,11 @@ group :test do
   gem "shoulda-matchers", '~> 2.0.0'
   gem 'database_cleaner', '~> 0.8.0'
   gem 'timecop', '~> 0.6.1'
+  gem 'email_spec', '~> 1.4.0'
 end
 
 group :development do
+  gem 'letter_opener', '~> 1.1.1'
   gem "rails_best_practices", '~> 1.11.1'
   gem 'debugger', '~> 1.5.0'
   gem 'unicorn-rails', '~> 1.0.0'

@@ -272,7 +272,14 @@ en:
           should_be_finalized: "must be finalized"
 
   add_option: "Add Option"
-# Library strings
+
+  privacy_mailer:
+    deactivation_mail:
+      subject: "The organization %{organization_name} has been de-registered"
+      salutation: "Hi!"
+      body:
+        line_1: "The organization %{organization_name} has chosen to de-register itself from our system."
+        line_2: "Its data and assets have been marked for deletion, and will be expunged soon."
 
   formtastic:
     actions:

@@ -8,6 +8,7 @@ require File.expand_path("../../config/environment", __FILE__)
 require 'rspec/rails'
 require 'rspec/autorun'
 require 'rubygems'
+require 'email_spec'
 
 Fog.mock!
 CarrierWave.configure do |config|
@@ -30,6 +31,9 @@ RSpec.configure do |config|
   config.use_transactional_fixtures = false
   config.infer_base_class_for_anonymous_controllers = false
   config.order = "random"
+
+  config.include(EmailSpec::Helpers)
+  config.include(EmailSpec::Matchers)
 
   if ENV["ENABLE_COVERAGE"]
     config.before(:each) do

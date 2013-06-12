@@ -1,20 +1,17 @@
 class User
-  attr_reader :id, :name, :role
+  attr_reader :id, :name, :role, :email
 
-  def initialize(id, name, role)
+  def initialize(id, name, role, email)
     @id = id
     @name = name
     @role = role
+    @email = email
   end
 
   def self.find_by_organization(client, organization_id)
     client.get("/api/organizations/#{organization_id}/users").parsed.inject([]) { |users, user_json|
        users.push(json_to_user(user_json))
     }
-  end
-
-  def self.json_to_user(user_json)
-    User.new(user_json['id'], user_json['name'], user_json['role'])
   end
 
   def self.names_for_ids(client, user_ids)
@@ -33,5 +30,11 @@ class User
 
   def publishable?
     role == "field_agent" || role == "supervisor"
+  end
+
+  private
+
+  def self.json_to_user(user_json)
+    User.new(user_json['id'], user_json['name'], user_json['role'], user_json['email'])
   end
 end
