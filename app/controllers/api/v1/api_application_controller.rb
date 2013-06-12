@@ -2,12 +2,25 @@ module Api
   module V1
     class APIApplicationController < ApplicationController
 
+      rescue_from OAuth2::Error do |exception|
+        if exception.response.status == 401
+          render :nothing => true, :status => :unauthorized
+        end
+      end
+
+      rescue_from CanCan::AccessDenied do |exception|
+        render :nothing => true, :status => :unauthorized
+      end
+
+
       private
 
       def current_user_info
-        if params[:access_token].blank?
+        if params[:access_token].blank? && user_currently_logged_in?
+          # Survey builder
           super
         else
+          # Mobile
           raw_info = access_token(params[:access_token]).get('api/me').parsed
           user_info = {
             :name => raw_info['name'],

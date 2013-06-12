@@ -32,9 +32,9 @@ describe ApplicationController do
     end
 
     context "if the user isn't logged in" do
-      it "creates a `PublicResponseAbility`" do
+      it "creates a `PublicAbility`" do
         get :index
-        controller.current_ability.class.should == PublicResponseAbility
+        controller.current_ability.class.should == PublicAbility
       end
     end
 

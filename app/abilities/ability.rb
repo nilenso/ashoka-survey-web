@@ -2,7 +2,9 @@ class Ability
   include CanCan::Ability
 
   def self.ability_for(user)
-    if user[:org_type] != "Financial Institution"
+    if user[:org_type] == "Financial Institution"
+      FinancialInstituteAbility.new(user)
+    elsif user[:user_id].present?
       case user[:role]
       when 'viewer'
         ViewerAbility.new(user)
@@ -22,13 +24,12 @@ class Ability
         Ability.new(user)
       end
     else
-      FinancialInstituteAbility.new(user)
+      PublicAbility.new(user)
     end
   end
 
   def initialize(user_info)
     @user_info = user_info
-    #can :manage, :all
     can :read, Survey, :id => nil # The root_url is Surveys#index
   end
 

@@ -1,4 +1,4 @@
-class PublicResponseAbility < Ability
+class PublicAbility < Ability
   def initialize(user_info)
     super
     can :read, Survey, :public => true
