@@ -1,4 +1,3 @@
-# Interfaces between the views and the rails model for an option
 class SurveyBuilder.Models.OptionModel extends Backbone.RelationalModel
   urlRoot: '/api/options'
   defaults: {

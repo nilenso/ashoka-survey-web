@@ -1,4 +1,3 @@
-# Interfaces between the views and the rails model for a multiline category
 class SurveyBuilder.Models.CategoryModel extends Backbone.RelationalModel
   urlRoot: '/api/categories'
 
