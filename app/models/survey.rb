@@ -7,8 +7,8 @@ class Survey < ActiveRecord::Base
   validates :description, :length => { :maximum => 250 }
 
   belongs_to :organization
-  has_many :questions, :dependent => :delete_all
-  has_many :categories, :dependent => :delete_all
+  has_many :questions, :dependent => :destroy
+  has_many :categories, :dependent => :destroy
   has_many :responses, :dependent => :destroy
   has_many :survey_users, :dependent => :destroy
   has_many :participating_organizations, :dependent => :destroy
@@ -138,7 +138,7 @@ class Survey < ActiveRecord::Base
   end
 
   def options
-    Option.unscoped.joins(:question).where('questions.survey_id = ?', self.id)
+    Option.where(:question_id => questions.pluck('id'))
   end
 
   def questions_for_reports
@@ -168,8 +168,15 @@ class Survey < ActiveRecord::Base
     "#{name.gsub(/\W/, "")} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}"
   end
 
-  def destroy
-    super if deletable?
+  def delete_self_and_associated
+    # We use delete_all instead of destroy because the callbacks in
+    # question, option and category will stop deletion if those elements are finalized.
+    if deletable?
+      options.unscoped.delete_all
+      questions.unscoped.delete_all
+      categories.unscoped.delete_all
+      self.delete
+    end
   end
 
   def deletable?

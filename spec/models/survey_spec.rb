@@ -28,12 +28,12 @@ describe Survey do
     end
   end
 
-  context "when destroying the survey" do
+  context "when deleting a survey with associated elements" do
     it "deletes finalized elements" do
       survey = FactoryGirl.create(:survey, :finalized)
       question = FactoryGirl.create(:question, :finalized, :survey => survey)
       category = FactoryGirl.create(:category, :finalized, :survey => survey)
-      survey.destroy
+      survey.delete_self_and_associated
       Question.find_by_id(question.id).should be_nil
       Category.find_by_id(category.id).should be_nil
     end
@@ -42,7 +42,7 @@ describe Survey do
       survey = FactoryGirl.create(:survey)
       question = FactoryGirl.create(:question, :survey => survey)
       category = FactoryGirl.create(:category, :survey => survey)
-      survey.destroy
+      survey.delete_self_and_associated
       Question.find_by_id(question.id).should be_nil
       Category.find_by_id(category.id).should be_nil
     end
@@ -52,7 +52,7 @@ describe Survey do
       question = FactoryGirl.create(:question, :finalized, :survey => survey)
       category = FactoryGirl.create(:category, :finalized, :survey => survey)
       FactoryGirl.create(:response, :survey => survey)
-      survey.destroy
+      survey.delete_self_and_associated
       question.reload.should be_present
       category.reload.should be_present
     end
@@ -61,6 +61,28 @@ describe Survey do
       survey = FactoryGirl.create(:survey)
       FactoryGirl.create(:response, :survey => survey)
       survey.should_not be_deletable
+    end
+
+    it "deletes finalized options" do
+      survey = FactoryGirl.create(:survey)
+      FactoryGirl.create(:option)
+      option = FactoryGirl.create(:option, :finalized, :question => FactoryGirl.create(:question, :survey => survey))
+      survey.delete_self_and_associated
+      Option.find_by_id(option.id).should_not be_present
+    end
+
+    it "deletes non-finalized options" do
+      survey = FactoryGirl.create(:survey)
+      FactoryGirl.create(:option)
+      option = FactoryGirl.create(:option, :question => FactoryGirl.create(:question, :survey => survey))
+      survey.delete_self_and_associated
+      Option.find_by_id(option.id).should_not be_present
+    end
+
+    it "deletes itself" do
+      survey = FactoryGirl.create(:survey, :finalized)
+      survey.delete_self_and_associated
+      Survey.find_by_id(survey.id).should_not be_present
     end
   end
 
@@ -226,6 +248,7 @@ describe Survey do
     survey = FactoryGirl.create(:survey)
     option_1 = FactoryGirl.create(:option, :question => FactoryGirl.create(:radio_question, :survey => survey))
     option_2 = FactoryGirl.create(:option, :question => FactoryGirl.create(:radio_question, :survey => survey, :parent => option_1))
+    option_3 = FactoryGirl.create(:option)
     survey.options.should =~ [option_1, option_2]
   end
 
