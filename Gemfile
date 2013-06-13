@@ -35,6 +35,10 @@ gem "google_visualr", ">= 2.1"
 gem 'ruby-progressbar', '~> 1.0.2'
 gem "mixpanel", "~> 4.0.2"
 
+group :production do
+  gem 'ey_config'
+end
+
 group :assets do
   gem 'compass-rails', '~> 1.0.3'
   gem 'sass-rails',   '~> 3.2.3'

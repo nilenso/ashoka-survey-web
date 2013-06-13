@@ -8,8 +8,7 @@ production:
   BITLY_USERNAME: # Username of your bit.ly account
   BITLY_API_KEY: # API key from your bit.ly account
   MIXPANEL_TOKEN: # The access token provided by mixpanel
-  SENDGRID_USERNAME: # The username of your sendgrid account
-  SENDGRID_PASSWORD: # The password to your sendgrid account
+  SENDGRID_CATEGORY: # The category used when sending emails
 
 development:
   OAUTH_ID: # Application ID of the OAuth provider.
@@ -21,8 +20,7 @@ development:
   BITLY_USERNAME: # Username of your bit.ly account
   BITLY_API_KEY: # API key from your bit.ly account
   MIXPANEL_TOKEN: # The access token provided by mixpanel
-  SENDGRID_USERNAME: # The username of your sendgrid account
-  SENDGRID_PASSWORD: # The password to your sendgrid account
+  SENDGRID_CATEGORY: # The category used when sending emails
 
 test:
   OAUTH_ID: # Application ID of the OAuth provider.
@@ -34,5 +32,4 @@ test:
   BITLY_USERNAME: # Username of your bit.ly account
   BITLY_API_KEY: # API key from your bit.ly account
   MIXPANEL_TOKEN: # The access token provided by mixpanel
-  SENDGRID_USERNAME: # The username of your sendgrid account
-  SENDGRID_PASSWORD: # The password to your sendgrid account
+  SENDGRID_CATEGORY: # The category used when sending emails
