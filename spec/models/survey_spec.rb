@@ -110,6 +110,35 @@ describe Survey do
           survey.delete_self_and_associated(:validate => false)
           Survey.find_by_id(survey.id).should_not be_present
         end
+
+        it "deletes the responses for the survey" do
+          survey = FactoryGirl.create(:survey)
+          response = FactoryGirl.create(:response, :survey => survey)
+          survey.delete_self_and_associated(:validate => false)
+          Response.find_by_id(response.id).should_not be_present
+        end
+
+        it "deletes the answers of the survey" do
+          survey = FactoryGirl.create(:survey)
+          answer = FactoryGirl.create(:answer, :response => FactoryGirl.create(:response, :survey => survey))
+          survey.delete_self_and_associated(:validate => false)
+          Answer.find_by_id(answer.id).should_not be_present
+        end
+
+        it "deletes the choices of the survey" do
+          survey = FactoryGirl.create(:survey)
+          answer = FactoryGirl.create(:answer, :response => FactoryGirl.create(:response, :survey => survey))
+          choice = FactoryGirl.create(:choice, :answer => answer)
+          survey.delete_self_and_associated(:validate => false)
+          Choice.find_by_id(choice.id).should_not be_present
+        end
+
+        it "deletes all records of the survey" do
+          survey = FactoryGirl.create(:survey)
+          record = FactoryGirl.create(:record, :response => FactoryGirl.create(:response, :survey => survey))
+          survey.delete_self_and_associated(:validate => false)
+          Record.find_by_id(record.id).should_not be_present
+        end
       end
 
       it "turns validation on by default" do

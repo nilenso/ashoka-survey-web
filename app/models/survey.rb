@@ -174,9 +174,17 @@ class Survey < ActiveRecord::Base
       if ops[:validate]
         return if !deletable?
       end
+      answers = Answer.unscoped.where(:response_id => responses.pluck('id'))
+      choices = Choice.where(:answer_id => answers.pluck('id'))
+      records = Record.where(:response_id => responses.pluck('id'))
+
       options.unscoped.delete_all
       questions.unscoped.delete_all
       categories.unscoped.delete_all
+      choices.delete_all
+      answers.delete_all
+      records.delete_all
+      responses.unscoped.delete_all
       self.delete
     end
 
