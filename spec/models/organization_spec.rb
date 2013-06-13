@@ -86,4 +86,21 @@ describe Organization do
       organization.should be_nil
     end
   end
+
+  context "when deleting an organization and its associated data" do
+    it "deletes the organization's surveys" do
+      organization = FactoryGirl.build(:organization)
+      survey = FactoryGirl.create(:survey, :organization_id => organization.id)
+      organization.destroy!
+      Survey.find_by_id(survey.id).should_not be_present
+    end
+
+    it "deletes the surveys even if they have responses" do
+      organization = FactoryGirl.build(:organization)
+      survey = FactoryGirl.create(:survey, :organization_id => organization.id)
+      response = FactoryGirl.create(:response, :survey => survey)
+      organization.destroy!
+      Survey.find_by_id(survey.id).should_not be_present
+    end
+  end
 end

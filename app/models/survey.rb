@@ -26,192 +26,193 @@ class Survey < ActiveRecord::Base
   before_save :generate_auth_key, :if => Proc.new { |s| s.public? && s.auth_key.blank? }
 
   attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
-  accepts_nested_attributes_for :questions
+    accepts_nested_attributes_for :questions
 
 
-  def self.active
-    where(active_arel)
-  end
-
-  def self.active_plus(extras)
-    where(active_arel.or(extra_arel(extras)))
-  end
-
-  def finalize
-    self.finalized = true
-    questions.update_all(:finalized => true)
-    categories.update_all(:finalized => true)
-    options.update_all(:finalized => true)
-    self.save
-  end
-
-  def archive
-    self.archived = true
-    self.name = "#{name} #{I18n.t('activerecord.attributes.survey.archive')}"
-    save
-  end
-
-  def user_ids
-    self.survey_users.map(&:user_id)
-  end
-
-  def users_for_organization(access_token, organization_id)
-    users = {}
-    publishable_users = Organization.publishable_users(access_token, organization_id)
-    users[:published], users[:unpublished] = publishable_users.partition do |publishable_user|
-      user_ids.include?(publishable_user.id)
+    def self.active
+      where(active_arel)
     end
-    users
-  end
 
-  def partitioned_organizations(access_token)
-    organizations = Organization.all(access_token, :except => organization_id)
-    partitioned_organizations = {}
-    partitioned_organizations[:participating], partitioned_organizations[:not_participating] = organizations.partition do |organization|
-      participating_organization_ids.include? organization.id
+    def self.active_plus(extras)
+      where(active_arel.or(extra_arel(extras)))
     end
-    partitioned_organizations
-  end
 
-  def expired?
-    expiry_date < Date.today
-  end
-
-  def duplicate(options = {})
-    transaction do
-      survey = self.dup
-      survey.finalized = false
-      survey.archived = false
-      survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
-      survey.organization_id = options[:organization_id] if options[:organization_id]
-      survey.public = false
-      survey.auth_key = nil
-      survey.published_on = nil
-      survey.save(:validate => false)
-      survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
-      survey.categories << first_level_categories.map { |category| category.duplicate(survey.id) }
-      survey
+    def finalize
+      self.finalized = true
+      questions.update_all(:finalized => true)
+      categories.update_all(:finalized => true)
+      options.update_all(:finalized => true)
+      self.save
     end
-  end
 
-  def share_with_organizations(organizations)
-    organizations.each do |organization_id|
-      participating_organizations.create(:organization_id => organization_id)
-    end if finalized?
-    set_published_on
-  end
+    def archive
+      self.archived = true
+      self.name = "#{name} #{I18n.t('activerecord.attributes.survey.archive')}"
+      save
+    end
 
-  def publish
-    set_published_on
-  end
+    def user_ids
+      self.survey_users.map(&:user_id)
+    end
 
-  def published?
-    !participating_organizations.empty? || !survey_users.empty? || public?
-  end
+    def users_for_organization(access_token, organization_id)
+      users = {}
+      publishable_users = Organization.publishable_users(access_token, organization_id)
+      users[:published], users[:unpublished] = publishable_users.partition do |publishable_user|
+        user_ids.include?(publishable_user.id)
+      end
+      users
+    end
 
-  def participating_organization_ids
-    self.participating_organizations.map(&:organization_id)
-  end
+    def partitioned_organizations(access_token)
+      organizations = Organization.all(access_token, :except => organization_id)
+      partitioned_organizations = {}
+      partitioned_organizations[:participating], partitioned_organizations[:not_participating] = organizations.partition do |organization|
+        participating_organization_ids.include? organization.id
+      end
+      partitioned_organizations
+    end
 
-  def first_level_questions
-    questions.where(:parent_id => nil, :category_id => nil)
-  end
+    def expired?
+      expiry_date < Date.today
+    end
 
-  def first_level_categories
-    categories.where(:category_id => nil, :parent_id => nil)
-  end
+    def duplicate(options = {})
+      transaction do
+        survey = self.dup
+        survey.finalized = false
+        survey.archived = false
+        survey.name = "#{name}  #{I18n.t('activerecord.attributes.survey.copied')}"
+        survey.organization_id = options[:organization_id] if options[:organization_id]
+        survey.public = false
+        survey.auth_key = nil
+        survey.published_on = nil
+        survey.save(:validate => false)
+        survey.questions << first_level_questions.map { |question| question.duplicate(survey.id) }
+        survey.categories << first_level_categories.map { |category| category.duplicate(survey.id) }
+        survey
+      end
+    end
 
-  def first_level_categories_with_questions
-    first_level_categories.includes([:questions, :categories]).select { |x| x.has_questions? }
-  end
+    def share_with_organizations(organizations)
+      organizations.each do |organization_id|
+        participating_organizations.create(:organization_id => organization_id)
+      end if finalized?
+      set_published_on
+    end
 
-  def first_level_elements
-    (first_level_questions + first_level_categories_with_questions).sort_by(&:order_number)
-  end
+    def publish
+      set_published_on
+    end
 
-  def elements_in_order_as_json
-    first_level_elements.map(&:as_json_with_elements_in_order)
-  end
+    def published?
+      !participating_organizations.empty? || !survey_users.empty? || public?
+    end
 
-  def questions_in_order
-    first_level_elements.map(&:questions_in_order).flatten
-  end
+    def participating_organization_ids
+      self.participating_organizations.map(&:organization_id)
+    end
 
-  def options
-    Option.where(:question_id => questions.pluck('id'))
-  end
+    def first_level_questions
+      questions.where(:parent_id => nil, :category_id => nil)
+    end
 
-  def questions_for_reports
-    questions.joins(:answers => :response).where("responses.status = 'complete' AND responses.state = 'clean' AND ((answers.content  <> '' AND answers.content IS NOT NULL) OR
+    def first_level_categories
+      categories.where(:category_id => nil, :parent_id => nil)
+    end
+
+    def first_level_categories_with_questions
+      first_level_categories.includes([:questions, :categories]).select { |x| x.has_questions? }
+    end
+
+    def first_level_elements
+      (first_level_questions + first_level_categories_with_questions).sort_by(&:order_number)
+    end
+
+    def elements_in_order_as_json
+      first_level_elements.map(&:as_json_with_elements_in_order)
+    end
+
+    def questions_in_order
+      first_level_elements.map(&:questions_in_order).flatten
+    end
+
+    def options
+      Option.where(:question_id => questions.pluck('id'))
+    end
+
+    def questions_for_reports
+      questions.joins(:answers => :response).where("responses.status = 'complete' AND responses.state = 'clean' AND ((answers.content  <> '' AND answers.content IS NOT NULL) OR
                                                 questions.type = 'MultiChoiceQuestion')").uniq
-  end
+    end
 
-  def complete_responses_count(current_ability)
-    responses.accessible_by(current_ability).where(:status => 'complete', :blank => false).count
-  end
+    def complete_responses_count(current_ability)
+      responses.accessible_by(current_ability).where(:status => 'complete', :blank => false).count
+    end
 
-  def incomplete_responses_count(current_ability)
-    responses.accessible_by(current_ability).where(:status => 'incomplete', :blank => false).count
-  end
+    def incomplete_responses_count(current_ability)
+      responses.accessible_by(current_ability).where(:status => 'incomplete', :blank => false).count
+    end
 
-  def publicize
-    self.public = true
-    set_published_on
-  end
+    def publicize
+      self.public = true
+      set_published_on
+    end
 
-  def identifier_questions
-    identifier_questions = questions.where(:identifier => :true)
-    identifier_questions.blank? ? first_level_questions.limit(5).to_a : identifier_questions
-  end
+    def identifier_questions
+      identifier_questions = questions.where(:identifier => :true)
+      identifier_questions.blank? ? first_level_questions.limit(5).to_a : identifier_questions
+    end
 
-  def filename_for_excel
-    "#{name.gsub(/\W/, "")} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}"
-  end
+    def filename_for_excel
+      "#{name.gsub(/\W/, "")} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}"
+    end
 
-  def delete_self_and_associated
-    # We use delete_all instead of destroy because the callbacks in
-    # question, option and category will stop deletion if those elements are finalized.
-    if deletable?
+    def delete_self_and_associated(ops = {:validate => true})
+      # We use delete_all instead of destroy because the callbacks in
+      # question, option and category will stop deletion if those elements are finalized.
+      if ops[:validate]
+        return if !deletable?
+      end
       options.unscoped.delete_all
       questions.unscoped.delete_all
       categories.unscoped.delete_all
       self.delete
     end
-  end
 
-  def deletable?
-    responses.where(:blank => false).empty?
-  end
+    def deletable?
+      responses.where(:blank => false).empty?
+    end
 
   private
 
-  def self.active_arel
-    survey = Survey.arel_table
-    (
-      survey[:expiry_date].gt(Date.today). # Not expired
-      and(survey[:finalized].eq(true)).     # Finalized
-      and(survey[:archived].eq(false))
-    )
-  end
-
-  def self.extra_arel(extras)
-    survey = Survey.arel_table
-    survey[:id].in(extras)
-  end
-
-  def generate_auth_key
-    self.auth_key = SecureRandom.urlsafe_base64
-  end
-
-  def set_published_on
-    if finalized
-      self.published_on ||= Date.today
-      self.save
+    def self.active_arel
+      survey = Survey.arel_table
+      (
+        survey[:expiry_date].gt(Date.today). # Not expired
+        and(survey[:finalized].eq(true)).     # Finalized
+        and(survey[:archived].eq(false))
+      )
     end
-  end
 
-  def ensure_survey_to_be_archivable
-    errors.add(:base, :must_not_be_archived) if archived? && archived_was
-    errors.add(:base, :finalize_before_archive) if archived? && !finalized?
-  end
+    def self.extra_arel(extras)
+      survey = Survey.arel_table
+      survey[:id].in(extras)
+    end
+
+    def generate_auth_key
+      self.auth_key = SecureRandom.urlsafe_base64
+    end
+
+    def set_published_on
+      if finalized
+        self.published_on ||= Date.today
+        self.save
+      end
+    end
+
+    def ensure_survey_to_be_archivable
+      errors.add(:base, :must_not_be_archived) if archived? && archived_was
+      errors.add(:base, :finalize_before_archive) if archived? && !finalized?
+    end
 end

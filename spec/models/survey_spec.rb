@@ -57,12 +57,6 @@ describe Survey do
       category.reload.should be_present
     end
 
-    it "it is not deletable if it has any non-blank responses" do
-      survey = FactoryGirl.create(:survey)
-      FactoryGirl.create(:response, :survey => survey)
-      survey.should_not be_deletable
-    end
-
     it "deletes finalized options" do
       survey = FactoryGirl.create(:survey)
       FactoryGirl.create(:option)
@@ -83,6 +77,47 @@ describe Survey do
       survey = FactoryGirl.create(:survey, :finalized)
       survey.delete_self_and_associated
       Survey.find_by_id(survey.id).should_not be_present
+    end
+
+    context "when validating" do
+      context "if validation is on" do
+        it "does't perform the deletion if it has any non-blank responses" do
+          survey = FactoryGirl.create(:survey)
+          FactoryGirl.create(:response, :survey => survey)
+          survey.delete_self_and_associated(:validate => true)
+          Survey.find_by_id(survey.id).should be_present
+        end
+
+        it "performs the deletion if it has no non-blank responses" do
+          survey = FactoryGirl.create(:survey)
+          FactoryGirl.create(:response, :blank, :survey => survey)
+          survey.delete_self_and_associated(:validate => true)
+          Survey.find_by_id(survey.id).should_not be_present
+        end
+      end
+
+      context "if validation is off" do
+        it "performs the deletion if it has any non-blank responses" do
+          survey = FactoryGirl.create(:survey)
+          FactoryGirl.create(:response, :survey => survey)
+          survey.delete_self_and_associated(:validate => false)
+          Survey.find_by_id(survey.id).should_not be_present
+        end
+
+        it "performs the deletion if it has no non-blank responses" do
+          survey = FactoryGirl.create(:survey)
+          FactoryGirl.create(:response, :blank, :survey => survey)
+          survey.delete_self_and_associated(:validate => false)
+          Survey.find_by_id(survey.id).should_not be_present
+        end
+      end
+
+      it "turns validation on by default" do
+        survey = FactoryGirl.create(:survey)
+        FactoryGirl.create(:response, :survey => survey)
+        survey.delete_self_and_associated
+        Survey.find_by_id(survey.id).should be_present
+      end
     end
   end
 

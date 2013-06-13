@@ -41,4 +41,8 @@ class Organization
     rescue OAuth2::Error
     end
   end
+
+  def destroy!
+    Survey.where(:organization_id => id).each {|survey| survey.delete_self_and_associated(:validate => false)}
+  end
 end
