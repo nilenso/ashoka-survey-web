@@ -182,7 +182,7 @@ class Survey < ActiveRecord::Base
     questions.unscoped.delete_all
     categories.unscoped.delete_all
     choices.delete_all
-    answers.each(&:remove_image!)
+    answers.each(&:remove_photo!)
     answers.delete_all
     records.delete_all
     responses.unscoped.delete_all
