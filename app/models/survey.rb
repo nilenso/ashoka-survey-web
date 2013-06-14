@@ -28,7 +28,6 @@ class Survey < ActiveRecord::Base
   attr_accessible :name, :expiry_date, :description, :questions_attributes, :finalized, :public
   accepts_nested_attributes_for :questions
 
-
   def self.active
     where(active_arel)
   end
@@ -179,9 +178,11 @@ class Survey < ActiveRecord::Base
     records = Record.where(:response_id => responses.pluck('id'))
 
     options.unscoped.delete_all
+    questions.each(&:remove_image!)
     questions.unscoped.delete_all
     categories.unscoped.delete_all
     choices.delete_all
+    answers.each(&:remove_image!)
     answers.delete_all
     records.delete_all
     responses.unscoped.delete_all
