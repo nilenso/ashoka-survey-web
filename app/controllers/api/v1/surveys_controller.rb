@@ -7,11 +7,6 @@ module Api
       after_filter :only => [:update] { send_to_mixpanel("Survey edited", {:survey => @survey.name}) if @survey.present? }
       after_filter :only => [:duplicate] { send_to_mixpanel("Survey duplicated", {:survey => @survey.name}) if @survey.present? }
 
-      def index
-        surveys = Survey.accessible_by(current_ability).active_plus(extra_survey_ids)
-        render :json => surveys
-      end
-
       def questions_count
         surveys = Survey.accessible_by(current_ability).active_plus(extra_survey_ids)
         render :json => { count: surveys.with_questions.count }

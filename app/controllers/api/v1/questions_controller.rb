@@ -45,17 +45,6 @@ module Api
         end
       end
 
-      def index
-        survey = Survey.find_by_id(params[:survey_id])
-        authorize! :read, survey
-        methods = [:type, :image_url]
-        if survey
-          render :json => survey.first_level_questions.to_json(:methods => methods)
-        else
-          render :nothing => true, :status => :bad_request
-        end
-      end
-
       def show
         question = Question.find_by_id(params[:id])
         authorize! :read, question.try(:survey)

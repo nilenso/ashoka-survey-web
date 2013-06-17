@@ -35,16 +35,6 @@ module Api
         end
       end
 
-      def index
-        survey = Survey.find_by_id(params[:survey_id])
-        authorize! :read, survey
-        if survey
-          render :json => survey.first_level_categories
-        else
-          render :nothing => true, :status => :bad_request
-        end
-      end
-
       def show
         category = Category.find_by_id(params[:id])
         authorize! :read, category.try(:survey)

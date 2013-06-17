@@ -177,42 +177,6 @@ module Api
         end
       end
 
-      context "GET 'index'" do
-        it "returns question IDs" do
-          question = FactoryGirl.create(:question, :survey_id => survey.id)
-          get :index, :survey_id => survey.id
-          response.should be_ok
-          JSON.parse(response.body).map { |hash| hash['id'] }.should include question.id
-        end
-
-        it "returns question types" do
-          question = FactoryGirl.create(:question, :survey_id => survey.id, :type => "RadioQuestion")
-          get :index, :survey_id => survey.id
-          response.should be_ok
-          JSON.parse(response.body).map { |hash| hash['type'] }.should include 'RadioQuestion'
-        end
-
-        it "returns all attributes of the question as well as the image_url" do
-          question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id))
-          get :index, :survey_id => survey.id
-          response.should be_ok
-          response.body.should include question.to_json(:methods => [:type, :image_url])
-        end
-
-        it "returns a :bad_request if no survey_id is passed" do
-          get :index
-          response.should_not be_ok
-        end
-
-        it "authorizes the current user's access to the given survey" do
-          sign_in_as('viewer')
-          survey = FactoryGirl.create(:survey, :organization_id => 500)
-          question = RadioQuestion.create(FactoryGirl.attributes_for(:question, :survey_id => survey.id))
-          get :index, :survey_id => survey.id
-          response.should_not be_ok
-        end
-      end
-
       context "GET 'show'" do
         it "returns the question as JSON" do
           question = FactoryGirl.create(:question, :survey => survey)

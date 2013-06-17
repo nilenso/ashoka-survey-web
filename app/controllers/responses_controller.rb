@@ -8,13 +8,6 @@ class ResponsesController < ApplicationController
 
   after_filter :only => [:destroy] { send_to_mixpanel("Response deleted", {:survey => @response.survey.name}) if @response.present? }
 
-  def index
-    @user_names = User.names_for_ids(access_token, @responses.map(&:user_id).uniq)
-    @organization_names = Organization.all(access_token)
-    @complete_responses_count = @responses.where(:status => 'complete').order('updated_at').count
-    @responses = @responses.where(:blank => false).paginate(:page => params[:page], :per_page => 10).order('created_at DESC, status')
-  end
-
   def generate_excel
     authorize! :generate_excel, @survey
     @responses = Reports::Excel::Responses.new(@responses).build(params[:date_range]).all
