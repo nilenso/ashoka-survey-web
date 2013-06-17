@@ -2,24 +2,25 @@ class Question < ActiveRecord::Base
   belongs_to :parent, :class_name => Option
   belongs_to :category
   belongs_to :survey
+  has_many :answers, :dependent => :destroy
+
   attr_accessible :content, :mandatory, :image, :type, :survey_id, :order_number,
                     :parent_id, :identifier, :category_id, :private, :finalized
+
   validates_presence_of :content
   validates_uniqueness_of :order_number, :scope => [:survey_id, :parent_id, :category_id], :allow_nil => true
   validate :ensure_survey_is_draft, :if => :mandatory_changed?
   validate :allow_limited_updates_for_finalized, :if => :finalized?, :on => :update
 
-  has_many :answers, :dependent => :destroy
-  mount_uploader :image, ImageUploader
-
-  default_scope :order => 'order_number'
-  scope :not_private, where("private IS NOT true")
-  scope :finalized, where(:finalized => true)
+  after_save :update_image_size!, :if => :image_changed?
+  before_destroy { |question| !question.finalized? }
 
   delegate :question, :to => :parent, :prefix => true
 
-  after_save :update_image_size!, :if => :image_changed?
-  before_destroy { |question| !question.finalized? }
+  scope :not_private, where("private IS NOT true")
+  scope :finalized, where(:finalized => true)
+
+  mount_uploader :image, ImageUploader
 
   def image_in_base64
     Base64.encode64(image.thumb.file.read)
