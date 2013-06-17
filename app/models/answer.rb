@@ -19,7 +19,6 @@ class Answer < ActiveRecord::Base
   validates_numericality_of :content, :if => :numeric_question?
   after_save :touch_multi_choice_answer
 
-  default_scope includes('question').order('questions.order_number')
   delegate :content, :to => :question, :prefix => true
   delegate :validating?, :to => :response, :prefix => true
   delegate :type, :to => :question, :prefix => true
