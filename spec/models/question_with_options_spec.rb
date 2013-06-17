@@ -59,14 +59,14 @@ describe QuestionWithOptions do
   context "when fetching question with its sub_questions in order" do
     it "includes itself" do
       question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)
-      question.questions_in_order.should include question
+      question.ordered_question_tree.should include question
     end
 
     it "includes its options" do
       question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)
       option = FactoryGirl.create(:option, :question_id => question.id)
       sub_question = FactoryGirl.create(:question, :parent => option)
-      question.questions_in_order.should include sub_question
+      question.ordered_question_tree.should include sub_question
     end
 
     it "includes its options in ascending order" do
@@ -75,7 +75,7 @@ describe QuestionWithOptions do
       second_option = FactoryGirl.create(:option, :question_id => question.id, :order_number => 2)
       first_sub_question = FactoryGirl.create(:question, :parent => first_option)
       second_sub_question = FactoryGirl.create(:question, :parent => second_option)
-      question.questions_in_order.should == [question, first_sub_question, second_sub_question]
+      question.ordered_question_tree.should == [question, first_sub_question, second_sub_question]
     end
   end
 end

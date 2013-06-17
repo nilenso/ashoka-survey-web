@@ -52,7 +52,7 @@ class Question < ActiveRecord::Base
     self.as_json(:methods => 'type')
   end
 
-  def questions_in_order
+  def ordered_question_tree
     [self]
   end
 

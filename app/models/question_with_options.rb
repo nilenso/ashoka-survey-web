@@ -28,7 +28,7 @@ class QuestionWithOptions < Question
     json
   end
 
-  def questions_in_order
-    [self, options.ascending.map(&:questions_in_order)].flatten
+  def ordered_question_tree
+    [self, options.ascending.map(&:ordered_question_tree)].flatten
   end
 end

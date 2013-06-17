@@ -132,8 +132,8 @@ class Survey < ActiveRecord::Base
     first_level_elements.map(&:as_json_with_elements_in_order)
   end
 
-  def questions_in_order
-    first_level_elements.map(&:questions_in_order).flatten
+  def ordered_question_tree
+    first_level_elements.map(&:ordered_question_tree).flatten
   end
 
   def options

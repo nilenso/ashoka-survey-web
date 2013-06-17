@@ -268,7 +268,7 @@ describe Question do
   context "when fetching a question with its questions in order" do
     it "includes itself" do
       question = FactoryGirl.create(:question, :type => 'SingleLineQuestion')
-      question.questions_in_order.should == [question]
+      question.ordered_question_tree.should == [question]
     end
   end
 

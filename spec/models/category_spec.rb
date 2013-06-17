@@ -323,13 +323,13 @@ describe Category do
   context "when fetching a category's questions" do
     it "does not include itself" do
       category = FactoryGirl.create(:category)
-      category.questions_in_order.should_not include category
+      category.ordered_question_tree.should_not include category
     end
 
     it "includes its sub elements" do
       category = FactoryGirl.create(:category)
       sub_question = FactoryGirl.create(:question, :category => category)
-      category.questions_in_order.should =~ [sub_question]
+      category.ordered_question_tree.should =~ [sub_question]
     end
   end
 end

@@ -4,7 +4,7 @@ class Reports::Excel::Questions
 
   def initialize(survey, current_ability)
     @survey = survey
-    @questions = survey.questions_in_order.select(&:finalized?)
+    @questions = survey.ordered_question_tree.select(&:finalized?)
     @ability = current_ability
   end
 

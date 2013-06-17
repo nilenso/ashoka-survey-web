@@ -191,13 +191,13 @@ describe Option do
   context "when fetching an option with its questions in order" do
     it "does not include itself" do
       option = FactoryGirl.create(:option)
-      option.questions_in_order.should_not include option
+      option.ordered_question_tree.should_not include option
     end
 
     it "includes its sub elements" do
       option = FactoryGirl.create(:option)
       sub_question = FactoryGirl.create(:question, :parent => option)
-      option.questions_in_order.should == [sub_question]
+      option.ordered_question_tree.should == [sub_question]
     end
   end
 end

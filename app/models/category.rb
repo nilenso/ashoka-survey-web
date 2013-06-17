@@ -34,8 +34,8 @@ class Category < ActiveRecord::Base
     json
   end
 
-  def questions_in_order
-    elements.map(&:questions_in_order).flatten
+  def ordered_question_tree
+    elements.map(&:ordered_question_tree).flatten
   end
 
   def as_json(opts={})

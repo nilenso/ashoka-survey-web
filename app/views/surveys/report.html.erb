@@ -16,7 +16,7 @@
   }
 
   function drawChart() {
-    <% @survey.questions_in_order.each do |question| %>
+    <% @survey.ordered_question_tree.each do |question| %>
       <%
         report_data = @survey.report_data_for(question)
         next if report_data.empty?
@@ -64,7 +64,7 @@
 <%= render "responses/excel_password_dialog" %>
 <div class="reports">
   <%= render "layouts/status_bar", :status => "analyze" %>
-  <% @survey.questions_in_order.each do |question| %>
+  <% @survey.ordered_question_tree.each do |question| %>
     <div id="chart_div_<%= question.id %>"></div>
   <% end %>
   <div id="location_map">

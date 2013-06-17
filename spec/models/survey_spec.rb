@@ -624,14 +624,14 @@ describe Survey do
     end
   end
 
-  context "#questions_in_order" do
+  context "#ordered_question_tree" do
     it "should include all the elements of the survey" do
       survey = FactoryGirl.create :survey
       question = FactoryGirl.create :question, :survey => survey
       category = FactoryGirl.create :category, :survey => survey
       sub_question = FactoryGirl.create(:question)
       category.questions << sub_question
-      survey.questions_in_order.should =~ [question, sub_question]
+      survey.ordered_question_tree.should =~ [question, sub_question]
     end
   end
 end
