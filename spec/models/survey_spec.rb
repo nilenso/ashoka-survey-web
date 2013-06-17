@@ -150,21 +150,6 @@ describe Survey do
     end
   end
 
-  context "when ordering" do
-    it "fetches all draft surveys in descending order of created_at" do
-      survey = FactoryGirl.create(:survey)
-      another_survey = FactoryGirl.create(:survey)
-      Survey.all.first(2).should == [another_survey, survey]
-    end
-
-    it "fetches all published surveys in descending order of published_on" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :published_on => (Date.today + 6.days) )
-      another_survey = FactoryGirl.create(:survey, :finalized => true, :published_on => Date.today)
-      draft_survey = FactoryGirl.create(:survey, :finalized => true)
-      Survey.all.should == [survey, another_survey, draft_survey]
-    end
-  end
-
   it "provides the filename for the excel file" do
     survey = FactoryGirl.create(:survey)
     survey.filename_for_excel.should =~ /#{survey.name}/
@@ -562,18 +547,41 @@ describe Survey do
         Survey.active_plus([inactive_survey.id]).should =~ [active_survey, inactive_survey]
       end
     end
+
+    context "ordering" do
+      it "orders published surveys in the most recently published fashion" do
+        oldest_survey = Timecop.freeze(2.days.from_now) { FactoryGirl.create(:survey, :public, :published_on => Date.today) }
+        old_survey = Timecop.freeze(1.week.from_now) { FactoryGirl.create(:survey, :public, :published_on => Date.today) }
+        new_survey = Timecop.freeze(2.weeks.from_now) { FactoryGirl.create(:survey, :public, :published_on => Date.today) }
+        Survey.most_recent.should == [new_survey, old_survey, oldest_survey]
+      end
+
+      it "orders unpublished surveys in the most recently created fashion" do
+        oldest_survey = Timecop.freeze(2.days.from_now) { FactoryGirl.create(:survey, :published_on => nil) }
+        old_survey = Timecop.freeze(1.week.from_now) { FactoryGirl.create(:survey, :published_on => nil) }
+        new_survey = Timecop.freeze(2.weeks.from_now) { FactoryGirl.create(:survey, :published_on => nil) }
+        Survey.most_recent.should == [new_survey, old_survey, oldest_survey]
+      end
+
+      it "orders unpublished surveys after published surveys" do
+        oldest_published_survey = Timecop.freeze(2.days.from_now) { FactoryGirl.create(:survey, :public, :published_on => Date.today) }
+        old_published_survey = Timecop.freeze(1.week.from_now) { FactoryGirl.create(:survey, :public, :published_on => Date.today) }
+        new_unpublished_survey = Timecop.freeze(2.weeks.from_now) { FactoryGirl.create(:survey, :published_on => nil) }
+        Survey.most_recent.should == [old_published_survey, oldest_published_survey, new_unpublished_survey]
+      end
+    end
   end
 
   context "publicize" do
     it "makes the survey public" do
       survey = FactoryGirl.create(:survey, :finalized => true)
-      survey.publicize()
+      survey.publicize
       survey.reload.should be_public
     end
 
     it "updates the publisged on date forthe survey" do
       survey = FactoryGirl.create(:survey, :finalized => true)
-      survey.publicize()
+      survey.publicize
       survey.reload.published_on.should_not be_nil
     end
   end

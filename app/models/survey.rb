@@ -21,7 +21,7 @@ class Survey < ActiveRecord::Base
   scope :drafts, where(:finalized => false)
   scope :archived, where(:archived => true)
   scope :unarchived, where(:archived => false)
-  default_scope :order => 'published_on DESC NULLS LAST, created_at DESC'
+  scope :most_recent, order('published_on DESC NULLS LAST, created_at DESC')
 
   before_save :generate_auth_key, :if => Proc.new { |s| s.public? && s.auth_key.blank? }
 

@@ -43,8 +43,7 @@ describe SurveysController do
       it "shows all draft surveys if filter is draft" do
         get :index, :filter => "drafts"
         response.should be_ok
-        assigns(:surveys).should include @draft_survey
-        assigns(:surveys).should_not include @finalized_survey
+        assigns(:surveys).should == [@draft_survey]
       end
 
       it "shows all draft surveys if filter is archived" do
@@ -58,6 +57,15 @@ describe SurveysController do
         response.should be_ok
         assigns(:surveys).should include @finalized_survey
       end
+    end
+
+    it "shows surveys in the most recently published order" do
+      sign_in_as('cso_admin')
+      oldest_survey = Timecop.freeze(2.days.from_now) { FactoryGirl.create(:survey, :finalized, :expiry_date => 2.days.from_now, :organization_id => LOGGED_IN_ORG_ID) }
+      old_survey = Timecop.freeze(1.week.from_now) { FactoryGirl.create(:survey, :finalized, :expiry_date => 2.days.from_now, :organization_id => LOGGED_IN_ORG_ID) }
+      new_survey = Timecop.freeze(2.weeks.from_now) { FactoryGirl.create(:survey, :finalized, :expiry_date => 2.days.from_now, :organization_id => LOGGED_IN_ORG_ID) }
+      get :index
+      assigns(:surveys).map(&:id).should == [new_survey, old_survey, oldest_survey].map(&:id)
     end
   end
 
