@@ -83,7 +83,7 @@ class Question < ActiveRecord::Base
   end
 
   def answers_for_reports
-    Answer.unscoped.joins(:response).where("answers.question_id = ? AND responses.status = 'complete' AND responses.state = 'clean'", id)
+    Answer.joins(:response).where("answers.question_id = ? AND responses.status = 'complete' AND responses.state = 'clean'", id)
   end
 
   def nesting_level

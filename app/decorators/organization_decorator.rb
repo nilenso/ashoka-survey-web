@@ -10,8 +10,8 @@ class OrganizationDecorator < Draper::Decorator
   end
 
   def asset_space_in_bytes
-    question_space = Question.unscoped.where("photo_file_size IS NOT NULL AND survey_id IN (?)", surveys).sum("photo_file_size")
-    answer_space = Answer.unscoped.where("photo_file_size IS NOT NULL AND response_id IN (?)", responses).sum("photo_file_size")
+    question_space = Question.where("photo_file_size IS NOT NULL AND survey_id IN (?)", surveys).sum("photo_file_size")
+    answer_space = Answer.where("photo_file_size IS NOT NULL AND response_id IN (?)", responses).sum("photo_file_size")
     question_space + answer_space
   end
 
@@ -78,6 +78,6 @@ class OrganizationDecorator < Draper::Decorator
   end
 
   def surveys
-    Survey.unscoped.where(:organization_id => model.id)
+    Survey.where(:organization_id => model.id)
   end
 end

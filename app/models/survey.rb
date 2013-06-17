@@ -173,19 +173,22 @@ class Survey < ActiveRecord::Base
     if ops[:validate]
       return if !deletable?
     end
-    answers = Answer.unscoped.where(:response_id => responses.pluck('id'))
+    answers = Answer.where(:response_id => responses.pluck('id'))
     choices = Choice.where(:answer_id => answers.pluck('id'))
     records = Record.where(:response_id => responses.pluck('id'))
 
-    options.unscoped.delete_all
+    questions = Question.where(:survey_id => self.id)
+    categories = Category.where(:survey_id => self.id)
+
+    options.delete_all
     questions.each(&:remove_image!)
-    questions.unscoped.delete_all
-    categories.unscoped.delete_all
+    questions.delete_all
+    categories.delete_all
     choices.delete_all
     answers.each(&:remove_photo!)
     answers.delete_all
     records.delete_all
-    responses.unscoped.delete_all
+    responses.delete_all
     self.delete
   end
 
