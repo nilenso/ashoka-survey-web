@@ -68,5 +68,14 @@ describe QuestionWithOptions do
       sub_question = FactoryGirl.create(:question, :parent => option)
       question.questions_in_order.should include sub_question
     end
+
+    it "includes its options in ascending order" do
+      question = FactoryGirl.create(:radio_question)
+      first_option = FactoryGirl.create(:option, :question_id => question.id, :order_number => 1)
+      second_option = FactoryGirl.create(:option, :question_id => question.id, :order_number => 2)
+      first_sub_question = FactoryGirl.create(:question, :parent => first_option)
+      second_sub_question = FactoryGirl.create(:question, :parent => second_option)
+      question.questions_in_order.should == [question, first_sub_question, second_sub_question]
+    end
   end
 end

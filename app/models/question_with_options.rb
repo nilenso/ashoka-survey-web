@@ -29,6 +29,6 @@ class QuestionWithOptions < Question
   end
 
   def questions_in_order
-    [self, options.map(&:questions_in_order)].flatten
+    [self, options.ascending.map(&:questions_in_order)].flatten
   end
 end
