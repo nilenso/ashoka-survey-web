@@ -9,6 +9,7 @@ production:
   BITLY_API_KEY: # API key from your bit.ly account
   MIXPANEL_TOKEN: # The access token provided by mixpanel
   SENDGRID_CATEGORY: # The category used when sending emails
+  AIRBRAKE_TOKEN: # API token for airbrake.io
 
 development:
   OAUTH_ID: # Application ID of the OAuth provider.
@@ -21,6 +22,7 @@ development:
   BITLY_API_KEY: # API key from your bit.ly account
   MIXPANEL_TOKEN: # The access token provided by mixpanel
   SENDGRID_CATEGORY: # The category used when sending emails
+  AIRBRAKE_TOKEN: # API token for airbrake.io
 
 test:
   OAUTH_ID: # Application ID of the OAuth provider.
@@ -33,3 +35,4 @@ test:
   BITLY_API_KEY: # API key from your bit.ly account
   MIXPANEL_TOKEN: # The access token provided by mixpanel
   SENDGRID_CATEGORY: # The category used when sending emails
+  AIRBRAKE_TOKEN: # API token for airbrake.io
