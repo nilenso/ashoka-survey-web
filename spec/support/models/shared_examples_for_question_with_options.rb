@@ -6,11 +6,13 @@ shared_examples "a question with options" do |question_klass|
 
   context "reports" do
     it "counts all its answers grouped by the option's content" do
-      question = FactoryGirl.create(factory_name, :finalized, :with_options)
-      5.times { FactoryGirl.create(:answer_with_complete_response, :content => question.options.first.content, :question => question) }
-      3.times { FactoryGirl.create(:answer_with_complete_response, :content => question.options.last.content, :question => question) }
-      question.report_data.should include [question.options.first.content, 5]
-      question.report_data.should include [question.options.last.content, 3]
+      question = FactoryGirl.create(factory_name, :finalized)
+      first_option = FactoryGirl.create(:option, :question => question, :content => "Foo")
+      second_option = FactoryGirl.create(:option, :question => question, :content => "Bar")
+      5.times { FactoryGirl.create(:answer_with_complete_response, :content => "Foo", :question => question) }
+      3.times { FactoryGirl.create(:answer_with_complete_response, :content => "Bar", :question => question) }
+      question.report_data.should include ["Foo", 5]
+      question.report_data.should include ["Bar", 3]
     end
 
     it "returns an empty array if no answers belonging to a completed response exist for the question" do

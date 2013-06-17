@@ -34,16 +34,6 @@ module Api
         end
       end
 
-      def index
-        question = Question.find_by_id(params[:question_id])
-        authorize! :read, question.try(:survey)
-        if question.is_a? QuestionWithOptions
-          render :json => question.options.as_json(:include => { :categories => { :methods => :type }})
-        else
-          render :nothing => true, :status => :bad_request
-        end
-      end
-
       private
       def dont_cache
         expires_now

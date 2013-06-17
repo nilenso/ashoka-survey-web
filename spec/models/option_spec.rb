@@ -34,14 +34,11 @@ describe Option do
     end
   end
 
-  context "orders by order number" do
-    it "fetches all option in ascending order of order_number for a particular question" do
-      question = FactoryGirl.create(:radio_question)
-      first_option = FactoryGirl.create(:option, :question => question, :order_number => 1)
-      third_option = FactoryGirl.create(:option, :question => question, :order_number => 3)
-      second_option = FactoryGirl.create(:option, :question => question, :order_number => 2)
-      question.options.should == [first_option, second_option, third_option]
-    end
+  it "fetches all option in ascending order of order_number for a particular question" do
+    first_option = FactoryGirl.create(:option, :order_number => 1)
+    third_option = FactoryGirl.create(:option, :order_number => 3)
+    second_option = FactoryGirl.create(:option, :order_number => 2)
+    Option.ascending.should == [first_option, second_option, third_option]
   end
 
   it "fetches all it's sub-questions and sub-categories" do

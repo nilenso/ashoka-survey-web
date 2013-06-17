@@ -10,6 +10,13 @@ describe MultiChoiceQuestionReporter do
       reporter.header.size.should == 2
       reporter.header[-1].should == "Foo"
     end
+
+    it "includes the options in ascending order" do
+      reporter = MultiChoiceQuestionReporter.decorate(question)
+      FactoryGirl.create(:option, :question => question, :content => "Foo", :order_number => 1)
+      FactoryGirl.create(:option, :question => question, :content => "Bar", :order_number => 2)
+      reporter.header.last(2).should == ["Foo", "Bar"]
+    end
   end
 
   context "formatted answers" do

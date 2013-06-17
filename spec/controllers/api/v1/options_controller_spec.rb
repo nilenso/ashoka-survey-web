@@ -23,8 +23,8 @@ module Api
         access_token.stub(:get).and_return(response)
         response.stub(:parsed).and_return(parsed_response)
       end
-      context "POST 'create'" do
 
+      context "POST 'create'" do
         it "creates a new option" do
           option = FactoryGirl.attributes_for(:option, :question_id => question.id)
 
@@ -113,58 +113,6 @@ module Api
           delete :destroy, :id => option.id
           response.should_not be_ok
           option.reload.should be_present
-        end
-      end
-
-      context "GET 'index'" do
-        it "returns all options for a question" do
-          question = FactoryGirl.create(:radio_question)
-          question.survey = survey
-          question.save
-          option = FactoryGirl.create(:option, :question => question)
-          get :index, :question_id => question.id
-          response.should be_ok
-          JSON.parse(response.body).should include(JSON.parse(option.to_json(:include => :categories)))
-        end
-
-        it "returns a :bad_request for an invalid question ID" do
-          get :index, :question_id => 123567
-          response.should_not be_ok
-        end
-
-        it "returns a bad request for a question without options" do
-          question = FactoryGirl.create(:question, :type => 'SingleLineQuestion', :survey => survey)
-          get :index, :question_id => question.id
-          response.should be_bad_request
-          response.body.should be_blank
-        end
-
-        it "returns all the categories under the option" do
-          question = FactoryGirl.create(:question, :type => 'RadioQuestion', :survey => survey)
-          option = FactoryGirl.create(:option, :question => question)
-          option.categories << FactoryGirl.create(:category, :content => "Foo")
-          get :index, :question_id => question.id
-          response.should be_ok
-          JSON.parse(response.body)[0].should have_key('categories')
-          JSON.parse(response.body)[0]['categories'].should_not be_empty
-        end
-
-        it "returns the type for each category" do
-          question = FactoryGirl.create(:question, :type => 'RadioQuestion', :survey => survey)
-          option = FactoryGirl.create(:option, :question => question)
-          option.categories << FactoryGirl.create(:category)
-          get :index, :question_id => question.id
-          response.should be_ok
-          JSON.parse(response.body)[0]['categories'][0].should have_key('type')
-        end
-
-        it "returns a bad response if the current user doesn't have access to read the parent survey" do
-          sign_in_as('viewer')
-          survey = FactoryGirl.create(:survey, :organization_id => 500)
-          question = FactoryGirl.create(:question, :type => 'RadioQuestion', :survey => survey)
-          option = FactoryGirl.create(:option, :question => question)
-          get :index, :question_id => question.id
-          response.should_not be_ok
         end
       end
     end

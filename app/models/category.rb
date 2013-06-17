@@ -81,7 +81,7 @@ class Category < ActiveRecord::Base
   end
 
   def index_of_parent_option
-    parent_options = parent_question.options
+    parent_options = parent_question.options.ascending
     parent_options.index(parent)
   end
 

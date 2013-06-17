@@ -46,11 +46,13 @@ describe QuestionWithOptions do
       end
     end
 
-    it "includes its options" do
-      question = RadioQuestion.find(FactoryGirl.create(:question_with_options).id)
-      option = FactoryGirl.create(:option, :question_id => question.id)
+    it "includes its options in ascending order" do
+      question = FactoryGirl.create(:radio_question)
+      first_option = FactoryGirl.create(:option, :question_id => question.id, :order_number => 1)
+      third_option = FactoryGirl.create(:option, :question_id => question.id, :order_number => 3)
+      second_option = FactoryGirl.create(:option, :question_id => question.id, :order_number => 2)
       json = question.as_json_with_elements_in_order
-      json['options'].size.should == question.options.size
+      json['options'].map { |o| o['id'] }.should == [first_option, second_option, third_option].map(&:id)
     end
   end
 

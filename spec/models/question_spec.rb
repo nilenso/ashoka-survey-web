@@ -365,13 +365,11 @@ describe Question do
 
   it "returns the index of the parent's option amongst its siblings" do
     question = FactoryGirl.create(:multi_choice_question)
-    parent_option = Option.create(content: "Option", order_number: 0)
-    question.options << parent_option
-    question.options << Option.create(content: "Option", order_number: 1)
-    question.options << Option.create(content: "Option", order_number: 2)
-    sub_question = FactoryGirl.create(:single_line_question)
-    parent_option.questions << sub_question
-    sub_question.index_of_parent_option.should == 0
+    FactoryGirl.create(:option, :question => question, :order_number => 5)
+    parent_option = FactoryGirl.create(:option, :question => question, :order_number => 10)
+    FactoryGirl.create(:option, :question => question, :order_number => 15)
+    sub_question = FactoryGirl.create(:single_line_question, :parent => parent_option)
+    sub_question.index_of_parent_option.should == 1
   end
 
   context "copy" do

@@ -5,10 +5,10 @@ class Option < ActiveRecord::Base
   attr_accessible :content, :question_id, :order_number
   validates_uniqueness_of :order_number, :scope => :question_id
   validates_presence_of :content, :question_id
-  default_scope :order => 'order_number'
   delegate :survey, :to => :question, :prefix => false, :allow_nil => true
 
   scope :finalized, where(:finalized => true)
+  scope :ascending, :order => "order_number ASC"
 
   before_destroy { |option| !option.finalized? }
 
