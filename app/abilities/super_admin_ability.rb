@@ -6,5 +6,6 @@ class SuperAdminAbility < Ability
     cannot :create, Survey
     cannot :create, Response
     can :view_dashboard, :all
+    can :destroy, Organization
   end
 end

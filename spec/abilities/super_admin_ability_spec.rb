@@ -19,5 +19,6 @@ describe SuperAdminAbility do
   it { should_not be_able_to :create, Survey }
   it { should_not be_able_to :create, Response }
   it { should be_able_to :manage, Response }
+  it { should be_able_to :destroy, :organization }
 end
 

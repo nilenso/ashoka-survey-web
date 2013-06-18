@@ -44,6 +44,7 @@ SurveyWeb::Application.routes.draw do
       resources :categories, :only => [:create, :update, :show, :destroy] do
         member { post "duplicate" }
       end
+      resources :organizations, :only => :destroy
       resources :audits, :only => [:create, :update]
       resources :options, :only => [:create, :update, :destroy]
       resources :surveys, :only => [:show, :update] do

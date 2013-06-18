@@ -2,7 +2,7 @@ class Organization
   attr_reader :id, :name
   include Draper::Decoratable
 
-  def initialize(id, name)
+  def initialize(id, name=nil)
     @id = id
     @name = name
   end
