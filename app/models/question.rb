@@ -23,7 +23,7 @@ class Question < ActiveRecord::Base
   mount_uploader :image, ImageUploader
 
   def image_in_base64
-    Base64.encode64(image.thumb.file.read)
+    Base64.encode64(image.thumb.file.read) if image?
   end
 
   def create_blank_answers(params={})
