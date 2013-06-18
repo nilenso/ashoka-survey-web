@@ -25,5 +25,10 @@ shared_examples "a question" do
       question.image.thumb.file.stub(:read).and_return(image_content)
       question.image_in_base64.should == Base64.encode64(image_content)
     end
+
+    it "returns nil if the image doesn't exist" do
+      question = FactoryGirl.create(:question)
+      question.image_in_base64.should be_nil
+    end
   end
 end
