@@ -28,7 +28,7 @@ describe Option do
   end
 
   context "callbacks" do
-    conext "when destroying" do
+    context "when destroying" do
       context "if the survey is marked for deletion" do
         let(:question) { FactoryGirl.create(:question, :survey => FactoryGirl.create(:survey, :marked_for_deletion)) }
 
