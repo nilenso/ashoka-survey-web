@@ -109,3 +109,9 @@ Setup `delayed_job` to Upload Photos to Amazon S3
 - Start `delayed_job` workers using `script/delayed_job`. Look [here](https://github.com/collectiveidea/delayed_job#running-jobs) for documentation.
 - If you're deploying to EngineYard, a deploy hook is provided in `deploy/after_restart.rb`.
 
+Setup organization deletion
+-----------
+
+- Organizations can be (soft) deleted on user-owner
+- Running `rake db:remove_deleted_organizations_data` on survey-web will delete all data (surveys, questions, responses etc.) belonging to any soft-deleted organisations
+- Run it in a cron job so that this cleanup doesn't have to happen manually (although it is delayed)
