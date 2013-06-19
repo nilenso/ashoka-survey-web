@@ -13,9 +13,13 @@ class Question < ActiveRecord::Base
   validate :allow_limited_updates_for_finalized, :if => :finalized?, :on => :update
 
   after_save :update_image_size!, :if => :image_changed?
-  before_destroy { |question| !question.finalized? }
+  before_destroy do |question|
+    return if question.survey_marked_for_deletion?
+    !question.finalized?
+  end
 
   delegate :question, :to => :parent, :prefix => true
+  delegate :marked_for_deletion?, :to => :survey, :prefix => true
 
   scope :not_private, where("private IS NOT true")
   scope :finalized, where(:finalized => true)

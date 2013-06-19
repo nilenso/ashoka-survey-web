@@ -12,9 +12,34 @@ describe Category do
   end
 
   context "callbacks" do
-    it "doesn't destroy if the category is finalized" do
-      category = FactoryGirl.create(:category, :finalized)
-      expect { category.destroy }.not_to change { Category.count }
+    context "when destroying" do
+      context "if the survey is marked for deletion" do
+        let(:survey) { FactoryGirl.create(:survey, :marked_for_deletion) }
+
+        it "destroys if it is finalized" do
+          category = FactoryGirl.create(:category, :finalized, :survey => survey)
+          expect { category.destroy }.to change { Category.count }.by(-1)
+        end
+
+        it "destroys if it is not finalized" do
+          category = FactoryGirl.create(:category, :survey => survey)
+          expect { category.destroy }.to change { Category.count }.by(-1)
+        end
+      end
+
+      context "if the survey is not marked for deletion" do
+        let(:survey) { FactoryGirl.create(:survey, :marked_for_deletion => false) }
+
+        it "doesn't destroy if it is finalized" do
+          category = FactoryGirl.create(:category, :finalized, :survey => survey)
+          expect { category.destroy }.not_to change { Category.count }
+        end
+
+        it "destroys if it is not finalized" do
+          category = FactoryGirl.create(:category, :finalized => false, :survey => survey)
+          expect { category.destroy }.to change { Category.count }.by(-1)
+        end
+      end
     end
   end
 

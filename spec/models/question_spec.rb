@@ -61,6 +61,36 @@ describe Question do
         end.to change { question.photo_file_size }
       end
     end
+
+        context "when destroying" do
+      context "if the survey is marked for deletion" do
+        let(:survey) { FactoryGirl.create(:survey, :marked_for_deletion) }
+
+        it "destroys if it is finalized" do
+          question = FactoryGirl.create(:question, :finalized, :content => "FOO", :survey => survey)
+          expect { question.destroy }.to change { Question.count }.by(-1)
+        end
+
+        it "destroys if it is not finalized" do
+          question = FactoryGirl.create(:question, :content => "FOO", :survey => survey)
+          expect { question.destroy }.to change { Question.count }.by(-1)
+        end
+      end
+
+      context "if the survey is not marked for deletion" do
+        let(:survey) { FactoryGirl.create(:survey, :marked_for_deletion => false) }
+
+        it "doesn't destroy if it is finalized" do
+          question = FactoryGirl.create(:question, :finalized, :content => "FOO", :survey => survey)
+          expect { question.destroy }.not_to change { Question.count }
+        end
+
+        it "destroys if it is not finalized" do
+          question = FactoryGirl.create(:question, :finalized => false, :content => "FOO", :survey => survey)
+          expect { question.destroy }.to change { Question.count }
+        end
+      end
+    end
   end
 
   context "validation" do
@@ -158,10 +188,7 @@ describe Question do
       end
     end
 
-    it "doesn't destroy if it is finalized" do
-      question = FactoryGirl.create(:question, :finalized, :content => "FOO")
-      expect { question.destroy }.not_to change { Question.count }
-    end
+
 
     it "allows multiple rows to have nil for order_number" do
       survey = FactoryGirl.create(:survey)

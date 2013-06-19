@@ -28,9 +28,34 @@ describe Option do
   end
 
   context "callbacks" do
-    it "doesn't destroy if it is finalized" do
-      option = FactoryGirl.create(:option, :finalized)
-      expect { option.destroy }.not_to change { Option.count }
+    conext "when destroying" do
+      context "if the survey is marked for deletion" do
+        let(:question) { FactoryGirl.create(:question, :survey => FactoryGirl.create(:survey, :marked_for_deletion)) }
+
+        it "destroys if it is finalized" do
+          option = FactoryGirl.create(:option, :finalized, :question => question)
+          expect { option.destroy }.to change { Option.count }.by(-1)
+        end
+
+        it "destroys if it is not finalized" do
+          option = FactoryGirl.create(:option, :question => question)
+          expect { option.destroy }.to change { Option.count }.by(-1)
+        end
+      end
+
+      context "if the survey is not marked for deletion" do
+        let(:question) { FactoryGirl.create(:question, :survey => FactoryGirl.create(:survey, :marked_for_deletion => false)) }
+
+        it "doesn't destroy if it is finalized" do
+          option = FactoryGirl.create(:option, :finalized, :question => question)
+          expect { option.destroy }.not_to change { Option.count }
+        end
+
+        it "destroys if it is not finalized" do
+          option = FactoryGirl.create(:option, :finalized => false, :question => question)
+          expect { option.destroy }.to change { Option.count }.by(-1)
+        end
+      end
     end
   end
 

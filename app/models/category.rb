@@ -9,8 +9,12 @@ class Category < ActiveRecord::Base
   attr_accessible :content, :survey_id, :order_number, :category_id, :parent_id, :type, :mandatory
 
   delegate :question, :to => :parent, :prefix => true, :allow_nil => true
+  delegate :marked_for_deletion?, :to => :survey, :prefix => true
 
-  before_destroy { |category| !category.finalized? }
+  before_destroy do |category|
+    return if category.survey_marked_for_deletion?
+    !category.finalized?
+  end
 
   scope :finalized, where(:finalized => true)
 

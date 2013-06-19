@@ -20,6 +20,10 @@ FactoryGirl.define do
       public true
     end
 
+    trait :marked_for_deletion do
+      marked_for_deletion true
+    end
+
     factory :survey_with_questions do
       after(:create) do |survey, evaluator|
         FactoryGirl.create_list(:question_with_answers, 5, :survey => survey)

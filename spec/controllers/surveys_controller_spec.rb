@@ -81,6 +81,12 @@ describe SurveysController do
       flash[:notice].should_not be_nil
     end
 
+    it "doesn't delete any other surveys" do
+      other_survey = FactoryGirl.create(:survey)
+      delete :destroy, :id => survey.id
+      other_survey.reload.should be_present
+    end
+
     it "redirects to the survey index page" do
       delete :destroy, :id => survey.id
       response.should redirect_to surveys_path
@@ -90,6 +96,13 @@ describe SurveysController do
       expect do
         delete :destroy, :id => survey.id
       end.to change { Delayed::Job.count }.by(1)
+    end
+
+    it "doesn't delete the survey if it has any non-blank responses" do
+      FactoryGirl.create(:response, :survey => survey, :blank => false)
+      expect do
+        delete :destroy, :id => survey.id
+      end.not_to change { Survey.count }
     end
   end
 

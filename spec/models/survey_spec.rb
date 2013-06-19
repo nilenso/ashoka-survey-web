@@ -29,6 +29,12 @@ describe Survey do
   end
 
   context "when deleting a survey with associated elements" do
+    it "deletes itself" do
+      survey = FactoryGirl.create(:survey, :finalized)
+      survey.delete_self_and_associated
+      Survey.find_by_id(survey.id).should_not be_present
+    end
+
     it "deletes finalized elements" do
       survey = FactoryGirl.create(:survey, :finalized)
       question = FactoryGirl.create(:question, :finalized, :survey => survey)
@@ -47,20 +53,10 @@ describe Survey do
       Category.find_by_id(category.id).should be_nil
     end
 
-    it "aborts if the survey is not deletable" do
-      survey = FactoryGirl.create(:survey, :finalized)
-      question = FactoryGirl.create(:question, :finalized, :survey => survey)
-      category = FactoryGirl.create(:category, :finalized, :survey => survey)
-      FactoryGirl.create(:response, :survey => survey)
-      survey.delete_self_and_associated
-      question.reload.should be_present
-      category.reload.should be_present
-    end
-
     it "deletes finalized options" do
       survey = FactoryGirl.create(:survey)
       FactoryGirl.create(:option)
-      option = FactoryGirl.create(:option, :finalized, :question => FactoryGirl.create(:question, :survey => survey))
+      option = FactoryGirl.create(:option, :finalized, :question => FactoryGirl.create(:radio_question, :survey => survey))
       survey.delete_self_and_associated
       Option.find_by_id(option.id).should_not be_present
     end
@@ -68,84 +64,110 @@ describe Survey do
     it "deletes non-finalized options" do
       survey = FactoryGirl.create(:survey)
       FactoryGirl.create(:option)
-      option = FactoryGirl.create(:option, :question => FactoryGirl.create(:question, :survey => survey))
+      option = FactoryGirl.create(:option, :question => FactoryGirl.create(:radio_question, :survey => survey))
       survey.delete_self_and_associated
       Option.find_by_id(option.id).should_not be_present
     end
 
-    it "deletes itself" do
-      survey = FactoryGirl.create(:survey, :finalized)
+    it "deletes the responses for the survey" do
+      survey = FactoryGirl.create(:survey)
+      response = FactoryGirl.create(:response, :survey => survey)
       survey.delete_self_and_associated
-      Survey.find_by_id(survey.id).should_not be_present
+      Response.find_by_id(response.id).should_not be_present
     end
 
-    context "when validating" do
-      context "if validation is on" do
-        it "does't perform the deletion if it has any non-blank responses" do
-          survey = FactoryGirl.create(:survey)
-          FactoryGirl.create(:response, :survey => survey)
-          survey.delete_self_and_associated(:validate => true)
-          Survey.find_by_id(survey.id).should be_present
-        end
+    it "deletes the answers of the survey" do
+      survey = FactoryGirl.create(:survey)
+      answer = FactoryGirl.create(:answer, :response => FactoryGirl.create(:response, :survey => survey))
+      survey.delete_self_and_associated
+      Answer.find_by_id(answer.id).should_not be_present
+    end
 
-        it "performs the deletion if it has no non-blank responses" do
-          survey = FactoryGirl.create(:survey)
-          FactoryGirl.create(:response, :blank, :survey => survey)
-          survey.delete_self_and_associated(:validate => true)
-          Survey.find_by_id(survey.id).should_not be_present
-        end
-      end
+    it "deletes the choices of the survey" do
+      survey = FactoryGirl.create(:survey)
+      answer = FactoryGirl.create(:answer, :response => FactoryGirl.create(:response, :survey => survey))
+      choice = FactoryGirl.create(:choice, :answer => answer)
+      survey.delete_self_and_associated
+      Choice.find_by_id(choice.id).should_not be_present
+    end
 
-      context "if validation is off" do
-        it "performs the deletion if it has any non-blank responses" do
-          survey = FactoryGirl.create(:survey)
-          FactoryGirl.create(:response, :survey => survey)
-          survey.delete_self_and_associated(:validate => false)
-          Survey.find_by_id(survey.id).should_not be_present
-        end
+    it "deletes all records of the survey" do
+      survey = FactoryGirl.create(:survey)
+      record = FactoryGirl.create(:record, :response => FactoryGirl.create(:response, :survey => survey))
+      survey.delete_self_and_associated
+      Record.find_by_id(record.id).should_not be_present
+    end
 
-        it "performs the deletion if it has no non-blank responses" do
-          survey = FactoryGirl.create(:survey)
-          FactoryGirl.create(:response, :blank, :survey => survey)
-          survey.delete_self_and_associated(:validate => false)
-          Survey.find_by_id(survey.id).should_not be_present
-        end
+    context "for other surveys" do
+      let(:another_survey) { FactoryGirl.create(:survey) }
 
-        it "deletes the responses for the survey" do
-          survey = FactoryGirl.create(:survey)
-          response = FactoryGirl.create(:response, :survey => survey)
-          survey.delete_self_and_associated(:validate => false)
-          Response.find_by_id(response.id).should_not be_present
-        end
-
-        it "deletes the answers of the survey" do
-          survey = FactoryGirl.create(:survey)
-          answer = FactoryGirl.create(:answer, :response => FactoryGirl.create(:response, :survey => survey))
-          survey.delete_self_and_associated(:validate => false)
-          Answer.find_by_id(answer.id).should_not be_present
-        end
-
-        it "deletes the choices of the survey" do
-          survey = FactoryGirl.create(:survey)
-          answer = FactoryGirl.create(:answer, :response => FactoryGirl.create(:response, :survey => survey))
-          choice = FactoryGirl.create(:choice, :answer => answer)
-          survey.delete_self_and_associated(:validate => false)
-          Choice.find_by_id(choice.id).should_not be_present
-        end
-
-        it "deletes all records of the survey" do
-          survey = FactoryGirl.create(:survey)
-          record = FactoryGirl.create(:record, :response => FactoryGirl.create(:response, :survey => survey))
-          survey.delete_self_and_associated(:validate => false)
-          Record.find_by_id(record.id).should_not be_present
-        end
-      end
-
-      it "turns validation on by default" do
-        survey = FactoryGirl.create(:survey)
-        FactoryGirl.create(:response, :survey => survey)
+      it "does not delete it" do
+        survey = FactoryGirl.create(:survey, :finalized)
         survey.delete_self_and_associated
-        Survey.find_by_id(survey.id).should be_present
+        Survey.find_by_id(another_survey.id).should be_present
+      end
+
+      it "does not delete finalized elements" do
+        survey = FactoryGirl.create(:survey, :finalized)
+        question = FactoryGirl.create(:question, :finalized, :survey => another_survey)
+        category = FactoryGirl.create(:category, :finalized, :survey => another_survey)
+        survey.delete_self_and_associated
+        Question.find_by_id(question.id).should_not be_nil
+        Category.find_by_id(category.id).should_not be_nil
+      end
+
+      it "does not delete non-finalized elements" do
+        survey = FactoryGirl.create(:survey)
+        question = FactoryGirl.create(:question, :survey => another_survey)
+        category = FactoryGirl.create(:category, :survey => another_survey)
+        survey.delete_self_and_associated
+        Question.find_by_id(question.id).should_not be_nil
+        Category.find_by_id(category.id).should_not be_nil
+      end
+
+      it "does not delete finalized options" do
+        survey = FactoryGirl.create(:survey)
+        FactoryGirl.create(:option)
+        option = FactoryGirl.create(:option, :finalized, :question => FactoryGirl.create(:radio_question, :survey => another_survey))
+        survey.delete_self_and_associated
+        Option.find_by_id(option.id).should be_present
+      end
+
+      it "does not delete non-finalized options" do
+        survey = FactoryGirl.create(:survey)
+        FactoryGirl.create(:option)
+        option = FactoryGirl.create(:option, :question => FactoryGirl.create(:radio_question, :survey => another_survey))
+        survey.delete_self_and_associated
+        Option.find_by_id(option.id).should be_present
+      end
+
+      it "does not delete the responses" do
+        survey = FactoryGirl.create(:survey)
+        response = FactoryGirl.create(:response, :survey => another_survey)
+        survey.delete_self_and_associated
+        Response.find_by_id(response.id).should be_present
+      end
+
+      it "does not delete the answers" do
+        survey = FactoryGirl.create(:survey)
+        answer = FactoryGirl.create(:answer, :response => FactoryGirl.create(:response, :survey => another_survey))
+        survey.delete_self_and_associated
+        Answer.find_by_id(answer.id).should be_present
+      end
+
+      it "does not delete the choices" do
+        survey = FactoryGirl.create(:survey)
+        answer = FactoryGirl.create(:answer, :response => FactoryGirl.create(:response, :survey => another_survey))
+        choice = FactoryGirl.create(:choice, :answer => answer)
+        survey.delete_self_and_associated
+        Choice.find_by_id(choice.id).should be_present
+      end
+
+      it "does not delete records" do
+        survey = FactoryGirl.create(:survey)
+        record = FactoryGirl.create(:record, :response => FactoryGirl.create(:response, :survey => another_survey))
+        survey.delete_self_and_associated
+        Record.find_by_id(record.id).should be_present
       end
     end
   end

@@ -43,7 +43,7 @@ class Organization
   end
 
   def destroy!
-    Survey.where(:organization_id => id).each {|survey| survey.delete_self_and_associated(:validate => false)}
+    Survey.where(:organization_id => id).each { |survey| survey.delete_self_and_associated }
   end
 
   handle_asynchronously :destroy!, :queue => "destroy_organization"

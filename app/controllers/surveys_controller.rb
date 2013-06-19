@@ -18,7 +18,7 @@ class SurveysController < ApplicationController
 
   def destroy
     @survey = Survey.find(params[:id])
-    @survey.delete_self_and_associated
+    @survey.delete_self_and_associated if @survey.deletable?
     flash[:notice] = t "flash.survey_deleted"
     redirect_to(surveys_path)
   end

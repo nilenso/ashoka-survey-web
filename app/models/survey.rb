@@ -167,29 +167,12 @@ class Survey < ActiveRecord::Base
     "#{name.gsub(/\W/, "")} (#{id}) - #{Time.now.strftime("%Y-%m-%d %I.%M.%S%P")}"
   end
 
-  def delete_self_and_associated(ops = {:validate => true})
-    # We use delete_all instead of destroy because the callbacks in
-    # question, option and category will stop deletion if those elements are finalized.
-    if ops[:validate]
-      return if !deletable?
+  def delete_self_and_associated
+    transaction do
+      self.marked_for_deletion = true
+      self.save
+      self.destroy
     end
-    answers = Answer.where(:response_id => responses.pluck('id'))
-    choices = Choice.where(:answer_id => answers.pluck('id'))
-    records = Record.where(:response_id => responses.pluck('id'))
-
-    questions = Question.where(:survey_id => self.id)
-    categories = Category.where(:survey_id => self.id)
-
-    options.delete_all
-    questions.each(&:remove_image!)
-    questions.delete_all
-    categories.delete_all
-    choices.delete_all
-    answers.each(&:remove_photo!)
-    answers.delete_all
-    records.delete_all
-    responses.delete_all
-    self.delete
   end
 
   def deletable?
