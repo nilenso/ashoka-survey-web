@@ -70,6 +70,68 @@ describe ResponsesController do
     end
   end
 
+  context "GET 'index'" do
+    before(:each) do
+      session[:access_token] = "123"
+      response = mock(OAuth2::Response)
+      access_token = mock(OAuth2::AccessToken)
+      names_response = mock(OAuth2::Response)
+      organizations_response = mock(OAuth2::Response)
+      controller.stub(:access_token).and_return(access_token)
+
+      access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
+      access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
+      names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
+      organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "Foo"}, {"id" => 2, "name" => "Bar"}])
+    end
+
+    it "renders the list of responses for a survey if a cso admin is signed in" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res = FactoryGirl.create(:response, :survey => survey,
+                               :organization_id => 1, :user_id => 1)
+      get :index, :survey_id => survey.id
+      response.should be_ok
+      assigns(:responses).should == Response.find_all_by_survey_id(survey.id)
+    end
+
+    it "sorts the responses by created_at, status" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res_1 = FactoryGirl.create(:response, :survey => survey, :status => "complete",
+          :organization_id => 1, :user_id => 1, :created_at => Time.now)
+      res_2 = FactoryGirl.create(:response, :survey => survey, :status => "incomplete",
+          :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
+      res_3 = FactoryGirl.create(:response, :survey => survey, :status => "complete",
+          :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
+      get :index, :survey_id => survey.id
+      assigns(:responses).should == [res_1, res_3, res_2]
+    end
+
+    it "gets the user names for all the user_ids of the responses " do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res = FactoryGirl.create(:response, :survey => survey,
+                               :organization_id => 1, :user_id => 1)
+      get :index, :survey_id => survey.id
+      assigns(:user_names).should == {1 => "Bob", 2 => "John"}
+    end
+
+    it "gets the organization names for all the organization_ids of the responses " do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      res = FactoryGirl.create(:response, :survey => survey,
+                               :organization_id => 1, :user_id => 1)
+      get :index, :survey_id => survey.id
+      assigns(:organization_names)[0].name.should == "Foo"
+      assigns(:organization_names)[1].name.should == "Bar"
+    end
+
+    it "doesn't include blank responses" do
+      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
+      blank_response = FactoryGirl.create(:response, :blank => true, :survey => survey)
+      non_blank_response = FactoryGirl.create(:response, :blank => false, :survey => survey)
+      get :index, :survey_id => survey.id
+      assigns(:responses).should == [non_blank_response]
+    end
+  end
+
   context "GET 'generate_excel'" do
     before(:each) do
       session[:access_token] = "123"
