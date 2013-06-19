@@ -1,7 +1,6 @@
 module Api
   module V1
     class SurveysController < APIApplicationController
-      caches_action :show, :if => :survey_finalized?
       authorize_resource :except => [:identifier_questions, :questions_count]
 
       after_filter :only => [:update] { send_to_mixpanel("Survey edited", {:survey => @survey.name}) if @survey.present? }
