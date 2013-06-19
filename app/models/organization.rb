@@ -42,9 +42,12 @@ class Organization
     end
   end
 
+  def self.deleted_organizations
+    response = HTTParty.get("#{ENV['OAUTH_SERVER_URL']}/api/deleted_organizations")
+    JSON.parse(response.body).map { |id| Organization.new(id) }
+  end
+
   def destroy!
     Survey.where(:organization_id => id).each { |survey| survey.delete_self_and_associated }
   end
-
-  handle_asynchronously :destroy!, :queue => "destroy_organization"
 end

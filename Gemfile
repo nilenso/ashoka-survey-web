@@ -34,6 +34,7 @@ gem "js-routes", "~> 0.9.0"
 gem "google_visualr", ">= 2.1"
 gem 'ruby-progressbar', '~> 1.0.2'
 gem "mixpanel", "~> 4.0.2"
+gem 'httparty', '~> 0.11.0'
 
 group :production do
   gem 'ey_config'

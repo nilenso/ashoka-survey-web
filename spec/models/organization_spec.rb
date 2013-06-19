@@ -88,16 +88,10 @@ describe Organization do
   end
 
   context "when deleting an organization and its associated data" do
-    it "performs the deletion in a delayed job" do
-      organization = FactoryGirl.build(:organization)
-      expect { organization.destroy! }.to change { Delayed::Job.where(:queue => "destroy_organization").count }.by(1)
-    end
-
     it "deletes the organization's surveys" do
       organization = FactoryGirl.build(:organization)
       survey = FactoryGirl.create(:survey, :organization_id => organization.id)
       organization.destroy!
-      Delayed::Worker.new.work_off
       Survey.find_by_id(survey.id).should_not be_present
     end
 
@@ -106,8 +100,13 @@ describe Organization do
       survey = FactoryGirl.create(:survey, :organization_id => organization.id)
       response = FactoryGirl.create(:response, :survey => survey)
       organization.destroy!
-      Delayed::Worker.new.work_off
       Survey.find_by_id(survey.id).should_not be_present
     end
+  end
+
+  it "finds deleted organizations" do
+    FakeWeb.register_uri(:get, "#{ENV["OAUTH_SERVER_URL"]}/api/deleted_organizations", :body => [5, 6].to_json)
+    organizations = Organization.deleted_organizations
+    organizations.first.id.should == 5
   end
 end
