@@ -2,7 +2,7 @@ language: ruby
 rvm:
   - 1.9.3
 env:
-  - S3_BUCKET=surveywebtestassets S3_ACCESS_KEY=Foo S3_SECRET=Bar RAILS_ENV=test
+  - S3_BUCKET=surveywebtestassets S3_ACCESS_KEY=Foo S3_SECRET=Bar RAILS_ENV=test OAUTH_SERVER_URL=http://example.com
 # uncomment this line if your project needs to run something other than `rake`:
 # script: bundle exec rspec spec
 before_script:
