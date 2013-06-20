@@ -7,6 +7,7 @@ class SurveysController < ApplicationController
   after_filter :only => [:destroy] { send_to_mixpanel("Survey destroyed", {:survey => @survey.name}) if @survey.present? }
   after_filter :only => [:finalize] { send_to_mixpanel("Survey finalized", {:survey => @survey.name}) if @survey.present? }
   after_filter :only => [:archive] { send_to_mixpanel("Survey archived", {:survey => @survey.name}) if @survey.present? }
+  before_filter :redirect_to_https, :only => :index
 
   def index
     @surveys ||= Survey.none
@@ -66,11 +67,9 @@ class SurveysController < ApplicationController
 
   private
 
-  def require_draft_survey
-    survey = Survey.find(params[:survey_id])
-    if survey.finalized?
-      flash[:error] = t "flash.edit_finalized_survey"
-      redirect_to root_path
-    end
+  def redirect_to_https
+    # Need request.head? because mobile makes a HEAD request to this same path and Titanium
+    # since doesn't follow redirects, we can't redirect to https:// in that case.
+    redirect_to :protocol => "https://" if !request.ssl? && !request.head?
   end
 end

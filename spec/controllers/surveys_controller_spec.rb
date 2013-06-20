@@ -5,6 +5,7 @@ describe SurveysController do
 
   context "GET 'index'" do
     before(:each) do
+      request.env['HTTPS'] = 'on'
       session[:access_token] = "123"
       response = mock(OAuth2::Response)
       access_token = mock(OAuth2::AccessToken)
@@ -66,6 +67,21 @@ describe SurveysController do
       new_survey = Timecop.freeze(2.weeks.from_now) { FactoryGirl.create(:survey, :finalized, :expiry_date => 2.days.from_now, :organization_id => LOGGED_IN_ORG_ID) }
       get :index
       assigns(:surveys).map(&:id).should == [new_survey, old_survey, oldest_survey].map(&:id)
+    end
+
+    context "when redirecting to a https:// url" do
+      it "redirects if the request is http://" do
+        request.env['HTTPS'] = 'off'
+        get :index
+        response.should be_a_redirect
+        URI(response.location).scheme.should == "https"
+      end
+
+      it "doesn't redirect if the request is a HEAD request" do
+        request.env['HTTPS'] = 'off'
+        head :index
+        response.should_not be_a_redirect
+      end
     end
   end
 

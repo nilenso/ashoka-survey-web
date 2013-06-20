@@ -35,9 +35,10 @@ gem "google_visualr", ">= 2.1"
 gem 'ruby-progressbar', '~> 1.0.2'
 gem "mixpanel", "~> 4.0.2"
 gem 'httparty', '~> 0.11.0'
+gem 'rack-ssl', '~> 1.3.3', :require => 'rack/ssl'
 
 group :production do
-  gem 'ey_config'
+  gem 'ey_config', '~> 0.0.6'
 end
 
 group :assets do
