@@ -28,7 +28,7 @@ describe Response do
       end
 
       it "includes responses created at the from and to dates" do
-        from, to = (10.days.ago), (5.days.ago)
+        from, to = (Date.parse("2013/05/05")), (Date.parse("2013/05/10"))
         from_date_response = Timecop.freeze(from) { FactoryGirl.create(:response) }
         to_date_response = Timecop.freeze(to) { FactoryGirl.create(:response) }
         Response.created_between(from, to).should =~ [from_date_response, to_date_response]
