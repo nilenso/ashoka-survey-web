@@ -47,11 +47,6 @@ class Response < ActiveRecord::Base
       self.updated_at].compact.max
   end
 
-  def answers_for_identifier_questions
-    identifier_answers = answers.find_all { |answer| answer.identifier? }
-    identifier_answers.blank? ? five_first_level_answers : identifier_answers
-  end
-
   def complete
     update_column(:status, 'complete') if response_validating?
   end

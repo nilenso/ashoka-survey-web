@@ -36,31 +36,6 @@ describe Response do
     end
   end
 
-  it "fetches the answers for the identifier questions" do
-    response = FactoryGirl.create(:response)
-    identifier_question = FactoryGirl.create(:question, :finalized, :identifier)
-    normal_question = FactoryGirl.create(:question, :finalized, :identifier => false)
-    FactoryGirl.create(:answer, :question => identifier_question,  :response => response)
-    FactoryGirl.create(:answer, :question => normal_question, :response => response)
-    response.reload.answers_for_identifier_questions.should == identifier_question.answers
-  end
-
-  context "when there are no identifier questions" do
-    it "gives you answers to first level questions " do
-      response = FactoryGirl.create(:response)
-      question = FactoryGirl.create(:radio_question, :finalized)
-      nested_question = FactoryGirl.create(:single_line_question, :finalized, :parent => FactoryGirl.create(:option, :question => question))
-      FactoryGirl.create(:answer, :question => question, :response => response)
-      FactoryGirl.create(:answer, :question => nested_question, :response => response)
-      response.reload.answers_for_identifier_questions.should == question.answers
-    end
-
-    it "returns a list of first five answers" do
-      response = FactoryGirl.create(:response_with_answers, :survey => FactoryGirl.create(:survey), :organization_id => 1, :user_id => 1)
-      response.reload.answers_for_identifier_questions.size.should == 5
-    end
-  end
-
   it "merges the response status based on updated_at" do
     response = FactoryGirl.create :response, :organization_id => 1, :user_id => 1, :status => 'complete'
     response.merge_status({ :status => 'incomplete', :updated_at => 5.days.ago.to_s })
