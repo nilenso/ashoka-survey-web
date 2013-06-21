@@ -21,7 +21,8 @@
       <tbody>
         <% @responses.each do |response| %>
         <tr class="survey_row <%= response.status %>">
-          <% response.answers_for_identifier_questions.each do |answer| %>
+          <% @survey.identifier_questions.each do |question| %>
+            <% answer = Answer.find_by_response_id_and_question_id(response.id, question.id) %>
             <td>
             <% if answer.photo_url.present? %>
               <%= image_tag answer.photo_url(:format => :thumb), :class => 'thumb' %>
