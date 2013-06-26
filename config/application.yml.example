@@ -10,6 +10,7 @@ production:
   MIXPANEL_TOKEN: # The access token provided by mixpanel
   SENDGRID_CATEGORY: # The category used when sending emails
   AIRBRAKE_TOKEN: # API token for airbrake.io
+  SECRET_TOKEN: # Secret key used to sign cookies (run `rake secret`)
 
 development:
   OAUTH_ID: # Application ID of the OAuth provider.
@@ -23,6 +24,7 @@ development:
   MIXPANEL_TOKEN: # The access token provided by mixpanel
   SENDGRID_CATEGORY: # The category used when sending emails
   AIRBRAKE_TOKEN: # API token for airbrake.io
+  SECRET_TOKEN: # Secret key used to sign cookies (run `rake secret`)
 
 test:
   OAUTH_ID: # Application ID of the OAuth provider.
@@ -36,3 +38,4 @@ test:
   MIXPANEL_TOKEN: # The access token provided by mixpanel
   SENDGRID_CATEGORY: # The category used when sending emails
   AIRBRAKE_TOKEN: # API token for airbrake.io
+  SECRET_TOKEN: # Secret key used to sign cookies (run `rake secret`)
