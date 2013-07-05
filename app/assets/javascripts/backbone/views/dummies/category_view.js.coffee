@@ -102,7 +102,7 @@ class SurveyBuilder.Views.Dummies.CategoryView extends SurveyBuilder.Views.Dummi
     last_order_number = @last_sub_question_order_number()
 
     _(@sub_questions).each (sub_question) =>
-      index = $(sub_question.el).index()
+      index = $(sub_question.el).index() + 1
       sub_question.model.set({order_number: last_order_number + (index * @ORDER_NUMBER_STEP)}, {silent: true})
       @model.sub_question_order_counter = last_order_number + (index * @ORDER_NUMBER_STEP)
 

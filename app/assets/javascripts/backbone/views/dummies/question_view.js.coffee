@@ -44,7 +44,7 @@ class SurveyBuilder.Views.Dummies.QuestionView extends Backbone.View
     $(@el).children('.dummy_question_content').removeClass("active")
 
   set_order_number: (last_order_number) =>
-    index = $(@el).index()
+    index = $(@el).index() + 1
     @model.set({order_number: last_order_number + (index * @ORDER_NUMBER_STEP)})
     index
 
