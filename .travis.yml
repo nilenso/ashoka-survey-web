@@ -3,10 +3,13 @@ rvm:
   - 1.9.3
 env:
   - S3_BUCKET=surveywebtestassets S3_ACCESS_KEY=Foo S3_SECRET=Bar RAILS_ENV=test OAUTH_SERVER_URL=http://example.com
-# uncomment this line if your project needs to run something other than `rake`:
-# script: bundle exec rspec spec
+
 before_script:
   - psql -c 'create database survey_web_test;' -U postgres
   - cp config/database.yml.sample config/database.yml
   - bundle exec rake db:migrate
   - bundle exec rake db:test:prepare
+
+notifications:
+  email:
+    - ashoka-survey@nilenso.com
