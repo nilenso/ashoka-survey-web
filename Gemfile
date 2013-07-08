@@ -70,7 +70,6 @@ end
 group :development do
   gem 'letter_opener', '~> 1.1.1'
   gem "rails_best_practices", '~> 1.11.1'
-  gem 'debugger', '~> 1.5.0'
   gem 'unicorn-rails', '~> 1.0.0'
   gem 'quiet_assets', '~> 1.0.1'
   gem 'rails-footnotes', '~> 3.7.9'
