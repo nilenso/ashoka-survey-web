@@ -52,13 +52,13 @@ end
 
 group :test, :development do
   gem "parallel_tests", "~> 0.8.14"
+  gem 'rspec-rails', '~> 2.11.4'
+  gem 'rspec-http', '~> 0.10.0'
 end
 
 group :test do
   gem 'fakeweb', '~> 1.3.0'
   gem "simplecov", "~> 0.7.1", :require => false
-  gem 'rspec-rails', '~> 2.11.4'
-  gem 'rspec-http', '~> 0.10.0'
   gem 'factory_girl_rails', '~> 4.2.0'
   gem 'fuubar', '~> 1.1.0'
   gem "shoulda-matchers", '~> 2.0.0'
