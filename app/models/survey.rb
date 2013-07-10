@@ -184,8 +184,8 @@ class Survey < ActiveRecord::Base
   def self.active_arel
     survey = Survey.arel_table
     (
-      survey[:expiry_date].gt(Date.today). # Not expired
-      and(survey[:finalized].eq(true)).     # Finalized
+      survey[:expiry_date].gteq(Date.today).
+      and(survey[:finalized].eq(true)).
       and(survey[:archived].eq(false))
     )
   end
