@@ -560,6 +560,15 @@ describe Survey do
           Survey.active.should == [unexpired_survey]
         end
       end
+
+      it "returns surveys that expire today" do
+        time_right_now = Time.parse("2013-07-10 15:50")
+        survey = Timecop.freeze(time_right_now - 5.days) do
+          FactoryGirl.create(:survey, :finalized, :expiry_date => time_right_now.to_date)
+        end
+        Timecop.travel(time_right_now)
+        Survey.active.should == [survey]
+      end
     end
 
     context "active_plus" do
