@@ -46,7 +46,7 @@ describe Response do
     it "sets the completed_at date when the state changes to complete" do
       response = FactoryGirl.create(:response, :incomplete)
       response.status = "complete"
-      current_time = Time.now
+      current_time = Time.zone.now
       Timecop.freeze(current_time) { response.save }
       response.reload.completed_at.should == current_time
     end
@@ -59,7 +59,7 @@ describe Response do
     end
 
     it "doesn't change the completed_at date when the state stays complete" do
-      current_time = Time.now
+      current_time = Time.zone.now
       response = Timecop.freeze(current_time) { FactoryGirl.create(:response, :complete) }
       response.status = "complete"
       response.save
