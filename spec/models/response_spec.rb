@@ -5,6 +5,12 @@ describe Response do
   it { should validate_presence_of(:organization_id)}
   it { should validate_presence_of(:user_id)}
 
+  it "doesn't allow changing back from complete to incomplete" do
+    response = FactoryGirl.create(:response, :complete)
+    response.status = Response::Status::INCOMPLETE
+    response.should_not be_valid
+  end
+
   context "scopes" do
     it "returns responses in the chronological order" do
       old_response = Timecop.freeze(5.days.ago) { FactoryGirl.create(:response)}
@@ -33,6 +39,31 @@ describe Response do
         to_date_response = Timecop.freeze(to) { FactoryGirl.create(:response) }
         Response.created_between(from, to).should =~ [from_date_response, to_date_response]
       end
+    end
+  end
+
+  context "callbacks" do
+    it "sets the completed_at date when the state changes to complete" do
+      response = FactoryGirl.create(:response, :incomplete)
+      response.status = "complete"
+      current_time = Time.now
+      Timecop.freeze(current_time) { response.save }
+      response.reload.completed_at.should == current_time
+    end
+
+    it "doesn't set the completed_at date when the state isn't complete" do
+      response = FactoryGirl.create(:response, :incomplete)
+      response.status = "incomplete"
+      response.save
+      response.reload.completed_at.should be_nil
+    end
+
+    it "doesn't change the completed_at date when the state stays complete" do
+      current_time = Time.now
+      response = Timecop.freeze(current_time) { FactoryGirl.create(:response, :complete) }
+      response.status = "complete"
+      response.save
+      response.reload.completed_at.should == current_time
     end
   end
 

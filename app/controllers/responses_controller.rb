@@ -6,12 +6,12 @@ class ResponsesController < ApplicationController
   before_filter :authorize_public_response, :only => :create
   before_filter :survey_not_expired, :only => :create
 
-  after_filter :only => [:destroy] { send_to_mixpanel("Response deleted", {:survey => @response.survey.name}) if @response.present? }
+  after_filter(:send_destroy_to_mixpanel, :only => [:destroy])
 
   def index
     @user_names = User.names_for_ids(access_token, @responses.map(&:user_id).uniq)
     @organization_names = Organization.all(access_token)
-    @complete_responses_count = @responses.where(:status => 'complete').order('updated_at').count
+    @complete_responses_count = @responses.where(:status => Response::Status::COMPLETE).order('updated_at').count
     @responses = @responses.where(:blank => false).paginate(:page => params[:page], :per_page => 10).order('created_at DESC, status')
   end
 
@@ -85,9 +85,12 @@ class ResponsesController < ApplicationController
   end
 
   private
+  def send_destroy_to_mixpanel
+    send_to_mixpanel("Response deleted", {:survey => @response.survey.name}) if @response.present?
+  end
 
   def complete_valid_response
-    @response.update_column('status', 'complete')
+    @response.update_column('status', Response::Status::COMPLETE)
     if @response.survey_public? && !user_currently_logged_in?
       @public_response = public_response?
       @survey = @response.survey.decorate

@@ -1,4 +1,13 @@
 class Response < ActiveRecord::Base
+
+  MAX_PAGE_SIZE = 50
+
+  module Status
+    COMPLETE = "complete"
+    INCOMPLETE = "incomplete"
+    VALIDATING = "validating"
+  end
+
   belongs_to :survey
   has_many :answers, :dependent => :destroy
   has_many :records, :dependent => :destroy
@@ -22,9 +31,11 @@ class Response < ActiveRecord::Base
   acts_as_gmappable :lat => :latitude, :lng => :longitude, :check_process => false, :process_geocoding => false
 
   scope :earliest_first, order('updated_at')
-  scope :completed, where(:status => "complete")
+  scope :completed, where(:status => Status::COMPLETE)
 
-  MAX_PAGE_SIZE = 50
+  before_save(:set_completed_date)
+
+  validate :completed_response_cannot_be_marked_incomplete
 
   def self.created_between(from, to)
     where(:created_at => from..to)
@@ -48,27 +59,27 @@ class Response < ActiveRecord::Base
   end
 
   def complete
-    update_column(:status, 'complete') if response_validating?
+    update_column(:status, Status::COMPLETE) if response_validating?
   end
 
   def incomplete
-    update_column(:status, 'incomplete')
+    update_column(:status, Status::INCOMPLETE)
   end
 
   def validating
-    update_column(:status, 'validating')
+    update_column(:status, Status::VALIDATING)
   end
 
   def complete?
-    status == 'complete'
+    status == Status::COMPLETE
   end
 
   def incomplete?
-    status == 'incomplete'
+    status == Status::INCOMPLETE
   end
 
   def validating?
-    status == 'validating'
+    status == Status::VALIDATING
   end
 
   def set(survey_id, user_id, organization_id, session_token)
@@ -97,9 +108,9 @@ class Response < ActiveRecord::Base
     return unless params[:updated_at]
     if Time.parse(params[:updated_at]) > updated_at
       case params[:status]
-      when 'complete'
+      when Status::COMPLETE
         complete
-      when 'incomplete'
+      when Status::INCOMPLETE
         incomplete
       end
     end
@@ -138,6 +149,17 @@ class Response < ActiveRecord::Base
   end
 
   private
+  def completed_response_cannot_be_marked_incomplete
+    if self.status_was == Status::COMPLETE && self.status == Status::INCOMPLETE
+      errors.add(:status, I18n.t("activerecord.errors.models.response.incomplete_to_complete_error"))
+    end
+  end
+
+  def set_completed_date
+    if status == Status::COMPLETE && self.completed_at.nil?
+      self.completed_at = Time.now
+    end
+  end
 
   def five_first_level_answers
     answers.find_all{ |answer| answer.question.first_level? }[0..4]

@@ -271,6 +271,8 @@ en:
         answer:
           should_be_finalized: "must be finalized"
 
+        response:
+          incomplete_to_complete_error: "A completed response cannot be marked incomplete."
   add_option: "Add Option"
 
   privacy_mailer:
