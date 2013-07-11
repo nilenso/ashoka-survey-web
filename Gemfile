@@ -54,6 +54,7 @@ group :test, :development do
   gem "parallel_tests", "~> 0.8.14"
   gem 'rspec-rails', '~> 2.11.4'
   gem 'rspec-http', '~> 0.10.0'
+  gem 'zeus', '~> 0.13.3'
 end
 
 group :test do
