@@ -1,4 +1,5 @@
 class MultiRecordCategory < Category
+  has_many :records, :foreign_key => :category_id
   validate :dont_allow_nested_multi_record, :if => :has_multi_record_ancestor?
 
   def sorted_answers_for_response(response_id, record_id=nil)

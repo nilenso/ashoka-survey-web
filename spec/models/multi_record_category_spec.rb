@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe MultiRecordCategory do
+  it { should have_many :records }
+
   it "doesn't allow nested multi-record categories" do
     parent_mr = FactoryGirl.create(:multi_record_category)
     new_category = FactoryGirl.build(:multi_record_category, :category => parent_mr)

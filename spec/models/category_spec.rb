@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Category do
   it { should validate_presence_of :content }
+  it { should_not have_many :records }
 
   context "scopes" do
     it "finds the finalized categories" do
