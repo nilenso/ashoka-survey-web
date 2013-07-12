@@ -25,7 +25,6 @@ gem "fog", '~> 1.8.0'
 gem "carrierwave_backgrounder", '~> 0.1.3'
 gem 'delayed_job_active_record', '~> 0.3.3'
 gem 'daemons', '~> 1.1.9'
-gem 'paperclip', '~> 3.1.4'
 gem 'feature', '~> 0.5.0'
 gem "active_model_serializers", "~> 0.7.0"
 gem 'jquery-rails', '~> 2.0.2'

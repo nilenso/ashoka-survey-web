@@ -49,10 +49,6 @@ GEM
     carrierwave_backgrounder (0.1.5)
       carrierwave (~> 0.5)
     chunky_png (1.2.8)
-    climate_control (0.0.3)
-      activesupport (>= 3.0)
-    cocaine (0.5.1)
-      climate_control (>= 0.0.3, < 1.0)
     code_analyzer (0.3.1)
       sexp_processor
     coderay (1.0.9)
@@ -181,12 +177,6 @@ GEM
     omniauth-oauth2 (1.1.1)
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
-    paperclip (3.1.4)
-      activemodel (>= 3.0.0)
-      activerecord (>= 3.0.0)
-      activesupport (>= 3.0.0)
-      cocaine (>= 0.0.2)
-      mime-types
     parallel (0.6.5)
     parallel_tests (0.8.14)
       parallel
@@ -347,7 +337,6 @@ DEPENDENCIES
   letter_opener (~> 1.1.1)
   mixpanel (~> 4.0.2)
   omniauth-oauth2 (~> 1.1.1)
-  paperclip (~> 3.1.4)
   parallel_tests (~> 0.8.14)
   pg (~> 0.14.0)
   pry-rails (~> 0.2.1)
