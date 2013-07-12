@@ -6,6 +6,7 @@ class SupervisorAbility < Ability
     can :report, Survey, surveys_published_to_me
     can :archive, Survey, surveys_published_to_me
     can :generate_excel, Survey, surveys_published_to_me
+    can :view_survey_dashboard, Survey, surveys_published_to_me
 
     can_perform_on_responses_of_surveys_published_to_me(:manage)
   end

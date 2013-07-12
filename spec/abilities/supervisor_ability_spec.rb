@@ -44,6 +44,9 @@ describe SupervisorAbility do
     it { should_not be_able_to :change_excel_filters, survey_published_to_him }
     it { should_not be_able_to :change_excel_filters, survey_not_published_to_him }
 
+    it { should be_able_to :view_survey_dashboard, survey_published_to_him }
+    it { should_not be_able_to :view_survey_dashboard, survey_not_published_to_him }
+
     context "with responses" do
       let(:response_for_survey_published_to_him) { FactoryGirl.create(:response, :survey => survey_published_to_him) }
       let(:response_for_survey_not_published_to_him) { FactoryGirl.create(:response, :survey => survey_not_published_to_him) }
