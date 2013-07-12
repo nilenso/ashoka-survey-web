@@ -1,2 +1,20 @@
-<h1><%= @survey.reporter.complete_responses_per_survey_per_user_grouped_by_completion_month(@user_id) %></h1>
-<h1><%= @survey.reporter.incomplete_responses_per_survey_per_user_grouped_by_month(@user_id) %></h1>
+<header>
+  <h2><%= t(".user_responses_dashboard_heading") %></h2>
+</header>
+
+<table class="responses-dashboard-table">
+  <thead>
+    <th><%= t(".date_table_heading") %></th>
+    <th><%= t(".incomplete_table_heading") %></th>
+    <th><%= t(".complete_table_heading") %></th>
+  </thead>
+  <tbody>
+  <% @survey.reporter.response_counts_for(@user_id).each do |month, counts| %>
+    <tr>
+      <td><%= month %></td>
+      <td><%= counts[Response::Status::INCOMPLETE] %></td>
+      <td><%= counts[Response::Status::COMPLETE] %></td>
+    </tr>
+  <% end %>
+  </tbody>
+</table>

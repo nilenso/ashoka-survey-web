@@ -321,3 +321,8 @@ en:
     index:
       list_of_users_heading: "List of users with responses for %{survey_name}"
       view_report_for_user_link: "View"
+    show:
+      user_responses_dashboard_heading: "List of Responses"
+      date_table_heading: "Date"
+      incomplete_table_heading: "Incomplete"
+      complete_table_heading: "Complete"
