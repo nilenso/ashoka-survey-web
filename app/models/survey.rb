@@ -54,6 +54,10 @@ class Survey < ActiveRecord::Base
     self.survey_users.map(&:user_id)
   end
 
+  def ids_for_users_with_responses
+    self.responses.pluck("user_id").uniq
+  end
+
   def users_for_organization(access_token, organization_id)
     users = {}
     publishable_users = Organization.publishable_users(access_token, organization_id)

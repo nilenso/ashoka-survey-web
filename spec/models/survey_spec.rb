@@ -8,13 +8,13 @@ describe Survey do
 
     context "validates the expiry date" do
       it "to not be in the past when survey is created" do
-        date = Date.new(1990,10,24)
+        date = Date.new(1990, 10, 24)
         survey = FactoryGirl.build(:survey, :expiry_date => date)
         survey.should_not be_valid
       end
 
       it "to not be in the past when expiry date is updated" do
-        date = Date.new(1990,10,24)
+        date = Date.new(1990, 10, 24)
         survey = FactoryGirl.create(:survey)
         survey.expiry_date = date
         survey.should_not be_valid
@@ -342,6 +342,28 @@ describe Survey do
       field_agents[:published].first.id.should == 1
       field_agents[:unpublished].first.id.should == 2
     end
+
+    context "when finding users who have taken a response to this survey" do
+      it "returns a list of user IDs" do
+        survey = FactoryGirl.create(:survey)
+        response = FactoryGirl.create(:response, :user_id => 5, :survey => survey)
+        survey.ids_for_users_with_responses.should == [5]
+      end
+
+      it "doesn't include users who haven't taken a response to this survey" do
+        survey = FactoryGirl.create(:survey)
+        other_survey = FactoryGirl.create(:survey)
+        response = FactoryGirl.create(:response, :user_id => 5, :survey => other_survey)
+        survey.ids_for_users_with_responses.should == []
+      end
+
+      it "doesn't include duplicate users" do
+        survey = FactoryGirl.create(:survey)
+        FactoryGirl.create(:response, :user_id => 5, :survey => survey)
+        FactoryGirl.create(:response, :user_id => 5, :survey => survey)
+        survey.ids_for_users_with_responses.should == [5]
+      end
+    end
   end
 
   context "participating organizations" do
@@ -384,7 +406,7 @@ describe Survey do
       organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Org name"}])
       access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
 
-      organization = { :id => 2, :name => "Org name"}
+      organization = {:id => 2, :name => "Org name"}
       FactoryGirl.create(:participating_organization, :survey_id => survey.id, :organization_id => organization[:id])
       partitioned_organizations = survey.partitioned_organizations(access_token)
       partitioned_organizations[:not_participating].first.id.should == 1
