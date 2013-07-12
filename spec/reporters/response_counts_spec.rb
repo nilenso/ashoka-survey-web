@@ -52,4 +52,13 @@ describe ResponseCounts do
       response_counts.counts.size.should == 1
     end
   end
+
+  context "when iterating over the ResponseCount objects" do
+    it "yields all the counts" do
+      response_count_1 = ResponseCount.new("Jan 2013", 1, 5)
+      response_count_2 = ResponseCount.new("Jun 2013", 1, 5)
+      response_counts = ResponseCounts.new([response_count_1, response_count_2])
+      response_counts.each.to_a.should =~ [response_count_1, response_count_2]
+    end
+  end
 end

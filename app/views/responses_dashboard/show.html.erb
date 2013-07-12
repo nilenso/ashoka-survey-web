@@ -10,7 +10,7 @@
   </thead>
   <tbody>
 
-  <% @survey.reporter.response_counts_for(@user_id).counts.each do |count| %>
+  <% @survey.reporter.response_counts_for(@user_id).each do |count| %>
     <tr>
       <td><%= count.month %></td>
       <td><%= count.incompletes %></td>

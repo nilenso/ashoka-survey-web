@@ -1,5 +1,10 @@
+require 'forwardable'
+
 class ResponseCounts
   attr_reader :counts
+  extend Forwardable
+
+  def_delegators :@counts, :<<, :each
 
   def initialize(counts=[])
     @counts = counts
@@ -16,10 +21,6 @@ class ResponseCounts
       end
       merged_counts
     end
-  end
-
-  def << (other)
-    counts << other
   end
 
   def find_by_month(month)
