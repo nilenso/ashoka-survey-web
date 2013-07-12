@@ -9,11 +9,12 @@
     <th><%= t(".complete_table_heading") %></th>
   </thead>
   <tbody>
-  <% @survey.reporter.response_counts_for(@user_id).each do |month, counts| %>
+
+  <% @survey.reporter.response_counts_for(@user_id).counts.each do |count| %>
     <tr>
-      <td><%= month %></td>
-      <td><%= counts[Response::Status::INCOMPLETE] %></td>
-      <td><%= counts[Response::Status::COMPLETE] %></td>
+      <td><%= count.month %></td>
+      <td><%= count.incompletes %></td>
+      <td><%= count.completes %></td>
     </tr>
   <% end %>
   </tbody>
