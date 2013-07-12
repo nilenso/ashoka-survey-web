@@ -317,3 +317,7 @@ en:
   date:
     formats:
       default: "%d %b, %Y"
+  responses_dashboard:
+    index:
+      list_of_users_heading: "List of users with responses for %{survey_name}"
+      view_report_for_user_link: "View"
