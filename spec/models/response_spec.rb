@@ -48,7 +48,7 @@ describe Response do
       response.status = "complete"
       current_time = Time.zone.now
       Timecop.freeze(current_time) { response.save }
-      response.reload.completed_at.should == current_time
+      response.reload.completed_at.to_i.should == current_time.to_i
     end
 
     it "doesn't set the completed_at date when the state isn't complete" do
@@ -63,7 +63,7 @@ describe Response do
       response = Timecop.freeze(current_time) { FactoryGirl.create(:response, :complete) }
       response.status = "complete"
       response.save
-      response.reload.completed_at.should == current_time
+      response.reload.completed_at.to_i.should == current_time.to_i
     end
   end
 
