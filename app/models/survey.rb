@@ -179,6 +179,10 @@ class Survey < ActiveRecord::Base
     responses.where(:blank => false).empty?
   end
 
+  def reporter
+    SurveyReporter.new(self)
+  end
+
   private
 
   def self.active_arel
