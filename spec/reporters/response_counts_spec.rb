@@ -58,7 +58,15 @@ describe ResponseCounts do
       response_count_1 = ResponseCount.new("Jan 2013", 1, 5)
       response_count_2 = ResponseCount.new("Jun 2013", 1, 5)
       response_counts = ResponseCounts.new([response_count_1, response_count_2])
-      response_counts.each.to_a.should =~ [response_count_1, response_count_2]
+      response_counts.each_in_reverse_chronological_order.to_a.should =~ [response_count_1, response_count_2]
+    end
+
+    it "yields the elements in reverse chronological order" do
+      response_count_3 = ResponseCount.new("Jan 2013", 1, 5)
+      response_count_2 = ResponseCount.new("Sep 2012", 1, 5)
+      response_count_1 = ResponseCount.new("Jun 2013", 1, 5)
+      response_counts = ResponseCounts.new([response_count_1, response_count_2, response_count_3])
+      response_counts.each_in_reverse_chronological_order.to_a.should == [response_count_1, response_count_3, response_count_2]
     end
   end
 end

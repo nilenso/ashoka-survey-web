@@ -23,6 +23,10 @@ class ResponseCounts
     end
   end
 
+  def each_in_reverse_chronological_order(&blk)
+    @counts.sort_by { |count| Date.parse(count.month) }.reverse.each(&blk)
+  end
+
   def find_by_month(month)
     @counts.find { |count| count.month == month }
   end
