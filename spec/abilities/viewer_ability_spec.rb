@@ -15,10 +15,10 @@ describe ViewerAbility do
   let(:ability){ ViewerAbility.new(user_info) }
 
   context "for surveys" do
-    let(:survey_in_same_org) { FactoryGirl.create :survey_with_all, :organization_id => user_info[:org_id] }
-    let(:survey_in_other_org) { FactoryGirl.create :survey_with_all, :organization_id => 341 }
+    let(:survey_in_same_org) { FactoryGirl.create :survey, :finalized, :organization_id => user_info[:org_id] }
+    let(:survey_in_other_org) { FactoryGirl.create :survey, :finalized, :organization_id => 341 }
     let(:survey_in_another_org_shared_with_his_org) do
-      survey = FactoryGirl.create :survey_with_all, :organization_id => 300
+      survey = FactoryGirl.create :survey, :finalized, :organization_id => 300
       ParticipatingOrganization.create(:survey_id => survey.id, :organization_id => 5)
       survey
     end

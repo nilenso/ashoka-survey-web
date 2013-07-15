@@ -16,11 +16,11 @@ describe SupervisorAbility do
 
   context "for surveys" do
     let(:survey_published_to_him) do
-      survey = FactoryGirl.create :survey_with_all, :organization_id => user_info[:org_id]
+      survey = FactoryGirl.create :survey, :finalized, :organization_id => user_info[:org_id]
       SurveyUser.create(:user_id => 6, :survey_id => survey.id)
       survey
     end
-    let(:survey_not_published_to_him) { FactoryGirl.create :survey_with_all, :organization_id => 5 }
+    let(:survey_not_published_to_him) { FactoryGirl.create :survey, :finalized, :organization_id => 5 }
 
     it { should_not be_able_to :create, Survey }
     it { should_not be_able_to :update, Survey }

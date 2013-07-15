@@ -15,10 +15,10 @@ describe ManagerAbility do
   let(:ability){ ManagerAbility.new(user_info) }
 
   context "for surveys" do
-    let(:survey_in_his_organization) { FactoryGirl.create :survey_with_all, :organization_id => 5 }
-    let(:survey_in_another_organization) { FactoryGirl.create :survey_with_all, :organization_id => 300 }
+    let(:survey_in_his_organization) { FactoryGirl.create :survey, :finalized, :organization_id => 5 }
+    let(:survey_in_another_organization) { FactoryGirl.create :survey, :finalized, :organization_id => 300 }
     let(:survey_in_another_org_shared_with_his_org) do
-      survey = FactoryGirl.create :survey_with_all, :organization_id => 300
+      survey = FactoryGirl.create :survey, :finalized, :organization_id => 300
       ParticipatingOrganization.create(:survey_id => survey.id, :organization_id => 5)
       survey
     end
