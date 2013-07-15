@@ -111,7 +111,8 @@ describe ResponsesController do
       res = FactoryGirl.create(:response, :survey => survey,
                                :organization_id => 1, :user_id => 1)
       get :index, :survey_id => survey.id
-      assigns(:user_names).should == {1 => "Bob", 2 => "John"}
+      user = assigns(:users).find_by_id(1)
+      user.name.should == "Bob"
     end
 
     it "gets the organization names for all the organization_ids of the responses " do

@@ -16,8 +16,8 @@ describe User do
     users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => "field_agent", "email" => "foo@bar.com"},
                                             {"id" => 2, "name" => "John", "role" => "field_agent", "email" => "bar@foo.com"}])
 
-    @access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1,2].to_json}).and_return(names_response)
-    names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
+    @access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
+    names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "email" => "foo@foo.com", "role" => "admin"}])
 
     @access_token.stub(:get).with('/api/users/validate_users', :params => {:user_ids => [1,2].to_json}).and_return(user_exists)
     user_exists.stub(:parsed).and_return(true)
@@ -34,12 +34,14 @@ describe User do
 
   context "when getting user info for ids passed in" do
     it "returns the user ids if logged in" do
-      user_ids = [1, 2]
-      User.users_for_ids(@access_token, user_ids).should == { 1 => "Bob", 2 => "John"}
+      user_ids = [1]
+      user = User.users_for_ids(@access_token, user_ids)[0]
+      user.name.should == "Bob"
+      user.id.should == 1
     end
 
     it "returns an empty hash if not logged in" do
-      user_ids = [1, 2]
+      user_ids = [1]
       User.users_for_ids(nil, user_ids).should == {}
     end
   end

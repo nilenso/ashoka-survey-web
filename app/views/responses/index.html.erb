@@ -38,7 +38,7 @@
             <%= I18n.localize(response.last_update) %>
           </td>
           <td>
-            <%= @user_names[response.user_id] if response.user_id %>
+            <%= @users.find_by_id(response.user_id).name if response.user_id %>
           </td>
           <td>
           <% if response.status == 'complete' %>

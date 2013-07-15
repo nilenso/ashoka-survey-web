@@ -31,8 +31,8 @@ class Reports::Excel::Metadata
   end
 
   def user_name_for(id)
-    @user_names ||= User.users_for_ids(@access_token, @responses.map(&:user_id).uniq)
-    @user_names[id]
+    @users ||= User.users_for_ids(@access_token, @responses.map(&:user_id).uniq)
+    @users.find { |user| user.id == id }.name
   end
 
   def organization_name_for(id)

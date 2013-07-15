@@ -9,7 +9,7 @@ class ResponsesController < ApplicationController
   after_filter(:send_destroy_to_mixpanel, :only => [:destroy])
 
   def index
-    @user_names = User.users_for_ids(access_token, @responses.map(&:user_id).uniq)
+    @users = UsersDecorator.new(User.users_for_ids(access_token, @responses.map(&:user_id).uniq))
     @organization_names = Organization.all(access_token)
     @complete_responses_count = @responses.where(:status => Response::Status::COMPLETE).order('updated_at').count
     @responses = @responses.where(:blank => false).paginate(:page => params[:page], :per_page => 10).order('created_at DESC, status')
