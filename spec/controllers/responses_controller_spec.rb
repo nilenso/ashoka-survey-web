@@ -79,7 +79,7 @@ describe ResponsesController do
       organizations_response = mock(OAuth2::Response)
       controller.stub(:access_token).and_return(access_token)
 
-      access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
+      access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
       access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
       names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
       organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "Foo"}, {"id" => 2, "name" => "Bar"}])
@@ -141,7 +141,7 @@ describe ResponsesController do
       organizations_response = mock(OAuth2::Response)
       controller.stub(:access_token).and_return(access_token)
 
-      access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
+      access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
       access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
       names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
       organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "Foo"}, {"id" => 2, "name" => "Bar"}])

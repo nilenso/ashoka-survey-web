@@ -31,7 +31,7 @@ class Reports::Excel::Metadata
   end
 
   def user_name_for(id)
-    @user_names ||= User.names_for_ids(@access_token, @responses.map(&:user_id).uniq)
+    @user_names ||= User.users_for_ids(@access_token, @responses.map(&:user_id).uniq)
     @user_names[id]
   end
 

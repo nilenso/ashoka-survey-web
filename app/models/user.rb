@@ -14,9 +14,9 @@ class User
     }
   end
 
-  def self.names_for_ids(client, user_ids)
+  def self.users_for_ids(client, user_ids)
     return {} if not client
-    users = client.get("/api/users/names_for_ids", :params => {:user_ids => user_ids.to_json}).parsed
+    users = client.get("/api/users/users_for_ids", :params => {:user_ids => user_ids.to_json}).parsed
     users.inject({}) do |hash, user|
       hash[user['id']] = user['name']
       hash

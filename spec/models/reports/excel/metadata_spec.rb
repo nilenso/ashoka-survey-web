@@ -6,7 +6,7 @@ describe Reports::Excel::Metadata do
   context "when returning the metadata for a response" do
     before(:each) do
       names_response = mock(OAuth2::Response)
-      access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
+      access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
       names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}])
 
       orgs_response = mock(OAuth2::Response)
@@ -69,7 +69,7 @@ describe Reports::Excel::Metadata do
 
   it "finds the user name for an ID" do
     names_response = mock(OAuth2::Response)
-    access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
+    access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
     names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}])
 
     response = FactoryGirl.create(:response, :user_id => 1)

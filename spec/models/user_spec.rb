@@ -16,7 +16,7 @@ describe User do
     users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => "field_agent", "email" => "foo@bar.com"},
                                             {"id" => 2, "name" => "John", "role" => "field_agent", "email" => "bar@foo.com"}])
 
-    @access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1,2].to_json}).and_return(names_response)
+    @access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1,2].to_json}).and_return(names_response)
     names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
 
     @access_token.stub(:get).with('/api/users/validate_users', :params => {:user_ids => [1,2].to_json}).and_return(user_exists)
@@ -32,15 +32,15 @@ describe User do
     user.email.should == "foo@bar.com"
   end
 
-  context "when getting user ids and names for ids passed in" do
+  context "when getting user info for ids passed in" do
     it "returns the user ids if logged in" do
       user_ids = [1, 2]
-      User.names_for_ids(@access_token, user_ids).should == { 1 => "Bob", 2 => "John"}
+      User.users_for_ids(@access_token, user_ids).should == { 1 => "Bob", 2 => "John"}
     end
 
     it "returns an empty hash if not logged in" do
       user_ids = [1, 2]
-      User.names_for_ids(nil, user_ids).should == {}
+      User.users_for_ids(nil, user_ids).should == {}
     end
   end
 
@@ -52,7 +52,7 @@ describe User do
 
     it "returns an empty hash if not logged in" do
       user_ids = [1, 2]
-      User.names_for_ids(nil, user_ids).should == {}
+      User.users_for_ids(nil, user_ids).should == {}
     end
 
     it "checks if whether the user is publishable or not" do

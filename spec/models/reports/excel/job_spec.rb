@@ -12,7 +12,7 @@ describe Reports::Excel::Job do
     @access_token.stub(:get).with('/api/organizations').and_return(@orgs_response)
     @orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
     @names_response = mock(OAuth2::Response)
-    @access_token.stub(:get).with('/api/users/names_for_ids', :params => {:user_ids => [1].to_json}).and_return(@names_response)
+    @access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(@names_response)
     @names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}])
   end
 
