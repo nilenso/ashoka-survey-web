@@ -2,7 +2,7 @@ class ResponsesDashboardController < ApplicationController
   def index
     @survey = Survey.find(params[:survey_id])
     authorize! :view_survey_dashboard, @survey
-    @ids_for_users_with_responses = @survey.ids_for_users_with_responses
+    @users_with_responses = User.users_for_ids(access_token, @survey.ids_for_users_with_responses)
   end
 
   def show

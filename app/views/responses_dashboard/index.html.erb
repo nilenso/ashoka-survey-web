@@ -11,13 +11,13 @@
   </thead>
 
   <tbody>
-    <% @ids_for_users_with_responses.each do |user_id| %>
+    <% @users_with_responses.each do |user| %>
     <tr>
-      <td>N/A</td>
-      <td>N/A</td>
-      <td><%= user_id %></td>
+      <td><%= user.name %></td>
+      <td><%= user.role %></td>
+      <td><%= user.id %></td>
       <td class="actions">
-        <%= link_to t(".view_report_for_user_link"), survey_dashboard_path(@survey.id, user_id) %>
+        <%= link_to t(".view_report_for_user_link"), survey_dashboard_path(@survey.id, user.id) %>
       </td>
     </tr>
     <% end %>

@@ -8,18 +8,22 @@ describe ResponsesDashboardController do
     end
 
     it "renders the 'index' template" do
+      stub_users_for_ids([])
       get :index, :survey_id => survey.id
       response.should be_ok
       response.should render_template :index
     end
 
-    it "assigns the IDs of users who have taken responses for the survey" do
+    it "assigns the users who have taken responses for the survey" do
+      stub_users_for_ids([{"id" => 5, "name" => "Bob"}])
       response = FactoryGirl.create(:response, :user_id => 5, :survey => survey)
       get :index, :survey_id => survey.id
-      assigns(:ids_for_users_with_responses).should == [5]
+      users = assigns(:users_with_responses)
+      users[0].name.should == "Bob"
     end
 
     it "raises an error if the survey ID is invalid" do
+      stub_users_for_ids([])
       expect { get :index, :survey_id => 42 }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end

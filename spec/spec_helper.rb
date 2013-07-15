@@ -72,3 +72,12 @@ def sign_in_as(role)
   session[:user_info] = OmniAuth::AuthHash.new({ :role => role, :org_id => LOGGED_IN_ORG_ID })
   session[:access_token] = "123"
 end
+
+def stub_users_for_ids(users)
+  session[:access_token] = "123"
+  access_token = mock(OAuth2::AccessToken)
+  controller.stub(:access_token).and_return(access_token)
+  names_response = mock(OAuth2::Response)
+  access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => users.map { |u| u['id'] }.to_json}).and_return(names_response)
+  names_response.stub(:parsed).and_return(users)
+end
