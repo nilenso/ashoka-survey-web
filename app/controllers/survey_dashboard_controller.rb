@@ -1,4 +1,4 @@
-class ResponsesDashboardController < ApplicationController
+class SurveyDashboardController < ApplicationController
   def index
     @survey = Survey.find(params[:survey_id])
     authorize! :view_survey_dashboard, @survey

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ResponsesDashboardController do
+describe SurveyDashboardController do
   let(:survey) { FactoryGirl.create(:survey, :organization_id => LOGGED_IN_ORG_ID) }
   describe "GET 'index'"  do
     before(:each) do

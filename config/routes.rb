@@ -8,7 +8,7 @@ SurveyWeb::Application.routes.draw do
     resources :dashboards, :only => [:index, :show], :controller => "organization_dashboards"
 
     resources :surveys, :only => [:new, :create, :destroy, :index] do
-      resources :dashboard, :only => [:index, :show], :controller => 'responses_dashboard'
+      resources :dashboard, :only => [:index, :show], :controller => 'survey_dashboard'
       resource :publication, :only => [:update, :edit, :destroy] do
         get 'unpublish'
       end
