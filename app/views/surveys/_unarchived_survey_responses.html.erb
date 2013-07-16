@@ -7,7 +7,11 @@
 
   <ul class="cso_admin_operations">
     <li><%= link_to icon_for('icon-edit', t('surveys.index.edit')), survey_build_path(survey.id)  if can? :build, survey %></li>
-    <li><%= link_to icon_for('icon-dashboard', t('surveys.index.survey_dashboard')), survey_dashboard_index_path(survey.id) if can?(:view_survey_dashboard, survey) %></li>
+    <li><%= link_to icon_for('icon-trash', t('surveys.index.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can?(:destroy, survey) && survey.deletable?  %></li>
+    <li><%= link_to icon_for('icon-copy', t('surveys.index.duplicate')), "javascript:void(0);", :class => "duplicate", :data => { :survey_id => survey.id } if can? :duplicate, survey %></li>
+  </ul>
+
+  <ul>
     <% if survey.finalized? %>
         <li><%= link_to icon_for('icon-arrow-up', t('surveys.index.publish')), edit_survey_publication_path(survey.id) if can? :edit_publication, survey %></li>
         <li><%= link_to icon_for('icon-arrow-up', t('surveys.index.unpublish')), unpublish_survey_publication_path(survey.id) if can?(:edit_publication, survey) && survey.survey_users.any? %></li>
@@ -15,8 +19,11 @@
     <% else %>
         <li><%= link_to icon_for('icon-ok', t('surveys.index.finalize')), survey_finalize_path(survey.id), :method => :put, :data => { :confirm => t("surveys.confirm_finalize") } if can? :finalize, survey %></li>
     <% end %>
-    <li><%= link_to icon_for('icon-trash', t('surveys.index.delete')), survey_path(survey.id), :method => :delete, :data => { :confirm => t(:confirm) } if can?(:destroy, survey) && survey.deletable?  %></li>
-    <li><%= link_to icon_for('icon-copy', t('surveys.index.duplicate')), "javascript:void(0);", :class => "duplicate", :data => { :survey_id => survey.id } if can? :duplicate, survey %></li>
+  </ul>
+
+  <ul>
+    <li><%= link_to icon_for('icon-dashboard', t('surveys.index.survey_dashboard')), survey_dashboard_index_path(survey.id) if can?(:view_survey_dashboard, survey) %></li>
     <li><%= link_to icon_for('icon-bar-chart', t('surveys.index.reports')), report_survey_path(survey.id) if can?(:report, survey) && survey.finalized? && survey.has_responses? %></li>
+    
   </ul>
 </div>

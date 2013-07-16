@@ -49,13 +49,14 @@ div#content{
         bottom: 6px;
 
         ul{
-          margin: 0; padding: 0;
+          margin: 0 0 0 12px; padding: 0;
           float: left;
 
           li{
-            display: block; padding: 0; margin: 0 4px 0 0;
+            display: block; padding: 0; margin: 0 1px 0 0;
             float: left;
             list-style: none;
+            line-height: 20px;
 
             a{
               display: block;
@@ -64,8 +65,7 @@ div#content{
               text-align: center;
               line-height: 20px;
               padding: 0 6px;
-              @include border-radius(2px);
-
+              
               &:hover{
                 background: $primary-color;
                 color: $secondary-color-light;
@@ -74,6 +74,9 @@ div#content{
 
               &.disabled{display: none;}
             }
+
+            &:first-child a{ @include border-radius(4px 0 0 4px); }
+            &:last-child a{ @include border-radius(0 4px 4px 0); }
           }
         }
       }
@@ -84,6 +87,10 @@ div#content{
         ul li a{
           background: $secondary-color-light;
           color: $primary-color;
+
+          &:hover{
+            background: $secondary-color;
+          }
         }
       }
     }
