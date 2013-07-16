@@ -37,21 +37,5 @@ FactoryGirl.define do
         survey.finalize
       end
     end
-
-    factory :survey_with_all do
-      ignore do
-        options_count 5
-      end
-      after(:create) do |survey, evaluator|
-        FactoryGirl.create_list(:question_with_answers, 5, :survey => survey)
-        FactoryGirl.create_list(:category, 5, :survey => survey)
-        question = survey.questions.first
-        question.type = 'RadioQuestion' if question.type.blank?
-        FactoryGirl.create_list(:option, evaluator.options_count, :question => question)
-        question.save
-        survey.save
-        survey.finalize
-      end
-    end
   end
 end
