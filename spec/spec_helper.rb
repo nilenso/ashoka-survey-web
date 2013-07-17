@@ -81,3 +81,8 @@ def stub_users_for_ids(users)
   access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => users.map { |u| u['id'] }.to_json}).and_return(names_response)
   names_response.stub(:parsed).and_return(users)
 end
+
+def stub_geocoder(opts = {})
+  Geocoder.configure(:lookup => :test)
+  Geocoder::Lookup::Test.set_default_stub([:address => opts[:address]])
+end

@@ -11,10 +11,11 @@ describe ResponsesController do
     let(:survey) { FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)}
     let(:question) { FactoryGirl.create(:question)}
 
+    before(:each) { stub_geocoder }
+
     it "saves the response" do
       expect {
         post :create, :survey_id => survey.id
-
       }.to change { Response.count }.by(1)
     end
 
@@ -146,6 +147,7 @@ describe ResponsesController do
       access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
       names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
       organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "Foo"}, {"id" => 2, "name" => "Bar"}])
+      stub_geocoder
     end
 
     it "assigns only the completed responses" do

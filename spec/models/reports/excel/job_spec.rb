@@ -53,8 +53,7 @@ describe Reports::Excel::Job do
       @orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "C42"}, {"id" => 2, "name" => "Ashoka"}])
       @names_response.stub(:parsed).and_return([{"id" => 1, "name" => "hansel"}])
 
-      Geocoder.configure(:lookup => :test)
-      Geocoder::Lookup::Test.set_default_stub([{ 'address' => 'foo_location' }])
+      stub_geocoder(:address => "foo_location")
 
       response = FactoryGirl.create(:response, :user_id => 1, :ip_address => "0.0.0.0", :organization_id => 1, :state => "dirty")
       data = Reports::Excel::Data.new(survey, [], [response], server_url, metadata)
