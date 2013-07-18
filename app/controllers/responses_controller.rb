@@ -12,7 +12,7 @@ class ResponsesController < ApplicationController
     @users = UsersDecorator.new(User.users_for_ids(access_token, @responses.map(&:user_id).uniq))
     @organization_names = Organization.all(access_token)
     @complete_responses_count = @responses.where(:status => Response::Status::COMPLETE).order('updated_at').count
-    @responses = @responses.where(:blank => false).paginate(:page => params[:page], :per_page => 10).order('created_at DESC, status')
+    @responses = @responses.where(:answers_present => true).paginate(:page => params[:page], :per_page => 10).order('created_at DESC, status')
   end
 
   def generate_excel
@@ -27,7 +27,7 @@ class ResponsesController < ApplicationController
   end
 
   def create
-    response = ResponseDecorator.new(Response.new(:blank => true))
+    response = ResponseDecorator.new(Response.new)
     response.set(params[:survey_id], current_user, current_user_org, session_token)
     response.save
     survey = Survey.find(params[:survey_id])
@@ -54,7 +54,7 @@ class ResponsesController < ApplicationController
 
   def update
     @response = ResponseDecorator.find(params[:id])
-    @response.update_column(:blank, false)
+    @response.update_column(:answers_present, true)
     if @response.update_attributes(params[:response])
       send_to_mixpanel("Response updated", { :survey => @response.survey.name })
       redirect_to :back, :notice => "Successfully updated"
@@ -66,7 +66,7 @@ class ResponsesController < ApplicationController
 
   def complete
     @response = ResponseDecorator.find(params[:id])
-    @response.update_column(:blank, false)
+    @response.update_column(:answers_present, true)
     was_complete = @response.complete?
     answers_attributes = params.try(:[],:response).try(:[], :answers_attributes)
     if @response.valid_for?(answers_attributes)

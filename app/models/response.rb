@@ -15,7 +15,7 @@ class Response < ActiveRecord::Base
   accepts_nested_attributes_for :answers
 
   attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status, :updated_at,
-                  :latitude, :longitude, :ip_address, :state, :comment, :blank
+                  :latitude, :longitude, :ip_address, :state, :comment, :answers_present
 
   validates_presence_of :survey_id
   validates_presence_of :organization_id, :user_id, :unless => :survey_public?

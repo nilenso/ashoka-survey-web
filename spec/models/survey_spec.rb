@@ -513,24 +513,24 @@ describe Survey do
   context "when counting responses" do
     it "returns the number of complete responses accessible by the current user" do
       survey = FactoryGirl.create(:survey, :finalized => true)
-      6.times { FactoryGirl.create(:response, :survey => survey, :status => 'complete', :user_id => 123) }
-      FactoryGirl.create(:response, :survey => survey, :status => 'complete', :user_id => 456)
+      6.times { FactoryGirl.create(:response, :complete, :answers_present, :survey => survey, :user_id => 123) }
+      FactoryGirl.create(:response, :complete, :answers_present, :survey => survey, :user_id => 456)
       survey.responses.should_receive(:accessible_by).and_return(Response.where(:user_id => 123))
       survey.complete_responses_count(stub).should == 6
     end
 
     it "returns the number of incomplete responses accessible by the current user" do
       survey = FactoryGirl.create(:survey, :finalized => true)
-      6.times { FactoryGirl.create(:response, :survey => survey, :user_id => 123) }
+      6.times { FactoryGirl.create(:response, :incomplete, :answers_present, :survey => survey, :user_id => 123) }
       FactoryGirl.create(:response, :survey => survey, :user_id => 456)
       survey.responses.should_receive(:accessible_by).and_return(Response.where(:user_id => 123))
       survey.incomplete_responses_count(stub).should == 6
     end
 
-    it "excludes blank responses" do
+    it "excludes responses with no answers" do
       survey = FactoryGirl.create(:survey, :finalized => true)
-      2.times { FactoryGirl.create(:response, :survey => survey, :user_id => 123, :blank => true) }
-      2.times { FactoryGirl.create(:response, :survey => survey, :status => 'complete', :user_id => 123, :blank => true) }
+      2.times { FactoryGirl.create(:response, :complete, :survey => survey, :user_id => 123, :answers_present => false) }
+      2.times { FactoryGirl.create(:response, :incomplete, :survey => survey, :user_id => 123, :answers_present => false) }
       survey.responses.should_receive(:accessible_by).twice.and_return(Response.where(:user_id => 123))
       survey.incomplete_responses_count(stub).should == 0
       survey.complete_responses_count(stub).should == 0

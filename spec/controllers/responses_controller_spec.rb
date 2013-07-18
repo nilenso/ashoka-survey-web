@@ -19,11 +19,6 @@ describe ResponsesController do
       }.to change { Response.count }.by(1)
     end
 
-    it "saves the response with blank as true" do
-      post :create, :survey_id => survey.id
-      Response.last.should be_blank
-    end
-
     it "saves the response to the right survey" do
       post :create, :survey_id => survey.id
       assigns(:response).survey.should ==  survey
@@ -88,7 +83,7 @@ describe ResponsesController do
 
     it "renders the list of responses for a survey if a cso admin is signed in" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey,
+      res = FactoryGirl.create(:response, :answers_present, :survey => survey,
                                :organization_id => 1, :user_id => 1)
       get :index, :survey_id => survey.id
       response.should be_ok
@@ -97,11 +92,11 @@ describe ResponsesController do
 
     it "sorts the responses by created_at, status" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res_1 = FactoryGirl.create(:response, :survey => survey, :status => "complete",
+      res_1 = FactoryGirl.create(:response, :answers_present, :survey => survey, :status => "complete",
           :organization_id => 1, :user_id => 1, :created_at => Time.now)
-      res_2 = FactoryGirl.create(:response, :survey => survey, :status => "incomplete",
+      res_2 = FactoryGirl.create(:response, :answers_present, :survey => survey, :status => "incomplete",
           :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
-      res_3 = FactoryGirl.create(:response, :survey => survey, :status => "complete",
+      res_3 = FactoryGirl.create(:response, :answers_present, :survey => survey, :status => "complete",
           :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
       get :index, :survey_id => survey.id
       assigns(:responses).should == [res_1, res_3, res_2]
@@ -127,8 +122,8 @@ describe ResponsesController do
 
     it "doesn't include blank responses" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      blank_response = FactoryGirl.create(:response, :blank => true, :survey => survey)
-      non_blank_response = FactoryGirl.create(:response, :blank => false, :survey => survey)
+      blank_response = FactoryGirl.create(:response, :answers_present => false, :survey => survey)
+      non_blank_response = FactoryGirl.create(:response, :answers_present, :survey => survey)
       get :index, :survey_id => survey.id
       assigns(:responses).should == [non_blank_response]
     end

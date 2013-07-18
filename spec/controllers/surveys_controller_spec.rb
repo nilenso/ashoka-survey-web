@@ -115,7 +115,7 @@ describe SurveysController do
     end
 
     it "doesn't delete the survey if it has any non-blank responses" do
-      FactoryGirl.create(:response, :survey => survey, :blank => false)
+      FactoryGirl.create(:response, :survey => survey, :answers_present => true)
       expect do
         delete :destroy, :id => survey.id
       end.not_to change { Survey.count }

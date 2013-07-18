@@ -150,11 +150,11 @@ class Survey < ActiveRecord::Base
   end
 
   def complete_responses_count(current_ability)
-    responses.accessible_by(current_ability).where(:status => 'complete', :blank => false).count
+    responses.accessible_by(current_ability).where(:status => 'complete', :answers_present => true).count
   end
 
   def incomplete_responses_count(current_ability)
-    responses.accessible_by(current_ability).where(:status => 'incomplete', :blank => false).count
+    responses.accessible_by(current_ability).where(:status => 'incomplete', :answers_present => true).count
   end
 
   def publicize
@@ -180,7 +180,7 @@ class Survey < ActiveRecord::Base
   end
 
   def deletable?
-    responses.where(:blank => false).empty?
+    responses.where(:answers_present => true).empty?
   end
 
   def reporter

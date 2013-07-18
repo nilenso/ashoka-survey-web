@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130711130450) do
+ActiveRecord::Schema.define(:version => 20130718102430) do
 
   create_table "answers", :force => true do |t|
     t.text     "content"
@@ -132,7 +132,7 @@ ActiveRecord::Schema.define(:version => 20130711130450) do
     t.string   "mobile_id"
     t.string   "state",           :default => "clean"
     t.text     "comment"
-    t.boolean  "blank",           :default => false
+    t.boolean  "answers_present", :default => false
     t.datetime "completed_at"
   end
 

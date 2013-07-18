@@ -74,7 +74,7 @@ class OrganizationDecorator < Draper::Decorator
   private
 
   def responses
-    Response.where(:survey_id => Survey.where(:organization_id => model.id), :blank => false)
+    Response.where(:survey_id => Survey.where(:organization_id => model.id), :answers_present => true)
   end
 
   def surveys

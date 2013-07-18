@@ -14,8 +14,8 @@ FactoryGirl.define do
       state 'clean'
     end
 
-    trait :blank do
-      blank true
+    trait :answers_present do
+      answers_present true
     end
 
     before(:create) do |response|
