@@ -190,6 +190,7 @@ en:
       added_by: Added by
       last_updated_at: Last Updated At
 
+      no_answer_present: "<no answer>"
     edit:
       delete: "Delete"
       edit: "Edit"
