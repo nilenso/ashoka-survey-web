@@ -24,7 +24,12 @@
           <% @survey.identifier_questions.each do |question| %>
             <% answer = Answer.find_by_response_id_and_question_id(response.id, question.id) %>
             <td>
-            <% if answer.photo_url.present? %>
+            <% if answer.blank? %>
+              <!-- Patching this bug. Does not solve the issue, but at least the page doesn't bomb. -->
+              <!-- https://www.pivotaltracker.com/story/show/53539811 -->
+              <!-- TODO: Remove this when the bug is fixed. -->
+              <%= t(".no_answer_present") %>
+            <% elsif answer.photo_url.present? %>
               <%= image_tag answer.photo_url(:format => :thumb), :class => 'thumb' %>
             <% else %>
               <%= answer.content %>
