@@ -11,7 +11,10 @@ describe Reports::Excel::Metadata do
 
       orgs_response = mock(OAuth2::Response)
       access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
-      orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
+      orgs_response.stub(:parsed).and_return([
+        {"id" => 1, "name" => "CSOOrganization", "logos" => {"thumb_url" => "http://foo.png"}},
+        {"id" => 2, "name" => "Ashoka", "logos" => {"thumb_url" => "http://foo.png"}}
+        ])
     end
 
     context "when the `disable_filtering` flag is false" do

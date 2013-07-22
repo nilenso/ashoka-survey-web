@@ -11,7 +11,10 @@ describe SurveysController do
       access_token = mock(OAuth2::AccessToken)
       controller.stub(:access_token).and_return(access_token)
       access_token.stub(:get).and_return(response)
-      response.stub(:parsed).and_return([{"id" => 123, "name" => "foo"}, {"id" => LOGGED_IN_ORG_ID, "name" => "bar"}])
+      response.stub(:parsed).and_return([
+        {"id" => 123, "name" => "foo", "logos" => {"thumb_url" => "http://foo.png"}},
+        {"id" => LOGGED_IN_ORG_ID, "name" => "bar", "logos" => {"thumb_url" => "http://foo.png"}}
+      ])
     end
 
     it "assigns the surveys instance variable" do

@@ -2,6 +2,7 @@ class SurveyDecorator < Draper::Decorator
   decorates :survey
   decorates_finders
   delegate_all
+  self.include_root_in_json = false
 
   def build_mustache_templates
     template_types.inject('') do |string, type|
@@ -19,6 +20,14 @@ class SurveyDecorator < Draper::Decorator
 
   def organization_name(organizations)
     organizations.find { |org| org.id == model.organization_id }.try(:name)
+  end
+
+  def organization
+    Organization.find_by_id(context[:access_token], model.organization_id)
+  end
+
+  def organization_logo_url
+    organization.logo_url
   end
 
   def report_data_for(question)
@@ -49,6 +58,10 @@ class SurveyDecorator < Draper::Decorator
 
   def has_responses?
     model.responses.accessible_by(h.current_ability).count != 0
+  end
+
+  def as_json(opts = {})
+    super.merge(:organization_logo_url => organization_logo_url)
   end
 
   private

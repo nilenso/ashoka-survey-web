@@ -6,7 +6,6 @@ class Survey < ActiveRecord::Base
   validate :ensure_survey_to_be_archivable
   validates :description, :length => { :maximum => 250 }
 
-  belongs_to :organization
   has_many :questions, :dependent => :destroy
   has_many :categories, :dependent => :destroy
   has_many :responses, :dependent => :destroy

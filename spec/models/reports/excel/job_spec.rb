@@ -10,7 +10,10 @@ describe Reports::Excel::Job do
     @access_token = mock(OAuth2::AccessToken)
     @orgs_response = mock(OAuth2::Response)
     @access_token.stub(:get).with('/api/organizations').and_return(@orgs_response)
-    @orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
+    @orgs_response.stub(:parsed).and_return([
+      {"id" => 1, "name" => "CSOOrganization", "logos" => {"thumb_url" => "http://foo.png"}},
+      {"id" => 2, "name" => "Ashoka", "logos" => {"thumb_url" => "http://foo.png"}}
+    ])
     @names_response = mock(OAuth2::Response)
     @access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(@names_response)
     @names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}])
@@ -50,7 +53,9 @@ describe Reports::Excel::Job do
     end
 
     it "should include the metadata information" do
-      @orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "C42"}, {"id" => 2, "name" => "Ashoka"}])
+      @orgs_response.stub(:parsed).and_return([
+        {"id" => 1, "name" => "C42", "logos" => {"thumb_url" => "http://foo.png"}},
+        {"id" => 2, "name" => "Ashoka", "logos" => {"thumb_url" => "http://foo.png"}}])
       @names_response.stub(:parsed).and_return([{"id" => 1, "name" => "hansel"}])
 
       stub_geocoder(:address => "foo_location")

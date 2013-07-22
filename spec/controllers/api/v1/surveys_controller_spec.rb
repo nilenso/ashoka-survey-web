@@ -53,6 +53,10 @@ describe Api::V1::SurveysController do
   end
 
   context "GET 'show" do
+    before(:each) do
+      Organization.stub(:find_by_id).and_return(Organization.new(1, :logo_url => "http://foo.bar/logo.png"))
+    end
+
     it "returns the survey information as JSON" do
       get :show, :id => survey.id
       json = JSON.parse(response.body)
@@ -71,6 +75,12 @@ describe Api::V1::SurveysController do
       get :show, :id => survey.id
       response.should be_ok
       JSON.parse(response.body).should have_key 'elements'
+    end
+
+    it "includes the survey logo in the description" do
+      get :show, :id => survey.id
+      response_hash = JSON.parse(response.body)
+      response_hash["organization_logo_url"].should == "http://foo.bar/logo.png"
     end
   end
 

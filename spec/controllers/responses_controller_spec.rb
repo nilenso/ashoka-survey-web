@@ -83,7 +83,10 @@ describe ResponsesController do
       access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
       access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
       names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
-      organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "Foo"}, {"id" => 2, "name" => "Bar"}])
+      organizations_response.stub(:parsed).and_return([
+        {"id" => 1, "name" => "Foo", "logos" => {"thumb_url" => "http://foo.png"}},
+        {"id" => 2, "name" => "Bar", "logos" => {"thumb_url" => "http://foo.png"}}
+      ])
     end
 
     it "renders the list of responses for a survey if a cso admin is signed in" do
@@ -146,7 +149,10 @@ describe ResponsesController do
       access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
       access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
       names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
-      organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "Foo"}, {"id" => 2, "name" => "Bar"}])
+      organizations_response.stub(:parsed).and_return([
+        {"id" => 1, "name" => "Foo", "logos" => {"thumb_url" => "http://foo.png"}},
+        {"id" => 2, "name" => "Bar", "logos" => {"thumb_url" => "http://foo.png"}}
+      ])
       stub_geocoder
     end
 

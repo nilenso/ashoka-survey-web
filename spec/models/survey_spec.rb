@@ -403,7 +403,10 @@ describe Survey do
     it "returns partitioned organizations" do
       access_token = mock(OAuth2::AccessToken)
       organizations_response = mock(OAuth2::Response)
-      organizations_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Org name"}])
+      organizations_response.stub(:parsed).and_return([
+        {"id" => 1, "name" => "CSOOrganization", "logos" => {"thumb_url" => "http://foo.com/bar.png"}},
+        {"id" => 2, "name" => "Org name", "logos" => {"thumb_url" => "http://foo.com/bar.png"}}
+      ])
       access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
 
       organization = {:id => 2, :name => "Org name"}

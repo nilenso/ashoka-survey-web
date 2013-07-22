@@ -21,7 +21,7 @@ module Api
           super
         else
           # Mobile
-          raw_info = access_token(params[:access_token]).get('api/me').parsed
+          raw_info = OAuth2::AccessToken.new(oauth_client, params[:access_token]).get('api/me').parsed
           user_info = {
             :name => raw_info['name'],
             :email => raw_info['email'],
@@ -32,10 +32,6 @@ module Api
           }
           user_info
         end
-      end
-
-      def access_token(token_string)
-        OAuth2::AccessToken.new(oauth_client, token_string)
       end
     end
   end

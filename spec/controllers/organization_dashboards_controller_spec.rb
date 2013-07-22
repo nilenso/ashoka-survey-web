@@ -7,7 +7,10 @@ describe OrganizationDashboardsController do
       access_token = mock(OAuth2::AccessToken)
       controller.stub(:access_token).and_return(access_token)
       access_token.stub(:get).and_return(response)
-      response.stub(:parsed).and_return([{"id" => 123, "name" => "foo"}, {"id" => 456, "name" => "bar"}])
+      response.stub(:parsed).and_return([
+        {"id" => 123, "name" => "foo", "logos" => {"thumb_url" => "http://foo.png"}},
+        {"id" => 456, "name" => "bar", "logos" => {"thumb_url" => "http://foo.png"}}
+      ])
       sign_in_as("super_admin")
     end
 
@@ -28,7 +31,7 @@ describe OrganizationDashboardsController do
     it "fetches the requested organization" do
       response = mock(OAuth2::Response)
       access_token.stub(:get).and_return(response)
-      response.stub(:parsed).and_return({"id" => 1, "name" => "foo"})
+      response.stub(:parsed).and_return({"id" => 1, "name" => "foo", "logos" => {"thumb_url" => "http://foo.png"}})
       get :show, :id => 1
       organization = assigns(:decorated_organization)
       organization.id.should == 1

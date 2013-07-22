@@ -55,6 +55,6 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     , {})
 
   attr_accessible: =>
-    [ "name", "description", "expiry_date" ]
+    [ "name", "description", "expiry_date", "organization_logo_url"]
 
 SurveyBuilder.Models.SurveyModel.setup()
