@@ -16,7 +16,7 @@ describe Organization do
     users_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob", "role" => 'field_agent'}, {"id" => 2, "name" => "John", "role" => 'supervisor'}, {"id" => 3, "name" => "Rambo", "role" => 'cso_admin'}])
 
     @access_token.stub(:get).with('/api/organizations/1').and_return(single_organization_response)
-    single_organization_response.stub(:parsed).and_return({"id" => 1, "name" => "Apple"})
+    single_organization_response.stub(:parsed).and_return({"id" => 1, "name" => "Apple", "logo_url" => "http://foo.com/bar.png"})
 
     @access_token.stub(:get).with('/api/organizations/42').and_raise(OAuth2::Error.new(bad_response))
 
@@ -84,6 +84,11 @@ describe Organization do
     it "returns nil if the organization doesn't exist" do
       organization = Organization.find_by_id(@access_token, 42)
       organization.should be_nil
+    end
+
+    it "returns the logo for the organization" do
+      organization = Organization.find_by_id(@access_token, 1)
+      organization.logo_url.should == "http://foo.com/bar.png"
     end
   end
 
