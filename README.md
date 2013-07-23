@@ -102,7 +102,7 @@ Other Notes
 ========
 
 Setup `delayed_job` to Upload Photos to Amazon S3
-----------------
+-----------
 
 - If delayed_job workers aren't running, photos will stay on the app server, and will not be migrated to S3.
 - [Setup](https://github.com/jnicklas/carrierwave#using-amazon-s3) `Carrierwave` with your Amazon S3 credentials.
@@ -115,3 +115,8 @@ Setup organization deletion
 - Organizations can be (soft) deleted on user-owner
 - Running `rake db:remove_deleted_organizations_data` on survey-web will delete all data (surveys, questions, responses etc.) belonging to any soft-deleted organisations
 - Run it in a cron job so that this cleanup doesn't have to happen manually (although it is delayed)
+
+Setup Logentries on Engineyard
+-----------
+
+To include unicorn and nginx config files as well, follow the instructions provided by EngineYard to upload a custom recipe, but replace configure.rb with the contents of [this gist](https://gist.github.com/timothyandrew/79de202f486c26eb40e0).
