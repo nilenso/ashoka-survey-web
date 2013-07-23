@@ -23,18 +23,23 @@ class ResponsesController < ApplicationController
     @data = Reports::Excel::Data.new(@survey, @questions, @responses, server_url, @metadata)
     job = Reports::Excel::Job.new(@data)
     job.start
-    render :json => { :excel_path => @data.file_name, :id => job.delayed_job_id, :password => @data.password }
+    render :json => {:excel_path => @data.file_name, :id => job.delayed_job_id, :password => @data.password}
   end
 
   def create
     response = ResponseDecorator.new(Response.new(:blank => true))
     response.set(params[:survey_id], current_user, current_user_org, session_token)
-    response.save
-    survey = Survey.find(params[:survey_id])
-    response.create_blank_answers
-    response.ip_address = request.remote_ip
-    response.save(:validate => false)
-    redirect_to edit_survey_response_path(:id => response.id)
+    Response.transaction do
+      response.save
+      response.create_blank_answers
+      response.ip_address = request.remote_ip
+      response.save(:validate => false)
+    end
+    if response.persisted?
+      redirect_to edit_survey_response_path(:id => response.id)
+    else
+      render :nothing => true, :status => :internal_server_error
+    end
   end
 
   def edit
@@ -56,7 +61,7 @@ class ResponsesController < ApplicationController
     @response = ResponseDecorator.find(params[:id])
     @response.update_column(:blank, false)
     if @response.update_attributes(params[:response])
-      send_to_mixpanel("Response updated", { :survey => @response.survey.name })
+      send_to_mixpanel("Response updated", {:survey => @response.survey.name})
       redirect_to :back, :notice => "Successfully updated"
     else
       flash[:error] = "Error"
@@ -68,9 +73,9 @@ class ResponsesController < ApplicationController
     @response = ResponseDecorator.find(params[:id])
     @response.update_column(:blank, false)
     was_complete = @response.complete?
-    answers_attributes = params.try(:[],:response).try(:[], :answers_attributes)
+    answers_attributes = params.try(:[], :response).try(:[], :answers_attributes)
     if @response.valid_for?(answers_attributes)
-      send_to_mixpanel("Response completed", { :survey => @response.survey.name })
+      send_to_mixpanel("Response completed", {:survey => @response.survey.name})
       complete_valid_response
     else
       revert_response(was_complete, params[:response])

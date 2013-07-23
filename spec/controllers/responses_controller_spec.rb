@@ -69,6 +69,13 @@ describe ResponsesController do
       post :create, :survey_id => survey.id
       sub_question.answers.should_not be_blank
     end
+
+    it "doesn't create a response if an exception is thrown while creating blank answers" do
+      Response.any_instance.stub(:create_blank_answers).and_raise(ActiveRecord::Rollback)
+      expect {
+        post :create, :survey_id => survey.id
+      }.not_to change { Response.count }
+    end
   end
 
   context "GET 'index'" do
