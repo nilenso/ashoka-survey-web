@@ -132,6 +132,10 @@ body#build{
 
       div#dummy_survey_details{
         display: block;
+        img {
+          width: 100px;
+          float: right;
+        }
       }
 
       div.dummy_question, .dummy_category{
