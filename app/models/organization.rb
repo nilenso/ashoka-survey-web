@@ -51,6 +51,7 @@ class Organization
   private
 
   def self.json_to_organization(org_json)
-    Organization.new(org_json['id'], :name => org_json['name'], :logo_url => org_json['logos']['thumb_url'])
+    logo_url = org_json['logos']['thumb_url'] if org_json['logos']
+    Organization.new(org_json['id'], :name => org_json['name'], :logo_url => logo_url)
   end
 end
