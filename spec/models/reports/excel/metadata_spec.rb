@@ -83,7 +83,10 @@ describe Reports::Excel::Metadata do
   it "finds the organization name for an ID" do
     orgs_response = mock(OAuth2::Response)
     access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
-    orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
+    orgs_response.stub(:parsed).and_return([
+      FactoryGirl.attributes_for(:organization, :id => 1, :name => "CSOOrganization").with_indifferent_access,
+      FactoryGirl.attributes_for(:organization, :id => 2, :name => "Ashoka").with_indifferent_access
+    ])
 
     metadata = Reports::Excel::Metadata.new([], access_token)
     metadata.organization_name_for(1).should == "CSOOrganization"
@@ -92,7 +95,10 @@ describe Reports::Excel::Metadata do
   it "returns an empty string if an organization is not found" do
     orgs_response = mock(OAuth2::Response)
     access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
-    orgs_response.stub(:parsed).and_return([{"id" => 1, "name" => "CSOOrganization"}, {"id" => 2, "name" => "Ashoka"}])
+    orgs_response.stub(:parsed).and_return([
+      FactoryGirl.attributes_for(:organization, :id => 1, :name => "CSOOrganization").with_indifferent_access,
+      FactoryGirl.attributes_for(:organization, :id => 2, :name => "Ashoka").with_indifferent_access,
+    ])
 
     metadata = Reports::Excel::Metadata.new([], access_token)
     metadata.organization_name_for(42).should == ""
