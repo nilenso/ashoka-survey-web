@@ -143,6 +143,67 @@ describe Response do
     end
   end
 
+  context "create a valid response"  do
+    let (:survey) { FactoryGirl.create(:survey) }
+    let (:question) { FactoryGirl.create(:question, :finalized) }
+
+    it "creates a response" do
+      resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
+      expect {
+        resp.create_valid_response({ :answers_attributes => {} })
+      }.to change { Response.count }.by 1
+    end
+
+    it "creates the nested answers" do
+      resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
+      answers_attributes = {'0' => {'content' => 'asdasd', 'question_id' => question.id}}
+      expect {
+        resp.create_valid_response({ :answers_attributes => answers_attributes })
+      }.to change { Answer.count }.by 1
+    end
+
+    it "should not increase the response count if the answers are invalid" do
+      question = FactoryGirl.create(:question, :finalized, :max_length => 2, :survey => survey)
+      resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
+      answers_attributes = {'0' => {'content' => 'abcd', 'question_id' => question.id}}
+      expect {
+        resp.create_valid_response({ :answers_attributes => answers_attributes })
+      }.to_not change { Response.count }
+    end
+
+    it "should not increase the response count if an exception is thrown when saving the answers" do
+      resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
+      answers_attributes = {'0' => {'content' => 'abcd', 'question_id' => question.id}}
+      original_update_attributes = resp.method(:update_attributes)
+      resp.stub(:update_attributes) { |*args| original_update_attributes.call(*args) }
+      resp.stub(:update_attributes).with(:answers_attributes => answers_attributes).and_raise(ActiveRecord::Rollback)
+      expect {
+        resp.create_valid_response({ :answers_attributes => answers_attributes })
+      }.to_not change { Response.count }
+    end
+
+    context "return values" do
+      it "returns true if valid response" do
+        resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
+        resp.create_valid_response({ :answers_attributes => {} }).should be_true
+      end
+
+      it "returns false for an invalid response" do
+        resp = FactoryGirl.build(:response, :survey_id => survey.id)
+        resp.create_valid_response({ :answers_attributes => {} }).should be_false
+      end
+    end
+
+    it "updates the response_id for its answers' records" do
+      record = FactoryGirl.create :record, :response_id => nil
+      answers_attrs = { '0' => { :content => 'AnswerFoo', :question_id => question.id, :record_id => record.id } }
+      resp = FactoryGirl.build(:response, :survey_id => survey.id, :user_id => 50, :organization_id => 42)
+      resp.create_valid_response(:answers_attributes => answers_attrs)
+      record.reload.response_id.should_not be_nil
+      record.reload.response_id.should == resp.id
+    end
+  end
+
   context "#set" do
     it "sets the survey_id, user_id, organization_id and session_token" do
       survey = FactoryGirl.create(:survey)

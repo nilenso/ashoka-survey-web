@@ -15,16 +15,11 @@ module Api::V1
       response = Response.new
       response.user_id = params[:user_id]
       response.organization_id = params[:organization_id]
-      response.update_attributes(params[:response].except(:answers_attributes)) # Response isn't created before the answers, so we need to create the answers after this.
-      response.validating if params[:response][:status] == "complete"
-      response.update_attributes({:answers_attributes => params[:response][:answers_attributes]}) if response.valid?
-      response.update_records
-      if response.invalid?
-        render :json => response.render_json, :status => :bad_request
-        destroy_response(response)
-        Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
-      else
+      if response.create_valid_response(params[:response])
         render :json => response.render_json
+      else
+        render :json => response.to_json_with_answers_and_choices, :status => :bad_request
+        Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
       end
     end
 
@@ -53,14 +48,9 @@ module Api::V1
 
     private
 
-    def destroy_response(response)
-      resp = Response.find_by_id(response) || response
-      resp.destroy
-    end
-
     def decode_base64_images
       answers_attributes = params[:response][:answers_attributes] || []
-      answers_attributes.each do |_,answer|
+      answers_attributes.each do |_, answer|
         if answer.has_key? 'photo'
           sio = StringIO.new(Base64.decode64(answer['photo']))
           sio.class.class_eval { attr_accessor :content_type, :original_filename } # Need to do this to pass Paperclip's content_type validation. Found this at http://stackoverflow.com/questions/5054982/rails3-problem-saving-base64-image-with-paperclip

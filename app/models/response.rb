@@ -55,7 +55,7 @@ class Response < ActiveRecord::Base
 
   def last_update
     [answers.maximum('answers.updated_at'),
-      self.updated_at].compact.max
+     self.updated_at].compact.max
   end
 
   def complete
@@ -80,6 +80,21 @@ class Response < ActiveRecord::Base
 
   def validating?
     status == Status::VALIDATING
+  end
+
+  def create_valid_response(response_params)
+    transaction do
+      update_attributes(response_params.except(:answers_attributes)) # Response isn't created before the answers, so we need to create the answers after this.
+      validating if response_params[:status] == "complete"
+      update_attributes({:answers_attributes => response_params[:answers_attributes]}) if valid?
+      update_records
+      if invalid?
+        destroy
+        false
+      else
+        true
+      end
+    end
   end
 
   def set(survey_id, user_id, organization_id, session_token)
@@ -108,10 +123,10 @@ class Response < ActiveRecord::Base
     return unless params[:updated_at]
     if Time.parse(params[:updated_at]) > updated_at
       case params[:status]
-      when Status::COMPLETE
-        complete
-      when Status::INCOMPLETE
-        incomplete
+        when Status::COMPLETE
+          complete
+        when Status::INCOMPLETE
+          incomplete
       end
     end
   end
@@ -121,7 +136,7 @@ class Response < ActiveRecord::Base
     transaction do
       answers.select(&:has_been_answered?).each(&:clear_content)
       validating
-      valid = all_answer_params.all? do |_,single_answer_params|
+      valid = all_answer_params.all? do |_, single_answer_params|
         answer = answers.detect { |answer| answer.id == single_answer_params[:id].to_i }
         answer.update_attributes(single_answer_params)
       end
@@ -162,7 +177,7 @@ class Response < ActiveRecord::Base
   end
 
   def five_first_level_answers
-    answers.find_all{ |answer| answer.question.first_level? }[0..4]
+    answers.find_all { |answer| answer.question.first_level? }[0..4]
   end
 
   def response_validating?
