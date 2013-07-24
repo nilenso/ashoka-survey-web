@@ -167,7 +167,6 @@ describe ResponsesController do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete')
       incomplete_response = FactoryGirl.create(:response, :status => 'incomplete', :survey => survey)
-      validating_response = FactoryGirl.create(:response, :status => 'validating', :survey => survey)
       get :generate_excel, :survey_id => survey.id
       response.should be_ok
       assigns(:responses).should == [resp]

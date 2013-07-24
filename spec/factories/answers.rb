@@ -4,8 +4,7 @@ FactoryGirl.define do
   factory :answer do
     content "MyText"
     question { FactoryGirl.create(:question, :finalized) }
-    response { FactoryGirl.create(:response, :status => 'validating', :survey => FactoryGirl.create(:survey),
-                                  :organization_id => 4, :user_id => 2) }
+    response { FactoryGirl.create(:response, :survey => FactoryGirl.create(:survey), :organization_id => 4, :user_id => 2) }
 
     factory(:answer_with_complete_response) do
       after(:create) do |answer, evaluator|
