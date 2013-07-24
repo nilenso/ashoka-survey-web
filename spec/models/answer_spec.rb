@@ -3,25 +3,27 @@ require 'spec_helper'
 describe Answer do
   context "validations" do
     context "for mandatory questions" do
+      let(:complete_response) { FactoryGirl.create(:response, :complete) }
+
       it "does not save if a mandatory question is not answered for a complete response" do
         question = FactoryGirl.create(:question, :finalized, :mandatory => true)
-        answer = FactoryGirl.create(:answer, :question => question)
+        answer = FactoryGirl.create(:answer, :question => question, :response => complete_response)
         answer.content = ''
         answer.should_not be_valid
       end
 
       it "adds errors to the content field for a non photo type question" do
         question = FactoryGirl.create(:question, :finalized, :mandatory => true)
-        answer = FactoryGirl.create(:answer, :question => question)
+        answer = FactoryGirl.create(:answer, :question => question, :response => complete_response)
 
         answer.content = ''
         answer.save
         answer.errors.to_hash[:content].should_not be_empty
       end
 
-      it "adds errors to the photo field for non photo type question" do
+      it "adds errors to the photo field for photo question" do
         question = FactoryGirl.create(:photo_question, :finalized, :mandatory)
-        answer = FactoryGirl.build(:answer, :question => question)
+        answer = FactoryGirl.build(:answer, :question => question, :response => complete_response)
         answer.content = ''
         answer.save
         answer.errors.to_hash[:photo].should_not be_empty

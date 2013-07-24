@@ -31,31 +31,4 @@ describe ResponseSerializer do
       response_json['answers'][0]['choices'].size.should == response.answers[0].choices.size
     end
   end
-
-  context "#render_json" do
-    context "response is invalid" do
-      it "returns the json with answers and doesn't delete the response" do
-        (FactoryGirl.create :response_with_answers).reload
-        response = Response.new
-        response_serializer = ResponseSerializer.new(response)
-        response_serializer.render_json.should == response_serializer.to_json_with_answers_and_choices
-        response.should_not be_frozen
-      end
-    end
-    context "response is valid" do
-      it "it marks response complete and returns json with answers" do
-        response = FactoryGirl.create(:response, :status => "validating")
-        response_serializer = ResponseSerializer.new(response)
-        response_serializer.render_json.should == response_serializer.to_json_with_answers_and_choices
-        response.should be_complete
-      end
-
-      it "returns the json if response is incomplete" do
-        response = FactoryGirl.create(:response, :status => "incomplete")
-        response_serializer = ResponseSerializer.new(response)
-        response_serializer.render_json.should == response_serializer.to_json_with_answers_and_choices
-        response.should be_incomplete
-      end
-    end
-  end
 end
