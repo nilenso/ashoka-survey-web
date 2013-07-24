@@ -60,27 +60,23 @@ class ResponsesController < ApplicationController
   def update
     @response = ResponseDecorator.find(params[:id])
     @response.update_column(:blank, false)
-    if @response.update_attributes(params[:response])
+    if @response.update_valid_response_from_params(params[:response])
       send_to_mixpanel("Response updated", {:survey => @response.survey.name})
-      redirect_to :back, :notice => "Successfully updated"
+      if @response.public?
+        @public_response = !user_currently_logged_in?
+        @survey = @response.survey.decorate
+        render "thank_you"
+      elsif @response.complete?
+        redirect_to survey_responses_path(@response.survey_id), :notice => "Successfully updated"
+      else
+        redirect_to :back, :notice => "Successfully updated"
+      end
     else
       flash[:error] = "Error"
       render :edit
     end
   end
 
-  def complete
-    @response = ResponseDecorator.find(params[:id])
-    @response.update_column(:blank, false)
-    was_complete = @response.complete?
-    answers_attributes = params.try(:[], :response).try(:[], :answers_attributes)
-    if @response.valid_for?(answers_attributes)
-      send_to_mixpanel("Response completed", {:survey => @response.survey.name})
-      complete_valid_response
-    else
-      revert_response(was_complete, params[:response])
-    end
-  end
 
   def destroy
     response = Response.find(params[:id])
@@ -92,29 +88,6 @@ class ResponsesController < ApplicationController
   private
   def send_destroy_to_mixpanel
     send_to_mixpanel("Response deleted", {:survey => @response.survey.name}) if @response.present?
-  end
-
-  def complete_valid_response
-    @response.update_column('status', Response::Status::COMPLETE)
-    if @response.survey_public? && !user_currently_logged_in?
-      @public_response = public_response?
-      @survey = @response.survey.decorate
-      render "thank_you"
-    else
-      redirect_to survey_responses_path(@response.survey_id), :notice => "Successfully updated"
-    end
-  end
-
-  def revert_response(was_complete, response)
-    if was_complete
-      @response.complete
-    else
-      @response.incomplete
-    end
-    @response.attributes = response
-    flash[:error] = t("responses.edit.error_saving_response")
-    @disabled = false
-    render :edit
   end
 
   def survey_finalized

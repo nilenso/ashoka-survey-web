@@ -3,7 +3,7 @@ class Answer < ActiveRecord::Base
   belongs_to :response
   belongs_to :record
   attr_accessible :content, :question_id, :option_ids, :updated_at, :response_id, :record_id
-  validate :mandatory_questions_should_be_answered, :if => :response_validating?
+  validate :mandatory_questions_should_be_answered, :if => :response_complete?
   with_options :if => :has_been_answered? do |condition|
     condition.validate :date_should_be_valid
     condition.validate :content_should_be_in_range
@@ -20,7 +20,7 @@ class Answer < ActiveRecord::Base
   after_save :touch_multi_choice_answer
 
   delegate :content, :to => :question, :prefix => true
-  delegate :validating?, :to => :response, :prefix => true
+  delegate :complete?, :to => :response, :prefix => true
   delegate :type, :to => :question, :prefix => true
   delegate :identifier?, :to => :question
   delegate :first_level?, :to => :question

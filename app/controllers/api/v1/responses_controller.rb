@@ -15,8 +15,8 @@ module Api::V1
       response = Response.new
       response.user_id = params[:user_id]
       response.organization_id = params[:organization_id]
-      if response.create_valid_response(params[:response])
-        render :json => response.render_json
+      if response.create_valid_response_from_params(params[:response])
+        render :json => response.to_json_with_answers_and_choices
       else
         render :json => response.to_json_with_answers_and_choices, :status => :bad_request
         Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
@@ -27,17 +27,16 @@ module Api::V1
       response = Response.find_by_id(params[:id])
       return render :nothing => true, :status => :gone if response.nil?
       response.merge_status(params[:response].except(:answers_attributes))
-      response.validating if response.complete?
       answers_to_update = response.select_new_answers(params[:response][:answers_attributes])
       response.update_attributes({ :answers_attributes => answers_to_update })
       response.update_records
 
       if response.invalid?
         response.incomplete
-        render :json => response.render_json, :status => :bad_request
+        render :json => response.to_json_with_answers_and_choices, :status => :bad_request
         Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
       else
-        render :json => response.render_json
+        render :json => response.to_json_with_answers_and_choices
       end
     end
 

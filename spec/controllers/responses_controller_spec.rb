@@ -137,8 +137,8 @@ describe ResponsesController do
 
     it "doesn't include blank responses" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      blank_response = FactoryGirl.create(:response, :blank => true, :survey => survey)
-      non_blank_response = FactoryGirl.create(:response, :blank => false, :survey => survey)
+      blank_response = FactoryGirl.create(:response, :blank => true, :survey => survey, :user_id => 1)
+      non_blank_response = FactoryGirl.create(:response, :blank => false, :survey => survey, :user_id => 1)
       get :index, :survey_id => survey.id
       assigns(:responses).should == [non_blank_response]
     end
@@ -231,7 +231,7 @@ describe ResponsesController do
     context "when filtering metadata" do
       it "filters the private metadata out by default" do
         survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete', :ip_address => "0.0.0.0")
+        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete', :user_id => 1)
         get :generate_excel, :survey_id => survey.id
         response.should be_ok
         assigns(:metadata).for(resp).should_not include resp.location
@@ -240,7 +240,7 @@ describe ResponsesController do
 
       it "doesn't filter the private questions out if the parameter is passed in" do
         survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete', :ip_address => "0.0.0.0")
+        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete', :ip_address => "0.0.0.0", :user_id => 1)
         get :generate_excel, :survey_id => survey.id, :disable_filtering => "true"
         response.should be_ok
         assigns(:metadata).for(resp).should include resp.location
@@ -323,6 +323,9 @@ describe ResponsesController do
 
   context "PUT 'update'" do
     before(:each) { request.env["HTTP_REFERER"] = 'http://example.com' }
+    let(:survey) { FactoryGirl.create(:survey, :finalized, :organization_id => 1) }
+    let(:resp) { FactoryGirl.create(:response, :incomplete, :survey => survey) }
+
     it "doesn't run validations on answers that are empty" do
       survey = FactoryGirl.create(:survey, :organization_id => 1)
       survey.finalize
@@ -359,8 +362,8 @@ describe ResponsesController do
     it "renders the edit page if the response is saved successfully" do
       request.env["HTTP_REFERER"] = 'http://example.com'
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey)
-      put :update, :id => res.id, :survey_id => survey.id
+      res = FactoryGirl.create(:response, :incomplete, :survey => survey)
+      put :update, :id => res.id, :survey_id => survey.id, :response => { :comment => "Foo" }
       response.should redirect_to :back
     end
 
@@ -368,11 +371,9 @@ describe ResponsesController do
       survey = FactoryGirl.create(:survey, :organization_id => 1)
       question = FactoryGirl.create(:question, :mandatory, :finalized, :survey => survey)
       survey.finalize
-      res = FactoryGirl.create(:response, :survey => survey,
-                               :organization_id => 1, :user_id => 2, :status => 'validating')
-      answer = FactoryGirl.create(:answer, :question => question)
-      res.answers << answer
-      put :update, :id => res.id, :survey_id => survey.id, :response =>
+      response = FactoryGirl.create(:response, :complete, :survey => survey, :organization_id => 1, :user_id => 2)
+      answer = FactoryGirl.create(:answer, :question => question, :response => response)
+      put :update, :id => response.id, :survey_id => survey.id, :response =>
         { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
 
       response.should render_template('edit')
@@ -389,98 +390,73 @@ describe ResponsesController do
 
     it "sends an event to mixpanel" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey)
+      res = FactoryGirl.create(:response, :complete, :survey => survey)
       expect do
-        put :update, :id => res.id, :survey_id => survey.id
+        put :update, :id => res.id, :survey_id => survey.id, :response => { :state => "clean" }
       end.to change { Delayed::Job.where(:queue => "mixpanel").count }.by(1)
     end
-  end
 
-  context "PUT 'complete'" do
-    let(:resp) { FactoryGirl.create(:response, :survey_id => survey.id, :organization_id => 1, :user_id => 1, :status => 'validating') }
-
-    it "marks the response complete" do
-      put :complete, :id => resp.id, :survey_id => resp.survey_id
-      resp.reload.should be_complete
+    it "doesn't change the response's status if one isn't passed as a parameter" do
+      resp = FactoryGirl.create(:response, :incomplete, :survey => survey)
+      put :update, :id => resp.id, :survey_id => survey.id, :response => { :comment => "Foo" }
+      resp.reload.should be_incomplete
     end
 
-    it "redirects to the response index page on success if the survey is not crowd_sourced" do
-      put :complete, :id => resp.id, :survey_id => resp.survey_id
-      response.should redirect_to(survey_responses_path(resp.survey_id))
+    context "when an incomplete response is marked complete" do
+      it "sets the status to 'complete'" do
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => { :status => Response::Status::COMPLETE }
+        resp.reload.should be_complete
+      end
+
+      it "redirects to the response index page on success" do
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => { :status => Response::Status::COMPLETE }
+        response.should redirect_to(survey_responses_path(resp.survey_id))
+      end
+
+      it "marks the response incomplete if save is unsuccessful" do
+        survey = FactoryGirl.create(:survey, :finalized, :organization_id => 1)
+        question = FactoryGirl.create(:question, :finalized, :max_length => 2, :survey => survey)
+        response = FactoryGirl.create(:response, :survey => survey, :organization_id => 1, :user_id => 2)
+        answer = FactoryGirl.create(:answer, :content => "A", :question => question, :response => response)
+
+        put :update, :id => response.id, :survey_id => survey.id, :status => Response::Status::INCOMPLETE, :response =>
+            { :answers_attributes => { "0" => { :content => "sadsdfgsdfgsdfg", :id => answer.id} } }
+        response.reload.should_not be_complete
+      end      
     end
 
-    context "when completing a response to public survey" do
-      it "redirects to the root_path if no user is logged in" do
-        session[:user_id] = nil
-        survey = FactoryGirl.create(:survey, :public => true, :finalized => true)
+    context "when a complete response is marked complete again" do
+      it "doesn't mark the response as incomplete when save is unsuccessful" do
+        survey = FactoryGirl.create(:survey, :organization_id => 1)
+        question = FactoryGirl.create(:question, :finalized, :survey => survey, :mandatory => true)
+        survey.finalize
+        res = FactoryGirl.create(:response, :survey => survey,
+                                 :organization_id => 1, :user_id => 2, :status => 'complete')
+        answer = FactoryGirl.create(:answer, :question => question)
+        res.answers << answer
+        put :update, :id => res.id, :survey_id => survey.id, :response =>
+            { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+        res.reload.should be_complete
+      end
+    end
+
+    context "for a public survey" do
+      it "redirects to the root_path" do
+        survey = FactoryGirl.create(:survey, :public => true, :finalized => true, :organization_id => 1)
         resp = FactoryGirl.create(:response, :session_token => "123", :survey => survey)
         session[:session_token] = "123"
-        put :complete, :id => resp.id, :survey_id => resp.survey_id
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => { :state => "clean" }
         response.should render_template("thank_you")
       end
 
-      it "redirects to the responses index page if a user is logged in" do
+      it "sets the `public_response` instance variable to `true` if no user is logged in" do
+        session.clear
         survey = FactoryGirl.create(:survey, :public => true, :finalized => true, :organization_id => 1)
-        resp = FactoryGirl.create(:response, :organization_id => 1, :user_id => 1, :survey => survey)
-        put :complete, :id => resp.id, :survey_id => resp.survey_id
-        response.should redirect_to survey_responses_path(survey.id)
+        resp = FactoryGirl.create(:response, :session_token => "123", :survey => survey)
+        session[:session_token] = "123"
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => { :state => "clean" }
+        assigns(:public_response).should be_true
       end
-    end
-
-    it "updates the response" do
-      survey = FactoryGirl.create(:survey, :organization_id => 1)
-      survey.finalize
-      res = FactoryGirl.create(:response, :survey => survey,
-                               :organization_id => 1, :user_id => 2)
-      answer = FactoryGirl.create(:answer)
-      res.answers << answer
-
-      put :complete, :id => res.id, :survey_id => survey.id, :response =>
-        { :answers_attributes => { "0" => { :content => "yeah123", :id => answer.id} } }
-
-      Answer.find(answer.id).content.should == "yeah123"
-      response.should redirect_to survey_responses_path
-      flash[:notice].should_not be_nil
-    end
-
-    it "sends an event to mixpanel" do
-      expect do
-        put :complete, :id => resp.id, :survey_id => resp.survey_id
-      end.to change { Delayed::Job.where(:queue => "mixpanel").count }.by(1)
-    end
-
-    it "marks the response incomplete if save is unsuccessful" do
-      survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question = FactoryGirl.create(:question, :finalized, :survey => survey, :mandatory => true)
-      survey.finalize
-      res = FactoryGirl.create(:response, :survey => survey,
-                               :organization_id => 1, :user_id => 2)
-      answer = FactoryGirl.create(:answer, :question => question)
-      res.answers << answer
-
-      put :complete, :id => res.id, :survey_id => survey.id, :response =>
-        { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
-      res.reload.should_not be_complete
-    end
-
-    it "doesn't mark an already complete response as incomplete when save if unsuccessful" do
-      survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question = FactoryGirl.create(:question, :finalized, :survey => survey, :mandatory => true)
-      survey.finalize
-      res = FactoryGirl.create(:response, :survey => survey,
-                               :organization_id => 1, :user_id => 2, :status => 'complete')
-      answer = FactoryGirl.create(:answer, :question => question)
-      res.answers << answer
-      put :complete, :id => res.id, :survey_id => survey.id, :response =>
-        { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
-      res.reload.should be_complete
-    end
-
-    it "marks the response as not blank" do
-      survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-      res = FactoryGirl.create(:response, :survey => survey)
-      put :complete, :id => res.id, :survey_id => survey.id
-      res.reload.should_not be_blank
     end
   end
 

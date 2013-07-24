@@ -1,6 +1,8 @@
 FactoryGirl.define do
   factory :response do
     survey { FactoryGirl.create(:survey) }
+    user_id 1
+    organization_id 1
 
     trait :incomplete do
       status 'incomplete'

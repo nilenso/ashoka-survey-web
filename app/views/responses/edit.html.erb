@@ -14,6 +14,7 @@
 <% @response.sort_answers %>
 
 <%= semantic_form_for [@survey, @response], :html => { :multipart => true } do |f| %>
+  <%= f.input :status, :as => :hidden %>
   <%= f.semantic_fields_for :answers do |f| %>
     <% question = f.object.question %>
     <%= question.category.decorate.category_name(f.object.record_id, f.object.response_id, cache, @disabled)  if question.category %>
@@ -91,8 +92,7 @@
       });
     });
     $('#complete_button').click(function(){
-      var action = $('form.response').attr('action')
-      $('form.response').attr('action', action + '/complete')
+      $('#response_status').val("complete")
     })
 
     $("form").submit(function(){

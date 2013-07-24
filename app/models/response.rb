@@ -5,7 +5,6 @@ class Response < ActiveRecord::Base
   module Status
     COMPLETE = "complete"
     INCOMPLETE = "incomplete"
-    VALIDATING = "validating"
   end
 
   belongs_to :survey
@@ -22,7 +21,7 @@ class Response < ActiveRecord::Base
   validates_associated :answers
   before_save :geocode, :reverse_geocode, :on => :create
 
-  delegate :to_json_with_answers_and_choices, :render_json, :to => :response_serializer
+  delegate :to_json_with_answers_and_choices, :to => :response_serializer
   delegate :questions, :to => :survey
   delegate :public?, :to => :survey, :prefix => true, :allow_nil => true
 
@@ -59,15 +58,11 @@ class Response < ActiveRecord::Base
   end
 
   def complete
-    update_column(:status, Status::COMPLETE) if response_validating?
+    update_column(:status, Status::COMPLETE)
   end
 
   def incomplete
     update_column(:status, Status::INCOMPLETE)
-  end
-
-  def validating
-    update_column(:status, Status::VALIDATING)
   end
 
   def complete?
@@ -78,14 +73,26 @@ class Response < ActiveRecord::Base
     status == Status::INCOMPLETE
   end
 
-  def validating?
-    status == Status::VALIDATING
+  def public?
+    survey_public?
   end
 
-  def create_valid_response(response_params)
+  def update_valid_response_from_params(response_params)
+    return unless response_params.present?
+    begin
+      transaction do
+        update_attributes!(:status => response_params[:status]) if response_params[:status]
+        update_attributes!(response_params)
+      end
+      true
+    rescue ActiveRecord::RecordInvalid
+      false
+    end
+  end
+
+  def create_valid_response_from_params(response_params)
     transaction do
       update_attributes(response_params.except(:answers_attributes)) # Response isn't created before the answers, so we need to create the answers after this.
-      validating if response_params[:status] == "complete"
       update_attributes({:answers_attributes => response_params[:answers_attributes]}) if valid?
       update_records
       if invalid?
@@ -131,23 +138,6 @@ class Response < ActiveRecord::Base
     end
   end
 
-  def update_answers(all_answer_params)
-    return true unless all_answer_params
-    transaction do
-      answers.select(&:has_been_answered?).each(&:clear_content)
-      validating
-      valid = all_answer_params.all? do |_, single_answer_params|
-        answer = answers.detect { |answer| answer.id == single_answer_params[:id].to_i }
-        answer.update_attributes(single_answer_params)
-      end
-      if valid
-        true
-      else
-        raise ActiveRecord::Rollback
-      end
-    end
-  end
-
   def update_records
     records = answers.includes(:record).map(&:record).compact.uniq
     records.each do |record|
@@ -157,10 +147,6 @@ class Response < ActiveRecord::Base
 
   def response_serializer
     ResponseSerializer.new(self)
-  end
-
-  def valid_for?(answer_attributes)
-    self.errors.empty? && self.update_answers(answer_attributes)
   end
 
   private
@@ -178,9 +164,5 @@ class Response < ActiveRecord::Base
 
   def five_first_level_answers
     answers.find_all { |answer| answer.question.first_level? }[0..4]
-  end
-
-  def response_validating?
-    valid? && validating?
   end
 end

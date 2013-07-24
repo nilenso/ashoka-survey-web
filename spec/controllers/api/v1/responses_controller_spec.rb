@@ -59,12 +59,21 @@ module Api::V1
           JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
         end
 
-        it "should return the newly created response if it is complete" do
-          resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :status => 'complete', :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
-          post :create, :response => resp, :user_id => 15, :organization_id => 42
-          response.should be_ok
-          JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
+        context "for a complete response" do
+          it "should return the newly created response" do
+            resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :status => 'complete', :answers_attributes =>  { '0' => {'content' => 'asdasd', 'question_id' => question.id} })
+            post :create, :response => resp, :user_id => 15, :organization_id => 42
+            response.should be_ok
+            JSON.parse(response.body).keys.should =~ Response.new.attributes.keys.unshift("answers")
+          end
+
+          it "should set the returned status to 'complete'" do
+            resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :status => 'complete', :answers_attributes =>  {})
+            post :create, :response => resp, :user_id => 15, :organization_id => 42
+            JSON.parse(response.body)['status'].should == Response::Status::COMPLETE
+          end
         end
+
 
         it "should not create the response and should return it with answers if it fails the validation" do
           question = FactoryGirl.create(:question, :type => 'SingleLineQuestion', :mandatory => true)

@@ -8,9 +8,4 @@ class ResponseSerializer
   def to_json_with_answers_and_choices
    response.to_json(:include => {:answers => {:include => :choices, :methods => :photo_in_base64}})
   end
-
-  def render_json
-    response.complete
-    to_json_with_answers_and_choices
-  end
 end
