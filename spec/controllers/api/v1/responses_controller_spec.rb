@@ -94,8 +94,8 @@ module Api::V1
         end
 
         it "sets the user_id and organization_id for the response" do
-          resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :answers_attributes => {})
-          post :create, :response => resp, :user_id => 15, :organization_id => 42
+          resp = FactoryGirl.attributes_for(:response, :survey_id => survey.id, :user_id => 15, :organization_id => 42, :answers_attributes => {})
+          post :create, :response => resp
           resp = Response.find_by_id(JSON.parse(response.body)['id'])
           resp.user_id.should == 15
           resp.organization_id.should == 42
