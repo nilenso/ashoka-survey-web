@@ -81,7 +81,7 @@ class Response < ActiveRecord::Base
     return unless response_params.present?
     begin
       transaction do
-        update_attributes!(:status => response_params[:status]) if response_params[:status]
+        update_attribute(:status, response_params[:status]) if response_params[:status]
         update_attributes!(response_params)
       end
       true

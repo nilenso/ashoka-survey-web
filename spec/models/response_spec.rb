@@ -212,6 +212,16 @@ describe Response do
         response.update_valid_response_from_params(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
         response.reload.should be_complete
       end
+
+      it "runs the mandatory validations" do
+        response = FactoryGirl.create(:response, :incomplete)
+        mandatory_question = FactoryGirl.create(:single_line_question, :mandatory, :finalized,)
+        answer = FactoryGirl.create(:answer, :question => mandatory_question, :content => "foo", :response => response)
+        response.reload
+        answers_attributes = { "0" => { :question_id => mandatory_question.id, :content => "", :id => answer.id}}
+        response.update_valid_response_from_params(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
+        answer.reload.content.should == "foo"
+      end
     end
 
 
