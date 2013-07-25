@@ -60,7 +60,7 @@ class ResponsesController < ApplicationController
   def update
     @response = ResponseDecorator.find(params[:id])
     @response.update_column(:blank, false)
-    if @response.update_valid_response_from_params(params[:response])
+    if @response.update_response(params[:response])
       send_to_mixpanel("Response updated", {:survey => @response.survey.name})
       if @response.public?
         @public_response = !user_currently_logged_in?

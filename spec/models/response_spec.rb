@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Response do
-  it { should validate_presence_of(:survey_id)}
-  it { should validate_presence_of(:organization_id)}
-  it { should validate_presence_of(:user_id)}
+  it { should validate_presence_of(:survey_id) }
+  it { should validate_presence_of(:organization_id) }
+  it { should validate_presence_of(:user_id) }
 
   it "doesn't allow changing back from complete to incomplete" do
     response = FactoryGirl.create(:response, :complete)
@@ -13,8 +13,8 @@ describe Response do
 
   context "scopes" do
     it "returns responses in the chronological order" do
-      old_response = Timecop.freeze(5.days.ago) { FactoryGirl.create(:response)}
-      new_response = Timecop.freeze(5.days.from_now) { FactoryGirl.create(:response)}
+      old_response = Timecop.freeze(5.days.ago) { FactoryGirl.create(:response) }
+      new_response = Timecop.freeze(5.days.from_now) { FactoryGirl.create(:response) }
       Response.earliest_first.should == [old_response, new_response]
     end
 
@@ -69,9 +69,9 @@ describe Response do
 
   it "merges the response status based on updated_at" do
     response = FactoryGirl.create :response, :organization_id => 1, :user_id => 1, :status => 'complete'
-    response.merge_status({ :status => 'incomplete', :updated_at => 5.days.ago.to_s })
+    response.merge_status({:status => 'incomplete', :updated_at => 5.days.ago.to_s})
     response.should be_complete
-    response.merge_status({ :status => 'incomplete', :updated_at => 5.days.from_now.to_s })
+    response.merge_status({:status => 'incomplete', :updated_at => 5.days.from_now.to_s})
     response.should be_incomplete
   end
 
@@ -88,14 +88,14 @@ describe Response do
       response.answers << answer
       time = 5.days.from_now
       answer.update_attribute :updated_at, time
-      response.last_update.to_i.should ==  time.to_i
+      response.last_update.to_i.should == time.to_i
     end
 
     it "looks at the response's `updated_at` as well" do
       time = 2.days.from_now
       response = FactoryGirl.create :response, :updated_at => time
       response.answers << FactoryGirl.create(:answer)
-      response.last_update.to_i.should ==  time.to_i
+      response.last_update.to_i.should == time.to_i
     end
 
     it "doesn't complain if the response has no answers" do
@@ -120,14 +120,14 @@ describe Response do
     end
   end
 
-  context "when creating a valid response from params"  do
+  context "when creating a valid response from params" do
     let (:survey) { FactoryGirl.create(:survey) }
     let (:question) { FactoryGirl.create(:question, :finalized) }
 
     it "creates a response" do
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
       expect {
-        resp.create_valid_response_from_params({ :answers_attributes => {} })
+        resp.create_valid_response_from_params({:answers_attributes => {}})
       }.to change { Response.count }.by 1
     end
 
@@ -135,7 +135,7 @@ describe Response do
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
       answers_attributes = {'0' => {'content' => 'asdasd', 'question_id' => question.id}}
       expect {
-        resp.create_valid_response_from_params({ :answers_attributes => answers_attributes })
+        resp.create_valid_response_from_params({:answers_attributes => answers_attributes})
       }.to change { Answer.count }.by 1
     end
 
@@ -144,7 +144,7 @@ describe Response do
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
       answers_attributes = {'0' => {'content' => 'abcd', 'question_id' => question.id}}
       expect {
-        resp.create_valid_response_from_params({ :answers_attributes => answers_attributes })
+        resp.create_valid_response_from_params({:answers_attributes => answers_attributes})
       }.to_not change { Response.count }
     end
 
@@ -155,27 +155,27 @@ describe Response do
       resp.stub(:update_attributes) { |*args| original_update_attributes.call(*args) }
       resp.stub(:update_attributes).with(:answers_attributes => answers_attributes).and_raise(ActiveRecord::Rollback)
       expect {
-        resp.create_valid_response_from_params({ :answers_attributes => answers_attributes })
+        resp.create_valid_response_from_params({:answers_attributes => answers_attributes})
       }.to_not change { Response.count }
     end
 
     context "return values" do
       it "returns true if valid response" do
         resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
-        resp.create_valid_response_from_params({ :answers_attributes => {} }).should be_true
+        resp.create_valid_response_from_params({:answers_attributes => {}}).should be_true
       end
 
       it "returns false for an invalid response" do
         question = FactoryGirl.create(:single_line_question, :finalized, :max_length => 2)
         resp = FactoryGirl.build(:response, :survey_id => survey.id)
-        answers_attributes = { "0" => { :content => "abcde", :question_id => question.id } }
-        resp.create_valid_response_from_params({ :answers_attributes => answers_attributes }).should be_false
+        answers_attributes = {"0" => {:content => "abcde", :question_id => question.id}}
+        resp.create_valid_response_from_params({:answers_attributes => answers_attributes}).should be_false
       end
     end
 
     it "updates the response_id for its answers' records" do
       record = FactoryGirl.create :record, :response_id => nil
-      answers_attrs = { '0' => { :content => 'AnswerFoo', :question_id => question.id, :record_id => record.id } }
+      answers_attrs = {'0' => {:content => 'AnswerFoo', :question_id => question.id, :record_id => record.id}}
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :user_id => 50, :organization_id => 42)
       resp.create_valid_response_from_params(:answers_attributes => answers_attrs)
       record.reload.response_id.should_not be_nil
@@ -187,29 +187,44 @@ describe Response do
     let(:response) { FactoryGirl.create(:response) }
 
     it "should return nil if no params are passed in" do
-      response.update_valid_response_from_params(nil).should be_nil
+      response.update_response(nil).should be_nil
     end
 
     it "doesn't change the response status if there isn't a param for it" do
       response = FactoryGirl.create(:response, :incomplete)
-      response.update_valid_response_from_params(:comment => "foo")
+      response.update_response(:comment => "foo")
       response.reload.should be_incomplete
+    end
+
+    context "return values" do
+      it "returns true when the update is successful" do
+        response = FactoryGirl.create(:response, :incomplete)
+        response.update_response(:comment => "foo").should be_true
+      end
+
+      it "returns false when the update is unsuccessful" do
+        response = FactoryGirl.create(:response, :complete)
+        response.update_response(:comment => "foo").should be_true
+        mandatory_question = FactoryGirl.create(:single_line_question, :mandatory, :finalized)
+        answers_attributes = {"0" => {:question_id => mandatory_question.id, :content => ""}}
+        response.update_response(:answers_attributes => answers_attributes).should be_false
+      end
     end
 
     context "when the status is changed from incomplete to complete" do
       it "doesn't change the response status if the answers are invalid" do
         response = FactoryGirl.create(:response, :incomplete)
         mandatory_question = FactoryGirl.create(:single_line_question, :mandatory, :finalized)
-        answers_attributes = { "0" => { :question_id => mandatory_question.id, :content => ""}}
-        response.update_valid_response_from_params(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
+        answers_attributes = {"0" => {:question_id => mandatory_question.id, :content => ""}}
+        response.update_response(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
         response.reload.should be_incomplete
       end
 
       it "changes the response status if the answers are valid" do
         response = FactoryGirl.create(:response, :incomplete)
         question = FactoryGirl.create(:single_line_question, :mandatory, :finalized)
-        answers_attributes = { "0" => { :question_id => question.id, :content => "Foo"}}
-        response.update_valid_response_from_params(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
+        answers_attributes = {"0" => {:question_id => question.id, :content => "Foo"}}
+        response.update_response(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
         response.reload.should be_complete
       end
 
@@ -218,8 +233,8 @@ describe Response do
         mandatory_question = FactoryGirl.create(:single_line_question, :mandatory, :finalized,)
         answer = FactoryGirl.create(:answer, :question => mandatory_question, :content => "foo", :response => response)
         response.reload
-        answers_attributes = { "0" => { :question_id => mandatory_question.id, :content => "", :id => answer.id}}
-        response.update_valid_response_from_params(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
+        answers_attributes = {"0" => {:question_id => mandatory_question.id, :content => "", :id => answer.id}}
+        response.update_response(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
         answer.reload.content.should == "foo"
       end
     end
@@ -228,14 +243,160 @@ describe Response do
     it "updates the response's answers" do
       response = FactoryGirl.create(:response, :incomplete)
       question = FactoryGirl.create(:single_line_question, :finalized)
-      answers_attributes = { "0" => { :question_id => question.id, :content => "Foo"}}
-      response.update_valid_response_from_params(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
+      answers_attributes = {"0" => {:question_id => question.id, :content => "Foo"}}
+      response.update_response(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
       response.reload.answers[0].content.should == "Foo"
     end
 
     it "updates the response" do
       response = FactoryGirl.create(:response, :incomplete)
-      response.update_valid_response_from_params(:comment => "foo")
+      response.update_response(:comment => "foo")
+      response.reload.comment.should == "foo"
+    end
+  end
+
+  context "when updating a response in a transaction" do
+    let(:response) { FactoryGirl.create(:response) }
+
+    context "return values" do
+      it "should return nil if no params are passed in" do
+        response.update_response_in_transaction(nil) {
+        }.should be_nil
+      end
+
+      it 'should return nil if no block is passed in' do
+        response.update_response_in_transaction({}) {
+        }.should be_nil
+      end
+
+      it "should return true if the update is successful" do
+        response.update_response_in_transaction({:comment => "foo"}) {
+        }.should be_true
+      end
+
+      it "should return false if the update is successful" do
+        question = FactoryGirl.create(:single_line_question, :finalized, :max_length => 2)
+        answers_attributes = {"0" => {:question_id => question.id, :content => "abcde"}}
+        response.update_response_in_transaction(:answers_attributes => answers_attributes) {
+        }.should be_false
+      end
+    end
+
+    it "updates the response's answers" do
+      response = FactoryGirl.create(:response, :incomplete)
+      question = FactoryGirl.create(:single_line_question, :finalized)
+      answers_attributes = {"0" => {:question_id => question.id, :content => "Foo"}}
+      response.update_response_in_transaction(:answers_attributes => answers_attributes) {}
+      response.reload.answers[0].content.should == "Foo"
+    end
+
+    it "updates the response" do
+      response = FactoryGirl.create(:response, :incomplete)
+      response.update_response_in_transaction(:comment => "foo") {}
+      response.reload.comment.should == "foo"
+    end
+
+    it "executes the block and the update in a transaction" do
+      question = FactoryGirl.create(:single_line_question, :finalized, :max_length => 2)
+      answers_attributes = {"0" => {:question_id => question.id, :content => "abcde"}}
+      response.update_response_in_transaction(:answers_attributes => answers_attributes) do
+        response.update_attribute(:comment, "foo")
+      end
+      response.reload.comment.should_not == "foo"
+    end
+
+    it "executes the contents of the block" do
+      block = lambda { |params| }
+      response_params = { :comment => "foo" }
+      block.should_receive(:call).with(response_params)
+      response.update_response_in_transaction(response_params, &block)
+    end
+  end
+
+  context "when updating a valid response from params and resolving conflicts" do
+    let(:response) { FactoryGirl.create(:response) }
+
+    it "should return nil if no params are passed in" do
+      response.update_response_with_conflict_resolution(nil).should be_nil
+    end
+
+    it "doesn't change the response status if there isn't a param for it" do
+      response = FactoryGirl.create(:response, :incomplete)
+      response.update_response_with_conflict_resolution(:comment => "foo")
+      response.reload.should be_incomplete
+    end
+
+    context "return values" do
+      it "returns true when the update is successful" do
+        response = FactoryGirl.create(:response, :incomplete)
+        response.update_response_with_conflict_resolution(:comment => "foo").should be_true
+      end
+
+      it "returns false when the update is unsuccessful" do
+        response = FactoryGirl.create(:response, :complete)
+        response.update_response_with_conflict_resolution(:comment => "foo").should be_true
+        mandatory_question = FactoryGirl.create(:single_line_question, :mandatory, :finalized)
+        answers_attributes = {"0" => {:question_id => mandatory_question.id, :content => ""}}
+        response.update_response_with_conflict_resolution(:answers_attributes => answers_attributes).should be_false
+      end
+    end
+
+    context "when the status is changed from incomplete to complete" do
+      it "doesn't change the response status if the answers are invalid" do
+        response = Timecop.freeze(5.days.ago) { FactoryGirl.create(:response, :incomplete) }
+        mandatory_question = FactoryGirl.create(:single_line_question, :mandatory, :finalized)
+        answers_attributes = {"0" => {:question_id => mandatory_question.id, :content => ""}}
+        response.update_response_with_conflict_resolution(:status => Response::Status::COMPLETE, :updated_at => Time.now.to_s, :answers_attributes => answers_attributes)
+        response.reload.should be_incomplete
+      end
+
+      it "changes the response status if the answers are valid" do
+        response = FactoryGirl.create(:response, :incomplete)
+        question = FactoryGirl.create(:single_line_question, :mandatory, :finalized)
+        answers_attributes = {"0" => {:question_id => question.id, :content => "Foo"}}
+        response.update_response_with_conflict_resolution(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
+        response.reload.should be_complete
+      end
+
+      it "runs the mandatory validations" do
+        response = Timecop.freeze(5.days.ago) { FactoryGirl.create(:response, :incomplete) }
+        mandatory_question = FactoryGirl.create(:single_line_question, :mandatory, :finalized,)
+        answer = FactoryGirl.create(:answer, :question => mandatory_question, :content => "foo", :response => response)
+        response.reload
+        answers_attributes = {"0" => {:question_id => mandatory_question.id, :content => "", :id => answer.id}}
+        response.update_response_with_conflict_resolution(:status => Response::Status::COMPLETE, :updated_at => Time.now.to_s, :answers_attributes => answers_attributes)
+        answer.reload.content.should == "foo"
+      end
+    end
+
+    context "when resolving conflicts" do
+      it "should keep the passed in status if it is newer" do
+        response = Timecop.freeze(5.days.ago) { FactoryGirl.create(:response, :incomplete) }
+        response.update_response_with_conflict_resolution(:status => "complete", :updated_at => Time.now.to_s)
+        response.reload.should be_complete
+      end
+
+      pending 'should keep the existing status if it is newer than the passed in status' do
+        response = Timecop.freeze(3.days.ago) { FactoryGirl.create(:response, :incomplete) }
+        response.update_response_with_conflict_resolution(:status => "complete", :updated_at => 5.days.ago.to_s)
+        response.reload.should be_incomplete
+      end
+
+      it "should keep the answer content that is newer"
+      it "shouldn't keep the answer content that is older"
+    end
+
+    it "updates the response's answers" do
+      response = FactoryGirl.create(:response, :incomplete)
+      question = FactoryGirl.create(:single_line_question, :finalized)
+      answers_attributes = {"0" => {:question_id => question.id, :content => "Foo"}}
+      response.update_response_with_conflict_resolution(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
+      response.reload.answers[0].content.should == "Foo"
+    end
+
+    it "updates the response" do
+      response = FactoryGirl.create(:response, :incomplete)
+      response.update_response_with_conflict_resolution(:comment => "foo")
       response.reload.comment.should == "foo"
     end
   end
@@ -272,8 +433,8 @@ describe Response do
       question_2 = FactoryGirl.create(:question, :finalized, :survey_id => survey.id)
       answer_1 = FactoryGirl.create(:answer, :question_id => question_1.id, :updated_at => Time.now, :content => "older", :response_id => response.id)
       answer_2 = FactoryGirl.create(:answer, :question_id => question_2.id, :updated_at => 5.hours.from_now, :content => "newer", :response_id => response.id)
-      answers_attributes = { '0' => {"question_id" => question_1.id, "updated_at" => 5.hours.from_now.to_s, "id" => answer_1.id, "content" => "newer"},
-                             '1' => {"question_id" => question_2.id, "updated_at" => Time.now.to_s, "id" => answer_2.id, "content" => "older"}}
+      answers_attributes = {'0' => {"question_id" => question_1.id, "updated_at" => 5.hours.from_now.to_s, "id" => answer_1.id, "content" => "newer"},
+                            '1' => {"question_id" => question_2.id, "updated_at" => Time.now.to_s, "id" => answer_2.id, "content" => "older"}}
       selected_answers = response.select_new_answers(answers_attributes)
       selected_answers.keys.should == ['0']
     end
@@ -306,7 +467,7 @@ describe Response do
   end
 
   context "when fetching sorted answers" do
-    let(:survey) {FactoryGirl.create(:survey)}
+    let(:survey) { FactoryGirl.create(:survey) }
     let(:response) { FactoryGirl.create :response, :survey => survey }
 
     it "returns a sorted list of answers for all its first level questions" do
@@ -320,7 +481,7 @@ describe Response do
     it "returns a sorted list of answers for all sub-questions of a category" do
       category = FactoryGirl.create(:category, :survey => survey)
       question = FactoryGirl.create(:question, :finalized, :survey => survey, :order_number => 2, :category => category)
-      another_question = FactoryGirl.create(:question , :finalized, :survey => survey, :order_number => 1, :category => category)
+      another_question = FactoryGirl.create(:question, :finalized, :survey => survey, :order_number => 1, :category => category)
       answer = FactoryGirl.create(:answer, :response => response, :question => question)
       another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)
       response.sorted_answers.should == [another_answer, answer]
@@ -332,7 +493,7 @@ describe Response do
 
       option = FactoryGirl.create(:option, :question => radio_question)
       question = FactoryGirl.create(:question, :finalized, :survey => survey, :order_number => 2, :parent => option)
-      another_question = FactoryGirl.create(:question , :finalized, :survey => survey, :order_number => 1, :parent => option)
+      another_question = FactoryGirl.create(:question, :finalized, :survey => survey, :order_number => 1, :parent => option)
 
       answer = FactoryGirl.create(:answer, :response => response, :question => question)
       another_answer = FactoryGirl.create(:answer, :response => response, :question => another_question)
