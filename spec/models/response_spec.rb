@@ -133,7 +133,7 @@ describe Response do
 
     it "creates the nested answers" do
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
-      answers_attributes = {'0' => {'content' => 'asdasd', 'question_id' => question.id}}
+      answers_attributes = {'0' => {:content => 'asdasd', :question_id => question.id}}
       expect {
         resp.create_valid_response_from_params({:answers_attributes => answers_attributes})
       }.to change { Answer.count }.by 1
@@ -142,7 +142,7 @@ describe Response do
     it "should not increase the response count if the answers are invalid" do
       question = FactoryGirl.create(:question, :finalized, :max_length => 2, :survey => survey)
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
-      answers_attributes = {'0' => {'content' => 'abcd', 'question_id' => question.id}}
+      answers_attributes = {'0' => {:content => 'abcd', :question_id => question.id}}
       expect {
         resp.create_valid_response_from_params({:answers_attributes => answers_attributes})
       }.to_not change { Response.count }
@@ -150,7 +150,7 @@ describe Response do
 
     it "should not increase the response count if an exception is thrown when saving the answers" do
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
-      answers_attributes = {'0' => {'content' => 'abcd', 'question_id' => question.id}}
+      answers_attributes = {'0' => {:content => 'abcd', :question_id => question.id}}
       original_update_attributes = resp.method(:update_attributes)
       resp.stub(:update_attributes) { |*args| original_update_attributes.call(*args) }
       resp.stub(:update_attributes).with(:answers_attributes => answers_attributes).and_raise(ActiveRecord::Rollback)
@@ -351,19 +351,19 @@ describe Response do
       end
 
       it "changes the response status if the answers are valid" do
-        response = FactoryGirl.create(:response, :incomplete)
+        response = Timecop.freeze(5.days.ago) { FactoryGirl.create(:response, :incomplete) }
         question = FactoryGirl.create(:single_line_question, :mandatory, :finalized)
         answers_attributes = {"0" => {:question_id => question.id, :content => "Foo"}}
-        response.update_response_with_conflict_resolution(:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes)
+        response.update_response_with_conflict_resolution(:status => Response::Status::COMPLETE, :updated_at => Time.now.to_s, :answers_attributes => answers_attributes)
         response.reload.should be_complete
       end
 
       it "runs the mandatory validations" do
         response = Timecop.freeze(5.days.ago) { FactoryGirl.create(:response, :incomplete) }
-        mandatory_question = FactoryGirl.create(:single_line_question, :mandatory, :finalized,)
+        mandatory_question = FactoryGirl.create(:single_line_question, :mandatory, :finalized)
         answer = FactoryGirl.create(:answer, :question => mandatory_question, :content => "foo", :response => response)
         response.reload
-        answers_attributes = {"0" => {:question_id => mandatory_question.id, :content => "", :id => answer.id}}
+        answers_attributes = {"0" => {:question_id => mandatory_question.id, :updated_at => Time.now.to_s, :content => "", :id => answer.id}}
         response.update_response_with_conflict_resolution(:status => Response::Status::COMPLETE, :updated_at => Time.now.to_s, :answers_attributes => answers_attributes)
         answer.reload.content.should == "foo"
       end
@@ -376,14 +376,29 @@ describe Response do
         response.reload.should be_complete
       end
 
-      pending 'should keep the existing status if it is newer than the passed in status' do
+      it 'should keep the existing status if it is newer than the passed in status' do
         response = Timecop.freeze(3.days.ago) { FactoryGirl.create(:response, :incomplete) }
         response.update_response_with_conflict_resolution(:status => "complete", :updated_at => 5.days.ago.to_s)
         response.reload.should be_incomplete
       end
 
-      it "should keep the answer content that is newer"
-      it "shouldn't keep the answer content that is older"
+      it "should keep the answer content that is newer" do
+        response = Timecop.freeze(3.days.ago) { FactoryGirl.create(:response, :incomplete) }
+        question = FactoryGirl.create(:single_line_question, :finalized)
+        answer = Timecop.freeze(3.days.ago) { FactoryGirl.create(:answer, :question => question, :content => "foo", :response => response) }
+        answers_attributes = { "0" => { :content => "bar", :updated_at => Time.now.to_s, :id => answer.id }}
+        response.reload.update_response_with_conflict_resolution(:answers_attributes => answers_attributes)
+        answer.reload.content.should == "bar"
+      end
+
+      it "shouldn't keep the answer content that is older" do
+        response = Timecop.freeze(6.days.ago) { FactoryGirl.create(:response, :incomplete) }
+        question = FactoryGirl.create(:single_line_question, :finalized)
+        answer = Timecop.freeze(3.days.ago) { FactoryGirl.create(:answer, :question => question, :content => "foo", :response => response) }
+        answers_attributes = { "0" => { :content => "bar", :updated_at => 5.days.ago.to_s, :id => answer.id }}
+        response.reload.update_response_with_conflict_resolution(:answers_attributes => answers_attributes)
+        answer.reload.content.should == "foo"
+      end
     end
 
     it "updates the response's answers" do
@@ -433,8 +448,8 @@ describe Response do
       question_2 = FactoryGirl.create(:question, :finalized, :survey_id => survey.id)
       answer_1 = FactoryGirl.create(:answer, :question_id => question_1.id, :updated_at => Time.now, :content => "older", :response_id => response.id)
       answer_2 = FactoryGirl.create(:answer, :question_id => question_2.id, :updated_at => 5.hours.from_now, :content => "newer", :response_id => response.id)
-      answers_attributes = {'0' => {"question_id" => question_1.id, "updated_at" => 5.hours.from_now.to_s, "id" => answer_1.id, "content" => "newer"},
-                            '1' => {"question_id" => question_2.id, "updated_at" => Time.now.to_s, "id" => answer_2.id, "content" => "older"}}
+      answers_attributes = {'0' => {:question_id => question_1.id, :updated_at => 5.hours.from_now.to_s, :id => answer_1.id, :content => "newer"},
+                            '1' => {:question_id => question_2.id, :updated_at => Time.now.to_s, :id => answer_2.id, :content => "older"}}
       selected_answers = response.select_new_answers(answers_attributes)
       selected_answers.keys.should == ['0']
     end

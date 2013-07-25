@@ -86,7 +86,7 @@ class Response < ActiveRecord::Base
   def update_response_with_conflict_resolution(response_params)
     return unless response_params.present?
     response_params[:answers_attributes] = select_new_answers(response_params[:answers_attributes])
-    update_response_in_transaction(response_params) { |response_params| merge_status(response_params) }
+    update_response_in_transaction(response_params.except(:status)) { merge_status(response_params) }
   end
 
   def update_response_in_transaction(response_params, &blk)
@@ -135,8 +135,8 @@ class Response < ActiveRecord::Base
   def select_new_answers(answers_attributes)
     return {} unless answers_attributes.present?
     answers_attributes.reject do |_, answer_attributes|
-      existing_answer = answers.find_by_id(answer_attributes['id'])
-      existing_answer && (Time.parse(answer_attributes['updated_at']) < existing_answer.updated_at)
+      existing_answer = answers.find_by_id(answer_attributes[:id])
+      existing_answer && (Time.parse(answer_attributes[:updated_at]) < existing_answer.updated_at)
     end
   end
 
