@@ -72,6 +72,7 @@ class ResponsesController < ApplicationController
         redirect_to :back, :notice => "Successfully updated"
       end
     else
+      @disabled = false
       flash[:error] = "Error"
       render :edit
     end

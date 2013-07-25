@@ -366,19 +366,40 @@ describe ResponsesController do
       response.should redirect_to :back
     end
 
-    it "renders edit page in case of any validations error" do
-      survey = FactoryGirl.create(:survey, :organization_id => 1)
-      question = FactoryGirl.create(:question, :mandatory, :finalized, :survey => survey)
-      survey.finalize
-      response = FactoryGirl.create(:response, :complete, :survey => survey, :organization_id => 1, :user_id => 2)
-      answer = FactoryGirl.create(:answer, :question => question, :response => response)
-      put :update, :id => response.id, :survey_id => survey.id, :response =>
-        { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+    context "when a validation error occurs" do
+      let(:survey) { FactoryGirl.create(:survey, :organization_id => 1) }
+      let!(:mandatory_question) { FactoryGirl.create(:question, :mandatory, :finalized, :survey => survey) }
 
-      response.should render_template('edit')
-      answer.reload.content.should == "MyText"
-      flash[:error].should_not be_empty
+      before(:each) do
+        survey.finalize
+      end
+
+      it "renders the edit page" do
+        resp = FactoryGirl.create(:response, :complete, :organization_id => 1, :user_id => 2, :survey => survey)
+        answer = FactoryGirl.create(:answer, :question => mandatory_question, :response => resp)
+        response_attributes = { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
+        response.should render_template('edit')
+        flash[:error].should_not be_empty
+      end
+
+      it "does not update the answer" do
+        resp = FactoryGirl.create(:response, :complete, :organization_id => 1, :user_id => 2, :survey => survey)
+        answer = FactoryGirl.create(:answer, :question => mandatory_question, :response => resp)
+        response_attributes = { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
+        answer.reload.content.should == "MyText"
+      end
+
+      it "sets assigns `disabled` to false" do
+        resp = FactoryGirl.create(:response, :complete, :organization_id => 1, :user_id => 2, :survey => survey)
+        answer = FactoryGirl.create(:answer, :question => mandatory_question, :response => resp)
+        response_attributes = { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
+        assigns(:disabled).should be_false
+      end
     end
+
 
     it "marks the response as not blank" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
