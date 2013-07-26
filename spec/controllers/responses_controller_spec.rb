@@ -398,6 +398,23 @@ describe ResponsesController do
         put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
         assigns(:disabled).should be_false
       end
+
+      it "assigns a response with the existing status" do
+        resp = FactoryGirl.create(:response, :incomplete, :organization_id => 1, :user_id => 2, :survey => survey)
+        answer = FactoryGirl.create(:answer, :question => mandatory_question, :response => resp)
+        response_attributes = { :status => Response::Status::COMPLETE, :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
+        assigns(:response).should be_incomplete
+      end
+
+      it "assigns a responses whose answers' contents are from the params passed in" do
+        resp = FactoryGirl.create(:response, :incomplete, :organization_id => 1, :user_id => 2, :survey => survey)
+        question = FactoryGirl.create(:question, :finalized, :max_length => 2, :survey => survey)
+        answer = FactoryGirl.create(:answer, :content => "f", :question => question, :response => resp)
+        response_attributes = { :status => Response::Status::COMPLETE, :answers_attributes => { "0" => { :content => "2121", :id => answer.id} } }
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
+        assigns(:response).answers.first.content.should == "2121"
+      end
     end
 
 

@@ -73,6 +73,7 @@ class ResponsesController < ApplicationController
       end
     else
       @disabled = false
+      @response.reload_attribute(:status)
       flash[:error] = "Error"
       render :edit
     end

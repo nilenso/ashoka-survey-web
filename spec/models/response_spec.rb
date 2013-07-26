@@ -585,4 +585,20 @@ describe Response do
       Response.page_size.should == 50
     end
   end
+
+  context "when reloading a single attribute" do
+    it 'reloads that attribute' do
+      response = FactoryGirl.create(:response, :comment => "foo")
+      response.comment = "xyz"
+      response.reload_attribute(:comment)
+      response.comment.should == "foo"
+    end
+
+    it "doesn't reload any other attribute" do
+      response = FactoryGirl.create(:response, :complete, :comment => "foo")
+      response.comment = "xyz"
+      response.reload_attribute(:status)
+      response.comment.should == "xyz"
+    end
+  end
 end

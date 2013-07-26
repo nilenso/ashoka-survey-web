@@ -162,6 +162,10 @@ class Response < ActiveRecord::Base
     ResponseSerializer.new(self)
   end
 
+  def reload_attribute(attribute)
+    self[attribute.to_sym] = Response.find(self.id)[attribute.to_sym]
+  end
+
   private
   def completed_response_cannot_be_marked_incomplete
     if self.status_was == Status::COMPLETE && self.status == Status::INCOMPLETE
