@@ -15,7 +15,7 @@ module Api::V1
       response = Response.new
       response.user_id = params[:user_id]
       response.organization_id = params[:organization_id]
-      if response.create_valid_response_from_params(params[:response])
+      if response.create_response(params[:response])
         render :json => response.to_json_with_answers_and_choices
       else
         render :json => response.to_json_with_answers_and_choices, :status => :bad_request

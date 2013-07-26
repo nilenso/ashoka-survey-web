@@ -77,6 +77,19 @@ class Response < ActiveRecord::Base
     survey_public?
   end
 
+  def create_response(response_params)
+    begin
+      transaction do
+        update_attributes!(response_params.except(:answers_attributes))
+        update_attributes!({:answers_attributes => response_params[:answers_attributes]}) if valid?
+        update_records
+        true
+      end
+    rescue ActiveRecord::RecordInvalid
+      false
+    end
+  end
+
   def update_response(response_params)
     update_response_in_transaction(response_params) do |response_params|
       update_attribute(:status, response_params[:status]) if response_params[:status]
@@ -100,20 +113,6 @@ class Response < ActiveRecord::Base
       true
     rescue ActiveRecord::RecordInvalid
       false
-    end
-  end
-
-  def create_valid_response_from_params(response_params)
-    transaction do
-      update_attributes(response_params.except(:answers_attributes)) # Response isn't created before the answers, so we need to create the answers after this.
-      update_attributes({:answers_attributes => response_params[:answers_attributes]}) if valid?
-      update_records
-      if invalid?
-        destroy
-        false
-      else
-        true
-      end
     end
   end
 

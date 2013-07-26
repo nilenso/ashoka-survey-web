@@ -127,7 +127,7 @@ describe Response do
     it "creates a response" do
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
       expect {
-        resp.create_valid_response_from_params({:answers_attributes => {}})
+        resp.create_response({:answers_attributes => {}})
       }.to change { Response.count }.by 1
     end
 
@@ -135,7 +135,7 @@ describe Response do
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
       answers_attributes = {'0' => {:content => 'asdasd', :question_id => question.id}}
       expect {
-        resp.create_valid_response_from_params({:answers_attributes => answers_attributes})
+        resp.create_response({:answers_attributes => answers_attributes})
       }.to change { Answer.count }.by 1
     end
 
@@ -144,32 +144,30 @@ describe Response do
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
       answers_attributes = {'0' => {:content => 'abcd', :question_id => question.id}}
       expect {
-        resp.create_valid_response_from_params({:answers_attributes => answers_attributes})
+        resp.create_response({:answers_attributes => answers_attributes})
       }.to_not change { Response.count }
     end
 
-    it "should not increase the response count if an exception is thrown when saving the answers" do
+    it "should not increase the response count if saving the answers fails" do
+      question = FactoryGirl.create(:question, :finalized, :max_length => 2)
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
-      answers_attributes = {'0' => {:content => 'abcd', :question_id => question.id}}
-      original_update_attributes = resp.method(:update_attributes)
-      resp.stub(:update_attributes) { |*args| original_update_attributes.call(*args) }
-      resp.stub(:update_attributes).with(:answers_attributes => answers_attributes).and_raise(ActiveRecord::Rollback)
+      answers_attributes = {'0' => {:content => 'abcde', :question_id => question.id}}
       expect {
-        resp.create_valid_response_from_params({:answers_attributes => answers_attributes})
+        resp.create_response({:answers_attributes => answers_attributes})
       }.to_not change { Response.count }
     end
 
     context "return values" do
       it "returns true if valid response" do
         resp = FactoryGirl.build(:response, :survey_id => survey.id, :organization_id => 42, :user_id => 50)
-        resp.create_valid_response_from_params({:answers_attributes => {}}).should be_true
+        resp.create_response({:answers_attributes => {}}).should be_true
       end
 
       it "returns false for an invalid response" do
         question = FactoryGirl.create(:single_line_question, :finalized, :max_length => 2)
         resp = FactoryGirl.build(:response, :survey_id => survey.id)
         answers_attributes = {"0" => {:content => "abcde", :question_id => question.id}}
-        resp.create_valid_response_from_params({:answers_attributes => answers_attributes}).should be_false
+        resp.create_response({:answers_attributes => answers_attributes}).should be_false
       end
     end
 
@@ -177,7 +175,7 @@ describe Response do
       record = FactoryGirl.create :record, :response_id => nil
       answers_attrs = {'0' => {:content => 'AnswerFoo', :question_id => question.id, :record_id => record.id}}
       resp = FactoryGirl.build(:response, :survey_id => survey.id, :user_id => 50, :organization_id => 42)
-      resp.create_valid_response_from_params(:answers_attributes => answers_attrs)
+      resp.create_response(:answers_attributes => answers_attrs)
       record.reload.response_id.should_not be_nil
       record.reload.response_id.should == resp.id
     end
