@@ -26,13 +26,10 @@ module Api::V1
     def update
       response = Response.find_by_id(params[:id])
       return render :nothing => true, :status => :gone if response.nil?
-      response.merge_status(params[:response].except(:answers_attributes))
-      answers_to_update = response.select_new_answers(params[:response][:answers_attributes])
-      response.update_attributes({ :answers_attributes => answers_to_update })
-      response.update_records
+      response.update_response_with_conflict_resolution(params[:response])
+      response.update_records # TODO: Refactor this into the model method, if possible
 
       if response.invalid?
-        response.incomplete
         render :json => response.to_json_with_answers_and_choices, :status => :bad_request
         Airbrake.notify(ActiveRecord::RecordInvalid.new(response))
       else

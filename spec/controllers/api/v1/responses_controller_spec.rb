@@ -173,7 +173,7 @@ module Api::V1
           resp.reload.should be_complete
         end
 
-        it "returns a 410 if the response doesn't exist on the server anymore" do
+        it "returns a 410 (GONE) if the response doesn't exist on the server anymore" do
           put :update, :id => 42, :response => { :status => 'incomplete', :answers_attributes => {}, :updated_at => 5.hours.ago.to_i }
           response.code.should == "410"
         end
@@ -213,9 +213,9 @@ module Api::V1
           resp = FactoryGirl.create(:response, :survey => survey)
 
           answers_attrs = { '0' => { :content => 'AnswerFoo', :question_id => question.id, :record_id => record.id } }
-          resp_attrs = FactoryGirl.attributes_for(:response, :id => resp.id, :answers_attributes => answers_attrs)
+          resp_attrs = FactoryGirl.attributes_for(:response, :id => resp.id, :answers_attributes => answers_attrs, :survey_id => survey.id)
 
-          put :update, :id => resp.id, :response => resp_attrs, :user_id => 15, :organization_id => 42
+          put :update, :id => resp.id, :response => resp_attrs
           record.reload.response_id.should_not be_nil
         end
       end
