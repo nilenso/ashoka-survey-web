@@ -314,6 +314,13 @@ describe Answer do
     end
 
     context "when encoding in base64" do
+
+      before(:each) do
+        CarrierWave.configure do |config|
+          config.enable_processing = true
+        end
+      end
+
       it "returns the cached image if the remote image is still uploading" do
         answer = FactoryGirl.create :answer
         answer.photo.stub(:root).and_return(Rails.root)
@@ -324,7 +331,7 @@ describe Answer do
 
       it "returns the remote image if it's done uploading" do
         answer = FactoryGirl.create :answer_with_image
-        answer.photo_in_base64.should == Base64.encode64(File.read(answer.photo.thumb.path))
+        answer.photo_in_base64.should == Base64.encode64(File.read(answer.photo.path))
       end
     end
 
