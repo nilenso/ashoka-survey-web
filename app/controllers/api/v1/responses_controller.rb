@@ -13,8 +13,6 @@ module Api::V1
 
     def create
       response = Response.new
-      response.user_id = params[:user_id]
-      response.organization_id = params[:organization_id]
       if response.create_response(params[:response])
         render :json => response.to_json_with_answers_and_choices
       else

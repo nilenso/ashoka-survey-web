@@ -9,11 +9,7 @@ before_script:
   - cp config/database.yml.sample config/database.yml
   - bundle exec rake db:migrate
   - bundle exec rake db:test:prepare
-
-branches:
-  except:
-    - refactor_responses_controller
-
+  
 notifications:
   email:
     - ashoka-survey@nilenso.com
