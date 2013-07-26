@@ -81,7 +81,7 @@ class Response < ActiveRecord::Base
     begin
       transaction do
         update_attributes!(response_params.except(:answers_attributes))
-        update_attributes!({:answers_attributes => response_params[:answers_attributes]}) if valid?
+        update_attributes!({:answers_attributes => response_params[:answers_attributes]})
         update_records
         true
       end
