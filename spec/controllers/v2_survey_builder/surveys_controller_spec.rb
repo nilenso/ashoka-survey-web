@@ -141,11 +141,14 @@ describe V2SurveyBuilder::SurveysController do
     end
 
     context "when save is unsuccessful" do
-      it "redirects to the surveys build path" do
-        post :create, :survey => @survey_attributes
-        created_survey = Survey.find_all_by_name(@survey_attributes[:name]).last
-        response.should redirect_to(v2_survey_builder_survey_build_path(:survey_id => created_survey.id))
-        flash[:notice].should_not be_nil
+      it "renders the new page" do
+        post :create, :survey => { :name => nil }
+        response.should render_template :new
+      end
+
+      it "adds a flash error message" do
+        post :create, :survey => { :name => nil }
+        flash[:error].should =~ /error/i
       end
     end
 
@@ -160,8 +163,10 @@ describe V2SurveyBuilder::SurveysController do
         created_survey.organization_id.should == session[:user_info][:org_id]
       end
 
-      it "creates a survey with placeholder attrs if params[:survey] doesn't exist" do
-        expect { post :create }.to change { Survey.count }.by(1)
+      it "sets the expiry date to 5 days from the current date" do
+        Timecop.travel(Date.parse("2013/07/20"))
+        post :create, :survey => @survey_attributes
+        Survey.order("created_at").last.expiry_date.should == Date.parse("2013/07/25")
       end
     end
 

@@ -2,7 +2,7 @@
   <h2><%= t(".create_survey_header") %></h2>
 </header>
 
-<%= semantic_form_for @survey do |f| %>
+<%= semantic_form_for [:v2_survey_builder, @survey] do |f| %>
   <%= f.input :name, :wrapper_html => { :class => "new-survey-form-element" } %>
   <%= f.input :description, :wrapper_html => { :class => "new-survey-form-element" } %>
 

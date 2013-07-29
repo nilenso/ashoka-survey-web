@@ -29,15 +29,15 @@ class V2SurveyBuilder::SurveysController < ApplicationController
   def create
     @survey = Survey.new(params[:survey])
     @survey.organization_id = current_user_org
+    @survey.expiry_date = 5.days.from_now
 
-    @survey.name ||= I18n.t('js.untitled_survey')
-    @survey.expiry_date ||= 5.days.from_now
-    @survey.description ||= "Description goes here"
-
-    @survey.save
-    flash[:notice] = t "flash.survey_created"
-
-    redirect_to v2_survey_builder_survey_build_path(:survey_id => @survey.id)
+    if @survey.save
+      flash[:notice] = t "flash.survey_created"
+      redirect_to v2_survey_builder_survey_build_path(:survey_id => @survey.id)
+    else
+      flash[:error] = I18n.t("v2_survey_builder.surveys.create.flash_error_message")
+      render :new
+    end
   end
 
   def build
