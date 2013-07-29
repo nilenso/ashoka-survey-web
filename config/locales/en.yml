@@ -57,12 +57,129 @@ en:
 
   v2_survey_builder:
     surveys:
+      confirm_finalize: "The survey can't be edited after this. Are you sure?"
+      duplication_in_progress: "Survey duplication in progress…"
+      duplication_dialog_title: "Duplicating Survey..."
+
+      validations:
+        cant_be_in_past: "Can't be in the past"
+        invalid: "is not valid"
+        older_than_existing: "can not be older than existing value"
+
+      public_link:
+        copy_to_clipboard: "Copy to clipboard"
+        message: "This survey can be crowd-sourced using this link: "
+        ok_button_text: "Done"
+        dialog_title: "Get Crowd Source Link"
+        copied: "Copied!"
+
       new:
+        create_survey: "Create a new survey"
+        add_single_line_question: "Add a single line Question"
+        pick_question_type: "Pick Question"
+        question_settings: "Settings"
+        untitled: "Untitled"
+        description: "Description"
+        survey_details: "Survey Details"
+        expiry_date: "Expires on"
+        content: "Content"
+        max_length: "Maximum Length"
+        image: "Image"
+        mandatory: "Mandatory"
         create_survey_header: "Create a Survey"
         create_survey_submit_button: "Create Survey"
 
       create:
         flash_error_message: "Error while saving survey."
+
+      index:
+        surveys: "Surveys"
+        welcome: "Welcome"
+        responses: "Response"
+        show: "Show"
+        finalized: "Finalized"
+        archived: "Archived"
+        drafts: "Drafts"
+        all: "All"
+        active: "Active"
+        expired: "Expired"
+        create_survey: "Create survey"
+        delete: "Delete"
+        publish: "Publish"
+        unpublish: "Unpublish"
+        archive: "Archive"
+        share: "Share"
+        add_response: "Add Response"
+        edit: "Edit"
+        operations: "Operations"
+        more: "more"
+        less: "less"
+        list_responses: "List Responses"
+        duplicate: "Duplicate"
+        reports: "Reports"
+        no_surveys: "There are no surveys yet."
+        crowd_source: "Get crowd source link"
+        copied: "Copied!"
+        finalize: "Finalize"
+        duplicate_confirm: "Are you sure you want to duplicate this survey?"
+        description_part_1:
+          "Data plays a significant part in designing social impact programs.
+          Social Surveys, Data collection drives and Demand aggregation are fundamental to operations of many citizen sector organizations.
+          Ashoka's technology framework and tools enable organizations use 'Data As Infrastructure' (DAI)."
+        description_part_2:
+          "Organizations can get quality and variety of data through crowd sourcing, through organized surveys, marketing research.
+          Through 'DAI', we aim to help organizations in strategic decision making, and to achieve the right Insights, Interventions & Impact."
+
+        survey_dashboard: "Dashboard"
+      share:
+        share_survey: "Share"
+
+      build:
+        build_survey: "Build your survey"
+        add_radio_question: "Radio"
+        add_single_line_question: "Single Line"
+        add_multiline_question: "Multiline"
+        add_numeric_question: "Numeric"
+        add_date_question: "Date"
+        add_multi_choice_question: "Multi-choice"
+        add_drop_down_question: "Drop Down"
+        add_photo_question: "Photo"
+        add_rating_question: "Rating"
+        add_multi_record_category: "Multi Record"
+        pick_question_type: "Pick Question"
+        question_settings: "Settings"
+        pick_question_type: "Pick Question"
+        question_settings: "Settings"
+        option: "Option"
+        category: "Category"
+        question_title: "Question Title"
+        multi_record_title: "Multi Record Title"
+        save_survey: "Save Survey"
+        delete_survey: "Delete Survey"
+        finalize_survey: "Publish"
+        survey_finalized: "The survey was finalized"
+        mark_identifier: "Mark as identifier?"
+        mark_private: "Mark private?"
+        saving_your_survey_message: "Saving your survey. Please don't close this page."
+        loading_survey: "Loading your survey. Please wait."
+        add_options_in_bulk_help_text: "Enter a comma separated list of options"
+        add_options_in_bulk_label: "Add Options in Bulk"
+        category_finalized: This category has been published.
+        question_finalized: This question has been published.
+        option_finalized: This option has been published.
+
+      share_with_organizations:
+        share_survey: "Share Survey and continue"
+
+      publish_to_users:
+        publish_survey: "Publish and continue"
+
+      report:
+        location: Location Map
+        download_excel: Download Excel
+        reports: Reports
+        total: "(Total: %{count})"
+
   surveys:
     confirm_finalize: "The survey can't be edited after this. Are you sure?"
     duplication_in_progress: "Survey duplication in progress…"
