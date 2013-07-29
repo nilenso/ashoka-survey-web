@@ -1,0 +1,12 @@
+<header>
+  <h2><%= t(".create_survey_header") %></h2>
+</header>
+
+<%= semantic_form_for @survey do |f| %>
+  <%= f.input :name, :wrapper_html => { :class => "new-survey-form-element" } %>
+  <%= f.input :description, :wrapper_html => { :class => "new-survey-form-element" } %>
+
+  <%= f.actions do %>
+    <%= f.action :submit, :label => t(".create_survey_submit_button"), :wrapper_html => { :class => "new-survey-form-element" } %>
+  <% end %>
+<% end %>

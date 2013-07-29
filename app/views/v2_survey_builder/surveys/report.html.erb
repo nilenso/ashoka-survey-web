@@ -1,0 +1,79 @@
+<script type="text/javascript" src="https://www.google.com/jsapi"></script>
+<script type="text/javascript">
+  google.load("visualization", "1", {packages:["corechart"]});
+  google.setOnLoadCallback(drawChart);
+    var chart, data, params={};
+
+
+  function dateReportData(report_data_json) {
+    var report_data = _(JSON.parse(report_data_json)).rest()
+
+    _(report_data).each(function(dateString){
+      dateString[0] = new Date(dateString[0]);
+    });
+
+    return report_data;
+  }
+
+  function drawChart() {
+    <% @survey.ordered_question_tree.each do |question| %>
+      <%
+        report_data = @survey.report_data_for(question)
+        next if report_data.empty?
+      %>
+      <% if question.is_a? QuestionWithOptions %>
+        data = google.visualization.arrayToDataTable(JSON.parse('<%= report_data %>'))
+        chart = new google.visualization.PieChart(document.getElementById('chart_div_<%= question.id %>'));
+        params['title'] = "<%= question.decorate.content_with_answer_count %>";
+        chart.draw(data, params);
+      <% elsif question.type == 'DateQuestion' %>
+        data = new google.visualization.DataTable();
+        chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
+
+        data.addColumn('date', 'Value');
+        data.addColumn('number', 'Answer / Count');
+
+        var report_data = dateReportData('<%= report_data %>')
+
+        data.addRows(report_data)
+        params = {
+          vAxis: {'title': 'Count'},
+          hAxis: {'title': 'Answer'},
+        }
+
+        params['title'] = "<%= question.decorate.content_with_answer_count %>";
+        chart.draw(data, params);
+      <% elsif question.type == 'NumericQuestion' %>
+        chart = new google.visualization.ScatterChart(document.getElementById('chart_div_<%= question.id %>'));
+        data = google.visualization.arrayToDataTable(JSON.parse('<%= report_data %>'))
+        params = {
+          vAxis: {'title': 'Count', minValue: 0, maxValue: <%= question.answers.count %> },
+          hAxis: {'title': 'Answer', minValue: <%= question.min_value_for_report %> , maxValue: <%= question.max_value_for_report %>},
+        }
+        params['title'] = "<%= question.decorate.content_with_answer_count %>";
+        chart.draw(data, params);
+      <% end %>
+    <% end %>
+  }
+</script>
+<header>
+  <%= link_to icon_for('icon-table', t('.download_excel')), 'javascript:void(0);', :class => 'download_excel' if @complete_responses_count > 0 && can?(:generate_excel, @survey) %>
+  <h2><%= t '.reports' %></h2>
+</header>
+<%= render "responses/excel_dialog" %>
+<%= render "responses/excel_password_dialog" %>
+<div class="reports">
+  <%= render "layouts/status_bar", :status => "analyze" %>
+  <% @survey.ordered_question_tree.each do |question| %>
+    <div id="chart_div_<%= question.id %>"></div>
+  <% end %>
+  <div id="location_map">
+    <p><%= t('.location') %></p>
+    <%= gmaps4rails(@markers) %>
+  </div>
+</div>
+<script>
+  $(document).ready(function() {
+    new SurveyApp.ExcelDownloader($("#excel-dialog"), $(".download_excel"), <%= @survey.id %>)
+  });
+</script>

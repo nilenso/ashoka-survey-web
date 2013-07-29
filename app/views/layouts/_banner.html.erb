@@ -4,6 +4,9 @@
     <% if user_currently_logged_in? %>
       <% if can? :create, Survey %>
         <li><%= link_to t(".create_survey"), surveys_path, :method => :post, :class => "add" %></li>
+        <% if ENV["SURVEY_BUILDER_V2"] %>
+          <li><%= link_to "Create V2", new_v2_survey_builder_survey_path, :method => :get, :class => "add" %></li>
+        <% end %>
       <% end %>
 
       <% if signed_in_as_cso_admin? %>

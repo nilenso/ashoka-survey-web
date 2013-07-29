@@ -27,12 +27,22 @@ SurveyWeb::Application.routes.draw do
       end
     end
 
+    namespace :v2_survey_builder do
+      resources :surveys, :only => [:new, :create, :destroy, :index] do
+        member { get 'report' }
+        get 'build'
+        put 'finalize'
+        put 'archive'
+        match "public_response" => "responses#create"
+      end
+    end
+
     resources :records, :only => [:create, :destroy]
 
     root :to => 'surveys#index'
   end
 
-  namespace :api, :defaults => { :format => 'json' } do
+  namespace :api, :defaults => {:format => 'json'} do
     scope :module => :v1 do
       get '/jobs/:id/alive' => "jobs#alive"
       resources :questions, :only => [:create, :update, :show, :destroy] do

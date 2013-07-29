@@ -1,0 +1,95 @@
+<header>
+    <% if user_currently_logged_in? %>
+      <ul class="filters">
+        <li><%= link_to t(".active"), surveys_path, :class => "#{'selected' unless params[:filter]}"%></li>
+        <li><%= link_to t(".expired"), surveys_path(:filter => "expired"), :class => "#{'selected' if params[:filter] == "expired"}" %></li>
+        <li><%= link_to t(".drafts"), surveys_path(:filter => "drafts"), :class => "#{'selected' if params[:filter] == "drafts"}"%></li>
+        <li><%= link_to t(".archived"), surveys_path(:filter => "archived"), :class => "#{'selected' if params[:filter] == "archived"}"%></li>
+      </ul>
+    <% end %>
+
+  <h2>
+    <%= user_currently_logged_in? ?  t('.surveys') : t('.welcome') %>
+  </h2>
+
+</header>
+
+<% unless user_currently_logged_in? %>
+    <p class="application_description"><%= t('.description_part_1') %></p>
+    <p class="application_description"><%= t('.description_part_2') %></p>
+<% end %>
+
+<% if user_currently_logged_in? && @surveys.blank? %>
+    <p class="no-surveys"><%= t('.no_surveys') %></p>
+<% end %>
+
+<% if @surveys.present? && @organizations.present? %>
+    <ul class="surveys">
+      <li class="survey header">
+        <span class="info">&nbsp;</span>
+        <span class="published-on">Published On</span>
+        <span class="expires-on">Expires On</span>
+        <span class="responses-complete">Complete</span>
+        <span class="responses-incomplete">Incomplete</span>
+      </li>
+
+
+      <% @surveys.each do |survey| %>
+          <li class="survey <%= survey.finalized? ? 'finalized' : 'incomplete' %>">
+            <div class="info">
+              <h2 class="name"><%= survey.name %>
+                <em><%= survey.organization_name(@organizations) %></em>
+              </h2>
+              <p class="description"><%= survey.description %></p>
+            </div>
+
+            <span class="published-on">
+              <% if survey.published? && survey.published_on %>
+                <%= I18n.localize(survey.published_on) %>
+              <% else %>
+                <%= t(".not_yet_published") %>
+              <% end %>
+            </span>
+
+            <span class="expires-on">
+              <%= I18n.localize(survey.expiry_date) %>
+            </span>
+
+            <span class="responses-complete"><%= survey.complete_responses_count(current_ability) %></span>
+
+            <span class="responses-incomplete"><%= survey.incomplete_responses_count(current_ability) %></span>
+
+            <% if survey.archived? %>
+              <%= render :partial => "archived_survey_responses", :locals => { :survey => survey } %>
+            <% else %>
+              <%= render :partial => "unarchived_survey_responses", :locals => { :survey => survey } %>
+            <% end %>
+          </li>
+      <% end %>
+    </ul>
+<% end %>
+
+<%= render "surveys/public_link_dialog" %>
+<%= render "surveys/duplicate_dialog" %>
+
+<%= will_paginate @surveys %>
+
+<script type="text/javascript">
+    $(document).ready(function(){
+        $('a.disabled').click(function(){
+            return false;
+        });
+
+        $('a.copy_public_link').click(function(){
+            new SurveyApp.PublicLinkDialog($(this).data('public-link')).open();
+        });
+
+        $('a.duplicate').click(function(){
+          if(confirm("<%= t('.duplicate_confirm') %>")) {
+            new SurveyApp.DuplicateSurvey($("#survey-duplicate-dialog"), $(this).data('survey-id'));
+          }
+        });
+
+        new SurveyApp.AddConfirmation($(".archive"));
+    });
+</script>
