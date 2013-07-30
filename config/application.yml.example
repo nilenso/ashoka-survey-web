@@ -11,6 +11,7 @@ production:
   SENDGRID_CATEGORY: # The category used when sending emails
   AIRBRAKE_TOKEN: # API token for airbrake.io
   SECRET_TOKEN: # Secret key used to sign cookies (run `rake secret`)
+  SURVEY_BUILDER_V2: # Feature toggle for the new Survey Builder
 
 development:
   OAUTH_ID: # Application ID of the OAuth provider.
@@ -25,6 +26,7 @@ development:
   SENDGRID_CATEGORY: # The category used when sending emails
   AIRBRAKE_TOKEN: # API token for airbrake.io
   SECRET_TOKEN: # Secret key used to sign cookies (run `rake secret`)
+  SURVEY_BUILDER_V2: # Feature toggle for the new Survey Builder
 
 test:
   OAUTH_ID: # Application ID of the OAuth provider.
@@ -39,3 +41,4 @@ test:
   SENDGRID_CATEGORY: # The category used when sending emails
   AIRBRAKE_TOKEN: # API token for airbrake.io
   SECRET_TOKEN: # Secret key used to sign cookies (run `rake secret`)
+  SURVEY_BUILDER_V2: # Feature toggle for the new Survey Builder
