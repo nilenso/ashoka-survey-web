@@ -12,9 +12,9 @@ describe Reports::Excel::Metadata do
       orgs_response = mock(OAuth2::Response)
       access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
       orgs_response.stub(:parsed).and_return([
-        {"id" => 1, "name" => "CSOOrganization", "logos" => {"thumb_url" => "http://foo.png"}},
-        {"id" => 2, "name" => "Ashoka", "logos" => {"thumb_url" => "http://foo.png"}}
-        ])
+                                                 {"id" => 1, "name" => "CSOOrganization", "logos" => {"thumb_url" => "http://foo.png"}},
+                                                 {"id" => 2, "name" => "Ashoka", "logos" => {"thumb_url" => "http://foo.png"}}
+                                             ])
     end
 
     context "when the `disable_filtering` flag is false" do
@@ -70,23 +70,33 @@ describe Reports::Excel::Metadata do
     end
   end
 
-  it "finds the user name for an ID" do
-    names_response = mock(OAuth2::Response)
-    access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
-    names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}])
+  context "user names" do
+    before(:each) do
+      names_response = mock(OAuth2::Response)
+      access_token.stub(:get).with('/api/users/users_for_ids', :params => {:user_ids => [1].to_json}).and_return(names_response)
+      names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}])
+    end
 
-    response = FactoryGirl.create(:response, :user_id => 1)
-    metadata = Reports::Excel::Metadata.new([response], access_token)
-    metadata.user_name_for(1).should == "Bob"
+    it "finds the user name for an ID" do
+      response = FactoryGirl.create(:response, :user_id => 1)
+      metadata = Reports::Excel::Metadata.new([response], access_token)
+      metadata.user_name_for(1).should == "Bob"
+    end
+
+    it "returns '<public>' if no user ID is passed" do
+      response = FactoryGirl.create(:response, :user_id => 1)
+      metadata = Reports::Excel::Metadata.new([response], access_token)
+      metadata.user_name_for(nil).should == "<public>"
+    end
   end
 
   it "finds the organization name for an ID" do
     orgs_response = mock(OAuth2::Response)
     access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
     orgs_response.stub(:parsed).and_return([
-      FactoryGirl.attributes_for(:organization, :id => 1, :name => "CSOOrganization").with_indifferent_access,
-      FactoryGirl.attributes_for(:organization, :id => 2, :name => "Ashoka").with_indifferent_access
-    ])
+                                               FactoryGirl.attributes_for(:organization, :id => 1, :name => "CSOOrganization").with_indifferent_access,
+                                               FactoryGirl.attributes_for(:organization, :id => 2, :name => "Ashoka").with_indifferent_access
+                                           ])
 
     metadata = Reports::Excel::Metadata.new([], access_token)
     metadata.organization_name_for(1).should == "CSOOrganization"
@@ -96,9 +106,9 @@ describe Reports::Excel::Metadata do
     orgs_response = mock(OAuth2::Response)
     access_token.stub(:get).with('/api/organizations').and_return(orgs_response)
     orgs_response.stub(:parsed).and_return([
-      FactoryGirl.attributes_for(:organization, :id => 1, :name => "CSOOrganization").with_indifferent_access,
-      FactoryGirl.attributes_for(:organization, :id => 2, :name => "Ashoka").with_indifferent_access,
-    ])
+                                               FactoryGirl.attributes_for(:organization, :id => 1, :name => "CSOOrganization").with_indifferent_access,
+                                               FactoryGirl.attributes_for(:organization, :id => 2, :name => "Ashoka").with_indifferent_access,
+                                           ])
 
     metadata = Reports::Excel::Metadata.new([], access_token)
     metadata.organization_name_for(42).should == ""

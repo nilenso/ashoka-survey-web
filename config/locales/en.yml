@@ -341,6 +341,7 @@ en:
       include_private_fields: Include Private Fields
       excel_password_dialog_title: "Generated Excel Archive"
       excel_password_message: "Your archive has been generated, and should begin downloading shortly. You can use the following password to unlock it:"
+      public_response_tag: "<public>"
 
   answers:
     validations:

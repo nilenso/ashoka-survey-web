@@ -32,7 +32,8 @@ class Reports::Excel::Metadata
 
   def user_name_for(id)
     @users ||= User.users_for_ids(@access_token, @responses.map(&:user_id).uniq)
-    @users.find { |user| user.id == id }.name
+    user = @users.find { |user| user.id == id }
+    user ? user.name : I18n.t("responses.excel.public_response_tag")
   end
 
   def organization_name_for(id)
