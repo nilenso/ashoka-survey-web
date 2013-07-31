@@ -35,6 +35,7 @@ class V2SurveyBuilder::SurveysController < ApplicationController
 
   def build
     @survey = SurveyDecorator.find(params[:survey_id])
+    gon.survey_attributes = @survey.attributes
   end
 
   def destroy

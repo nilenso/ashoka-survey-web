@@ -8,9 +8,12 @@ body#build_v2 {
 
   $survey-header-background: $secondary-color-light;
 
+  #survey_builder_v2 {
+    padding: 0;
+  }
+
   .survey-header {
     clear: both;
-    padding: 0;
     cursor: pointer;
   }
 

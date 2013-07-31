@@ -36,6 +36,7 @@ gem "mixpanel", "~> 4.0.2"
 gem 'httparty', '~> 0.11.0'
 gem 'rack-ssl', '~> 1.3.3', :require => 'rack/ssl'
 gem 'smt_rails', '~> 0.2.6'
+gem 'gon', '~> 4.1.1'
 
 group :production do
   gem 'ey_config', '~> 0.0.6'
@@ -55,6 +56,7 @@ group :test, :development do
   gem 'rspec-rails', '~> 2.11.4'
   gem 'rspec-http', '~> 0.10.0'
   gem 'zeus', '~> 0.13.3'
+  gem 'konacha', '~> 3.0.0'
 end
 
 group :test do

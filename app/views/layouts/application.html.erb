@@ -3,6 +3,7 @@
   <head>
     <%= airbrake_javascript_notifier %>
     <title><%= t(:application_title) %></title>
+    <%= include_gon %>
     <%= stylesheet_link_tag    "application", :media => "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>

@@ -2,8 +2,10 @@
 <% end %>
 <%= render "layouts/status_bar", :status => "edit" %>
 
-<%= render 'v2_survey_builder/surveys/header', :mustache => @survey.attributes %>
+<div id="survey_builder_v2">
+  <%= render 'v2_survey_builder/surveys/header', :mustache => @survey.attributes %>
+</div>
 
 <script type="text/javascript">
-  new SurveyBuilderV2.Views.SurveyView({ el: "#build_v2" })
+  new SurveyBuilderV2.Views.SurveyView({ el: "#survey_builder_v2", survey: gon.survey_attributes })
 </script>
