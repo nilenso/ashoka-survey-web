@@ -1,23 +1,118 @@
 body#build_v2 {
+  $left-pane-width: 68%;
+  $right-pane-width: 32%;
+  $survey-header-height: 60px;
+  $survey-pane-height: 500px;
+
+  $survey-metadata-left-margin: 10px;
+
+  $survey-header-background: $secondary-color-light;
+
   .survey-header {
     clear: both;
+    padding: 0;
   }
 
   .survey-metadata {
     float: left;
+    width: 58%;
+  }
+
+  .survey-actions {
+    float: right;
+    width: 42%;
   }
 
   h3.survey-metadata-name {
-    color: blue;
+    font-size: 16px;
+    margin-left: $survey-metadata-left-margin;
+    color: $primary-color-light;
   }
 
   .survey-metadata-description {
-    font-size: 15px;
+    font-size: 14px;
+    margin-left: $survey-metadata-left-margin;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  .survey-actions { float: right; }
+  .survey-actions-list-item {
+    display: inline;
+    margin-right: 5px;
 
-  ul.survey-actions-list {
-    li { display: inline; }
+    &> button {
+      text-shadow: none;
+      line-height: 24px;
+      background: $secondary-color;
+      color: $white;
+      border: none;
+      @include border-radius(2px);
+      padding: 5px 10px 0;
+
+      &:hover {
+        background: $secondary-color-dark;
+      }
+
+      &> i {
+        margin-bottom: 3px;
+        margin-right: 5px;
+        font-size: 20px;
+      }
+    }
+  }
+
+  .survey-header-left-pane {
+    width: $left-pane-width;
+    background: $survey-header-background;
+    float: left;
+    height: $survey-header-height;
+    overflow: hidden;
+
+    .survey-actions-list {
+      padding: 0 15px 0 0;
+    }
+
+    .survey-actions-list-item {
+      float: right;
+    }
+  }
+
+  .survey-header-right-pane {
+    width: $right-pane-width;
+    background: $survey-header-background;
+    float: right;
+    height: $survey-header-height;
+
+    .survey-actions-list {
+      padding: 0 0 0 15px;
+    }
+
+    .survey-actions {
+      width: 100%;
+      float: left;
+    }
+    .survey-actions-list-item {
+      float: left;
+    }
+  }
+
+  .survey-panes {
+    clear: both;
+    padding: 0;
+  }
+
+  .survey-panes-left-pane {
+    height: $survey-pane-height;
+    width: $left-pane-width;
+    background: green;
+    float: left;
+  }
+
+  .survey-panes-right-pane {
+    width: $right-pane-width;
+    height: $survey-pane-height;
+    background: red;
+    float: right;
   }
 }

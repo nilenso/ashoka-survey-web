@@ -1,25 +1,43 @@
-<%= content_for :body_attributes do %> id="build_v2" <% end %>
+<%= content_for :body_attributes do %> id="build_v2"
+<% end %>
 <%= render "layouts/status_bar", :status => "edit" %>
 
 <div class="survey-header">
-  <div class="survey-metadata">
-    <h3 class="survey-metadata-name">
-      <%= @survey.name %>
-    </h3>
 
-    <div class="survey-metadata-description">
-      <%= @survey.description %>
+  <!-- left thing -->
+  <div class="survey-header-left-pane">
+    <div class="survey-metadata">
+      <h3 class="survey-metadata-name">
+        <%= @survey.name %>
+      </h3>
+
+      <div class="survey-metadata-description">
+        <%= @survey.description %>
+      </div>
+    </div>
+
+    <div class="survey-actions">
+      <ul class="survey-actions-list">
+        <li class="survey-actions-list-item"><button><i class="icon-remove"></i>Close</button></li>
+        <li class="survey-actions-list-item"><button><i class="icon-eye-open"></i>Preview</button></li>
+        <li class="survey-actions-list-item"><button><i class="icon-save"></i>Save</button></li>
+      </ul>
     </div>
   </div>
 
-  <div class="survey-actions">
-    <ul class="survey-actions-list">
-      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
-      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
-      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
-      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
-      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
-      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
-    </ul>
+  <!-- right thing -->
+  <div class="survey-header-right-pane">
+    <div class="survey-actions">
+      <ul class="survey-actions-list">
+        <li class="survey-actions-list-item"><button><i class="icon-trash"></i>Discard</button></li>
+        <li class="survey-actions-list-item"><button><i class="icon-copy"></i>Duplicate</button></li>
+        <li class="survey-actions-list-item"><button><i class="icon-share"></i>Publish</button></li>
+      </ul>
+    </div>
   </div>
+</div>
+
+<div class="survey-panes">
+  <div class="survey-panes-left-pane"></div>
+  <div class="survey-panes-right-pane"></div>
 </div>
