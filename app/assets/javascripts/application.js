@@ -25,6 +25,7 @@
 //= require jquery.charCount
 //= require jquery_sortable
 //= require jquery.zclip
+//= require js-routes
 //= require spin
 //= require i18n
 //= require datepicker-fr
@@ -35,7 +36,6 @@
 //= require backbone_datalink
 //= require backbone/survey_builder
 //= require backbone/survey_builder_v2/survey_builder_v2
-//= require js-routes
 //= require_tree .
 
 //= require mustache

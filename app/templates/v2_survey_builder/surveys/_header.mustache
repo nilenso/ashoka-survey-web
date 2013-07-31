@@ -47,15 +47,14 @@
 <div class="survey-header-edit">
   <div class="survey-header-edit-information">
     <label name="name" class="survey-header-edit-information-label">Name</label>
-    <input type="text" name="name" placeholder="{{name}}"/>
+    <input type="text" class="name-input" name="name" value="{{name}}"/>
     <label name="description" class="survey-header-edit-information-label">Description</label>
-    <textarea name="description" rows="10" cols="50" placeholder="{{description}}"></textarea>
+    <textarea name="description" class="description-input" rows="10" cols="50">{{description}}</textarea>
   </div>
 
   <div class="survey-header-edit-logo"></div>
-  <p>
-    <button>Update</button>
-  </p>
+
+  <p><button class="update-survey">Update</button></p>
 </div>
 
 <div class="survey-panes">
