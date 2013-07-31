@@ -2,21 +2,24 @@ class Answer < ActiveRecord::Base
   belongs_to :question
   belongs_to :response
   belongs_to :record
-  attr_accessible :content, :question_id, :option_ids, :updated_at, :response_id, :record_id
-  validate :mandatory_questions_should_be_answered, :if => :response_complete?
+  has_many :choices, :dependent => :destroy
+
+  attr_accessible :content, :question_id, :option_ids, :updated_at, :response_id, :record_id, :photo
+
+  mount_uploader :photo, ImageUploader
+  store_in_background :photo, AnswerPhotoWorker
+
   with_options :if => :has_been_answered? do |condition|
     condition.validate :date_should_be_valid
     condition.validate :content_should_be_in_range
   end
+  validate :mandatory_questions_should_be_answered, :if => :response_complete?
   validate :content_should_not_exceed_max_length, :if => :max_length_and_content_present?
   validate :question_should_be_finalized
-  validates_uniqueness_of :question_id, :scope => [:response_id, :record_id]
-  has_many :choices, :dependent => :destroy
-  attr_accessible :photo
-  mount_uploader :photo, ImageUploader
-  store_in_background :photo, AnswerPhotoWorker
   validate :maximum_photo_size, :if => :content_present?
+  validates_uniqueness_of :question_id, :scope => [:response_id, :record_id]
   validates_numericality_of :content, :if => :numeric_question?
+
   after_save :touch_multi_choice_answer
 
   delegate :content, :to => :question, :prefix => true
@@ -119,9 +122,11 @@ class Answer < ActiveRecord::Base
   end
 
   def mandatory_questions_should_be_answered
-    if question.mandatory && has_not_been_answered?
+    if question.mandatory? && has_not_been_answered?
       if question.is_a?(PhotoQuestion)
         errors.add(:photo, I18n.t('answers.validations.mandatory_question'))
+      elsif question.is_a?(MultiChoiceQuestion)
+        errors.add(:option_ids, I18n.t('answers.validations.mandatory_question'))
       else
         errors.add(:content, I18n.t('answers.validations.mandatory_question'))
       end
