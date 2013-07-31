@@ -35,6 +35,7 @@ gem 'ruby-progressbar', '~> 1.0.2'
 gem "mixpanel", "~> 4.0.2"
 gem 'httparty', '~> 0.11.0'
 gem 'rack-ssl', '~> 1.3.3', :require => 'rack/ssl'
+gem 'smt_rails', '~> 0.2.6'
 
 group :production do
   gem 'ey_config', '~> 0.0.6'

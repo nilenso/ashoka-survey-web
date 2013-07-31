@@ -1,0 +1,64 @@
+<div class="survey-header">
+  <!-- left thing -->
+  <div class="survey-header-left-pane">
+    <div class="survey-metadata">
+      <h3 class="survey-metadata-name">
+        {{name}}
+      </h3>
+
+      <div class="survey-metadata-description">
+        {{description}}
+      </div>
+    </div>
+
+    <div class="survey-actions">
+      <ul class="survey-actions-list">
+        <li class="survey-actions-list-item">
+          <button><i class="icon-remove"></i>Close</button>
+        </li>
+        <li class="survey-actions-list-item">
+          <button><i class="icon-eye-open"></i>Preview</button>
+        </li>
+        <li class="survey-actions-list-item">
+          <button><i class="icon-save"></i>Save</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- right thing -->
+  <div class="survey-header-right-pane">
+    <div class="survey-actions">
+      <ul class="survey-actions-list">
+        <li class="survey-actions-list-item">
+          <button><i class="icon-trash"></i>Discard</button>
+        </li>
+        <li class="survey-actions-list-item">
+          <button><i class="icon-copy"></i>Duplicate</button>
+        </li>
+        <li class="survey-actions-list-item">
+          <button><i class="icon-share"></i>Publish</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="survey-header-edit">
+  <div class="survey-header-edit-information">
+    <label name="name" class="survey-header-edit-information-label">Name</label>
+    <input type="text" name="name" placeholder="{{name}}"/>
+    <label name="description" class="survey-header-edit-information-label">Description</label>
+    <textarea name="description" rows="10" cols="50" placeholder="{{description}}"></textarea>
+  </div>
+
+  <div class="survey-header-edit-logo"></div>
+  <p>
+    <button>Update</button>
+  </p>
+</div>
+
+<div class="survey-panes">
+  <div class="survey-panes-left-pane"></div>
+  <div class="survey-panes-right-pane"></div>
+</div>

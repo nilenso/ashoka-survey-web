@@ -2,42 +2,8 @@
 <% end %>
 <%= render "layouts/status_bar", :status => "edit" %>
 
-<div class="survey-header">
+<%= render 'v2_survey_builder/surveys/header', :mustache => @survey.attributes %>
 
-  <!-- left thing -->
-  <div class="survey-header-left-pane">
-    <div class="survey-metadata">
-      <h3 class="survey-metadata-name">
-        <%= @survey.name %>
-      </h3>
-
-      <div class="survey-metadata-description">
-        <%= @survey.description %>
-      </div>
-    </div>
-
-    <div class="survey-actions">
-      <ul class="survey-actions-list">
-        <li class="survey-actions-list-item"><button><i class="icon-remove"></i>Close</button></li>
-        <li class="survey-actions-list-item"><button><i class="icon-eye-open"></i>Preview</button></li>
-        <li class="survey-actions-list-item"><button><i class="icon-save"></i>Save</button></li>
-      </ul>
-    </div>
-  </div>
-
-  <!-- right thing -->
-  <div class="survey-header-right-pane">
-    <div class="survey-actions">
-      <ul class="survey-actions-list">
-        <li class="survey-actions-list-item"><button><i class="icon-trash"></i>Discard</button></li>
-        <li class="survey-actions-list-item"><button><i class="icon-copy"></i>Duplicate</button></li>
-        <li class="survey-actions-list-item"><button><i class="icon-share"></i>Publish</button></li>
-      </ul>
-    </div>
-  </div>
-</div>
-
-<div class="survey-panes">
-  <div class="survey-panes-left-pane"></div>
-  <div class="survey-panes-right-pane"></div>
-</div>
+<script type="text/javascript">
+  new SurveyBuilderV2.Views.SurveyView({ el: "#build_v2" })
+</script>

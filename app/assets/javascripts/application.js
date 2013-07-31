@@ -34,7 +34,11 @@
 //= require backbone_rails_sync
 //= require backbone_datalink
 //= require backbone/survey_builder
+//= require backbone/survey_builder_v2/survey_builder_v2
 //= require js-routes
 //= require_tree .
+
+//= require mustache
+//= require_tree ../../templates
 
 var SurveyApp = {};
