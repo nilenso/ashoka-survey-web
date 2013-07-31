@@ -1,58 +1,25 @@
-<%= content_for :body_attributes do %> id="build"<% end %>
-
+<%= content_for :body_attributes do %> id="build_v2" <% end %>
 <%= render "layouts/status_bar", :status => "edit" %>
 
-<div id="survey_builder">
-  <div id="notifications">
-    <p></p>
-    <div id="spinner"></div>
+<div class="survey-header">
+  <div class="survey-metadata">
+    <h3 class="survey-metadata-name">
+      <%= @survey.name %>
+    </h3>
+
+    <div class="survey-metadata-description">
+      <%= @survey.description %>
+    </div>
   </div>
 
-  <ul id="picker_pane" >
-    <li><%= link_to t(".add_single_line_question"), "javascript:void(0)", :id => "add_single_line_question" %></li>
-    <li><%= link_to t(".add_multiline_question"), "javascript:void(0)", :id => "add_multiline_question" %></li>
-    <li><%= link_to t(".add_numeric_question"), "javascript:void(0)", :id => "add_numeric_question" %></li>
-    <li><%= link_to t(".add_date_question"), "javascript:void(0)", :id => "add_date_question" %></li>
-    <li><%= link_to t(".add_rating_question"), "javascript:void(0)", :id =>"add_rating_question" %>
-    <li><%= link_to t(".add_radio_question"), "javascript:void(0)", :id => "add_radio_question" %></li>
-    <li><%= link_to t(".add_multi_choice_question"), "javascript:void(0)", :id => "add_multi_choice_question" %></li>
-    <li><%= link_to t(".add_drop_down_question"), "javascript:void(0)", :id => "add_drop_down_question" %></li>
-    <li><%= link_to t(".add_photo_question"), "javascript:void(0)", :id => "add_photo_question" %></li>
-    <li><%= link_to t(".category"), "javascript:void(0)", :id => "add_category" %></li>
-    <li><%= link_to t(".add_multi_record_category"), "javascript:void(0)", :id => "add_multi_record_category" %></li>
-  </ul>
-
-  <div id="settings_pane"></div>
-
-  <div id="dummy_pane">
-    <div id="dummy_survey_details"></div>
-    <div id="dummy_questions"></div>
-  </div>
-  <div id="actions" class="form-actions">
-    <input id ="save" type="button" value="<%= t(".save_survey") %>"></input>
-    <%= link_to t(".delete_survey"), survey_path(@survey.id), :method => :delete, :class=>"button delete-survey", :data => { :confirm => t(:confirm) } if can? :destroy, @survey %>
-    <%= button_tag t(".finalize_survey"), :id => 'finalize', :class => "button" if can? :finalize, @survey %>
-    <%= button_to '', survey_finalize_path(@survey.id), :method => :put, :class => 'hidden', :id => 'finalize_hidden' if can? :finalize, @survey %>
+  <div class="survey-actions">
+    <ul class="survey-actions-list">
+      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
+      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
+      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
+      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
+      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
+      <li class="survey-action-list-item"> <a href="#">Save</a> </li>
+    </ul>
   </div>
 </div>
-
-<div id="loading_overlay">
-  <div class="spinner"></div>
-  <p class="text"><%= t('.saving_your_survey_message') %></p>
-</div>
-
-<script type="text/javascript">
-  $(document).ready(function(){
-    window.notifications_view = new SurveyBuilder.Views.NotificationsView;
-    window.loading_overlay = new SurveyBuilder.Views.LoadingOverlayView
-    window.loading_overlay.show_overlay("<%= t('.loading_survey') %>");
-    window.survey_builder = new SurveyBuilder.Views.SurveyBuilderView(<%= @survey.id %>, <%= @survey.finalized? %>);
-    setTimeout(function(){
-      $("#flash_messages").empty();
-    }, 3000);
-    $.datepicker.setDefaults($.datepicker.regional['<%= locale %>']);
-    I18n.locale = "<%= locale %>";
-  });
-</script>
-
-<%= @survey.build_mustache_templates %>

@@ -1,0 +1,23 @@
+body#build_v2 {
+  .survey-header {
+    clear: both;
+  }
+
+  .survey-metadata {
+    float: left;
+  }
+
+  h3.survey-metadata-name {
+    color: blue;
+  }
+
+  .survey-metadata-description {
+    font-size: 15px;
+  }
+
+  .survey-actions { float: right; }
+
+  ul.survey-actions-list {
+    li { display: inline; }
+  }
+}

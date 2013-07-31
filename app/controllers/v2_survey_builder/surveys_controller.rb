@@ -7,23 +7,16 @@ class V2SurveyBuilder::SurveysController < ApplicationController
   after_filter(:only => [:archive]) { send_to_mixpanel("Survey archived", {:survey => @survey.name}) if @survey.present? }
   before_filter :redirect_to_https, :only => :index
 
+  def new
+    @survey = Survey.new
+  end
+
   def index
     @surveys ||= Survey.none
     filtered_surveys = SurveyFilter.new(@surveys, params[:filter]).filter
     paginated_surveys = filtered_surveys.most_recent.paginate(:page => params[:page], :per_page => 10)
     @surveys = paginated_surveys.decorate
     @organizations = Organization.all(access_token)
-  end
-
-  def destroy
-    @survey = Survey.find(params[:id])
-    @survey.delete_self_and_associated if @survey.deletable?
-    flash[:notice] = t "flash.survey_deleted"
-    redirect_to(surveys_path)
-  end
-
-  def new
-    @survey = Survey.new
   end
 
   def create
@@ -42,6 +35,13 @@ class V2SurveyBuilder::SurveysController < ApplicationController
 
   def build
     @survey = SurveyDecorator.find(params[:survey_id])
+  end
+
+  def destroy
+    @survey = Survey.find(params[:id])
+    @survey.delete_self_and_associated if @survey.deletable?
+    flash[:notice] = t "flash.survey_deleted"
+    redirect_to(surveys_path)
   end
 
   def finalize
