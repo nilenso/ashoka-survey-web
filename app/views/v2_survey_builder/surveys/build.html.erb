@@ -1,7 +1,11 @@
+<div id="saving-indicator">
+  <span class="saving-indicator-label">Saving</span>
+  <%= image_tag "spinner_v2.gif", :class => "saving-indicator-spinner" %>
+</div>
+
+
 <%= content_for :body_attributes do %> id="build_v2"
 <% end %>
-<%= render "layouts/status_bar", :status => "edit" %>
-
 <div id="survey_builder_v2">
   <%= render 'v2_survey_builder/surveys/header', :mustache => @survey.attributes %>
 </div>

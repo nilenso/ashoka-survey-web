@@ -7,6 +7,7 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
     @model = new SurveyBuilderV2.Models.SurveyModel(attributes.survey)
     @model.on("change", @render)
     @template = SMT["v2_survey_builder/surveys/header"]
+    @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
 
   # Using a method because we want do the `find` every time.
   getEditableView: => this.$el.find(".survey-header-edit")
@@ -22,4 +23,5 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
     name = @getEditableView().find("input[name=name]").val()
     description = @getEditableView().find("textarea[name=description]").val()
     @model.set({ name: name, description: description })
-    @model.save()
+    @savingIndicator.show()
+    @model.save(null, success: @savingIndicator.hide, error: @savingIndicator.hide)
