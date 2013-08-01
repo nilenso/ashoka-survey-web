@@ -118,6 +118,11 @@ body#build_v2 {
     }
     .survey-actions-list-item {
       float: left;
+
+      &.publish {
+        float: right;
+        margin-right: 15px;
+      }
     }
   }
 
