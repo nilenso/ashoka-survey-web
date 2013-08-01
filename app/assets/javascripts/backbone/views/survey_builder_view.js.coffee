@@ -32,14 +32,14 @@ class SurveyBuilder.Views.SurveyBuilderView extends Backbone.View
       @limit_edit() if @survey_frozen
     )
 
-
   new_question: (event, data) =>
     @loading_overlay()
     type = data.type
     parent = data.parent
     model = this.survey.add_new_question_model(type, parent)
-    this.dummy_pane.add_element(type, model, parent)
+    dummy_view = this.dummy_pane.add_element(type, model, parent)
     this.settings_pane.add_element(type, model)
+    dummy_view.show_actual()
     model.save_model()
 
   new_category: (event, type) =>

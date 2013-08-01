@@ -79,7 +79,6 @@ class ResponsesController < ApplicationController
     end
   end
 
-
   def destroy
     response = Response.find(params[:id])
     response.destroy

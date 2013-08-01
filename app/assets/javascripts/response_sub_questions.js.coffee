@@ -79,7 +79,7 @@
 
 
     sub_questions.each ->
-      sub_question = $(this)      
+      sub_question = $(this)
       sub_questions.push(sub_questions_for_category(sub_question, record_id)) if (sub_question.hasClass('category'))
 
     _(sub_questions).flatten()

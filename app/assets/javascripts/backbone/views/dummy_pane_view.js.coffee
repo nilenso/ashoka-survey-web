@@ -32,6 +32,7 @@ class SurveyBuilder.Views.DummyPaneView extends Backbone.View
     @questions.push(view)
     model.on('destroy', @delete_question_view, this)
     $(@el).children(@QUESTIONS_CONTAINER).append(view.render().el)
+    return view
 
   insert_view_at_index: (view, index) =>
     if index == -1
