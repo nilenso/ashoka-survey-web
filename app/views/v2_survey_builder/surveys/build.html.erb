@@ -1,7 +1,13 @@
 <div id="saving-indicator">
-  <span class="saving-indicator-time-ago-label"></span>
-  <span class="saving-indicator-label">Saving</span>
-  <%= image_tag "spinner_v2.gif", :class => "saving-indicator-spinner" %>
+  <div class="saving-indicator-failure">
+    <i class="icon-exclamation-sign"></i>
+    <span>There was an error in saving the survey. Try again.</span>
+  </div>
+  <span class="saving-indicator-time-ago"></span>
+  <div class="saving-indicator-progress">
+    <span class="saving-indicator-progress-label">Saving</span>
+    <%= image_tag "spinner_v2.gif", :class => "saving-indicator-progress-spinner" %>
+  </div>
 </div>
 
 

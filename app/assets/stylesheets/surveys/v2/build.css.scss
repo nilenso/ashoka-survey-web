@@ -145,23 +145,37 @@ body#build_v2 {
     background: $primary-color;
     padding-bottom: 30px;
   }
-  
-  .saving-indicator-spinner {
-    float: right;
-    margin-bottom: 10px;
+
+  @mixin saving-indicator {
     display: none;
+    float: right;
   }
 
-  .saving-indicator-label {
-    float: right;
+  .saving-indicator-progress {
+    @include saving-indicator;
     color: $secondary-color;
-    margin-left: 7px;
-    display: none;
   }
 
-  .saving-indicator-time-ago-label {
-    display: none;
+  .saving-indicator-progress-spinner {
     float: right;
+    margin: 0 2px 0 10px;
+  }
+
+  .saving-indicator-progress-label {
+    float: right;
+  }
+
+  .saving-indicator-time-ago {
+    @include saving-indicator;
     color: $secondary-color;
+  }
+
+  .saving-indicator-failure {
+    @include saving-indicator;
+    color: red;
+
+    & > i {
+      margin-right: 2px;
+    }
   }
 }

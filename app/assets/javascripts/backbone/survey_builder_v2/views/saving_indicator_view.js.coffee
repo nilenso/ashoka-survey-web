@@ -1,22 +1,30 @@
 class SurveyBuilderV2.Views.SavingIndicatorView extends Backbone.View
   el: "#saving-indicator"
 
-  getSpinner: => this.$el.find(".saving-indicator-spinner")
-  getLabel: => this.$el.find(".saving-indicator-label")
-  getTimeAgoLabel: => this.$el.find(".saving-indicator-time-ago-label")
+  getProgress: => this.$el.find(".saving-indicator-progress")
+  getTimeAgo: => this.$el.find(".saving-indicator-time-ago")
+  getError: => this.$el.find(".saving-indicator-failure")
 
   initialize: =>
     @timeAgoIndicator = new SurveyBuilderV2.Views.TimeAgoIndicatorView
 
   show: =>
-    @getSpinner().show()
-    @getLabel().show()
-    @getTimeAgoLabel().hide()
-    @timeAgoIndicator.reset()
+    @reset()
+    @getProgress().show()
 
   hide: =>
-    @getSpinner().hide()
-    @getLabel().hide()
+    @reset()
+    console.log @getTimeAgo()
+    @getTimeAgo().show()
     @timeAgoIndicator.start()
 
+  error: =>
+    @reset()
+    @getError().show()
 
+
+  reset: =>
+    @getProgress().hide()
+    @getTimeAgo().hide()
+    @getError().hide()
+    @timeAgoIndicator.reset()
