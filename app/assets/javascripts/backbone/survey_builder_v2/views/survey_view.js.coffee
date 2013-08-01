@@ -22,6 +22,5 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
   updateModel: =>
     name = @getEditableView().find("input[name=name]").val()
     description = @getEditableView().find("textarea[name=description]").val()
-    @model.set({ name: name, description: description })
     @savingIndicator.show()
-    @model.save(null, success: @savingIndicator.hide, error: @savingIndicator.hide)
+    @model.save({ name: name, description: description }, success: @savingIndicator.hide, error: @savingIndicator.hide)

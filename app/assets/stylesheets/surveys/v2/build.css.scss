@@ -154,4 +154,10 @@ body#build_v2 {
     margin-left: 7px;
     display: none;
   }
+
+  .saving-indicator-time-ago-label {
+    display: none;
+    float: right;
+    color: $secondary-color;
+  }
 }
