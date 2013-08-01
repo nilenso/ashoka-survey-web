@@ -1,67 +1,81 @@
-<div id="saving-indicator">
-  <div class="saving-indicator-failure">
-    <i class="icon-exclamation-sign"></i>
-    <span>There was an error in saving the survey. Try again.</span>
-  </div>
-  <span class="saving-indicator-time-ago"></span>
+<%= content_for :page_attributes do %>
+  class="survey-builder-fullscreen-page"
+<% end %>
 
-  <div class="saving-indicator-progress">
-    <span class="saving-indicator-progress-label">Saving</span>
-    <%= image_tag "spinner_v2.gif", :class => "saving-indicator-progress-spinner" %>
-  </div>
-</div>
-
+<%= content_for :content_attributes do %>
+  class="survey-builder-fullscreen-content"
+<% end %>
 
 <%= content_for :body_attributes do %> id="build_v2"
 <% end %>
+
+<script type="text/javascript" src="https://rawgithub.com/theroux/clingify/master/jquery.clingify.min.js"></script>
+
+
+
 <div id="survey_builder_v2">
-  <div class="survey-header">
-    <div class="survey-header-left-pane">
-      <div class="survey-metadata">
-        <%= render 'v2_survey_builder/surveys/header', :mustache => @survey.attributes %>
+  <div id="survey-action-bar">
+    <div id="saving-indicator">
+      <div class="saving-indicator-failure">
+        <i class="icon-exclamation-sign"></i>
+        <span>There was an error in saving the survey. Try again.</span>
       </div>
-      <div class="survey-actions">
-        <ul class="survey-actions-list">
-          <li class="survey-actions-list-item">
-            <button><i class="icon-remove"></i>Close</button>
-          </li>
-          <li class="survey-actions-list-item">
-            <button><i class="icon-eye-open"></i>Preview</button>
-          </li>
-          <li class="survey-actions-list-item">
-            <button><i class="icon-save"></i>Save</button>
-          </li>
-        </ul>
+      <span class="saving-indicator-time-ago"></span>
+
+      <div class="saving-indicator-progress">
+        <span class="saving-indicator-progress-label">Saving</span>
+        <%= image_tag "spinner_v2.gif", :class => "saving-indicator-progress-spinner" %>
       </div>
     </div>
 
-    <div class="survey-header-right-pane">
-      <div class="survey-actions">
-        <ul class="survey-actions-list">
-          <li class="survey-actions-list-item">
-            <button><i class="icon-trash"></i>Discard</button>
-          </li>
-          <li class="survey-actions-list-item">
-            <button><i class="icon-copy"></i>Duplicate</button>
-          </li>
-          <li class="survey-actions-list-item">
-            <button><i class="icon-share"></i>Publish</button>
-          </li>
-        </ul>
+    <div class="survey-header">
+      <div class="survey-header-left-pane">
+        <div class="survey-metadata">
+          <%= render 'v2_survey_builder/surveys/header', :mustache => @survey.attributes %>
+        </div>
+        <div class="survey-actions">
+          <ul class="survey-actions-list">
+            <li class="survey-actions-list-item">
+              <button><i class="icon-remove"></i>Close</button>
+            </li>
+            <li class="survey-actions-list-item">
+              <button><i class="icon-eye-open"></i>Preview</button>
+            </li>
+            <li class="survey-actions-list-item">
+              <button><i class="icon-save"></i>Save</button>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="survey-header-right-pane">
+        <div class="survey-actions">
+          <ul class="survey-actions-list">
+            <li class="survey-actions-list-item">
+              <button><i class="icon-trash"></i>Discard</button>
+            </li>
+            <li class="survey-actions-list-item">
+              <button><i class="icon-copy"></i>Duplicate</button>
+            </li>
+            <li class="survey-actions-list-item">
+              <button><i class="icon-share"></i>Publish</button>
+            </li>
+          </ul>
+        </div>
       </div>
     </div>
-  </div>
 
-  <div class="survey-header-edit">
-    <div class="survey-header-edit-information">
-      <%= render 'v2_survey_builder/surveys/header_edit', :mustache => @survey.attributes %>
+    <div class="survey-header-edit">
+      <div class="survey-header-edit-information">
+        <%= render 'v2_survey_builder/surveys/header_edit', :mustache => @survey.attributes %>
+      </div>
+
+      <div class="survey-header-edit-logo"></div>
+
+      <p>
+        <button class="update-survey">Update</button>
+      </p>
     </div>
-
-    <div class="survey-header-edit-logo"></div>
-
-    <p>
-      <button class="update-survey">Update</button>
-    </p>
   </div>
 
   <div class="survey-panes">
@@ -71,5 +85,6 @@
 </div>
 
 <script type="text/javascript">
+  new SurveyBuilderV2.Views.ActionBarView()
   new SurveyBuilderV2.Views.SurveyView({ el: "#survey_builder_v2", survey: gon.survey_attributes })
 </script>

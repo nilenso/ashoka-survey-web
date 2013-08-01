@@ -10,6 +10,7 @@
   </head>
   <body<%= yield :body_attributes %>>
     <div id="page">
+      <%= render "layouts/banner" unless @public_response %>
       <%= render "layouts/header" %>
 
       <%= yield :status_bar unless @public_response %>

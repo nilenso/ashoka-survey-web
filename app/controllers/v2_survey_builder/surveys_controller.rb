@@ -1,4 +1,5 @@
 class V2SurveyBuilder::SurveysController < ApplicationController
+  layout "survey_builder_v2"
   load_resource :only => :index
   authorize_resource
   after_filter(:only => [:create]) { send_to_mixpanel("Survey created") }

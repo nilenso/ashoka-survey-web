@@ -2,11 +2,29 @@ body#build_v2 {
   $left-pane-width: 68%;
   $right-pane-width: 32%;
   $survey-header-height: 60px;
-  $survey-pane-height: 500px;
+  $survey-pane-height: 1500px;
 
   $survey-metadata-left-margin: 10px;
 
   $survey-header-background: $secondary-color-light;
+
+  .survey-builder-fullscreen-page {
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .sticky {
+    position: fixed;
+    top: 0;
+    padding-right: 21px;
+    z-index:1000;
+  }
+
+  .survey-builder-fullscreen-content {
+    float: none;
+    width: 100%;
+    margin: 0;
+  }
 
   #survey_builder_v2 {
     padding: 0;
@@ -143,7 +161,8 @@ body#build_v2 {
 
   #saving-indicator {
     background: $primary-color;
-    padding-bottom: 30px;
+    padding: 10px 0 30px 0;
+    clear: both;
   }
 
   @mixin saving-indicator {

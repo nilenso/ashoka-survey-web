@@ -13,7 +13,7 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
   getEditableView: => this.$el.find(".survey-header-edit")
 
   toggleCollapse: =>
-    @getEditableView().toggle('slow')
+    @getEditableView().slideToggle('slow')
 
   render: =>
     this.$el.find(".survey-metadata").html(@nonEditableTemplate(@model.attributes))
