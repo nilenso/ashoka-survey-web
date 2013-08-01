@@ -9,21 +9,17 @@
 <%= content_for :body_attributes do %> id="build_v2"
 <% end %>
 
-<script type="text/javascript" src="https://rawgithub.com/theroux/clingify/master/jquery.clingify.min.js"></script>
-
-
-
 <div id="survey_builder_v2">
   <div id="survey-action-bar">
     <div id="saving-indicator">
       <div class="saving-indicator-failure">
         <i class="icon-exclamation-sign"></i>
-        <span>There was an error in saving the survey. Try again.</span>
+        <span><%= t(".saving_indicator_failure_message") %></span>
       </div>
-      <span class="saving-indicator-time-ago"></span>
+      <span class="saving-indicator-time-ago"><%= t(".saving_indicator_time_ago_label", :time => @survey.updated_at) %></span>
 
       <div class="saving-indicator-progress">
-        <span class="saving-indicator-progress-label">Saving</span>
+        <span class="saving-indicator-progress-label"><%= t(".saving_indicator_progress_label") %></span>
         <%= image_tag "spinner_v2.gif", :class => "saving-indicator-progress-spinner" %>
       </div>
     </div>
@@ -36,13 +32,13 @@
         <div class="survey-actions">
           <ul class="survey-actions-list">
             <li class="survey-actions-list-item">
-              <button><i class="icon-remove"></i>Close</button>
+              <button><i class="icon-remove"></i><%= t('.survey_actions_close') %></button>
             </li>
             <li class="survey-actions-list-item">
-              <button><i class="icon-eye-open"></i>Preview</button>
+              <button><i class="icon-eye-open"></i><%= t(".survey_actions_preview") %></button>
             </li>
             <li class="survey-actions-list-item">
-              <button><i class="icon-save"></i>Save</button>
+              <button><i class="icon-save"></i><%= t(".survey_actions_save") %></button>
             </li>
           </ul>
         </div>
@@ -52,13 +48,13 @@
         <div class="survey-actions">
           <ul class="survey-actions-list">
             <li class="survey-actions-list-item">
-              <button><i class="icon-trash"></i>Discard</button>
+              <button><i class="icon-trash"></i><%= t(".survey_actions_discard") %></button>
             </li>
             <li class="survey-actions-list-item">
-              <button><i class="icon-copy"></i>Duplicate</button>
+              <button><i class="icon-copy"></i><%= t(".survey_actions_duplicate") %></button>
             </li>
             <li class="survey-actions-list-item publish">
-              <button><i class="icon-share"></i>Publish</button>
+              <button><i class="icon-share"></i><%= t(".survey_actions_publish") %></button>
             </li>
           </ul>
         </div>
@@ -73,7 +69,7 @@
       <div class="survey-header-edit-logo"></div>
 
       <p>
-        <button class="update-survey">Update</button>
+        <button class="update-survey"><%= t(".survey_actions_update") %></button>
       </p>
     </div>
   </div>
