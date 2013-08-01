@@ -68,6 +68,7 @@ group :test do
   gem 'database_cleaner', '~> 0.8.0'
   gem 'timecop', '~> 0.6.1'
   gem 'email_spec', '~> 1.4.0'
+  gem 'poltergeist', '~> 1.3.0'
 end
 
 group :development do
