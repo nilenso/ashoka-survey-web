@@ -96,9 +96,16 @@ describe Api::V1::SurveysController do
       response.should_not be_ok
     end
 
+    it "returns the full errors if survey save fails" do
+      put :update, :id => survey.id, :survey => { :expiry_date => -5.days.from_now }
+      response.should_not be_ok
+      JSON.parse(response.body)["full_errors"].first.should =~ /Expires on must be after/
+    end
+
     it "returns the errors if survey save fails" do
       put :update, :id => survey.id, :survey => { :expiry_date => -5.days.from_now }
       response.should_not be_ok
+      JSON.parse(response.body)["errors"]["expiry_date"].first.should =~ /must be after/
     end
 
     it "sends an event to mixpanel" do

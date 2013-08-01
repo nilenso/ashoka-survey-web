@@ -46,9 +46,14 @@
 
 <div class="survey-header-edit">
   <div class="survey-header-edit-information">
-    <label name="name" class="survey-header-edit-information-label">Name</label>
+    <label name="name" class="survey-header-edit-information-label">
+      Name <span class="survey-header-edit-information-inline-error">{{errors.name}}</span>
+    </label>
     <input type="text" class="name-input" name="name" value="{{name}}"/>
-    <label name="description" class="survey-header-edit-information-label">Description</label>
+
+    <label name="description" class="survey-header-edit-information-label">
+      Description <span class="survey-header-edit-information-inline-error">{{errors.description}}</span>
+    </label>
     <textarea name="description" class="description-input" rows="10" cols="50">{{description}}</textarea>
   </div>
 

@@ -137,6 +137,10 @@ body#build_v2 {
     margin-top: 15px;
   }
 
+  .survey-header-edit-information-inline-error {
+    color: $danger;
+  }
+
   #saving-indicator {
     background: $primary-color;
     padding-bottom: 30px;

@@ -35,7 +35,7 @@ class SurveyBuilder.Models.SurveyModel extends Backbone.RelationalModel
     @trigger('save:completed')
 
   error_callback: (model, response) =>
-    @errors = JSON.parse(response.responseText)
+    @errors = JSON.parse(response.responseText).full_errors
     @trigger('change:errors')
 
   save_all_questions: =>

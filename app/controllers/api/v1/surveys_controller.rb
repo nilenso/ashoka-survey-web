@@ -34,12 +34,13 @@ module Api
       end
 
       def update
-        sleep 3
         @survey = Survey.find_by_id(params[:id])
         if @survey && @survey.update_attributes(params[:survey])
           render :json => @survey.to_json
         else
-          render :json => @survey.try(:errors).try(:full_messages), :status => :bad_request
+          # TODO: Remove `full_messages` when the old survey builder is deprecated
+          response = { :full_errors => @survey.try(:errors).try(:full_messages), :errors =>  @survey.try(:errors).try(:messages) }
+          render :json => response, :status => :bad_request
         end
       end
 
