@@ -32,3 +32,4 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
   handleUpdateError: (model, response, options) =>
     @savingIndicator.error()
     @model.set(JSON.parse(response.responseText))
+    @toggleCollapse()

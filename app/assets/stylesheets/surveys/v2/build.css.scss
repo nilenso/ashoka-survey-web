@@ -149,6 +149,7 @@ body#build_v2 {
   @mixin saving-indicator {
     display: none;
     float: right;
+    margin-right: 15px;
   }
 
   .saving-indicator-progress {
@@ -173,9 +174,6 @@ body#build_v2 {
   .saving-indicator-failure {
     @include saving-indicator;
     color: red;
-
-    & > i {
-      margin-right: 2px;
-    }
+    & > i { margin-right: 2px; }
   }
 }
