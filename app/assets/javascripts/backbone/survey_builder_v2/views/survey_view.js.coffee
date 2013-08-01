@@ -6,7 +6,8 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
   initialize: (attributes) =>
     @model = new SurveyBuilderV2.Models.SurveyModel(attributes.survey)
     @model.on("change", @render)
-    @template = SMT["v2_survey_builder/surveys/header"]
+    @nonEditableTemplate = SMT["v2_survey_builder/surveys/header"]
+    @editableTemplate = SMT["v2_survey_builder/surveys/header_edit"]
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
 
   getEditableView: => this.$el.find(".survey-header-edit")
@@ -15,13 +16,15 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
     @getEditableView().toggle('slow')
 
   render: =>
-    this.$el.html(@template(@model.attributes))
+    this.$el.find(".survey-metadata").html(@nonEditableTemplate(@model.attributes))
+    this.$el.find(".survey-header-edit-information").html(@editableTemplate(@model.attributes))
     return this
 
   updateModel: =>
     name = @getEditableView().find("input[name=name]").val()
     description = @getEditableView().find("textarea[name=description]").val()
     @savingIndicator.show()
+    @toggleCollapse()
     @model.save({ name: name, description: description },
       success: @handleUpdateSuccess, error: @handleUpdateError)
 

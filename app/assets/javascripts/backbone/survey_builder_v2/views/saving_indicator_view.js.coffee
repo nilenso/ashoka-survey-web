@@ -14,7 +14,6 @@ class SurveyBuilderV2.Views.SavingIndicatorView extends Backbone.View
 
   hide: =>
     @reset()
-    console.log @getTimeAgo()
     @getTimeAgo().show()
     @timeAgoIndicator.start()
 

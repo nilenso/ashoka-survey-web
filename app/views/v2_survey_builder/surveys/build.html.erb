@@ -4,6 +4,7 @@
     <span>There was an error in saving the survey. Try again.</span>
   </div>
   <span class="saving-indicator-time-ago"></span>
+
   <div class="saving-indicator-progress">
     <span class="saving-indicator-progress-label">Saving</span>
     <%= image_tag "spinner_v2.gif", :class => "saving-indicator-progress-spinner" %>
@@ -14,7 +15,59 @@
 <%= content_for :body_attributes do %> id="build_v2"
 <% end %>
 <div id="survey_builder_v2">
-  <%= render 'v2_survey_builder/surveys/header', :mustache => @survey.attributes %>
+  <div class="survey-header">
+    <div class="survey-header-left-pane">
+      <div class="survey-metadata">
+        <%= render 'v2_survey_builder/surveys/header', :mustache => @survey.attributes %>
+      </div>
+      <div class="survey-actions">
+        <ul class="survey-actions-list">
+          <li class="survey-actions-list-item">
+            <button><i class="icon-remove"></i>Close</button>
+          </li>
+          <li class="survey-actions-list-item">
+            <button><i class="icon-eye-open"></i>Preview</button>
+          </li>
+          <li class="survey-actions-list-item">
+            <button><i class="icon-save"></i>Save</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="survey-header-right-pane">
+      <div class="survey-actions">
+        <ul class="survey-actions-list">
+          <li class="survey-actions-list-item">
+            <button><i class="icon-trash"></i>Discard</button>
+          </li>
+          <li class="survey-actions-list-item">
+            <button><i class="icon-copy"></i>Duplicate</button>
+          </li>
+          <li class="survey-actions-list-item">
+            <button><i class="icon-share"></i>Publish</button>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="survey-header-edit">
+    <div class="survey-header-edit-information">
+      <%= render 'v2_survey_builder/surveys/header_edit', :mustache => @survey.attributes %>
+    </div>
+
+    <div class="survey-header-edit-logo"></div>
+
+    <p>
+      <button class="update-survey">Update</button>
+    </p>
+  </div>
+
+  <div class="survey-panes">
+    <div class="survey-panes-left-pane"></div>
+    <div class="survey-panes-right-pane"></div>
+  </div>
 </div>
 
 <script type="text/javascript">
