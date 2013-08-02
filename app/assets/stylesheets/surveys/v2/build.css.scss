@@ -16,8 +16,9 @@ body#build_v2 {
   .sticky {
     position: fixed;
     top: 0;
-    padding-right: 21px;
-    z-index:1000;
+    z-index: 1000;
+    left: 21px;
+    right: 21px;
   }
 
   .survey-builder-fullscreen-content {
