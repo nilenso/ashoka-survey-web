@@ -127,10 +127,6 @@ class Response < ActiveRecord::Base
     survey.first_level_elements.each { |element| element.create_blank_answers(:response_id => id) }
   end
 
-  def sorted_answers
-    survey.first_level_elements.map { |element| element.sorted_answers_for_response(id) }.flatten
-  end
-
   def select_new_answers(answers_attributes)
     return {} unless answers_attributes.present?
     answers_attributes.reject do |_, answer_attributes|

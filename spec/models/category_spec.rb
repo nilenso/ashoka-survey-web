@@ -289,25 +289,6 @@ describe Category do
     end
   end
 
-  context "when fetching sorted answers for a response" do
-    let(:response) { FactoryGirl.create :response }
-
-    it "returns a sorted list of answers for all its elements for the specified response" do
-      category= FactoryGirl.create(:category)
-
-      category_question_1 = FactoryGirl.create(:question, :finalized, :category => category, :order_number => 1)
-      category_question_1_answer = FactoryGirl.create(:answer, :response => response, :question => category_question_1)
-
-      category_question_2 = FactoryGirl.create(:radio_question, :finalized, :order_number => 2, :category => category)
-      category_question_2_answer = FactoryGirl.create(:answer, :response => response, :question => category_question_2)
-
-      option = FactoryGirl.create(:option, :question => category_question_2)
-      category_question_2_sub_question = FactoryGirl.create(:question, :finalized, :parent => option)
-      category_question_2_sub_question_answer = FactoryGirl.create(:answer, :response => response, :question => category_question_2_sub_question)
-
-      category.sorted_answers_for_response(response.id).should == [category_question_1_answer, category_question_2_answer, category_question_2_sub_question_answer]
-    end
-  end
 
   context "when creating empty answers for a new response" do
     let(:response) { FactoryGirl.create :response }
