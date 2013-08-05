@@ -28,3 +28,5 @@ public/uploads
 zeus.json
 custom_plan.rb
 .powenv
+.rbenv-version
+.ruby-version
