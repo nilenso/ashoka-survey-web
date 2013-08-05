@@ -11,7 +11,7 @@ class Response < ActiveRecord::Base
   has_many :answers, :dependent => :destroy
   has_many :records, :dependent => :destroy
 
-  accepts_nested_attributes_for :answers
+  accepts_nested_attributes_for :answers, :allow_destroy => true
 
   attr_accessible :survey, :answers_attributes, :mobile_id, :survey_id, :status, :updated_at,
                   :latitude, :longitude, :ip_address, :state, :comment, :blank, :user_id, :organization_id
