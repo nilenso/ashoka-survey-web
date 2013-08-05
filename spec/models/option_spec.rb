@@ -225,4 +225,22 @@ describe Option do
       option.ordered_question_tree.should == [sub_question]
     end
   end
+
+  context "when finding or initializing answers for a response" do
+    it "initializes answers for each of the option's sub-questions" do
+      response = FactoryGirl.create(:response)
+      option = FactoryGirl.create(:option)
+      sub_question = FactoryGirl.create(:question, :parent => option)
+      answers = option.find_or_initialize_answers_for_response(response)
+      answers.first.question_id.should == sub_question.id
+    end
+
+    it "initializes answers with a record_id if one is passed in" do
+      response = FactoryGirl.create(:response)
+      option = FactoryGirl.create(:option)
+      sub_question = FactoryGirl.create(:question, :parent => option)
+      answers = option.find_or_initialize_answers_for_response(response, :record_id => 5)
+      answers.first.record_id.should == 5
+    end
+  end
 end

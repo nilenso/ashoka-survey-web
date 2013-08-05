@@ -30,7 +30,11 @@ class ResponsesController < ApplicationController
     response = ResponseDecorator.new(Response.new(:blank => true))
     response.set(params[:survey_id], current_user, current_user_org, session_token)
     response.ip_address = request.remote_ip
-    if response.save
+    Response.transaction do
+      response.save
+      response.create_record_for_each_multi_record_category
+    end
+    if response.persisted?
       redirect_to edit_survey_response_path(:id => response.id)
     else
       render :nothing => true, :status => :internal_server_error
@@ -42,9 +46,7 @@ class ResponsesController < ApplicationController
     @response = ResponseDecorator.find(params[:id])
     @disabled = false
     @public_response = public_response?
-    @answers = @survey.questions.map do |question|
-      Answer.where(:question_id => question.id, :response_id => @response.id).first_or_initialize
-    end
+    @answers = @survey.find_or_initialize_answers_for_response(@response)
   end
 
   def show

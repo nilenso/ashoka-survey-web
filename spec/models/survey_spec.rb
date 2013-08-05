@@ -690,4 +690,30 @@ describe Survey do
       survey.ordered_question_tree.should =~ [question, sub_question]
     end
   end
+
+  context "when finding or initializing answers for a response" do
+    it "initializes answers for questions at every level of the survey" do
+      survey = FactoryGirl.create(:survey)
+      question = FactoryGirl.create(:radio_question, :survey => survey)
+      sub_question = FactoryGirl.create(:question, :survey => survey, :parent => FactoryGirl.create(:option, :question => question))
+      response = FactoryGirl.create(:response, :survey => survey)
+      answers = survey.find_or_initialize_answers_for_response(response)
+      answers.map(&:question_id).should =~ [question.id, sub_question.id]
+    end
+
+    it "doesn't create any answers" do
+      survey = FactoryGirl.create(:survey)
+      question = FactoryGirl.create(:question, :survey => survey)
+      response = FactoryGirl.create(:response, :survey => survey)
+      expect { survey.find_or_initialize_answers_for_response(response) }.not_to change { Answer.count }
+    end
+
+    it "returns existing answers (if any)" do
+      survey = FactoryGirl.create(:survey)
+      question = FactoryGirl.create(:question, :finalized, :survey => survey)
+      response = FactoryGirl.create(:response, :survey => survey)
+      answer = FactoryGirl.create(:answer, :response => response, :question => question)
+      survey.find_or_initialize_answers_for_response(response).should == [answer]
+    end
+  end
 end

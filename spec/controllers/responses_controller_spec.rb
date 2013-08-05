@@ -52,6 +52,12 @@ describe ResponsesController do
       question = FactoryGirl.create :question, :finalized, :survey => survey
       expect { post :create, :survey_id => survey.id }.not_to change { Answer.count }
     end
+
+    it "creates records for each of its multi-record categories" do
+      survey = FactoryGirl.create(:survey, :finalized, :organization_id => 1)
+      FactoryGirl.create(:multi_record_category, :survey => survey)
+      expect { post :create, :survey_id => survey.id }.to change { Record.count }.by(1)
+    end
   end
 
   context "GET 'index'" do

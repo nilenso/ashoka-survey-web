@@ -186,6 +186,18 @@ class Survey < ActiveRecord::Base
     SurveyReporter.new(self)
   end
 
+  def has_multi_record_categories?
+    categories.where(:type => MultiRecordCategory).present?
+  end
+
+  def find_or_initialize_answers_for_response(response)
+    first_level_elements.map { |element| element.find_or_initialize_answers_for_response(response) }.flatten
+  end
+
+  def multi_record_categories
+    categories.where(:type => MultiRecordCategory)
+  end
+
   private
 
   def self.active_arel

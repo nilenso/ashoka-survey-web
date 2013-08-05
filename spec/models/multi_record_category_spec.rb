@@ -9,31 +9,25 @@ describe MultiRecordCategory do
     new_category.should_not be_valid
   end
 
-  context "when creating empty answers for a new response" do
+  context "when initializing answers for a new response" do
     let(:response) { FactoryGirl.create :response }
 
-    it "creates a new empty record" do
+    it "does not create a record" do
       mr_category = FactoryGirl.create(:multi_record_category)
       expect {
-        mr_category.create_blank_answers(:response_id => response.id)
-      }.to change { Record.count }.by 1
+        mr_category.find_or_initialize_answers_for_response(response)
+      }.not_to change { Record.count }
     end
 
-    it "creates empty answers for the new record" do
+    it "initializes answers for each record in the given response" do
       mr_category = FactoryGirl.create(:multi_record_category)
+      response = FactoryGirl.create(:response)
+      first_record = FactoryGirl.create(:record, :response => response, :category => mr_category)
+      second_record = FactoryGirl.create(:record, :response => response, :category => mr_category)
+
       question = FactoryGirl.create(:question, :finalized, :category => mr_category)
-      mr_category.create_blank_answers(:response_id => response.id)
-      question.answers.should_not be_empty
-    end
-
-    it "doesn't create a record if a record_id is passed in" do
-      mr_category = FactoryGirl.create(:multi_record_category)
-      question = FactoryGirl.create(:question, :category => mr_category)
-      record = FactoryGirl.create(:record, :response => response, :category => mr_category)
-
-      expect do
-        mr_category.create_blank_answers(:record_id => record.id, :response_id => response.id)
-      end.not_to change { Record.count }
+      answers = mr_category.find_or_initialize_answers_for_response(response)
+      answers.map(&:record_id).should =~ [first_record.id, second_record.id]
     end
   end
 

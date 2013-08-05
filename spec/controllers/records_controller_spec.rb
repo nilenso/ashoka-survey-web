@@ -23,10 +23,9 @@ describe RecordsController do
       response.should redirect_to('http://example.com')
     end
 
-    it "creates blank answers for the new record" do
-      5.times { FactoryGirl.create(:question, :finalized, :category => category) }
-      get 'create', :record => { :response_id => response.id, :category_id => category.id }
-      Record.last.answers.count.should == 5
+    it "doesn't create any answers" do
+      record_attrs = FactoryGirl.attributes_for(:record)
+      expect { post :create, :record => record_attrs }.not_to change { Answer.count }
     end
   end
 

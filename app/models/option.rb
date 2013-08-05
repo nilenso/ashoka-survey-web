@@ -59,6 +59,10 @@ class Option < ActiveRecord::Base
     (questions + categories_with_questions).sort_by(&:order_number)
   end
 
+  def find_or_initialize_answers_for_response(response, options={})
+    elements.map { |element| element.find_or_initialize_answers_for_response(response, options) }.flatten
+  end
+
   protected
 
   def has_multi_record_ancestor

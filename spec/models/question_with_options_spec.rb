@@ -1,22 +1,29 @@
 require 'spec_helper'
 
 describe QuestionWithOptions do
-  context 'when creating blank answers' do
+  context 'when initializing answers for a response' do
     let(:response) { FactoryGirl.create :response }
 
-    it "creates blank answers for each of its sub-questions" do
+    it "initializes answers for each of its sub-questions" do
       question = FactoryGirl.create(:radio_question, :with_options)
       sub_question = FactoryGirl.create :question, :finalized, :parent => question.options[0]
-      question.create_blank_answers(:response_id => response.id)
-      sub_question.answers.should_not be_blank
+      answers = question.find_or_initialize_answers_for_response(response)
+      answers.map(&:question_id).should == [question.id, sub_question.id]
     end
 
-    it "creates blank answers for the contents of each of its sub-categories" do
+    it "initializes answers for the contents of each of its sub-categories" do
       question = FactoryGirl.create(:radio_question, :with_options)
       sub_category = FactoryGirl.create :category, :parent => question.options[0]
       sub_question = FactoryGirl.create :question, :finalized, :category => sub_category
-      question.create_blank_answers(:response_id => response.id)
-      sub_question.answers.should_not be_blank
+      answers = question.find_or_initialize_answers_for_response(response)
+      answers.map(&:question_id).should == [question.id, sub_question.id]
+    end
+
+    it "initializes answers with a record_id if one is passed in" do
+      question = FactoryGirl.create(:radio_question, :with_options)
+      sub_question = FactoryGirl.create :question, :finalized, :parent => question.options[0]
+      answers = question.find_or_initialize_answers_for_response(response, :record_id => 5)
+      answers.map(&:record_id).should == [5, 5]
     end
   end
 

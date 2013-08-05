@@ -478,32 +478,33 @@ describe Question do
     end
   end
 
-  context "when creating empty answers for a new response" do
+  context "when finding or initializing answers for a response" do
     let(:response) { FactoryGirl.create :response }
 
-    it "creates an empty answer to itself" do
+    it "initializes an empty answer" do
       question = FactoryGirl.create(:question, :finalized)
-      question.create_blank_answers(:response_id => response.id)
-      response.reload.answers.should_not be_empty
+      answer = question.find_or_initialize_answers_for_response(response)
+      answer.question_id.should == question.id
     end
 
-    it "creates an empty answer belonging to a record (if specified)" do
+    it "initializes an empty answer belonging to the passed response" do
+      question = FactoryGirl.create(:question, :finalized)
+      response = FactoryGirl.create(:response)
+      answer = question.find_or_initialize_answers_for_response(response)
+      answer.response_id.should == response.id
+    end
+
+    it "initializes an answer belonging to a record (if specified)" do
       record = FactoryGirl.create(:record)
       question = FactoryGirl.create(:question, :finalized)
-      question.create_blank_answers(:response_id => response.id, :record_id => record.id)
-      record.reload.answers.should_not be_empty
+      answer = question.find_or_initialize_answers_for_response(response, :record_id => record.id)
+      answer.record_id.should == record.id
     end
 
-    it "creates the empty answer without running validations" do
-      question = FactoryGirl.create(:question, :finalized, :max_length => 5)
-      expect { question.create_blank_answers(:response_id => response.id) }.not_to raise_error
-      response.reload.answers.should_not be_empty
-    end
-
-    it "doesn't create blank answers if it is not finalized" do
-      question = FactoryGirl.create(:question, :finalized => false)
-      question.create_blank_answers(:response_id => response.id)
-      question.answers.should be_empty
+    it "returns an existing answer if it exists" do
+      question = FactoryGirl.create(:question, :finalized)
+      answer = FactoryGirl.create(:answer, :question => question, :response => response)
+      question.find_or_initialize_answers_for_response(response).should == answer
     end
   end
 

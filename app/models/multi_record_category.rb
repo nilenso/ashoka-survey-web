@@ -6,9 +6,10 @@ class MultiRecordCategory < Category
     records.where(:response_id => response_id)
   end
 
-  def create_blank_answers(params={})
-    record = Record.find_or_create_by_id(:id => params[:record_id], :category_id => id, :response_id => params[:response_id])
-    super(params.merge(:record_id => record.id))
+  def find_or_initialize_answers_for_response(response, options={})
+    records.where(:response_id => response.id).map do |record|
+      (questions + categories).map { |element| element.find_or_initialize_answers_for_response(response, :record_id => record.id) }
+    end.flatten
   end
 
   protected

@@ -22,10 +22,6 @@ class Category < ActiveRecord::Base
     (questions + categories.includes([:questions, :categories])).sort_by(&:order_number)
   end
 
-  def create_blank_answers(params={})
-    elements.each { |element| element.create_blank_answers(params) }
-  end
-
   def self.new_category_by_type(type, params)
     klass = (type == 'MultiRecordCategory') ? MultiRecordCategory : Category
     klass.new(params)
@@ -94,6 +90,10 @@ class Category < ActiveRecord::Base
 
   def elements_with_questions
     (questions + categories_with_questions).sort_by(&:order_number)
+  end
+
+  def find_or_initialize_answers_for_response(response, options={})
+    (questions + categories).map { |element| element.find_or_initialize_answers_for_response(response, options) }.flatten
   end
 
   protected

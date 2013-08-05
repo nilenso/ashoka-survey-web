@@ -123,10 +123,6 @@ class Response < ActiveRecord::Base
     self.session_token = session_token
   end
 
-  def create_blank_answers
-    survey.first_level_elements.each { |element| element.create_blank_answers(:response_id => id) }
-  end
-
   def select_new_answers(answers_attributes)
     return {} unless answers_attributes.present?
     answers_attributes.reject do |_, answer_attributes|
@@ -160,6 +156,13 @@ class Response < ActiveRecord::Base
 
   def reload_attribute(attribute)
     self[attribute.to_sym] = Response.find(self.id)[attribute.to_sym]
+  end
+
+  # TODO: This method shouldn't be neccessary after the responses page (web) is refactored
+  def create_record_for_each_multi_record_category
+    survey.multi_record_categories.each do |category|
+      Record.where(:category_id => category.id, :response_id => self.id).first_or_create
+    end
   end
 
   private

@@ -304,8 +304,8 @@ describe Response do
     end
 
     it "executes the contents of the block" do
-      block = lambda { |params| }
-      response_params = { :comment => "foo" }
+      block = lambda { |params|}
+      response_params = {:comment => "foo"}
       block.should_receive(:call).with(response_params)
       response.update_response_in_transaction(response_params, &block)
     end
@@ -384,7 +384,7 @@ describe Response do
         response = Timecop.freeze(3.days.ago) { FactoryGirl.create(:response, :incomplete) }
         question = FactoryGirl.create(:single_line_question, :finalized)
         answer = Timecop.freeze(3.days.ago) { FactoryGirl.create(:answer, :question => question, :content => "foo", :response => response) }
-        answers_attributes = { "0" => { :content => "bar", :updated_at => Time.now.to_s, :id => answer.id }}
+        answers_attributes = {"0" => {:content => "bar", :updated_at => Time.now.to_s, :id => answer.id}}
         response.reload.update_response_with_conflict_resolution(:answers_attributes => answers_attributes)
         answer.reload.content.should == "bar"
       end
@@ -393,7 +393,7 @@ describe Response do
         response = Timecop.freeze(6.days.ago) { FactoryGirl.create(:response, :incomplete) }
         question = FactoryGirl.create(:single_line_question, :finalized)
         answer = Timecop.freeze(3.days.ago) { FactoryGirl.create(:answer, :question => question, :content => "foo", :response => response) }
-        answers_attributes = { "0" => { :content => "bar", :updated_at => 5.days.ago.to_s, :id => answer.id }}
+        answers_attributes = {"0" => {:content => "bar", :updated_at => 5.days.ago.to_s, :id => answer.id}}
         response.reload.update_response_with_conflict_resolution(:answers_attributes => answers_attributes)
         answer.reload.content.should == "foo"
       end
@@ -479,61 +479,6 @@ describe Response do
     end
   end
 
-  context 'when creating blank answers' do
-    it "creates blank answers for each of its survey's questions" do
-      survey = FactoryGirl.create :survey
-      question = FactoryGirl.create :question, :survey => survey
-
-      response = FactoryGirl.create :response, :survey => survey
-      response.create_blank_answers
-
-      question.answers.should_not be_nil
-    end
-
-    it "creates blank answers for each of its survey's categories" do
-      survey = FactoryGirl.create :survey
-      category = FactoryGirl.create :category, :survey => survey
-      question = FactoryGirl.create :question, :survey => survey, :category => category
-
-      response = FactoryGirl.create :response, :survey => survey
-      response.create_blank_answers
-
-      question.answers.should_not be_nil
-    end
-
-    it "creates blank answers with the correct response_id" do
-      survey = FactoryGirl.create :survey
-      question = FactoryGirl.create :question, :finalized, :survey => survey
-
-      response = FactoryGirl.create :response, :survey => survey
-      response.create_blank_answers
-
-      question.answers[0].response_id.should == response.id
-    end
-
-    context "for its answers' records" do
-      context "if the response_id is not set" do
-        it "sets it to its own id" do
-          response = FactoryGirl.create(:response)
-          record = FactoryGirl.create(:record, :response_id => nil)
-          response.answers << FactoryGirl.create(:answer, :record => record)
-          response.update_records
-          record.reload.response.should == response
-        end
-      end
-
-      context "if the response_id is set" do
-        it "doesn't change the response_id" do
-          response = FactoryGirl.create :response
-          record = FactoryGirl.create(:record, :response_id => 123)
-          response.answers << FactoryGirl.create(:answer, :record => record)
-          response.update_records
-          record.reload.response_id.should == 123
-        end
-      end
-    end
-  end
-
   context 'when calculating the page size' do
     before(:each) { stub_const('Response::MAX_PAGE_SIZE', 50) }
 
@@ -563,6 +508,32 @@ describe Response do
       response.comment = "xyz"
       response.reload_attribute(:status)
       response.comment.should == "xyz"
+    end
+  end
+
+  context "when creating records for each multi record category" do
+    it "creates records" do
+      survey = FactoryGirl.create(:survey)
+      multi_record_category = FactoryGirl.create(:multi_record_category, :survey => survey)
+      response = FactoryGirl.create(:response, :survey => survey)
+      expect { response.create_record_for_each_multi_record_category }.to change { multi_record_category.records.count }.from(0).to(1)
+    end
+
+    it "creates records for each multi record category" do
+      survey = FactoryGirl.create(:survey)
+      first_multi_record_category = FactoryGirl.create(:multi_record_category, :survey => survey)
+      second_multi_record_category = FactoryGirl.create(:multi_record_category, :survey => survey)
+      response = FactoryGirl.create(:response, :survey => survey)
+      response.create_record_for_each_multi_record_category
+      response.records.map(&:category_id).should =~ [first_multi_record_category.id, second_multi_record_category.id]
+    end
+
+    it "creates records under the current response" do
+      survey = FactoryGirl.create(:survey)
+      multi_record_category = FactoryGirl.create(:multi_record_category, :survey => survey)
+      response = FactoryGirl.create(:response, :survey => survey)
+      response.create_record_for_each_multi_record_category
+      multi_record_category.records.first.response_id.should == response.id
     end
   end
 end

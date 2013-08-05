@@ -290,22 +290,29 @@ describe Category do
   end
 
 
-  context "when creating empty answers for a new response" do
+  context "when finding or initializing answers for a response" do
     let(:response) { FactoryGirl.create :response }
 
-    it "creates empty answers for each of it's sub-questions" do
+    it "initializes answers for each of it's sub-questions" do
       category = FactoryGirl.create(:category)
-      5.times { FactoryGirl.create(:question, :finalized, :category => category) }
-      category.create_blank_answers(:response_id => response.id)
-      response.reload.answers.count.should == 5
+      questions = FactoryGirl.create_list(:question, 5, :finalized, :category => category)
+      answers = category.find_or_initialize_answers_for_response(response)
+      answers.map(&:question_id).should =~ questions.map(&:id)
     end
 
-    it "creates empty answers for each of it's sub-categories' sub-questions" do
+    it "initializes answers for each of it's sub-categories' sub-questions" do
       category = FactoryGirl.create(:category)
       sub_category = FactoryGirl.create(:category, :category => category)
-      5.times { FactoryGirl.create(:question, :finalized, :category => category) }
-      category.create_blank_answers(:response_id => response.id)
-      response.reload.answers.size.should == 5
+      questions = FactoryGirl.create_list(:question, 5, :finalized, :category => category)
+      answers = category.find_or_initialize_answers_for_response(response)
+      answers.map(&:question_id).should =~ questions.map(&:id)
+    end
+
+    it "passes on the record_id if one is passed in" do
+      category = FactoryGirl.create(:category)
+      question = FactoryGirl.create(:question, :finalized, :category => category)
+      answers = category.find_or_initialize_answers_for_response(response, :record_id => 5)
+      answers.first.record_id.should == 5
     end
   end
 

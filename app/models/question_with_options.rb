@@ -3,11 +3,6 @@ class QuestionWithOptions < Question
 
   alias_method :serializable_options, :options
 
-  def create_blank_answers(params={})
-    super
-    options.map(&:elements).flatten.each { |element| element.create_blank_answers(params) }
-  end
-
   def report_data
     answers = answers_for_reports
     report_data = options.map { |option| [option.content, option.report_data(answers)] }
@@ -26,5 +21,9 @@ class QuestionWithOptions < Question
 
   def ordered_question_tree
     [self, options.ascending.map(&:ordered_question_tree)].flatten
+  end
+
+  def find_or_initialize_answers_for_response(response, options={})
+    [super, self.options.map {|option| option.find_or_initialize_answers_for_response(response, options) }].flatten
   end
 end

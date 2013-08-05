@@ -21,6 +21,7 @@
       <%= image_tag question.image_url(:medium), :class => "medium" if question.image_url %>
       <%= question.decorate.input_tag(f, :disabled => @disabled) %>
       <%= f.input :question_id, :as => :hidden %>
+      <%= f.input :record_id, :as => :hidden %>
       <%= f.input :_destroy, :as => :hidden, :input_html => { :class => "allow-destroy" } %>
     </div>
   <% end %>

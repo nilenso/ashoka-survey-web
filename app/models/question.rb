@@ -30,12 +30,6 @@ class Question < ActiveRecord::Base
     Base64.encode64(image.thumb.file.read) if image?
   end
 
-  def create_blank_answers(params={})
-    return unless finalized?
-    answer = Answer.new(:question_id => id, :response_id => params[:response_id], :record_id => params[:record_id])
-    answer.save(:validate => false)
-  end
-
   def duplicate(survey_id)
     question = self.dup
     question.survey_id = survey_id
@@ -111,6 +105,10 @@ class Question < ActiveRecord::Base
     else
       update_column(:photo_file_size, nil)
     end
+  end
+
+  def find_or_initialize_answers_for_response(response, options={})
+    Answer.where(:response_id => response.id, :question_id => self.id, :record_id => options[:record_id]).first_or_initialize
   end
 
   protected
