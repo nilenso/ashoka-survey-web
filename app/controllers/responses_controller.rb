@@ -29,13 +29,8 @@ class ResponsesController < ApplicationController
   def create
     response = ResponseDecorator.new(Response.new(:blank => true))
     response.set(params[:survey_id], current_user, current_user_org, session_token)
-    Response.transaction do
-      response.save
-      response.create_blank_answers
-      response.ip_address = request.remote_ip
-      response.save(:validate => false)
-    end
-    if response.persisted?
+    response.ip_address = request.remote_ip
+    if response.save
       redirect_to edit_survey_response_path(:id => response.id)
     else
       render :nothing => true, :status => :internal_server_error
@@ -47,6 +42,9 @@ class ResponsesController < ApplicationController
     @response = ResponseDecorator.find(params[:id])
     @disabled = false
     @public_response = public_response?
+    @answers = @survey.questions.map do |question|
+      Answer.where(:question_id => question.id, :response_id => @response.id).first_or_initialize
+    end
   end
 
   def show

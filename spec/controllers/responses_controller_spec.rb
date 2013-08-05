@@ -47,34 +47,10 @@ describe ResponsesController do
       flash[:error].should_not be_nil
     end
 
-    it "creates blank answers for each of its survey's questions" do
+    it "doesn't create any answers" do
       survey = FactoryGirl.create(:survey, :finalized, :organization_id => 1)
       question = FactoryGirl.create :question, :finalized, :survey => survey
-      post :create, :survey_id => survey.id
-      question.answers.should_not be_blank
-    end
-
-    it "creates blank answers for each of its survey's questions nested under a category" do
-      survey = FactoryGirl.create(:survey, :finalized, :organization_id => 1)
-      category = FactoryGirl.create :category, :survey => survey
-      question = FactoryGirl.create :question, :finalized, :survey => survey, :category => category
-      post :create, :survey_id => survey.id
-      question.answers.should_not be_blank
-    end
-
-    it "creates blank answers for each of its survey's questions nested under a question with options" do
-      survey = FactoryGirl.create(:survey, :finalized, :organization_id => 1)
-      question = FactoryGirl.create(:radio_question, :with_options, :finalized, :survey => survey)
-      sub_question = FactoryGirl.create :question, :finalized, :survey => survey, :parent => question.options[0]
-      post :create, :survey_id => survey.id
-      sub_question.answers.should_not be_blank
-    end
-
-    it "doesn't create a response if an exception is thrown while creating blank answers" do
-      Response.any_instance.stub(:create_blank_answers).and_raise(ActiveRecord::Rollback)
-      expect {
-        post :create, :survey_id => survey.id
-      }.not_to change { Response.count }
+      expect { post :create, :survey_id => survey.id }.not_to change { Answer.count }
     end
   end
 
@@ -293,6 +269,29 @@ describe ResponsesController do
       response.should be_ok
       assigns(:public_response).should == true
     end
+
+    context "when assigning answers" do
+      it "assigns an empty answer for each question in the survey" do
+        question = FactoryGirl.create(:question, :survey => @survey)
+        get :edit, :id => @res.id, :survey_id => @survey.id
+        answer = assigns(:answers).first
+        answer.question_id.should == question.id
+      end
+
+      it "assigns answers to the current response" do
+        question = FactoryGirl.create(:question, :survey => @survey)
+        get :edit, :id => @res.id, :survey_id => @survey.id
+        answer = assigns(:answers).first
+        answer.response_id.should == @res.id
+      end
+
+      it "assigns an existing answer if one exists" do
+        question = FactoryGirl.create(:question, :finalized, :survey => @survey)
+        answer = FactoryGirl.create(:answer, :question => question, :response => @res)
+        get :edit, :id => @res.id, :survey_id => @survey.id
+        assigns(:answers).first.should == answer
+      end
+    end
   end
 
   context "GET 'show'" do
@@ -459,7 +458,7 @@ describe ResponsesController do
         put :update, :id => response.id, :survey_id => survey.id, :status => Response::Status::INCOMPLETE, :response =>
             { :answers_attributes => { "0" => { :content => "sadsdfgsdfgsdfg", :id => answer.id} } }
         response.reload.should_not be_complete
-      end      
+      end
     end
 
     context "when a complete response is marked complete again" do
