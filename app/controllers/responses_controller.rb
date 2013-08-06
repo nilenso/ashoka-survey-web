@@ -54,6 +54,7 @@ class ResponsesController < ApplicationController
     @response = ResponseDecorator.find(params[:id])
     @disabled = true
     @marker = @response.to_gmaps4rails
+    @answers = @survey.find_or_initialize_answers_for_response(@response)
     render :edit
   end
 

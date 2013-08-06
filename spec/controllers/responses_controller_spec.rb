@@ -323,6 +323,29 @@ describe ResponsesController do
       get :show, :id => @res.id, :survey_id => @survey.id
       assigns(:disabled).should be_true
     end
+
+    context "when assigning answers" do
+      it "assigns an empty answer for each question in the survey" do
+        question = FactoryGirl.create(:question, :survey => @survey)
+        get :show, :id => @res.id, :survey_id => @survey.id
+        answer = assigns(:answers).first
+        answer.question_id.should == question.id
+      end
+
+      it "assigns answers to the current response" do
+        question = FactoryGirl.create(:question, :survey => @survey)
+        get :show, :id => @res.id, :survey_id => @survey.id
+        answer = assigns(:answers).first
+        answer.response_id.should == @res.id
+      end
+
+      it "assigns an existing answer if one exists" do
+        question = FactoryGirl.create(:question, :finalized, :survey => @survey)
+        answer = FactoryGirl.create(:answer, :question => question, :response => @res)
+        get :show, :id => @res.id, :survey_id => @survey.id
+        assigns(:answers).first.should == answer
+      end
+    end
   end
 
   context "PUT 'update'" do
