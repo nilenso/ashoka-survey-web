@@ -8,8 +8,8 @@ describe ResponsesController do
   end
 
   context "POST 'create'" do
-    let(:survey) { FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)}
-    let(:question) { FactoryGirl.create(:question)}
+    let(:survey) { FactoryGirl.create(:survey, :finalized => true, :organization_id => 1) }
+    let(:question) { FactoryGirl.create(:question) }
 
     before(:each) { stub_geocoder }
 
@@ -26,7 +26,7 @@ describe ResponsesController do
 
     it "saves the response to the right survey" do
       post :create, :survey_id => survey.id
-      assigns(:response).survey.should ==  survey
+      assigns(:response).survey.should == survey
     end
 
     it "saves the id of the user taking the response" do
@@ -73,9 +73,9 @@ describe ResponsesController do
       access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
       names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
       organizations_response.stub(:parsed).and_return([
-        {"id" => 1, "name" => "Foo", "logos" => {"thumb_url" => "http://foo.png"}},
-        {"id" => 2, "name" => "Bar", "logos" => {"thumb_url" => "http://foo.png"}}
-      ])
+                                                          {"id" => 1, "name" => "Foo", "logos" => {"thumb_url" => "http://foo.png"}},
+                                                          {"id" => 2, "name" => "Bar", "logos" => {"thumb_url" => "http://foo.png"}}
+                                                      ])
     end
 
     it "renders the list of responses for a survey if a cso admin is signed in" do
@@ -90,11 +90,11 @@ describe ResponsesController do
     it "sorts the responses by created_at, status" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       res_1 = FactoryGirl.create(:response, :survey => survey, :status => "complete",
-          :organization_id => 1, :user_id => 1, :created_at => Time.now)
+                                 :organization_id => 1, :user_id => 1, :created_at => Time.now)
       res_2 = FactoryGirl.create(:response, :survey => survey, :status => "incomplete",
-          :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
+                                 :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
       res_3 = FactoryGirl.create(:response, :survey => survey, :status => "complete",
-          :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
+                                 :organization_id => 1, :user_id => 1, :created_at => 10.minutes.ago)
       get :index, :survey_id => survey.id
       assigns(:responses).should == [res_1, res_3, res_2]
     end
@@ -139,9 +139,9 @@ describe ResponsesController do
       access_token.stub(:get).with('/api/organizations').and_return(organizations_response)
       names_response.stub(:parsed).and_return([{"id" => 1, "name" => "Bob"}, {"id" => 2, "name" => "John"}])
       organizations_response.stub(:parsed).and_return([
-        {"id" => 1, "name" => "Foo", "logos" => {"thumb_url" => "http://foo.png"}},
-        {"id" => 2, "name" => "Bar", "logos" => {"thumb_url" => "http://foo.png"}}
-      ])
+                                                          {"id" => 1, "name" => "Foo", "logos" => {"thumb_url" => "http://foo.png"}},
+                                                          {"id" => 2, "name" => "Bar", "logos" => {"thumb_url" => "http://foo.png"}}
+                                                      ])
       stub_geocoder
     end
 
@@ -236,7 +236,7 @@ describe ResponsesController do
         early_response = Timecop.freeze(7.days.ago) { FactoryGirl.create(:response, :status => 'complete', :survey => survey) }
         late_response = Timecop.freeze(7.days.from_now) { FactoryGirl.create(:response, :status => 'complete', :survey => survey) }
         response = FactoryGirl.create(:response, :status => 'complete', :survey => survey)
-        get :generate_excel, :survey_id => survey.id, :date_range => { :from => date_range.first, :to => date_range.last }
+        get :generate_excel, :survey_id => survey.id, :date_range => {:from => date_range.first, :to => date_range.last}
         assigns(:responses).should == [response]
       end
     end
@@ -246,7 +246,7 @@ describe ResponsesController do
     before(:each) do
       @survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       @res = FactoryGirl.create(:response, :survey => @survey,
-                               :organization_id => 1, :user_id => 2)
+                                :organization_id => 1, :user_id => 2)
     end
 
     it "renders the edit page" do
@@ -304,7 +304,7 @@ describe ResponsesController do
     before(:each) do
       @survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       @res = FactoryGirl.create(:response, :survey => @survey,
-                               :organization_id => 1, :user_id => 2)
+                                :organization_id => 1, :user_id => 2)
     end
 
     it "renders the edit page" do
@@ -325,21 +325,21 @@ describe ResponsesController do
     end
 
     context "when assigning answers" do
-      it "assigns an empty answer for each question in the survey" do
+      it "doesn't assign answers that aren't persisted" do
         question = FactoryGirl.create(:question, :survey => @survey)
         get :show, :id => @res.id, :survey_id => @survey.id
-        answer = assigns(:answers).first
-        answer.question_id.should == question.id
+        assigns(:answers).should be_empty
       end
 
       it "assigns answers to the current response" do
-        question = FactoryGirl.create(:question, :survey => @survey)
+        question = FactoryGirl.create(:question, :finalized, :survey => @survey)
+        answer = FactoryGirl.create(:answer, :question => question, :response => @res)
         get :show, :id => @res.id, :survey_id => @survey.id
         answer = assigns(:answers).first
         answer.response_id.should == @res.id
       end
 
-      it "assigns an existing answer if one exists" do
+      it "assigns answers that are persisted" do
         question = FactoryGirl.create(:question, :finalized, :survey => @survey)
         answer = FactoryGirl.create(:answer, :question => question, :response => @res)
         get :show, :id => @res.id, :survey_id => @survey.id
@@ -364,8 +364,8 @@ describe ResponsesController do
       res.answers << answer_2
 
       put :update, :id => res.id, :survey_id => survey.id, :response =>
-        { :answers_attributes => { "0" => { :content => "", :id => answer_2.id},
-                                   "1" => { :content => "hello", :id => answer_1.id} } }
+          {:answers_attributes => {"0" => {:content => "", :id => answer_2.id},
+                                   "1" => {:content => "hello", :id => answer_1.id}}}
 
       answer_1.reload.content.should == "hello"
       flash[:notice].should_not be_nil
@@ -380,7 +380,7 @@ describe ResponsesController do
       res.answers << answer
 
       put :update, :id => res.id, :survey_id => survey.id, :response =>
-        { :answers_attributes => { "0" => { :content => "yeah123", :id => answer.id} } }
+          {:answers_attributes => {"0" => {:content => "yeah123", :id => answer.id}}}
 
       Answer.find(answer.id).content.should == "yeah123"
       flash[:notice].should_not be_nil
@@ -390,7 +390,7 @@ describe ResponsesController do
       request.env["HTTP_REFERER"] = 'http://example.com'
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       res = FactoryGirl.create(:response, :incomplete, :survey => survey)
-      put :update, :id => res.id, :survey_id => survey.id, :response => { :comment => "Foo" }
+      put :update, :id => res.id, :survey_id => survey.id, :response => {:comment => "Foo"}
       response.should redirect_to :back
     end
 
@@ -405,7 +405,7 @@ describe ResponsesController do
       it "renders the edit page" do
         resp = FactoryGirl.create(:response, :complete, :organization_id => 1, :user_id => 2, :survey => survey)
         answer = FactoryGirl.create(:answer, :question => mandatory_question, :response => resp)
-        response_attributes = { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+        response_attributes = {:answers_attributes => {"0" => {:content => "", :id => answer.id}}}
         put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
         response.should render_template('edit')
         flash[:error].should_not be_empty
@@ -414,7 +414,7 @@ describe ResponsesController do
       it "does not update the answer" do
         resp = FactoryGirl.create(:response, :complete, :organization_id => 1, :user_id => 2, :survey => survey)
         answer = FactoryGirl.create(:answer, :question => mandatory_question, :response => resp)
-        response_attributes = { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+        response_attributes = {:answers_attributes => {"0" => {:content => "", :id => answer.id}}}
         put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
         answer.reload.content.should == "MyText"
       end
@@ -422,7 +422,7 @@ describe ResponsesController do
       it "sets assigns `disabled` to false" do
         resp = FactoryGirl.create(:response, :complete, :organization_id => 1, :user_id => 2, :survey => survey)
         answer = FactoryGirl.create(:answer, :question => mandatory_question, :response => resp)
-        response_attributes = { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+        response_attributes = {:answers_attributes => {"0" => {:content => "", :id => answer.id}}}
         put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
         assigns(:disabled).should be_false
       end
@@ -430,21 +430,46 @@ describe ResponsesController do
       it "assigns a response with the existing status" do
         resp = FactoryGirl.create(:response, :incomplete, :organization_id => 1, :user_id => 2, :survey => survey)
         answer = FactoryGirl.create(:answer, :question => mandatory_question, :response => resp)
-        response_attributes = { :status => Response::Status::COMPLETE, :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+        response_attributes = {:status => Response::Status::COMPLETE, :answers_attributes => {"0" => {:content => "", :id => answer.id}}}
         put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
         assigns(:response).should be_incomplete
       end
 
-      it "assigns a responses whose answers' contents are from the params passed in" do
-        resp = FactoryGirl.create(:response, :incomplete, :organization_id => 1, :user_id => 2, :survey => survey)
-        question = FactoryGirl.create(:question, :finalized, :max_length => 2, :survey => survey)
-        answer = FactoryGirl.create(:answer, :content => "f", :question => question, :response => resp)
-        response_attributes = { :status => Response::Status::COMPLETE, :answers_attributes => { "0" => { :content => "2121", :id => answer.id} } }
-        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
-        assigns(:response).answers.first.content.should == "2121"
+      context "when assigning answers" do
+        let(:resp) { FactoryGirl.create(:response, :incomplete, :organization_id => 1, :user_id => 2, :survey => survey) }
+        let(:question) { FactoryGirl.create(:question, :finalized, :max_length => 2, :survey => survey) }
+
+        context "when params are passed in for the answer" do
+          it "assigns an answer with content from params if no previous answer exists" do
+            answers_attributes = {"0" => {:content => "2121", :question_id => question.id }}
+            response_attributes = {:status => Response::Status::COMPLETE, :answers_attributes => answers_attributes}
+            put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
+            assigns(:answers).first.content.should == "2121"
+          end
+
+          it "assigns an answer with content from params if a previous answer exists" do
+            answer = FactoryGirl.create(:answer, :content => "f", :question => question, :response => resp)
+            answers_attributes = {:content => "2121", :question_id => question.id, :id => answer.id}
+            response_attributes = {:status => Response::Status::COMPLETE, :answers_attributes => {"0" => answers_attributes}}
+            put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
+            assigns(:answers).first.content.should == "2121"
+          end
+        end
+
+        it "assigns an answer with content from the persisted answer when params are not passed in" do
+          answer = FactoryGirl.create(:answer, :content => "f", :question => question, :response => resp)
+          other_question = FactoryGirl.create(:question, :finalized, :survey => survey)
+          other_answer = FactoryGirl.create(:answer, :content => "foo", :question => other_question, :response => resp)
+
+          # making the validation fail for another answer that is updated
+          answers_attributes = {"0" => {:content => "bar", :id => answer.id}}
+          response_attributes = { :status => Response::Status::COMPLETE, :answers_attributes => answers_attributes }
+          put :update, :id => resp.id, :survey_id => resp.survey_id, :response => response_attributes
+
+          assigns(:answers).map(&:content).should include "foo"
+        end
       end
     end
-
 
     it "marks the response as not blank" do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
@@ -457,24 +482,24 @@ describe ResponsesController do
       survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
       res = FactoryGirl.create(:response, :complete, :survey => survey)
       expect do
-        put :update, :id => res.id, :survey_id => survey.id, :response => { :state => "clean" }
+        put :update, :id => res.id, :survey_id => survey.id, :response => {:state => "clean"}
       end.to change { Delayed::Job.where(:queue => "mixpanel").count }.by(1)
     end
 
     it "doesn't change the response's status if one isn't passed as a parameter" do
       resp = FactoryGirl.create(:response, :incomplete, :survey => survey)
-      put :update, :id => resp.id, :survey_id => survey.id, :response => { :comment => "Foo" }
+      put :update, :id => resp.id, :survey_id => survey.id, :response => {:comment => "Foo"}
       resp.reload.should be_incomplete
     end
 
     context "when an incomplete response is marked complete" do
       it "sets the status to 'complete'" do
-        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => { :status => Response::Status::COMPLETE }
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => {:status => Response::Status::COMPLETE}
         resp.reload.should be_complete
       end
 
       it "redirects to the response index page on success" do
-        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => { :status => Response::Status::COMPLETE }
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => {:status => Response::Status::COMPLETE}
         response.should redirect_to(survey_responses_path(resp.survey_id))
       end
 
@@ -485,7 +510,7 @@ describe ResponsesController do
         answer = FactoryGirl.create(:answer, :content => "A", :question => question, :response => response)
 
         put :update, :id => response.id, :survey_id => survey.id, :status => Response::Status::INCOMPLETE, :response =>
-            { :answers_attributes => { "0" => { :content => "sadsdfgsdfgsdfg", :id => answer.id} } }
+            {:answers_attributes => {"0" => {:content => "sadsdfgsdfgsdfg", :id => answer.id}}}
         response.reload.should_not be_complete
       end
     end
@@ -500,7 +525,7 @@ describe ResponsesController do
         answer = FactoryGirl.create(:answer, :question => question)
         res.answers << answer
         put :update, :id => res.id, :survey_id => survey.id, :response =>
-            { :answers_attributes => { "0" => { :content => "", :id => answer.id} } }
+            {:answers_attributes => {"0" => {:content => "", :id => answer.id}}}
         res.reload.should be_complete
       end
     end
@@ -510,7 +535,7 @@ describe ResponsesController do
         survey = FactoryGirl.create(:survey, :public => true, :finalized => true, :organization_id => 1)
         resp = FactoryGirl.create(:response, :session_token => "123", :survey => survey)
         session[:session_token] = "123"
-        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => { :state => "clean" }
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => {:state => "clean"}
         response.should render_template("thank_you")
       end
 
@@ -519,10 +544,11 @@ describe ResponsesController do
         survey = FactoryGirl.create(:survey, :public => true, :finalized => true, :organization_id => 1)
         resp = FactoryGirl.create(:response, :session_token => "123", :survey => survey)
         session[:session_token] = "123"
-        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => { :state => "clean" }
+        put :update, :id => resp.id, :survey_id => resp.survey_id, :response => {:state => "clean"}
         assigns(:public_response).should be_true
       end
     end
+
   end
 
   context "DELETE 'destroy'" do

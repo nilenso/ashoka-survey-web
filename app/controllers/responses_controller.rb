@@ -1,4 +1,6 @@
 class ResponsesController < ApplicationController
+  include ResponsesHelper
+
   load_and_authorize_resource :survey
   load_and_authorize_resource :through => :survey
 
@@ -54,7 +56,7 @@ class ResponsesController < ApplicationController
     @response = ResponseDecorator.find(params[:id])
     @disabled = true
     @marker = @response.to_gmaps4rails
-    @answers = @survey.find_or_initialize_answers_for_response(@response)
+    @answers = @response.answers
     render :edit
   end
 
@@ -75,6 +77,9 @@ class ResponsesController < ApplicationController
     else
       @disabled = false
       @response.reload_attribute(:status)
+      @answers = merge_arrays_using_attributes(@response.answers,
+                                               @survey.find_or_initialize_answers_for_response(@response),
+                                               [:question_id, :record_id])
       flash[:error] = "Error"
       render :edit
     end
