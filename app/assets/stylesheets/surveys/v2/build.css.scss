@@ -150,14 +150,14 @@ body#build_v2 {
   .survey-panes-left-pane {
     height: $survey-pane-height;
     width: $left-pane-width;
-    background: green;
+    background: #fff;
     float: left;
   }
 
   .survey-panes-right-pane {
     width: $right-pane-width;
     height: $survey-pane-height;
-    background: red;
+    background: #EEE;
     float: right;
   }
 
