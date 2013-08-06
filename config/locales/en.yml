@@ -158,6 +158,8 @@ en:
         survey_actions_duplicate: "Duplicate"
         survey_actions_publish: "Publish"
         survey_actions_update: "Update"
+        add_question_button_text: "Question"
+        add_section_button_text: "Section"
   surveys:
     confirm_finalize: "The survey can't be edited after this. Are you sure?"
     duplication_in_progress: "Survey duplication in progress…"

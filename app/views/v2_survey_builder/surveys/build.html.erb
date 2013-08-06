@@ -30,15 +30,26 @@
           <%= render 'v2_survey_builder/surveys/header', :mustache => @survey.attributes %>
         </div>
         <div class="survey-actions">
+          <div class="survey-add-elements">
+            <ul class="survey-add-elements-list">
+              <li class="survey-add-elements-list-item">
+                <button class="survey-action-button add-section"><i class="icon-plus"></i><%= t(".add_section_button_text") %></button>
+              </li>
+
+              <li class="survey-add-elements-list-item">
+                <button class="survey-action-button add-question"><i class="icon-plus"></i><%= t(".add_question_button_text") %></button>
+              </li>
+            </ul>
+          </div>
           <ul class="survey-actions-list">
             <li class="survey-actions-list-item">
-              <button><i class="icon-remove"></i><%= t('.survey_actions_close') %></button>
+              <button class="survey-action-button"><i class="icon-remove"></i><%= t('.survey_actions_close') %></button>
             </li>
             <li class="survey-actions-list-item">
-              <button><i class="icon-eye-open"></i><%= t(".survey_actions_preview") %></button>
+              <button class="survey-action-button"><i class="icon-eye-open"></i><%= t(".survey_actions_preview") %></button>
             </li>
             <li class="survey-actions-list-item">
-              <button><i class="icon-save"></i><%= t(".survey_actions_save") %></button>
+              <button class="survey-action-button"><i class="icon-save"></i><%= t(".survey_actions_save") %></button>
             </li>
           </ul>
         </div>
@@ -48,13 +59,13 @@
         <div class="survey-actions">
           <ul class="survey-actions-list">
             <li class="survey-actions-list-item">
-              <button><i class="icon-trash"></i><%= t(".survey_actions_discard") %></button>
+              <button class="survey-action-button"><i class="icon-trash"></i><%= t(".survey_actions_discard") %></button>
             </li>
             <li class="survey-actions-list-item">
-              <button><i class="icon-copy"></i><%= t(".survey_actions_duplicate") %></button>
+              <button class="survey-action-button"><i class="icon-copy"></i><%= t(".survey_actions_duplicate") %></button>
             </li>
             <li class="survey-actions-list-item publish">
-              <button><i class="icon-share"></i><%= t(".survey_actions_publish") %></button>
+              <button class="survey-action-button"><i class="icon-share"></i><%= t(".survey_actions_publish") %></button>
             </li>
           </ul>
         </div>

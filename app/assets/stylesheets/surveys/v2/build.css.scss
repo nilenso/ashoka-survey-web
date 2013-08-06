@@ -39,12 +39,12 @@ body#build_v2 {
 
   .survey-metadata {
     float: left;
-    width: 58%;
+    width: 32%;
   }
 
   .survey-actions {
     float: right;
-    width: 42%;
+    width: 68%;
   }
 
   h3.survey-metadata-name {
@@ -65,25 +65,40 @@ body#build_v2 {
   .survey-actions-list-item {
     display: inline;
     margin-right: 5px;
+  }
 
-    &> button {
-      text-shadow: none;
-      line-height: 24px;
-      background: $secondary-color;
-      color: $white;
-      border: none;
-      @include border-radius(2px);
-      padding: 5px 10px 0;
+  .survey-action-button {
+    text-shadow: none;
+    line-height: 24px;
+    background: $secondary-color;
+    color: $white;
+    border: none;
+    @include border-radius(2px);
+    padding: 5px 10px 0;
 
-      &:hover {
-        background: $secondary-color-dark;
-      }
+    &:hover {
+      background: $secondary-color-dark;
+    }
 
-      &> i {
-        margin-bottom: 3px;
-        margin-right: 5px;
-        font-size: 20px;
-      }
+    i {
+      margin-bottom: 3px;
+      margin-right: 5px;
+      font-size: 20px;
+    }
+  }
+
+  .survey-add-elements { margin-right: 50px; }
+  .survey-add-elements-list { float: left; }
+
+  .survey-add-elements-list-item {
+    display: inline;
+    .add-question {
+      background: #3795CB;
+      &:hover { background: orchid; }
+    }
+    .add-section {
+      background: #FC962D;
+      &:hover { background: $secondary-color-dark; }
     }
   }
 
@@ -199,6 +214,8 @@ body#build_v2 {
   .saving-indicator-failure {
     @include saving-indicator;
     color: red;
-    & > i { margin-right: 2px; }
+    & > i {
+      margin-right: 2px;
+    }
   }
 }
