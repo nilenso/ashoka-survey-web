@@ -4,10 +4,12 @@
 @import "components";
 @import "banner";
 
+@import "surveys/v2/build/build";
+@import "surveys/v2/build/questions";
+
 @import "surveys/index.css.scss";
 @import "surveys/build.css.scss";
 @import "surveys/new.css.scss";
-@import "surveys/v2/build";
 
 @import "publish";
 @import "responses";
