@@ -40,7 +40,7 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
     @toggleCollapse()
 
   clearLeftPaneSelection: (view) =>
-    @currentlyActiveView.clearSelection() if @currentlyActiveView
+    @currentlyActiveView.deselect() if @currentlyActiveView
     @currentlyActiveView = view
 
   addQuestion: (attributes) =>

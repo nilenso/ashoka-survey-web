@@ -15,12 +15,11 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends Backbone.Vie
 
   handleClick: =>
     @trigger("clear_left_pane_selections", this)
-    @select()
-    view = new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView({ model: @model })
-    view.render()
-
-  clearSelection: =>
-    this.$el.removeClass("active")
-
-  select: =>
     this.$el.addClass("active")
+    @right_pane_view = new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView({ model: @model })
+    @right_pane_view.render()
+
+  deselect: =>
+    this.$el.removeClass("active")
+    @right_pane_view.undelegateEvents()
+
