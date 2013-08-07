@@ -32,4 +32,33 @@ div.survey-panes-left-pane {
   }
 }
 
-.survey-panes-right-pane { }
+.survey-panes-right-pane {
+  .question-settings {
+    overflow: hidden;
+    background-color: #38587A;
+  }
+  .question-settings-content {
+    clear: both;
+  }
+
+  .question-settings-list {
+    margin: 0 auto;
+    padding: 0;
+    width: 65%;
+    overflow: hidden;
+  }
+
+  .question-settings-list-item {
+    display: inline;
+    float: left;
+    padding: 5px;
+    color: #fff;
+
+    label, input { display: inline; }
+    label { font-weight: 200; }
+  }
+
+  .question-settings-list-item-question-number {
+    font-weight: 600;
+  }
+}

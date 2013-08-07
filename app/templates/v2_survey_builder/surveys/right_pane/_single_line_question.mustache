@@ -1,4 +1,41 @@
 <div class="question">
-  Question Name
-  <textarea>{{ content }}</textarea>
+  <div class="question-settings">
+    <ul class="question-settings-list">
+      <li class="question-settings-list-item">
+        <span class="question-settings-list-item-question-number">2.0</span>
+      </li>
+      <li class="question-settings-list-item">
+        {{#mandatory}}
+          <input type="checkbox" id="mandatory" checked/>
+        {{/mandatory}}
+        {{^mandatory}}
+          <input type="checkbox" id="mandatory"/>
+        {{/mandatory}}
+        <label for="mandatory">Mandatory</label>
+      </li>
+      <li class="question-settings-list-item">
+        {{#identifier}}
+        <input type="checkbox" id="identifier" checked/>
+        {{/identifier}}
+        {{^identifier}}
+        <input type="checkbox" id="identifier"/>
+        {{/identifier}}
+        <label for="identifier">Identifier</label>
+      </li>
+      <li class="question-settings-list-item">
+        {{#private}}
+          <input type="checkbox" id="private" checked/>
+        {{/private}}
+        {{^private}}
+          <input type="checkbox" id="private"/>
+        {{/private}}
+        <label for="private">Private</label>
+      </li>
+    </ul>
+  </div>
+
+  <div class="questions-settings-content">
+    <label>Question Name<label>
+    <textarea>{{ content }}</textarea>
+  </div>
 </div>
