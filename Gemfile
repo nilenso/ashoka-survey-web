@@ -9,7 +9,6 @@ gem 'will_paginate', '~> 3.0.3'
 gem 'rails-i18n', '~> 0.6.5'
 gem 'omniauth-oauth2', '~> 1.1.1'
 gem 'figaro', '~> 0.4.1'
-gem "rails-backbone", '~> 0.7.2'
 gem 'pry-rails', '~> 0.2.1'
 gem 'cancan', '~> 1.6.8'
 gem 'draper', "~> 1.2.1"
