@@ -67,26 +67,6 @@ body#build_v2 {
     margin-right: 5px;
   }
 
-  .survey-action-button {
-    text-shadow: none;
-    line-height: 24px;
-    background: $secondary-color;
-    color: $white;
-    border: none;
-    @include border-radius(2px);
-    padding: 5px 10px 0;
-
-    &:hover {
-      background: $secondary-color-dark;
-    }
-
-    i {
-      margin-bottom: 3px;
-      margin-right: 5px;
-      font-size: 20px;
-    }
-  }
-
   .survey-add-elements { margin-right: 50px; }
   .survey-add-elements-list { float: left; }
 
@@ -217,5 +197,25 @@ body#build_v2 {
     & > i {
       margin-right: 2px;
     }
+  }
+}
+
+.survey-builder-action-button {
+  text-shadow: none;
+  line-height: 24px;
+  background: $secondary-color;
+  color: $white;
+  border: none;
+  @include border-radius(2px);
+  padding: 5px 10px 0;
+
+  &:hover {
+    background: $secondary-color-dark;
+  }
+
+  i {
+    margin-bottom: 3px;
+    margin-right: 5px;
+    font-size: 20px;
   }
 }

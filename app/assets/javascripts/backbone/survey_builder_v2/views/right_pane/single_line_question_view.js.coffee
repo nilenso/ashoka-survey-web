@@ -4,6 +4,7 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends Backbone.Vi
   events:
     "keyup .question-content-textarea": "updateModelContent"
     "click .question-settings input": "updateModelSettings"
+    "click .question-update": "saveQuestion"
 
   initialize: (attributes) =>
     @model = attributes.model
@@ -20,3 +21,5 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends Backbone.Vi
     key = $(event.target).attr('id')
     value = $(event.target).is(':checked')
     @model.set(key, value)
+
+  saveQuestion: @model.save

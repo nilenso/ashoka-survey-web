@@ -62,6 +62,19 @@ div.survey-panes-left-pane {
     label { font-weight: 200; }
   }
 
+  .question-content {
+     margin: 15px;
+  }
+
+  button.question-update {
+    margin-left: 15px;
+    background: #3795CB;
+
+    &:hover {
+      background: orchid;
+    }
+  }
+
   .question-settings-list-item-question-number {
     font-weight: 600;
   }
