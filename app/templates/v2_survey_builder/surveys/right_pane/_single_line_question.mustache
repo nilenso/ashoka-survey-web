@@ -11,7 +11,7 @@
         {{^mandatory}}
           <input type="checkbox" id="mandatory"/>
         {{/mandatory}}
-        <label for="mandatory">Mandatory</label>
+        <label for="mandatory" title="A mandatory question is required to have an answer.">Mandatory</label>
       </li>
       <li class="question-settings-list-item">
         {{#identifier}}
@@ -20,7 +20,7 @@
         {{^identifier}}
         <input type="checkbox" id="identifier"/>
         {{/identifier}}
-        <label for="identifier">Identifier</label>
+        <label for="identifier" title="An identifier question will show in a response listing.">Identifier</label>
       </li>
       <li class="question-settings-list-item">
         {{#private}}
@@ -29,7 +29,7 @@
         {{^private}}
           <input type="checkbox" id="private"/>
         {{/private}}
-        <label for="private">Private</label>
+        <label for="private" title="Answers to a private question can be filtered out of excel reports.">Private</label>
       </li>
     </ul>
   </div>

@@ -3,5 +3,8 @@
   </span>
 <div class="question-details">
   <span class="question-details-content">{{content}}</span>
+  {{#mandatory}}
+    <span class="question-details-mandatory">*</span>
+  {{/mandatory}}
   <input type="text" class="question-details-input" disabled></input>
 </div>
