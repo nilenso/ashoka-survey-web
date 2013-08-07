@@ -39,6 +39,11 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
     @model.set(JSON.parse(response.responseText))
     @toggleCollapse()
 
+  clearLeftPaneSelection: (view) =>
+    @currentlyActiveView.clearSelection() if @currentlyActiveView
+    @currentlyActiveView = view
+
   addQuestion: (attributes) =>
     el = this.$el.find(".question[data-id=#{attributes.id}]")
-    new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView({ el: el, question: attributes })
+    view = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView({ el: el, question: attributes })
+    view.on("clear_left_pane_selections", @clearLeftPaneSelection)

@@ -11,6 +11,9 @@ div.survey-panes-left-pane {
       @include box-shadow(#aaa 0px 0px 5px);
       padding: 9px 9px 14px 9px !important;
     }
+    &.active {
+      background-color: rgba(57, 147, 222, 0.2);
+    }
   }
 
   .question-number {

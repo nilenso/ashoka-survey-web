@@ -71,3 +71,11 @@ table{
   color: $secondary-color-light; text-align: center;
   a{color: white;}
 }
+
+.input-disabled {
+  user-select : none;
+  -moz-user-select : none;
+  -webkit-user-select : none;
+  color: gray;
+  cursor: pointer;
+}
