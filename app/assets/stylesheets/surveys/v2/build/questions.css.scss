@@ -78,4 +78,8 @@ div.survey-panes-left-pane {
   .question-settings-list-item-question-number {
     font-weight: 600;
   }
+
+  .question-content-label-error {
+    color: $danger;
+  }
 }

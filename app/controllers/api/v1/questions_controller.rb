@@ -19,7 +19,7 @@ module Api
         if question.update_attributes(params[:question])
           render :json => question.to_json(:methods => :type)
         else
-          render :json => question.errors.full_messages, :status => :bad_request
+          render :json => { :full_errors => question.errors.full_messages, :errors => question.errors.messages }, :status => :bad_request
         end
       end
 
