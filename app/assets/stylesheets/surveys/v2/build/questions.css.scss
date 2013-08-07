@@ -3,15 +3,20 @@
     width: 100%;
     clear: left;
     padding: 20px;
+    overflow: hidden;
+    margin: 20px 0 0 10px;
+    &:first-child { margin-top: 5px; }
   }
 
   .question-number {
     float: left;
+    font-weight: 600;
   }
 
   .question-details {
+    width: 94.5%;
     float: left;
-    margin-left: 10px;
+    margin-left: 7px;
   }
 }
 
