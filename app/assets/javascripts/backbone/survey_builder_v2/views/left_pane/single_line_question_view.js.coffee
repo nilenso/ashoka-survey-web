@@ -12,5 +12,5 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends Backbone.Vie
     return this
 
   handleClick: =>
-    # Bubble up event
-
+    view = new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView({ model: @model })
+    view.render()
