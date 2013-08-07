@@ -1,11 +1,16 @@
-.survey-panes-left-pane {
-  .question {
-    width: 100%;
+div.survey-panes-left-pane {
+  div.question {
     clear: left;
-    padding: 20px;
+    padding: 10px 10px 15px 10px !important; // FIXME: padding is zeroed out in layout.css.scss
     overflow: hidden;
-    margin: 20px 0 0 10px;
+    margin: 10px 10px 0 10px;
     &:first-child { margin-top: 5px; }
+    @include border-radius(4px);
+    &:hover {
+      border: 1px dotted #3795CB;
+      @include box-shadow(#aaa 0px 0px 5px);
+      padding: 9px 9px 14px 9px !important;
+    }
   }
 
   .question-number {
@@ -14,9 +19,13 @@
   }
 
   .question-details {
-    width: 94.5%;
+    width: 97%;
     float: left;
     margin-left: 7px;
+  }
+
+  .question-details-input {
+    margin-top: 5px;
   }
 }
 
