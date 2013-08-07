@@ -88,7 +88,9 @@
   <div class="survey-panes">
     <div class="survey-panes-left-pane">
       <% @survey.ordered_question_tree.each do |question| %>
-        <%= render "v2_survey_builder/surveys/left_pane/single_line_question", :mustache => question.attributes %>
+        <div class="question" data-id="<%= question.id %>">
+          <%= render "v2_survey_builder/surveys/left_pane/single_line_question", :mustache => question.attributes %>
+        </div>
       <% end %>
     </div>
     <div class="survey-panes-right-pane"></div>
@@ -101,6 +103,11 @@
       $('.flash').remove();
     }, 2000);
   })
+
   new SurveyBuilderV2.Views.ActionBarView()
-  new SurveyBuilderV2.Views.SurveyView({ el: "#survey_builder_v2", survey: gon.survey_attributes })
+  new SurveyBuilderV2.Views.SurveyView({
+    el: "#survey_builder_v2",
+    survey: gon.survey_attributes,
+    questions: gon.questions_attributes
+  });
 </script>

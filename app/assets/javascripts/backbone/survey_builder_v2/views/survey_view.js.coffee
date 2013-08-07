@@ -10,6 +10,8 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
     @editableTemplate = SMT["v2_survey_builder/surveys/header_edit"]
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
 
+    _(attributes.questions).each (question) => @addQuestion(question)
+
   getEditableView: => this.$el.find(".survey-header-edit")
 
   toggleCollapse: =>
@@ -36,3 +38,7 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
     @savingIndicator.error()
     @model.set(JSON.parse(response.responseText))
     @toggleCollapse()
+
+  addQuestion: (attributes) =>
+    el = this.$el.find(".question[data-id=#{attributes.id}]")
+    new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView({ el: el, question: attributes })

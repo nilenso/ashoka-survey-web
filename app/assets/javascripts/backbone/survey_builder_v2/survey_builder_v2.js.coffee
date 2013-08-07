@@ -5,4 +5,7 @@
 window.SurveyBuilderV2 =
   Models: {}
   Collections: {}
-  Views: {}
+  Views: {
+    LeftPane: {},
+    RightPane: {}
+  }
