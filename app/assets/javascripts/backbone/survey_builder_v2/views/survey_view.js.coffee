@@ -49,6 +49,7 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
     event.stopPropagation()
     view = @addQuestion({ survey_id: @model.get('id') })
     @getLeftPane().append(view.render().el)
+    view.click()
 
   addQuestion: (attributes) =>
     el = this.$el.find(".question[data-id=#{attributes.id}]") if attributes.id

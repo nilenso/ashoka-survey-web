@@ -3,8 +3,7 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends Backbone.Vie
   className: "question"
 
   events: =>
-    "click": "handleClick"
-    "click input": "handleClick"
+    "click": "click"
 
   initialize: (attributes) =>
     @model = new SurveyBuilderV2.Models.SingleLineQuestionModel(attributes.question)
@@ -16,7 +15,7 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends Backbone.Vie
     this.$el.html(@template(@model.attributes))
     return this
 
-  handleClick: =>
+  click: =>
     @trigger("clear_left_pane_selections", this)
     this.$el.addClass("active")
     @right_pane_view = new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView({ model: @model })
