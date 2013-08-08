@@ -9,7 +9,6 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilde
     @model = new SurveyBuilderV2.Models.SingleLineQuestionModel(attributes.question)
     @model.on("sync", @render)
     @template = SMT["v2_survey_builder/surveys/left_pane/single_line_question"]
-    this.$el.on("click")
 
   render: =>
     this.$el.html(@template(@model.attributes))

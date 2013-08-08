@@ -87,7 +87,7 @@
 
   <div class="survey-panes">
     <div class="survey-panes-left-pane">
-      <% @survey.ordered_question_tree.each do |question| %>
+      <% @survey.questions.each do |question| %>
         <div class="question" data-id="<%= question.id %>">
           <%= render "v2_survey_builder/surveys/left_pane/single_line_question", :mustache => question.attributes %>
         </div>

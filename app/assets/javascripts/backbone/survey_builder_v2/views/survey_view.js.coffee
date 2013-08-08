@@ -11,7 +11,8 @@ class SurveyBuilderV2.Views.SurveyView extends SurveyBuilderV2.Backbone.View
     @editableTemplate = SMT["v2_survey_builder/surveys/header_edit"]
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
 
-    _(attributes.questions).each (question) => @addQuestion(question)
+    questions = _(attributes.questions).map(@addQuestion)
+    _(questions).first().click()
 
   getEditableView: => this.$el.find(".survey-header-edit")
   getLeftPane: => this.$el.find(".survey-panes-left-pane")
