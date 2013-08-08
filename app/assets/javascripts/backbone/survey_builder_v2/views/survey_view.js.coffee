@@ -46,6 +46,7 @@ class SurveyBuilderV2.Views.SurveyView extends Backbone.View
     @currentlyActiveView = view
 
   addNewQuestion: (event) =>
+    event.stopPropagation()
     view = @addQuestion({ survey_id: @model.get('id') })
     @getLeftPane().append(view.render().el)
 
