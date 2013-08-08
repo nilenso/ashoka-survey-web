@@ -1,4 +1,7 @@
 class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends Backbone.View
+  tagName: "div"
+  className: "question"
+
   events: =>
     "click": "handleClick"
     "click input": "handleClick"
