@@ -16,6 +16,7 @@
 //= require mustache
 //= require_self
 //= require underscore
+//= require backbone
 //= require jquery.ui.widget
 //= require jquery_csv
 //= require jquery.iframe-transport
@@ -30,8 +31,9 @@
 //= require datepicker-fr
 //= require datepicker-en
 //= require i18n/translations
-//= require backbone
 //= require backbone_relational
+//= require backbone_rails_sync
+//= require backbone_datalink
 //= require backbone/survey_builder
 //= require backbone/survey_builder_v2/survey_builder_v2
 //= require moment
