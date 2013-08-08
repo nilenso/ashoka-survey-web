@@ -12,7 +12,7 @@ class SurveyBuilderV2.Views.SurveyView extends SurveyBuilderV2.Backbone.View
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
 
     questions = _(attributes.questions).map(@addQuestion)
-    _(questions).first().click()
+    _(questions).first().click() if questions.length > 0
 
   getEditableView: => this.$el.find(".survey-header-edit")
   getLeftPane: => this.$el.find(".survey-panes-left-pane")
