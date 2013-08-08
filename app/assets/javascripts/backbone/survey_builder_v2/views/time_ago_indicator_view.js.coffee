@@ -1,4 +1,4 @@
-class SurveyBuilderV2.Views.TimeAgoIndicatorView extends Backbone.View
+class SurveyBuilderV2.Views.TimeAgoIndicatorView extends SurveyBuilderV2.Backbone.View
   el: ".saving-indicator-time-ago"
 
   getTimeAgoLabel: => this.$el

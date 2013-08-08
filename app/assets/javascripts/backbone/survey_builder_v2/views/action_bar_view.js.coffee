@@ -1,4 +1,4 @@
-class SurveyBuilderV2.Views.ActionBarView extends Backbone.View
+class SurveyBuilderV2.Views.ActionBarView extends SurveyBuilderV2.Backbone.View
   el: "#survey-action-bar"
 
   initialize: =>

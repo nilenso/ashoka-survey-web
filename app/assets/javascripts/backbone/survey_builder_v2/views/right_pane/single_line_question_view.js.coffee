@@ -1,4 +1,4 @@
-class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends Backbone.View
+class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuilderV2.Backbone.View
   el: ".survey-panes-right-pane"
 
   events:

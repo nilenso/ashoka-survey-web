@@ -1,4 +1,4 @@
-class SurveyBuilderV2.Views.SurveyView extends Backbone.View
+class SurveyBuilderV2.Views.SurveyView extends SurveyBuilderV2.Backbone.View
   events:
     "click .survey-header": "toggleCollapse"
     "click .update-survey": "updateModel"

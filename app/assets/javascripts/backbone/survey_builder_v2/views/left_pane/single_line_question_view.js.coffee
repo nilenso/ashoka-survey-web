@@ -1,4 +1,4 @@
-class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends Backbone.View
+class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilderV2.Backbone.View
   tagName: "div"
   className: "question"
 

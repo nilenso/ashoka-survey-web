@@ -1,4 +1,4 @@
-class SurveyBuilderV2.Views.SavingIndicatorView extends Backbone.View
+class SurveyBuilderV2.Views.SavingIndicatorView extends SurveyBuilderV2.Backbone.View
   el: "#saving-indicator"
 
   getProgress: => this.$el.find(".saving-indicator-progress")

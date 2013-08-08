@@ -1,4 +1,4 @@
-class SurveyBuilderV2.Models.SingleLineQuestionModel extends Backbone.Model
+class SurveyBuilderV2.Models.SingleLineQuestionModel extends SurveyBuilderV2.Backbone.Model
   urlRoot: "/api/questions"
 
   defaults:
