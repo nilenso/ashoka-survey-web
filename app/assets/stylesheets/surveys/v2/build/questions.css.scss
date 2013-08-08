@@ -41,6 +41,11 @@ div.survey-panes-left-pane {
 }
 
 .survey-panes-right-pane {
+  .question {
+    background-color: rgba(57, 147, 222, 0.2);
+    padding-bottom: 15px !important;
+  }
+
   .question-settings {
     overflow: hidden;
     background-color: #38587A;
