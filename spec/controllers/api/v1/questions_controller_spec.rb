@@ -104,7 +104,14 @@ module Api
             question = FactoryGirl.create(:question, :survey => survey)
             put :update, :id => question.id, :question => {:content => ""}
             response.status.should == 400
-            JSON.parse(response.body).should be_any {|m| m =~ /can\'t be blank/ }
+            JSON.parse(response.body)['errors'].should == { 'content' => ["can't be blank"] }
+          end
+
+          it "returns the full errors with a bad request status" do
+            question = FactoryGirl.create(:question, :survey => survey)
+            put :update, :id => question.id, :question => {:content => ""}
+            response.status.should == 400
+            JSON.parse(response.body)['full_errors'].should be_any {|m| m =~ /can\'t be blank/ }
           end
         end
 
