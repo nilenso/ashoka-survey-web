@@ -13,14 +13,6 @@ body#build_v2 {
     margin: 0;
   }
 
-  .sticky {
-    position: fixed;
-    top: 0;
-    z-index: 1000;
-    left: 21px;
-    right: 21px;
-  }
-
   .survey-builder-fullscreen-content {
     float: none;
     width: 100%;
@@ -45,6 +37,16 @@ body#build_v2 {
   .survey-actions {
     float: right;
     width: 68%;
+  }
+
+  #survey-action-bar {
+    &.sticky {
+      position: fixed;
+      top: 0;
+      z-index: 1000;
+      left: 21px;
+      right: 21px;
+    }
   }
 
   h3.survey-metadata-name {
@@ -125,6 +127,10 @@ body#build_v2 {
   .survey-panes {
     clear: both;
     padding: 0;
+    &.sticky {
+      position: relative;
+      top: 100px;
+    }
   }
 
   .survey-panes-left-pane {

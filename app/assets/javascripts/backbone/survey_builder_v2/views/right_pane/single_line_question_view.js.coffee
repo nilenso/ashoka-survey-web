@@ -8,16 +8,23 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuild
 
   initialize: (attributes) =>
     @model = attributes.model
+    @offset = attributes.offset
     @template = SMT["v2_survey_builder/surveys/right_pane/single_line_question"]
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
     @model.on("change:errors", @render)
 
   render: =>
     this.$el.html(@template(@model.attributes))
+    @setMargin()
+    return this
 
   updateModelContent: (event) =>
     content = $(event.target).val()
     @model.set({ content: content })
+
+  setMargin: =>
+    headerHeight = this.$el.offset().top
+    this.$el.find(".question").css('margin-top', @offset - headerHeight)
 
   updateModelSettings: (event) =>
     key = $(event.target).attr('id')

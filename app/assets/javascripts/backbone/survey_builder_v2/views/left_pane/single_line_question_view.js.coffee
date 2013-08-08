@@ -18,8 +18,11 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilde
   click: =>
     @trigger("clear_left_pane_selections", this)
     this.$el.addClass("active")
-    @right_pane_view = new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView({ model: @model })
+    @right_pane_view = new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView({ model: @model, offset: @getOffset() })
     @right_pane_view.render()
+
+  getOffset: =>
+    this.$el.offset().top - parseInt(this.$el.css("margin-top"))
 
   deselect: =>
     this.$el.removeClass("active")
