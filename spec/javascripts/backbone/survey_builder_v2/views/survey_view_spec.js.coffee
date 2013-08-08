@@ -56,7 +56,8 @@ describe "SurveyView", ->
       question.should.not.have.class("active")
 
     it "keeps only the current question selected", ->
-      [first, last] = $(".survey-panes-left-pane").children()
+      first = $(".survey-panes-left-pane").children().first()
+      last = $(".survey-panes-left-pane").children().last()
       first.click()
       $(first).should.have.class("active")
       $(last).should.not.have.class("active")
