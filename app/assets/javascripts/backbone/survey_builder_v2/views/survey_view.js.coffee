@@ -34,8 +34,8 @@ class SurveyBuilderV2.Views.SurveyView extends SurveyBuilderV2.Backbone.View
       success: @handleUpdateSuccess, error: @handleUpdateError)
 
   handleUpdateSuccess: (model, response, options) =>
-    @savingIndicator.hide()
     @model.unset("errors")
+    @savingIndicator.hide()
 
   handleUpdateError: (model, response, options) =>
     @savingIndicator.error()
@@ -54,6 +54,6 @@ class SurveyBuilderV2.Views.SurveyView extends SurveyBuilderV2.Backbone.View
 
   addQuestion: (attributes) =>
     el = this.$el.find(".question[data-id=#{attributes.id}]") if attributes.id
-    view = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView({ el: el, question: attributes })
+    view = new SurveyBuilderV2.Views.LeftPane.NumericQuestionView({ el: el, question: attributes })
     view.on("clear_left_pane_selections", @clearLeftPaneSelection)
     view
