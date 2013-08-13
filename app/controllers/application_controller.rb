@@ -1,6 +1,6 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery
-  before_filter :authorize_profiler, :set_locale, :session_token
+  before_filter :set_locale, :session_token
   helper_method :current_user_info, :register_path, :new_user_path, :current_ability
 
   def default_url_options(options={})
@@ -94,22 +94,16 @@ class ApplicationController < ActionController::Base
 
   private
 
-    def authorize_profiler
-      if Rails.env.development?
-        Rack::MiniProfiler.authorize_request
-      end
-    end
+  def set_locale
+    I18n.locale = params[:locale] || I18n.default_locale
+  end
 
-    def set_locale
-      I18n.locale = params[:locale] || I18n.default_locale
-    end
-
-    def mixpanel_env
-      {
-        'REMOTE_ADDR' => request.env['REMOTE_ADDR'],
-        'HTTP_X_FORWARDED_FOR' => request.env['HTTP_X_FORWARDED_FOR'],
-        'rack.session' => request.env['rack.session'].to_hash,
-        'mixpanel_events' => request.env['mixpanel_events']
-      }
-    end
+  def mixpanel_env
+    {
+      'REMOTE_ADDR' => request.env['REMOTE_ADDR'],
+      'HTTP_X_FORWARDED_FOR' => request.env['HTTP_X_FORWARDED_FOR'],
+      'rack.session' => request.env['rack.session'].to_hash,
+      'mixpanel_events' => request.env['mixpanel_events']
+    }
+  end
 end
