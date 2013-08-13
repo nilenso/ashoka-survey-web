@@ -46,6 +46,7 @@ group :assets do
   gem 'compass-rails', '~> 1.0.3'
   gem 'sass-rails',   '~> 3.2.3'
   gem 'coffee-rails', '~> 3.2.1'
+  gem 'coffee-script-source', '1.5.0'
   gem 'susy', '~> 1.0'
   gem 'compass-normalize', '~> 1.1.2'
   gem 'uglifier', '>= 1.0.3'
@@ -77,5 +78,4 @@ group :development do
   gem 'unicorn-rails', '~> 1.0.0'
   gem 'quiet_assets', '~> 1.0.1'
   gem 'rails-footnotes', '~> 3.7.9'
-  gem 'rack-mini-profiler', '~> 0.1.23'
 end
