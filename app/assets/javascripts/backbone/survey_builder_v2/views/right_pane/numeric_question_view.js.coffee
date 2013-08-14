@@ -1,6 +1,5 @@
 class SurveyBuilderV2.Views.RightPane.NumericQuestionView extends SurveyBuilderV2.Backbone.View
   el: ".survey-panes-right-pane"
-
   events:
     "keyup .question-content-textarea": "updateModelContent"
     "keyup .question-max-value-text": "updateModelMaxValue"

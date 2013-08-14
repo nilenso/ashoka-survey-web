@@ -70,9 +70,9 @@ div.survey-panes-left-pane {
     label, input { display: inline; }
     label { font-weight: 200; }
   }
-
-  .question-content, .question-max-value, .question-min-value {
-     margin: 15px;
+  
+  .question-fields, .question-content {
+    margin: 15px;
   }
 
   button.question-update {

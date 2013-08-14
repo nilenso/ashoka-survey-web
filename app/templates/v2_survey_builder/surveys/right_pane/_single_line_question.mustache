@@ -38,7 +38,14 @@
     <label class="question-content-label">Question Name <span class="question-content-label-error">{{ errors.content }}</span></label>
     <textarea class="question-content-textarea" placeholder="Add your question's name here.">{{ content }}</textarea>
   </div>
-
+    
+  <div class="question-answer-type question-fields">
+    <label class="question-answer-type-label">Answer Type <span class="question-content-label-error">{{ errors.content }}</span></label>
+    <select name="question-answer-type-select" id="question-answer-type-select">
+      <option value="SingleLineQuestion">Single Line Question</option>
+      <option value="NumericQuestion" selected>Numeric Question</option>
+    </select>
+  </div>
 
   <button class="survey-builder-action-button question-update">Update</button>
 </div>

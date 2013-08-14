@@ -1,12 +1,12 @@
 class SurveyBuilderV2.Views.LeftPane.NumericQuestionView extends SurveyBuilderV2.Backbone.View
   tagName: "div"
   className: "question"
-
-  events: =>
+  events:
     "click": "click"
 
   initialize: (attributes) =>
-    @model = new SurveyBuilderV2.Models.NumericQuestionModel(attributes.question)
+    @attributes = attributes
+    @model = new SurveyBuilderV2.Models.NumericQuestionModel(@attributes.question)
     @model.on("sync", @render)
     @template = SMT["v2_survey_builder/surveys/left_pane/numeric_question"]
 
@@ -17,7 +17,8 @@ class SurveyBuilderV2.Views.LeftPane.NumericQuestionView extends SurveyBuilderV2
   click: =>
     @trigger("clear_left_pane_selections", this)
     this.$el.addClass("active")
-    @right_pane_view = new SurveyBuilderV2.Views.RightPane.NumericQuestionView({ model: @model, offset: @getOffset() })
+    @right_pane_view = 
+      new SurveyBuilderV2.Views.RightPane.NumericQuestionView(model: @model, offset: @getOffset())
     @right_pane_view.render()
 
   getOffset: =>
@@ -26,4 +27,3 @@ class SurveyBuilderV2.Views.LeftPane.NumericQuestionView extends SurveyBuilderV2
   deselect: =>
     this.$el.removeClass("active")
     @right_pane_view.undelegateEvents()
-

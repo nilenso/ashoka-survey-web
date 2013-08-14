@@ -1,14 +1,18 @@
 class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuilderV2.Backbone.View
   el: ".survey-panes-right-pane"
-
   events:
     "keyup .question-content-textarea": "updateModelContent"
+    "change #question-answer-type-select": "updateView"
     "click .question-settings input": "updateModelSettings"
     "click .question-update": "saveQuestion"
+  
+  getLeftPane: => $(".survey-panes-left-pane")
 
   initialize: (attributes) =>
-    @model = attributes.model
-    @offset = attributes.offset
+    @attributes = attributes
+    @model = @attributes.model
+    @offset = @attributes.offset
+    @left = @attributes.left
     @template = SMT["v2_survey_builder/surveys/right_pane/single_line_question"]
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
     @model.on("change:errors", @render)
@@ -16,11 +20,12 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuild
   render: =>
     this.$el.html(@template(@model.attributes))
     @setMargin()
+    
     return this
 
   updateModelContent: (event) =>
     content = $(event.target).val()
-    @model.set({ content: content })
+    @model.set(content: content)
 
   setMargin: =>
     headerHeight = this.$el.offset().top
@@ -42,3 +47,20 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuild
   handleUpdateError: (model, response, options) =>
     @model.set(JSON.parse(response.responseText))
     @savingIndicator.error()
+        
+  updateView: (event) =>
+    option = $(event.target).val()
+    
+    if option == "SingleLineQuestion"
+      return
+      
+    if option == "NumericQuestion"
+      newView = new SurveyBuilderV2.Views.LeftPane.NumericQuestionView(@newLeftPaneParams())
+      console.log @getLeftPane(), newView.el, @left
+      @getLeftPane().append(newView.el)
+      @left.remove()
+      newView.render()
+  
+  newLeftPaneParams: =>
+    { el: @attributes.attributes.el, question: @attributes.attributes.question }
+    

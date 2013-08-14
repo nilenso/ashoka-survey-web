@@ -1,12 +1,12 @@
 class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilderV2.Backbone.View
   tagName: "div"
   className: "question"
-
-  events: =>
+  events:
     "click": "click"
 
   initialize: (attributes) =>
-    @model = new SurveyBuilderV2.Models.SingleLineQuestionModel(attributes.question)
+    @attributes = attributes
+    @model = new SurveyBuilderV2.Models.SingleLineQuestionModel(@attributes.question)
     @model.on("sync", @render)
     @template = SMT["v2_survey_builder/surveys/left_pane/single_line_question"]
 
@@ -17,7 +17,8 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilde
   click: =>
     @trigger("clear_left_pane_selections", this)
     this.$el.addClass("active")
-    @right_pane_view = new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView({ model: @model, offset: @getOffset() })
+    @right_pane_view =
+      new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView(model: @model, offset: @getOffset(), attributes: @attributes, left: this)
     @right_pane_view.render()
 
   getOffset: =>
@@ -26,4 +27,3 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilde
   deselect: =>
     this.$el.removeClass("active")
     @right_pane_view.undelegateEvents()
-
