@@ -6,8 +6,6 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuild
     "click .question-settings input": "updateModelSettings"
     "click .question-update": "saveQuestion"
   
-  getLeftPane: => $(".survey-panes-left-pane")
-
   initialize: (attributes) =>
     @attributes = attributes
     @model = @attributes.model
@@ -15,6 +13,7 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuild
     @left = @attributes.left
     @template = SMT["v2_survey_builder/surveys/right_pane/single_line_question"]
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
+    @switcher = new SurveyBuilderV2.Views.AnswerTypeSwitcher("SingleLineQuestion", @left, @attributes)
     @model.on("change:errors", @render)
 
   render: =>
@@ -49,18 +48,4 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuild
     @savingIndicator.error()
         
   updateView: (event) =>
-    option = $(event.target).val()
-    
-    if option == "SingleLineQuestion"
-      return
-      
-    if option == "NumericQuestion"
-      newView = new SurveyBuilderV2.Views.LeftPane.NumericQuestionView(@newLeftPaneParams())
-      console.log @getLeftPane(), newView.el, @left
-      @getLeftPane().append(newView.el)
-      @left.remove()
-      newView.render()
-  
-  newLeftPaneParams: =>
-    { el: @attributes.attributes.el, question: @attributes.attributes.question }
-    
+    @switcher.switch(event)  

@@ -2,7 +2,7 @@ class SurveyBuilderV2.Views.LeftPane.NumericQuestionView extends SurveyBuilderV2
   tagName: "div"
   className: "question"
   events:
-    "click": "click"
+    "click": "makeActive"
 
   initialize: (attributes) =>
     @attributes = attributes
@@ -14,7 +14,7 @@ class SurveyBuilderV2.Views.LeftPane.NumericQuestionView extends SurveyBuilderV2
     this.$el.html(@template(@model.attributes))
     return this
 
-  click: =>
+  makeActive: =>
     @trigger("clear_left_pane_selections", this)
     this.$el.addClass("active")
     @right_pane_view = 

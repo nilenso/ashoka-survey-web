@@ -2,7 +2,7 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilde
   tagName: "div"
   className: "question"
   events:
-    "click": "click"
+    "click": "makeActive"
 
   initialize: (attributes) =>
     @attributes = attributes
@@ -14,10 +14,13 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilde
     this.$el.html(@template(@model.attributes))
     return this
 
-  click: =>
+  makeActive: =>
     @trigger("clear_left_pane_selections", this)
     this.$el.addClass("active")
-    @right_pane_view =
+    @showRightView()
+  
+  showRightView: =>
+    @right_pane_view ||=
       new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView(model: @model, offset: @getOffset(), attributes: @attributes, left: this)
     @right_pane_view.render()
 
