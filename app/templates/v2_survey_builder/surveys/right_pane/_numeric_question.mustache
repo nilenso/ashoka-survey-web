@@ -35,23 +35,23 @@
   </div>
 
   <div class="question-content question-fields">
-    <label class="question-content-label">Question Name <span class="question-content-label-error">{{ errors.content }}</span></label>
+    <label class="question-content-label">Question Right Name <span class="question-content-label-error">{{ errors.content }}</span></label>
     <textarea class="question-content-textarea" placeholder="Add your question's name here.">{{ content }}</textarea>
   </div>
-  
+
   <div class="question-answer-type question-fields">
     <label class="question-answer-type-label">Answer Type <span class="question-content-label-error">{{ errors.content }}</span></label>
-    <select name="question-answer-type-select" id="question-answer-type-select">
+    <select name="question-answer-type-select" class="question-answer-type-select">
       <option value="SingleLineQuestion">Single Line Question</option>
-      <option value="NumericQuestion">Numeric Question</option>
+      <option value="NumericQuestion" selected>Numeric Question</option>
     </select>
   </div>
-  
+
   <div class="question-max-value question-fields">
     <label class="question-max-value-label">Max Value <span class="question-content-label-error">{{ errors.content }}</span></label>
     <input type="text" class="question-max-value-text" value="{{ max_value }}"/>
   </div>
-  
+
   <div class="question-min-value question-fields">
     <label class="question-min-value-label">Min Value <span class="question-content-label-error">{{ errors.content }}</span></label>
     <input type="text" class="question-min-value-text" value="{{ min_value }}"/>
