@@ -11,5 +11,5 @@ class SurveyBuilderV2.Views.LeftPane.NumericQuestionView extends SurveyBuilderV2
     @createRightView()
 
   createRightView: =>
-    @rightPaneView = new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView(model: @model, offset: @getOffset(), leftPaneView: this)
+    @rightPaneView = new SurveyBuilderV2.Views.RightPane.NumericQuestionView(model: @model, offset: @getOffset(), leftPaneView: this)
 
