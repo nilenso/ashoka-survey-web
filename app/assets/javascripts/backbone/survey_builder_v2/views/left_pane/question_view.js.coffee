@@ -4,6 +4,8 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
   events:
     "click": "makeActive"
 
+  getRightPane: => $(".survey-panes-right-pane")
+
   initialize: (attributes) =>
     @attributes = attributes
     @model.on("sync", @render)
@@ -18,12 +20,16 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
     @showRightView()
 
   showRightView: =>
-    @right_pane_view = @createRightView() unless @right_pane_view
-    @right_pane_view.render()
+    @getRightPane().append(@rightPaneView.el)
+    @rightPaneView.render()
 
   getOffset: =>
     this.$el.offset().top - parseInt(this.$el.css("margin-top"))
 
   deselect: =>
     this.$el.removeClass("active")
-    @right_pane_view.undelegateEvents()
+    @rightPaneView.undelegateEvents()
+
+  destroyAll: =>
+    this.remove()
+    @rightPaneView.remove()

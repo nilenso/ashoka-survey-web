@@ -1,5 +1,7 @@
 class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backbone.View
-  el: ".survey-panes-right-pane"
+  tagName: "div"
+  className: "question"
+  # el: ".survey-panes-right-pane"
 
   events:
     "change .question-answer-type-select": "updateView"
@@ -7,10 +9,10 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
     "click .question-update": "saveQuestion"
 
   initialize: (attributes) =>
-    @attributes = attributes
-    @model = @attributes.model
-    @offset = @attributes.offset
-    @left = @attributes.left
+    @model = attributes.model
+    @offset = attributes.offset
+    @leftPaneView = attributes.leftPaneView
+
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
     @model.on("change:errors", @render)
 
@@ -42,5 +44,4 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
     @savingIndicator.error()
 
   updateView: (event) =>
-    console.log "update"
     @switcher.switch(event)

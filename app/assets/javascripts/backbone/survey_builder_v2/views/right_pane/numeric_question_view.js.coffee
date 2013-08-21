@@ -12,7 +12,8 @@ class SurveyBuilderV2.Views.RightPane.NumericQuestionView extends SurveyBuilderV
     @template = SMT["v2_survey_builder/surveys/right_pane/numeric_question"]
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
     super(attributes)
-    @switcher = new SurveyBuilderV2.Views.AnswerTypeSwitcher("NumericQuestion", @left, attributes)
+
+    @switcher = new SurveyBuilderV2.Views.AnswerTypeSwitcher("NumericQuestion", @leftPaneView)
 
   updateModelContent: (event) =>
     content = $(event.target).val()

@@ -1,20 +1,25 @@
 class SurveyBuilderV2.Views.AnswerTypeSwitcher
-  constructor: (@source, @originalView, @attributes) ->
-    
+  constructor: (@source, @originaLeftView) ->
+
   getLeftPane: => $(".survey-panes-left-pane")
-    
+
   switch: (event) =>
     option = $(event.target).val()
+
     if option == @source
       return
-      
-    if option == "NumericQuestion"
-      newView = new SurveyBuilderV2.Views.LeftPane.NumericQuestionView(@newLeftPaneParams())
-      @getLeftPane().append(newView.el)
-      @originalView.remove()
-      newView.render()
-      newView.makeActive()
-    
-  newLeftPaneParams: =>
-    { el: @attributes.attributes.el, question: @attributes.attributes.question }
-  
+    else if option == "NumericQuestion"
+      newLeftView = new SurveyBuilderV2.Views.LeftPane.NumericQuestionView({survey_id: 15})
+    else if option == "SingleLineQuestion"
+      newLeftView = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView({survey_id: 15})
+
+    @addNewQuestionView(newLeftView)
+
+  addNewQuestionView: (newLeftView) =>
+    @destroyOldQuestion()
+    @getLeftPane().append(newLeftView.el)
+    newLeftView.render()
+    newLeftView.makeActive()
+
+  destroyOldQuestion: =>
+    @originaLeftView.destroyAll()
