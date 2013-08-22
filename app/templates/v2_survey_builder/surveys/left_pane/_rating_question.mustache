@@ -1,0 +1,22 @@
+<span class="question-number">
+    1.0
+  </span>
+<div class="question-details">
+  {{#content}}
+    <span class="question-details-content">{{content}}</span>
+  {{/content}}
+  {{^content}}
+    <span class="question-details-placeholder-content">Untitled Question</span>
+  {{/content}}
+  {{#mandatory}}
+    <span class="question-details-mandatory">*</span>
+  {{/mandatory}}
+  <div class="star" data-number-of-stars="" data-score="" style="cursor: pointer; width: 100px;">
+    <img src="/assets/star-off.png" alt="1" title="bad">
+    <img src="/assets/star-off.png" alt="2" title="poor">
+    <img src="/assets/star-off.png" alt="3" title="regular">
+    <img src="/assets/star-off.png" alt="4" title="good">
+    <img src="/assets/star-off.png" alt="5" title="gorgeous">
+    <input type="hidden" name="score" disabled/>
+  </div>
+</div>
