@@ -6,10 +6,10 @@
     <span class="question-details-content">{{content}}</span>
   {{/content}}
   {{^content}}
-    <span class="question-details-placeholder-content">Untitled Numeric Question</span>
+    <span class="question-details-placeholder-content">Untitled Question</span>
   {{/content}}
   {{#mandatory}}
     <span class="question-details-mandatory">*</span>
   {{/mandatory}}
-  <input type="number" class="question-details-input" min="{{ min_value }}" max="{{ max_value }}" disabled/>
+  <textarea class="question-details-input" disabled></textarea>
 </div>

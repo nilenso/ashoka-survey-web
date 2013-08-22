@@ -34,17 +34,17 @@
     </ul>
   </div>
 
-  <div class="question-content">
-    <label class="question-content-label">Question Name <span class="question-content-label-error">{{ errors.content }}</span></label>
+  <div class="question-content question-fields">
+    <label class="question-content-label">Question Right Name <span class="question-content-label-error">{{ errors.content }}</span></label>
     <textarea class="question-content-textarea" placeholder="Add your question's name here.">{{ content }}</textarea>
   </div>
 
   <div class="question-answer-type question-fields">
     <label class="question-answer-type-label">Answer Type <span class="question-content-label-error">{{ errors.content }}</span></label>
     <select name="question-answer-type-select" class="question-answer-type-select">
-      <option value="SingleLineQuestion" selected>Single Line Question</option>
+      <option value="SingleLineQuestion">Single Line Question</option>
       <option value="MultiLineQuestion">Multi Line Question</option>
-      <option value="DateQuestion">Date Question</option>
+      <option value="DateQuestion" selected>Date Question</option>
       <option value="RatingQuestion">Rating Question</option>
       <option value="NumericQuestion">Numeric Question</option>
     </select>
