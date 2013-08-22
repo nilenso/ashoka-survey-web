@@ -33,3 +33,6 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
   destroyAll: =>
     this.remove()
     @rightPaneView.remove()
+    @model.destroy()
+
+

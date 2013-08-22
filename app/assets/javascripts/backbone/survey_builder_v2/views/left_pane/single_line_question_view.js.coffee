@@ -5,7 +5,7 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilde
     "click": "makeActive"
 
   initialize: (attributes) =>
-    @model = new SurveyBuilderV2.Models.SingleLineQuestionModel(attributes.question)
+    @model = new SurveyBuilderV2.Models.SingleLineQuestionModel(attributes)
     @template = SMT["v2_survey_builder/surveys/left_pane/single_line_question"]
     super(attributes)
 

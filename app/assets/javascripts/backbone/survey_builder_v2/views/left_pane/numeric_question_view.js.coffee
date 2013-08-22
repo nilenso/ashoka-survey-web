@@ -5,7 +5,7 @@ class SurveyBuilderV2.Views.LeftPane.NumericQuestionView extends SurveyBuilderV2
     "click": "makeActive"
 
   initialize: (attributes) =>
-    @model = new SurveyBuilderV2.Models.NumericQuestionModel(attributes.question)
+    @model = new SurveyBuilderV2.Models.NumericQuestionModel(attributes)
     @template = SMT["v2_survey_builder/surveys/left_pane/numeric_question"]
     super(attributes)
     @createRightView()
