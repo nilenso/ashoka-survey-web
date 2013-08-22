@@ -1,26 +1,26 @@
 class SurveyBuilderV2.Views.AnswerTypeSwitcher
-  constructor: (@source, @originaLeftView) ->
+  @switch: (source, targetEvent, originaLeftView, question) =>
+    target = $(targetEvent.target).val()
+    return if source == target
+    originaLeftView.destroyAll()
+    SurveyBuilderV2.Views.QuestionCreator.render(target, null, question).render()
 
-  getLeftPane: => $(".survey-panes-left-pane")
-
-  switch: (event) =>
-    option = $(event.target).val()
-
-    if option == @source
-      return
-    else if option == "NumericQuestion"
-      newLeftView = new SurveyBuilderV2.Views.LeftPane.NumericQuestionView({survey_id: 16})
-    else if option == "SingleLineQuestion"
-      newLeftView = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView({survey_id: 16})
+class SurveyBuilderV2.Views.QuestionCreator
+  @render: (type, el, question) =>
+    if type == "NumericQuestion"
+      newLeftView = new SurveyBuilderV2.Views.LeftPane.NumericQuestionView(el: el, question: question)
+    else if type == "SingleLineQuestion"
+      newLeftView = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView(el: el, question: question)
+    else
+      newLeftView = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView(el: el, question: question)
 
     @addNewQuestionView(newLeftView)
+    newLeftView
 
-  addNewQuestionView: (newLeftView) =>
-    @destroyOldQuestion()
+  @getLeftPane: => $(".survey-panes-left-pane")
+
+  @addNewQuestionView: (newLeftView) =>
     newLeftView.on("clear_left_pane_selections", @clearLeftPaneSelection)
     @getLeftPane().append(newLeftView.el)
     newLeftView.render()
     newLeftView.makeActive()
-
-  destroyOldQuestion: =>
-    @originaLeftView.destroyAll()

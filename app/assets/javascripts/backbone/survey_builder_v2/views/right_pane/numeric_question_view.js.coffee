@@ -13,8 +13,7 @@ class SurveyBuilderV2.Views.RightPane.NumericQuestionView extends SurveyBuilderV
     @template = SMT["v2_survey_builder/surveys/right_pane/numeric_question"]
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
     super(attributes)
-
-    @switcher = new SurveyBuilderV2.Views.AnswerTypeSwitcher("NumericQuestion", @leftPaneView)
+    @questionTemp = attributes.question
 
   updateModelContent: (event) =>
     content = $(event.target).val()
@@ -27,3 +26,7 @@ class SurveyBuilderV2.Views.RightPane.NumericQuestionView extends SurveyBuilderV
   updateModelMinValue: (event) =>
     val = parseInt($(event.target).val())
     @model.set(min_value: val)
+
+  updateView: (event) =>
+    SurveyBuilderV2.Views.AnswerTypeSwitcher.switch("NumericQuestion", event, @leftPaneView, @model.dup())
+

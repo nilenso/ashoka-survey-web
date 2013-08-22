@@ -10,10 +10,11 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuild
   initialize: (attributes) =>
     @template = SMT["v2_survey_builder/surveys/right_pane/single_line_question"]
     super(attributes)
-
-    @switcher = new SurveyBuilderV2.Views.AnswerTypeSwitcher("SingleLineQuestion",
-      @leftPaneView)
+    @questionTemp = attributes.question
 
   updateModelContent: (event) =>
     content = $(event.target).val()
     @model.set(content: content)
+
+  updateView: (event) =>
+    SurveyBuilderV2.Views.AnswerTypeSwitcher.switch("SingleLineQuestion", event, @leftPaneView, @model.dup())

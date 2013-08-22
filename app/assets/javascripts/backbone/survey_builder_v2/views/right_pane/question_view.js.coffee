@@ -1,6 +1,5 @@
 class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backbone.View
-  tagName: 'div'
-  className: 'question'
+  el: '.survey-panes-right-pane'
 
   initialize: (attributes) =>
     @model = attributes.model
@@ -36,6 +35,3 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
   handleUpdateError: (model, response, options) =>
     @model.set(JSON.parse(response.responseText))
     @savingIndicator.error()
-
-  updateView: (event) =>
-    @switcher.switch(event)

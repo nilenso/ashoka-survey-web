@@ -54,6 +54,7 @@ class SurveyBuilderV2.Views.SurveyView extends SurveyBuilderV2.Backbone.View
 
   addQuestion: (attributes) =>
     el = this.$el.find(".question[data-id=#{attributes.id}]") if attributes.id
-    view = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView(el: el, question: attributes)
+    type = el.data("type") if attributes.type
+    view = SurveyBuilderV2.Views.QuestionCreator.render(type, el, attributes)
     view.on("clear_left_pane_selections", @clearLeftPaneSelection)
     view

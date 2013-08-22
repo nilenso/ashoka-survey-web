@@ -20,7 +20,7 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
     @showRightView()
 
   showRightView: =>
-    @getRightPane().append(@rightPaneView.el)
+    $('.survey-panes').append("<div class='survey-panes-right-pane'></div>") #unless $(".survey-panes-right-pane").length
     @rightPaneView.render()
 
   getOffset: =>
