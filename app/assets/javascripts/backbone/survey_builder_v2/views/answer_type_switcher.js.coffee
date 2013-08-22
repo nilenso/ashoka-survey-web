@@ -12,6 +12,8 @@ class SurveyBuilderV2.Views.AnswerTypeSwitcher
       newLeftView = new SurveyBuilderV2.Views.LeftPane.NumericQuestionView({survey_id: 15})
     else if option == "SingleLineQuestion"
       newLeftView = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView({survey_id: 15})
+    else if option == "MultiLineQuestion"
+      newLeftView = new SurveyBuilderV2.Views.LeftPane.MultiLineQuestionView({survey_id: 15})
 
     @addNewQuestionView(newLeftView)
 
