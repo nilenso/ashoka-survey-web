@@ -1,12 +1,6 @@
 class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backbone.View
-  tagName: "div"
-  className: "question"
-  # el: ".survey-panes-right-pane"
-
-  events:
-    "change .question-answer-type-select": "updateView"
-    "click .question-settings input": "updateModelSettings"
-    "click .question-update": "saveQuestion"
+  tagName: 'div'
+  className: 'question'
 
   initialize: (attributes) =>
     @model = attributes.model

@@ -1,61 +1,59 @@
-<div class="question">
-  <div class="question-settings">
-    <ul class="question-settings-list">
-      <li class="question-settings-list-item">
-        <span class="question-settings-list-item-question-number">2.0</span>
-      </li>
-      <li class="question-settings-list-item">
-        {{#mandatory}}
-          <input type="checkbox" id="mandatory" checked/>
-        {{/mandatory}}
-        {{^mandatory}}
-          <input type="checkbox" id="mandatory"/>
-        {{/mandatory}}
-        <label for="mandatory" title="A mandatory question is required to have an answer.">Mandatory</label>
-      </li>
-      <li class="question-settings-list-item">
-        {{#identifier}}
-        <input type="checkbox" id="identifier" checked/>
-        {{/identifier}}
-        {{^identifier}}
-        <input type="checkbox" id="identifier"/>
-        {{/identifier}}
-        <label for="identifier" title="An identifier question will show in a response listing.">Identifier</label>
-      </li>
-      <li class="question-settings-list-item">
-        {{#private}}
-          <input type="checkbox" id="private" checked/>
-        {{/private}}
-        {{^private}}
-          <input type="checkbox" id="private"/>
-        {{/private}}
-        <label for="private" title="Answers to a private question can be filtered out of excel reports.">Private</label>
-      </li>
-    </ul>
-  </div>
-
-  <div class="question-content question-fields">
-    <label class="question-content-label">Question Right Name <span class="question-content-label-error">{{ errors.content }}</span></label>
-    <textarea class="question-content-textarea" placeholder="Add your question's name here.">{{ content }}</textarea>
-  </div>
-
-  <div class="question-answer-type question-fields">
-    <label class="question-answer-type-label">Answer Type <span class="question-content-label-error">{{ errors.content }}</span></label>
-    <select name="question-answer-type-select" class="question-answer-type-select">
-      <option value="SingleLineQuestion">Single Line Question</option>
-      <option value="NumericQuestion" selected>Numeric Question</option>
-    </select>
-  </div>
-
-  <div class="question-max-value question-fields">
-    <label class="question-max-value-label">Max Value <span class="question-content-label-error">{{ errors.content }}</span></label>
-    <input type="text" class="question-max-value-text" value="{{ max_value }}"/>
-  </div>
-
-  <div class="question-min-value question-fields">
-    <label class="question-min-value-label">Min Value <span class="question-content-label-error">{{ errors.content }}</span></label>
-    <input type="text" class="question-min-value-text" value="{{ min_value }}"/>
-  </div>
-
-  <button class="survey-builder-action-button question-update">Update</button>
+<div class="question-settings">
+  <ul class="question-settings-list">
+    <li class="question-settings-list-item">
+      <span class="question-settings-list-item-question-number">2.0</span>
+    </li>
+    <li class="question-settings-list-item">
+      {{#mandatory}}
+        <input type="checkbox" id="mandatory" checked/>
+      {{/mandatory}}
+      {{^mandatory}}
+        <input type="checkbox" id="mandatory"/>
+      {{/mandatory}}
+      <label for="mandatory" title="A mandatory question is required to have an answer.">Mandatory</label>
+    </li>
+    <li class="question-settings-list-item">
+      {{#identifier}}
+      <input type="checkbox" id="identifier" checked/>
+      {{/identifier}}
+      {{^identifier}}
+      <input type="checkbox" id="identifier"/>
+      {{/identifier}}
+      <label for="identifier" title="An identifier question will show in a response listing.">Identifier</label>
+    </li>
+    <li class="question-settings-list-item">
+      {{#private}}
+        <input type="checkbox" id="private" checked/>
+      {{/private}}
+      {{^private}}
+        <input type="checkbox" id="private"/>
+      {{/private}}
+      <label for="private" title="Answers to a private question can be filtered out of excel reports.">Private</label>
+    </li>
+  </ul>
 </div>
+
+<div class="question-content question-fields">
+  <label class="question-content-label">Question Right Name <span class="question-content-label-error">{{ errors.content }}</span></label>
+  <textarea class="question-content-textarea" placeholder="Add your question's name here.">{{ content }}</textarea>
+</div>
+
+<div class="question-answer-type question-fields">
+  <label class="question-answer-type-label">Answer Type <span class="question-content-label-error">{{ errors.content }}</span></label>
+  <select name="question-answer-type-select" class="question-answer-type-select">
+    <option value="SingleLineQuestion">Single Line Question</option>
+    <option value="NumericQuestion" selected>Numeric Question</option>
+  </select>
+</div>
+
+<div class="question-max-value question-fields">
+  <label class="question-max-value-label">Max Value <span class="question-content-label-error">{{ errors.content }}</span></label>
+  <input type="text" class="question-max-value-text" value="{{ max_value }}"/>
+</div>
+
+<div class="question-min-value question-fields">
+  <label class="question-min-value-label">Min Value <span class="question-content-label-error">{{ errors.content }}</span></label>
+  <input type="text" class="question-min-value-text" value="{{ min_value }}"/>
+</div>
+
+<button class="survey-builder-action-button question-update">Update</button>

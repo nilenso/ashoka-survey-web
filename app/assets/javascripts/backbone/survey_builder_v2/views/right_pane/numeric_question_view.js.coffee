@@ -3,6 +3,7 @@
 class SurveyBuilderV2.Views.RightPane.NumericQuestionView extends SurveyBuilderV2.Views.RightPane.QuestionView
   events:
     "change .question-answer-type-select": "updateView"
+    "change .question-content-textarea": "updateModelContent"
     "click .question-settings input": "updateModelSettings"
     "keyup .question-max-value-text": "updateModelMaxValue"
     "keyup .question-min-value-text": "updateModelMinValue"
