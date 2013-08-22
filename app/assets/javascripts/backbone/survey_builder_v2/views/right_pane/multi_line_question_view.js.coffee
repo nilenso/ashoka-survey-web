@@ -10,9 +10,9 @@ class SurveyBuilderV2.Views.RightPane.MultiLineQuestionView extends SurveyBuilde
     @template = SMT["v2_survey_builder/surveys/right_pane/multi_line_question"]
     super(attributes)
 
-    @switcher = new SurveyBuilderV2.Views.AnswerTypeSwitcher("MultiLineQuestion",
-      @leftPaneView)
-
   updateModelContent: (event) =>
     content = $(event.target).val()
     @model.set(content: content)
+
+  updateView: (event) =>
+    SurveyBuilderV2.Views.AnswerTypeSwitcher.switch("MultiLineQuestion", event, @leftPaneView, @model.dup())

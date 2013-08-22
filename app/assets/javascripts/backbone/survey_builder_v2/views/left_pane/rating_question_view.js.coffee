@@ -9,4 +9,5 @@ class SurveyBuilderV2.Views.LeftPane.RatingQuestionView extends SurveyBuilderV2.
     @template = SMT["v2_survey_builder/surveys/left_pane/rating_question"]
     super(attributes)
 
-    @rightPaneView = new SurveyBuilderV2.Views.RightPane.RatingQuestionView(model: @model, offset: @getOffset(), leftPaneView: this)
+    rightPaneParams = model: @model, offset: @getOffset(), leftPaneView: this, question: attributes.question
+    @rightPaneView = new SurveyBuilderV2.Views.RightPane.RatingQuestionView(rightPaneParams)

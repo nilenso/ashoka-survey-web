@@ -9,4 +9,5 @@ class SurveyBuilderV2.Views.LeftPane.MultiLineQuestionView extends SurveyBuilder
     @template = SMT["v2_survey_builder/surveys/left_pane/multi_line_question"]
     super(attributes)
 
-    @rightPaneView = new SurveyBuilderV2.Views.RightPane.MultiLineQuestionView(model: @model, offset: @getOffset(), leftPaneView: this)
+    rightPaneParams = model: @model, offset: @getOffset(), leftPaneView: this, question: attributes.question
+    @rightPaneView = new SurveyBuilderV2.Views.RightPane.MultiLineQuestionView(rightPaneParams)

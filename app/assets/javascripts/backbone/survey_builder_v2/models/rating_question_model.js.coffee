@@ -1,8 +1,5 @@
-class SurveyBuilderV2.Models.RatingQuestionModel extends SurveyBuilderV2.Backbone.Model
-  urlRoot: "/api/questions"
+##= require ./question_model
 
+class SurveyBuilderV2.Models.RatingQuestionModel extends SurveyBuilderV2.Models.QuestionModel
   defaults:
     "type": "RatingQuestion"
-
-  initialize: =>
-    @set("order_number", Math.floor(Math.random() * 100000))

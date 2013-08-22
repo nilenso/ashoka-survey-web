@@ -10,7 +10,6 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuild
   initialize: (attributes) =>
     @template = SMT["v2_survey_builder/surveys/right_pane/single_line_question"]
     super(attributes)
-    @questionTemp = attributes.question
 
   updateModelContent: (event) =>
     content = $(event.target).val()

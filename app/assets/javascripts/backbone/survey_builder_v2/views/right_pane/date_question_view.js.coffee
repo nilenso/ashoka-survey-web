@@ -10,9 +10,9 @@ class SurveyBuilderV2.Views.RightPane.DateQuestionView extends SurveyBuilderV2.V
     @template = SMT["v2_survey_builder/surveys/right_pane/date_question"]
     super(attributes)
 
-    @switcher = new SurveyBuilderV2.Views.AnswerTypeSwitcher("DateQuestion",
-      @leftPaneView)
-
   updateModelContent: (event) =>
     content = $(event.target).val()
     @model.set(content: content)
+
+  updateView: (event) =>
+    SurveyBuilderV2.Views.AnswerTypeSwitcher.switch("DateQuestion", event, @leftPaneView, @model.dup())

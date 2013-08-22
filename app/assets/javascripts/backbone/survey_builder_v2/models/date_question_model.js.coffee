@@ -1,8 +1,5 @@
-class SurveyBuilderV2.Models.DateQuestionModel extends SurveyBuilderV2.Backbone.Model
-  urlRoot: "/api/questions"
+##= require ./question_model
 
+class SurveyBuilderV2.Models.DateQuestionModel extends SurveyBuilderV2.Models.QuestionModel
   defaults:
     "type": "DateQuestion"
-
-  initialize: =>
-    @set("order_number", Math.floor(Math.random() * 100000))
