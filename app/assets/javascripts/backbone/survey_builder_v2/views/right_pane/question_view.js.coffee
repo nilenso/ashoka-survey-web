@@ -35,3 +35,6 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
   handleUpdateError: (model, response, options) =>
     @model.set(JSON.parse(response.responseText))
     @savingIndicator.error()
+
+  updateView: (event) =>
+    SurveyBuilderV2.Views.AnswerTypeSwitcher.switch(@viewType(), event, @leftPaneView, @model.dup())

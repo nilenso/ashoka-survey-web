@@ -27,6 +27,5 @@ class SurveyBuilderV2.Views.RightPane.NumericQuestionView extends SurveyBuilderV
     val = parseInt($(event.target).val())
     @model.set(min_value: val)
 
-  updateView: (event) =>
-    SurveyBuilderV2.Views.AnswerTypeSwitcher.switch("NumericQuestion", event, @leftPaneView, @model.dup())
-
+  viewType: =>
+    "NumericQuestion"

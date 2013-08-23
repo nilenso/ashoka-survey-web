@@ -14,5 +14,5 @@ class SurveyBuilderV2.Views.RightPane.MultiLineQuestionView extends SurveyBuilde
     content = $(event.target).val()
     @model.set(content: content)
 
-  updateView: (event) =>
-    SurveyBuilderV2.Views.AnswerTypeSwitcher.switch("MultiLineQuestion", event, @leftPaneView, @model.dup())
+  viewType: =>
+    "MultiLineQuestion"

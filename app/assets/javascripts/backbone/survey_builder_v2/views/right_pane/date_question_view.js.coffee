@@ -14,5 +14,5 @@ class SurveyBuilderV2.Views.RightPane.DateQuestionView extends SurveyBuilderV2.V
     content = $(event.target).val()
     @model.set(content: content)
 
-  updateView: (event) =>
-    SurveyBuilderV2.Views.AnswerTypeSwitcher.switch("DateQuestion", event, @leftPaneView, @model.dup())
+  viewType: =>
+    "DateQuestion"

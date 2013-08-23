@@ -15,5 +15,5 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuild
     content = $(event.target).val()
     @model.set(content: content)
 
-  updateView: (event) =>
-    SurveyBuilderV2.Views.AnswerTypeSwitcher.switch("SingleLineQuestion", event, @leftPaneView, @model.dup())
+  viewType: =>
+    "SingleLineQuestion"
