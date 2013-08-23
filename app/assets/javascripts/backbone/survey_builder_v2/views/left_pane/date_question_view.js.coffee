@@ -9,5 +9,5 @@ class SurveyBuilderV2.Views.LeftPane.DateQuestionView extends SurveyBuilderV2.Vi
     @template = SMT["v2_survey_builder/surveys/left_pane/date_question"]
     super(attributes)
 
-    rightPaneParams = model: @model, offset: @getOffset(), leftPaneView: this, question: attributes.question
+    rightPaneParams = model: @model, leftPaneView: this, question: attributes.question
     @rightPaneView = new SurveyBuilderV2.Views.RightPane.DateQuestionView(rightPaneParams)

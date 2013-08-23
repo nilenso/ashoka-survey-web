@@ -12,7 +12,6 @@ class SurveyBuilderV2.Views.RightPane.MultiLineQuestionView extends SurveyBuilde
     super(attributes)
 
   updateModelContent: (event) =>
-    console.log "updating content"
     content = $(event.target).val()
     @model.set(content: content)
 

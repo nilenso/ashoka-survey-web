@@ -3,22 +3,21 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
 
   initialize: (attributes) =>
     @model = attributes.model
-    @offset = attributes.offset
     @leftPaneView = attributes.leftPaneView
 
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
     @model.on("change:errors", @render)
 
-  render: =>
+  render:(offset) =>
     this.delegateEvents()
     this.$el.html(@template(@model.attributes))
-    @setMargin()
+    @setMargin(offset)
 
     return this
 
-  setMargin: =>
+  setMargin: (offset) =>
     headerHeight = this.$el.offset().top
-    this.$el.find(".question").css('margin-top', @offset - headerHeight)
+    this.$el.find(".question").css('margin-top', offset - headerHeight)
 
   updateModelSettings: (event) =>
     key = $(event.target).attr('id')
@@ -38,7 +37,6 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
     @savingIndicator.error()
 
   updateView: (event) =>
-    console.log "switching view from", @viewType()
     SurveyBuilderV2.Views.AnswerTypeSwitcher.switch(@viewType(), event, @leftPaneView, @model.dup())
 
   destroyView: =>

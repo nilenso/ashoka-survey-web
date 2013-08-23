@@ -12,7 +12,6 @@ class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuild
     super(attributes)
 
   updateModelContent: (event) =>
-    console.log "updating content"
     content = $(event.target).val()
     @model.set(content: content)
 

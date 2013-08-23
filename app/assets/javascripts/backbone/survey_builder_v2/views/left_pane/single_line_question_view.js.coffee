@@ -9,5 +9,5 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilde
     @template = SMT["v2_survey_builder/surveys/left_pane/single_line_question"]
     super(attributes)
 
-    rightPaneParams = model: @model, offset: @getOffset(), leftPaneView: this, question: attributes.question
+    rightPaneParams = model: @model, leftPaneView: this, question: attributes.question
     @rightPaneView = new SurveyBuilderV2.Views.RightPane.SingleLineQuestionView(rightPaneParams)

@@ -9,6 +9,6 @@ class SurveyBuilderV2.Views.LeftPane.NumericQuestionView extends SurveyBuilderV2
     @template = SMT["v2_survey_builder/surveys/left_pane/numeric_question"]
     super(attributes)
 
-    rightPaneParams = model: @model, offset: @getOffset(), leftPaneView: this, question: attributes.question
+    rightPaneParams = model: @model, leftPaneView: this, question: attributes.question
     @rightPaneView = new SurveyBuilderV2.Views.RightPane.NumericQuestionView(rightPaneParams)
 

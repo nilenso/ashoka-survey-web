@@ -20,7 +20,7 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
     @showRightView()
 
   showRightView: =>
-    @rightPaneView.render()
+    @rightPaneView.render(@getOffset())
 
   getOffset: =>
     this.$el.offset().top - parseInt(this.$el.css("margin-top"))
@@ -35,7 +35,6 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
     @destroyView()
 
   destroyView: =>
-    console.log "destroy view"
     this.undelegateEvents();
     this.$el.removeData().unbind();
     this.remove();
