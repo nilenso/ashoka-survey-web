@@ -10,6 +10,7 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
     @model.on("change:errors", @render)
 
   render: =>
+    this.delegateEvents()
     this.$el.html(@template(@model.attributes))
     @setMargin()
 

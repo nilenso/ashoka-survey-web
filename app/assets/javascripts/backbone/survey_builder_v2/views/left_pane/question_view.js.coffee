@@ -35,6 +35,7 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
     @destroyView()
 
   destroyView: =>
+    console.log "destroy view"
     this.undelegateEvents();
     this.$el.removeData().unbind();
     this.remove();
