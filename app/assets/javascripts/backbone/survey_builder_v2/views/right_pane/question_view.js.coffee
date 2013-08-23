@@ -37,6 +37,7 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
     @savingIndicator.error()
 
   updateView: (event) =>
+    console.log "switching view from", @viewType()
     SurveyBuilderV2.Views.AnswerTypeSwitcher.switch(@viewType(), event, @leftPaneView, @model.dup())
 
   destroyView: =>

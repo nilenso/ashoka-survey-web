@@ -1,6 +1,7 @@
 class SurveyBuilderV2.Views.AnswerTypeSwitcher
   @switch: (source, targetEvent, originaLeftView, question) =>
     target = $(targetEvent.target).val()
+    console.log "swtiching to", target
     return if source == target
     originaLeftView.destroyAll()
     $('.survey-panes').append("<div class='survey-panes-right-pane'></div>") #unless $(".survey-panes-right-pane").length
@@ -21,6 +22,7 @@ class SurveyBuilderV2.Views.QuestionCreator
     else
       newLeftView = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView(el: el, question: question)
 
+    console.log "created new", newLeftView
     @addNewQuestionView(newLeftView)
     newLeftView
 
