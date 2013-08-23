@@ -20,7 +20,6 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
     @showRightView()
 
   showRightView: =>
-    $('.survey-panes').append("<div class='survey-panes-right-pane'></div>") #unless $(".survey-panes-right-pane").length
     @rightPaneView.render()
 
   getOffset: =>
@@ -31,8 +30,12 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
     @rightPaneView.undelegateEvents()
 
   destroyAll: =>
-    this.remove()
-    @rightPaneView.remove()
+    @rightPaneView.destroyView()
     @model.destroy()
+    @destroyView()
 
-
+  destroyView: =>
+    this.undelegateEvents();
+    this.$el.removeData().unbind();
+    this.remove();
+    Backbone.View.prototype.remove.call(this);

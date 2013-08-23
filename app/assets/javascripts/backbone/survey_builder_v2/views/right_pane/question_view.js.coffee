@@ -38,3 +38,9 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
 
   updateView: (event) =>
     SurveyBuilderV2.Views.AnswerTypeSwitcher.switch(@viewType(), event, @leftPaneView, @model.dup())
+
+  destroyView: =>
+    this.undelegateEvents();
+    this.$el.removeData().unbind();
+    this.remove();
+    Backbone.View.prototype.remove.call(this);

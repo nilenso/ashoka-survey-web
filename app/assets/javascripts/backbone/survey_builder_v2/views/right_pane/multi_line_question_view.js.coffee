@@ -2,6 +2,7 @@
 
 class SurveyBuilderV2.Views.RightPane.MultiLineQuestionView extends SurveyBuilderV2.Views.RightPane.QuestionView
   events:
+    "change .question-content-textarea": "updateModelContent"
     "change .question-answer-type-select": "updateView"
     "click .question-settings input": "updateModelSettings"
     "click .question-update": "saveQuestion"
@@ -15,4 +16,4 @@ class SurveyBuilderV2.Views.RightPane.MultiLineQuestionView extends SurveyBuilde
     @model.set(content: content)
 
   viewType: =>
-    "MultiLineQuestion"
+    "MultilineQuestion"

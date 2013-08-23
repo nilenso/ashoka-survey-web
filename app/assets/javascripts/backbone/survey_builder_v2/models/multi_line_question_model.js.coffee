@@ -2,4 +2,4 @@
 
 class SurveyBuilderV2.Models.MultiLineQuestionModel extends SurveyBuilderV2.Models.QuestionModel
   defaults:
-    "type": "MultiLineQuestion"
+    "type": "MultilineQuestion"
