@@ -1,0 +1,14 @@
+<span class="question-number">
+    1.0
+  </span>
+<div class="question-details">
+  {{#content}}
+    <span class="question-details-content">{{content}}</span>
+  {{/content}}
+  {{^content}}
+    <span class="question-details-placeholder-content">Untitled Question</span>
+  {{/content}}
+  {{#mandatory}}
+    <span class="question-details-mandatory">*</span>
+  {{/mandatory}}
+</div>
