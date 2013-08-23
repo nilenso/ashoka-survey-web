@@ -15,7 +15,7 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
     return this
 
   makeActive: =>
-    @trigger("clear_left_pane_selections", this)
+    globalMessageBus.trigger("clear_left_pane_selections", this)
     this.$el.addClass("active")
     @showRightView()
 

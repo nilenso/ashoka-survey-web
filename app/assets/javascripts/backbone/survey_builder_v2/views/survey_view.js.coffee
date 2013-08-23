@@ -11,6 +11,8 @@ class SurveyBuilderV2.Views.SurveyView extends SurveyBuilderV2.Backbone.View
     @editableTemplate = SMT["v2_survey_builder/surveys/header_edit"]
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
 
+    globalMessageBus.bind("clear_left_pane_selections", @clearLeftPaneSelection)
+
     questions = _(attributes.questions).map(@addQuestion)
     _(questions).first().makeActive() if questions.length > 0
 
@@ -43,6 +45,7 @@ class SurveyBuilderV2.Views.SurveyView extends SurveyBuilderV2.Backbone.View
     @toggleCollapse()
 
   clearLeftPaneSelection: (view) =>
+    console.log "last active view", view
     @currentlyActiveView.deselect() if @currentlyActiveView
     @currentlyActiveView = view
 
@@ -55,6 +58,5 @@ class SurveyBuilderV2.Views.SurveyView extends SurveyBuilderV2.Backbone.View
   addQuestion: (attributes) =>
     el = this.$el.find(".question[data-id=#{attributes.id}]") if attributes.id
     type = el.data("type") if attributes.type
-    view = SurveyBuilderV2.Views.QuestionCreator.render(type, el, attributes)
-    view.on("clear_left_pane_selections", @clearLeftPaneSelection)
+    view = SurveyBuilderV2.Views.QuestionCreator.render(type, el, attributes, @clearLeftPaneSelection)
     view

@@ -29,7 +29,6 @@ class SurveyBuilderV2.Views.QuestionCreator
   @getLeftPane: => $(".survey-panes-left-pane")
 
   @addNewQuestionView: (newLeftView) =>
-    newLeftView.on("clear_left_pane_selections", @clearLeftPaneSelection)
     @getLeftPane().append(newLeftView.el)
     newLeftView.render()
     newLeftView.makeActive()
