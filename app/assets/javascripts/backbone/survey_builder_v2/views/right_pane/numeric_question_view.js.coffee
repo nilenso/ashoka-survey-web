@@ -9,11 +9,8 @@ class SurveyBuilderV2.Views.RightPane.NumericQuestionView extends SurveyBuilderV
     "keyup .question-min-value-text": "updateModelMinValue"
     "click .question-update": "saveQuestion"
 
-  initialize: (attributes) =>
-    @template = SMT["v2_survey_builder/surveys/right_pane/numeric_question"]
-    @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
-    super(attributes)
-    @questionTemp = attributes.question
+  templatePath: =>
+    "v2_survey_builder/surveys/right_pane/numeric_question"
 
   updateModelContent: (event) =>
     content = $(event.target).val()
@@ -29,3 +26,4 @@ class SurveyBuilderV2.Views.RightPane.NumericQuestionView extends SurveyBuilderV
 
   viewType: =>
     "NumericQuestion"
+

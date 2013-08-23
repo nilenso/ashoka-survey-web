@@ -7,13 +7,22 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
 
     @savingIndicator = new SurveyBuilderV2.Views.SavingIndicatorView
     @model.on("change:errors", @render)
+    @template = SMT[this.templatePath()]
 
   render:(offset) =>
     this.delegateEvents()
+
     this.$el.html(@template(@model.attributes))
     @setMargin(offset)
+    @selectType()
 
     return this
+
+  templatePath: =>
+    "v2_survey_builder/surveys/right_pane/question_without_options"
+
+  selectType: =>
+    $el.find(".question-answer-type-select").find("option[value=#{@viewType()}]").attr("selected", true)
 
   setMargin: (offset) =>
     headerHeight = this.$el.offset().top

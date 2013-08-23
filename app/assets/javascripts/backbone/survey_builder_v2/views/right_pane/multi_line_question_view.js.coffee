@@ -7,10 +7,6 @@ class SurveyBuilderV2.Views.RightPane.MultiLineQuestionView extends SurveyBuilde
     "click .question-settings input": "updateModelSettings"
     "click .question-update": "saveQuestion"
 
-  initialize: (attributes) =>
-    @template = SMT["v2_survey_builder/surveys/right_pane/multi_line_question"]
-    super(attributes)
-
   updateModelContent: (event) =>
     content = $(event.target).val()
     @model.set(content: content)
