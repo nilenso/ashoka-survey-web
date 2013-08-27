@@ -1,9 +1,9 @@
-##= require ./question_without_options_view
+##= require ./question_with_options_view
 
-class SurveyBuilderV2.Views.RightPane.RatingQuestionView extends SurveyBuilderV2.Views.RightPane.QuestionWithoutOptionsView
+class SurveyBuilderV2.Views.RightPane.MultiChoiceQuestionView extends SurveyBuilderV2.Views.RightPane.QuestionWithOptionsView
   events:
-    "change .question-answer-type-select": "updateView"
     "change .question-content-textarea": "updateModelContent"
+    "change .question-answer-type-select": "updateView"
     "click .question-settings input": "updateModelSettings"
     "click .question-update": "saveQuestion"
 
@@ -12,4 +12,4 @@ class SurveyBuilderV2.Views.RightPane.RatingQuestionView extends SurveyBuilderV2
     @model.set(content: content)
 
   viewType: =>
-    "RatingQuestion"
+    "MultiChoiceQuestion"

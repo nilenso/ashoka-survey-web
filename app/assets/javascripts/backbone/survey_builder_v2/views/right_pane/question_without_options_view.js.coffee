@@ -1,4 +1,4 @@
-class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backbone.View
+class SurveyBuilderV2.Views.RightPane.QuestionWithoutOptionsView extends SurveyBuilderV2.Backbone.View
   el: '.survey-panes-right-pane'
 
   initialize: (attributes) =>
@@ -22,7 +22,7 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
     "v2_survey_builder/surveys/right_pane/question_without_options"
 
   selectType: =>
-    $el.find(".question-answer-type-select").find("option[value=#{@viewType()}]").attr("selected", true)
+    this.$el.find(".question-answer-type-select").find("option[value=#{@viewType()}]").attr("selected", true)
 
   setMargin: (offset) =>
     headerHeight = this.$el.offset().top

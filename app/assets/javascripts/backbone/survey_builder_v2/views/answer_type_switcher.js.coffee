@@ -18,6 +18,8 @@ class SurveyBuilderV2.Views.QuestionCreator
       newLeftView = new SurveyBuilderV2.Views.LeftPane.DateQuestionView(el: el, question: question)
     else if type == "RatingQuestion"
       newLeftView = new SurveyBuilderV2.Views.LeftPane.RatingQuestionView(el: el, question: question)
+    else if type == "MultiChoiceQuestion"
+      newLeftView = new SurveyBuilderV2.Views.LeftPane.MultiChoiceQuestionView(el: el, question: question)
     else
       newLeftView = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView(el: el, question: question)
 

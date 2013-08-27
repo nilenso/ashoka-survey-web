@@ -1,6 +1,6 @@
-##= require ./question_view
+##= require ./question_without_options_view
 
-class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuilderV2.Views.RightPane.QuestionView
+class SurveyBuilderV2.Views.RightPane.SingleLineQuestionView extends SurveyBuilderV2.Views.RightPane.QuestionWithoutOptionsView
   events:
     "change .question-answer-type-select": "updateView"
     "change .question-content-textarea": "updateModelContent"
