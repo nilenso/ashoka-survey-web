@@ -1,5 +1,5 @@
-class SurveyBuilderV2.Views.RightPane.QuestionWithOptionsView extends SurveyBuilderV2.Backbone.View
-  el: '.survey-panes-right-pane'
+class SurveyBuilderV2.Views.RightPane.OptionView extends SurveyBuilderV2.Backbone.View
+  el: '.question-option-fields'
 
   initialize: (attributes) =>
     @model = attributes.model
@@ -36,11 +36,6 @@ class SurveyBuilderV2.Views.RightPane.QuestionWithOptionsView extends SurveyBuil
   saveQuestion: =>
     @savingIndicator.show()
     @model.save({}, success: @handleUpdateSuccess, error: @handleUpdateError)
-    _.delay(@saveOptions, 1000);
-
-  saveOptions: =>
-    @model.get('options').each (option) =>
-      option.save(question_id: @model.get('id'))
 
   handleUpdateSuccess: (model, response, options) =>
     @model.unset("errors")
@@ -59,11 +54,3 @@ class SurveyBuilderV2.Views.RightPane.QuestionWithOptionsView extends SurveyBuil
     this.remove();
     Backbone.View.prototype.remove.call(this);
 
-  addOptionsInBulk: (event) =>
-    csv = $(event.target).val()
-    parsed_csv = csv.trim().split(",")
-
-    @model.destroyOptions()
-
-    for option in parsed_csv
-      @model.createNewOption(option) if option && option.length > 0
