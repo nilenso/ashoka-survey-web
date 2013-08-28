@@ -38,4 +38,4 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
     this.undelegateEvents();
     this.$el.removeData().unbind();
     this.remove();
-    Backbone.View.prototype.remove.call(this);
+    SurveyBuilderV2.Backbone.View.prototype.remove.call(this);

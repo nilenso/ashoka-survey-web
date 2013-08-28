@@ -37,7 +37,7 @@ class V2SurveyBuilder::SurveysController < ApplicationController
   def build
     @survey = SurveyDecorator.find(params[:survey_id])
     gon.survey_attributes = @survey.attributes
-    gon.questions_attributes = @survey.questions.map(&:attributes)
+    gon.questions_attributes = @survey.questions.inject([]) { |acc, q| acc << q.attributes.merge(options: q.options) } #FIXME
   end
 
   def destroy

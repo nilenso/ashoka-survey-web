@@ -1,4 +1,13 @@
-{{> v2_survey_builder/surveys/left_pane/question_details }}
+{{> v2_survey_builder/surveys/left_pane/question_details_with_options }}
 <div class="question-input">
-  This is a Radio Question
+  {{#options}}
+    {{#models}}
+      {{#attributes}}
+        <label>
+          <input type="radio" class="question-details-input" disabled/>
+          <span>{{content}}</span>
+        </label>
+      {{/attributes}}
+    {{/models}}
+  {{/options}}
 </div>

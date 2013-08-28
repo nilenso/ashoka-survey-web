@@ -63,7 +63,5 @@ class SurveyBuilderV2.Views.RightPane.QuestionWithOptionsView extends SurveyBuil
     csv = $(event.target).val()
     parsed_csv = $.csv.toArray(csv)
 
-    @model.destroyOptions()
-
     for option in parsed_csv
       @model.createNewOption(option.trim()) if option && option.length > 0
