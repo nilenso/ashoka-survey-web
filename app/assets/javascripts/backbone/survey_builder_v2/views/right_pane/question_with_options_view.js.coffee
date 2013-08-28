@@ -61,9 +61,9 @@ class SurveyBuilderV2.Views.RightPane.QuestionWithOptionsView extends SurveyBuil
 
   addOptionsInBulk: (event) =>
     csv = $(event.target).val()
-    parsed_csv = csv.trim().split(",")
+    parsed_csv = $.csv.toArray(csv)
 
     @model.destroyOptions()
 
     for option in parsed_csv
-      @model.createNewOption(option) if option && option.length > 0
+      @model.createNewOption(option.trim()) if option && option.length > 0
