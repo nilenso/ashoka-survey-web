@@ -3,6 +3,7 @@
 class SurveyBuilderV2.Views.LeftPane.RatingQuestionView extends SurveyBuilderV2.Views.LeftPane.QuestionView
   events:
     "click": "makeActive"
+    "click .question-delete-button": "destroyAll"
 
   initialize: (attributes) =>
     @model = new SurveyBuilderV2.Models.RatingQuestionModel(attributes.question)
