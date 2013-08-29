@@ -1,7 +1,8 @@
 class SurveyBuilderV2.Views.LeftPane.OptionView extends SurveyBuilderV2.Backbone.View
-  el: ".question-options"
+  initialize: (attributes) =>
+    @model.on("sync", @render)
 
-  render: () =>
+  render: =>
     this.$el.append(@template(@model.attributes))
     return this
 

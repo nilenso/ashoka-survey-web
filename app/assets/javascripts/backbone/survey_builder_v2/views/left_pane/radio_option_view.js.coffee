@@ -4,3 +4,5 @@ class SurveyBuilderV2.Views.LeftPane.RadioOptionView extends SurveyBuilderV2.Vie
   initialize: (attributes) =>
     @model = attributes.model
     @template = SMT["v2_survey_builder/surveys/left_pane/radio_option"]
+
+    super(attributes)

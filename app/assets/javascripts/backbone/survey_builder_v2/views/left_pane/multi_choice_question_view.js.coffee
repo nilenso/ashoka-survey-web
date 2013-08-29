@@ -1,21 +1,18 @@
-##= require ./question_view
+##= require ./question_with_options_view
 
-class SurveyBuilderV2.Views.LeftPane.MultiChoiceQuestionView extends SurveyBuilderV2.Views.LeftPane.QuestionView
+class SurveyBuilderV2.Views.LeftPane.MultiChoiceQuestionView extends SurveyBuilderV2.Views.LeftPane.QuestionWithOptionsView
   events:
     "click": "makeActive"
 
   initialize: (attributes) =>
     @model = new SurveyBuilderV2.Models.MultiChoiceQuestionModel(attributes.question)
-    @template = SMT["v2_survey_builder/surveys/left_pane/multi_choice_question"]
-    @loadOptions()
     super(attributes)
 
     rightPaneParams = model: @model, leftPaneView: this, question: attributes.question
     @rightPaneView = new SurveyBuilderV2.Views.RightPane.MultiChoiceQuestionView(rightPaneParams)
 
   loadOptions: =>
-    options = @model.get('options')
+    optionsParent = this.$el.find('div.question-options')
 
-    for option in options
-      optionModel = @model.createNewOption(option)
-      new SurveyBuilderV2.Views.LeftPane.MultiChoiceOptionView(model: optionModel)
+    @model.get('options').each((optionModel) =>
+      new SurveyBuilderV2.Views.LeftPane.MultiChoiceOptionView(el: optionsParent, model: optionModel).render())

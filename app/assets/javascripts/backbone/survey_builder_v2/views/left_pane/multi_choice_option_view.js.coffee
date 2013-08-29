@@ -4,3 +4,6 @@ class SurveyBuilderV2.Views.LeftPane.MultiChoiceOptionView extends SurveyBuilder
   initialize: (attributes) =>
     @model = attributes.model
     @template = SMT["v2_survey_builder/surveys/left_pane/multi_choice_option"]
+
+    super(attributes)
+

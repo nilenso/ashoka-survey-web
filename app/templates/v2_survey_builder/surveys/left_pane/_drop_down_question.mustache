@@ -1,2 +1,17 @@
-{{> v2_survey_builder/surveys/left_pane/question_details_with_options }}
-<div class="question-options"></div>
+<span class="question-number">
+    {{ id }}
+  </span>
+<div class="question-details">
+  {{#content}}
+    <span class="question-details-content">{{content}}</span>
+  {{/content}}
+  {{^content}}
+    <span class="question-details-placeholder-content">Untitled Question</span>
+  {{/content}}
+  {{#mandatory}}
+    <span class="question-details-mandatory">*</span>
+  {{/mandatory}}
+</div>
+<div class="question-options">
+  <select name="dropdown-options" class="question-details-input"></select>
+</div>
