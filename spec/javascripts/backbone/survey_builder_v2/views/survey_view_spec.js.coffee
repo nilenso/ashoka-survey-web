@@ -1,6 +1,8 @@
 #= require spec_helper
 
 describe "SurveyView", ->
+  window.globalMessageBus = new SurveyBuilderV2.Views.GlobalMessageBus
+
   beforeEach ->
     $("body").html(SMT["templates/survey_view"]())
     @surveyHeaderEdit = $(".survey-header-edit")
