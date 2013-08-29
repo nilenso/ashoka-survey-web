@@ -12,7 +12,7 @@ class SurveyBuilderV2.Views.LeftPane.RadioQuestionView extends SurveyBuilderV2.V
     @rightPaneView = new SurveyBuilderV2.Views.RightPane.RadioQuestionView(rightPaneParams)
 
   loadOptions: =>
-    optionsParent = this.$el.find('div.question-options')
+    optionsParent = this.$el.find('.question-options')
 
     @model.get('options').each((optionModel) =>
       new SurveyBuilderV2.Views.LeftPane.RadioOptionView(el: optionsParent, model: optionModel).render())

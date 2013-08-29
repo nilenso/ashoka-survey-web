@@ -6,6 +6,8 @@ class SurveyBuilderV2.Views.LeftPane.DropDownQuestionView extends SurveyBuilderV
 
   initialize: (attributes) =>
     @model = new SurveyBuilderV2.Models.DropDownQuestionModel(attributes.question)
+    super(attributes)
+
     @template = SMT["v2_survey_builder/surveys/left_pane/drop_down_question"]
 
     rightPaneParams = model: @model, leftPaneView: this, question: attributes.question

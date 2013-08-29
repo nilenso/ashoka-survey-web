@@ -12,7 +12,7 @@ class SurveyBuilderV2.Views.LeftPane.MultiChoiceQuestionView extends SurveyBuild
     @rightPaneView = new SurveyBuilderV2.Views.RightPane.MultiChoiceQuestionView(rightPaneParams)
 
   loadOptions: =>
-    optionsParent = this.$el.find('div.question-options')
+    optionsParent = this.$el.find('.question-options')
 
     @model.get('options').each((optionModel) =>
       new SurveyBuilderV2.Views.LeftPane.MultiChoiceOptionView(el: optionsParent, model: optionModel).render())
