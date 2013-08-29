@@ -1,7 +1,6 @@
 ##= require ./question_model
 # Interfaces between the views and the rails model for a radio question with a collection of options
 class SurveyBuilder.Models.QuestionWithOptionsModel extends SurveyBuilder.Models.QuestionModel
-
   relations: [
     {
       type: Backbone.HasMany,
