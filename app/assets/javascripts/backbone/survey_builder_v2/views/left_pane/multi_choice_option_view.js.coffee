@@ -6,4 +6,3 @@ class SurveyBuilderV2.Views.LeftPane.MultiChoiceOptionView extends SurveyBuilder
     @template = SMT["v2_survey_builder/surveys/left_pane/multi_choice_option"]
 
     super(attributes)
-
