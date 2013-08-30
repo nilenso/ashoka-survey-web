@@ -3,6 +3,7 @@
 class SurveyBuilderV2.Views.LeftPane.MultiChoiceQuestionView extends SurveyBuilderV2.Views.LeftPane.QuestionWithOptionsView
   events:
     "click": "makeActive"
+    "click .question-delete-button": "destroyAll"
 
   initialize: (attributes) =>
     @model = new SurveyBuilderV2.Models.MultiChoiceQuestionModel(attributes.question)

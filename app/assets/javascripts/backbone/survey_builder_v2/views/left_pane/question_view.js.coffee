@@ -25,6 +25,11 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
   getOffset: =>
     this.$el.offset().top - parseInt(this.$el.css("margin-top"))
 
+  destroyLeftRightView: =>
+    @destroyAll()
+    $('.survey-panes').append("<div class='survey-panes-right-pane'></div>")
+
+
   deselect: =>
     this.$el.removeClass("active")
     @rightPaneView.undelegateEvents()
