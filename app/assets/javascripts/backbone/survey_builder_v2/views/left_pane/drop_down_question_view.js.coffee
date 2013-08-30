@@ -15,7 +15,8 @@ class SurveyBuilderV2.Views.LeftPane.DropDownQuestionView extends SurveyBuilderV
     @rightPaneView = new SurveyBuilderV2.Views.RightPane.DropDownQuestionView(rightPaneParams)
 
   loadOptions: =>
-    optionsParent = this.$el.find('.question-details-input')
+    optionsParent = this.$el.find('.question-options')
 
     @model.get('options').each((optionModel) =>
-      new SurveyBuilderV2.Views.LeftPane.DropDownOptionView(el: optionsParent, model: optionModel).render())
+      optionView = new SurveyBuilderV2.Views.LeftPane.DropDownOptionView(model: optionModel)
+      optionsParent.append(optionView.render().el))

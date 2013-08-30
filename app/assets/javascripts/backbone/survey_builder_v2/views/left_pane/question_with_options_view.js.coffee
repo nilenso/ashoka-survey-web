@@ -7,6 +7,7 @@ class SurveyBuilderV2.Views.LeftPane.QuestionWithOptionsView extends SurveyBuild
 
   initialize: (attributes) =>
     @template = SMT["v2_survey_builder/surveys/left_pane/question_details_with_options"]
+    @model.bind("change:elements", @loadOptions)
     super(attributes)
 
   render: =>

@@ -1,4 +1,7 @@
 class SurveyBuilderV2.Views.LeftPane.OptionView extends SurveyBuilderV2.Backbone.View
+  tagName: "div"
+  className: "question-option"
+
   events:
     "click .question-add-sub-question": "addSubQuestion"
 
@@ -8,4 +11,3 @@ class SurveyBuilderV2.Views.LeftPane.OptionView extends SurveyBuilderV2.Backbone
 
   addSubQuestion: =>
     SurveyBuilderV2.Views.QuestionCreator.render(null, el, attributes)
-
