@@ -3,7 +3,7 @@
 class SurveyBuilderV2.Views.LeftPane.NumericQuestionView extends SurveyBuilderV2.Views.LeftPane.QuestionView
   events:
     "click": "makeActive"
-    "click .question-delete-button": "destroyAll"
+    "click .question-delete-button": "destroyQuestion"
 
   initialize: (attributes) =>
     @model = new SurveyBuilderV2.Models.NumericQuestionModel(attributes.question)

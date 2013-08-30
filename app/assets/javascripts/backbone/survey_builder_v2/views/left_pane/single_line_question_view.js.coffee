@@ -3,7 +3,7 @@
 class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilderV2.Views.LeftPane.QuestionView
   events:
     "click": "makeActive"
-    "click .question-delete-button": "destroyLeftRightView"
+    "click .question-delete-button": "destroyQuestion"
 
 
   initialize: (attributes) =>

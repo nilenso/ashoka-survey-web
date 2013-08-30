@@ -7,6 +7,10 @@ class SurveyBuilderV2.Views.LeftPane.RadioOptionView extends SurveyBuilderV2.Vie
 
     super(attributes)
 
+  render: =>
+    super
+    @loadSubQuestions()
+
   loadSubQuestions: =>
     elementContainer = this.$el.find("div.question-input > div.question-sub-questions")
 

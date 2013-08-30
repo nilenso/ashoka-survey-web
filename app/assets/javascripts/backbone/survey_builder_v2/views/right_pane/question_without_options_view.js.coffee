@@ -48,8 +48,13 @@ class SurveyBuilderV2.Views.RightPane.QuestionWithoutOptionsView extends SurveyB
   updateView: (event) =>
     SurveyBuilderV2.Views.AnswerTypeSwitcher.switch(@viewType(), event, @leftPaneView, @model.dup())
 
+  destroyQuestion: =>
+    this.undelegateEvents()
+    this.$el.removeData().unbind()
+    this.$el.find(".question").remove()
+
   destroyView: =>
-    this.undelegateEvents();
-    this.$el.removeData().unbind();
-    this.remove();
-    Backbone.View.prototype.remove.call(this);
+    this.undelegateEvents()
+    this.$el.removeData().unbind()
+    this.remove()
+    SurveyBuilderV2.Backbone.View.prototype.remove.call(this)
