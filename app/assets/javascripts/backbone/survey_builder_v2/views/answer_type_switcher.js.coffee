@@ -8,25 +8,9 @@ class SurveyBuilderV2.Views.AnswerTypeSwitcher
 
 class SurveyBuilderV2.Views.QuestionCreator
   @render: (type, el, question) =>
-    switch type
-      when "NumericQuestion"
-         newLeftView = new SurveyBuilderV2.Views.LeftPane.NumericQuestionView(el: el, question: question)
-      when "SingleLineQuestion"
-        newLeftView = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView(el: el, question: question)
-      when "MultilineQuestion"
-        newLeftView = new SurveyBuilderV2.Views.LeftPane.MultiLineQuestionView(el: el, question: question)
-      when "DateQuestion"
-        newLeftView = new SurveyBuilderV2.Views.LeftPane.DateQuestionView(el: el, question: question)
-      when "RatingQuestion"
-        newLeftView = new SurveyBuilderV2.Views.LeftPane.RatingQuestionView(el: el, question: question)
-      when "MultiChoiceQuestion"
-        newLeftView = new SurveyBuilderV2.Views.LeftPane.MultiChoiceQuestionView(el: el, question: question)
-      when "DropDownQuestion"
-        newLeftView = new SurveyBuilderV2.Views.LeftPane.DropDownQuestionView(el: el, question: question)
-      when "RadioQuestion"
-        newLeftView = new SurveyBuilderV2.Views.LeftPane.RadioQuestionView(el: el, question: question)
-      else
-        newLeftView = new SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView(el: el, question: question)
+    newLeftView = new (SurveyBuilderV2.Views.LeftPane["#{type}View"] || SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView)
+      el: el
+      question: question
 
     @addNewQuestionView(newLeftView)
     newLeftView
