@@ -1,3 +1,5 @@
+##= require ./question_view
+
 class SurveyBuilderV2.Views.RightPane.QuestionWithOptionsView extends SurveyBuilderV2.Views.RightPane.QuestionView
   templatePath: =>
     "v2_survey_builder/surveys/right_pane/question_with_options"

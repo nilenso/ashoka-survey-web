@@ -12,6 +12,8 @@ class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backb
   render:(offset) =>
     this.delegateEvents()
 
+    this.$el = $(".survey-panes-right-pane")
+
     this.$el.html(@template(@model.attributes))
     @setMargin(offset)
     @selectType()

@@ -5,7 +5,6 @@ class SurveyBuilderV2.Views.LeftPane.SingleLineQuestionView extends SurveyBuilde
     "click": "makeActive"
     "click .question-delete-button": "destroyQuestion"
 
-
   initialize: (attributes) =>
     @model = new SurveyBuilderV2.Models.SingleLineQuestionModel(attributes.question)
     @template = SMT["v2_survey_builder/surveys/left_pane/single_line_question"]

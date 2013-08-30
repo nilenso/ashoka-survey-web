@@ -3,8 +3,7 @@
 class SurveyBuilderV2.Views.LeftPane.MultilineQuestionView extends SurveyBuilderV2.Views.LeftPane.QuestionView
   events:
     "click": "makeActive"
-    "click .question-delete-button": "destroyAll"
-
+    "click .question-delete-button": "destroyQuestion"
 
   initialize: (attributes) =>
     @model = new SurveyBuilderV2.Models.MultilineQuestionModel(attributes.question)
