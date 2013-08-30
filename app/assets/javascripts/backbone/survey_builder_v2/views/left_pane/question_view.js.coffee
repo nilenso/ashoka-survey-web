@@ -27,20 +27,22 @@ class SurveyBuilderV2.Views.LeftPane.QuestionView extends SurveyBuilderV2.Backbo
     this.$el.removeClass("active")
     @rightPaneView.undelegateEvents()
 
-  destroyQuestion: (event) =>
-    event.stopPropagation()
-
-    @rightPaneView.destroyQuestion();
-    @model.destroy();
-    @destroyView();
-
-  destroyAll: =>
-    @rightPaneView.destroyView()
+  destroy: =>
     @model.destroy()
     @destroyView()
 
+  destroyQuestion: (event) =>
+    event.stopPropagation()
+
+    @rightPaneView.destroyQuestion()
+    @destroy()
+
+  destroyAll: =>
+    @rightPaneView.destroyView()
+    @destroy()
+
   destroyView: =>
-    this.undelegateEvents();
-    this.$el.removeData().unbind();
-    this.remove();
-    SurveyBuilderV2.Backbone.View.prototype.remove.call(this);
+    this.undelegateEvents()
+    this.$el.removeData().unbind()
+    this.remove()
+    SurveyBuilderV2.Backbone.View.prototype.remove.call(this)

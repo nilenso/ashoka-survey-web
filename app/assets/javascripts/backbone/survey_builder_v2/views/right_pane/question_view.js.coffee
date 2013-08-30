@@ -1,4 +1,4 @@
-class SurveyBuilderV2.Views.RightPane.QuestionWithoutOptionsView extends SurveyBuilderV2.Backbone.View
+class SurveyBuilderV2.Views.RightPane.QuestionView extends SurveyBuilderV2.Backbone.View
   el: '.survey-panes-right-pane'
 
   initialize: (attributes) =>
@@ -48,13 +48,15 @@ class SurveyBuilderV2.Views.RightPane.QuestionWithoutOptionsView extends SurveyB
   updateView: (event) =>
     SurveyBuilderV2.Views.AnswerTypeSwitcher.switch(@viewType(), event, @leftPaneView, @model.dup())
 
-  destroyQuestion: =>
+  destroy: =>
     this.undelegateEvents()
     this.$el.removeData().unbind()
+
+  destroyQuestion: =>
+    @destroy()
     this.$el.find(".question").remove()
 
   destroyView: =>
-    this.undelegateEvents()
-    this.$el.removeData().unbind()
+    @destroy()
     this.remove()
     SurveyBuilderV2.Backbone.View.prototype.remove.call(this)
