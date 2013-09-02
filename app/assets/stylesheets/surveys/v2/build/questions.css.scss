@@ -34,6 +34,26 @@ div.survey-panes-left-pane {
         font-size: 20px;
       }
     }
+    .option-delete-button {
+      text-shadow: none;
+      line-height: 24px;
+      background: $secondary-color;
+      color: $white;
+      border: none;
+      @include border-radius(2px);
+      padding: 5px 10px 0;
+      float: right;
+
+      &:hover {
+        background: $secondary-color-dark;
+      }
+
+      i {
+        margin-bottom: 3px;
+        margin-right: 5px;
+        font-size: 20px;
+      }
+    }
   }
 
   .question-options{
