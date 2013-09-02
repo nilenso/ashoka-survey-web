@@ -11,3 +11,10 @@ class SurveyBuilderV2.Views.LeftPane.OptionView extends SurveyBuilderV2.Backbone
 
   addSubQuestion: =>
     SurveyBuilderV2.Views.QuestionCreator.render(null, el, attributes)
+
+  destroyOption: =>
+    @model.destroy()
+    this.undelegateEvents()
+    this.$el.removeData().unbind()
+    this.remove()
+    SurveyBuilderV2.Backbone.View.prototype.remove.call(this)
