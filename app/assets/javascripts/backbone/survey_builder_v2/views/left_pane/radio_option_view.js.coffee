@@ -5,6 +5,7 @@ class SurveyBuilderV2.Views.LeftPane.RadioOptionView extends SurveyBuilderV2.Vie
   events:
     "click": "makeActive"
     "click .option-delete-button": "destroyOption"
+    "click .question-add-sub-question": "addSubQuestion"
 
   initialize: (attributes) =>
     @model = attributes.model
