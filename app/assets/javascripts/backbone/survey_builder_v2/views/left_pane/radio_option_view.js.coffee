@@ -12,7 +12,7 @@ class SurveyBuilderV2.Views.LeftPane.RadioOptionView extends SurveyBuilderV2.Vie
     @template = SMT["v2_survey_builder/surveys/left_pane/radio_option"]
 
     super(attributes)
-
+    @id=attributes.survey_id
   render: =>
     super
 
@@ -21,3 +21,18 @@ class SurveyBuilderV2.Views.LeftPane.RadioOptionView extends SurveyBuilderV2.Vie
 
     @model.get('elements').each((questionModel) =>
       SurveyBuilderV2.Views.QuestionCreator.render(questionModel.type, elementContainer, questionModel.attributes))
+
+  addSubQuestion: (event)=>
+    event.stopPropagation()
+    console.log @model.id
+    view = @addQuestion({ survey_id: @id, parent_id: @model.id})
+    @getLeftPane().append(view.render().el)
+    view.makeActive()
+
+  addQuestion: (attributes) =>
+    el = this.$el.find(".question[data-id=#{attributes.id}]") if attributes.id
+    type = el.data("type") if attributes.type
+    view = SurveyBuilderV2.Views.QuestionCreator.render(type, el, attributes)
+    view
+
+  getLeftPane: => this.$el.find(".survey-panes-left-pane")
