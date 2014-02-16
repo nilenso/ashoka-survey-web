@@ -19,15 +19,22 @@ describe Reports::Excel::Metadata do
 
     context "when the `disable_filtering` flag is false" do
       it "doesn't return the location of the response" do
-        response = FactoryGirl.create(:response, :user_id => 1)
+        response = FactoryGirl.create(:response, :user_id => 1, :location => "foobar")
         metadata = Reports::Excel::Metadata.new([response], access_token, :disable_filtering => false)
         metadata.for(response).should_not include response.location
       end
 
       it "doesn't return the ip address of the response" do
-        response = FactoryGirl.create(:response, :user_id => 1)
+        response = FactoryGirl.create(:response, :user_id => 1, :location => "foobar")
         metadata = Reports::Excel::Metadata.new([response], access_token, :disable_filtering => false)
         metadata.for(response).should_not include response.ip_address
+      end
+
+      it "doesn't return the lat/long of the response" do
+        response = FactoryGirl.create(:response, :user_id => 1, :latitude => 123.23, :longitude => 233.23)
+        metadata = Reports::Excel::Metadata.new([response], access_token, :disable_filtering => false)
+        metadata.for(response).should_not include response.latitude
+        metadata.for(response).should_not include response.longitude
       end
     end
 
@@ -42,6 +49,13 @@ describe Reports::Excel::Metadata do
         response = FactoryGirl.create(:response, :user_id => 1)
         metadata = Reports::Excel::Metadata.new([response], access_token, :disable_filtering => true)
         metadata.for(response).should include response.ip_address
+      end
+
+      it "returns the lat/long of the response" do
+        response = FactoryGirl.create(:response, :user_id => 1, :latitude => 123.23, :longitude => 233.23)
+        metadata = Reports::Excel::Metadata.new([response], access_token, :disable_filtering => true)
+        metadata.for(response).should include response.latitude
+        metadata.for(response).should include response.longitude
       end
     end
 

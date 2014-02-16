@@ -212,7 +212,7 @@ describe ResponsesController do
     context "when filtering metadata" do
       it "filters the private metadata out by default" do
         survey = FactoryGirl.create(:survey, :finalized => true, :organization_id => 1)
-        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete', :user_id => 1)
+        resp = FactoryGirl.create(:response, :survey => survey, :status => 'complete', :user_id => 1, :location => "foobar")
         get :generate_excel, :survey_id => survey.id
         response.should be_ok
         assigns(:metadata).for(resp).should_not include resp.location

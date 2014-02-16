@@ -9,7 +9,7 @@ class Reports::Excel::Metadata
     if disable_filtering?
       ["Added By", "Organization", "Last updated at", "Address", "IP Address", "State", "Latitude", "Longitude"]
     else
-      ["Added By", "Organization", "Last updated at", "State", "Latitude", "Longitude"]
+      ["Added By", "Organization", "Last updated at", "State"]
     end
   end
 
@@ -18,8 +18,7 @@ class Reports::Excel::Metadata
       [user_name_for(response.user_id), organization_name_for(response.organization_id), formatted_last_update_for(response),
         response.location, response.ip_address, response.state, response.latitude, response.longitude]
     else
-      [user_name_for(response.user_id), organization_name_for(response.organization_id), formatted_last_update_for(response),
-       response.state, response.latitude, response.longitude]
+      [user_name_for(response.user_id), organization_name_for(response.organization_id), formatted_last_update_for(response), response.state]
     end
   end
 
