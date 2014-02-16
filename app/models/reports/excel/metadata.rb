@@ -7,18 +7,19 @@ class Reports::Excel::Metadata
 
   def headers
     if disable_filtering?
-      ["Added By", "Organization", "Last updated at", "Address", "IP Address", "State"]
+      ["Added By", "Organization", "Last updated at", "Address", "IP Address", "State", "Latitude", "Longitude"]
     else
-      ["Added By", "Organization", "Last updated at", "State"]
+      ["Added By", "Organization", "Last updated at", "State", "Latitude", "Longitude"]
     end
   end
 
   def for(response)
     if disable_filtering?
       [user_name_for(response.user_id), organization_name_for(response.organization_id), formatted_last_update_for(response),
-        response.location, response.ip_address, response.state]
+        response.location, response.ip_address, response.state, response.latitude, response.longitude]
     else
-      [user_name_for(response.user_id), organization_name_for(response.organization_id), formatted_last_update_for(response), response.state]
+      [user_name_for(response.user_id), organization_name_for(response.organization_id), formatted_last_update_for(response),
+       response.state, response.latitude, response.longitude]
     end
   end
 
