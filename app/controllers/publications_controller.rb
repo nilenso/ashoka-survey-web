@@ -4,7 +4,7 @@ class PublicationsController < ApplicationController
   after_filter :only => [:destroy] { send_to_mixpanel("Survey unpublished", { :survey => @survey.name}) if @survey.present? }
 
   def edit
-    @survey = Survey.find(params[:survey_id]).decorate
+    @survey = @survey.decorate
     authorize! :edit_publication, @survey
     publishable_users = @survey.users_for_organization(access_token, current_user_org)
     @published_users = publishable_users[:published]
@@ -16,12 +16,11 @@ class PublicationsController < ApplicationController
   end
 
   def update
-    survey = Survey.find(params[:survey_id])
-    authorize! :update_publication, survey
-    publisher = Publisher.new(survey, access_token, params[:survey])
+    authorize! :update_publication, @survey
+    publisher = Publisher.new(@survey, access_token, params[:survey])
     if publisher.publish(:organization_id => current_user_org)
-      flash[:notice] = t "flash.survey_published", :survey_name => survey.name
-      send_to_mixpanel("Survey published", { :survey => survey.name })
+      flash[:notice] = t "flash.survey_published", :survey_name => @survey.name
+      send_to_mixpanel("Survey published", { :survey => @survey.name })
       redirect_to surveys_path
     else
       flash[:error] = publisher.errors.full_messages.join(', ')
@@ -30,7 +29,6 @@ class PublicationsController < ApplicationController
   end
 
   def unpublish
-    @survey = Survey.find(params[:survey_id])
     authorize! :edit_publication, @survey
     if @survey.published?
       field_agents = @survey.users_for_organization(access_token, current_user_org)
@@ -43,7 +41,6 @@ class PublicationsController < ApplicationController
   end
 
   def destroy
-    @survey = Survey.find(params[:survey_id])
     authorize! :update_publication, @survey
     publisher = Publisher.new(@survey, access_token, params[:survey])
     publisher.unpublish_users
@@ -54,8 +51,8 @@ class PublicationsController < ApplicationController
   private
 
   def require_finalized_survey
-    survey = Survey.find(params[:survey_id])
-    unless survey.finalized?
+    @survey = Survey.find(params[:survey_id])
+    unless @survey.finalized?
       redirect_to surveys_path
       flash[:error] = t "flash.publish_draft_survey"
     end
